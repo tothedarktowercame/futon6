@@ -217,6 +217,19 @@ move-vocabulary grow then converge?) and `inference-anchor-confidence` (quality)
 emitted by the harvester. The harvested lexicon then becomes the *data-driven* proof-move
 vocabulary that should lift the 0.14 grounding — the macro-fix lesson, one level up.
 
+**The same frame spans every layer.** An IATC inference-move, an expository scope, and an
+SFC typed-slot are one shape: a **classified scope (kind) + a `:source` anchor + a grounding
+confidence.** So `iatc_lexicon_harvest.py` is layer-agnostic — pointed at the expository
+scope-graphs it harvests an **expository move-grammar** (`connection/example-source`,
+`difficulty-assessment`, `connection/literature-gap`, `meta/strategy`, `value/useful`…) and
+slot-fill phrases with the *same* per-anchoring confidence, which catches junk anchorings
+there too (a leaked `"deterministic anatomy in this region"` scores 0.00, correctly). The
+SFC/types layer already carries this confidence natively (`grounded` / `undefined-in-context`
+/ `unsupported`, each citing verbatim evidence). So the deliverable isn't an IATC lexicon —
+it's **one grounded, confidence-weighted move-lexicon across inference, exposition, and
+type-structure**, each layer with its own accretion (lexicon growth) and quality
+(anchor-confidence) axes.
+
 ---
 
 ## 6. The topology that wasn't

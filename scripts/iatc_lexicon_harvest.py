@@ -56,35 +56,59 @@ def _norm(phrase):
     return re.sub(r"\s+", " ", phrase.strip().lower())[:80]
 
 
+def _pid_of(fname):
+    base = os.path.basename(fname)
+    return base.split("__")[0].split("_")[0][:-4] if "__" not in base and "_" not in base else base.split("__")[0].split("_")[0]
+
+
 def harvest(graph_dir):
-    lex = defaultdict(lambda: {"count": 0, "conf": [], "kinds": Counter(), "exemplars": []})
-    relations = Counter()
+    """Layer-agnostic: an IATC inference-move, an expository scope, and (in principle) an
+    SFC typed-slot are the same shape — a CLASSIFIED scope (kind) + a :source anchor +
+    a grounding confidence. Harvests whichever the file carries."""
+    lex = defaultdict(lambda: {"count": 0, "conf": [], "kinds": Counter(), "layer": Counter(), "exemplars": []})
+    grammar = Counter()       # relation grammar (IATC) + move grammar (expository kinds)
     flattened = []
     cache = {}
     for f in sorted(glob.glob(os.path.join(graph_dir, "*.edn"))):
         if "rung2" in f:
             continue
-        pid = os.path.basename(f).split("__")[0][:-4] if os.path.basename(f).endswith(".edn") and "__" not in os.path.basename(f) else os.path.basename(f).split("__")[0]
+        pid = _pid_of(f)
         lines = _text_lines(pid, cache)
         t = open(f).read()
-        # node move-names (the linearized inference descriptions)
-        for m in re.finditer(r':kind :([a-z-]+),?\s*:text "([^"]{4,80})"[^}]*?:source \{:lines \[(\d+) (\d+)\]', t):
-            kind, text, a, b = m.group(1), m.group(2), int(m.group(3)), int(m.group(4))
-            conf, faith, flat = _confidence(text, _span(lines, a, b))
-            key = _norm(text)
-            e = lex[key]; e["count"] += 1; e["conf"].append(conf); e["kinds"][kind] += 1
-            if len(e["exemplars"]) < 3:
+        expository = ":scopes" in t or ":slot-fill" in t
+
+        def add(key, conf, kind, layer, a=None, b=None):
+            e = lex[_norm(key)]; e["count"] += 1; e["conf"].append(conf)
+            e["kinds"][kind] += 1; e["layer"][layer] += 1
+            if a and len(e["exemplars"]) < 3:
                 e["exemplars"].append({"pid": pid, "lines": [a, b], "conf": conf})
-            if flat:
-                flattened.append({"pid": pid, "lines": [a, b], "text": text})
-        # warrant phrases (the justification vocabulary)
-        for w in re.findall(r':warrant \{[^}]*?:text "([^"]{4,80})"', t):
-            key = _norm(w); e = lex[key]; e["count"] += 1; e["kinds"]["warrant"] += 1
-            e["conf"].append(0.5)  # warrant text w/o its own span check — neutral prior
-        # relation grammar
-        for r in re.findall(r":relation :([a-z-]+)", t):
-            relations[r] += 1
-    return lex, relations, flattened
+
+        if expository:  # EXPOSITORY: scope kind (move grammar) + slot-fill text, span-anchored
+            for block in re.split(r'(?=:kind :)', t):     # one scope per :kind block
+                km = re.search(r':kind (:[a-z/-]+)', block)
+                if not km:
+                    continue
+                kind = km.group(1)
+                grammar[kind] += 1
+                lm = re.search(r':lines \[(\d+) (\d+)\]', block)
+                fills = re.findall(r'"([^"]{4,})"', block.split(":slot-fill", 1)[1]) if ":slot-fill" in block else []
+                fill = " ".join(fills)[:90]
+                if fill and lm:
+                    a, b = int(lm.group(1)), int(lm.group(2))
+                    conf, _, _ = _confidence(fill, _span(lines, a, b))
+                    add(fill, conf, kind, "expository", a, b)
+        else:           # IATC: node move-names + warrant phrases + relation grammar
+            for m in re.finditer(r':kind :([a-z-]+),?\s*:text "([^"]{4,80})"[^}]*?:source \{:lines \[(\d+) (\d+)\]', t):
+                kind, text, a, b = m.group(1), m.group(2), int(m.group(3)), int(m.group(4))
+                conf, faith, flat = _confidence(text, _span(lines, a, b))
+                add(text, conf, kind, "iatc", a, b)
+                if flat:
+                    flattened.append({"pid": pid, "lines": [a, b], "text": text})
+            for w in re.findall(r':warrant \{[^}]*?:text "([^"]{4,80})"', t):
+                add(w, 0.5, "warrant", "iatc")
+            for r in re.findall(r":relation :([a-z-]+)", t):
+                grammar[r] += 1
+    return lex, grammar, flattened
 
 
 def main():
@@ -94,13 +118,16 @@ def main():
     ap.add_argument("--run-id", default="adhoc")
     ap.add_argument("--corpus-id", default="adhoc")
     a = ap.parse_args()
-    lex, relations, flattened = harvest(os.path.join(ROOT, a.graphs) if not os.path.isabs(a.graphs) else a.graphs)
+    lex, grammar, flattened = harvest(os.path.join(ROOT, a.graphs) if not os.path.isabs(a.graphs) else a.graphs)
 
     def mc(e):
         return sum(e["conf"]) / len(e["conf"]) if e["conf"] else 0.0
     entries = sorted(lex.items(), key=lambda kv: (-kv[1]["count"], -mc(kv[1])))
-    print(f"=== inference lexicon: {len(lex)} distinct entries ===\n")
-    print("relation grammar:", dict(relations.most_common()))
+    layers = Counter()
+    for _, e in entries:
+        layers.update(e["layer"])
+    print(f"=== move lexicon: {len(lex)} distinct entries  (layers: {dict(layers)}) ===\n")
+    print("grammar (IATC relations / expository move-kinds):", dict(grammar.most_common()))
     print(f"\ntop entries (phrase · count · mean-confidence):")
     for k, e in entries[:18]:
         print(f"  conf={mc(e):.2f} ×{e['count']}  {k}")
