@@ -28,7 +28,13 @@ def main():
     ap.add_argument("--list")
     ap.add_argument("--papers", nargs="*")
     ap.add_argument("--out", default=GOLDEN)
+    ap.add_argument("--run-dir", help="if set, emit S1 MetricRecords here (INSTANTIATE-GPU)")
+    ap.add_argument("--run-id", default="adhoc")
+    ap.add_argument("--corpus-id", default="adhoc")
     args = ap.parse_args()
+    mh = None
+    if args.run_dir:
+        import metric_harness as mh  # emit_record + _interval_coverage
     ids = args.papers or [l.strip() for l in open(args.list) if l.strip()]
     os.makedirs(args.out, exist_ok=True)
     ok = fail = 0
@@ -42,6 +48,14 @@ def main():
                 kinds[m.get("kind")] = kinds.get(m.get("kind"), 0) + 1
             pm = kinds.get("proof-move", 0)
             print(f"  {pid}: {len(d['marks'])} marks (proof-move={pm})")
+            if mh:  # S1 inline metric emit (non-fatal — never abort the marks artifact)
+                try:
+                    cov = mh._interval_coverage(d["marks"], len(d.get("text", "")) or 1)
+                    mh.emit_record(args.run_dir, run_id=args.run_id, corpus_id=args.corpus_id,
+                                   paper_id=pid, stage="S1", metric="any-markup-coverage",
+                                   axis="completeness", value=round(cov, 4), computable=True)
+                except Exception as ee:
+                    print(f"    (metric emit skipped: {ee})")
             ok += 1
         except Exception as e:
             print(f"  {pid}: FAIL {type(e).__name__}: {e}")

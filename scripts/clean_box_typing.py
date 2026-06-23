@@ -92,6 +92,9 @@ def main():
     ap.add_argument("--model", default="hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4")
     ap.add_argument("--max-retries", type=int, default=3)
     ap.add_argument("--stub", action="store_true")
+    ap.add_argument("--run-dir", help="if set, emit S4 MetricRecords here (INSTANTIATE-GPU)")
+    ap.add_argument("--run-id", default="adhoc")
+    ap.add_argument("--corpus-id", default="adhoc")
     args = ap.parse_args()
 
     methods, macros = load_vocab()
@@ -139,6 +142,17 @@ def main():
             print(f"  REJECT {pid}: not a DAG comb (e.g. cyclic-equivalence) — logged")
             continue
         typed.append(pid)
+        if args.run_dir:  # S4 inline metric emit (non-fatal — never abort the CLean)
+            try:
+                import metric_harness as mh
+                txt = open(outfile).read()
+                nbox = max(1, len(sk.get("boxes", [])))
+                discharge = max(0, nbox - txt.count(":hole")) / nbox
+                mh.emit_record(args.run_dir, run_id=args.run_id, corpus_id=args.corpus_id,
+                               paper_id=pid, stage="S4", metric="clean-discharge-rate",
+                               axis="completeness", value=round(discharge, 4), computable=True)
+            except Exception as ee:
+                print(f"    (S4 metric emit skipped: {ee})")
 
     print(f"\ntyped {len(typed)} / rejected {len(rejected)} (cyclic) / failed {len(failed)} (typing)"
           f"  -> {args.out}  ({'stub' if args.stub else args.model})")

@@ -465,18 +465,22 @@ weak-point-with-confidence) need the GPU run's outputs — and the deeper requir
 **the next run must produce the slope report, not just artifacts.** So the run is
 instrumented to *emit metrics as it goes*:
 
-- **Interface (BUILT):** `emit_record(run_dir, **rec)` / `read_records(run_dir)` —
+- **Interface (BUILT + tested):** `emit_record` / `read_records` / `aggregate_records` —
   `MetricRecord` JSONL at `data/runs/<run-id>/metrics.jsonl`
-  (`{run_id, corpus_id, paper_id, stage, metric, axis, value, computable}`).
-- **Per-stage emit hooks (the remaining wiring, done when the run is wired):**
-  S1 → any-markup-coverage (+ proof-only/​+expository features-on delta) ·
-  S2 → encyclopedia-defined, G-coverage · S3 → substance/grounding/diversity ·
-  S4 → expository-scope-coverage, typed-hole-fill-rate · S5 → comprehension noun/strategy,
-  symbol-grounding-by-kind, weak-point-with-confidence · S7 → G-entropy, structure-vs-text.
-- **The CPU harness already prototypes the read/compute side** (S1 markup, S2
-  coverage/encyclopedia, S5 comprehension/recurring-holes on existing data) — the GPU
-  emit hooks just write the *same* `MetricRecord`s inline, and the harness aggregates
-  them into the slope report post-run. **No GPU run until these hooks are in.**
+  (`{run_id, corpus_id, paper_id, stage, metric, axis, value, computable}`);
+  `metric_harness.py --from-records <run-dir>` aggregates emitted records into reports.
+- **Emit hooks WIRED + tested (the inline, per-paper stages):**
+  - **S1** `emit_marks.py --run-dir …` → emits **any-markup-coverage** as it builds each
+    paper's marks (non-fatal). Tested: 3 papers → records (0.83/0.87/0.50) → aggregated.
+  - **S4** `clean_box_typing.py --run-dir …` → emits **clean-discharge-rate** per typed
+    CLean (non-fatal). Tested via `--stub`: 9 CLeans → records → aggregated alongside S1.
+- **Remaining stages map to existing outputs / harness-computed post-run:** S2
+  (encyclopedia, G-coverage) from the concept-index; S3 (substance/grounding/diversity)
+  from the eval report; S5 (comprehension, symbol, weak-point) + S7 (G-entropy,
+  structure-vs-text) computed by the harness on the run's outputs. The expository-coverage
+  + symbol-grounding emit hooks land when S4-expository / S5-symbol run at scale.
+- So **the run will emit S1+S4 inline and the harness computes/reads the rest** → a full
+  slope+distribution report, never "just finished." **No GPU run until this is exercised.**
 - Wire **S3 all-proofs + S4 expository + S6 paper-graph**; run **10 then 20 whole papers
   everything-on**; the harness then emits the full multi-metric slope report.
 - Keep `f6/graph-enhanced-evaluation` (the ground-truth use-value proxy) in view.

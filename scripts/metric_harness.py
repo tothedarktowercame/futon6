@@ -225,6 +225,26 @@ def read_records(run_dir):
     return [json.loads(l) for l in open(p)] if os.path.exists(p) else []
 
 
+def aggregate_records(run_dir):
+    """Turn the per-paper MetricRecords a run EMITTED inline into reports — completeness/
+    quality metrics become a distribution over papers (accretion slopes are computed by
+    run() via leave-one-out on the run's outputs, not from these per-paper records)."""
+    groups = defaultdict(list)
+    for r in read_records(run_dir):
+        if isinstance(r.get("value"), (int, float)):
+            groups[(r["metric"], r.get("stage", "?"), r.get("axis", "completeness"))].append(r["value"])
+    reports = []
+    for (metric, stage, axis), vals in sorted(groups.items()):
+        vals.sort()
+        reports.append({"metric": metric, "stage": stage, "axis": axis, "kind": "per-paper",
+                        "attribution_stage": stage, "n_papers": len(vals),
+                        "distribution": {"mean": round(statistics.mean(vals), 3),
+                                         "median": round(statistics.median(vals), 3),
+                                         "min": round(vals[0], 3), "max": round(vals[-1], 3),
+                                         "frac_below_0.5": round(sum(v < 0.5 for v in vals) / len(vals), 3)}})
+    return reports
+
+
 def _interval_coverage(marks, tlen):
     iv = sorted((m["start"], m["end"]) for m in marks
                 if isinstance(m.get("start"), int) and isinstance(m.get("end"), int) and m["end"] > m["start"])
@@ -321,10 +341,16 @@ def main():
     ap.add_argument("--golden", default="data/showcases/ct-anatomy/golden")
     ap.add_argument("--n-held", type=int, default=20)
     ap.add_argument("--out", default="data/metric-harness-report.json")
+    ap.add_argument("--from-records", help="aggregate MetricRecords a run emitted (run-dir)")
     ap.add_argument("--self-test", action="store_true")
     a = ap.parse_args()
     if a.self_test:
         self_test()
+        return
+    if a.from_records:
+        reps = aggregate_records(a.from_records)
+        print_reports(reps)
+        print(f"\naggregated {len(reps)} metric(s) from emitted records in {a.from_records}")
         return
     ctx = {}
     cip = a.concept_index if os.path.isabs(a.concept_index) else os.path.join(ROOT, a.concept_index)
