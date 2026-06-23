@@ -3,8 +3,10 @@
 **Status:** HEAD complete; IDENTIFY authored; MAP complete (scratch-work survey);
 DERIVE authored (3-axis taxonomy + per-phase & aggregate catalog); ARGUE authored
 (paradox resolved); VERIFY spiked (accretion slope real + steep at small n);
-**INSTANTIATE (1) DONE** — `scripts/metric_harness.py` built + self-test + reproduces the
-spike; INSTANTIATE (2) = more emitters + the everything-on box run (2026-06-23).
+**INSTANTIATE (1)+(2) in progress** — `scripts/metric_harness.py`: 6 metrics across
+substrate+mined corpora (concept-coverage, encyclopedia, recurring-holes, comprehension
+noun/strategy/floor), all tested; INSTANTIATE remaining = expository/symbol/weak-point
+emitters + the everything-on box run (2026-06-23).
 
 *Follows `futon4/holes/mission-lifecycle.md`. Successor framing to the mark5 run
 (`holes/mark5-ct100-results.md`); executes against the corrected pipeline in
@@ -433,9 +435,22 @@ declare `requires`/`corpus`, and run() sweeps the matching universe.
   surfaces cross-paper recurring gaps where raw `:wanted` (generic "warrant") found none.
   Confirms the WARRANT-NORM hypothesis as a live accretion metric.
 
+- **`comprehension-floor` (S5, mined, accretion) — BUILT.** Cross-universe: held-out
+  mined proofs, **noun axis** = concept-coverage vs the growing substrate (rises),
+  **strategy axis** = the recognizer on the proof prose (fixed); `comp = min(N, S)`.
+  Result — three series that reproduce the *binding-axis* finding as a slope:
+  - noun N: 0.13 → 1.00 (rises with substrate)
+  - strategy S: **0.156, flat** (corpus-independent)
+  - floor min(N,S): 0.078 → **0.156 and plateaus by k≈10**
+  → the corpus compounds the nouns, but comprehension **caps at the strategy ceiling**;
+  the harness localizes the bottleneck to S5/STRAT-REC. This is "pinpoint why" working:
+  the floor is flat-after-k10 *because* the strategy axis caps it.
+
+The harness now carries **6 metrics** across both corpora; self-test + spike-reproduction pass.
+
 ### (2, cont.) remaining — INSTANTIATE
 
-- Register: comprehension floor, expository coverage, symbol-grounding-by-kind,
+- Register (when their data lands): expository coverage, symbol-grounding-by-kind,
   weak-point-with-confidence (each `@metric` + a loader).
 - Wire **S3 all-proofs + S4 expository + S6 paper-graph**; run **10 then 20 whole papers
   everything-on**; the harness then emits the full multi-metric slope report.

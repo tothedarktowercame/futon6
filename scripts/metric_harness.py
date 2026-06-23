@@ -204,10 +204,55 @@ def self_test():
     print(f"self-test PASS: coverage {cov['v@1']}→{cov['v@max']}, encyclopedia {enc['v@1']:.0f}→{enc['v@max']:.0f}, round-trip ok")
 
 
+def load_candidates_prose(cand_dir):
+    prose = {}
+    for f in glob.glob(os.path.join(cand_dir, "*.candidate.json")):
+        d = json.load(open(f))
+        prose[d["paper-id"]] = d.get("source-window", "")
+    return prose
+
+
+def run_comprehension(ctx, prose, vocab, n_held=20):
+    """Comprehension floor as an accretion curve (cross-universe): held-out mined proofs,
+    noun axis = concept-coverage vs the growing substrate (rises), strategy axis = the
+    recognizer on the proof prose (fixed). comp = min(N, S) — rises with N then plateaus
+    at the strategy ceiling (the 'strategy is the binding axis' finding, as a slope)."""
+    import strategy_recognizer as sr
+    cands = sorted(p for p in prose if p in ctx.get("paper2c", {}) and prose[p].strip())
+    if not cands:
+        return []
+    held = held_out(cands, n_held)
+    S = {h: (sr.strat_score(sr.recognize_text(prose[h], vocab)[0]) or 0.0) for h in held}
+    pool = [p for p in ctx["substrate_universe"] if p not in set(held)]
+    grid = kgrid(len(pool))
+    series = {"comprehension-noun": [], "comprehension-strategy": [], "comprehension-floor": []}
+    for k in grid:
+        sub = pool[:k]
+        conc = set()
+        for p in sub:
+            conc |= ctx["paper2c"][p]
+        Ns = {h: len(ctx["paper2c"][h] & conc) / max(1, len(ctx["paper2c"][h])) for h in held}
+        series["comprehension-noun"].append([k, statistics.mean(Ns.values())])
+        series["comprehension-strategy"].append([k, statistics.mean(S.values())])
+        series["comprehension-floor"].append([k, statistics.mean(min(Ns[h], S[h]) for h in held)])
+    reports = []
+    for name, pts in series.items():
+        v1, vmax = pts[0][1], pts[-1][1]
+        v10 = next((v for k, v in pts if k >= 10), vmax)
+        reports.append({"metric": name, "stage": "S5", "axis": "accretion", "corpus": "mined",
+                        "points": pts, "v@1": round(v1, 4), "v@10": round(v10, 4), "v@max": round(vmax, 4),
+                        "rise_1_to_10": round(v10 - v1, 4),
+                        "rising": all(pts[i][1] <= pts[i + 1][1] + 1e-9 for i in range(len(pts) - 1)),
+                        "attribution_stage": "S5", "n_held": len(held), "n_pool": len(pool)})
+    return reports
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--concept-index", default="data/warp/concept-index.json")
     ap.add_argument("--clean-dir", default="data/mark5-ct100-run/holes/clean-ct200")
+    ap.add_argument("--candidates", default="data/iatc-candidates-ct200")
+    ap.add_argument("--vocab", default="holes/clean/tactic-gesture-vocab.edn")
     ap.add_argument("--n-held", type=int, default=20)
     ap.add_argument("--out", default="data/metric-harness-report.json")
     ap.add_argument("--self-test", action="store_true")
@@ -223,6 +268,12 @@ def main():
     if os.path.isdir(cd):
         load_clean_holes(cd, ctx)
     reps = run(ctx, a.n_held)
+    # comprehension floor (cross-universe): needs candidate prose + the recognizer vocab
+    cand = a.candidates if os.path.isabs(a.candidates) else os.path.join(ROOT, a.candidates)
+    vocp = a.vocab if os.path.isabs(a.vocab) else os.path.join(ROOT, a.vocab)
+    if "paper2c" in ctx and os.path.isdir(cand) and os.path.exists(vocp):
+        import strategy_recognizer as sr
+        reps += run_comprehension(ctx, load_candidates_prose(cand), sr.load_vocab(vocp), a.n_held)
     print_reports(reps)
     outp = a.out if os.path.isabs(a.out) else os.path.join(ROOT, a.out)
     json.dump({"reports": reps}, open(outp, "w"), indent=1)
