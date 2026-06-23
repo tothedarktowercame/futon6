@@ -77,6 +77,71 @@ def load_concept_index(path, ctx=None):
     return ctx
 
 
+def load_citations(path, ctx):
+    """In-corpus citation edges -> paper2refs (papers each paper cites). Feeds the bib
+    metrics (reference-resolution, concept-novelty)."""
+    c = json.load(open(path))
+    refs = defaultdict(set)
+    for e in c.get("edges", []):
+        f, t = e.get("from"), e.get("to")
+        if f and t:
+            refs[f].add(t)
+    ctx["paper2refs"] = dict(refs)
+    return ctx
+
+
+def run_bib(ctx, n_held=20):
+    """reference-resolution (S2, accretion): of a held-out paper's in-corpus references,
+    how many are present as the substrate grows k=1..N. The bib analogue of concept-
+    coverage — steep only when the substrate is citation-coherent (else flat at small n)."""
+    if "paper2refs" not in ctx or "substrate_universe" not in ctx:
+        return []
+    refs = ctx["paper2refs"]
+    have = sorted(p for p in refs if len(refs[p]) >= 3 and p in ctx.get("paper2c", {}))
+    if not have:
+        return []
+    held = held_out(have, n_held)
+    pool = [p for p in ctx["substrate_universe"] if p not in set(held)]
+    grid = kgrid(len(pool))
+    pts = []
+    for k in grid:
+        s = set(pool[:k])
+        pts.append([k, statistics.mean(len(refs[h] & s) / len(refs[h]) for h in held)])
+    v1, vmax = pts[0][1], pts[-1][1]
+    v10 = next((v for k, v in pts if k >= 10), vmax)
+    return [{"metric": "reference-resolution", "stage": "S2", "axis": "accretion", "corpus": "substrate",
+             "points": pts, "v@1": round(v1, 4), "v@10": round(v10, 4), "v@max": round(vmax, 4),
+             "rise_1_to_10": round(v10 - v1, 4),
+             "rising": all(pts[i][1] <= pts[i + 1][1] + 1e-9 for i in range(len(pts) - 1)),
+             "attribution_stage": "S2", "n_held": len(held), "n_pool": len(pool)}]
+
+
+def concept_novelty_report(ctx, sample_n=300):
+    """concept-novelty-vs-citations (S2, completeness): fraction of a paper's concepts that
+    do NOT appear in any paper it cites — the paper's apparent conceptual contribution
+    over its citation ancestry."""
+    if "paper2refs" not in ctx or "paper2c" not in ctx:
+        return None
+    refs, p2c = ctx["paper2refs"], ctx["paper2c"]
+    have = sorted(p for p in refs if p2c.get(p) and any(c in p2c for c in refs[p]))
+    if not have:
+        return None
+    step = max(1, len(have) // sample_n)
+    have = have[::step][:sample_n]
+    nov = []
+    for p in have:
+        cited = set()
+        for c in refs[p]:
+            cited |= p2c.get(c, set())
+        nov.append(len(p2c[p] - cited) / max(1, len(p2c[p])))
+    nov.sort()
+    return {"metric": "concept-novelty-vs-citations", "stage": "S2", "axis": "completeness",
+            "kind": "per-paper", "attribution_stage": "S2", "n_papers": len(nov),
+            "distribution": {"mean": round(statistics.mean(nov), 3), "median": round(statistics.median(nov), 3),
+                             "min": round(nov[0], 3), "max": round(nov[-1], 3),
+                             "frac_below_0.5": round(sum(v < 0.5 for v in nov) / len(nov), 3)}}
+
+
 def _concept_matcher(ci):
     # one regex over genuine concept names (longest-first), for grounding hole-box text
     names = sorted((c for c, r in ci.items() if r.get("genuine")), key=len, reverse=True)
@@ -339,6 +404,7 @@ def main():
     ap.add_argument("--candidates", default="data/iatc-candidates-ct200")
     ap.add_argument("--vocab", default="holes/clean/tactic-gesture-vocab.edn")
     ap.add_argument("--golden", default="data/showcases/ct-anatomy/golden")
+    ap.add_argument("--citations", default="data/warp/citations.json")
     ap.add_argument("--n-held", type=int, default=20)
     ap.add_argument("--out", default="data/metric-harness-report.json")
     ap.add_argument("--from-records", help="aggregate MetricRecords a run emitted (run-dir)")
@@ -372,6 +438,14 @@ def main():
         mc = markup_coverage_report(gd)
         if mc:
             reps.append(mc)
+    # bib layer: reference-resolution (accretion) + concept-novelty (completeness)
+    cit = a.citations if os.path.isabs(a.citations) else os.path.join(ROOT, a.citations)
+    if "paper2c" in ctx and os.path.exists(cit):
+        load_citations(cit, ctx)
+        reps += run_bib(ctx, a.n_held)
+        nov = concept_novelty_report(ctx)
+        if nov:
+            reps.append(nov)
     print_reports(reps)
     outp = a.out if os.path.isabs(a.out) else os.path.join(ROOT, a.out)
     json.dump({"reports": reps}, open(outp, "w"), indent=1)

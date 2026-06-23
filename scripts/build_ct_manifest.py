@@ -34,13 +34,67 @@ def warm_ids():
     return ids
 
 
+EPRINT_DIR = "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints"
+
+
+def _has_eprint(pid):
+    return bool(glob.glob(os.path.join(EPRINT_DIR, pid.replace("/", "__") + ".*")))
+
+
+def build_citation_neighborhood(hub=None, n=15):
+    """A citation-coherent sample (a hub + its in-corpus citers, all with eprints) + a
+    matched even-spread random sample of the same size — so the run can compare whether
+    citation coherence steepens the accretion slope. Writes holes/math-ct-{neighborhood,
+    random}.{ids.txt,fetch.jsonl} (safe-form ids; eprint_url constructed)."""
+    cits = json.load(open(os.path.join(ROOT, "data/warp/citations.json")))
+    cited_by = cits["cited_by"]
+    idx = json.load(open(os.path.join(ROOT, "data/warp/concept-index.json")))
+    incorpus = set()
+    for rec in idx.values():
+        incorpus.update(rec.get("papers", []))
+
+    def citers(p):
+        return [x.get("from") if isinstance(x, dict) else x for x in cited_by.get(p, [])]
+
+    if not hub:
+        hub = max((p for p in cited_by if _has_eprint(p)), key=lambda p: len(set(citers(p)) & incorpus))
+    neigh = [hub] + [c for c in dict.fromkeys(citers(hub)) if c != hub and c in incorpus and _has_eprint(c)][:n - 1]
+    excl = set(neigh)
+    pool = sorted(p for p in incorpus if p not in excl and _has_eprint(p))
+    step = max(1, len(pool) // n)
+    rnd = pool[::step][:n]
+
+    def emit(name, ids):
+        safe = [p.replace("/", "__") for p in ids]
+        open(os.path.join(ROOT, f"holes/math-ct-{name}.ids.txt"), "w").write("\n".join(safe) + "\n")
+        with open(os.path.join(ROOT, f"holes/math-ct-{name}.fetch.jsonl"), "w") as fh:
+            for p in ids:
+                fh.write(json.dumps({"id": p.replace("/", "__"),
+                                     "eprint_url": f"https://arxiv.org/e-print/{p.replace('__', '/')}"}) + "\n")
+    emit("neighborhood", neigh)
+    emit("random", rnd)
+    print(f"citation-coherent sample: hub {hub} ({len(set(citers(hub)) & incorpus)} in-corpus citers) "
+          f"+ {len(neigh) - 1} citers = {len(neigh)} papers")
+    print(f"  neighborhood: {neigh}")
+    print(f"matched random ({len(rnd)} papers, even-spread): {rnd}")
+    print("wrote holes/math-ct-{neighborhood,random}.{ids.txt,fetch.jsonl}")
+
+
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--citation-neighborhood", action="store_true",
+                    help="build a citation-coherent sample + matched random (instead of the 200-draw)")
+    ap.add_argument("--hub", help="citation hub id (default = top in-corpus hub with an eprint)")
+    ap.add_argument("--neighborhood-n", type=int, default=15)
     ap.add_argument("--db", default="/home/joe/code/storage/arxiv-manifest/arxiv_manifest.sqlite")
     ap.add_argument("--n", type=int, default=200)
     ap.add_argument("--since", default="2007-01-01")
     ap.add_argument("--out", default="holes/math-ct-200.manifest.json")
     args = ap.parse_args()
+
+    if args.citation_neighborhood:
+        build_citation_neighborhood(args.hub, args.neighborhood_n)
+        return
 
     con = sqlite3.connect(args.db)
     rows = con.execute(
