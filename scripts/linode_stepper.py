@@ -99,6 +99,79 @@ def sh(cmd):
     return subprocess.run(cmd, shell=True, cwd=ROOT).returncode
 
 
+# ---- scale profiles (same stage commands; S0 + scale differ — the generalization test) ----
+PROFILES = {
+    "linode": {
+        "banner": "LINODE — small / single StackScript box (the reduced-scale end-to-end)",
+        "s0": "README-linode: StackScript 2142757; linode-postsetup-deps.sh; hf pre-pull 70B; "
+              "linode-4gpu-setup.sh (vLLM 70B, TP=4)",
+        "scale": "sample: holes/math-ct-200.ids.txt OR a 15-paper citation neighborhood "
+                 "(math-ct-neighborhood) + matched random",
+    },
+    "superpod": {
+        "banner": "SUPERPOD — whole math.XX domain / 8-GPU cluster, overnight (LLaMA-only)",
+        "s0": "cluster alloc (SLURM/queue); serve LLaMA across 8 GPUs (TP=8); "
+              "linode-postsetup-deps.sh; hf pre-pull; corpus-id = domain@date",
+        "scale": "ENTIRE math.XX domain (build_ct_manifest over the domain); LLM stages S3/S4/S7 "
+                 "at batch concurrency; S2 MUST be corpus-fresh (no --reuse)",
+    },
+}
+
+
+def load_deps():
+    """:depends-on per stage, from the superpod DAG contract (single source of truth)."""
+    txt = open(os.path.join(ROOT, "holes", "superpod-dag-contract.md")).read()
+    for b in re.findall(r"```edn\n(.*?)\n```", txt, re.S):
+        if ":dag" in b and ":pipeline" in b:
+            c = {kw(k): v for k, v in dict(edn.loads(b)).items()}
+            out = {}
+            for m in c["dag"]:
+                sd = {kw(k): v for k, v in dict(m).items()}
+                out[kw(sd["id"])] = [kw(d) for d in (sd.get("depends-on") or [])]
+            return out
+    return {}
+
+
+# ---- phase-completeness ledger (the superpod contract's teeth) ----
+def _ledger(run_dir):
+    return os.path.join(run_dir, "phase-ledger.jsonl")
+
+
+def ledger_record(run_dir, stage, corpus_id, run_id):
+    import json
+    os.makedirs(run_dir, exist_ok=True)
+    open(_ledger(run_dir), "a").write(
+        json.dumps({"stage": stage, "corpus_id": corpus_id, "run_id": run_id, "gate": "pass"}) + "\n")
+
+
+def ledger_has(run_dir, stage, corpus_id):
+    import json
+    p = _ledger(run_dir)
+    if not run_dir or not os.path.exists(p):
+        return False
+    for line in open(p):
+        r = json.loads(line)
+        if r.get("stage") == stage and r.get("corpus_id") == corpus_id:
+            return True
+    return False
+
+
+def completeness_block(stage, deps, run_dir, corpus_id, reuse):
+    """Return a refusal message if any upstream dep lacks a passing ledger entry for THIS
+    corpus (the DAG-completeness discipline). S2 is corpus-fresh — never satisfiable by --reuse."""
+    if not run_dir:
+        return None
+    for d in deps:
+        if ledger_has(run_dir, d, corpus_id):
+            continue
+        if d in reuse and d != "S2":
+            continue
+        extra = " (S2 must be corpus-fresh — NOT --reuse-able)" if d == "S2" else f" (run it, or --reuse {d})"
+        return (f"✗ {stage} BLOCKED — upstream {d} has no passing ledger entry for "
+                f"corpus '{corpus_id}'{extra}")
+    return None
+
+
 def order(stages, frm, to):
     ids = [s["id"] for s in stages]
     i0 = ids.index(frm) if frm else 0
@@ -106,13 +179,21 @@ def order(stages, frm, to):
     return stages[i0:i1]
 
 
-def plan(stages):
-    print("LINODE STEPPER — executable plan\n")
+DEPS = load_deps()
+
+
+def plan(stages, profile):
+    pr = PROFILES[profile]
+    print(f"PIPELINE STEPPER — {pr['banner']}\n  scale: {pr['scale']}\n")
     for s in stages:
         op = OPS.get(s["id"], {})
-        loc = "local" if op.get("local") else "HOST-ONLY"
-        print(f"{s['id']} {s['name']:22s} [{s['compute']:8s} {loc:9s}] "
-              f"{'⏸HALT' if s['halt'] else '     '}  go/no-go: {','.join(s['go']) or '—'}")
+        loc = "local" if op.get("local") else "HOST/CLUSTER"
+        deps = ",".join(DEPS.get(s["id"], [])) or "—"
+        print(f"{s['id']} {s['name']:22s} [{s['compute']:8s} {loc:12s}] "
+              f"{'⏸HALT' if s['halt'] else '     '}  deps: {deps}  go/no-go: {','.join(s['go']) or '—'}")
+        if s["id"] == "S0":
+            print(f"     note: {pr['s0']}")
+            continue
         if op.get("cmd"):
             print(f"     cmd : {op['cmd'].format(PY=PY)}")
         if op.get("gate"):
@@ -121,36 +202,41 @@ def plan(stages):
             print(f"     note: {op['note']}")
 
 
-def run(stages, no_halt, on_host):
+def run(stages, profile, no_halt, on_host, run_dir, corpus_id, run_id, reuse):
+    print(f"=== {PROFILES[profile]['banner']} | corpus={corpus_id} run={run_id} ===")
     for s in stages:
         op = OPS.get(s["id"], {})
         print(f"\n=== {s['id']} {s['name']} [{s['compute']}] ===")
-        if not op.get("local") and not on_host:
-            print(f"⏸ HOST-ONLY — run on the Linode GPU host, then resume with "
-                  f"--from {s['id']}")
-            print(f"   {op.get('note','')}")
+        # DAG-completeness: every upstream dep must have a passing ledger entry for this corpus
+        block = completeness_block(s["id"], DEPS.get(s["id"], []), run_dir, corpus_id, reuse)
+        if block:
+            print(block)
             return
-        # precondition: inputs present
+        if not op.get("local") and not on_host:
+            print(f"⏸ HOST/CLUSTER stage — run on the box/cluster, record it with "
+                  f"--mark-done {s['id']} (or resume --from {s['id']} --on-host)")
+            print(f"   {pr_s0 if (pr_s0 := PROFILES[profile]['s0']) and s['id']=='S0' else op.get('note','')}")
+            return
         missing = [p for p in op.get("inputs", []) if not os.path.exists(os.path.join(ROOT, p))]
         if missing:
             print(f"✗ precondition FAILED — missing input(s): {missing}")
             return
-        # command
         if op.get("cmd"):
             print(f"$ {op['cmd'].format(PY=PY)}")
             if sh(op["cmd"].format(PY=PY)) != 0:
                 print(f"✗ {s['id']} command FAILED — stopping")
                 return
-        # postcondition gate
         if op.get("gate"):
             print(f"[gate] {op['gate'].format(PY=PY)}")
             if sh(op["gate"].format(PY=PY)) != 0:
                 print(f"✗ {s['id']} GATE FAILED ({','.join(s['go'])}) — stopping for fix")
                 return
-        print(f"✓ {s['id']} done")
+        if run_dir:
+            ledger_record(run_dir, s["id"], corpus_id, run_id)
+        print(f"✓ {s['id']} done" + (f" (ledger: {corpus_id})" if run_dir else ""))
         if s["halt"] and not no_halt:
-            print(f"⏸ HALT — inspect {s['id']} output; resume with "
-                  f"--from {stages[stages.index(s)+1]['id'] if stages.index(s)+1 < len(stages) else '(done)'}")
+            nxt = stages[stages.index(s) + 1]["id"] if stages.index(s) + 1 < len(stages) else "(done)"
+            print(f"⏸ HALT — inspect {s['id']} output; resume with --from {nxt}")
             return
     print("\n✓ run complete")
 
@@ -159,16 +245,28 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--plan", action="store_true")
     ap.add_argument("--run", action="store_true")
+    ap.add_argument("--profile", choices=["linode", "superpod"], default="linode")
     ap.add_argument("--from", dest="frm", default=None)
     ap.add_argument("--to", default=None)
     ap.add_argument("--no-halt", action="store_true")
     ap.add_argument("--on-host", action="store_true")
+    ap.add_argument("--run-dir", help="phase-ledger + emit dir (data/runs/<run-id>)")
+    ap.add_argument("--corpus-id", default="adhoc")
+    ap.add_argument("--run-id", default="adhoc")
+    ap.add_argument("--reuse", nargs="*", default=[], help="upstream stages to accept from --reuse (never S2)")
+    ap.add_argument("--mark-done", nargs="*", default=[], help="record host/cluster stages as ledger-passed")
     args = ap.parse_args()
     stages = load_stages()
+    if args.mark_done:
+        for sid in args.mark_done:
+            ledger_record(args.run_dir, sid, args.corpus_id, args.run_id)
+            print(f"ledger: {sid} marked done for corpus {args.corpus_id}")
+        return
     if args.plan or not args.run:
-        plan(stages)
+        plan(stages, args.profile)
     if args.run:
-        run(order(stages, args.frm, args.to), args.no_halt, args.on_host)
+        run(order(stages, args.frm, args.to), args.profile, args.no_halt, args.on_host,
+            args.run_dir, args.corpus_id, args.run_id, args.reuse)
 
 
 if __name__ == "__main__":

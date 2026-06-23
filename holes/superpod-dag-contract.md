@@ -172,7 +172,11 @@ the only safety net. They are now load-bearing, not advisory.
 
 - **Contract: set up (this doc).** The DAG, the phase-ledger spec, the
   completeness rule, and the explicit-reuse rule are defined.
-- **To wire into the stepper (next code step):** (1) emit phase-ledger entries on
+- **Enforcement WIRED (2026-06-23):** `linode_stepper.py` is now the scale-aware runner
+  (`--profile linode|superpod`): phase-ledger (`--run-dir`, keyed by `--corpus-id`),
+  completeness refusal on missing upstream, `--reuse` (never S2), `--mark-done` for
+  cluster stages. Verified: superpod `--plan` + S6-blocked-without-S2 + S2-reuse-refused.
+  *(superseded next-step note:)* (1) emit phase-ledger entries on
   each gate-PASS keyed by `:corpus-id`; (2) a `--verify-dag` / precondition that
   reads `:depends-on` + the ledger and refuses on a missing upstream phase;
   (3) the `--reuse <stage>=<provenance>` flag. Until wired, the contract is the
