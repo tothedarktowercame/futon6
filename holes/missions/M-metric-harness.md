@@ -1,7 +1,8 @@
 # M-metric-harness — the next end-to-end run measures PROGRESS, not throughput
 
-**Status:** HEAD complete; IDENTIFY authored (awaiting operator sign-off); MAP/DERIVE
-seeded; INSTANTIATE deferred to next session (2026-06-23).
+**Status:** HEAD complete; IDENTIFY authored; **MAP in progress** (surveying the prior
+runs / grabbed-back data / rendered examples — the "scratch work"); DERIVE seeded;
+INSTANTIATE deferred (2026-06-23).
 
 *Follows `futon4/holes/mission-lifecycle.md`. Successor framing to the mark5 run
 (`holes/mark5-ct100-results.md`); executes against the corrected pipeline in
@@ -110,6 +111,14 @@ DERIVE table formalizes them. **The list is open** (more will surface in MAP).
   concepts carrying a *real definition entry* should **rise as papers accrete** — each
   paper contributes definitions/usages. A pure cross-paper accretion metric: seed at n=1,
   climbing n=1→10. Flat ⇒ the encyclopedia isn't actually ingesting new definitions.
+- **Weak-point identification + our confidence in it.** Flag the load-bearing-but-thin
+  steps / undischarged gaps in a paper (rung-3 thin-move detector; the conjecture /
+  weak-proof map) — but **paired with a confidence that distinguishes a weak *proof* from
+  a weak *model*** (low comprehension ⇒ "study more / weak-extraction", *never*
+  "weak-proof" — the comprehension verdict gate). Two-dimensional: (# flagged weak points,
+  confidence/comprehension at each flag). Defined at n=1; the *confidence* should rise with
+  the corpus (better grounding ⇒ more flags we can trust as real, fewer mistaken for model
+  weakness).
 - **(more to come)** — deliberately open; MAP-Q1 sorts which rise vs saturate at small n.
 
 **Exit criterion (IDENTIFY):** Joe agrees the gap is real and the scope (harness + small
@@ -117,21 +126,78 @@ everything-on run, rework deferred) is right.
 
 ---
 
-## 2. MAP — *seeded; to complete next session*
+## 2. MAP — survey of prior runs / data / renders (2026-06-23)
 
-**Ready vs missing.**
+*The "scratch work" is sprawling: ~15 run/experiment dirs, ~20 G of rendered HTML, ~35 G
+of grabbed-back SE/MO data, plus per-feature slices. Surveyed via an Explore sweep +
+targeted inventory. **Headline MAP finding at the bottom: no run ever varied n, so a
+progress *slope* has literally never been measured — that absence is the mission's whole
+point.***
 
-| ready (built) | missing (the work) |
+### Runs / experiment slices
+
+| run | type | date | location | produced | status |
+|-----|------|------|----------|----------|--------|
+| loop-run | laptop | 06-16 | `data/iatc-argument-graphs/loop-run` | 10 finals | early baseline |
+| loop-run-dpdemo{,-fixed,-final} | laptop | 06-16 | same parent | render artifacts (0/2/1 finals) | superseded by dp-demo render |
+| gh200 | laptop | 06-16 | `…/gh200` + showcases/gh200 (182 HTML) | 15 finals | baseline; `1308.1804` true-positive vacuous-edge catch |
+| **loop-run-70b** (mark4 go-live) | laptop+vLLM 70B | 06-17 | `…/loop-run-70b` | 9 finals, checker 9/9 · substance 9/9 · grounding 21.4% | preregistered; the enriched baseline |
+| **linode-stageA-20260618** | Linode | 06-18 | `…/linode-stageA-20260618` | 9 finals (top-level) | Stage-A staged run |
+| **RAW-CTL** | Linode | 06-18 | `data/exp-20260618/loop-run-70b-raw` | 10 finals + eval; grounding **12.5%**, substance lower | **RAN** — raw degrades vs enriched ⇒ enrichment earns its keep |
+| EXP-3b / BGE retrieval | Linode/laptop | 06-18 | `data/exp-20260618/{bge-cas-sel-3b,exp3b-context}` | 6+6 entries | the text-vs-structure retrieval arc |
+| per-feature slices | laptop | 06-17/18 | `data/{rung3-technique,symbol-grounding,cas-select-steps,expository-scope-graphs}/loop-run-70b` | one slice each | each exercises ONE proofcheck stage in isolation |
+| **mark5-ct100-run** | Linode | 06-22 | `data/mark5-ct100-run` | 106 graphs, 102 CLeans, embeddings, export | latest; macro-collapse (see results note) |
+
+### Data stores
+
+| store | size | count | note |
+|-------|------|-------|------|
+| eprints `storage/futon6/data/arxiv-math-ct-eprints` | 1.9 G | 9,798 `.tar.gz` (9,916 in metadata) | the math.CT corpus; active ingestion |
+| warp substrate `data/warp` | 1.2 G | concept-index = **3,623 concepts** (Jun 18) | the (stale-for-mark5) concept model |
+| candidates | — | iatc-candidates 10 · **ct200 199** · dpdemo 5 | ct200 = the mark5 pre-stage |
+| grabbed-back corpora `storage/futon6` | **35 G se-data** · 613 M mo-processed · math/math-se | the P7 StackExchange/MO era |
+| NER kernel `data/ner-kernel*` | 1.5 M | ~18.9 K terms | **SE-physics-derived (May 23) — stale for CT** |
+
+### Rendered examples (the laptop "test-coverage" runs Joe recalls)
+
+| showcase | size | when | shows |
+|----------|------|------|-------|
+| `ct-anatomy/golden` | **18 G / 9,774 HTML** | 06-15 | the big anatomy render (object-layer coverage) |
+| `ct-anatomy/gh200` | 845 M / 182 HTML | 06-16/18 | gh200 anatomy + IATC goldens |
+| `batch-008-math-ct-qc{,-v2,-v3}` | ~24 M | **05-20/23** | the math.CT QC / test-coverage pages |
+| `distributed-proofreaders/*` | — | 05-20 | earlier DP render experiments |
+| `ct-anatomy/dp-demo` (11) · `proofcheck-demo` (1) · `clean-demo` (9-proof) · `clean-ct200-demo` (mark5) | — | 06-17/22 | the proof-check + CLean demos |
+
+### Ready vs missing (for the harness)
+
+| ready — data exists to prototype a metric on | missing — the work |
 |---|---|
-| S1 anatomy, S2 substrate, S3 IATC spine, S5 comprehension scripts, S7/S8, all gates | **the metrics harness** (compute + slope + per-stage attribution) |
-| each candidate metric has a producing stage (see DERIVE table) | **S3 all-proofs** extraction (mark3_extract_candidates → every proof) |
-| 102 mark5 artifacts for harness prototyping | **S4 expository GPU run** (built cfec4f9, never exercised) |
-| | **S6 paper-graph(B) assembler** (new component) |
+| mark5 102 (structure/method) · loop-run-70b **enriched + raw** (substance/grounding contrast) · expository-scope-graphs slice (expository coverage) · symbol-grounding + rung3-technique slices · warp concept-index (encyclopedia count) · eprint corpus + S1 (any-markup coverage) | **the harness itself** (compute metrics + n=1→n=10 slope + per-stage attribution) |
+| each candidate metric has a producing stage / a prior slice | **S3 all-proofs**, **S4 expository at scale**, **S6 paper-graph(B)** |
+| | **a single consistent run that varies n** (none exists — see below) |
 
-**MAP questions (answer with findings, not speculation, next session):**
-- **Q1** Which candidate metrics genuinely rise vs saturate at small n (10–20)? Prototype on the mark5 102 where possible.
-- **Q2** What is the correct **n=1 baseline** for an inherently cross-paper metric (self-grounding? zero? leave-one-out)?
-- **Q3** What is the per-stage **attribution mechanism** — how does a flat top-line decompose to "stage X isn't contributing"?
+### MAP questions — partial answers
+
+- **Q1 (which rise vs saturate):** *cannot yet be read from the archive* — every run is a
+  single fixed-n snapshot; none sweeps n. Must be measured by the harness on one
+  consistent run. The mark5 102 + the slices let us prototype the *metric definitions*, not
+  the slope.
+- **Q2 (n=1 baseline):** open (design in DERIVE) — leave-one-out vs self vs zero per metric.
+- **Q3 (attribution):** *feasible* — the per-feature slices (rung3, symbol-grounding,
+  expository-scope) prove each stage's output can be measured in isolation, so a flat
+  top-line can be decomposed by re-running the same stage scripts per metric.
+
+### Surprises (recorded before DERIVE locks in)
+
+1. **RAW-CTL DID run** (06-18) — correcting the contract; enrichment earns its keep.
+2. **No run ever varied n.** Every artifact is a fixed-size snapshot (10, 15, ~100). So
+   the *slope* — the mission's core deliverable — has **never been measured**. That's
+   exactly why there's no progress signal today: everything is a one-shot.
+3. **Per-stage outputs already exist as isolated slices** (rung3, symbol-grounding,
+   expository-scope) → per-stage attribution (Q3) is buildable by reuse.
+4. The scratch is large + uneven (18 G golden render; 35 G stale SE data; NER kernel
+   SE-derived) — the harness should ignore the stale corpora and measure on the live
+   math.CT path.
 
 ---
 

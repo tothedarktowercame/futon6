@@ -137,7 +137,7 @@ pipeline run (inspection / demo / separate experiment).*
 | 7.3 | Eval harness | (tail) | ⚙ | non-fatal |
 | 7.4 / DEMO-COMPOSE / DEMO-paper / RENDER | Demos / renderers | render-tail | ✓ | built (`build_proofcheck_demo`, `render_run`); runs post-S8 to present for Rob |
 | GOLIVE | mark4 IATC go-live | — | ○ | the substrate (done) |
-| RAW-CTL | 70B-on-raw control arm | S3-arm | ◐ | runner built + dry-run-verified (`linode-4gpu-run-raw.sh`, 7950307); **GPU run NEVER ran** (send-gated) — fold in as a 2nd S3 arm (same candidates, `enrichment:[]`) |
+| RAW-CTL | 70B-on-raw control arm | S3-arm | ✓ | **RAN 2026-06-18** (`data/exp-20260618/loop-run-70b-raw`, 10 finals + eval): raw grounding 12.5% vs enriched 21.4%, substance lower → **enrichment earns its keep**. (Earlier "never ran" was wrong — output was in `exp-20260618/`, found in the M-metric-harness MAP survey.) |
 
 **What mark5 actually exercised (for contrast):** only 1.1–1.3, 4.1(one-proof)–4.5,
 R2-wire, and 8.1–8.4. Everything tagged ② / ⑤ / S5-comprehension / S6 / S9 above was
@@ -154,12 +154,11 @@ omissions** — every card is run, gated, a follow-up, or ◐-pending the GPU:
 - **3.3 warp landscape overlays → CPU follow-up.** It's CPU-runnable (gpu-*benefit*),
   so it runs as a post-run inspection step (t-SNE / curvature / aliveness over the S2
   concept graph), not a skip.
-- **RAW-CTL → a ready S3 arm that never actually ran.** The runner exists and is
-  dry-run-verified (`linode-4gpu-run-raw.sh`, 7950307: 10 raw candidates, 253
-  enrichment marks stripped, gate-pass) but the **GPU run was send-gated and never
-  landed** — no `…-raw` candidate/output dirs exist. It's cheap to fold into the next
-  GPU run as a second arm (same candidates, `enrichment:[]`) and answers the
-  enrich-before-scale cost question.
+- **RAW-CTL → already RAN (2026-06-18).** Output in `data/exp-20260618/loop-run-70b-raw`
+  (10 finals + `mark3-eval-*-70b-raw`); **raw degrades vs enriched** (grounding 12.5% vs
+  21.4%; substance lower) → **enrichment earns its keep before scaling the 70B.** (An
+  earlier note here said "never ran" — wrong; the M-metric-harness MAP survey found the
+  output under `exp-20260618/`. Corrected.)
 - **In-scope but pending a served model (◐ — the real remaining work):** 5.4 expository
   GPU hole-fill, SFC2b symbol grounding, rung-3 LLM-residue, WARP-ORCH full runner.
 
