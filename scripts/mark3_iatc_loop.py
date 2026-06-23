@@ -286,7 +286,7 @@ def run(args) -> int:
     accepted_graphs = []
     for cf in cands:
         cand = json.loads(cf.read_text())
-        pid = cand["paper-id"]
+        pid = cand.get("proof-id", cand["paper-id"])  # unique per proof (all-proofs); falls back to paper-id
         final = outdir / f"{pid}.edn"
         if final.exists():                       # resume: skip papers already done
             results.append((pid, "pass", "(resumed: existing graph)"))

@@ -163,6 +163,66 @@ def extract(paper_id: str) -> dict[str, Any] | None:
     }
 
 
+PROOF_GAP = 40  # proof-moves within this many lines group into one proof region
+
+
+def all_passages(marks: list[dict[str, Any]], starts: list[int]) -> list[dict[str, Any]]:
+    """ALL proof regions in a paper (whole-paper extraction), not the single best passage.
+    Proof-moves within PROOF_GAP lines group into one proof region; each region -> one
+    passage (premise = nearest assumption before the region, conclusion = last move).
+    Falls back to choose_passage's single conditional/statement passage if no proof-moves."""
+    pms = sorted(marks_of(marks, "proof-move"), key=lambda m: (mark_line(m, starts), m["start"]))
+    if not pms:
+        one = choose_passage(marks, starts)
+        return [one] if one else []
+    groups = [[pms[0]]]
+    for m in pms[1:]:
+        if mark_line(m, starts) - mark_line(groups[-1][-1], starts) <= PROOF_GAP:
+            groups[-1].append(m)
+        else:
+            groups.append([m])
+    out = []
+    for g in groups:
+        first_line = mark_line(g[0], starts)
+        conclusion = g[-1]
+        premises = [m for m in marks if m.get("kind") in {"assume/explicit", "quant/universal"}
+                    and 0 <= first_line - mark_line(m, starts) <= 80]
+        premise = (sorted(premises, key=lambda m: (first_line - mark_line(m, starts), m["start"]))[0]
+                   if premises else g[0])
+        out.append({"selection": ":proof-move", "premise": premise, "conclusion": conclusion, "edge": conclusion})
+    return out
+
+
+def extract_all(paper_id: str) -> list[dict[str, Any]]:
+    mf = MARKS_DIR / f"fable-{paper_id}-dp-emacs.json"
+    if not mf.exists():
+        return []
+    data = json.loads(mf.read_text())
+    text = data["text"]
+    starts = line_starts(text)
+    marks = [m for m in data["marks"] if "start" in m and "end" in m]
+    cands = []
+    for i, ch in enumerate(all_passages(marks, starts)):
+        p, c = ch["premise"], ch["conclusion"]
+        lo = min(mark_line(p, starts), mark_line(c, starts))
+        hi = max(mark_line(p, starts), mark_line(c, starts))
+        win, win_lines = window_text(text, starts, lo, hi)
+        cands.append({
+            "paper-id": paper_id,
+            "proof-id": f"{paper_id}__p{i}",
+            "passage-id": f"{paper_id}:p{i}:{ch['selection'][1:]}:L{win_lines[0]}-{win_lines[1]}",
+            "selection": ch["selection"],
+            "anchor-lines": {"premise": mark_line(p, starts), "conclusion": mark_line(c, starts)},
+            "window-lines": win_lines,
+            "binder-context": binder_context(marks, starts, hi + 1),
+            "enrichment": window_enrichment(marks, starts, win_lines[0], win_lines[1]),
+            "source-window": win,
+            "marks-path": str(mf.relative_to(REPO)),
+            "schema": SCHEMA,
+        })
+    return cands
+
+
 def default_papers() -> list[str]:
     gh = sorted(p.stem for p in GH200_DIR.glob("*.html"))
     pilot = {p.stem for p in PILOT_DIR.glob("*.edn")}
@@ -181,24 +241,31 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(REPO / "data" / "iatc-candidates"))
     ap.add_argument("--papers", nargs="*", help="paper ids; default = 10 non-pilot gh200 with marks")
+    ap.add_argument("--all-proofs", action="store_true",
+                    help="extract EVERY proof region per paper (whole-paper), not one passage")
     a = ap.parse_args()
     papers = a.papers or default_papers()
     outdir = Path(a.out)
     outdir.mkdir(parents=True, exist_ok=True)
     manifest = []
     for pid in papers:
-        cand = extract(pid)
-        if not cand:
+        cands = extract_all(pid) if a.all_proofs else ([c] if (c := extract(pid)) else [])
+        if not cands:
             print(f"  skip {pid}: no marks or no selectable passage")
             continue
-        (outdir / f"{pid}.candidate.json").write_text(json.dumps(cand, indent=2))
-        manifest.append({"paper-id": pid, "passage-id": cand["passage-id"],
-                         "selection": cand["selection"], "window-lines": cand["window-lines"]})
-        print(f"  {pid}: {cand['selection']} lines {cand['window-lines']} "
-              f"({len(cand['source-window'])} chars, {len(cand['binder-context'])} binders, "
-              f"{len(cand['enrichment'])} anatomy marks)")
+        for cand in cands:
+            fid = cand.get("proof-id", pid)
+            (outdir / f"{fid}.candidate.json").write_text(json.dumps(cand, indent=2))
+            manifest.append({"paper-id": pid, "proof-id": cand.get("proof-id", pid),
+                             "passage-id": cand["passage-id"], "selection": cand["selection"],
+                             "window-lines": cand["window-lines"]})
+        print(f"  {pid}: {len(cands)} proof(s)" if a.all_proofs else
+              f"  {pid}: {cands[0]['selection']} lines {cands[0]['window-lines']} "
+              f"({len(cands[0]['source-window'])} chars, {len(cands[0]['binder-context'])} binders, "
+              f"{len(cands[0]['enrichment'])} anatomy marks)")
     (outdir / "manifest.json").write_text(json.dumps({"papers": manifest}, indent=2))
-    print(f"\n{len(manifest)}/{len(papers)} candidates -> {outdir}")
+    n_papers = len({m["paper-id"] for m in manifest})
+    print(f"\n{len(manifest)} candidate(s) from {n_papers}/{len(papers)} papers -> {outdir}")
     return 0
 
 

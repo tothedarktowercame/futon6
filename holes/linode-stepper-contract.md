@@ -191,9 +191,11 @@ a ready-but-never-run GPU arm; 5.5 needs a build; the substantive remaining work
 - **Built but NEVER exercised on GPU — the conspicuous mark5 gap:** **S4 expository**
   (`mark3_expository_loop.py` + `expository_argcheck.bb`, cfec4f9, stub-tested only).
   The whole point of the corrected run is to exercise ⑤ alongside ④.
-- **Needs a small change:** **S3 candidate extraction must yield ALL proof passages
-  per paper**, not the single `choose_passage` window (the mark3-demo one-proof
-  bottleneck — `mark5-ct100-results.md` D8).
+- **S3 all-proofs — DONE (2026-06-23).** `mark3_extract_candidates --all-proofs` groups
+  proof-moves into proof regions → one candidate per proof with a unique `proof-id`;
+  `mark3_iatc_loop` names graphs by `proof-id` (no per-paper collision). Tested:
+  0704.0502→3 proofs, 0705.4406→7; 10 distinct graphs, backward-compat (no flag→1/paper)
+  intact. (Was the mark3-demo one-proof bottleneck — `mark5-ct100-results.md` D8.)
 - **Needs build:** **S6 paper-graph (B) assembler** — the one genuinely-new component;
   the rest is composition of built stages.
 - **Needs diagnosis, then maybe rework:** the S7 macro collapse (G-entropy, mark5 D1) —
