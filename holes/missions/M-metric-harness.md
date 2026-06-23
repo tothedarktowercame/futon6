@@ -2,9 +2,9 @@
 
 **Status:** HEAD complete; IDENTIFY authored; MAP complete (scratch-work survey);
 DERIVE authored (3-axis taxonomy + per-phase & aggregate catalog); ARGUE authored
-(paradox resolved); **VERIFY spiked** — concept-coverage accretion slope is real + steep
-at small n (0.10→0.56 over k=1→10 on the 9,738-paper CT corpus); INSTANTIATE = build the
-harness (2026-06-23).
+(paradox resolved); VERIFY spiked (accretion slope real + steep at small n);
+**INSTANTIATE (1) DONE** — `scripts/metric_harness.py` built + self-test + reproduces the
+spike; INSTANTIATE (2) = more emitters + the everything-on box run (2026-06-23).
 
 *Follows `futon4/holes/mission-lifecycle.md`. Successor framing to the mark5 run
 (`holes/mark5-ct100-results.md`); executes against the corrected pipeline in
@@ -395,11 +395,41 @@ INSTANTIATE concern). One metric spiked; the rest land in INSTANTIATE.
 **Decision log.** No DERIVE revision needed — the spike confirms accretion slopes are real
 and readable at small n. Risk that "there's no slope to find" is retired.
 
-## 6. INSTANTIATE · 7. DOCUMENT — *forward path*
+## 6. INSTANTIATE (2026-06-23)
 
-- **INSTANTIATE:** build the harness (`MetricRecord`/`SlopeReport` emit + leave-one-out
-  replay + per-stage attribution); wire S3-all-proofs + S4 expository + S6 assembler; run
-  10 then 20 whole papers everything-on; emit the slope + attribution. Keep a line of
-  sight to `f6/graph-enhanced-evaluation` as the ground-truth proxy check.
-- **DOCUMENT:** the slope report becomes the progress artifact (and the superpod
-  go/no-go input).
+### (1) CPU harness — BUILT + tested  (`scripts/metric_harness.py`)
+
+The reusable gauge: a pluggable metric registry (`@metric(name, stage, axis, kind)`), the
+DERIVE leave-one-out replay (hold out a fixed set, sweep substrate k=1..N, mean over
+held-out), and a `SlopeReport` per metric (points · v@1 · v@10 · rise@1→10 · rising? ·
+attribution-stage) emitted as a table + JSON. Seeded with the two accretion metrics
+computable on data in hand; new metrics register with `@metric` + a `ctx` loader.
+
+**Tests.** self-test PASS (synthetic coverage rose 0.2→1.0, encyclopedia 2→30,
+`SlopeReport` round-trip ok). **Integration:** on the real concept-index it **reproduces
+the VERIFY spike exactly** —
+
+```
+[S2·accretion] concept-coverage      rising=True  rise@1→10=0.466  attribution=S2
+  k:    1    2    5   10   20   50  100  200  400  9718
+  val:.098 .226 .422 .564 .683 .822 .918 .967 .994 1.000
+[S2·accretion] encyclopedia-defined  rising=True  rise@1→10=736    (101 → 3559 defined)
+```
+
+**Completion-criteria check (IDENTIFY).** C1 (defined at n=1) ✓ · C2 (slope + per-stage
+attribution) ✓ · C3 (rises / else pinpointed) ✓ · C5 (slope is the headline) ✓ — for the
+accretion-on-existing-data subset. **C4 (both siblings + comprehension + cross-paper
+mining ON) is INSTANTIATE-(2)** — it needs the box run's outputs.
+
+### (2) remaining — INSTANTIATE
+
+- Register more metric emitters as their data lands: comprehension floor, expository
+  coverage, symbol-grounding-by-kind, weak-point-with-confidence (each `@metric` + a loader).
+- Wire **S3 all-proofs + S4 expository + S6 paper-graph**; run **10 then 20 whole papers
+  everything-on**; the harness then emits the full multi-metric slope report.
+- Keep `f6/graph-enhanced-evaluation` (the ground-truth use-value proxy) in view.
+
+## 7. DOCUMENT — *forward*
+
+The slope report (`data/metric-harness-report.json` + the table) is the progress artifact
+and the superpod go/no-go input.
