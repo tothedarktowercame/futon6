@@ -112,6 +112,23 @@ def c5_recogniser(sid):
             "thin_ok": True}
 
 
+def c6_webarxana(target):
+    """WebArxana follow-along: focusing the target by its NATURAL name in WebArxana shows its
+    scope-surface — the interactive form of C4 (watch the field light up as the session works)."""
+    import urllib.parse
+    name = urllib.parse.quote(target, safe="")
+    try:
+        d = json.load(urllib.request.urlopen(
+            f"http://localhost:3100/api/futon/ego/{name}?fold=1&depth=3", timeout=10))
+        e = d.get("ego", {})
+        n = len([r for r in (e.get("outgoing") or []) if (r.get("entity", {}) or {}).get("type") == "scope/frame"])
+    except Exception:
+        n = 0
+    return {"pass": n >= 2,
+            "value": f"#/dev/focus/{target} -> {n} scope/frames render in WebArxana",
+            "thin_ok": False}
+
+
 def main():
     if len(sys.argv) < 3:
         print(__doc__); sys.exit(1)
@@ -142,6 +159,7 @@ def main():
         "C3 comb engages target above chance":  c3_above_chance(comb, ctrl_comb, control, n_turns),
         "C4 field non-degenerate + specific":   c4_field(orbit),
         "C5 recogniser tags w/o paid mining":   c5_recogniser(sid),
+        "C6 WebArxana follow-along surface":     c6_webarxana(target),
     }
     # overall: PASS if all pass; THIN if the only failures are turn-count-limited (thin_ok); else FAIL
     fails = [k for k, c in checks.items() if not c["pass"]]
