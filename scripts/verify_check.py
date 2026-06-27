@@ -25,6 +25,10 @@ CHANCE_MARGIN = 0.15     # C3: target engage-frac must beat control by >= this (
 MIN_COVERED = 2          # C4: orbit must cover >= this many distinct scopes
 MIN_MOVES = 1            # C5: basins must tag >= this many turns
 MIN_POWER_TURNS = 12     # below this, the specificity test (C3) is under-powered → THIN, not FAIL
+COMB_THRESH = "0.42"     # calibrated engagement threshold — at 0.30 the comb is non-discriminating
+                         # (any technical turn clears it for any mission); 0.42 is where the target
+                         # separates from fair controls.  NB: M-points-de-fuite is a BAD control here
+                         # (its MAP catalogues γ/precision); use a thematically-independent mission.
 
 
 def run(args):
@@ -144,12 +148,12 @@ def main():
 
     # build the artifacts (untuned)
     run(["scripts/session_mission_comb.py", "--mission", target, "--scope-anchor", anchor,
-         "--session-id", sid, "--out", comb])
+         "--session-id", sid, "--thresh", COMB_THRESH, "--out", comb])
     run(["scripts/session_threads.py", "--session-id", sid, "--out", threads])
     run(["scripts/thread_orbits.py", "--threads", threads, "--comb", comb,
          "--out", f"{d}/orbit.edn", "--wa", orbit])
     run(["scripts/session_mission_comb.py", "--mission", control,
-         "--session-id", sid, "--out", ctrl_comb])
+         "--session-id", sid, "--thresh", COMB_THRESH, "--out", ctrl_comb])
 
     c1 = c1_sigils(sid)
     n_turns = c1["n_turns"]
