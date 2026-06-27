@@ -16,7 +16,7 @@ from session_mission_comb import fetch_scopes
 
 API = "http://localhost:7070"
 PIDX = "/home/joe/code/futon3/resources/sigils/patterns-index.tsv"
-WA = "/home/joe/code/futon4/data/webarxana/public/wa/thread-orbits.json"
+WA_DIR = "/home/joe/code/futon4/data/webarxana/public/wa"
 OUTROOT = "/home/joe/code/futon2/holes/reflow"
 
 
@@ -65,7 +65,8 @@ def main():
     thresh = float(a[a.index("--thresh") + 1]) if "--thresh" in a else 0.42
     minr = int(a[a.index("--min") + 1]) if "--min" in a else 3
     min_turns = int(a[a.index("--min-turns") + 1]) if "--min-turns" in a else 15
-    wa = a[a.index("--wa") + 1] if "--wa" in a else WA
+    # PER-TARGET served file (default) so the campaign tracker has its own live path
+    wa = a[a.index("--wa") + 1] if "--wa" in a else f"{WA_DIR}/thread-orbits-{campaign}.json"
     sessions = a[a.index("--sessions") + 1:] if "--sessions" in a else discover_sessions(min_turns)
 
     scopes = fetch_scopes(anchor)

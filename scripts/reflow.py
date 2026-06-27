@@ -15,7 +15,7 @@ import os, sys, json, glob, subprocess
 F6 = "/home/joe/code/futon6"
 PY = f"{F6}/.venv/bin/python"
 OUTROOT = "/home/joe/code/futon2/holes/reflow"
-WA_DEFAULT = "/home/joe/code/futon4/data/webarxana/public/wa/thread-orbits.json"
+WA_DIR = "/home/joe/code/futon4/data/webarxana/public/wa"
 
 
 def derive_scope_anchor(mission):
@@ -40,7 +40,8 @@ def main():
               else derive_scope_anchor(mission))
     thresh = rest[rest.index("--thresh") + 1] if "--thresh" in rest else "0.30"
     min_turns = rest[rest.index("--min-turns") + 1] if "--min-turns" in rest else "2"
-    wa = rest[rest.index("--wa") + 1] if "--wa" in rest else WA_DEFAULT
+    # PER-TARGET served file (default) so mission + campaign trackers don't share one path
+    wa = rest[rest.index("--wa") + 1] if "--wa" in rest else f"{WA_DIR}/thread-orbits-{mission}.json"
 
     d = os.path.join(OUTROOT, f"{sid[:8]}__{mission}")
     os.makedirs(d, exist_ok=True)
