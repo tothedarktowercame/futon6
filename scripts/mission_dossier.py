@@ -50,9 +50,27 @@ def mine_for_mission(mission):
     return {"asks": asks, "moves": moves, "sessions": sorted(sessions)}
 
 
+def canonical_mission_ep(mission):
+    """Resolve M-<stem> to its canonical substrate-2 node <repo>-d/mission/<stem>
+    (claude-2's contract) by locating the mission doc; excludes *-desktop-save."""
+    import glob
+    stem = mission[2:] if mission.startswith("M-") else mission
+    for base in (glob.glob("/home/joe/code/*/holes/missions/M-%s.md" % stem) +
+                 glob.glob("/home/joe/code/*/holes/M-%s.md" % stem)):
+        if "desktop-save" in base:
+            continue
+        parts = base.split("/")
+        repo = parts[parts.index("code") + 1]
+        return "%s-d/mission/%s" % (repo, stem)
+    return None
+
+
 def live_clock(mission):
-    """Agents/sessions currently clocked on MISSION (live O3, read-only)."""
-    url = "%s/api/alpha/hyperedges?end=mission:%s" % (FUTON1A, mission)
+    """Agents/sessions currently clocked on MISSION (live O3, read-only).
+    Queries the CANONICAL node id (O3 lineage now emits <repo>-d/mission/<stem>)."""
+    ep = canonical_mission_ep(mission) or ("mission:" + mission)
+    import urllib.parse
+    url = "%s/api/alpha/hyperedges?end=%s" % (FUTON1A, urllib.parse.quote(ep))
     try:
         req = urllib.request.Request(url, headers={"Accept": "application/edn"})
         body = urllib.request.urlopen(req, timeout=5).read().decode()
