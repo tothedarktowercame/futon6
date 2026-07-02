@@ -12,17 +12,11 @@ GOLD10 = ["autoclock-in","invariant-queue-unstuck","a-sorry-enterprise","agency-
           "pattern-ingest","patterns-done-right","single-entry-point","state-snapshot-witness","stepper-calibration"]
 
 def load_corpus():
-    miss = {}
-    for m in GOLD10:
-        f = f"{LAB}/A-next-{m}/{m}-sorry-EMPIRICAL.edn"
-        if not os.path.exists(f): raise SystemExit(f"MISSING {f}")
-        txt = open(f).read()
-        # gold endpoint set = deduped :ref strings within :endpoints [...]
-        eb = re.search(r":endpoints\s*\[(.*?)\]\s*(?::typed-holes|:kind|:title|:provenance|\})", txt, re.S)
-        block = eb.group(1) if eb else txt
-        refs = [r.strip() for r in re.findall(r':ref\s+"([^"]+)"', block)]
-        miss[m] = list(dict.fromkeys(refs))   # dedupe, keep order
-    return miss
+    # CANONICAL loader = claude-11's proper bb->EDN parse (my regex truncated autoclock-in's want-ref
+    # at the "]" inside "{missions [...]}"; cross-agent review caught it). Reuse the cached corpus.
+    GC = "/home/joe/code/futon6/data/fold-embed-gfn/gold-corpus.json"
+    d = json.load(open(GC))
+    return {m: list(dict.fromkeys(d[m]["refs"])) for m in GOLD10}
 
 def build_pool(miss, reduced_for=None):
     if reduced_for is None:
@@ -97,5 +91,5 @@ if __name__=="__main__":
          "n_with_positive_lift":sum(1 for x in v.values() if x["cov_lift"]>0.05),
          "verdicts":v,"repro":"gflownet/.venv/bin/python futon6/scripts/fold_embed/gfn_seed_v0.py --steps %d%s"%(a.steps," --reduced" if a.reduced else "")}
     od="/home/joe/code/futon6/data/fold-embed-gfn"; os.makedirs(od,exist_ok=True)
-    json.dump(out,open(f"{od}/gfn-seed-verdicts.json","w"),indent=2)
+    rung=("reduced" if a.reduced else "full"); json.dump(out,open(f"{od}/gfn-seed-verdicts-{rung}.json","w"),indent=2)
     print("\nSUMMARY:",json.dumps({k:out[k] for k in ["mean_cov_lift","n_with_positive_lift","reward_range"]}))
