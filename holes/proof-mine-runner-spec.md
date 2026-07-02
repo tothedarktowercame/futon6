@@ -3,6 +3,13 @@
 **Date:** 2026-07-02 · **Owner:** Joe + claude-11 (design owned here per Joe: "I'd trust you to design
 the runner so that it actually tells us useful things") · **Status:** SPEC (design; the runner build
 follows claude-3's CPU pilot — see §Rungs).
+**Runner BUILT (2026-07-02, claude-1, direct — codex out of quota):** `futon6/scripts/proof_mine.py`
+(D3/D4/D5/D6/D10) · `proof_mine_dossier.py` (dossier grain + D10 budget) · `check_proof_mine_gates.py`
+(D2) · `linode-proof-mine.sh` (RUNG=smoke|gold|full) · `land_proof_mine.bb` (D7, dry-run default) ·
+`proof_mine_manifest.py` (D8) · `tests/proof_mine_test.py` (9 tests). Stub-validated end-to-end; gates
+PASS on the 10 gold missions; gold-eval aborts nonzero on the D5 bands. NO box commissioned, NO GPU
+sweep, NO :7071 writes — those stay Joe's gated steps. `pair_unverified=true` on records until the
+E-have-want pairs corpus is located on disk (the pilot's ⚠pair).
 **For:** growing substrate-2's PROOF layer at scale — the deferred M-fold-ansatz batch-recovery, recast
 to LAND: per-mission discharge evidence feeding [[E-C-vector-live]] §11 (`:discharged-by` toward the
 ~70 uncovered mission-directed c-entries), R16-EXEC-REACH (executor rule candidates), R14 variance
