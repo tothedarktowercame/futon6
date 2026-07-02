@@ -89,7 +89,7 @@ def test_build_record_normalizes_nulls_and_quarantines_bad_target():
 
 
 # ---------------------------------------------------------------- D3: resilience / resume / append
-def _canned_assemble(stem):
+def _canned_assemble(stem, **kwargs):
     if stem == "good":
         return {"doc_found": True, "mission": "myrepo-d/mission/good", "stem": "good",
                 "text": "== DOC ==\nfirst line span", "no_code_trail": True, "truncations": []}
@@ -123,6 +123,67 @@ def test_load_done_and_append(tmp_path):
     pm.append_jsonl(p, {"stem": "m1"})
     pm.append_jsonl(p, {"stem": "m2"})
     assert pm.load_done(p) == {"m1", "m2"}
+
+
+# ---------------------------------------------------------------- witness snap-to-span + endpoints
+def test_snap_witness_recovers_real_span():
+    dossier = "== DOC ==\nThe durable clock record persists across teardown\nand reconstitutes on boot."
+    # a paraphrase that overlaps a real span → recovers the verbatim span
+    got = pm.snap_witness("the durable clock record persists across teardown reliably", dossier)
+    assert got is not None and "durable clock record persists across teardown" in got
+    # already-verbatim (mod whitespace) → returned as-is
+    assert pm.snap_witness("reconstitutes on boot", dossier) is not None
+    # unrelated text → not grounded → None (caller marks :unsupported)
+    assert pm.snap_witness("something entirely unrelated to any dossier content", dossier) is None
+
+
+def test_build_record_snaps_or_unsupports_witness():
+    idx = {"good": "myrepo-d/mission/good"}
+    dossier = {"mission": "myrepo-d/mission/good", "stem": "good",
+               "text": "== DOC ==\nthe order-independent retract repair landed in 84d4d04",
+               "no_code_trail": True, "truncations": []}
+    raw = {"mission": "myrepo-d/mission/good", "endpoints": [], "rule_candidates": [],
+           "discharges": [
+               {"target": "sorry/a", "grade": "discharged",
+                "witness": "the order independent retract repair landed"},   # paraphrase → snapped
+               {"target": "sorry/b", "grade": "open",
+                "witness": "a totally invented claim not in the dossier"}]}    # → :unsupported
+    rec, _q = pm.build_record(dossier["mission"], raw, dossier, idx)
+    d0, d1 = rec["discharges"]
+    assert d0["witness_verbatim"] is True and d0["witness"] in dossier["text"]
+    assert d1["witness_verbatim"] is False and d1["witness"] == ":unsupported"
+
+
+def test_line_cite_witness_extraction():
+    dossier = "L-map test\nsecond line has the real evidence here\nthird line unrelated"
+    # single line ref
+    assert pm._extract_line_witness("L2", dossier) == "second line has the real evidence here"
+    # range picks contiguous lines
+    got = pm._extract_line_witness("L1-L2", dossier)
+    assert "L-map test" in got and "real evidence" in got
+    # out-of-range / no ref → None (caller falls back to snap or :unsupported)
+    assert pm._extract_line_witness("L99", dossier) is None
+    assert pm._extract_line_witness("just prose", dossier) is None
+
+
+def test_build_record_prefers_line_cite():
+    idx = {"good": "myrepo-d/mission/good"}
+    dossier = {"mission": "myrepo-d/mission/good", "stem": "good",
+               "text": "L0 header\nthe repair landed in commit 84d4d04 on the clock path\ntail",
+               "no_code_trail": True, "truncations": []}
+    raw = {"mission": "myrepo-d/mission/good", "endpoints": [], "rule_candidates": [],
+           "discharges": [{"target": "sorry/a", "grade": "discharged", "witness": "L2"}]}
+    rec, _q = pm.build_record(dossier["mission"], raw, dossier, idx)
+    d0 = rec["discharges"][0]
+    assert d0["witness_verbatim"] is True
+    assert "the repair landed in commit 84d4d04" in d0["witness"]
+
+
+def test_ep_match_is_fair_but_not_promiscuous():
+    gold = ["clock/clocked-on hyperedge (the durable clock record)", "agent nodes (agent:<id>)"]
+    assert pm._ep_match("clock/clocked-on hyperedge", gold) is True       # shares ref-shaped token
+    assert pm._ep_match("held/on-mission hyperedge", gold) is False       # no distinctive overlap
+    assert pm._ep_match("the and for with", gold) is False                # stopwords only → no match
 
 
 # ---------------------------------------------------------------- D5: gold scoring + abort bands

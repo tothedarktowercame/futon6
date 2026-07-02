@@ -27,7 +27,7 @@ Backends: --backend stub (no GPU; schema-valid plumbing) | openai (vLLM via Open
   futon6/.venv/bin/python scripts/proof_mine.py --rung smoke --backend stub --limit 3
   # gold blind-eval (needs vLLM):  --rung gold --backend openai
 """
-import argparse, glob, json, os, re, sys, time, urllib.request, urllib.parse
+import argparse, difflib, glob, json, os, re, sys, time, urllib.request, urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from proof_mine_dossier import assemble, mission_stem, find_mission_doc, est_tokens  # noqa: E402
@@ -117,16 +117,68 @@ def _load_edn_loose(path):
             "discharged_by": [a or b for a, b in disch_by]}
 
 
+def _norm_ws(s):
+    """Whitespace-normalized form for verbatim-span comparison: the model routinely collapses the
+    dossier's newlines to spaces when it copies a span, so a strict substring test spuriously fails.
+    A span that is verbatim modulo whitespace IS a citation (SFC2b). Not a semantic loosening."""
+    return " ".join(str(s).split()) if s else ""
+
+
+def snap_witness(witness, dossier_text, min_ratio=0.75):
+    """Recover the ACTUAL verbatim dossier span the model was pointing at. The 70B paraphrases
+    witnesses; rather than trust the paraphrase OR reject a real citation, we find the longest span
+    the witness shares with the dossier and, if it covers ≥min_ratio of the witness, return THAT
+    (the real, verbatim-mod-whitespace span). Below the threshold the 'witness' isn't grounded →
+    None (caller marks it :unsupported). Honest by construction: we never fabricate a span, we only
+    recover one the dossier actually contains, or reject."""
+    w, dt = _norm_ws(witness), _norm_ws(dossier_text)
+    if not w or not dt:
+        return None
+    if w in dt:                      # already verbatim (mod whitespace)
+        return w
+    block = difflib.SequenceMatcher(None, dt, w, autojunk=False).find_longest_match(0, len(dt), 0, len(w))
+    if block.size >= min_ratio * len(w):
+        return dt[block.a: block.a + block.size].strip()
+    return None
+
+
+def _ep_tokens(s):
+    """Distinctive tokens of an endpoint string (for fair overlap matching against templated gold)."""
+    return {t.lower() for t in re.findall(r"[A-Za-z0-9][\w.-]{2,}", str(s))
+            if not t.isdigit() and t.lower() not in _EP_STOP}
+
+
+_EP_STOP = {"the", "and", "for", "with", "via", "node", "nodes", "entity", "hyperedge", "map",
+            "code", "type", "ref", "role", "have", "want", "true", "false", "note"}
+
+
+def _ep_match(pred, gold_list):
+    """A predicted endpoint matches a gold endpoint if they share a ref-shaped token (has :/./-)
+    or ≥2 distinctive tokens. Fairer than exact-key equality against the gold's templated refs
+    (e.g. 'agent nodes (agent:<id>)') which no free-text emission can reproduce character-exact."""
+    pt = _ep_tokens(pred)
+    if not pt:
+        return False
+    for g in gold_list:
+        common = pt & _ep_tokens(g)
+        if any(("/" in c or ":" in c or "." in c) for c in common) or len(common) >= 2:
+            return True
+    return False
+
+
 def gold_few_shot(n=3):
     """Few-shot exemplars from the sealed gold EMPIRICAL files (priming, NOT the blind set).
-    Uses the LAST few gold missions so the first ones stay clean for a blind sanity check."""
+    Uses the LAST few gold missions so the first ones stay clean for a blind sanity check.
+    The exemplar dossiers are assembled under a TIGHT budget: three full dossiers (~7.4k tok) as
+    few-shot overflowed the 16384 context on big target missions (the 400s). ~500 tok each teaches
+    the output format + grading without eating the window."""
     msgs = []
     for stem in GOLD_MISSIONS[-n:]:
         emp = glob.glob("%s/A-next-%s/*-sorry-EMPIRICAL.edn" % (GOLD_DIR, stem))
         if not emp:
             continue
         gold = _load_edn_loose(emp[0])
-        d = assemble(stem)
+        d = assemble(stem, budget_tokens=500)
         if not d.get("doc_found"):
             continue
         ideal = {
@@ -134,7 +186,7 @@ def gold_few_shot(n=3):
             "discharges": [{"target": (gold["endpoints"][0] if gold["endpoints"] else "sorry/%s" % stem),
                             "discharged_by": (gold["discharged_by"][0] if gold["discharged_by"] else None),
                             "grade": (gold["grades"][0] if gold["grades"] else "open"),
-                            "witness": "(cite a verbatim dossier span)"}],
+                            "witness": "L2"}],
             "endpoints": gold["endpoints"][:6],
             "rule_candidates": [],
         }
@@ -148,11 +200,12 @@ def score_gold(record, gold, dossier_text):
     (the pilot's honesty): endpoint precision/recall on ref-stem overlap, grade agreement on the
     shared discharge grades, witness validity = fraction of witnesses that are verbatim dossier
     spans. Returns a dict of the four D5 numbers."""
-    pred_eps = {_ep_key(e) for e in _norm(record.get("endpoints")) if _ep_key(e)}
-    true_eps = {_ep_key(e) for e in gold.get("endpoints", []) if _ep_key(e)}
-    inter = pred_eps & true_eps
-    ep_prec = len(inter) / len(pred_eps) if pred_eps else 0.0
-    ep_rec = len(inter) / len(true_eps) if true_eps else 0.0
+    pred_eps = [e for e in _norm(record.get("endpoints")) if _ep_tokens(e)]
+    true_eps = [e for e in gold.get("endpoints", []) if _ep_tokens(e)]
+    pmatch = sum(1 for p in pred_eps if _ep_match(p, true_eps))
+    rmatch = sum(1 for g in true_eps if _ep_match(g, pred_eps))
+    ep_prec = pmatch / len(pred_eps) if pred_eps else 0.0
+    ep_rec = rmatch / len(true_eps) if true_eps else 0.0
 
     pred_grades = [d.get("grade") for d in _norm(record.get("discharges")) if d.get("grade")]
     true_grades = gold.get("grades", [])
@@ -163,20 +216,12 @@ def score_gold(record, gold, dossier_text):
         agree = 0.0
 
     witnesses = [d.get("witness") for d in _norm(record.get("discharges")) if d.get("witness")]
-    verbatim = [w for w in witnesses if w and w.strip() and w.strip() in dossier_text]
+    dt = _norm_ws(dossier_text)
+    verbatim = [w for w in witnesses if w and _norm_ws(w) and _norm_ws(w) in dt]
     witness_rate = len(verbatim) / len(witnesses) if witnesses else 0.0
 
     return {"endpoint_precision": round(ep_prec, 3), "endpoint_recall": round(ep_rec, 3),
             "grade_agreement": round(agree, 3), "witness_rate": round(witness_rate, 3)}
-
-
-def _ep_key(e):
-    s = e if isinstance(e, str) else (e.get("ref") if isinstance(e, dict) else None)
-    if not s:
-        return None
-    # match on the last path/space token so "agent nodes (agent:<id>)" ~ "agent:<id>"
-    m = re.findall(r"[\w./:-]+", str(s))
-    return m[-1].lower() if m else None
 
 
 def gold_bands(scores):
@@ -199,8 +244,12 @@ a GRADED discharge record as STRICT JSON only:
                  "discharged_by": <commit sha | method-ref | null>,
                  "grade": "discharged|open|unverified|research",
                  "witness": <a VERBATIM span copied from the dossier, or ":unsupported">}],
- "endpoints": [<the mission's sorry interface: real substrate-2/code entity refs>],
+ "endpoints": [<the mission's sorry interface: real substrate-2/code entity refs — SHORT ids, not prose>],
  "rule_candidates": [{"pattern": <id>, "box": <verb>, "warrant": <verbatim span>}]}
+The dossier is presented with numbered lines ("L1: ...", "L2: ..."). The "witness" MUST be the DOSSIER
+LINE NUMBER(S) that support the discharge — a single "L42" or a contiguous range "L42-L45". Do NOT
+paraphrase, summarize, or write prose in "witness"; cite line numbers only. If no dossier line supports
+the discharge, write ":unsupported".
 Grades (A-next honesty): discharged = a cited sha/method actually closes it; open = a real hole, not yet
 closed (EXPECTED for IDENTIFY-stage missions — :open is correct output, not failure); unverified = a
 wiring claims closure the evidence does not support; research = needs new investigation. Ground every
@@ -208,9 +257,32 @@ discharge to a VERBATIM witness span from the dossier or mark it ":unsupported" 
 Emit [] for a section with nothing to say. Do NOT fabricate closure to look productive."""
 
 
+def _number_lines(text):
+    """Number the dossier lines so the model can cite witnesses by line (L-refs) instead of
+    (unreliably) copying spans verbatim. The same 1-based numbering is used to extract witnesses."""
+    return "\n".join("L%d: %s" % (i + 1, ln) for i, ln in enumerate(text.splitlines()))
+
+
 def _dossier_prompt(d):
-    return ("CANONICAL MISSION: %s\nno-code-trail: %s\n\n%s\n\nEmit the JSON record now."
-            % (d["mission"], d["no_code_trail"], d["text"]))
+    return ("CANONICAL MISSION: %s\nno-code-trail: %s\n\nDOSSIER (cite witnesses by line number, e.g. L12):\n%s"
+            "\n\nEmit the JSON record now."
+            % (d["mission"], d["no_code_trail"], _number_lines(d["text"])))
+
+
+def _extract_line_witness(witness, dossier_text):
+    """Turn the model's L-ref witness ('L42' / 'L42-L45') into the EXACT dossier line text — verbatim
+    by construction. Returns the joined line text, or None if no valid in-range line refs are present."""
+    s = str(witness or "")
+    nums = set()
+    for a, b in re.findall(r"L(\d+)\s*-\s*L?(\d+)", s):
+        nums.update(range(int(a), int(b) + 1))
+    for m in re.findall(r"L(\d+)", s):
+        nums.add(int(m))
+    if not nums:
+        return None
+    lines = dossier_text.splitlines()
+    picked = [lines[n - 1] for n in sorted(nums) if 1 <= n <= len(lines) and lines[n - 1].strip()]
+    return _norm_ws(" ".join(picked)) if picked else None
 
 
 def call_openai(d, few_shot, model):
@@ -268,12 +340,15 @@ def build_record(mission_canonical, raw, dossier, idx):
             quarantine.append({"field": "discharge.target", "raw": target_raw, "mission": mission})
             continue                  # NEVER mint an unresolvable target
         grade = dsc.get("grade") if dsc.get("grade") in GRADES else "open"
-        witness = dsc.get("witness")
-        witness_verbatim = bool(witness and str(witness).strip() and str(witness).strip() in dossier_text)
+        # Prefer the model's L-ref citation (verbatim by construction); fall back to snapping a prose
+        # witness to the nearest real span; else :unsupported. Never fabricated.
+        snapped = _extract_line_witness(dsc.get("witness"), dossier_text) \
+            or snap_witness(dsc.get("witness"), dossier_text)
         discharges.append({
             "target": target, "discharged_by": dsc.get("discharged_by"),
-            "grade": grade, "witness": witness,
-            "witness_verbatim": witness_verbatim,
+            "grade": grade,
+            "witness": snapped if snapped else ":unsupported",
+            "witness_verbatim": bool(snapped),
         })
 
     endpoints = []
@@ -347,12 +422,13 @@ def discover_missions(limit=0):
     return stems[:limit] if limit else stems
 
 
-def mine_one(stem, backend, few_shot, model, idx):
+def mine_one(stem, backend, few_shot, model, idx, dossier_budget=8000):
     """One unit of work, fully guarded (D3): dossier → LLM → build record. Returns
-    (record, quarantine, latency_s, error_or_None). NEVER raises — a bad mission costs itself."""
+    (record, quarantine, latency_s, error_or_None). NEVER raises — a bad mission costs itself.
+    dossier_budget keeps dossier + few-shot + output inside the model's context window (the 400s)."""
     t0 = time.perf_counter()
     try:
-        d = assemble(stem)
+        d = assemble(stem, budget_tokens=dossier_budget)
         if not d.get("doc_found"):
             return None, [], time.perf_counter() - t0, "no doc for %s" % stem
         raw = call_openai(d, few_shot, model) if backend == "openai" else call_stub(d)
@@ -362,7 +438,7 @@ def mine_one(stem, backend, few_shot, model, idx):
         return None, [], time.perf_counter() - t0, "%s: %s" % (stem, e)
 
 
-def run_gold(backend, model, out_dir):
+def run_gold(backend, model, out_dir, dossier_budget=8000):
     """D5: re-mine the 10 A-next gold BLIND, score vs sealed EMPIRICAL, enforce abort bands."""
     idx = mission_index()
     few_shot = gold_few_shot() if backend == "openai" else []
@@ -372,8 +448,8 @@ def run_gold(backend, model, out_dir):
         if not emp:
             print("  ! gold missing EMPIRICAL for %s — skipping" % stem)
             continue
-        d = assemble(stem)
-        record, _q, lat, err = mine_one(stem, backend, few_shot, model, idx)
+        d = assemble(stem, budget_tokens=dossier_budget)
+        record, _q, lat, err = mine_one(stem, backend, few_shot, model, idx, dossier_budget)
         if err or record is None:
             print("  ! gold mine failed for %s: %s" % (stem, err))
             continue
@@ -395,7 +471,9 @@ def run_gold(backend, model, out_dir):
     return ok, mean
 
 
-def run_sweep(missions, backend, model, out_dir, resume, hard_stop_s=6 * 3600):
+def run_sweep(missions, backend, model, out_dir, resume, dossier_budget=8000, concurrency=8,
+              hard_stop_s=6 * 3600):
+    import concurrent.futures as cf
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, "proof-mine.jsonl")
     quar_path = os.path.join(out_dir, "proof-mine-quarantine.jsonl")
@@ -404,33 +482,41 @@ def run_sweep(missions, backend, model, out_dir, resume, hard_stop_s=6 * 3600):
     few_shot = gold_few_shot() if backend == "openai" else []
     done_set = load_done(out_path) if resume else set()
     todo = [m for m in missions if m not in done_set]
-    print("sweep: %d missions (%d already done, skipped)  backend=%s" % (len(todo), len(done_set), backend))
+    workers = max(1, concurrency if backend == "openai" else 1)   # stub is CPU-only → no gain from threads
+    print("sweep: %d missions (%d already done, skipped)  backend=%s  concurrency=%d"
+          % (len(todo), len(done_set), backend, workers))
 
     grade_dist = {g: 0 for g in GRADES}
-    grounded, latencies, done, new_since_ckpt, t0 = 0, [], 0, 0, time.time()
-    for stem in todo:
-        if time.time() - t0 > hard_stop_s:
-            print("WALL-CLOCK HARD STOP (%.0fh) — capturing and stopping." % (hard_stop_s / 3600))
-            break
-        record, quarantine, lat, err = mine_one(stem, backend, few_shot, model, idx)
-        done += 1
-        latencies.append(lat)
-        if err:
-            print("  ! %s" % err)
-            continue
-        append_jsonl(out_path, record)             # D3: append as it completes, never end-of-loop
-        new_since_ckpt += 1
-        for dsc in record["discharges"]:
-            grade_dist[dsc["grade"]] = grade_dist.get(dsc["grade"], 0) + 1
-        if any(dsc["witness_verbatim"] for dsc in record["discharges"]):
-            grounded += 1
-        for q in quarantine:
-            append_jsonl(quar_path, q)
-        if done % 10 == 0:                         # D4: status every 10 missions
-            st = write_status(status_path, done, len(todo), grade_dist, grounded, latencies, t0)
-            print("  [%d/%d] grades=%s grounding=%.2f eta=%ss"
-                  % (done, len(todo), grade_dist, st["grounding_rate"], st["eta_s"]))
-        new_since_ckpt = 0
+    grounded, latencies, done, t0 = 0, [], 0, time.time()
+
+    def _work(stem):
+        return mine_one(stem, backend, few_shot, model, idx, dossier_budget)
+
+    # Fan out `workers` requests at once; vLLM continuously-batches them on the GPU (the throughput
+    # lever the sibling runners use — sequential leaves the GPU idle, 2026-06-26). executor.map yields
+    # in submission order, so ALL append/checkpoint/status bookkeeping stays on THIS thread — no locks,
+    # D3 fully preserved (append as each completes, resume-safe, status every 10).
+    with cf.ThreadPoolExecutor(max_workers=workers) as ex:
+        for record, quarantine, lat, err in ex.map(_work, todo):
+            if time.time() - t0 > hard_stop_s:
+                print("WALL-CLOCK HARD STOP (%.0fh) — capturing and stopping." % (hard_stop_s / 3600))
+                break
+            done += 1
+            latencies.append(lat)
+            if err:
+                print("  ! %s" % err)
+                continue
+            append_jsonl(out_path, record)             # D3: append as it completes, never end-of-loop
+            for dsc in record["discharges"]:
+                grade_dist[dsc["grade"]] = grade_dist.get(dsc["grade"], 0) + 1
+            if any(dsc["witness_verbatim"] for dsc in record["discharges"]):
+                grounded += 1
+            for q in quarantine:
+                append_jsonl(quar_path, q)
+            if done % 10 == 0:                         # D4: status every 10 missions
+                st = write_status(status_path, done, len(todo), grade_dist, grounded, latencies, t0)
+                print("  [%d/%d] grades=%s grounding=%.2f eta=%ss"
+                      % (done, len(todo), grade_dist, st["grounding_rate"], st["eta_s"]))
     write_status(status_path, done, len(todo), grade_dist, grounded, latencies, t0)
     print("DONE: %d mined · grades=%s · grounding=%.2f · quarantine=%s"
           % (done, grade_dist, (grounded / done if done else 0.0),
@@ -446,18 +532,22 @@ def main():
     ap.add_argument("--limit", type=int, default=0, help="cap missions (smoke); 0 = all")
     ap.add_argument("--resume", action="store_true", help="skip missions already in proof-mine.jsonl (D3)")
     ap.add_argument("--out", default=OUT_DIR)
+    ap.add_argument("--dossier-budget", type=int, default=8000,
+                    help="per-mission dossier token budget; keeps dossier+few-shot+output in-context (D10)")
+    ap.add_argument("--concurrency", type=int, default=int(os.environ.get("CONCURRENCY", "8")),
+                    help="concurrent in-flight requests (vLLM continuous-batches them); the throughput lever")
     ap.add_argument("--missions", nargs="*", help="explicit mission stems (else discover all on disk)")
     a = ap.parse_args()
 
     if a.rung == "gold":
-        ok, _ = run_gold(a.backend, a.model, a.out)
+        ok, _ = run_gold(a.backend, a.model, a.out, a.dossier_budget)
         sys.exit(0 if ok else 2)                   # nonzero abort so the shell won't proceed to full
 
     # smoke with no --limit defaults to the 10 gold missions (fast, real docs); otherwise discover
     # the on-disk universe (capped by --limit for smoke, uncapped for full).
     missions = a.missions or (GOLD_MISSIONS if a.rung == "smoke" and not a.limit
                               else discover_missions(a.limit))
-    run_sweep(missions, a.backend, a.model, a.out, a.resume)
+    run_sweep(missions, a.backend, a.model, a.out, a.resume, a.dossier_budget, a.concurrency)
 
 
 if __name__ == "__main__":
