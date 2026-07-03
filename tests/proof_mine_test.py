@@ -12,6 +12,7 @@ if os.path.abspath(_SCRIPTS) not in sys.path:
 
 import proof_mine_dossier as pmd
 import proof_mine as pm
+import proof_mine_land_prep as plp
 
 
 # ---------------------------------------------------------------- D10: dossier budget
@@ -187,6 +188,51 @@ def test_ep_match_is_fair_but_not_promiscuous():
 
 
 # ---------------------------------------------------------------- D5: gold scoring + abort bands
+# ---------------------------------------------------------------- D7: landing prep (cleaning)
+def test_clean_sha_and_repo_of():
+    assert plp.clean_sha("472f93e (capability-star-map arc + FutonZero §22)") == "472f93e"
+    assert plp.clean_sha("06dac23 Complete M-transport-adapters") == "06dac23"
+    assert plp.clean_sha("REAL: futon3a/src/futon/peripheral/pattern_author.clj") is None
+    assert plp.clean_sha("NULL") is None
+    assert plp.repo_of("futon3c-d/mission/autoclock-in") == "futon3c"
+    assert plp.repo_of("not-canonical") is None
+
+
+def test_prep_validates_and_rejects(tmp_path, monkeypatch):
+    # only 84d4d04 "exists in git"; everything else must be rejected, never landed
+    monkeypatch.setattr(plp, "sha_exists", lambda repo, sha, cache: sha == "84d4d04")
+    recs = [
+        {"mission": "futon3c-d/mission/good", "discharges": [
+            {"target": "sorry/a", "discharged_by": "84d4d04 the repair", "grade": "discharged",
+             "witness_verbatim": True, "witness": "the repair landed"}]},                 # LANDS
+        {"mission": "futon3c-d/mission/good", "discharges": [
+            {"target": "the whole mission prose", "discharged_by": "SUPERSEDED by x",
+             "grade": "discharged", "witness_verbatim": True, "witness": "w"}]},            # no-sha
+        {"mission": "futon3c-d/mission/good", "discharges": [
+            {"target": "sorry/c", "discharged_by": "deadbee the ghost commit", "grade": "discharged",
+             "witness_verbatim": True, "witness": "w"}]},                                   # sha-not-in-git
+        {"mission": "futon3c-d/mission/good", "discharges": [
+            {"target": "sorry/d", "discharged_by": "84d4d04", "grade": "discharged",
+             "witness_verbatim": False, "witness": "paraphrase"}]},                         # witness-not-verbatim
+        {"mission": "not-canonical", "discharges": [
+            {"target": "x", "discharged_by": "84d4d04", "grade": "discharged",
+             "witness_verbatim": True, "witness": "w"}]},                                   # mission-not-canonical
+        {"mission": "futon3c-d/mission/good", "discharges": [
+            {"target": "sorry/e", "discharged_by": None, "grade": "open",
+             "witness_verbatim": True, "witness": "w"}]},                                   # not :discharged
+    ]
+    d = tmp_path / "pm"; d.mkdir()
+    with open(d / "proof-mine.jsonl", "w") as fh:
+        for r in recs:
+            fh.write(json.dumps(r) + "\n")
+    landing, rejects = plp.prep(str(d))
+    assert len(landing) == 1 and landing[0]["sha"] == "84d4d04"
+    assert landing[0]["source"] == "proof-mine"
+    reasons = {r["reason"] for r in rejects}
+    assert reasons == {"no-sha-in-discharged_by", "sha-not-in-git", "witness-not-verbatim",
+                       "mission-not-canonical"}
+
+
 def test_gold_bands_pass_and_fail():
     ok, reasons = pm.gold_bands({"endpoint_precision": 0.8, "grade_agreement": 0.7, "witness_rate": 0.9})
     assert ok and not reasons
