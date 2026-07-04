@@ -20,6 +20,10 @@
 #     (the driver's per-paper repair + argument/semantic-check gates). The .bb
 #     scripts only (require '[clojure.edn]) — no sibling-repo reach, so bb alone
 #     is enough.
+#   - LaTeXML (latexmlmath): the SFC :structure lift (sfc_def_structure.bb,
+#     reached via S11 sfc_struct_canon.py). Without it the lift SILENTLY skips
+#     every formula (bare except in sfc_struct_canon.batch) — so its absence is
+#     FATAL here, not a warning.
 #   (substance_gate.py is pure-stdlib python3 — nothing to install.)
 set -euo pipefail
 
@@ -31,6 +35,41 @@ if command -v bb >/dev/null 2>&1; then
 else
   curl -sSL https://raw.githubusercontent.com/babashka/babashka/master/install | bash
   echo "installed: $(bb --version)"
+fi
+
+echo "== LaTeXML (latexmlmath) =="
+if command -v latexmlmath >/dev/null 2>&1; then
+  echo "latexmlmath already present: $(latexmlmath --VERSION 2>&1 | head -1)"
+else
+  installed=0
+  if command -v apt-get >/dev/null 2>&1; then
+    if [ "$(id -u)" -eq 0 ]; then
+      apt-get install -y latexml && installed=1
+    elif command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+      sudo apt-get install -y latexml && installed=1
+    fi
+  fi
+  if [ "$installed" -eq 0 ] && command -v conda >/dev/null 2>&1; then
+    conda install -y -c conda-forge latexml && installed=1
+  fi
+  if [ "$installed" -eq 0 ]; then
+    echo "FATAL: latexmlmath not found and could not auto-install (no root/conda)."
+    echo "  Install one of:  apt-get install latexml  |  conda install -c conda-forge latexml"
+    echo "  |  cpanm LaTeXML   — then re-run this script."
+    echo "  Without it the SFC :structure lift (S11) silently produces nothing."
+    exit 1
+  fi
+  echo "installed: $(latexmlmath --VERSION 2>&1 | head -1)"
+fi
+
+echo "== live check: formula -> :structure through the real chain =="
+if command -v bb >/dev/null 2>&1 && [ -f "$REPO/scripts/sfc_def_structure.bb" ]; then
+  if echo '\forall x \in X, f(x) = x' | bb "$REPO/scripts/sfc_def_structure.bb" - | grep -q ':structure'; then
+    echo "  ok: latexmlmath + sfc_def_structure.bb produce a :structure"
+  else
+    echo "FATAL: the bb->latexmlmath chain ran but produced no :structure — investigate before the run."
+    exit 1
+  fi
 fi
 
 echo "== sanity: pipeline gate scripts reachable in $REPO =="
