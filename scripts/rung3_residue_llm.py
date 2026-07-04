@@ -34,11 +34,15 @@ QUESTION_MENU: dict[str, dict[str, str]] = {
         "rm_pattern": "STRUCTURAL PROBE",
         "template": "What verifiable inference discharges the heuristic step {pattern} here?",
     },
+    # The spec's template is "…from <premise> to <conclusion>", but an IATC move
+    # carries undivided prose — filling both slots with it duplicated the text
+    # ("from X to X"), so the single-descriptor variant of the same menu entry
+    # is used instead.
     "ungrounded": {
         "rm_pattern": "THEOREM APPLICABILITY / TECHNIQUE LANDSCAPE",
         "template": (
-            "Which known theorem or proof technique, if any, licenses this move "
-            "from {premise} to {conclusion}?"
+            "Which known theorem or proof technique, if any, licenses this move: "
+            "“{move}”?"
         ),
     },
 }
@@ -63,12 +67,8 @@ def phrase(gap: dict[str, Any], move: dict[str, Any] | None) -> tuple[str, str]:
     menu = QUESTION_MENU.get(gap.get("bucket"), QUESTION_MENU["ungrounded"])
     pattern = gap.get("pattern") or "the matched pattern"
     text = ((move or {}).get("text") or "").strip()
-    # The IATC move carries prose, not separated premise/conclusion; use the move
-    # prose as the descriptor so the question is concrete.
     descriptor = text if text else "this move"
-    question = menu["template"].format(
-        pattern=pattern, premise=descriptor, conclusion=descriptor
-    )
+    question = menu["template"].format(pattern=pattern, move=descriptor)
     return menu["rm_pattern"], question
 
 
@@ -107,7 +107,14 @@ def call_openai(gap: dict[str, Any], move: dict[str, Any] | None, model: str) ->
     with urllib.request.urlopen(req, timeout=300) as r:
         txt = json.loads(r.read())["choices"][0]["message"]["content"]
     m = re.search(r"\{.*\}", txt, re.S)
-    parsed = json.loads(m.group(0)) if m else {}
+    try:
+        parsed = json.loads(m.group(0)) if m else {}
+    except json.JSONDecodeError:
+        # A malformed model reply must not kill a corpus pass — degrade this one
+        # gap to the deterministic template (same shape as the stub) and say so.
+        print(f"[rung3_residue_llm] unparseable model JSON for step {gap.get('step')}; "
+              "falling back to the menu template")
+        parsed = {}
     classification = parsed.get("classification")
     if classification not in CLASSIFICATIONS:
         classification = "real-gap"

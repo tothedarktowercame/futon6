@@ -108,3 +108,25 @@ Self-review (what I checked):
 - Stub marks all residue `real-gap` (deterministic; the stub does not judge novelty — novel-vs-gap is
   the model's call). The **real novel-vs-gap split + the actual questions need the `openai` pass**
   (the costed run), exactly as scoped.
+
+## Independent review — Claude (separate session), 2026-07-04 · REVIEWED PASS (2 findings, fixed in place)
+
+Closes the author=reviewer flag above. What I checked (fresh eyes, no prior context on this code):
+- **Read the full script** + the handoff spec; re-ran `pytest -q tests/test_rung3_residue_llm.py` (6 passed)
+  and a stub pass over the committed fixture.
+- **Residue-only/bounded:** confirmed — the loop iterates `residue_gaps()` (thin/ungrounded) only;
+  `assert calls == len(questions)`; `--max-questions` breaks *before* the call, so no wasted model calls.
+- **Report-only, re-verified independently on real data** (not just re-reading the author's claim):
+  generated questions for 0709.0248 from its committed gap-map, ran `cas_cert --rung3 …` with and
+  without `--questions`, diffed the certificates programmatically: only `open_questions` changes
+  (0→3); conformance/ports/verdict/gate byte-identical.
+- **Question-not-verdict + menu grounding:** hold as claimed (spec §"Gap to ArSE question mapping").
+
+Findings (both fixed directly, per fix-don't-re-bell):
+1. **Robustness:** `call_openai` did `json.loads` on the model reply unguarded — one malformed 70B
+   response would crash the per-paper pass. Now degrades that gap to the deterministic menu template
+   with a printed notice (same shape as the stub), preserving the bounded invariant.
+2. **Question quality:** the `ungrounded` template filled `{premise}` and `{conclusion}` with the *same*
+   IATC move prose ("…from X to X?"). IATC moves carry undivided prose, so the template now uses the
+   single-descriptor variant of the same menu entry: `…licenses this move: "<move prose>"?`.
+   Test-verified; the openai prompt inherits the fixed template.
