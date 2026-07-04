@@ -1,11 +1,12 @@
 # M-live-efe-map — agents on the EFE landscape, ants-style
 
-**Status: ARGUE in progress (2026-07-04, late evening) — HEAD and
-IDENTIFY ratified by Joe same evening; MAP verified the inventory,
-confirmed the wm-tick feed live and renderable, and found the frontier
-gap (active missions lack embed coordinates). DERIVE locked the two-tier
-placement/freshness rule; ARGUE now defends it against the mission
-lifecycle formalism before VERIFY.**
+**Status: VERIFY complete (2026-07-04) — HEAD and IDENTIFY ratified by
+Joe 2026-07-04 evening; MAP verified the inventory and found the
+frontier gap; DERIVE locked the two-tier placement/freshness rule;
+ARGUE defended it; Joe ratified DERIVE+ARGUE (D-frontier, D-method, C3
+two-tier, C4/C5 inspection-only) 2026-07-04 and VERIFY ran the design's
+claims against the live systems same session (claude-18). All checks
+pass; three operational findings recorded for INSTANTIATE.**
 
 ## HEAD
 
@@ -563,3 +564,84 @@ constraints: live work must be visible, approximate placement must be
 labelled, the first landing must be read-only, and any later pheromone or
 controller loop must be verified as behavior-changing rather than claimed
 by analogy.
+
+*Ratified by Joe over emacs-repl, 2026-07-04: D-frontier (approximate
+placement, never hidden), D-method (relational centroid → native BGE kNN
+→ text BGE → frontier shelf), C3 (live approximation + slow explicit
+re-anchor), C4/C5 (inspection-only).*
+
+## VERIFY (2026-07-04, claude-18 — design claims run against live systems)
+
+Method: every checkable claim ARGUE handed over was exercised against
+the running stack (ports 7070/7071, live stores, real files), not
+re-read from the doc. `pgrep java` untouched; all reads bounded
+(`&limit`, timeouts).
+
+### Checks
+
+- **V1 — coordinate table.** `futon6/data/mission-carpet-pos-embed.json`
+  loads: 212 missions, x ∈ [200, 3178], y ∈ [200, 3400]. The frontier
+  gap reproduces exactly: M-futon1b-port, M-custom-harness, and
+  M-live-efe-map itself all absent. **PASS** (MAP finding confirmed).
+- **V2 — wm-tick join (C5).** `GET /api/alpha/evidence?author=war-machine`
+  (port 7070) returns 18 entries, tags `wm-tick`/`wm-click`/`wm-cron`,
+  bodies carrying `:enacted :target :G :expected-G :realized-G :gates
+  :mode :decision :trigger`. Distinct enacted/target missions =
+  {M-bayesian-structure-learning, M-first-flights} — **both mapped**;
+  the WM-attention layer joins to coordinates with zero placement
+  machinery needed today. **PASS.**
+- **V3 — native BGE kNN (D-method step 2).**
+  `futon3a/resources/notions/bge_mission_embeddings.json` exists: 229
+  records, 1024-dim vectors, plus `cross_refs` per record (a bonus
+  relational-anchor source). **But it is June-12 vintage too** — none of
+  the frontier missions have vectors. **PASS with finding F1.**
+- **V4 — relational centroid (D-method step 1) dry-run.**
+  M-custom-harness's doc references resolve to two mapped anchors
+  (M-kangaroo, M-agency-hardening); the D2 formula yields [1437.6,
+  447.8] — in-range, sane. M-futon1b-port's dominant reference (12×) is
+  M-custom-harness, itself unmapped: the `:anchor-depth 2+` rule is
+  exercised by the very first real frontier pair, not a hypothetical.
+  **PASS.**
+- **V5 — agent join (C1).** `clock/clocked-on` hyperedges live on 7071
+  (`?type=clock/clocked-on&limit=10`): endpoints agent↔target,
+  `:hx/props` carry `:mission-id`, `:session-id`, and a witness record
+  (rule, source file, edit-count) — provenance for free. **PASS with
+  finding F2.**
+- **V6 — WM live endpoints.** `/api/alpha/war-machine` responds
+  (scheduler running; snapshot warming after the 19:29 restart —
+  `retry-after` honored, structure as expected incl. r14-gamma
+  verdicts); `/api/alpha/aif-stack/live` returns the full frame set.
+  **PASS.**
+
+### Findings for INSTANTIATE
+
+- **F1 — BGE staleness tracks embed staleness.** The mission-embedding
+  file is regenerated with the map, so D-method step 2 can never fire
+  for exactly the missions that need placement most. Relational
+  centroid (step 1) is the workhorse; step 2 is a re-anchor-tier
+  benefit, not a live-tier one. The re-anchor tier (C3) should
+  regenerate `bge_mission_embeddings.json` alongside the coordinate
+  set. Text-kNN (step 3) requires a live BGE encoder call — only worth
+  wiring if step 1 proves too weak in practice.
+- **F2 — clock targets include excursions.** Live `clock/clocked-on`
+  edges point at excursions (e.g. `E-repl-continuations`) as well as
+  missions. The endpoint must handle non-mission targets: v1 rule =
+  render on the frontier shelf labelled as excursion (they have no
+  mission coordinates by construction); do not silently drop them.
+- **F3 — evidence read path.** The wm-tick read is
+  `GET /api/alpha/evidence` on **7070** (futon3c transport); 7071 has
+  only the POST route, and `…:7071/evidence-viewer/index.html` currently
+  404s (asset-dir not mounted in the running instance — noted for Joe,
+  not a blocker for this mission since the 7070 read path works).
+
+### Verdict
+
+The DERIVE design survives contact with the live substrate. Nothing in
+the argument broke; the two stress points VERIFY was most suspicious of
+(frontier placement with no BGE vectors, anchor-depth chains) both
+occur in tonight's real data and are both handled by rules DERIVE
+already wrote. INSTANTIATE can proceed: the `GET /api/alpha/live-efe-map`
+aggregator (D4 shape, plus the F2 excursion branch) and the overlay on
+the embed page (D5 render contract).
+
+**VERIFY exit:** complete. Awaiting Joe's go for INSTANTIATE.
