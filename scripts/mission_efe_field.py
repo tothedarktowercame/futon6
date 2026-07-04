@@ -425,15 +425,20 @@ LIVE_OVERLAY_STYLE = """
 .live-frontier-label{fill:#f8e7a0;font-size:16px;font-weight:700}
 .live-frontier-item{fill:#f8e7a0;font-size:12px}
 .live-agent-label{fill:#dbeafe;font-size:12px;font-weight:700}
-.live-agent-dot{stroke:#06111f;stroke-width:1.2}
-.live-agent-idle{fill:#7a879b;opacity:.82}
-.live-agent-invoking{fill:#67e8f9;opacity:1;animation:liveAgentPulse 1.4s ease-in-out infinite}
+.live-agent-ring{stroke-width:1.7}
+.live-agent-idle{opacity:.72}
+.live-agent-invoking{opacity:1;animation:liveAgentPulse 1.4s ease-in-out infinite}
+.live-session-glyph{font-size:18px;text-anchor:middle;dominant-baseline:central;stroke:none}
 .live-approx{fill:none;stroke-dasharray:5 4}
 .live-wm-label{fill:#fff7ad;font-size:13px;font-weight:800}
 .live-wm-target{stroke:#fb7185}
 .live-wm-enacted{stroke:#facc15}
 .live-wm-ring{fill:none;stroke-width:2.5;opacity:.9}
 .live-wm-pulse{animation:liveWmPulse 1.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+.live-ship-halo{fill:none;stroke:#ff9f1c;stroke-width:2.2;opacity:.95}
+.live-ship-pulse{animation:liveWmPulse 1.7s ease-out infinite;transform-box:fill-box;transform-origin:center}
+.live-ship-glyph{font-size:30px;text-anchor:middle;dominant-baseline:central;stroke:none}
+.live-ship-label{fill:#ffd89a;font-size:13px;font-weight:800}
 .live-offline-badge{fill:#fecaca;font-size:22px;font-weight:800}
 @keyframes liveAgentPulse{0%,100%{opacity:.65}50%{opacity:1}}
 @keyframes liveWmPulse{0%{opacity:.95;transform:scale(.82)}70%{opacity:.08;transform:scale(1.45)}100%{opacity:0;transform:scale(1.55)}}
@@ -536,12 +541,15 @@ LIVE_OVERLAY_SCRIPT = """
     const cx = Number(p.x);
     const cy = Number(p.y);
     const r = attrs.r || 7;
+    const glyph = attrs.glyph || null;
+    const ringClass = `live-agent-ring ${attrs.className || ""}`;
     if (isEmbedded(p)) {
-      parent.appendChild(el("circle", {cx, cy, r, fill: attrs.fill, stroke: attrs.stroke || "#05060a", "stroke-width": attrs.strokeWidth || 1.2, class: attrs.className || ""}));
+      parent.appendChild(el("circle", {cx, cy, r: r + 4, fill: attrs.fill, opacity: 0.18, stroke: attrs.fill, "stroke-width": attrs.strokeWidth || 1.7, class: ringClass}));
+      if (glyph) parent.appendChild(el("text", {x: cx, y: cy + 1, class: `live-session-glyph ${attrs.className || ""}`, style: "stroke:none;paint-order:normal"}, glyph));
       return;
     }
-    parent.appendChild(el("circle", {cx, cy, r: r + 2, fill: "none", stroke: attrs.fill, "stroke-width": attrs.strokeWidth || 1.8, "stroke-dasharray": isShelf(p) ? "6 4" : "4 3", class: `live-approx ${attrs.className || ""}`}));
-    parent.appendChild(el("circle", {cx, cy, r: Math.max(2.2, r - 3), fill: isShelf(p) ? "none" : attrs.fill, opacity: isShelf(p) ? 1 : 0.35}));
+    parent.appendChild(el("circle", {cx, cy, r: r + 4, fill: "none", stroke: attrs.fill, "stroke-width": attrs.strokeWidth || 1.8, "stroke-dasharray": isShelf(p) ? "6 4" : "4 3", class: `live-approx ${ringClass}`}));
+    if (glyph) parent.appendChild(el("text", {x: cx, y: cy + 1, class: `live-session-glyph ${attrs.className || ""}`, style: "stroke:none;paint-order:normal"}, glyph));
   }
 
   function agentActive(agent) {
@@ -560,7 +568,8 @@ LIVE_OVERLAY_SCRIPT = """
       drawPlacementMarker(g, p, {
         r: active ? 8 : 6,
         fill: active ? "#67e8f9" : "#7a879b",
-        className: `live-agent-dot ${active ? "live-agent-invoking" : "live-agent-idle"}`
+        glyph: "🛸",
+        className: active ? "live-agent-invoking" : "live-agent-idle"
       });
       g.appendChild(el("text", {x: Number(p.x) + 11, y: Number(p.y) - 9, class: "live-agent-label"}, agent["agent-id"] || "agent"));
       if (isShelf(p) || isExcursion(agent["mission-id"])) {
@@ -568,6 +577,25 @@ LIVE_OVERLAY_SCRIPT = """
       }
       layer.appendChild(g);
     }
+  }
+
+  function shipContributors(ship) {
+    return ((ship && ship.contributing) || []).map((c) => `${c["agent-id"] || "agent"} -> ${c["mission-id"] || "unknown"}`).join("\\n");
+  }
+
+  function drawShip(data) {
+    const ship = data.ship;
+    if (!validPlacement(ship)) return;
+    const cx = Number(ship.x);
+    const cy = Number(ship.y);
+    const n = ship["session-count"] || ((ship.contributing || []).length);
+    const g = el("g", {"data-live-kind": "ship", "data-method": ship.method || "unknown"});
+    title(g, `operator centroid of ${n} active sessions\\nmethod=${ship.method || "unknown"}\\n${shipContributors(ship)}`);
+    g.appendChild(el("circle", {cx, cy, r: 34, class: "live-ship-halo live-ship-pulse"}));
+    g.appendChild(el("circle", {cx, cy, r: 20, class: "live-ship-halo"}));
+    g.appendChild(el("text", {x: cx, y: cy + 1, class: "live-ship-glyph", style: "stroke:none;paint-order:normal"}, "🚀"));
+    g.appendChild(el("text", {x: cx + 25, y: cy - 18, class: "live-ship-label"}, `operator centroid · ${n}`));
+    layer.appendChild(g);
   }
 
   function drawWmPoint(item, slot, color, dx, dy) {
@@ -598,6 +626,7 @@ LIVE_OVERLAY_SCRIPT = """
     drawFrontierBand(data);
     drawWarMachine(data);
     drawAgents(data);
+    drawShip(data);
   }
 
   function drawOffline(error) {
