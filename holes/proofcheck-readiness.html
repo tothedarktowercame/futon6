@@ -49,7 +49,7 @@
 </style></head><body>
 <header>
   <h1>Informal proof-checking + structure-first concepts — readiness</h1>
-  <div class="meta">claude-1 · 2026-06-17 · covers excursions <code>E-structure-first-concepts</code> + <code>E-informal-proof-checking</code>. Companion to <code>pre-superpod-pipeline-readiness.html</code>. "We know how to do this & it's a good idea — the rest is implementation."</div>
+  <div class="meta">claude-1 · 2026-06-17 · <b>updated 2026-07-04 after a full audit</b> (all cited shas/scripts/artifacts verified; stale "dispatched" statuses corrected — that work landed 2026-06-18; mark7 shipping layer added; links made repo-relative) · covers excursions <code>E-structure-first-concepts</code> + <code>E-informal-proof-checking</code>. Companion to <code>pre-superpod-pipeline-readiness.html</code>. "We know how to do this & it's a good idea — the rest is implementation."</div>
 </header>
 <div class="flow">
   <b>The spine</b> (deterministic-where-possible, LLM-only-for-the-residue, an incremental monoid over the corpus):<br>
@@ -68,12 +68,11 @@
 <footer>
   <h2>What needs breakdown (Joe's flag)</h2>
   <ol id="breakdowns"></ol>
-  <h2>Suggested order (dependency-aware)</h2>
+  <h2>Suggested order (updated 2026-07-04 — the earlier list is DONE: cheap wins, decompositions, Q1/Q2/Q3 all landed)</h2>
   <ol>
-    <li><b>Cheap wins now</b> (specified, CPU): SFC-D3 annotate-everywhere index · SFC-norm concept normalization · SFC2a-v2 (∃/<code>\mathbb</code> — the ∃ silent-drop is a correctness fix) · R2a-v2 de-noise · wire rung-2 into the loop self-gate.</li>
-    <li><b>Decompose</b> (needs breakdown): the per-concept map-reduce aggregator + schema · SFC2b symbol grounding (= M-symbol-grounding) · R2d concept-coverage-of-proofs bridge · the cascade <code>select</code>-per-topology + conformance certificate.</li>
-    <li><b>Settle the open questions</b> (Q1 menu location, Q2 select topology) — leanings recorded, Joe to ratify — they gate the cascade work.</li>
-    <li><b>Then the LLM rungs</b> (gpu/llm): SFC2b grounding, rung-3 judge — bounded, checkable, last.</li>
+    <li><b>Ship mark7 to Rob</b> — the ★ SHIP section is green: handoff doc + smoke test + gated runner + deps + in-flight logging. Remaining Rob-side: his <code>FUTON6_EPRINTS</code> layout + the served model.</li>
+    <li><b>Schedule the two costed LLM passes inside the mark7 window</b> (they just need the served model Rob will already have up): SFC2b real symbol bindings (openai pass) · rung-3-3 openai run (real novel-vs-gap split + questions). These retire the last placeholder numbers in CAS-CERT.</li>
+    <li><b>After the window:</b> R2d-3 imported-bucket (descent artifact is ready — WARP-ORCH-3 phylogeny) · CAS-SEL Tier-1 LLM verify on arXiv (deterministic path is all-thin there) · grow STRAT-REC vocab on the mark7 CT corpus (562 misses).</li>
   </ol>
 </footer>
 <script>
@@ -84,6 +83,20 @@ const CARDS = {
    n:"<b>The one new build.</b> Composes only green pieces into one HTML per paper: imported concepts + coverage (SFC1), a worked <code>:structure</code> with grounding-holes shown (SFC2a), the IATC graph + <b>rung-2 verdict with residual sorries highlighted</b> (iatc_semcheck). Featured set spans the range: 0706.1286 (clean) · 0708.2067 (orphans) · 0709.0248 (anchor-flag) · 0708.2185 (self-loop). This is the artifact to test against."},
   {id:"DEMO-paper", t:"Demo paper scout", s:"ready", c:"cpu",
    n:"Done — all 10 loop-run-70b papers carry ≥45 formula-defined concepts; chose the 4-paper range above. SFC2a + iatc_semcheck already cover them."}
+ ],
+ "★ SHIP — mark7: full math.CT on Rob's superpod (added 2026-07-04, post-audit)": [
+  {id:"MARK7-HANDOFF", t:"Rob handoff — one 20h window, turnkey", s:"ready", c:"gpu",
+   ev:"holes/mark7-rob-handoff.md + mark7-superpod-run-playbook.md · data/mark7-substrate.tgz (15MB, committed) · manifests holes/math-ct-full.ids.txt (4616 primary math.CT, citation-ranked) + math-ct-chrono.ids.txt",
+   n:"What Rob does: export <code>FUTON6_EPRINTS</code>, serve the model OpenAI-compatible, extract the substrate, run the 5-min smoke test, then one stepper command. <b>Rob's textbook is in LaTeX</b> — intake is LaTeX eprint sources (no PDF path), so it rides the same pipe. Send-back manifest listed (mark6 lesson: retrieve BEFORE teardown)."},
+  {id:"MARK7-STEPPER", t:"Gated runner: linode_stepper --profile superpod", s:"ready", c:"cpu",
+   ev:"scripts/linode_stepper.py · S1-S12 + phase-completeness ledger · FIXED 2026-07-04: id-manifest now threads through every per-paper stage (S1/S3/S4/S6 — were literal &lt;ids&gt;/&lt;pid&gt; placeholders that would have stopped a --run at S3); prose criteria split from executable gates (crit vs gate — 7 prose gates no longer shell-fail); linode-4gpu-run.sh no longer clobbers S3's candidates with a 10-paper demo re-extract; handoff run command now passes --ids explicitly (default was the 200-paper sample).",
+   n:"One resumable command over the whole manifest; halts at each stage gate for a glance; the ledger refuses any stage whose upstream didn't run for this corpus. Data-parallel sharding via <code>mark7_shard_manifest.py --num-shards 8</code> stays available for tight windows."},
+  {id:"MARK7-DEPS", t:"Fresh-host deps: bb + LaTeXML, live-checked", s:"ready", c:"cpu",
+   ev:"scripts/linode-postsetup-deps.sh · FIXED 2026-07-04: LaTeXML (latexmlmath) now installed (apt/conda, FATAL with instructions if neither) + a live formula→:structure check through the real bb chain",
+   n:"Was the audit's #1 fresh-box hazard: <code>sfc_def_structure.bb</code> shells to <code>latexmlmath</code>, no setup script installed it, and S11's <code>sfc_struct_canon.batch</code> swallows the failure (bare except) — the :structure lift would have been a SILENT no-op on the superpod. The postsetup script now fails loudly instead."},
+  {id:"MARK7-LOG", t:"In-flight loss snapshots in the 70B loop", s:"ready", c:"cpu",
+   ev:"scripts/mark3_iatc_loop.py · ADDED 2026-07-04: [i/n] per-proof lines + --loss-log-interval (default 100) snapshots: pass/fail/resumed/rung2-soft-fail · pass-rate · proofs/min · ETA",
+   n:"Rob's explicit ask from the May handoff (superpod-job.py stage-5 pattern, now ported): periodic in-flight snapshots, not just the end-of-run summary. On ~28k proofs the loop was one silent line per paper with no ETA; now it self-reports every N proofs, flushed, so a 20h window is legible from the log tail."}
  ],
  "A · Structure-first concepts (rung −1) — do we know the terms?": [
   {id:"SFC1", t:"Concept-definition coverage + genuine ranking", s:"ready", c:"cpu",
@@ -98,8 +111,8 @@ const CARDS = {
   {id:"SFC-NORM", t:"Normalize / merge concept variants", s:"ready", c:"cpu",
    ev:"scripts/sfc_concept_coverage.py · bdf2c4f · reviewed PASS · index regenerated 3737→3500 concepts",
    n:"Singularization + exact-merge in the shared <code>normalize_concept</code> (\"natural transformations\"→\"natural transformation\"); <b>complementary</b> to SFC-AGG's quantifier-GC (\"all functors\"→functor). Plurals now fold (df summed: natural transformation 4882→5659). concept-index regenerated for consistency."},
-  {id:"WARP-ORCH", t:"Wire the warp / tapestry layer (un-orchestrated)", s:"partial", c:"cpu",
-   ev:"3/4 built+reviewed (claude-2): -1 liveness audit 82740ba · -2 make-like runner+manifest+drift-gate 8310849/82f470f · -3 phylogeny 965085a (data/warp/concept-phylogeny.json, claude-2 gate + claude-1 co-review PASS = CAS-SEL-5 descent input). -4 close-SFC-join: wiring done (build_term_prior→spine S6t) but full warp_run rebuild TIMED OUT on codex 30min limit (concordance alone >30min); re-approach pending Joe (bg-supervised vs lighter audit). No drift; committed data intact.",
+  {id:"WARP-ORCH", t:"Wire the warp / tapestry layer", s:"ready", c:"cpu",
+   ev:"4/4 built+reviewed: -1 liveness audit 82740ba · -2 make-like runner+manifest+drift-gate 8310849/82f470f · -3 phylogeny 965085a (data/warp/concept-phylogeny.json, claude-2 gate + claude-1 co-review PASS = CAS-SEL-5 descent input) · -4 close-SFC-join DONE 007a683 (codex 30min timeouts beaten by a systemd unit; full warp_run rebuild ran end-to-end, warp_run→SFC1 reproduction 100%/99.8%, drift-summary crash fixed).",
    n:"<code>warp_concept_usage</code>, <code>def-snippets</code>, <code>concept-encyclopedia-v0</code>, <code>mark3_thread_tapestry</code> all live on disk but in no runner. Decomposed: <b>-1 liveness audit (read-only, first)</b> → -2 make-like runner → -3 promote the tapestry as the <b>citation-descent</b> artifact CAS-SEL's genealogical select needs → -4 close the SFC join. <b>This is where the two excursions meet.</b>"}
  ],
  "B · Definition structure — the :structure lift (D4)": [
@@ -110,7 +123,7 @@ const CARDS = {
    ev:"scripts/sfc_def_structure.bb · d22eab0 · reviewed PASS · ∃ preserved + ℕ; L-closure regression intact",
    n:"<b>Correctness fix landed:</b> <code>\\exists</code> no longer silently dropped → <code>(exists [k] …)</code>; <code>\\mathbb{N}</code>→ℕ; <code>formulae-sequence</code> cleaned (unrecognized → explicit <code>:hole</code>). Transducer now covers ∀ + ∃ + set-builder + restriction + ≅ + action."},
   {id:"SFC2b", t:"LLM symbol grounding (= M-symbol-grounding)", s:"partial", c:"llm",
-   ev:"scripts/sfc_symbol_grounding.py · built + stub-validated (claude-1, carve-out) · openai backend ready, model-pending · WIRED into CAS-CERT symbol grain (codex-4 211fcf2, claude-1 review PASS) · extraction-sharpening DISPATCHED (prose junk 'and'/'share' → real symbols)",
+   ev:"scripts/sfc_symbol_grounding.py · built + stub-validated (claude-1, carve-out) · openai backend ready, model-pending · WIRED into CAS-CERT symbol grain (codex-4 211fcf2, claude-1 review PASS) · extraction-sharpening LANDED 944fb68 (reviewed PASS: 0709 symbols ['A','B','x','a','p'], prose junk gone) · remaining: the served-model openai pass for real bindings — schedule inside the mark7 window",
    n:"Fills each <code>:grounding :hole</code> by binding the symbol to its <i>per-paper</i> domain from the prose. <b>Built</b> as a grounding loop (IATC/expository pattern): SFC2a holes → prompt → stub|openai → <b>defeasible evidence-check</b> (a binding cites verbatim evidence or is <code>:unsupported</code>; symbols the context never introduces are honest <code>:undefined-in-context</code>). Stub-validated on the L-closure (6 grounded / 1 undefined / 0 unsupported). Needs a served model for real bindings (no GPU now)."}
  ],
  "C · Proof-checking — the rung ladder (E-informal-proof-checking)": [
@@ -155,9 +168,9 @@ const CARDS = {
    n:"<b>RESOLVED</b> (cas-sel-1-spec.md): the <b>matched-pattern set IS the topology</b>, read off the proof by Tier-0 retrieve + Tier-1 verify (the coarse frame). The resolution axis <i>is</i> the control flow: coarse → select → fill → re-render. <b>Q3 also resolved:</b> the topology-feature vocabulary <i>is the pattern pool itself</i> — no separate taxonomy (empirical finding, all 4 worked proofs)."},
   {id:"CAS-CERT", t:"Conformance certificate + residual-sorry map", s:"ready", c:"cpu",
    ev:"BUILT+REVIEWED PASS (codex-1 · 85ce000 · claude-1 re-ran gates + spot-checked ports vs ground truth: 0709 R2a-flags→miswired, 0708.1921 0%-grounded yet PASS bc all-empty-not-miswired = honesty boundary working). cas_cert.py deterministic reader over iatc_semcheck; vector-by-grain; gate FAILs only on mis-wire. Deterministic per-paper aggregator over rung outputs (no model); ports by GRAIN (symbol⊂concept⊂technique⊂proof); conformance = vector-by-grain; residual-sorry map = empty ports = ArSE seeds; gate FAILs only on mis-wire (N/A≠FAIL); ships now over built grains. RENDER displays the 4-facet guide.",
-   n:"Output beyond the profile: \"this is a well-formed wiring — every port filled or flagged\" (NOT \"verified\") + the residual-sorry/open-questions map. <b>The certificate IS the per-paper substrate; RENDER displays it</b> (machine + human faces of one object). Buildable now over live grains {concept R2d · proof R2a/b/c · technique-partial CAS-SEL}. <b>UPDATE 2026-06-18: all 4 grains now REPORT (no N/As)</b> — seam-6 (cas_segment, 659e905) feeds the technique grain via <code>--cas-select</code>; SFC2b wired to symbol via <code>--symbols</code> (211fcf2). <b>Substance still pending:</b> technique <i>fill</i> = rung-3-2 (dispatched codex-1); symbol real-bindings = the openai pass + extraction-sharpening (dispatched codex-4). Today's deterministic technique/symbol numbers are placeholders (arXiv technique all-empty; stub symbols are noise) until those land."},
-  {id:"rung-3", t:"Technique-grounding detector — verb-twin of R2d, per-edge cascade select", s:"build", c:"llm",
-   ev:"rung-3-1 (residue spike) BUILT+REVIEWED PASS (c70d157). MEASURED: ~73% deterministic / 27.3% LLM-residue on the verifiable CAS-0 set (6/22 ungrounded = exactly the honest recall@4 miss set; 2 thin). arXiv = 100% strict-residue (no verifier wired, reported separately). The empirical answer to Q5/the cost question. rung-3-2 (deterministic detector) <b>DISPATCHED → codex-1 2026-06-18</b> (fills the technique grain via a per-paper gap-map + <code>cas_cert --rung3</code>; seam-6 already un-N/As the grain, rung-3-2 gives it real buckets); rung-3-3 (LLM-on-residue) follows; feeds CAS-CERT technique grain.",
+   n:"Output beyond the profile: \"this is a well-formed wiring — every port filled or flagged\" (NOT \"verified\") + the residual-sorry/open-questions map. <b>The certificate IS the per-paper substrate; RENDER displays it</b> (machine + human faces of one object). All 4 grains REPORT (no N/As) — seam-6 (cas_segment, 659e905) feeds technique via <code>--cas-select</code>; SFC2b → symbol via <code>--symbols</code> (211fcf2). <b>UPDATE 2026-07-04:</b> technique fill LANDED — rung-3-2 (e380e7e, reviewed PASS) gives <code>--rung3</code> real buckets ({filled:3, empty:3, rate:.5} on 0709, not all-empty); rung-3-3 (a97e790, independently reviewed 07-04) attaches phrased ArSE questions via <code>--questions</code> (report-only, verified byte-identical grains/gate). <b>Last placeholder:</b> symbol real-bindings — the served-model openai pass, schedule inside the mark7 window."},
+  {id:"rung-3", t:"Technique-grounding detector — verb-twin of R2d, per-edge cascade select", s:"partial", c:"llm",
+   ev:"rung-3-1 (residue spike) BUILT+REVIEWED PASS (c70d157): ~73% deterministic / 27.3% LLM-residue on the verifiable CAS-0 set. rung-3-2 (deterministic detector) LANDED e380e7e 2026-06-18, reviewed PASS — scripts/rung3_technique.py per-paper gap-map + cas_cert --rung3 (real technique buckets). rung-3-3 (LLM-on-residue → ArSE questions) LANDED a97e790 — scripts/rung3_residue_llm.py, bounded residue-only, cas_cert --questions report-only; author=reviewer flag CLOSED by independent review 2026-07-04 (2 findings fixed: malformed-JSON fallback; de-duplicated ungrounded template). Remaining: the costed openai run over the corpus (needs the served model — mark7 window).",
    n:"<b>Reframed + moved Phase C→D (Joe, 2026-06-17):</b> not a correctness judge — a <b>detector of thin / ungrounded MOVES</b> (the verb-twin of R2d: R2d grounds the <i>terms</i>, rung-3 grounds the <i>techniques</i>). \"Thin\" = a load-bearing step whose pattern bottoms out in a <i>heuristic</i> where a <i>verifiable</i> step is required — an undischarged HOWEVER / undeclared unfilled sorry (CAS-0's mechanism, per-edge). Buckets parallel R2d: grounded-by-pattern / by-citation / thin / ungrounded. <b>Conjectures = author-declared gaps</b> (credit them — a corpus open-problem map). Output = a <b>likely-gap → ArSE question</b> (phrased via the RM question-pattern menu), not a verdict. = the <b>per-edge instance of CAS-SEL</b> (best-pattern-fit residual = the gap); depends on the menu + CAS-CERT. LLM-fraction is <b>empirical</b> (measure the deterministic residue, per CAS-0 Q5). Breakdown: <code>holes/handoffs/rung-3-breakdown.md</code>."}
  ],
  "E · Cross-cutting / context": [
@@ -189,11 +202,15 @@ const CARDS = {
 };
 const app=document.getElementById('app'), bd=document.getElementById('breakdowns');
 const LBL={ready:"built+reviewed",partial:"v1 / gaps",build:"needs build",break:"needs breakdown",open:"open question",vision:"deferred"};
-const BASE="file:///home/joe/code/futon6/";
+const BASE="../";  // repo-relative (this file lives in holes/) — works from any clone, not just Joe's machine
 // each card → its latest artifact (built → report/demo; planned → its spec). Mostly EDN/markdown, not styled HTML.
 const LINKS={
  "DEMO-COMPOSE":"data/showcases/ct-anatomy/proofcheck-demo/index.html",
  "DEMO-paper":"data/showcases/ct-anatomy/proofcheck-demo/index.html",
+ "MARK7-HANDOFF":"holes/mark7-rob-handoff.md",
+ "MARK7-STEPPER":"scripts/linode_stepper.py",
+ "MARK7-DEPS":"scripts/linode-postsetup-deps.sh",
+ "MARK7-LOG":"scripts/mark3_iatc_loop.py",
  "SFC1":"holes/excursions/sfc-concept-coverage.md",
  "SFC-D3":"holes/excursions/sfc-concept-index.md",
  "SFC-AGG":"holes/excursions/sfc-concept-aggregate.md",
