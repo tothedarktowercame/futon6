@@ -677,9 +677,13 @@ text{{cursor:default}}{LIVE_OVERLAY_STYLE}</style>
 <p><b>This is the metric (terrain), NOT the EFE</b> (EFE = G(π) = the geodesic over it, drawn later as policy
 streamlines). Each mission is a DISTRICT — scopes spiral around the HEAD hub, <b>coloured by Salingaros class</b>
 (<span style="color:#3a9a4a">green=alive</span> · <span style="color:#c0392b">red=mess</span> ·
-<span style="color:#3a7ad0">blue=pipeline</span> · grey=stub) and <b>sized by generativity</b> (backlinks).
-Orange points = open <b>:detached</b> holes (high ground); smooth level sets = topography; faint purple = pattern
-roads. <b>Anatomy marks (2026-06-12)</b>: hollow rings = <b>vacuous scopes</b> (a binder with no named
+<span style="color:#3a7ad0">blue=pipeline</span> · grey=stub) and <b>sized by generativity</b> — hub SIZE is
+the citation-backlink count; citations are <i>not</i> drawn as lines.
+Orange points = open <b>:detached</b> holes (high ground); smooth level sets = topography.
+<b><span style="color:#9a7fd0">Purple lines = shared-PATTERN roads</span></b> (the two missions apply the same
+library pattern), <b>ink ∝ turn-attestation</b> of the strongest shared pattern — bold = that pattern is heavily
+<i>enacted</i> in logged turns, near-invisible = shared but never yet retrieved. A big hub with a faint fan is
+therefore "much-cited, patterns not yet exercised"; a bold fan is enacted structure. <b>Anatomy marks (2026-06-12)</b>: hollow rings = <b>vacuous scopes</b> (a binder with no named
 entities inside — suspect terrain, +cost); <span style="color:#4ade80">◆ green diamond = certificate
 PASS</span> (verified ground, −cost) · <span style="color:#ef4444">◆ red = FAIL</span> (+cost); verify-gates
 count as frontier. <b>★ filled = claimed</b> capability (at its minting mission) · <b>☆ empty gold = unclaimed but
