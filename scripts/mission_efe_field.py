@@ -388,13 +388,8 @@ for i, (c, is_claimed) in enumerate(_sky_items):
              f"scope-parents all came up empty) — needs a constructed foothold. {info.get('title','')[:100]}")
         sky.append(starpoly(sx, sy, 13, "none", "#ff8a6a", c, t.replace('"', "'")))  # red-ish = truly off-map
 
-# --- specially MARKED missions (e.g. the WM's current recommendation) — 🚀 + explainer ---
-MARKED = {
-    "emacs-cursor-peripheral": (
-        "War Machine recommendation",
-        "Read-only Emacs peripheral — a visible agent cursor 'body' inside the existing Emacs "
-        "session via the futon3c peripheral registry + WS transport (futon3 mission, in progress)."),
-}
+# --- specially MARKED missions (kept empty for this page's live v1 contract) ---
+MARKED = {}
 marks = []
 for stem, (why, desc) in MARKED.items():
     key = "M-" + stem
@@ -422,11 +417,225 @@ for stem, (why, desc) in MARKED.items():
         f'<text x="{mx+42:.0f}" y="{my+5:.0f}" fill="#bdeaff" font-size="15" font-weight="bold">M-{stem} ◄ WM</text>'
         f'</g>')
 
+LIVE_OVERLAY_STYLE = """
+#live-status{display:inline-block;margin-left:10px;padding:2px 7px;border:1px solid #334155;border-radius:999px;color:#94a3b8;background:#0b1020;font-size:11px}
+#live-status.live{color:#bbf7d0;border-color:#22c55e;background:#052e16}
+#live-status.offline{color:#fecaca;border-color:#ef4444;background:#300b12}
+#live-overlay text{font-family:ui-sans-serif,system-ui,sans-serif;paint-order:stroke;stroke:#05060a;stroke-width:3px;stroke-linejoin:round}
+.live-frontier-label{fill:#f8e7a0;font-size:16px;font-weight:700}
+.live-frontier-item{fill:#f8e7a0;font-size:12px}
+.live-agent-label{fill:#dbeafe;font-size:12px;font-weight:700}
+.live-agent-dot{stroke:#06111f;stroke-width:1.2}
+.live-agent-idle{fill:#7a879b;opacity:.82}
+.live-agent-invoking{fill:#67e8f9;opacity:1;animation:liveAgentPulse 1.4s ease-in-out infinite}
+.live-approx{fill:none;stroke-dasharray:5 4}
+.live-wm-label{fill:#fff7ad;font-size:13px;font-weight:800}
+.live-wm-target{stroke:#fb7185}
+.live-wm-enacted{stroke:#facc15}
+.live-wm-ring{fill:none;stroke-width:2.5;opacity:.9}
+.live-wm-pulse{animation:liveWmPulse 1.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+.live-offline-badge{fill:#fecaca;font-size:22px;font-weight:800}
+@keyframes liveAgentPulse{0%,100%{opacity:.65}50%{opacity:1}}
+@keyframes liveWmPulse{0%{opacity:.95;transform:scale(.82)}70%{opacity:.08;transform:scale(1.45)}100%{opacity:0;transform:scale(1.55)}}
+"""
+
+LIVE_OVERLAY_SCRIPT = """
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const ENDPOINT = "http://localhost:7070/api/alpha/live-efe-map";
+  const REFRESH_MS = 10000;
+  const FRONTIER_Y = 3410;
+  const FRONTIER_H = 175;
+  const svg = document.getElementById("efe-field");
+  const badge = document.getElementById("live-status");
+  if (!svg) return;
+
+  function el(name, attrs = {}, text = null) {
+    const node = document.createElementNS(NS, name);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v !== null && v !== undefined) node.setAttribute(k, String(v));
+    }
+    if (text !== null) node.textContent = text;
+    return node;
+  }
+
+  const layer = el("g", {id: "live-overlay"});
+  svg.appendChild(layer);
+
+  function clear(node) {
+    while (node.firstChild) node.removeChild(node.firstChild);
+  }
+
+  function setBadge(kind, text) {
+    if (!badge) return;
+    badge.className = kind;
+    badge.textContent = text;
+  }
+
+  function validPlacement(p) {
+    return p && Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y));
+  }
+
+  function placementKind(p) {
+    return (p && p.placement) || "unknown";
+  }
+
+  function isShelf(p) {
+    return placementKind(p) === "frontier-shelf";
+  }
+
+  function isEmbedded(p) {
+    return placementKind(p) === "embedded";
+  }
+
+  function isExcursion(id) {
+    return String(id || "").startsWith("E-");
+  }
+
+  function fmt(n) {
+    return Number.isFinite(Number(n)) ? Number(n).toFixed(2) : "n/a";
+  }
+
+  function anchorsText(p) {
+    const anchors = (p && p.anchors) || [];
+    if (!anchors.length) return "none";
+    return anchors.map((a) => {
+      if (typeof a === "string") return a;
+      return a["mission-id"] || a.id || a.label || JSON.stringify(a);
+    }).join(", ");
+  }
+
+  function placementTitle(p) {
+    if (!p) return "placement: none";
+    return `placement=${placementKind(p)} method=${p.method || "unknown"} confidence=${p.confidence ?? "?"} anchors=${anchorsText(p)}`;
+  }
+
+  function title(parent, text) {
+    parent.appendChild(el("title", {}, text));
+  }
+
+  function drawFrontierBand(data) {
+    const g = el("g", {"data-layer": "frontier-band"});
+    g.appendChild(el("rect", {x: 0, y: FRONTIER_Y, width: 3600, height: FRONTIER_H, fill: "#09111f", opacity: 0.88}));
+    g.appendChild(el("line", {x1: 0, y1: FRONTIER_Y, x2: 3600, y2: FRONTIER_Y, stroke: "#f8e7a0", "stroke-width": 1.3, "stroke-dasharray": "9 7", opacity: 0.8}));
+    g.appendChild(el("text", {x: 24, y: FRONTIER_Y + 28, class: "live-frontier-label"}, "frontier shelf — off-map live placements"));
+    for (const item of ((data.frontier && data.frontier.items) || [])) {
+      if (!validPlacement(item)) continue;
+      const missionId = item["mission-id"] || "unknown";
+      const itemG = el("g", {"data-live-kind": "frontier", "data-mission-id": missionId});
+      title(itemG, `${missionId}${isExcursion(missionId) ? " — excursion" : ""}\\n${placementTitle(item)}`);
+      itemG.appendChild(el("circle", {cx: item.x, cy: item.y, r: 7, fill: "none", stroke: "#f8e7a0", "stroke-width": 1.8, "stroke-dasharray": "4 3"}));
+      itemG.appendChild(el("text", {x: Number(item.x) + 12, y: Number(item.y) + 4, class: "live-frontier-item"}, `${missionId}${isExcursion(missionId) ? " · excursion" : ""}`));
+      g.appendChild(itemG);
+    }
+    layer.appendChild(g);
+  }
+
+  function drawPlacementMarker(parent, p, attrs) {
+    const cx = Number(p.x);
+    const cy = Number(p.y);
+    const r = attrs.r || 7;
+    if (isEmbedded(p)) {
+      parent.appendChild(el("circle", {cx, cy, r, fill: attrs.fill, stroke: attrs.stroke || "#05060a", "stroke-width": attrs.strokeWidth || 1.2, class: attrs.className || ""}));
+      return;
+    }
+    parent.appendChild(el("circle", {cx, cy, r: r + 2, fill: "none", stroke: attrs.fill, "stroke-width": attrs.strokeWidth || 1.8, "stroke-dasharray": isShelf(p) ? "6 4" : "4 3", class: `live-approx ${attrs.className || ""}`}));
+    parent.appendChild(el("circle", {cx, cy, r: Math.max(2.2, r - 3), fill: isShelf(p) ? "none" : attrs.fill, opacity: isShelf(p) ? 1 : 0.35}));
+  }
+
+  function agentActive(agent) {
+    const status = String(agent.status || "").toLowerCase();
+    const activity = String(agent["invoke-activity"] || "").toLowerCase();
+    return status === "invoking" || activity === "invoking" || activity === "active" || Boolean(agent["running-job-id"]);
+  }
+
+  function drawAgents(data) {
+    for (const agent of ((data.agents && data.agents.items) || [])) {
+      if (!agent["mission-id"] || !validPlacement(agent.placement)) continue;
+      const p = agent.placement;
+      const active = agentActive(agent);
+      const g = el("g", {"data-live-kind": "agent", "data-agent-id": agent["agent-id"], "data-mission-id": agent["mission-id"]});
+      title(g, `${agent["agent-id"]}\\nmission=${agent["mission-id"]}${isExcursion(agent["mission-id"]) ? " (excursion)" : ""}\\nclock-source=${agent["clock-source"] || "unknown"}\\nstatus=${agent.status || "unknown"}\\n${placementTitle(p)}`);
+      drawPlacementMarker(g, p, {
+        r: active ? 8 : 6,
+        fill: active ? "#67e8f9" : "#7a879b",
+        className: `live-agent-dot ${active ? "live-agent-invoking" : "live-agent-idle"}`
+      });
+      g.appendChild(el("text", {x: Number(p.x) + 11, y: Number(p.y) - 9, class: "live-agent-label"}, agent["agent-id"] || "agent"));
+      if (isShelf(p) || isExcursion(agent["mission-id"])) {
+        g.appendChild(el("text", {x: Number(p.x) + 11, y: Number(p.y) + 8, class: "live-frontier-item"}, "excursion"));
+      }
+      layer.appendChild(g);
+    }
+  }
+
+  function drawWmPoint(item, slot, color, dx, dy) {
+    const wrapped = item[slot];
+    const p = wrapped && wrapped.placement;
+    if (!validPlacement(p)) return;
+    const missionId = wrapped["mission-id"] || (p && p["mission-id"]) || "unknown";
+    const cx = Number(p.x);
+    const cy = Number(p.y);
+    const g = el("g", {"data-live-kind": `wm-${slot}`, "data-mission-id": missionId});
+    title(g, `WM ${slot}: ${missionId}${isExcursion(missionId) ? " (excursion)" : ""}\\ndecision=${item.decision || "unknown"} G=${fmt(item.G)} expected-G=${fmt(item["expected-G"])} realized-G=${fmt(item["realized-G"])}\\ntrigger=${item.trigger || "unknown"}\\n${placementTitle(p)}`);
+    g.appendChild(el("circle", {cx, cy, r: 28, fill: "none", stroke: color, "stroke-width": 1.4, opacity: 0.28}));
+    g.appendChild(el("circle", {cx, cy, r: 17, fill: "none", stroke: color, "stroke-width": 2.4, "stroke-dasharray": isEmbedded(p) ? null : "6 4", class: `live-wm-ring live-wm-${slot}`}));
+    g.appendChild(el("circle", {cx, cy, r: 23, fill: "none", stroke: color, "stroke-width": 2.0, class: `live-wm-ring live-wm-${slot} live-wm-pulse`}));
+    g.appendChild(el("text", {x: cx + dx, y: cy + dy, class: "live-wm-label"}, `${slot} G ${fmt(item.G)}`));
+    layer.appendChild(g);
+  }
+
+  function drawWarMachine(data) {
+    for (const item of ((data["war-machine"] && data["war-machine"].items) || [])) {
+      drawWmPoint(item, "enacted", "#facc15", 24, -20);
+      drawWmPoint(item, "target", "#fb7185", 24, 22);
+    }
+  }
+
+  function draw(data) {
+    clear(layer);
+    drawFrontierBand(data);
+    drawWarMachine(data);
+    drawAgents(data);
+  }
+
+  function drawOffline(error) {
+    clear(layer);
+    const g = el("g", {"data-live-kind": "offline"});
+    g.appendChild(el("rect", {x: 18, y: 54, width: 205, height: 34, rx: 6, fill: "#300b12", stroke: "#ef4444", opacity: 0.92}));
+    g.appendChild(el("text", {x: 32, y: 77, class: "live-offline-badge"}, "live layer offline"));
+    title(g, error ? String(error) : "live endpoint unreachable");
+    layer.appendChild(g);
+  }
+
+  async function refresh() {
+    try {
+      const resp = await fetch(ENDPOINT, {cache: "no-store"});
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      if (!data.ok) throw new Error("endpoint returned ok=false");
+      draw(data);
+      const agents = data.agents ? data.agents["with-placement"] : 0;
+      const wm = data["war-machine"] ? data["war-machine"].count : 0;
+      setBadge("live", `live layer on · ${agents} agents · ${wm} WM`);
+    } catch (err) {
+      drawOffline(err);
+      setBadge("offline", "live layer offline");
+    }
+  }
+
+  refresh();
+  window.setInterval(refresh, REFRESH_MS);
+})();
+</script>
+"""
+
 doc = f"""<!doctype html><meta charset=utf-8><title>Futon City — per-scope metric field</title>
 <style>body{{margin:0;background:#05060a;color:#cdd3df;font:13px sans-serif}}header{{padding:11px 20px}}
 h1{{font-size:16px;margin:0 0 4px}}p{{margin:0;color:#8b95a7;font-size:12px;max-width:1180px}}
-text{{cursor:default}}</style>
-<header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed</h1>
+text{{cursor:default}}{LIVE_OVERLAY_STYLE}</style>
+<header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed <span id="live-status">live layer loading</span></h1>
 <p><b>This is the metric (terrain), NOT the EFE</b> (EFE = G(π) = the geodesic over it, drawn later as policy
 streamlines). Each mission is a DISTRICT — scopes spiral around the HEAD hub, <b>coloured by Salingaros class</b>
 (<span style="color:#3a9a4a">green=alive</span> · <span style="color:#c0392b">red=mess</span> ·
@@ -441,18 +650,17 @@ hover for which; co-anchored stars stack as ladder rungs). <b>The sky holds only
 <b><span style="color:#ff8a6a">☆ red = unclaimed, no foothold anywhere</span></b> (a registered goal with no path
 built) · <b><span style="color:#c0392b">★ red-rimmed filled = claimed but off-map</span></b> (its minting missions
 have no district on the carpet — operator semantics decision pending).
-<b>🚀 = a specially-marked mission (the WM's current recommendation)</b> —
-cyan ring, hover for its story + metric diagnostic. <b><span style="color:#ffb43c">amber dashed lasso = YOUR
+<b><span style="color:#ffb43c">amber dashed lasso = YOUR
 territory</span></b> (missions worked in git's last ~3 weeks — the momentum/exploit baseline; inside = the WM
 confirms, outside = it breaks trend). <b><span style="color:#d8b066">⬡ = dark matter</span></b> (a lasso loop with
-momentum but no substrate-2 district — a mission worked but not yet ingested). <b>Hover any star or hub for its story.</b></p></header>
-<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}">
+momentum but no substrate-2 district — a mission worked but not yet ingested). <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape. <b>Hover any star, hub, or live marker for its story.</b></p></header>
+<svg id="efe-field" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
 <rect x="0" y="0" width="{W}" height="{SKY_H}" fill="#0c0f18"/>
 <g>{''.join(fill)}</g><g>{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
 <g>{hubline_svg}</g><g>{scope_svg}</g><g>{hub_svg}</g>
 <g>{lasso}</g><g>{''.join(ghosts)}</g>
 <g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
-<g>{''.join(marks)}</g></svg>"""
+<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT}"""
 OUT.write_text(doc)
 print(f"wrote {OUT}")
 print(f"{len(scope_pts)} scopes / {len(hubs)} districts · {sum(1 for p in scope_pts if p[3])} holes · "
@@ -468,6 +676,4 @@ for k in ("minting", "grounded", "summit", "summit-chain", "SKY"):
         print(f"unclaimed/{k}: {', '.join(sorted(_kinds[k]))}")
 _top = sorted(MOM.items(), key=lambda kv: -kv[1])[:10]
 print("momentum (recent-git, top): " + ", ".join(f"{k[2:]}={v:.2f}" for k, v in _top))
-_p = POS.get("M-emacs-cursor-peripheral")
-print(f"lasso level={LV:.3f}/mmax={mmax:.3f} · 🚀 emacs-cursor-peripheral inside YOUR territory? "
-      f"{in_territory(*_p) if _p else 'n/a'}")
+print(f"lasso level={LV:.3f}/mmax={mmax:.3f}")
