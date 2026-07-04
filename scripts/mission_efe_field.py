@@ -559,9 +559,18 @@ LIVE_OVERLAY_SCRIPT = """
   }
 
   function drawAgents(data) {
+    // Co-located sessions (same mission → same coords) would overprint their
+    // glyphs and labels; fan the 2nd, 3rd… out in a small ring around the hub.
+    const crowd = new Map();
     for (const agent of ((data.agents && data.agents.items) || [])) {
       if (!agent["mission-id"] || !validPlacement(agent.placement)) continue;
-      const p = agent.placement;
+      const spot = `${agent.placement.x},${agent.placement.y}`;
+      const k = crowd.get(spot) || 0;
+      crowd.set(spot, k + 1);
+      const p = k === 0 ? agent.placement : Object.assign({}, agent.placement, {
+        x: Number(agent.placement.x) + 14 * k,
+        y: Number(agent.placement.y) + 30 * k
+      });
       const active = agentActive(agent);
       const g = el("g", {"data-live-kind": "agent", "data-agent-id": agent["agent-id"], "data-mission-id": agent["mission-id"]});
       title(g, `${agent["agent-id"]}\\nmission=${agent["mission-id"]}${isExcursion(agent["mission-id"]) ? " (excursion)" : ""}\\nclock-source=${agent["clock-source"] || "unknown"}\\nstatus=${agent.status || "unknown"}\\n${placementTitle(p)}`);
