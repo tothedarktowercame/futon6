@@ -241,10 +241,11 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(REPO / "data" / "iatc-candidates"))
     ap.add_argument("--papers", nargs="*", help="paper ids; default = 10 non-pilot gh200 with marks")
+    ap.add_argument("--list", help="file of paper ids, one per line (same as emit_marks --list)")
     ap.add_argument("--all-proofs", action="store_true",
                     help="extract EVERY proof region per paper (whole-paper), not one passage")
     a = ap.parse_args()
-    papers = a.papers or default_papers()
+    papers = a.papers or (a.list and [l.strip() for l in open(a.list) if l.strip()]) or default_papers()
     outdir = Path(a.out)
     outdir.mkdir(parents=True, exist_ok=True)
     manifest = []

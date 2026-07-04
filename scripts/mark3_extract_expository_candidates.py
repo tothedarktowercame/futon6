@@ -83,9 +83,10 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default=str(REPO / "data" / "expository-candidates"))
     parser.add_argument("--papers", nargs="*", help="paper ids; default = dp-demo papers")
+    parser.add_argument("--list", help="file of paper ids, one per line (same as emit_marks --list)")
     args = parser.parse_args()
 
-    papers = args.papers or default_papers()
+    papers = args.papers or (args.list and [l.strip() for l in open(args.list) if l.strip()]) or default_papers()
     outdir = Path(args.out)
     outdir.mkdir(parents=True, exist_ok=True)
     manifest = []

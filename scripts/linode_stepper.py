@@ -68,22 +68,29 @@ OPS = {
               "patterns onto the host. DEREFERENCE symlinks (rsync -L / tar -h): dev uses a storage/ "
               "overlay, so a naive copy ships dangling links and S2/S5 then can't read the substrate."},
     "S1": {"cmd": "{PY} scripts/emit_marks.py --list {IDS} --run-dir " + RUN + " --run-id $RUN_ID --corpus-id $CORPUS",
-           "gate": "check_invariants wf=0 across the batch"},
+           "gate": "{PY} scripts/check_invariants.py --corpus",
+           "crit": "wf=0 across the batch — read data/loss/dashboard.json at the halt"},
     "S2": {"cmd": "{PY} scripts/coverage_inline.py  # concept-substrate corpus-fresh; G-coverage inline",
-           "gate": "G-coverage: raw coverage rises with corpus-fraction"},
-    "S3": {"cmd": f"{{PY}} scripts/mark3_extract_candidates.py --papers <ids> --all-proofs --out {CAND} && "
+           "crit": "G-coverage: raw coverage rises with corpus-fraction"},
+    "S3": {"cmd": f"{{PY}} scripts/mark3_extract_candidates.py --list {{IDS}} --all-proofs --out {CAND} && "
            f"CANDIDATES={CAND} OUT={GRAPHS} bash scripts/linode-4gpu-run.sh",
-           "gate": f"bb scripts/iatc_argcheck.bb {GRAPHS} && {{PY}} scripts/substance_gate.py {GRAPHS} (finals-only)"},
-    "S4": {"cmd": "{PY} scripts/mark3_extract_expository_candidates.py --papers <ids> "
+           "gate": f"bb scripts/iatc_argcheck.bb {GRAPHS} && {{PY}} scripts/substance_gate.py {GRAPHS}",
+           "note": "substance gate reads finals only; the run wrapper reuses the enriched "
+                   "candidates S3 just extracted (no silent 10-paper re-extract)"},
+    "S4": {"cmd": "{PY} scripts/mark3_extract_expository_candidates.py --list {IDS} "
            "--out data/expository-candidates-run && {PY} scripts/mark3_expository_loop.py "
            "--candidates data/expository-candidates-run --out data/expository-scope-graphs/run "
-           f"--backend openai --run-dir {RUN} (ALL regions; cap/sample at scale)",
-           "gate": "expository_argcheck (self-gated in loop)"},
+           f"--backend openai --run-dir {RUN}",
+           "crit": "expository_argcheck (self-gated in loop)",
+           "note": "ALL regions by default — cap/sample per paper at archive scale "
+                   "(mark7 playbook: ~30 regions/paper so S4 doesn't dominate the window)"},
     "S5": {"cmd": f"{{PY}} scripts/clean_comprehension.py --graphs {GRAPHS} --candidates {CAND} --run-dir {RUN} "
            "# rung-ladder + R2d + strategy_recognizer (reads the staged substrate + futon3 patterns)",
-           "gate": "G-comprehension: verdict separates weak-extraction from weak-proof"},
-    "S6": {"cmd": f"{{PY}} scripts/paper_graph_assemble.py --paper <pid> --iatc {GRAPHS} --run-dir {RUN}",
-           "gate": "B wellformed: every proof attaches to a statement; orphans flagged"},
+           "crit": "G-comprehension: verdict separates weak-extraction from weak-proof"},
+    "S6": {"cmd": "while read -r pid; do [ -n \"$pid\" ] || continue; "
+           f"{{PY}} scripts/paper_graph_assemble.py --paper $pid --iatc {GRAPHS} --run-dir {RUN} "
+           "|| exit 1; done < {IDS}",
+           "crit": "B wellformed: every proof attaches to a statement; orphans flagged"},
     "S7": {"cmd": f"{{PY}} scripts/clean_box_typing.py --graphs {GRAPHS} --out {CLEAN} "
            f"--endpoint http://localhost:$PORT/v1/chat/completions --model mark4-70b --run-dir {RUN} && "
            f"{{PY}} scripts/clean_structure_embed.py --clean-dir {CLEAN} --out {DEMO}",
@@ -95,12 +102,12 @@ OPS = {
     # --- LEARNING LAYER (the 'improve as we run' instrumentation; CPU post-stages) ---
     "S10": {"cmd": f"{{PY}} scripts/iatc_lexicon_harvest.py --graphs {GRAPHS} --run-dir {RUN} && "
             f"{{PY}} scripts/iatc_move_reground.py && {{PY}} scripts/expository_reground.py",
-            "gate": "move-lexicon harvested (relations+warrants+expository moves); reground lift >= 0"},
+            "crit": "move-lexicon harvested (relations+warrants+expository moves); reground lift >= 0"},
     "S11": {"cmd": f"{{PY}} scripts/sfc_struct_canon.py --formulae {RUN}/def-formulae.txt ; "
             f"{{PY}} scripts/clean_paper_signature.py --embed {DEMO}/clean-embed.json",
-            "gate": "structural canonical shapes + whole-paper signatures produced"},
+            "crit": "structural canonical shapes + whole-paper signatures produced"},
     "S12": {"cmd": f"{{PY}} scripts/accretion_curves.py --graphs {GRAPHS} --candidates {CAND} --run-dir {RUN}",
-            "gate": "ACCRETION SWEEP: every tier metric checkpointed at log-spaced n -> rising curves"},
+            "crit": "ACCRETION SWEEP: every tier metric checkpointed at log-spaced n -> rising curves"},
     "RETRIEVE": {"boot": True, "halt": True, "note": "<profile.retrieve> — pull ALL run outputs to dev BEFORE teardown"},
 }
 
@@ -232,6 +239,8 @@ def plan(stages, profile):
             print(f"     cmd : {op['cmd'].format(PY=PY, IDS=IDS)}")
         if op.get("gate"):
             print(f"     gate: {op['gate'].format(PY=PY, IDS=IDS)}")
+        if op.get("crit"):
+            print(f"     crit: {op['crit']}  (criterion — judged at the halt, not executed)")
         if op.get("note"):
             print(f"     note: {op['note']}")
 
@@ -265,6 +274,8 @@ def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
             if sh(op["gate"].format(PY=PY, IDS=IDS)) != 0:
                 print(f"✗ {s['id']} GATE FAILED ({','.join(s['go'])}) — stopping for fix")
                 return
+        if op.get("crit"):  # human criterion, judged at the halt — never a shell command
+            print(f"[crit] {op['crit']}")
         if run_dir:
             ledger_record(run_dir, s["id"], corpus_id, run_id)
         print(f"✓ {s['id']} done" + (f" (ledger: {corpus_id})" if run_dir else ""))
@@ -283,7 +294,8 @@ def main():
     ap.add_argument("--from", dest="frm", default=None)
     ap.add_argument("--to", default=None)
     ap.add_argument("--no-halt", action="store_true")
-    ap.add_argument("--ids", help="override the S1 id-list (e.g. a shard slice for data-parallel)")
+    ap.add_argument("--ids", help="override the run's id-list — threads through every per-paper "
+                    "stage (S1/S3/S4/S6); e.g. a shard slice for data-parallel")
     ap.add_argument("--run-dir", help="phase-ledger + emit dir (data/runs/<run-id>)")
     ap.add_argument("--corpus-id", default="adhoc")
     ap.add_argument("--run-id", default="adhoc")

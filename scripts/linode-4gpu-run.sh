@@ -39,16 +39,23 @@ cd "$REPO"
 }
 
 # --- Stages 1+2 (CPU): ensure the candidate dir carries inlined enrichment ---
-# If marks are local, (re)build enriched candidates so the run is self-contained.
-# If not (marks not rsync'd to this GPU box), refuse early unless a pre-built
-# enriched candidate dir is already present. The loop's own precondition gate is
-# the final backstop, but failing here is earlier and clearer.
-if compgen -G "$MARKS_DIR/fable-*-dp-emacs.json" >/dev/null 2>&1; then
-  echo "== marks present -> (re)extract enriched candidates into $CANDIDATES =="
-  "$PYTHON" scripts/mark3_extract_candidates.py --out "$CANDIDATES"
+# Pre-built candidates (e.g. the stepper's S3 extract, which threads the run's
+# id manifest) take precedence — re-extracting here without --list/--papers
+# would silently fall back to the 10-paper demo set and clobber them. Only
+# extract when the dir is empty AND marks are local; refuse early otherwise.
+# IDS_LIST (file of paper ids) / ALL_PROOFS=1 parameterize that fallback extract.
+if compgen -G "$CANDIDATES/*.candidate.json" >/dev/null 2>&1; then
+  echo "== pre-built candidates found -> verifying enrichment in $CANDIDATES =="
+elif compgen -G "$MARKS_DIR/fable-*-dp-emacs.json" >/dev/null 2>&1; then
+  echo "== no candidates, marks present -> extract enriched candidates into $CANDIDATES =="
+  "$PYTHON" scripts/mark3_extract_candidates.py --out "$CANDIDATES" \
+    ${IDS_LIST:+--list "$IDS_LIST"} ${ALL_PROOFS:+--all-proofs}
 else
-  echo "== no local marks -> verifying pre-built enriched candidates in $CANDIDATES =="
-  "$PYTHON" - "$CANDIDATES" <<'PY'
+  echo "== no candidates and no local marks =="
+fi
+
+# Verify whatever the branch above left in $CANDIDATES (pre-built, fresh, or nothing).
+"$PYTHON" - "$CANDIDATES" <<'PY'
 import json, sys, glob
 d = sys.argv[1]
 cs = sorted(glob.glob(f"{d}/*.candidate.json"))
@@ -61,7 +68,6 @@ if stale:
              f"would never see the anatomy. Re-extract on the dev box and rsync.")
 print(f"  ok: {len(cs)} enriched candidates")
 PY
-fi
 
 echo "== IATC reconstruction loop (70B) over $CANDIDATES -> $OUT =="
 OPENAI_BASE_URL="http://localhost:$PORT/v1" OPENAI_API_KEY=x \

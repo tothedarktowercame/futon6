@@ -76,11 +76,14 @@ cd ~/code/futon6
 # (substrate extracted; model served; FUTON6_EPRINTS exported)
 FUTON6_EPRINTS=$YOUR_EPRINTS OPENAI_BASE_URL=$URL OPENAI_API_KEY=x RUN_ID=mark7 CORPUS=math-ct-full \
   .venv/bin/python scripts/linode_stepper.py --run --profile superpod \
+    --ids holes/math-ct-full.ids.txt \
     --run-dir data/runs/mark7 --corpus-id math-ct-full --run-id mark7
 ```
 
-- Set the run's id-list to `holes/math-ct-full.ids.txt` (citation-ranked) — process most-cited
-  first so the backbone is covered early and a short window still gets the important papers.
+- **`--ids` is load-bearing**: without it the stepper falls back to the 200-paper sample list.
+  `holes/math-ct-full.ids.txt` is citation-ranked — most-cited first, so the backbone is covered
+  early and a short window still gets the important papers. The id list threads through every
+  per-paper stage (S1 marks, S3 IATC, S4 expository, S6 paper-graph).
 - It **halts at each stage gate** for a glance; the completeness ledger refuses any stage whose
   upstream didn't run for this corpus. Stage order: `S1 anatomy · S2 concepts · S3 IATC ·
   S4 expository · S5 comprehension · S6 paper-graph · S7 CLean-embed · S8 export · S9 APM ·
