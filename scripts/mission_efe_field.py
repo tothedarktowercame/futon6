@@ -615,9 +615,18 @@ LIVE_OVERLAY_SCRIPT = """
   }
 
   function drawWarMachine(data) {
+    // Ticks arrive newest-first; repeat ticks on the same mission would stack
+    // dozens of identical pulses. Draw only the latest tick per mission+slot.
+    const seen = new Set();
     for (const item of ((data["war-machine"] && data["war-machine"].items) || [])) {
-      drawWmPoint(item, "enacted", "#facc15", 24, -20);
-      drawWmPoint(item, "target", "#fb7185", 24, 22);
+      for (const [slot, color, dx, dy] of [["enacted", "#facc15", 24, -20], ["target", "#fb7185", 24, 22]]) {
+        const wrapped = item[slot];
+        const missionId = wrapped && wrapped["mission-id"];
+        const key = `${slot}:${missionId}`;
+        if (!missionId || seen.has(key)) continue;
+        seen.add(key);
+        drawWmPoint(item, slot, color, dx, dy);
+      }
     }
   }
 

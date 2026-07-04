@@ -63,6 +63,9 @@ cd "$FUTON6"
 echo "[daily-reembed] regenerating mission carpet variants"
 "$PY" scripts/mission_carpet_variants.py
 
+echo "[daily-reembed] refreshing per-scope districts from substrate-2"
+"$PY" scripts/mission_efe_scope_dump.py
+
 echo "[daily-reembed] regenerating embedded EFE field"
 "$PY" scripts/mission_efe_field.py embed
 
