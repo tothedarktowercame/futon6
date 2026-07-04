@@ -8791,8 +8791,9 @@ def main():
     hg_embeddings_path = None
     hg_thread_ids = None
     hg_path = outdir / "hypergraphs.json"
+    n_hypergraphs = int(stage9a_stats.get("hypergraphs_produced", 0)) if stage9a_stats else 0
     if (not args.skip_graph_embed and stage9a_stats is not None
-            and hg_path.exists()):
+            and hg_path.exists() and n_hypergraphs >= 2):
         t9b = time.time()
         print(f"\n[Stage 9b/{n_stages}] Graph embedding "
               f"(R-GCN, {args.graph_embed_dim}d, {args.graph_embed_epochs} epochs, "
@@ -8872,6 +8873,16 @@ def main():
             "graph_embedding",
             "skipped",
             skip_reason=auto_skip_reasons.get("graph_embedding", "--skip-graph-embed"),
+        )
+    elif stage9a_stats is not None and hg_path.exists():
+        # 9a ran but assembled too few graphs to train on (train_gnn needs >= 2);
+        # skip instead of crashing so a thin shard degrades gracefully.
+        print(f"\n[Stage 9b/{n_stages}] Skipped "
+              f"(only {n_hypergraphs} hypergraph(s) from Stage 9a; need >= 2 to train)")
+        mark_stage(
+            "graph_embedding",
+            "skipped",
+            skip_reason=f"only {n_hypergraphs} hypergraph(s) from Stage 9a (need >= 2 to train)",
         )
     else:
         print(f"\n[Stage 9b/{n_stages}] Skipped (no hypergraphs from Stage 9a)")
