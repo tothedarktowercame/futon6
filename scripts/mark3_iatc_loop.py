@@ -32,6 +32,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -284,13 +285,34 @@ def run(args) -> int:
     tmp.mkdir(exist_ok=True)
     results = []
     accepted_graphs = []
-    for cf in cands:
+    # in-flight progress (Rob's ask: periodic snapshots, not just the final
+    # summary — same pattern as superpod-job.py's stage-5 loss snapshots).
+    n_total = len(cands)
+    t0 = time.time()
+    n_resumed = n_rung2_soft = 0
+    # tolerate callers that build their own args Namespace (tests, mark4_iatc_concurrent)
+    loss_log_interval = getattr(args, "loss_log_interval", 100)
+
+    def loss_snapshot(i):
+        done = i - n_resumed  # freshly processed this session
+        rate = done / max(time.time() - t0, 1e-9) * 60
+        n_pass = sum(1 for _, s, _ in results if s == "pass")
+        eta_min = (n_total - i) / max(rate, 1e-9)
+        print(f"  [{i}/{n_total}] loss snapshot: pass={n_pass} fail={i - n_pass} "
+              f"resumed={n_resumed} rung2-soft-fail={n_rung2_soft} · "
+              f"pass-rate={n_pass / max(i, 1):.2f} · {rate:.1f} proofs/min · "
+              f"ETA {eta_min / 60:.1f}h", flush=True)
+
+    for i, cf in enumerate(cands, 1):
         cand = json.loads(cf.read_text())
         pid = cand.get("proof-id", cand["paper-id"])  # unique per proof (all-proofs); falls back to paper-id
         final = outdir / f"{pid}.edn"
         if final.exists():                       # resume: skip papers already done
             results.append((pid, "pass", "(resumed: existing graph)"))
-            print(f"  {pid}: pass (resumed)")
+            n_resumed += 1
+            print(f"  [{i}/{n_total}] {pid}: pass (resumed)", flush=True)
+            if loss_log_interval and i % loss_log_interval == 0:
+                loss_snapshot(i)
             continue
         prompt = build_prompt(cand, seeds)
         status, last_err = "fail", ""
@@ -331,13 +353,17 @@ def run(args) -> int:
                         continue
                 final.write_text(edn)
                 r2_ok, r2_msg = run_rung2(final, rung2_report, gate=False)
+                if not r2_ok:
+                    n_rung2_soft += 1
                 accepted_graphs.append(final)
                 status = "pass"
                 last_err = f"attempt {attempt}; {r2_msg}; report {rung2_report.name}"
                 break
             last_err = err
         results.append((pid, status, last_err))
-        print(f"  {pid}: {status} ({last_err[:80]})")
+        print(f"  [{i}/{n_total}] {pid}: {status} ({last_err[:80]})", flush=True)
+        if loss_log_interval and i % loss_log_interval == 0:
+            loss_snapshot(i)
 
     # cross-item substance gate over the accepted batch
     print("\n=== batch substance gate (cross-item) ===")
@@ -361,6 +387,9 @@ def main() -> int:
     ap.add_argument("--shots", type=int, default=3)
     ap.add_argument("--rung2-gate", action="store_true",
                     help="Hard-gate rung-2 semantic failures; default records the profile/verdict only.")
+    ap.add_argument("--loss-log-interval", type=int, default=100,
+                    help="print an in-flight loss snapshot every N proofs (pass/fail/rate/ETA); "
+                         "0 disables. Same pattern as superpod-job.py stage 5.")
     return run(ap.parse_args())
 
 
