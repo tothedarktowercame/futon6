@@ -74,6 +74,16 @@ for g, ms in pm.items():
         for j in range(i + 1, len(ms)):
             pair_att[(ms[i], ms[j])] = max(pair_att[(ms[i], ms[j])], a)
 
+# --roads-only: refresh the attestation-weighted road list WITHOUT re-solving
+# the spring layout. The daily job uses this so road ink tracks live
+# attestation while district positions stay put — geometry re-solve (springs
+# moving districts) is a deliberate operator decision, not a cron default.
+if "--roads-only" in sys.argv:
+    json.dump([[a, b, int(w)] for (a, b), w in pair_att.items()],
+              open(ROOT / "futon6" / "data" / "mission-carpet-roads.json", "w"))
+    print(f"roads-only: {len(pair_att)} HGT roads (layout untouched)")
+    raise SystemExit(0)
+
 # springs: citations (complementary web, strong) + HGT (strength ∝ attestation)
 E = []
 for s in stems:

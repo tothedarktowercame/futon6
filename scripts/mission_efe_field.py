@@ -209,14 +209,19 @@ for k in darkm:
         f'<text x="{gx0+28:.0f}" y="{gy0+4:.0f}" fill="#d8b066" font-size="12">{stem} · no substrate-2 district (dark matter)</text>'
         f'</g>')
 
-# faint pattern-road backdrop (attestation-weighted)
+# faint pattern-road backdrop (attestation-weighted). Ink is RELATIVE to the
+# current economy's strongest road: attestation now refreshes on a rolling
+# 60-day window (refresh_pattern_attestation.sh), so absolute counts are not
+# comparable across refreshes — the old absolute scale (calibrated to counts
+# ~100-236) would render a quiet week as a roadless map.
 roads = []
+_wmax = max((w for _, _, w in ROADS), default=1) or 1
 for a, b, w in ROADS:
     if a in POS and b in POS:
         x1, y1 = POS[a]; x2, y2 = POS[b]
-        op = 0.04 + 0.006 * min(w, 60)
+        f = min(w, _wmax) / _wmax
         roads.append(f'<line x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" '
-                     f'stroke="#9a7fd0" stroke-width="{0.4+0.02*min(w,80):.1f}" opacity="{op:.2f}"/>')
+                     f'stroke="#9a7fd0" stroke-width="{0.4+1.6*f:.1f}" opacity="{0.04+0.36*f:.2f}"/>')
 
 hubline_svg = "".join(f'<line x1="{a:.0f}" y1="{b:.0f}" x2="{c:.1f}" y2="{d:.1f}" stroke="#54627f" stroke-width="0.4" opacity="0.22"/>'
                       for a, b, c, d in hub_lines)
@@ -690,8 +695,9 @@ streamlines). Each mission is a DISTRICT — scopes spiral around the HEAD hub, 
 the citation-backlink count; citations are <i>not</i> drawn as lines.
 Orange points = open <b>:detached</b> holes (high ground); smooth level sets = topography.
 <b><span style="color:#9a7fd0">Purple lines = shared-PATTERN roads</span></b> (the two missions apply the same
-library pattern), <b>ink ∝ turn-attestation</b> of the strongest shared pattern — bold = that pattern is heavily
-<i>enacted</i> in logged turns, near-invisible = shared but never yet retrieved. A big hub with a faint fan is
+library pattern), <b>ink ∝ turn-attestation</b> of the strongest shared pattern over a <b>rolling 60-day
+window</b>, scaled to the current strongest road — bold = heavily <i>enacted</i> in recent logged turns,
+near-invisible = shared but not recently retrieved. A big hub with a faint fan is
 therefore "much-cited, patterns not yet exercised"; a bold fan is enacted structure. <b>Anatomy marks (2026-06-12)</b>: hollow rings = <b>vacuous scopes</b> (a binder with no named
 entities inside — suspect terrain, +cost); <span style="color:#4ade80">◆ green diamond = certificate
 PASS</span> (verified ground, −cost) · <span style="color:#ef4444">◆ red = FAIL</span> (+cost); verify-gates
