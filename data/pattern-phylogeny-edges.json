@@ -497,6 +497,11 @@
     ],
     [
       "aif-as-environment-not-instruction",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "aif-as-environment-not-instruction",
       "umwelt-not-architecture",
       1
     ],
@@ -513,6 +518,11 @@
     [
       "all-or-nothing",
       "all-or-nothing-startup",
+      1
+    ],
+    [
+      "all-or-nothing",
+      "canonical-typed-event-vs-side-channel",
       1
     ],
     [
@@ -563,6 +573,11 @@
     [
       "all-or-nothing",
       "local-gain-persistence",
+      1
+    ],
+    [
+      "all-or-nothing",
+      "logic-model-before-code",
       1
     ],
     [
@@ -622,7 +637,17 @@
     ],
     [
       "all-or-nothing",
+      "state-in-substrate-deltas-in-messages",
+      1
+    ],
+    [
+      "all-or-nothing",
       "stop-the-line",
+      1
+    ],
+    [
+      "all-or-nothing",
+      "structured-events-only",
       1
     ],
     [
@@ -1612,6 +1637,11 @@
     ],
     [
       "belief-state-operational-hypotheses",
+      "budget-bounds-exploration",
+      1
+    ],
+    [
+      "belief-state-operational-hypotheses",
       "candidate-pattern-action-space",
       4
     ],
@@ -1627,13 +1657,23 @@
     ],
     [
       "belief-state-operational-hypotheses",
+      "currency-before-merge",
+      1
+    ],
+    [
+      "belief-state-operational-hypotheses",
+      "declare-the-conditioning",
+      1
+    ],
+    [
+      "belief-state-operational-hypotheses",
       "evidence-precision-registry",
       3
     ],
     [
       "belief-state-operational-hypotheses",
       "expected-free-energy-scorecard",
-      4
+      5
     ],
     [
       "belief-state-operational-hypotheses",
@@ -1663,7 +1703,7 @@
     [
       "belief-state-operational-hypotheses",
       "logic-model-before-code",
-      1
+      2
     ],
     [
       "belief-state-operational-hypotheses",
@@ -1697,13 +1737,18 @@
     ],
     [
       "belief-state-operational-hypotheses",
+      "placeholder-is-load-bearing",
+      1
+    ],
+    [
+      "belief-state-operational-hypotheses",
       "plan-before-tool",
       1
     ],
     [
       "belief-state-operational-hypotheses",
       "policy-precision-commitment-temperature",
-      4
+      5
     ],
     [
       "belief-state-operational-hypotheses",
@@ -1773,7 +1818,7 @@
     [
       "belief-state-operational-hypotheses",
       "structured-observation-vector",
-      4
+      5
     ],
     [
       "belief-state-operational-hypotheses",
@@ -1786,13 +1831,33 @@
       1
     ],
     [
+      "belief-state-operational-hypotheses",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "belief-state-operational-hypotheses",
+      "valuation-reads-the-paperwork",
+      1
+    ],
+    [
       "bind-open-questions-to-closure-mechanisms",
       "candidate-pattern-action-space",
       1
     ],
     [
       "bind-open-questions-to-closure-mechanisms",
+      "construct-an-explicit-witness",
+      1
+    ],
+    [
+      "bind-open-questions-to-closure-mechanisms",
       "correct-effect-claims-with-relevant-denominators",
+      1
+    ],
+    [
+      "bind-open-questions-to-closure-mechanisms",
+      "derive-exits-on-a-minted-sorry",
       1
     ],
     [
@@ -1812,6 +1877,16 @@
     ],
     [
       "bind-open-questions-to-closure-mechanisms",
+      "honest-map-over-flattering-counter",
+      1
+    ],
+    [
+      "bind-open-questions-to-closure-mechanisms",
+      "ideal-actual-gap",
+      1
+    ],
+    [
+      "bind-open-questions-to-closure-mechanisms",
       "place-capabilities-at-the-scale-of-their-absence",
       1
     ],
@@ -1822,12 +1897,27 @@
     ],
     [
       "bind-open-questions-to-closure-mechanisms",
+      "protocol-family-naming",
+      1
+    ],
+    [
+      "bind-open-questions-to-closure-mechanisms",
       "separate-configurable-choices-from-load-bearing-couplings",
       1
     ],
     [
       "bind-open-questions-to-closure-mechanisms",
+      "shape-first-identify",
+      1
+    ],
+    [
+      "bind-open-questions-to-closure-mechanisms",
       "single-seed-results-need-multi-seed-validation",
+      1
+    ],
+    [
+      "bind-open-questions-to-closure-mechanisms",
+      "state-snapshot-witness",
       1
     ],
     [
@@ -1907,12 +1997,27 @@
     ],
     [
       "budget-bounds-exploration",
+      "currency-before-merge",
+      1
+    ],
+    [
+      "budget-bounds-exploration",
+      "declare-the-conditioning",
+      1
+    ],
+    [
+      "budget-bounds-exploration",
       "environment-over-optimization",
       1
     ],
     [
       "budget-bounds-exploration",
       "evidence-over-assertion",
+      1
+    ],
+    [
+      "budget-bounds-exploration",
+      "expected-free-energy-scorecard",
       1
     ],
     [
@@ -1927,12 +2032,27 @@
     ],
     [
       "budget-bounds-exploration",
+      "logic-model-before-code",
+      1
+    ],
+    [
+      "budget-bounds-exploration",
       "par-as-obligation",
       1
     ],
     [
       "budget-bounds-exploration",
       "pattern-as-strategy",
+      1
+    ],
+    [
+      "budget-bounds-exploration",
+      "placeholder-is-load-bearing",
+      1
+    ],
+    [
+      "budget-bounds-exploration",
+      "policy-precision-commitment-temperature",
       1
     ],
     [
@@ -1947,12 +2067,22 @@
     ],
     [
       "budget-bounds-exploration",
+      "structured-observation-vector",
+      1
+    ],
+    [
+      "budget-bounds-exploration",
       "task-shape-validation",
       1
     ],
     [
       "budget-bounds-exploration",
       "trail-enables-return",
+      1
+    ],
+    [
+      "budget-bounds-exploration",
+      "valuation-reads-the-paperwork",
       1
     ],
     [
@@ -2048,7 +2178,7 @@
     [
       "candidate-pattern-action-space",
       "construct-an-explicit-witness",
-      2
+      3
     ],
     [
       "candidate-pattern-action-space",
@@ -2088,7 +2218,7 @@
     [
       "candidate-pattern-action-space",
       "expected-free-energy-scorecard",
-      6
+      7
     ],
     [
       "candidate-pattern-action-space",
@@ -2157,6 +2287,11 @@
     ],
     [
       "candidate-pattern-action-space",
+      "local-to-global",
+      1
+    ],
+    [
+      "candidate-pattern-action-space",
       "logic-model-before-code",
       5
     ],
@@ -2197,6 +2332,11 @@
     ],
     [
       "candidate-pattern-action-space",
+      "metric-cauchy-convergence",
+      1
+    ],
+    [
+      "candidate-pattern-action-space",
       "mission-interface-signature",
       1
     ],
@@ -2207,8 +2347,18 @@
     ],
     [
       "candidate-pattern-action-space",
-      "par-as-obligation",
+      "no-self-certification",
       1
+    ],
+    [
+      "candidate-pattern-action-space",
+      "off-continuity-null-discriminates",
+      1
+    ],
+    [
+      "candidate-pattern-action-space",
+      "par-as-obligation",
+      2
     ],
     [
       "candidate-pattern-action-space",
@@ -2278,6 +2428,11 @@
     [
       "candidate-pattern-action-space",
       "reduce-to-known-result",
+      2
+    ],
+    [
+      "candidate-pattern-action-space",
+      "route-exploration-and-pivot",
       1
     ],
     [
@@ -2332,8 +2487,13 @@
     ],
     [
       "candidate-pattern-action-space",
-      "split-into-cases",
+      "single-source-of-truth",
       1
+    ],
+    [
+      "candidate-pattern-action-space",
+      "split-into-cases",
+      2
     ],
     [
       "candidate-pattern-action-space",
@@ -2353,12 +2513,12 @@
     [
       "candidate-pattern-action-space",
       "stop-the-line",
-      2
+      3
     ],
     [
       "candidate-pattern-action-space",
       "structural-tension-as-observation",
-      4
+      5
     ],
     [
       "candidate-pattern-action-space",
@@ -2368,7 +2528,7 @@
     [
       "candidate-pattern-action-space",
       "structured-observation-vector",
-      5
+      6
     ],
     [
       "candidate-pattern-action-space",
@@ -2407,12 +2567,32 @@
     ],
     [
       "candidate-pattern-action-space",
+      "transport-across-isomorphism",
+      1
+    ],
+    [
+      "candidate-pattern-action-space",
       "tri-store-separation",
       1
     ],
     [
       "candidate-pattern-action-space",
       "turn-design-into-checks",
+      1
+    ],
+    [
+      "candidate-pattern-action-space",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "candidate-pattern-action-space",
+      "unfold-the-definition",
+      1
+    ],
+    [
+      "candidate-pattern-action-space",
+      "unresolved-tensions-at-closure",
       1
     ],
     [
@@ -2427,6 +2607,11 @@
     ],
     [
       "candidate-pattern-action-space",
+      "what-problem-is-this-actually-solving",
+      1
+    ],
+    [
+      "candidate-pattern-action-space",
       "world-is-hypergraph",
       1
     ],
@@ -2437,7 +2622,17 @@
     ],
     [
       "canonical-typed-event-vs-side-channel",
+      "environment-over-optimization",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
       "expected-free-energy-scorecard",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
+      "honest-map-over-flattering-counter",
       1
     ],
     [
@@ -2457,6 +2652,16 @@
     ],
     [
       "canonical-typed-event-vs-side-channel",
+      "logic-model-before-code",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
+      "no-self-certification",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
       "pattern-becomes-peripheral",
       1
     ],
@@ -2467,7 +2672,17 @@
     ],
     [
       "canonical-typed-event-vs-side-channel",
+      "present-graph-topology-not-adjacency-lists",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
       "progress-heartbeat-distinct-from-cycle-completion",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
+      "proposal-ledger-for-fuzzy-output",
       1
     ],
     [
@@ -2483,11 +2698,16 @@
     [
       "canonical-typed-event-vs-side-channel",
       "read-only-first-then-extend",
-      1
+      2
     ],
     [
       "canonical-typed-event-vs-side-channel",
       "split-transport-from-embodiment",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
+      "state-in-substrate-deltas-in-messages",
       1
     ],
     [
@@ -2498,11 +2718,31 @@
     [
       "canonical-typed-event-vs-side-channel",
       "stop-the-line",
+      2
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
+      "structured-events-only",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
+      "structured-observation-vector",
       1
     ],
     [
       "canonical-typed-event-vs-side-channel",
       "surface-earns-inhabitation",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
+      "turn-design-into-checks",
+      1
+    ],
+    [
+      "canonical-typed-event-vs-side-channel",
+      "white-space-scout",
       1
     ],
     [
@@ -3492,6 +3732,11 @@
     ],
     [
       "construct-an-explicit-witness",
+      "derive-exits-on-a-minted-sorry",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
       "drain-channel-shape",
       1
     ],
@@ -3517,8 +3762,13 @@
     ],
     [
       "construct-an-explicit-witness",
+      "exotype-determines-behaviour",
+      2
+    ],
+    [
+      "construct-an-explicit-witness",
       "expected-free-energy-scorecard",
-      1
+      2
     ],
     [
       "construct-an-explicit-witness",
@@ -3552,6 +3802,11 @@
     ],
     [
       "construct-an-explicit-witness",
+      "hexagram-45-cui",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
       "hexagram-53-jian",
       1
     ],
@@ -3562,7 +3817,17 @@
     ],
     [
       "construct-an-explicit-witness",
+      "honest-map-over-flattering-counter",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
       "hypothesis-category-check",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
+      "ideal-actual-gap",
       1
     ],
     [
@@ -3588,7 +3853,7 @@
     [
       "construct-an-explicit-witness",
       "local-to-global",
-      3
+      4
     ],
     [
       "construct-an-explicit-witness",
@@ -3607,12 +3872,27 @@
     ],
     [
       "construct-an-explicit-witness",
+      "no-self-certification",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
       "non-circularity-check",
       3
     ],
     [
       "construct-an-explicit-witness",
+      "off-continuity-null-discriminates",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
       "optimise-a-free-parameter",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
+      "par-as-obligation",
       1
     ],
     [
@@ -3648,7 +3928,7 @@
     [
       "construct-an-explicit-witness",
       "protocol-family-naming",
-      1
+      2
     ],
     [
       "construct-an-explicit-witness",
@@ -3673,12 +3953,12 @@
     [
       "construct-an-explicit-witness",
       "reduce-to-known-result",
-      9
+      10
     ],
     [
       "construct-an-explicit-witness",
       "route-exploration-and-pivot",
-      2
+      3
     ],
     [
       "construct-an-explicit-witness",
@@ -3698,7 +3978,7 @@
     [
       "construct-an-explicit-witness",
       "shape-first-identify",
-      1
+      2
     ],
     [
       "construct-an-explicit-witness",
@@ -3707,8 +3987,18 @@
     ],
     [
       "construct-an-explicit-witness",
+      "single-authority-registration",
+      2
+    ],
+    [
+      "construct-an-explicit-witness",
+      "single-source-of-truth",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
       "split-into-cases",
-      4
+      5
     ],
     [
       "construct-an-explicit-witness",
@@ -3718,12 +4008,12 @@
     [
       "construct-an-explicit-witness",
       "state-snapshot-witness",
-      1
+      2
     ],
     [
       "construct-an-explicit-witness",
       "stop-the-line",
-      1
+      2
     ],
     [
       "construct-an-explicit-witness",
@@ -3733,12 +4023,12 @@
     [
       "construct-an-explicit-witness",
       "structural-tension-as-observation",
-      1
+      2
     ],
     [
       "construct-an-explicit-witness",
       "structured-observation-vector",
-      1
+      2
     ],
     [
       "construct-an-explicit-witness",
@@ -3753,7 +4043,7 @@
     [
       "construct-an-explicit-witness",
       "transport-across-isomorphism",
-      3
+      4
     ],
     [
       "construct-an-explicit-witness",
@@ -3762,8 +4052,18 @@
     ],
     [
       "construct-an-explicit-witness",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
       "unfold-the-definition",
-      3
+      4
+    ],
+    [
+      "construct-an-explicit-witness",
+      "unresolved-tensions-at-closure",
+      1
     ],
     [
       "construct-an-explicit-witness",
@@ -3772,7 +4072,17 @@
     ],
     [
       "construct-an-explicit-witness",
+      "verify-after-start",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
       "verify-universal-property",
+      1
+    ],
+    [
+      "construct-an-explicit-witness",
+      "what-problem-is-this-actually-solving",
       1
     ],
     [
@@ -4026,6 +4336,51 @@
       1
     ],
     [
+      "crime-relocates-to-a-scarcer-witness",
+      "derive-exits-on-a-minted-sorry",
+      1
+    ],
+    [
+      "crime-relocates-to-a-scarcer-witness",
+      "determined-fork-proto-psr",
+      1
+    ],
+    [
+      "crime-relocates-to-a-scarcer-witness",
+      "honest-map-over-flattering-counter",
+      1
+    ],
+    [
+      "crime-relocates-to-a-scarcer-witness",
+      "measurement-window-hygiene",
+      1
+    ],
+    [
+      "crime-relocates-to-a-scarcer-witness",
+      "no-self-certification",
+      1
+    ],
+    [
+      "crime-relocates-to-a-scarcer-witness",
+      "pilot-plus-ground-control",
+      1
+    ],
+    [
+      "crime-relocates-to-a-scarcer-witness",
+      "structured-events-only",
+      1
+    ],
+    [
+      "crime-relocates-to-a-scarcer-witness",
+      "two-layer-calibration",
+      1
+    ],
+    [
+      "crime-relocates-to-a-scarcer-witness",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
       "cross-validation-protocol",
       "intent-to-mission-binding",
       2
@@ -4088,6 +4443,41 @@
     [
       "curating-not-experting",
       "weak-tie-conflation",
+      1
+    ],
+    [
+      "currency-before-merge",
+      "declare-the-conditioning",
+      1
+    ],
+    [
+      "currency-before-merge",
+      "expected-free-energy-scorecard",
+      1
+    ],
+    [
+      "currency-before-merge",
+      "logic-model-before-code",
+      1
+    ],
+    [
+      "currency-before-merge",
+      "placeholder-is-load-bearing",
+      1
+    ],
+    [
+      "currency-before-merge",
+      "policy-precision-commitment-temperature",
+      1
+    ],
+    [
+      "currency-before-merge",
+      "structured-observation-vector",
+      1
+    ],
+    [
+      "currency-before-merge",
+      "valuation-reads-the-paperwork",
       1
     ],
     [
@@ -4233,6 +4623,71 @@
     [
       "dead-code-hygiene",
       "use-requires-evidence",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "evidence-over-assertion",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "expected-free-energy-scorecard",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "handoff-preserves-context",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "logic-model-before-code",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "no-self-certification",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "placeholder-is-load-bearing",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "policy-precision-commitment-temperature",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "scope-before-action",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "state-is-hypothesis",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "structured-events-only",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "structured-observation-vector",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "trail-enables-return",
+      1
+    ],
+    [
+      "declare-the-conditioning",
+      "valuation-reads-the-paperwork",
       1
     ],
     [
@@ -4491,6 +4946,71 @@
       1
     ],
     [
+      "derive-exits-on-a-minted-sorry",
+      "determined-fork-proto-psr",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "honest-map-over-flattering-counter",
+      2
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "ideal-actual-gap",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "measurement-window-hygiene",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "no-self-certification",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "pilot-plus-ground-control",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "protocol-family-naming",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "shape-first-identify",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "state-snapshot-witness",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "structured-events-only",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "the-woven-form",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "two-layer-calibration",
+      1
+    ],
+    [
+      "derive-exits-on-a-minted-sorry",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
       "design-as-function-of-evidence",
       "diagnose-before-prescribing",
       1
@@ -4518,6 +5038,41 @@
     [
       "design-as-function-of-evidence",
       "throat-clearing-close",
+      1
+    ],
+    [
+      "determined-fork-proto-psr",
+      "honest-map-over-flattering-counter",
+      1
+    ],
+    [
+      "determined-fork-proto-psr",
+      "measurement-window-hygiene",
+      1
+    ],
+    [
+      "determined-fork-proto-psr",
+      "no-self-certification",
+      1
+    ],
+    [
+      "determined-fork-proto-psr",
+      "pilot-plus-ground-control",
+      1
+    ],
+    [
+      "determined-fork-proto-psr",
+      "structured-events-only",
+      1
+    ],
+    [
+      "determined-fork-proto-psr",
+      "two-layer-calibration",
+      1
+    ],
+    [
+      "determined-fork-proto-psr",
+      "two-projections-of-one-quantity",
       1
     ],
     [
@@ -5197,12 +5752,22 @@
     ],
     [
       "environment-over-optimization",
+      "honest-map-over-flattering-counter",
+      1
+    ],
+    [
+      "environment-over-optimization",
       "learning-event-detection",
       1
     ],
     [
       "environment-over-optimization",
       "local-gain-persistence",
+      1
+    ],
+    [
+      "environment-over-optimization",
+      "no-self-certification",
       1
     ],
     [
@@ -5217,12 +5782,37 @@
     ],
     [
       "environment-over-optimization",
+      "present-graph-topology-not-adjacency-lists",
+      1
+    ],
+    [
+      "environment-over-optimization",
       "proof-as-social-process",
       1
     ],
     [
       "environment-over-optimization",
+      "proposal-ledger-for-fuzzy-output",
+      1
+    ],
+    [
+      "environment-over-optimization",
+      "read-only-first-then-extend",
+      1
+    ],
+    [
+      "environment-over-optimization",
       "session-durability-check",
+      1
+    ],
+    [
+      "environment-over-optimization",
+      "stop-the-line",
+      1
+    ],
+    [
+      "environment-over-optimization",
+      "structured-observation-vector",
       1
     ],
     [
@@ -5233,6 +5823,16 @@
     [
       "environment-over-optimization",
       "trail-enables-return",
+      1
+    ],
+    [
+      "environment-over-optimization",
+      "turn-design-into-checks",
+      1
+    ],
+    [
+      "environment-over-optimization",
+      "white-space-scout",
       1
     ],
     [
@@ -5492,6 +6092,11 @@
     ],
     [
       "evidence-over-assertion",
+      "handoff-preserves-context",
+      1
+    ],
+    [
+      "evidence-over-assertion",
       "hexagram-53-jian",
       1
     ],
@@ -5582,6 +6187,11 @@
     ],
     [
       "evidence-over-assertion",
+      "no-self-certification",
+      1
+    ],
+    [
+      "evidence-over-assertion",
       "operational-not-decorative",
       1
     ],
@@ -5643,7 +6253,7 @@
     [
       "evidence-over-assertion",
       "scope-before-action",
-      2
+      3
     ],
     [
       "evidence-over-assertion",
@@ -5677,6 +6287,11 @@
     ],
     [
       "evidence-over-assertion",
+      "state-is-hypothesis",
+      1
+    ],
+    [
+      "evidence-over-assertion",
       "stop-the-line",
       1
     ],
@@ -5688,7 +6303,7 @@
     [
       "evidence-over-assertion",
       "structured-events-only",
-      1
+      2
     ],
     [
       "evidence-over-assertion",
@@ -5718,7 +6333,7 @@
     [
       "evidence-over-assertion",
       "trail-enables-return",
-      2
+      3
     ],
     [
       "evidence-over-assertion",
@@ -5991,6 +6606,21 @@
       1
     ],
     [
+      "exotype-determines-behaviour",
+      "hexagram-45-cui",
+      1
+    ],
+    [
+      "exotype-determines-behaviour",
+      "single-authority-registration",
+      2
+    ],
+    [
+      "exotype-determines-behaviour",
+      "verify-after-start",
+      1
+    ],
+    [
       "expected-free-energy-scorecard",
       "expensive-move-consent",
       1
@@ -6052,8 +6682,13 @@
     ],
     [
       "expected-free-energy-scorecard",
+      "local-to-global",
+      1
+    ],
+    [
+      "expected-free-energy-scorecard",
       "logic-model-before-code",
-      2
+      3
     ],
     [
       "expected-free-energy-scorecard",
@@ -6082,13 +6717,23 @@
     ],
     [
       "expected-free-energy-scorecard",
+      "no-self-certification",
+      1
+    ],
+    [
+      "expected-free-energy-scorecard",
+      "off-continuity-null-discriminates",
+      1
+    ],
+    [
+      "expected-free-energy-scorecard",
       "operational-not-decorative",
       1
     ],
     [
       "expected-free-energy-scorecard",
       "par-as-obligation",
-      1
+      2
     ],
     [
       "expected-free-energy-scorecard",
@@ -6107,13 +6752,18 @@
     ],
     [
       "expected-free-energy-scorecard",
+      "placeholder-is-load-bearing",
+      1
+    ],
+    [
+      "expected-free-energy-scorecard",
       "plan-before-tool",
       1
     ],
     [
       "expected-free-energy-scorecard",
       "policy-precision-commitment-temperature",
-      6
+      7
     ],
     [
       "expected-free-energy-scorecard",
@@ -6158,6 +6808,11 @@
     [
       "expected-free-energy-scorecard",
       "reduce-to-known-result",
+      2
+    ],
+    [
+      "expected-free-energy-scorecard",
+      "route-exploration-and-pivot",
       1
     ],
     [
@@ -6207,8 +6862,13 @@
     ],
     [
       "expected-free-energy-scorecard",
-      "split-into-cases",
+      "single-source-of-truth",
       1
+    ],
+    [
+      "expected-free-energy-scorecard",
+      "split-into-cases",
+      2
     ],
     [
       "expected-free-energy-scorecard",
@@ -6228,12 +6888,12 @@
     [
       "expected-free-energy-scorecard",
       "stop-the-line",
-      5
+      6
     ],
     [
       "expected-free-energy-scorecard",
       "structural-tension-as-observation",
-      4
+      5
     ],
     [
       "expected-free-energy-scorecard",
@@ -6243,7 +6903,7 @@
     [
       "expected-free-energy-scorecard",
       "structured-observation-vector",
-      6
+      8
     ],
     [
       "expected-free-energy-scorecard",
@@ -6267,7 +6927,32 @@
     ],
     [
       "expected-free-energy-scorecard",
+      "transport-across-isomorphism",
+      1
+    ],
+    [
+      "expected-free-energy-scorecard",
       "turn-design-into-checks",
+      1
+    ],
+    [
+      "expected-free-energy-scorecard",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "expected-free-energy-scorecard",
+      "unfold-the-definition",
+      1
+    ],
+    [
+      "expected-free-energy-scorecard",
+      "unresolved-tensions-at-closure",
+      1
+    ],
+    [
+      "expected-free-energy-scorecard",
+      "valuation-reads-the-paperwork",
       1
     ],
     [
@@ -6278,7 +6963,7 @@
     [
       "expected-free-energy-scorecard",
       "what-problem-is-this-actually-solving",
-      2
+      3
     ],
     [
       "expected-free-energy-scorecard",
@@ -6418,6 +7103,11 @@
     [
       "experimental-comparison-of-EFE-variants",
       "term-to-channel-traceability",
+      1
+    ],
+    [
+      "experimental-comparison-of-EFE-variants",
+      "two-projections-of-one-quantity",
       1
     ],
     [
@@ -7076,6 +7766,11 @@
       2
     ],
     [
+      "free-energy-as-tick-scalar",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
       "full-lift-registry",
       "logic-model-before-code",
       1
@@ -7331,6 +8026,36 @@
       1
     ],
     [
+      "handoff-preserves-context",
+      "no-self-certification",
+      1
+    ],
+    [
+      "handoff-preserves-context",
+      "scope-before-action",
+      1
+    ],
+    [
+      "handoff-preserves-context",
+      "state-is-hypothesis",
+      1
+    ],
+    [
+      "handoff-preserves-context",
+      "structured-events-only",
+      1
+    ],
+    [
+      "handoff-preserves-context",
+      "trail-enables-return",
+      1
+    ],
+    [
+      "hexagram-45-cui",
+      "single-authority-registration",
+      1
+    ],
+    [
       "hexagram-53-jian",
       "indentation-as-complexity",
       1
@@ -7447,6 +8172,11 @@
     ],
     [
       "hierarchical-budget-aware-action-selection",
+      "metric-cauchy-convergence",
+      1
+    ],
+    [
+      "hierarchical-budget-aware-action-selection",
       "operational-not-decorative",
       1
     ],
@@ -7522,6 +8252,11 @@
     ],
     [
       "hierarchical-budget-aware-action-selection",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "hierarchical-budget-aware-action-selection",
       "what-problem-is-this-actually-solving",
       1
     ],
@@ -7548,6 +8283,91 @@
     [
       "hinge-entry-slots",
       "whose-question-is-this",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "ideal-actual-gap",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "measurement-window-hygiene",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "no-self-certification",
+      2
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "pilot-plus-ground-control",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "present-graph-topology-not-adjacency-lists",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "proposal-ledger-for-fuzzy-output",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "protocol-family-naming",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "read-only-first-then-extend",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "shape-first-identify",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "state-snapshot-witness",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "stop-the-line",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "structured-events-only",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "structured-observation-vector",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "turn-design-into-checks",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "two-layer-calibration",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "honest-map-over-flattering-counter",
+      "white-space-scout",
       1
     ],
     [
@@ -7712,6 +8532,11 @@
     ],
     [
       "ideal-actual-gap",
+      "protocol-family-naming",
+      1
+    ],
+    [
+      "ideal-actual-gap",
       "read-only-first-then-extend",
       1
     ],
@@ -7727,12 +8552,22 @@
     ],
     [
       "ideal-actual-gap",
+      "shape-first-identify",
+      1
+    ],
+    [
+      "ideal-actual-gap",
       "shared-standard-has-no-single-owner",
       1
     ],
     [
       "ideal-actual-gap",
       "split-into-cases",
+      1
+    ],
+    [
+      "ideal-actual-gap",
+      "state-snapshot-witness",
       1
     ],
     [
@@ -8942,12 +9777,27 @@
     ],
     [
       "local-to-global",
+      "no-self-certification",
+      1
+    ],
+    [
+      "local-to-global",
       "non-circularity-check",
       2
     ],
     [
       "local-to-global",
+      "off-continuity-null-discriminates",
+      1
+    ],
+    [
+      "local-to-global",
       "optimise-a-free-parameter",
+      1
+    ],
+    [
+      "local-to-global",
+      "par-as-obligation",
       1
     ],
     [
@@ -8988,12 +9838,12 @@
     [
       "local-to-global",
       "reduce-to-known-result",
-      3
+      4
     ],
     [
       "local-to-global",
       "route-exploration-and-pivot",
-      1
+      2
     ],
     [
       "local-to-global",
@@ -9012,8 +9862,13 @@
     ],
     [
       "local-to-global",
+      "single-source-of-truth",
+      1
+    ],
+    [
+      "local-to-global",
       "split-into-cases",
-      2
+      3
     ],
     [
       "local-to-global",
@@ -9022,7 +9877,22 @@
     ],
     [
       "local-to-global",
+      "stop-the-line",
+      1
+    ],
+    [
+      "local-to-global",
       "structural-relation-result",
+      1
+    ],
+    [
+      "local-to-global",
+      "structural-tension-as-observation",
+      1
+    ],
+    [
+      "local-to-global",
+      "structured-observation-vector",
       1
     ],
     [
@@ -9033,7 +9903,7 @@
     [
       "local-to-global",
       "transport-across-isomorphism",
-      2
+      3
     ],
     [
       "local-to-global",
@@ -9043,7 +9913,12 @@
     [
       "local-to-global",
       "unfold-the-definition",
-      2
+      3
+    ],
+    [
+      "local-to-global",
+      "unresolved-tensions-at-closure",
+      1
     ],
     [
       "local-to-global",
@@ -9057,12 +9932,22 @@
     ],
     [
       "local-to-global",
+      "what-problem-is-this-actually-solving",
+      1
+    ],
+    [
+      "local-to-global",
       "work-examples-first",
       1
     ],
     [
       "logic-model-before-code",
       "mana-gated-work",
+      1
+    ],
+    [
+      "logic-model-before-code",
+      "metric-cauchy-convergence",
       1
     ],
     [
@@ -9082,8 +9967,13 @@
     ],
     [
       "logic-model-before-code",
-      "policy-precision-commitment-temperature",
+      "placeholder-is-load-bearing",
       1
+    ],
+    [
+      "logic-model-before-code",
+      "policy-precision-commitment-temperature",
+      2
     ],
     [
       "logic-model-before-code",
@@ -9137,6 +10027,11 @@
     ],
     [
       "logic-model-before-code",
+      "state-in-substrate-deltas-in-messages",
+      1
+    ],
+    [
+      "logic-model-before-code",
       "stop-the-line",
       1
     ],
@@ -9147,8 +10042,13 @@
     ],
     [
       "logic-model-before-code",
-      "structured-observation-vector",
+      "structured-events-only",
       1
+    ],
+    [
+      "logic-model-before-code",
+      "structured-observation-vector",
+      2
     ],
     [
       "logic-model-before-code",
@@ -9168,6 +10068,16 @@
     [
       "logic-model-before-code",
       "theory-as-exotype",
+      1
+    ],
+    [
+      "logic-model-before-code",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "logic-model-before-code",
+      "valuation-reads-the-paperwork",
       1
     ],
     [
@@ -9602,18 +10512,33 @@
     ],
     [
       "maturity-evidence-audit",
+      "model-recompute-schedule",
+      1
+    ],
+    [
+      "maturity-evidence-audit",
       "parametric-tension-dissolution",
       1
     ],
     [
       "maturity-evidence-audit",
-      "prototype-alignment-tension",
+      "prototype-alignment-role",
       1
     ],
     [
       "maturity-evidence-audit",
-      "prototype-maturity-lifecycle",
+      "prototype-alignment-tension",
       2
+    ],
+    [
+      "maturity-evidence-audit",
+      "prototype-maturity-lifecycle",
+      3
+    ],
+    [
+      "maturity-evidence-audit",
+      "prototype-structure-checklist",
+      1
     ],
     [
       "maturity-evidence-audit",
@@ -9711,6 +10636,31 @@
       1
     ],
     [
+      "measurement-window-hygiene",
+      "no-self-certification",
+      1
+    ],
+    [
+      "measurement-window-hygiene",
+      "pilot-plus-ground-control",
+      1
+    ],
+    [
+      "measurement-window-hygiene",
+      "structured-events-only",
+      1
+    ],
+    [
+      "measurement-window-hygiene",
+      "two-layer-calibration",
+      1
+    ],
+    [
+      "measurement-window-hygiene",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
       "meet-the-reader-where-they-are",
       "name-what-you-drop",
       2
@@ -9778,7 +10728,7 @@
     [
       "mission-anchored-scan",
       "mission-unlocks-eoi",
-      1
+      2
     ],
     [
       "mission-interface-signature",
@@ -9888,6 +10838,26 @@
     [
       "misunderstanding-power-laws",
       "weak-tie-conflation",
+      1
+    ],
+    [
+      "model-recompute-schedule",
+      "prototype-alignment-role",
+      1
+    ],
+    [
+      "model-recompute-schedule",
+      "prototype-alignment-tension",
+      1
+    ],
+    [
+      "model-recompute-schedule",
+      "prototype-maturity-lifecycle",
+      1
+    ],
+    [
+      "model-recompute-schedule",
+      "prototype-structure-checklist",
       1
     ],
     [
@@ -10101,6 +11071,131 @@
       2
     ],
     [
+      "no-self-certification",
+      "off-continuity-null-discriminates",
+      1
+    ],
+    [
+      "no-self-certification",
+      "par-as-obligation",
+      1
+    ],
+    [
+      "no-self-certification",
+      "pilot-plus-ground-control",
+      1
+    ],
+    [
+      "no-self-certification",
+      "present-graph-topology-not-adjacency-lists",
+      1
+    ],
+    [
+      "no-self-certification",
+      "proposal-ledger-for-fuzzy-output",
+      1
+    ],
+    [
+      "no-self-certification",
+      "read-only-first-then-extend",
+      1
+    ],
+    [
+      "no-self-certification",
+      "reduce-to-known-result",
+      1
+    ],
+    [
+      "no-self-certification",
+      "route-exploration-and-pivot",
+      1
+    ],
+    [
+      "no-self-certification",
+      "scope-before-action",
+      1
+    ],
+    [
+      "no-self-certification",
+      "single-source-of-truth",
+      1
+    ],
+    [
+      "no-self-certification",
+      "split-into-cases",
+      1
+    ],
+    [
+      "no-self-certification",
+      "state-is-hypothesis",
+      1
+    ],
+    [
+      "no-self-certification",
+      "stop-the-line",
+      2
+    ],
+    [
+      "no-self-certification",
+      "structural-tension-as-observation",
+      1
+    ],
+    [
+      "no-self-certification",
+      "structured-events-only",
+      2
+    ],
+    [
+      "no-self-certification",
+      "structured-observation-vector",
+      2
+    ],
+    [
+      "no-self-certification",
+      "trail-enables-return",
+      1
+    ],
+    [
+      "no-self-certification",
+      "transport-across-isomorphism",
+      1
+    ],
+    [
+      "no-self-certification",
+      "turn-design-into-checks",
+      1
+    ],
+    [
+      "no-self-certification",
+      "two-layer-calibration",
+      1
+    ],
+    [
+      "no-self-certification",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "no-self-certification",
+      "unfold-the-definition",
+      1
+    ],
+    [
+      "no-self-certification",
+      "unresolved-tensions-at-closure",
+      1
+    ],
+    [
+      "no-self-certification",
+      "what-problem-is-this-actually-solving",
+      1
+    ],
+    [
+      "no-self-certification",
+      "white-space-scout",
+      1
+    ],
+    [
       "non-circularity-check",
       "pattern-as-strategy",
       1
@@ -10168,6 +11263,66 @@
     [
       "non-destructive-relational-layers",
       "validation-enforcement-gate",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "par-as-obligation",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "reduce-to-known-result",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "route-exploration-and-pivot",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "single-source-of-truth",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "split-into-cases",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "stop-the-line",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "structural-tension-as-observation",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "structured-observation-vector",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "transport-across-isomorphism",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "unfold-the-definition",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "unresolved-tensions-at-closure",
+      1
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "what-problem-is-this-actually-solving",
       1
     ],
     [
@@ -10382,6 +11537,16 @@
     ],
     [
       "par-as-obligation",
+      "reduce-to-known-result",
+      1
+    ],
+    [
+      "par-as-obligation",
+      "route-exploration-and-pivot",
+      1
+    ],
+    [
+      "par-as-obligation",
       "selection-before-write",
       1
     ],
@@ -10397,23 +11562,33 @@
     ],
     [
       "par-as-obligation",
+      "single-source-of-truth",
+      1
+    ],
+    [
+      "par-as-obligation",
+      "split-into-cases",
+      1
+    ],
+    [
+      "par-as-obligation",
       "state-is-hypothesis",
       1
     ],
     [
       "par-as-obligation",
       "stop-the-line",
-      1
-    ],
-    [
-      "par-as-obligation",
-      "structural-tension-as-observation",
       2
     ],
     [
       "par-as-obligation",
+      "structural-tension-as-observation",
+      3
+    ],
+    [
+      "par-as-obligation",
       "structured-observation-vector",
-      1
+      2
     ],
     [
       "par-as-obligation",
@@ -10433,6 +11608,26 @@
     [
       "par-as-obligation",
       "trail-enables-return",
+      1
+    ],
+    [
+      "par-as-obligation",
+      "transport-across-isomorphism",
+      1
+    ],
+    [
+      "par-as-obligation",
+      "unfold-the-definition",
+      1
+    ],
+    [
+      "par-as-obligation",
+      "unresolved-tensions-at-closure",
+      1
+    ],
+    [
+      "par-as-obligation",
+      "what-problem-is-this-actually-solving",
       1
     ],
     [
@@ -10951,6 +12146,21 @@
       1
     ],
     [
+      "pilot-plus-ground-control",
+      "structured-events-only",
+      1
+    ],
+    [
+      "pilot-plus-ground-control",
+      "two-layer-calibration",
+      1
+    ],
+    [
+      "pilot-plus-ground-control",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
       "place-capabilities-at-the-scale-of-their-absence",
       "policy-precision-commitment-temperature",
       1
@@ -10978,6 +12188,21 @@
     [
       "place-capabilities-at-the-scale-of-their-absence",
       "turn-design-into-checks",
+      1
+    ],
+    [
+      "placeholder-is-load-bearing",
+      "policy-precision-commitment-temperature",
+      1
+    ],
+    [
+      "placeholder-is-load-bearing",
+      "structured-observation-vector",
+      1
+    ],
+    [
+      "placeholder-is-load-bearing",
+      "valuation-reads-the-paperwork",
       1
     ],
     [
@@ -11118,7 +12343,7 @@
     [
       "policy-precision-commitment-temperature",
       "structured-observation-vector",
-      5
+      6
     ],
     [
       "policy-precision-commitment-temperature",
@@ -11128,6 +12353,16 @@
     [
       "policy-precision-commitment-temperature",
       "turn-design-into-checks",
+      1
+    ],
+    [
+      "policy-precision-commitment-temperature",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "policy-precision-commitment-temperature",
+      "valuation-reads-the-paperwork",
       1
     ],
     [
@@ -11236,6 +12471,11 @@
       1
     ],
     [
+      "predictive-entropy-as-ambiguity",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
       "preemptive-objection-clearance",
       "reduce-to-known-result",
       2
@@ -11262,6 +12502,16 @@
     ],
     [
       "present-graph-topology-not-adjacency-lists",
+      "proposal-ledger-for-fuzzy-output",
+      1
+    ],
+    [
+      "present-graph-topology-not-adjacency-lists",
+      "read-only-first-then-extend",
+      1
+    ],
+    [
+      "present-graph-topology-not-adjacency-lists",
       "scope-before-action",
       1
     ],
@@ -11282,7 +12532,17 @@
     ],
     [
       "present-graph-topology-not-adjacency-lists",
+      "stop-the-line",
+      1
+    ],
+    [
+      "present-graph-topology-not-adjacency-lists",
       "structural-tension-as-observation",
+      1
+    ],
+    [
+      "present-graph-topology-not-adjacency-lists",
+      "structured-observation-vector",
       1
     ],
     [
@@ -11297,7 +12557,17 @@
     ],
     [
       "present-graph-topology-not-adjacency-lists",
+      "turn-design-into-checks",
+      1
+    ],
+    [
+      "present-graph-topology-not-adjacency-lists",
       "value-flow-constellation",
+      1
+    ],
+    [
+      "present-graph-topology-not-adjacency-lists",
+      "white-space-scout",
       1
     ],
     [
@@ -11462,17 +12732,32 @@
     ],
     [
       "proposal-ledger-for-fuzzy-output",
+      "read-only-first-then-extend",
+      1
+    ],
+    [
+      "proposal-ledger-for-fuzzy-output",
       "single-source-of-truth",
       1
     ],
     [
       "proposal-ledger-for-fuzzy-output",
       "stop-the-line",
+      2
+    ],
+    [
+      "proposal-ledger-for-fuzzy-output",
+      "structured-observation-vector",
       1
     ],
     [
       "proposal-ledger-for-fuzzy-output",
       "turn-design-into-checks",
+      2
+    ],
+    [
+      "proposal-ledger-for-fuzzy-output",
+      "white-space-scout",
       1
     ],
     [
@@ -11498,7 +12783,7 @@
     [
       "protocol-family-naming",
       "shape-first-identify",
-      4
+      5
     ],
     [
       "protocol-family-naming",
@@ -11533,7 +12818,7 @@
     [
       "protocol-family-naming",
       "state-snapshot-witness",
-      2
+      3
     ],
     [
       "protocol-family-naming",
@@ -11606,6 +12891,31 @@
       1
     ],
     [
+      "prototype-alignment-role",
+      "prototype-alignment-tension",
+      1
+    ],
+    [
+      "prototype-alignment-role",
+      "prototype-maturity-lifecycle",
+      1
+    ],
+    [
+      "prototype-alignment-role",
+      "prototype-structure-checklist",
+      1
+    ],
+    [
+      "prototype-alignment-tension",
+      "prototype-maturity-lifecycle",
+      1
+    ],
+    [
+      "prototype-alignment-tension",
+      "prototype-structure-checklist",
+      1
+    ],
+    [
       "prototype-alignment-tension",
       "ready-blocked-triage",
       1
@@ -11643,6 +12953,11 @@
     [
       "prototype-alignment-tension",
       "use-requires-evidence",
+      1
+    ],
+    [
+      "prototype-maturity-lifecycle",
+      "prototype-structure-checklist",
       1
     ],
     [
@@ -11853,7 +13168,7 @@
     [
       "reachable-from-boot",
       "stop-the-line",
-      5
+      6
     ],
     [
       "reachable-from-boot",
@@ -11951,6 +13266,11 @@
       1
     ],
     [
+      "read-existing-seam-before-implementing",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
       "read-only-first-then-extend",
       "sense-deliberate-act",
       1
@@ -11968,12 +13288,12 @@
     [
       "read-only-first-then-extend",
       "stop-the-line",
-      2
+      3
     ],
     [
       "read-only-first-then-extend",
       "structured-observation-vector",
-      1
+      2
     ],
     [
       "read-only-first-then-extend",
@@ -11982,7 +13302,17 @@
     ],
     [
       "read-only-first-then-extend",
+      "turn-design-into-checks",
+      1
+    ],
+    [
+      "read-only-first-then-extend",
       "what-problem-is-this-actually-solving",
+      1
+    ],
+    [
+      "read-only-first-then-extend",
+      "white-space-scout",
       1
     ],
     [
@@ -12088,7 +13418,7 @@
     [
       "reduce-to-known-result",
       "route-exploration-and-pivot",
-      2
+      3
     ],
     [
       "reduce-to-known-result",
@@ -12117,8 +13447,13 @@
     ],
     [
       "reduce-to-known-result",
+      "single-source-of-truth",
+      1
+    ],
+    [
+      "reduce-to-known-result",
       "split-into-cases",
-      5
+      6
     ],
     [
       "reduce-to-known-result",
@@ -12133,7 +13468,7 @@
     [
       "reduce-to-known-result",
       "stop-the-line",
-      1
+      2
     ],
     [
       "reduce-to-known-result",
@@ -12143,12 +13478,12 @@
     [
       "reduce-to-known-result",
       "structural-tension-as-observation",
-      2
+      3
     ],
     [
       "reduce-to-known-result",
       "structured-observation-vector",
-      1
+      2
     ],
     [
       "reduce-to-known-result",
@@ -12168,7 +13503,7 @@
     [
       "reduce-to-known-result",
       "transport-across-isomorphism",
-      3
+      4
     ],
     [
       "reduce-to-known-result",
@@ -12177,8 +13512,18 @@
     ],
     [
       "reduce-to-known-result",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "reduce-to-known-result",
       "unfold-the-definition",
-      3
+      4
+    ],
+    [
+      "reduce-to-known-result",
+      "unresolved-tensions-at-closure",
+      1
     ],
     [
       "reduce-to-known-result",
@@ -12188,6 +13533,11 @@
     [
       "reduce-to-known-result",
       "verify-universal-property",
+      1
+    ],
+    [
+      "reduce-to-known-result",
+      "what-problem-is-this-actually-solving",
       1
     ],
     [
@@ -12217,17 +13567,47 @@
     ],
     [
       "route-exploration-and-pivot",
-      "split-into-cases",
-      2
-    ],
-    [
-      "route-exploration-and-pivot",
-      "transport-across-isomorphism",
+      "single-source-of-truth",
       1
     ],
     [
       "route-exploration-and-pivot",
+      "split-into-cases",
+      3
+    ],
+    [
+      "route-exploration-and-pivot",
+      "stop-the-line",
+      1
+    ],
+    [
+      "route-exploration-and-pivot",
+      "structural-tension-as-observation",
+      1
+    ],
+    [
+      "route-exploration-and-pivot",
+      "structured-observation-vector",
+      1
+    ],
+    [
+      "route-exploration-and-pivot",
+      "transport-across-isomorphism",
+      2
+    ],
+    [
+      "route-exploration-and-pivot",
       "unfold-the-definition",
+      2
+    ],
+    [
+      "route-exploration-and-pivot",
+      "unresolved-tensions-at-closure",
+      1
+    ],
+    [
+      "route-exploration-and-pivot",
+      "what-problem-is-this-actually-solving",
       1
     ],
     [
@@ -12267,7 +13647,17 @@
     ],
     [
       "scope-before-action",
+      "state-is-hypothesis",
+      1
+    ],
+    [
+      "scope-before-action",
       "structural-tension-as-observation",
+      1
+    ],
+    [
+      "scope-before-action",
+      "structured-events-only",
       1
     ],
     [
@@ -12278,6 +13668,11 @@
     [
       "scope-before-action",
       "theory-as-exotype",
+      1
+    ],
+    [
+      "scope-before-action",
+      "trail-enables-return",
       1
     ],
     [
@@ -12603,7 +13998,7 @@
     [
       "shape-first-identify",
       "state-snapshot-witness",
-      2
+      3
     ],
     [
       "shape-first-identify",
@@ -12788,7 +14183,7 @@
     [
       "single-authority-registration",
       "verify-after-start",
-      2
+      3
     ],
     [
       "single-line-transport",
@@ -12852,6 +14247,11 @@
     ],
     [
       "single-source-of-truth",
+      "split-into-cases",
+      1
+    ],
+    [
+      "single-source-of-truth",
       "startup-integrity-gate",
       1
     ],
@@ -12863,11 +14263,26 @@
     [
       "single-source-of-truth",
       "stop-the-line",
-      3
+      4
+    ],
+    [
+      "single-source-of-truth",
+      "structural-tension-as-observation",
+      1
+    ],
+    [
+      "single-source-of-truth",
+      "structured-observation-vector",
+      1
     ],
     [
       "single-source-of-truth",
       "theory-as-exotype",
+      1
+    ],
+    [
+      "single-source-of-truth",
+      "transport-across-isomorphism",
       1
     ],
     [
@@ -12882,12 +14297,32 @@
     ],
     [
       "single-source-of-truth",
+      "unfold-the-definition",
+      1
+    ],
+    [
+      "single-source-of-truth",
+      "unresolved-tensions-at-closure",
+      1
+    ],
+    [
+      "single-source-of-truth",
       "validation-enforcement-gate",
+      1
+    ],
+    [
+      "single-source-of-truth",
+      "what-problem-is-this-actually-solving",
       1
     ],
     [
       "split-into-cases",
       "state-snapshot-witness",
+      1
+    ],
+    [
+      "split-into-cases",
+      "stop-the-line",
       1
     ],
     [
@@ -12898,7 +14333,12 @@
     [
       "split-into-cases",
       "structural-tension-as-observation",
-      3
+      4
+    ],
+    [
+      "split-into-cases",
+      "structured-observation-vector",
+      1
     ],
     [
       "split-into-cases",
@@ -12918,7 +14358,7 @@
     [
       "split-into-cases",
       "transport-across-isomorphism",
-      3
+      4
     ],
     [
       "split-into-cases",
@@ -12928,7 +14368,12 @@
     [
       "split-into-cases",
       "unfold-the-definition",
-      3
+      4
+    ],
+    [
+      "split-into-cases",
+      "unresolved-tensions-at-closure",
+      1
     ],
     [
       "split-into-cases",
@@ -12943,6 +14388,11 @@
     [
       "split-into-cases",
       "verify-universal-property",
+      1
+    ],
+    [
+      "split-into-cases",
+      "what-problem-is-this-actually-solving",
       1
     ],
     [
@@ -12986,6 +14436,11 @@
       1
     ],
     [
+      "split-transport-from-embodiment",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
       "stack-blocker-detection",
       "surface-earns-inhabitation",
       1
@@ -12993,6 +14448,11 @@
     [
       "startup-integrity-gate",
       "stop-the-line",
+      1
+    ],
+    [
+      "state-in-substrate-deltas-in-messages",
+      "structured-events-only",
       1
     ],
     [
@@ -13008,7 +14468,7 @@
     [
       "state-is-hypothesis",
       "structured-events-only",
-      1
+      2
     ],
     [
       "state-is-hypothesis",
@@ -13024,6 +14484,11 @@
       "state-is-hypothesis",
       "term-to-channel-traceability",
       2
+    ],
+    [
+      "state-is-hypothesis",
+      "trail-enables-return",
+      1
     ],
     [
       "state-snapshot-witness",
@@ -13083,7 +14548,7 @@
     [
       "stop-the-line",
       "structural-tension-as-observation",
-      3
+      4
     ],
     [
       "stop-the-line",
@@ -13093,7 +14558,7 @@
     [
       "stop-the-line",
       "structured-observation-vector",
-      4
+      6
     ],
     [
       "stop-the-line",
@@ -13122,7 +14587,27 @@
     ],
     [
       "stop-the-line",
+      "transport-across-isomorphism",
+      1
+    ],
+    [
+      "stop-the-line",
       "turn-design-into-checks",
+      2
+    ],
+    [
+      "stop-the-line",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "stop-the-line",
+      "unfold-the-definition",
+      1
+    ],
+    [
+      "stop-the-line",
+      "unresolved-tensions-at-closure",
       1
     ],
     [
@@ -13133,7 +14618,12 @@
     [
       "stop-the-line",
       "what-problem-is-this-actually-solving",
-      2
+      3
+    ],
+    [
+      "stop-the-line",
+      "white-space-scout",
+      1
     ],
     [
       "structural-relation-result",
@@ -13198,7 +14688,7 @@
     [
       "structural-tension-as-observation",
       "structured-observation-vector",
-      3
+      4
     ],
     [
       "structural-tension-as-observation",
@@ -13233,7 +14723,22 @@
     [
       "structural-tension-as-observation",
       "transport-across-isomorphism",
-      2
+      3
+    ],
+    [
+      "structural-tension-as-observation",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "structural-tension-as-observation",
+      "unfold-the-definition",
+      1
+    ],
+    [
+      "structural-tension-as-observation",
+      "unresolved-tensions-at-closure",
+      1
     ],
     [
       "structural-tension-as-observation",
@@ -13243,6 +14748,11 @@
     [
       "structural-tension-as-observation",
       "verified-rewrite-from-diagnostic-annotation",
+      1
+    ],
+    [
+      "structural-tension-as-observation",
+      "what-problem-is-this-actually-solving",
       1
     ],
     [
@@ -13283,11 +14793,21 @@
     [
       "structured-events-only",
       "trail-enables-return",
-      1
+      2
     ],
     [
       "structured-events-only",
       "tri-store-separation",
+      1
+    ],
+    [
+      "structured-events-only",
+      "two-layer-calibration",
+      1
+    ],
+    [
+      "structured-events-only",
+      "two-projections-of-one-quantity",
       1
     ],
     [
@@ -13327,12 +14847,32 @@
     ],
     [
       "structured-observation-vector",
+      "transport-across-isomorphism",
+      1
+    ],
+    [
+      "structured-observation-vector",
       "tri-store-separation",
       1
     ],
     [
       "structured-observation-vector",
       "turn-design-into-checks",
+      2
+    ],
+    [
+      "structured-observation-vector",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
+      "structured-observation-vector",
+      "unfold-the-definition",
+      1
+    ],
+    [
+      "structured-observation-vector",
+      "unresolved-tensions-at-closure",
       1
     ],
     [
@@ -13342,7 +14882,17 @@
     ],
     [
       "structured-observation-vector",
+      "valuation-reads-the-paperwork",
+      1
+    ],
+    [
+      "structured-observation-vector",
       "what-problem-is-this-actually-solving",
+      2
+    ],
+    [
+      "structured-observation-vector",
+      "white-space-scout",
       1
     ],
     [
@@ -13403,6 +14953,11 @@
     [
       "term-to-channel-traceability",
       "turn-design-into-checks",
+      1
+    ],
+    [
+      "term-to-channel-traceability",
+      "two-projections-of-one-quantity",
       1
     ],
     [
@@ -13503,6 +15058,11 @@
     [
       "transport-across-isomorphism",
       "unfold-the-definition",
+      2
+    ],
+    [
+      "transport-across-isomorphism",
+      "unresolved-tensions-at-closure",
       1
     ],
     [
@@ -13518,6 +15078,11 @@
     [
       "transport-across-isomorphism",
       "verify-universal-property",
+      1
+    ],
+    [
+      "transport-across-isomorphism",
+      "what-problem-is-this-actually-solving",
       1
     ],
     [
@@ -13551,8 +15116,23 @@
       2
     ],
     [
+      "turn-design-into-checks",
+      "white-space-scout",
+      1
+    ],
+    [
+      "two-layer-calibration",
+      "two-projections-of-one-quantity",
+      1
+    ],
+    [
       "umwelt-not-architecture",
       "world-is-hypergraph",
+      1
+    ],
+    [
+      "unfold-the-definition",
+      "unresolved-tensions-at-closure",
       1
     ],
     [
@@ -13567,13 +15147,18 @@
     ],
     [
       "unfold-the-definition",
+      "what-problem-is-this-actually-solving",
+      1
+    ],
+    [
+      "unfold-the-definition",
       "work-examples-first",
       2
     ],
     [
       "unresolved-tensions-at-closure",
       "what-problem-is-this-actually-solving",
-      1
+      2
     ],
     [
       "unresolved-tensions-at-closure",
@@ -13812,6 +15397,14 @@
       "structured-events-only"
     ],
     [
+      "checkpoint-the-long-run",
+      "saturate-the-accelerator-with-concurrency"
+    ],
+    [
+      "checkpoint-the-long-run",
+      "smoke-before-the-paid-run"
+    ],
+    [
       "churn-as-signal",
       "evidence-over-assertion"
     ],
@@ -13822,6 +15415,14 @@
     [
       "citation-density-load-bearing-claim",
       "argue-empirically-not-persuasively"
+    ],
+    [
+      "classify-over-one-clean-source",
+      "gates-as-code"
+    ],
+    [
+      "classify-over-one-clean-source",
+      "smoke-before-the-paid-run"
     ],
     [
       "closed-containers-need-opening",
@@ -13928,6 +15529,14 @@
       "structural-tension-as-observation"
     ],
     [
+      "constrain-extraction-to-the-downstream-vocabulary",
+      "gates-as-code"
+    ],
+    [
+      "constrain-extraction-to-the-downstream-vocabulary",
+      "golden-is-curated-not-raw"
+    ],
+    [
       "constrained-execution-envelope",
       "aif-as-environment-not-instruction"
     ],
@@ -13988,6 +15597,14 @@
       "discerning-a-pattern"
     ],
     [
+      "crime-relocates-to-a-scarcer-witness",
+      "no-self-certification"
+    ],
+    [
+      "crime-relocates-to-a-scarcer-witness",
+      "two-layer-calibration"
+    ],
+    [
       "cross-mission-escrow",
       "campaign-as-temporary-institution"
     ],
@@ -14006,6 +15623,14 @@
     [
       "curating-not-experting",
       "polling-for-ideas"
+    ],
+    [
+      "currency-before-merge",
+      "declare-the-conditioning"
+    ],
+    [
+      "currency-before-merge",
+      "placeholder-is-load-bearing"
     ],
     [
       "current-strength-gap",
@@ -14030,6 +15655,14 @@
     [
       "data-availability-and-prereg",
       "coding-reliability-stated"
+    ],
+    [
+      "declare-the-conditioning",
+      "currency-before-merge"
+    ],
+    [
+      "declare-the-conditioning",
+      "valuation-reads-the-paperwork"
     ],
     [
       "derive-the-contract",
@@ -14168,6 +15801,22 @@
       "structural-obstruction-as-theorem"
     ],
     [
+      "fan-out-independent-runs-across-devices",
+      "checkpoint-the-long-run"
+    ],
+    [
+      "fan-out-independent-runs-across-devices",
+      "saturate-the-accelerator-with-concurrency"
+    ],
+    [
+      "fan-out-independent-runs-across-devices",
+      "smoke-before-the-paid-run"
+    ],
+    [
+      "fan-out-independent-runs-across-devices",
+      "the-first-checkpoint-is-a-quality-probe"
+    ],
+    [
       "feedback-activation-loop",
       "co-ownership-engine"
     ],
@@ -14206,6 +15855,22 @@
     [
       "futon1-storage-coherence",
       "validation-enforcement-gate"
+    ],
+    [
+      "gates-as-code",
+      "golden-is-curated-not-raw"
+    ],
+    [
+      "gates-as-code",
+      "smoke-before-the-paid-run"
+    ],
+    [
+      "golden-is-curated-not-raw",
+      "constrain-extraction-to-the-downstream-vocabulary"
+    ],
+    [
+      "golden-is-curated-not-raw",
+      "gates-as-code"
     ],
     [
       "grant-to-pitch",
@@ -14516,6 +16181,10 @@
       "whose-question-is-this"
     ],
     [
+      "honest-map-over-flattering-counter",
+      "no-self-certification"
+    ],
+    [
       "hot-reload-as-default-fix-path",
       "constrained-execution-envelope"
     ],
@@ -14780,8 +16449,16 @@
       "open-the-triangle"
     ],
     [
+      "measurement-window-hygiene",
+      "no-self-certification"
+    ],
+    [
       "meet-the-reader-where-they-are",
       "plain-language-thesis"
+    ],
+    [
+      "meeting-the-people",
+      "parallel-lives-mirroring"
     ],
     [
       "messy-with-lurkers",
@@ -14894,6 +16571,14 @@
     [
       "object-location-priors",
       "learn-as-you-go"
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "measurement-window-hygiene"
+    ],
+    [
+      "off-continuity-null-discriminates",
+      "two-layer-calibration"
     ],
     [
       "one-paragraph-per-typed-claim",
@@ -15012,12 +16697,32 @@
       "single-source-of-truth"
     ],
     [
+      "pilot-plus-ground-control",
+      "constrained-execution-envelope"
+    ],
+    [
+      "pilot-plus-ground-control",
+      "inhabitation-feeds-evolution"
+    ],
+    [
+      "pilot-plus-ground-control",
+      "learn-as-you-go"
+    ],
+    [
       "place-capabilities-at-the-scale-of-their-absence",
       "argue-empirically-not-persuasively"
     ],
     [
       "place-capabilities-at-the-scale-of-their-absence",
       "name-the-decision-before-the-framework"
+    ],
+    [
+      "placeholder-is-load-bearing",
+      "currency-before-merge"
+    ],
+    [
+      "placeholder-is-load-bearing",
+      "state-snapshot-witness"
     ],
     [
       "plan-as-enumeration",
@@ -15380,6 +17085,14 @@
       "learn-as-you-go"
     ],
     [
+      "saturate-the-accelerator-with-concurrency",
+      "checkpoint-the-long-run"
+    ],
+    [
+      "saturate-the-accelerator-with-concurrency",
+      "smoke-before-the-paid-run"
+    ],
+    [
       "scaffolding-emergent-clarity",
       "library-template-discipline"
     ],
@@ -15436,6 +17149,18 @@
       "throat-clearing-close"
     ],
     [
+      "seed-the-run-for-a-fair-ablation",
+      "gates-as-code"
+    ],
+    [
+      "seed-the-run-for-a-fair-ablation",
+      "smoke-before-the-paid-run"
+    ],
+    [
+      "seed-the-run-for-a-fair-ablation",
+      "the-first-checkpoint-is-a-quality-probe"
+    ],
+    [
       "self-play-loop",
       "collective-intelligence-evaluation"
     ],
@@ -15470,6 +17195,10 @@
     [
       "separate-evidence-gaps-from-implementation-decisions",
       "separate-configurable-choices-from-load-bearing-couplings"
+    ],
+    [
+      "separate-into-independent-pieces",
+      "local-to-global"
     ],
     [
       "separation-function-from-distance",
@@ -15544,6 +17273,14 @@
       "transferability-not-generalisability"
     ],
     [
+      "smoke-before-the-paid-run",
+      "constrain-extraction-to-the-downstream-vocabulary"
+    ],
+    [
+      "smoke-before-the-paid-run",
+      "gates-as-code"
+    ],
+    [
       "split-transport-from-embodiment",
       "canonical-typed-event-vs-side-channel"
     ],
@@ -15608,6 +17345,10 @@
       "shape-first-identify"
     ],
     [
+      "status-refresh-before-work",
+      "honest-map-over-flattering-counter"
+    ],
+    [
       "structural-obstruction-as-theorem",
       "argue-by-contradiction"
     ],
@@ -15634,6 +17375,14 @@
     [
       "structural-tension-as-observation",
       "task-as-arrow"
+    ],
+    [
+      "stuck-means-signal",
+      "is-this-even-a-problem"
+    ],
+    [
+      "stuck-means-signal",
+      "loop-failure-signals"
     ],
     [
       "surface-earns-inhabitation",
@@ -15716,6 +17465,26 @@
       "whose-question-is-this"
     ],
     [
+      "the-first-checkpoint-is-a-quality-probe",
+      "checkpoint-the-long-run"
+    ],
+    [
+      "the-first-checkpoint-is-a-quality-probe",
+      "gates-as-code"
+    ],
+    [
+      "the-first-checkpoint-is-a-quality-probe",
+      "smoke-before-the-paid-run"
+    ],
+    [
+      "the-woven-form",
+      "structural-tension-as-observation"
+    ],
+    [
+      "the-woven-form",
+      "theory-as-exotype"
+    ],
+    [
       "theory-as-exotype",
       "all-or-nothing"
     ],
@@ -15772,6 +17541,10 @@
       "bind-open-questions-to-closure-mechanisms"
     ],
     [
+      "two-layer-calibration",
+      "no-self-certification"
+    ],
+    [
       "unresolved-tensions-at-closure",
       "what-problem-is-this-actually-solving"
     ],
@@ -15786,6 +17559,10 @@
     [
       "upstream-patch-signal",
       "scan-talk-frame"
+    ],
+    [
+      "valuation-reads-the-paperwork",
+      "declare-the-conditioning"
     ],
     [
       "venue-register-boundary",
@@ -15854,6 +17631,7 @@
   ],
   "patterns": [
     "absence-as-evidence",
+    "absence-as-spaciousness",
     "abstract-n-method-frame",
     "adaptive-delivery-spine",
     "admissible-commands-are-ground-truth",
@@ -15903,11 +17681,14 @@
     "carrying-ones-own-question",
     "chain-builder-softness-accounting",
     "check-the-extreme-cases",
+    "checkpoint-the-long-run",
     "churn-as-signal",
     "citation-density-load-bearing-claim",
+    "classify-over-one-clean-source",
     "closed-containers-need-opening",
     "cluster-as-agenda",
     "cluster-as-story",
+    "co-created-project",
     "co-ownership-engine",
     "co-presence-over-co-location",
     "coding-reliability-stated",
@@ -15925,6 +17706,7 @@
     "confident-adaptation-merged",
     "connected-union-via-common-point",
     "connection-state-machine",
+    "constrain-extraction-to-the-downstream-vocabulary",
     "constrained-execution-envelope",
     "constraint-tension-resolution",
     "construct-an-explicit-witness",
@@ -15933,26 +17715,33 @@
     "continuous-linear-map-composition",
     "contribution-pathways-as-published",
     "contribution-pathways-merged",
+    "cook-as-care",
     "coordination-has-cost",
     "coreq-checklist-adherence",
     "correct-effect-claims-with-relevant-denominators",
+    "count-over-a-decomposition",
     "creating-a-guide",
+    "crime-relocates-to-a-scarcer-witness",
     "cross-mission-escrow",
     "cross-section-claim-drift",
     "cross-validation-protocol",
     "curating-not-experting",
+    "currency-before-merge",
     "current-strength-gap",
     "curry-howard-operational",
     "cycle-position-publication",
     "data-availability-and-prereg",
     "data-intensive-infrastructure-gap",
     "dead-code-hygiene",
+    "declare-the-conditioning",
     "decomposed-prediction-noise",
     "deep-storage-to-active-graph",
+    "derive-exits-on-a-minted-sorry",
     "derive-the-contract",
     "design-as-function-of-evidence",
     "design-state-lineage",
     "designing-thoughts-not-text",
+    "determined-fork-proto-psr",
     "determinism-vs-expansion",
     "deterministic-ingest-pipeline",
     "devmap-contribution-protocol",
@@ -15970,6 +17759,7 @@
     "economic-resonance-layer",
     "encode-as-algebra",
     "environment-over-optimization",
+    "epsilon-of-room",
     "error-layer-hierarchy",
     "escalation-cost-vs-risk",
     "estimate-by-bounding",
@@ -15989,6 +17779,7 @@
     "facet-before-aggregating",
     "fact-lifecycle-event-types",
     "failure-mode-characterization",
+    "fan-out-independent-runs-across-devices",
     "feedback-activation-loop",
     "field-simp-reciprocal",
     "find-the-right-abstraction",
@@ -16003,6 +17794,8 @@
     "full-lift-registry",
     "futon-bridge-health",
     "futon1-storage-coherence",
+    "gates-as-code",
+    "golden-is-curated-not-raw",
     "grant-to-pitch",
     "graph-enhanced-evaluation",
     "graph-memory-contract",
@@ -16076,6 +17869,7 @@
     "hierarchical-budget-aware-action-selection",
     "hilbert-projection-properties",
     "hinge-entry-slots",
+    "honest-map-over-flattering-counter",
     "hot-reload-as-default-fix-path",
     "human-machine-dialogue",
     "hunger-precision-coupling",
@@ -16101,6 +17895,7 @@
     "intent-to-mission-binding",
     "interest-event-vocabulary",
     "invariants-vs-repair",
+    "is-this-even-a-problem",
     "join-up-training-indicators-and-sector-positioning",
     "layer-as-evidence",
     "layering-design-into-argument",
@@ -16122,6 +17917,7 @@
     "loop-failure-signals",
     "loop-recovery-actions",
     "loop-success-signals",
+    "low-pressure-bid",
     "lp-norm-comparison",
     "lu-roll-back",
     "mana-gated-work",
@@ -16129,7 +17925,9 @@
     "maturity-evidence-audit",
     "measure-restrict-simplify",
     "measure-where-least-sure",
+    "measurement-window-hygiene",
     "meet-the-reader-where-they-are",
+    "meeting-the-people",
     "messy-with-lurkers",
     "metric-cauchy-convergence",
     "minimal-linking-pilot",
@@ -16145,10 +17943,12 @@
     "name-what-you-drop",
     "negative-space-duality",
     "next-steps-to-done",
+    "no-self-certification",
     "non-circularity-check",
     "non-destructive-relational-layers",
     "non-transactional-intensity",
     "object-location-priors",
+    "off-continuity-null-discriminates",
     "off-trail-brief-log",
     "off-trail-budget",
     "one-paragraph-per-typed-claim",
@@ -16164,6 +17964,7 @@
     "outline-first-detail-later",
     "par-as-obligation",
     "paradigm-matched-rigour-frame",
+    "parallel-lives-mirroring",
     "parametric-tension-dissolution",
     "pass-to-a-subsequence",
     "pattern-action-helper-command",
@@ -16182,7 +17983,9 @@
     "peripheral-as-sokoban",
     "persistence-speed-mirroring",
     "pheromone-trail-tuner",
+    "pilot-plus-ground-control",
     "place-capabilities-at-the-scale-of-their-absence",
+    "placeholder-is-load-bearing",
     "plain-language-thesis",
     "plan-as-enumeration",
     "plan-before-tool",
@@ -16220,6 +18023,7 @@
     "provisional-claims-ledger",
     "psr-pur-real-actions",
     "q-turnstile-a",
+    "quote-as-oblique-address",
     "quote-table-not-quote-flood",
     "quotient-by-irrelevance",
     "reachable-from-boot",
@@ -16242,6 +18046,7 @@
     "route-exploration-and-pivot",
     "rpow-exponent-limit",
     "rule-evolves-from-its-deferrals",
+    "saturate-the-accelerator-with-concurrency",
     "scaffolding-emergent-clarity",
     "scan-talk-frame",
     "schema-evolution-stability",
@@ -16251,6 +18056,7 @@
     "scope-shield-via-companion-paper",
     "search-dominates-execution",
     "section-bridge-missing",
+    "seed-the-run-for-a-fair-ablation",
     "seeing-the-surrounding-conditions",
     "selection-before-write",
     "self-play-loop",
@@ -16260,6 +18066,7 @@
     "separate-configurable-choices-from-load-bearing-couplings",
     "separate-direct-indirect-and-out-of-scope-levers",
     "separate-evidence-gaps-from-implementation-decisions",
+    "separate-into-independent-pieces",
     "separation-function-from-distance",
     "session-as-rehearsal",
     "session-durability-check",
@@ -16281,6 +18088,7 @@
     "site-case-data-display",
     "sky-disk-continuum",
     "small-n-is-a-design-feature",
+    "smoke-before-the-paid-run",
     "spatial-over-tabular",
     "split-into-cases",
     "split-transport-from-embodiment",
@@ -16294,6 +18102,7 @@
     "state-is-hypothesis",
     "state-snapshot-witness",
     "status-gated-belief-update",
+    "status-refresh-before-work",
     "stop-the-line",
     "structural-obstruction-as-theorem",
     "structural-relation-result",
@@ -16301,7 +18110,9 @@
     "structural-tension-as-observation",
     "structured-events-only",
     "structured-observation-vector",
+    "stuck-means-signal",
     "subheading-without-paragraph",
+    "subsumption-claim-discipline",
     "surface-earns-inhabitation",
     "systematic-search-fallback",
     "tactic-algebra-interference",
@@ -16315,6 +18126,8 @@
     "tension-free-solo-rule",
     "term-to-channel-traceability",
     "the-diagonal-argument",
+    "the-first-checkpoint-is-a-quality-probe",
+    "the-woven-form",
     "theory-as-exotype",
     "theory-as-heuristic-not-law",
     "throat-clearing-close",
@@ -16331,6 +18144,8 @@
     "try-a-simpler-case",
     "turn-design-into-checks",
     "two-joes-one-mandate",
+    "two-layer-calibration",
+    "two-projections-of-one-quantity",
     "typed-kolmogorov-arrows",
     "ukrn-horizon-bridge",
     "umwelt-not-architecture",
@@ -16341,6 +18156,7 @@
     "use-probabilistic-method",
     "use-requires-evidence",
     "validation-enforcement-gate",
+    "valuation-reads-the-paperwork",
     "value-flow-constellation",
     "vapor-as-affect",
     "venue-register-boundary",
