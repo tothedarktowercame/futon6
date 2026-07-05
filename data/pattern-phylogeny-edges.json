@@ -1467,7 +1467,22 @@
     ],
     [
       "baseline-cyber-ant",
+      "canonical-typed-event-vs-side-channel",
+      1
+    ],
+    [
+      "baseline-cyber-ant",
       "cargo-return-discipline",
+      1
+    ],
+    [
+      "baseline-cyber-ant",
+      "environment-over-optimization",
+      1
+    ],
+    [
+      "baseline-cyber-ant",
+      "honest-map-over-flattering-counter",
       1
     ],
     [
@@ -1502,6 +1517,11 @@
     ],
     [
       "baseline-cyber-ant",
+      "no-self-certification",
+      1
+    ],
+    [
+      "baseline-cyber-ant",
       "patterns-as-categorical-objects",
       1
     ],
@@ -1512,7 +1532,22 @@
     ],
     [
       "baseline-cyber-ant",
+      "present-graph-topology-not-adjacency-lists",
+      1
+    ],
+    [
+      "baseline-cyber-ant",
+      "proposal-ledger-for-fuzzy-output",
+      1
+    ],
+    [
+      "baseline-cyber-ant",
       "protocol-family-naming",
+      1
+    ],
+    [
+      "baseline-cyber-ant",
+      "read-only-first-then-extend",
       1
     ],
     [
@@ -1527,8 +1562,18 @@
     ],
     [
       "baseline-cyber-ant",
+      "stop-the-line",
+      1
+    ],
+    [
+      "baseline-cyber-ant",
       "structural-tension-as-observation",
       2
+    ],
+    [
+      "baseline-cyber-ant",
+      "structured-observation-vector",
+      1
     ],
     [
       "baseline-cyber-ant",
@@ -1542,13 +1587,18 @@
     ],
     [
       "baseline-cyber-ant",
+      "turn-design-into-checks",
+      1
+    ],
+    [
+      "baseline-cyber-ant",
       "verified-rewrite-from-diagnostic-annotation",
       1
     ],
     [
       "baseline-cyber-ant",
       "white-space-scout",
-      1
+      2
     ],
     [
       "belief-aware-risk-term",
@@ -15781,6 +15831,10 @@
       "minimum-viable-events"
     ],
     [
+      "extend-library-not-proof",
+      "sorry-boundary-clustering"
+    ],
+    [
       "facet-before-aggregating",
       "argue-empirically-not-persuasively"
     ],
@@ -17545,6 +17599,10 @@
       "no-self-certification"
     ],
     [
+      "typed-hole-as-frontier",
+      "sorry-boundary-clustering"
+    ],
+    [
       "unresolved-tensions-at-closure",
       "what-problem-is-this-actually-solving"
     ],
@@ -17774,6 +17832,7 @@
     "experimental-comparison-of-EFE-variants",
     "explicit-exit-over-abandonment",
     "explicit-promotion-to-facts",
+    "extend-library-not-proof",
     "extend-not-rewrite",
     "external-project-index",
     "facet-before-aggregating",
@@ -18089,6 +18148,7 @@
     "sky-disk-continuum",
     "small-n-is-a-design-feature",
     "smoke-before-the-paid-run",
+    "sorry-boundary-clustering",
     "spatial-over-tabular",
     "split-into-cases",
     "split-transport-from-embodiment",
@@ -18146,6 +18206,7 @@
     "two-joes-one-mandate",
     "two-layer-calibration",
     "two-projections-of-one-quantity",
+    "typed-hole-as-frontier",
     "typed-kolmogorov-arrows",
     "ukrn-horizon-bridge",
     "umwelt-not-architecture",

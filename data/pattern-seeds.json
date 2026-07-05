@@ -5,6 +5,12 @@
   "seeds": [
     {"id": "process-coherence/status-refresh-before-work", "at": "2026-07-04", "commit": "futon3 d433bbb"},
     {"id": "process-coherence/is-this-even-a-problem", "at": "2026-07-04", "commit": "futon3 d433bbb"},
-    {"id": "process-coherence/stuck-means-signal", "at": "2026-07-05", "commit": "futon3 c48891b"}
+    {"id": "process-coherence/stuck-means-signal", "at": "2026-07-05", "commit": "futon3 c48891b"},
+    {"id": "proof-search/sorry-boundary-clustering", "at": "2026-07-05", "commit": "futon3 9f0cef5",
+     "why": "finding-3 library gap (E-live-loop-3): diagramprover sorry-psi returned size 1 F -0.443 — no proof-search vocabulary in the library"},
+    {"id": "proof-search/extend-library-not-proof", "at": "2026-07-05", "commit": "futon3 9f0cef5",
+     "why": "finding-3 library gap remedy (this batch)"},
+    {"id": "proof-search/typed-hole-as-frontier", "at": "2026-07-05", "commit": "futon3 9f0cef5",
+     "why": "finding-3 library gap remedy (this batch)"}
   ]
 }
