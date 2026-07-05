@@ -1,0 +1,195 @@
+{:wiring
+ {:nodes
+  [{:id :b1,
+    :role :application,
+    :satiety :full,
+    :via
+    "clock-in as declared intent: set-dispatch-mission! writes the durable clock/clocked-on hyperedge (agent node -> canonical mission node, session in props) at the moment intent is declared, not RAM-only",
+    :rule "fold-turn/box"}
+   {:id :b2,
+    :role :application,
+    :satiety :full,
+    :via
+    "controlled degradation: if the durable write fails, keep the RAM clock, mark the entry :pending-durable, reconcile (retry the edge write) at the next clock event or at reconstitute — never block or kill the session",
+    :rule "fold-turn/box"}
+   {:id :b3,
+    :role :application,
+    :satiety :full,
+    :via
+    "lineage-gap audit in reconstitute: count sessions visible in RAM or held/on-mission edges that lack a clock/clocked-on edge; a growing gap count flags the durable-clock lane unhealthy; this juxtaposition is what the WANT's :held-count column audits",
+    :rule "fold-turn/box"}
+   {:id :b4,
+    :role :application,
+    :satiety :full,
+    :via
+    "acceptance probe: after a real teardown+restart, reconstitute returns the full {missions [{:target :agents :sessions :held-count}]} shape with gap count 0 and pending-durable queue empty; when green, freeze the mechanism and spend effort on coverage (more surfaces calling clock-in), not tuning",
+    :rule "fold-turn/box"}],
+  ;; v2 connective read: b1->b2 is coupled failure/recovery (copar);
+  ;; b1->b3 is a parallel audit monitor over the declared lineage record
+  ;; (tensor); b2->b3 and b3->b4 are genuine feed-forward checks (seq).
+  :hyperedges
+  [{:kind :composes, :from :b1, :to :b2, :connective :copar, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b1, :to :b3, :connective :tensor, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b3, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b3, :to :b4, :connective :seq, :rule "fold-turn/wire"}],
+  :terminals
+  [{:id :b4, :discharges :want-signature}]},
+ :cascade
+ {:psi
+  "WANT: clock-in : (agent, session, target) -> DurableLineage. reconstitute output — {missions [{:target :agents :sessions :held-count}] } surviving teardown. HAVE: agent nodes (agent:<id>); canonical mission/excursion/campaign nodes <repo>-d/<kind>/<id>; clock/clocked-on hyperedge (the durable clock record); clock_store ns (RAM per-agent session clocks + set-dispatch-mission!); agent-chat.el (the repl surface that displays/sets the clock); held/on-mission hyperedges (109).",
+  :psi-sha256
+  "a664701edbcebf0cb5965624e775a5304831776c534d8fe608cb002d22db9402",
+  :pattern-ids
+  ["musn/plan-before-tool"
+   "realtime/loop-recovery-actions"
+   "realtime/loop-failure-signals"
+   "realtime/loop-success-signals"],
+  :constructor
+  {:entry "construct_cascade",
+   :epsilon 0.15,
+   :budget 6,
+   :lambda 0.25,
+   :commit "0122e4feadaf04c2cb1a0b59565193013f0a2097"},
+  :pattern-cites
+  [{:order 0,
+    :ident "musn/plan-before-tool",
+    :ref "futon3/library/musn/plan-before-tool.flexiarg",
+    :via
+    "E-live-loop-1 S1 shown set (e-live-loop-1-s1-results.json, autoclock-in-durable-lineage)",
+    :rule "fold-turn/pattern-cite",
+    :rel 0.418,
+    :mc 0.125}
+   {:order 1,
+    :ident "realtime/loop-recovery-actions",
+    :ref "futon3/library/realtime/loop-recovery-actions.flexiarg",
+    :via
+    "E-live-loop-1 S1 shown set (e-live-loop-1-s1-results.json, autoclock-in-durable-lineage)",
+    :rule "fold-turn/pattern-cite",
+    :rel 0.416,
+    :mc 0.208}
+   {:order 2,
+    :ident "realtime/loop-failure-signals",
+    :ref "futon3/library/realtime/loop-failure-signals.flexiarg",
+    :via
+    "E-live-loop-1 S1 shown set (e-live-loop-1-s1-results.json, autoclock-in-durable-lineage)",
+    :rule "fold-turn/pattern-cite",
+    :rel 0.362,
+    :mc 0.398}
+   {:order 3,
+    :ident "realtime/loop-success-signals",
+    :ref "futon3/library/realtime/loop-success-signals.flexiarg",
+    :via
+    "E-live-loop-1 S1 shown set (e-live-loop-1-s1-results.json, autoclock-in-durable-lineage)",
+    :rule "fold-turn/pattern-cite",
+    :rel 0.377,
+    :mc 0.49}]},
+ :mission "futon3c-d/mission/autoclock-in",
+ :fold-turn/id "ft-autoclock-in-001",
+ :deposit-contract :v2,
+ :pin-4
+ {:status :attempted-passes-linearized,
+  :check
+  "clean_to_lean.py --mode standalone over the converted 001 skeleton; lean compile exit 0, no Lean sorry/admit tactics",
+  :artifacts
+  ["/tmp/clean001/autoclock-in-001.clean.edn"
+   "/tmp/clean001_check.lean"],
+  :fidelity-gap
+  "the CLean spine is seq-only: the v2 connectives (:tensor/:copar/:seq) do NOT round-trip — this checked composition/type-flow, step typing, discharge typing, and typed-hole positions, not connective structure",
+  :holes
+  "3 of 5 policy-holes attached as typed CLean holes (b1 enforcement policy, b2 reconciliation cadence, b3 held-count join); clock-out/session-end semantics and numeric acceptance targets remain fold-level holes in this linearized check"},
+ :turn
+ {:agent "claude-20",
+  :model "claude-fable-5",
+  :edge "invoke-1783235734332-416-cae5549c",
+  :at "2026-07-05T07:24:35Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "clock-in as declared intent: set-dispatch-mission! writes the durable clock/clocked-on hyperedge (agent node -> canonical mission node, session in props) at the moment intent is declared, not RAM-only",
+     :fits-pattern "musn/plan-before-tool",
+     :addresses-however
+     "tool use consumes budget / goes off-map: the write is one bounded hyperedge per declaration, and durably recorded intent is what keeps post-teardown work on-map"}
+    {:id :b2,
+     :role
+     "controlled degradation: if the durable write fails, keep the RAM clock, mark the entry :pending-durable, reconcile (retry the edge write) at the next clock event or at reconstitute — never block or kill the session",
+     :fits-pattern "realtime/loop-recovery-actions",
+     :addresses-however
+     "minimal coverage of critical signals under degradation: the critical signal is the clock record itself; :pending-durable keeps it recoverable instead of dropped"}
+    {:id :b3,
+     :role
+     "lineage-gap audit in reconstitute: count sessions visible in RAM or held/on-mission edges that lack a clock/clocked-on edge; a growing gap count flags the durable-clock lane unhealthy; this juxtaposition is what the WANT's :held-count column audits",
+     :fits-pattern "realtime/loop-failure-signals",
+     :addresses-however
+     "a single burst is acceptable if the loop recovers: transient gaps that :b2's reconciliation clears are tolerated; only a growing trend flags"}
+    {:id :b4,
+     :role
+     "acceptance probe: after a real teardown+restart, reconstitute returns the full {missions [{:target :agents :sessions :held-count}]} shape with gap count 0 and pending-durable queue empty; when green, freeze the mechanism and spend effort on coverage (more surfaces calling clock-in), not tuning",
+     :fits-pattern "realtime/loop-success-signals",
+     :addresses-however
+     "short bursts may spike latency or trigger small drops: acceptance is judged on the reconstituted record and trend, not on any single event"}],
+   :wires
+   [{:from :b1, :to :b2, :connective :copar}
+    {:from :b1, :to :b3, :connective :tensor}
+    {:from :b2, :to :b3, :connective :seq}
+    {:from :b3, :to :b4, :connective :seq}],
+   :terminals [{:id :b4, :discharges :want-signature}],
+   :policy-holes
+   [{:unfolded-pattern nil,
+     :free "clock-out / session-end semantics",
+     :why
+     "the WANT's :sessions count needs session closure to be well-defined; nothing in the halo or circumstance grounds whether clock-out must also be durable, so reconstitute may over-count live sessions"}
+    {:unfolded-pattern nil,
+     :free "the held-count join",
+     :why
+     "how held/on-mission hyperedges key onto clock lineage (per-mission? per-agent-session?) is not derivable from prose + circumstance; the aggregation rule behind :held-count is left free"}
+    {:unfolded-pattern "musn/plan-before-tool",
+     :free "enforcement policy at the surface",
+     :why
+     "the pattern offers 'warn or pause if missing'; whether agent-chat.el warns, pauses, or blocks an un-clocked session is an operator policy choice the prose does not decide"}
+    {:unfolded-pattern "realtime/loop-recovery-actions",
+     :free "reconciliation cadence and thresholds",
+     :why
+     "the pattern's numeric knobs (max_wait, N batches) are loop-tuning quantities with no mechanical mapping to clock events; retry cadence for :pending-durable entries is left free"}
+    {:unfolded-pattern "realtime/loop-success-signals",
+     :free "numeric acceptance targets",
+     :why
+     "the pattern's exemplar thresholds (<200ms latency, dropped==0 for most batches) do not transfer; what gap-count / pending-queue values count as green for the clock lane is left free"}]}},
+ :arming
+ {:operator "joe",
+  :word
+  "OK, if you agree then I think we can run E-live-loop-2 with the the claude-20 runner",
+  :at "2026-07-05T07:15:10.385955651Z",
+  :scope :one-fold,
+  :fold-turn/id "ft-autoclock-in-001"},
+ :prompt
+ {:sha256
+  "5597da918926a36a08619417c90c19a8f4121592d31bb07dc9cd5bdb4d957e5b",
+  :prose-sha256
+  {"musn/plan-before-tool"
+   "6784848a52ab146510e70f69286e4071818b936aad4bff7b7364495da7ea61ea",
+   "realtime/loop-recovery-actions"
+   "3650b36746497b3d967e8315b747c5ec488eb7aa0466ec311ee5513ab7692a43",
+   "realtime/loop-failure-signals"
+   "4139b20d541fe58aedfcd807f226046ddb78539652f4d4822ec55792e4dc0415",
+   "realtime/loop-success-signals"
+   "b283ab5d867032163562810da52d6550a2f34e22126891d3faddd38b9df6d594"},
+  :prose-source
+  "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\") — the prose-fn 2g must inject"},
+ :arrow-candidate
+ {:have
+  "agent nodes (agent:<id>); canonical mission/excursion/campaign nodes <repo>-d/<kind>/<id>; clock/clocked-on hyperedge (the durable clock record); clock_store ns (RAM per-agent session clocks + set-dispatch-mission!); agent-chat.el (the repl surface that displays/sets the clock); held/on-mission hyperedges (109).",
+  :want
+  "clock-in : (agent, session, target) -> DurableLineage. reconstitute output — {missions [{:target :agents :sessions :held-count}] } surviving teardown.",
+  :format :sorry,
+  :escrow "do-not-write-meme.db"},
+ :hole
+ {:confidence :authored,
+  :have
+  "agent nodes (agent:<id>); canonical mission/excursion/campaign nodes <repo>-d/<kind>/<id>; clock/clocked-on hyperedge (the durable clock record); clock_store ns (RAM per-agent session clocks + set-dispatch-mission!); agent-chat.el (the repl surface that displays/sets the clock); held/on-mission hyperedges (109).",
+  :want
+  "clock-in : (agent, session, target) -> DurableLineage. reconstitute output — {missions [{:target :agents :sessions :held-count}] } surviving teardown.",
+  :via
+  "E-live-loop-1 S1 psi recipe (A-next EMPIRICAL sorry, mechanical)",
+  :rule "fold-turn/hole-from-sorry-psi"},
+ :eval {:delta-g -0.4444444444444444, :g-grain :coverage}}
