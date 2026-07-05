@@ -111,7 +111,10 @@ def emit_proof(d):
     for w in wires:
         w["from"] = idmap.get(w["from"], camel(w["from"]))
         w["to"] = idmap.get(w["to"], camel(w["to"]))
-    ns = f"CLeanProof_{pid}"
+    # mission ids carry hyphens (autoclock-in, <repo>-d/mission/<id>); a Lean
+    # namespace identifier cannot. Sanitize hyphens->underscores for the ns
+    # (the comment on the next line keeps the original id for provenance).
+    ns = f"CLeanProof_{pid.replace('-', '_')}"
     L = []
     a = L.append
 
