@@ -783,10 +783,18 @@ from the laptop's — E-evidence-flow Q1–Q5 gate this move).
 existed since D1/O3); dispatched agents now clock on job completion and appear as
 🛸 without manual intervention.
 
-**Coordination-edge overlay (inventory row, "optional edge overlay"):** dispatched
-to codex-1 2026-07-05 (bell b465807b, itself carrying `--mission M-live-efe-map`):
-endpoint `:coordination` key from the mesh-edge ledger + fading cyan threads
-between placed saucers. Rendering fade only — deposit/decay semantics stay out.
+**Coordination-edge overlay (inventory row, "optional edge overlay"): LANDED +
+REVIEWED 2026-07-05.** codex-1 (bell b465807b, itself carrying `--mission
+M-live-efe-map`): endpoint `:coordination` from the mesh-edge ledger (futon3c
+9e19617 — defensive timestamp parse, degrades to empty, never 500s) + fading cyan
+threads between placed saucers using post-stagger positions (futon6 cb14bff).
+Review (claude-18): read both diffs; key names verified against
+`edge-public-view`; gates re-run clean; live verify — 50 edges served, 10 threads
+rendered incl. claude-18→codex-1 at 0.86 opacity and a claude-16→claude-19 bell
+thread visible at four decaying opacities (repeat edges stack ink — accidental but
+apt proto-pheromone reinforcement; kept). Rendering fade only — deposit/decay
+semantics stay with M-pheromone-field. And the flag dogfooded: codex-1
+self-clocked onto this mission's district at job completion, no manual clock-in.
 
 **T1 chartered as follow-on:** `M-pheromone-field.md` (same directory) — deposit /
 decay / perception-response semantics, claim gate inherited (the name "pheromone"
