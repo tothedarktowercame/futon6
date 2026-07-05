@@ -1,7 +1,8 @@
-(require '[babashka.fs :as fs]
-         '[babashka.process :as p]
-         '[clojure.string :as str]
-         '[clojure.test :refer [deftest is run-tests]])
+(ns iatc-closure-check-test
+  (:require [babashka.fs :as fs]
+            [babashka.process :as p]
+            [clojure.string :as str]
+            [clojure.test :refer [deftest is run-tests]]))
 
 (def root (fs/cwd))
 (def checker (str (fs/path root "scripts/iatc_closure_check.bb")))

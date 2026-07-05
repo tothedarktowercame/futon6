@@ -2,6 +2,8 @@
 
 (load-file "scripts/sfc_def_structure.bb")
 
+(declare transduce-formula)
+
 (def l-closure
   "\\overline{M}=\\{x\\in X\\mid \\forall f,g:X\\to Y\\,.\\,(f|_M=g|_M\\,\\Rw\\,f\\cdot x\\cong g\\cdot x)\\}")
 
