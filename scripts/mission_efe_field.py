@@ -434,6 +434,7 @@ LIVE_OVERLAY_STYLE = """
 .live-agent-idle{opacity:.72}
 .live-agent-invoking{opacity:1;animation:liveAgentPulse 1.4s ease-in-out infinite}
 .live-session-glyph{font-size:18px;text-anchor:middle;dominant-baseline:central;stroke:none}
+.live-coord-thread{fill:none;stroke:#67e8f9;stroke-width:1.4;stroke-linecap:round;pointer-events:stroke}
 .live-approx{fill:none;stroke-dasharray:5 4}
 .live-wm-label{fill:#fff7ad;font-size:13px;font-weight:800}
 .live-wm-target{stroke:#fb7185}
@@ -567,6 +568,7 @@ LIVE_OVERLAY_SCRIPT = """
     // Co-located sessions (same mission → same coords) would overprint their
     // glyphs and labels; fan the 2nd, 3rd… out in a small ring around the hub.
     const crowd = new Map();
+    const positions = new Map();
     for (const agent of ((data.agents && data.agents.items) || [])) {
       if (!agent["mission-id"] || !validPlacement(agent.placement)) continue;
       const spot = `${agent.placement.x},${agent.placement.y}`;
@@ -590,7 +592,42 @@ LIVE_OVERLAY_SCRIPT = """
         g.appendChild(el("text", {x: Number(p.x) + 11, y: Number(p.y) + 8, class: "live-frontier-item"}, "excursion"));
       }
       layer.appendChild(g);
+      positions.set(String(agent["agent-id"]), {x: Number(p.x), y: Number(p.y)});
     }
+    return positions;
+  }
+
+  function coordAge(edge) {
+    return Number(edge["age-ms"] ?? edge.age_ms ?? 0);
+  }
+
+  function drawCoordination(data, agentPositions) {
+    const edges = (data.coordination && data.coordination.items) || [];
+    if (!edges.length || !agentPositions || !agentPositions.size) return;
+    const g = el("g", {"data-layer": "coordination"});
+    for (const edge of edges) {
+      const from = String(edge.from || "");
+      const to = String(edge.to || "");
+      const a = agentPositions.get(from);
+      const b = agentPositions.get(to);
+      if (!a || !b) continue;
+      const ageMs = coordAge(edge);
+      const fade = Math.max(0.1, 1 - ageMs / 3600000);
+      const ageMin = Math.max(0, ageMs / 60000).toFixed(1);
+      const midX = (a.x + b.x) / 2;
+      const midY = (a.y + b.y) / 2 - Math.min(42, Math.hypot(b.x - a.x, b.y - a.y) / 8);
+      const path = el("path", {
+        d: `M ${a.x} ${a.y} Q ${midX} ${midY} ${b.x} ${b.y}`,
+        class: "live-coord-thread",
+        opacity: fade,
+        "data-live-kind": "coord",
+        "data-from": from,
+        "data-to": to
+      });
+      title(path, `${from} → ${to} · ${edge.kind || "coord"} · ${ageMin} age-min`);
+      g.appendChild(path);
+    }
+    if (g.childNodes.length) layer.appendChild(g);
   }
 
   function shipContributors(ship) {
@@ -648,7 +685,8 @@ LIVE_OVERLAY_SCRIPT = """
     clear(layer);
     drawFrontierBand(data);
     drawWarMachine(data);
-    drawAgents(data);
+    const agentPositions = drawAgents(data);
+    drawCoordination(data, agentPositions);
     drawShip(data);
   }
 
@@ -707,6 +745,7 @@ hover for which; co-anchored stars stack as ladder rungs). <b>The sky holds only
 <b><span style="color:#ff8a6a">☆ red = unclaimed, no foothold anywhere</span></b> (a registered goal with no path
 built) · <b><span style="color:#c0392b">★ red-rimmed filled = claimed but off-map</span></b> (its minting missions
 have no district on the carpet — operator semantics decision pending).
+<b><span style="color:#67e8f9">cyan threads = recent bells between placed sessions</span></b>, fading with age.
 <b><span style="color:#ffb43c">amber dashed lasso = YOUR
 territory</span></b> (missions worked in git's last ~3 weeks — the momentum/exploit baseline; inside = the WM
 confirms, outside = it breaks trend). <b><span style="color:#d8b066">⬡ = dark matter</span></b> (a lasso loop with
