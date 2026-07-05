@@ -6,7 +6,10 @@ frontier gap; DERIVE locked the two-tier placement/freshness rule;
 ARGUE defended it; Joe ratified DERIVE+ARGUE (D-frontier, D-method, C3
 two-tier, C4/C5 inspection-only) 2026-07-04 and VERIFY ran the design's
 claims against the live systems same session (claude-18). All checks
-pass; three operational findings recorded for INSTANTIATE.**
+pass; three operational findings recorded for INSTANTIATE. C3 cadence
+resolved by Joe: ≈daily; the one-off re-embed ran same session
+(coordinates 212 → 248, BGE file regenerated, endpoint serving the new
+set live).**
 
 ## HEAD
 
@@ -645,3 +648,147 @@ aggregator (D4 shape, plus the F2 excursion branch) and the overlay on
 the embed page (D5 render contract).
 
 **VERIFY exit:** complete. Awaiting Joe's go for INSTANTIATE.
+
+### VERIFY addendum — C3 cadence resolved; one-off re-embed executed (2026-07-04, claude-18)
+
+**Operator decision (Joe, emacs-repl):** re-embed ≈daily if the map is
+in use; run a one-off now so the rest of the build works against
+up-to-date data. This resolves the C3 cadence question (DERIVE's
+"session-end or slower" → **≈daily**).
+
+**One-off re-embed executed, full chain (the same chain a daily job
+would run):**
+
+1. `clojure -M -m futon.missions index` (futon3a) — mission_records
+   refreshed from substrate-2 `code/v05/mission-doc` hyperedges:
+   274 → **278 records**, all three frontier missions present with
+   summaries. (Why the Jul-3 nightly missed them: the docs were
+   ingested by the commit watcher on Jul-4 — pipeline fine, timing.)
+2. `embed_text.py --json --model BAAI/bge-large-en-v1.5` —
+   `bge_mission_embeddings.json` regenerated (278 × 1024-dim; prior
+   file backed up as `.bak-20260612`). Sanity: unchanged missions
+   reproduce their old vectors at cosine ≈ 1.000 (median); the 0.81
+   tail is missions whose docs changed — earned shift only.
+3. `mission_carpet_variants.py` — coordinate family regenerated:
+   `mission-carpet-pos-embed.json` **212 → 248 missions** (243 BGE-placed,
+   5 citation-placed; MDS stress 723.9).
+4. `mission_efe_field.py embed` — field HTML re-rendered.
+
+**Post-conditions verified live:** `GET /api/alpha/live-efe-map` serves
+the 248-mission coordinate set without restart (it re-reads the JSON);
+M-custom-harness lands at [2038, 2583] adjacent to its strongest
+relational anchor M-kangaroo [2173, 2738] — the semantic placement
+agrees with the D2 dry-run's relational prediction; the frontier shelf
+drains to exactly two residents, both excursions (E-repl-continuations,
+E-monster-to-joey) — the F2 rule rendering non-mission clock targets
+honestly. `pgrep java` untouched throughout (I-0).
+
+**For INSTANTIATE:** the ≈daily job = steps 1–4 above verbatim (step 1
+already runs nightly at 04:30 via the notions index; steps 2–4 need
+adding). Every rendered point's `:source-coordinate-set` timestamp
+requirement (D3) is now exercised by real data two generations apart.
+
+### VERIFY addendum 2 — T3/C2 resolved: 🛸 sessions, 🚀 centroid (2026-07-04)
+
+**Operator decision (Joe, emacs-repl):** "Let's use 🛸 to indicate
+positions of the *sessions* (e.g. the current session would be clocked
+in on M-live-efe-map). As for rocket, how [about] positioning it at the
+*average* of all active sessions?"
+
+This **supersedes C2's original shape** (cursor → file→mission grain,
+opt-in streaming) and dissolves T3 rather than answering it: there is
+no cursor stream at all, hence no privacy grain to choose and no
+opt-in machinery to build. The sessions ARE the 🛸 layer (the agent
+dots, already live); the operator's 🚀 renders at the unweighted
+centroid of *active* sessions — the operator's position is derived
+from the work being driven, which is the operator-not-sovereign
+principle made literal geometry.
+
+**Implemented same session (claude-18, commit 9cd5005, futon3c):** the
+endpoint returns a top-level `:ship` — active = status invoking/idle
+(alive this server epoch, not merely restored) with an embedded or
+approximate placement; synthetic frontier-shelf coordinates excluded;
+no live contributors → `:ship nil` (honest absence, no placeholder).
+Verified live: ship at [2196.9, 2712.9], the exact midpoint of the two
+active sessions (claude-16 on M-custom-harness, zai-9 on
+M-futon1b-port). Overlay glyph semantics (🛸 per session, 🚀 at
+`:ship`, centroid never computed client-side) amended into the codex-2
+INSTANTIATE handoff.
+
+## INSTANTIATE (2026-07-04, late evening — complete)
+
+**Build (codex-2, belled with inline spec + ship amendment):**
+- `ad80ccb` (futon6) — live overlay in the *generator*
+  (`mission_efe_field.py`, so re-embeds carry it): 10s polling of
+  `/api/alpha/live-efe-map`, placement-honesty rendering (solid vs
+  dashed ring vs labelled frontier band), WM attention pulses annotated
+  with G, graceful "live layer offline" badge; plus
+  `daily_reembed.sh` (atomic mv, record-parity check).
+- `66b5ce7` (futon6) — the ship amendment: 🛸 glyph per session
+  (invoking bright/animated, idle dim), 🚀 at the endpoint's `:ship`
+  with "operator centroid of N active sessions" tooltip; centroid never
+  computed client-side.
+
+**Review (claude-18, the gate):** read both diffs in full; re-ran every
+claimed PASS. Chromium against the live endpoint: badge "live layer
+on · 8 agents · 18 WM", 8 🛸 sessions at their clocked districts, 1 🚀
+at the centroid, frontier band holding the two excursions;
+`daily_reembed.sh` executed end-to-end (exit 0, 278 records, parity
+held). Header language checked against C4: "WM attention and agent
+telemetry on the EFE landscape" — no pheromone/collective-perception
+claims anywhere in the UI. Findings fixed directly (`bf04096`):
+drawWarMachine deduped to the latest tick per mission+slot (18 ticks
+had stacked 31 pulses on 2 missions — visual dishonesty about
+attention breadth); `mission_efe_scope_dump.py` added to
+`daily_reembed.sh` (without it new missions get coordinates but no
+districts and never render — the F-finding from the static-render
+request, now closed structurally).
+
+**C3 armed:** crontab `30 5 * * *` → `daily_reembed.sh` (after the
+04:30 notions index), logging to `futon2/logs/daily-reembed.log`.
+
+**Completion criteria:** C1 ✓ (live agents on the real map, one JVM,
+`pgrep java` untouched all session) · C2 ✓ in its superseded 🛸/🚀
+form · C3 ✓ (≈daily, armed) · C4 ✓ (reviewed at every phase; the map
+optimizes nothing) · C5 ✓ (WM attention live, deduped, G-annotated).
+Claim discipline holds: this is WM attention and agent telemetry on
+the EFE landscape — the collective-perception claim stays unclaimed
+until a later mission demonstrably closes the behavior loop.
+
+**Mission state: built and live. Close gate: Joe.**
+
+## Post-INSTANTIATE operator decisions (2026-07-05)
+
+**Live attestation (C3 deepened):** `pattern-attestation.json` was a frozen one-off
+(June 8, ad-hoc `bb futon0.report.pattern-density` dump); now refreshed daily from
+the live evidence store (`refresh_pattern_attestation.sh`, 60-day rolling window,
+pinned to localhost — the laptop's `FUTON3C_EVIDENCE_BASE` default points at lucy's
+thin store, see E-evidence-flow). Road ink is now RELATIVE to the current economy's
+strongest road. First fresh dump inverted the economy: recorded-handoff 0→63,
+idempotent-handoff 0→44; baseline-cyber-ant 100→7.
+
+**Geometry cadence = WEEKLY (Joe, 2026-07-05):** attestation feeds the layout
+springs, so fresh attestation can move districts. Decision: punctuated weekly
+re-solve ("continental drift") — spatial memory holds between drifts, each drift is
+itself informative. Cron: Sunday 05:00 `mission_carpet.py` (full re-solve) before
+the 05:30 daily render. **INTERIM: runs on the laptop.** Target: run the weekly
+re-embed + re-solve on lucy so the map doesn't depend on the laptop being open —
+requires at-least-weekly `futon-sync` (exists: `futon0/scripts/futon-sync.clj`,
+manifest-driven) plus unresolved dependencies: BGE model + venv on lucy,
+`mission_records.json` provenance, and WHICH substrate-2/evidence store the scope
+dump and attestation count against (lucy's stores are currently thin and disjoint
+from the laptop's — E-evidence-flow Q1–Q5 gate this move).
+
+**Dispatch self-clocking:** `agency_send.py --mission` added (the server side
+existed since D1/O3); dispatched agents now clock on job completion and appear as
+🛸 without manual intervention.
+
+**Coordination-edge overlay (inventory row, "optional edge overlay"):** dispatched
+to codex-1 2026-07-05 (bell b465807b, itself carrying `--mission M-live-efe-map`):
+endpoint `:coordination` key from the mesh-edge ledger + fading cyan threads
+between placed saucers. Rendering fade only — deposit/decay semantics stay out.
+
+**T1 chartered as follow-on:** `M-pheromone-field.md` (same directory) — deposit /
+decay / perception-response semantics, claim gate inherited (the name "pheromone"
+must be earned by demonstrated behavioral response). T2 remains p4ng-successor
+territory.
