@@ -1,0 +1,303 @@
+{:wiring
+ {:nodes
+  [{:id :b1,
+    :role :application,
+    :satiety :full,
+    :via
+    "the 23 legacy sorries are a SHAPE-FIRST IDENTIFY problem: 'code/v05/sorry' names one type but TWO senses (logged-issue vs interface), and each of the 23 is one instance of a discriminating protocol (improve→interface / keep-logged / evict). Before the per-item review, enumerate the shape: the disposition predicate takes (title, related-missions, resolution, status, underlying code) and returns one of three typed outputs — so the family is named before any single entry is classified. The 4 :open + 6 :n-a-by-design + 11 :addressed + 2 :meta + 1 :external-dependency are the candidate instances.",
+    :rule "fold-turn/box"}
+   {:id :b2,
+    :role :application,
+    :satiety :full,
+    :via
+    "each disposition is a TYPED EXIT on a minted sorry: the mission's exit criteria require 'every one of the 23 has a recorded disposition with a one-line rationale'. The DERIVE gate here is not a fresh sorry-arrow but the discrimination itself — each entry's (have: logged-issue shape → want: interface|logged|evicted) is a typed sorry disposition that the mission doc's §3 review protocol specifies. The WANT is the aggregate: 23 typed discharges so code/v05/sorry carries one coherent meaning.",
+    :rule "fold-turn/box"}
+   {:id :b3,
+    :role :application,
+    :satiety :full,
+    :via
+    "the disposition record is durable and append-only: each of the 23 gets a recorded (entry-id, disposition, rationale, evidence-ref) tuple in the mission's output, with the legacy-sorries-snapshot.edn retained as the immutable audit trail. Evictions go through the gated erase path (futon1a/scripts/erase.bb, --reason, dry-run first) — never raw evict. The snapshot sha256 (d242066d…) anchors the 'before' state.",
+    :rule "fold-turn/box"}
+   {:id :b4,
+    :role :application,
+    :satiety :full,
+    :via
+    "the scan itself follows the stack-scan logging protocol: declare scope (the 23 entries from the snapshot), record patterns applied (shape-first discrimination, A-next method for interface candidates), note the disposition diffs (which improved, which kept, which evicted), and append a next-scan note for any entries deferred or flagged for deeper investigation.",
+    :rule "fold-turn/box"}
+   {:id :b5,
+    :role :application,
+    :satiety :full,
+    :via
+    "any entry improved→interface must declare its interface signature: typed endpoints over real substrate-2 nodes (have-inputs → want-features), following the A-next schema (labs/A-next-sorry-hyperedge-schema.md). The 4 :open entries are the most likely to name a real interface; recovering their endpoints is where the mission extends the gold corpus.",
+    :rule "fold-turn/box"}
+   {:id :b6,
+    :role :application,
+    :satiety :full,
+    :via
+    "no paid-for signal is lost: entries that are genuine issue-ledger notes (prototyping-forward, deferred) get :sorry/facet :logged, preserving their value as the 'useful but not this' sense. The discrimination between interface and logged facets is what makes code/v05/sorry unambiguous — the type carries one coherent meaning because the facets are typed.",
+    :rule "fold-turn/box"}
+   {:id :b7,
+    :role :application,
+    :satiety :full,
+    :via
+    "the commit/diff for each disposition must align with the mission's stated exit criteria: every entry has a recorded disposition + rationale, improved-to-interface ones are minted + added to gold corpus, keep-loggeds are discriminated, evictions done via gated path with reasons. A disposition that stays 'planned' without evidence is drift.",
+    :rule "fold-turn/box"}
+   {:id :b8,
+    :role :application,
+    :satiety :full,
+    :via
+    "the A-next method (doc+code+git+XTDB) is the verification protocol for interface recovery: each candidate entry is cross-checked against documentation, source code, git history, and the XTDB substrate-2 graph. A recovered interface is only valid if all four sources agree on the endpoints.",
+    :rule "fold-turn/box"}],
+  :hyperedges
+  [{:kind :composes, :from :b1, :to :b2, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b5, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b6, :connective :copar, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b1, :to :b3, :connective :tensor, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b3, :to :b4, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b5, :to :b8, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b6, :to :b7, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b8, :to :b7, :connective :seq, :rule "fold-turn/wire"}],
+  :terminals
+  [{:id :b4, :discharges :want-signature}
+   {:id :b7, :discharges :want-signature}]},
+ :pins [:prompt-sha :arming :delta-g-recompute :clean-0-sorry],
+ :cascade
+ {:psi
+  "WANT: a recorded disposition (improve→interface / keep-logged / evict) for each of the 23 legacy code/v05/sorry entries with a one-line rationale, so the sorry type carries ONE coherent meaning (the interface sense) and no paid-for signal is lost.\nHUNGRY-FOR: a careful validation-and-improvement pass — NOT a blanket retyping; recovering real have→want interfaces via the A-next method (doc+code+git+XTDB) where they hide, discriminating the rest as :logged, evicting only the resolved/n-a-by-design.\nHAVE: 23 logged-issue entries (single self-endpoint, prose :sorry/title, zero have/want orientation, zero typed endpoints over real ns-vars); the A-next interface-sorry schema (labs/A-next-sorry-hyperedge-schema.md); the legacy-sorries-snapshot.edn audit trail (sha256 d242066d…); the gated erase path (futon1a/scripts/erase.bb, penholder joe); first-pass hypotheses (the 4 :open most likely to hide a real interface; :n-a-by-design lean evict/keep).\n",
+  :psi-sha256
+  "b7b62cc38b77361ff3210e37213287a5c93d80971f9469eb4e9de89f600eeddb",
+  :psi-recipe
+  "no-blind-scoring: no sealed corpus exists for this mission's sorries; the ψ is distilled from the mission doc's actual tension (§1 IDENTIFY the gap, §3 review protocol) and the snapshot's enumerated kind/status distribution. The sorry-grain is the author's reading, not a mechanically-extracted signal.",
+  :pattern-ids
+  ["contributing/stack-scan-logging-protocol"
+   "futon-theory/mission-interface-signature"
+   "futon-theory/local-gain-persistence"
+   "stack-coherence/commit-intent-alignment"
+   "devmap-coherence/ifr-f1-dhammavicaya"
+   "storage/durability-throughput-gate"
+   "coordination/session-durability-check"
+   "invariant-coherence/shape-first-identify"
+   "futon-theory/derive-exits-on-a-minted-sorry"
+   "sidecar/append-only-semantic-audit"
+   "exotic/tri-store-lineage"],
+  :size 11,
+  :truncated false,
+  :budget 20,
+  :F-free-energy 1.113,
+  :constructor
+  {:entry "construct_cascade",
+   :epsilon 0.15,
+   :budget 20,
+   :lambda 0.25,
+   :commit "fe8acea"},
+  :pattern-cites
+  [{:order 0,
+    :ident "contributing/stack-scan-logging-protocol",
+    :ref "futon3/library/contributing/stack-scan-logging-protocol.flexiarg",
+    :rel 0.543,
+    :mc 0.163,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 1,
+    :ident "futon-theory/mission-interface-signature",
+    :ref "futon3/library/futon-theory/mission-interface-signature.flexiarg",
+    :rel 0.526,
+    :mc 0.158,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 2,
+    :ident "futon-theory/local-gain-persistence",
+    :ref "futon3/library/futon-theory/local-gain-persistence.flexiarg",
+    :rel 0.485,
+    :mc 0.339,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 3,
+    :ident "stack-coherence/commit-intent-alignment",
+    :ref "futon3/library/stack-coherence/commit-intent-alignment.flexiarg",
+    :rel 0.478,
+    :mc 0.335,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 4,
+    :ident "devmap-coherence/ifr-f1-dhammavicaya",
+    :ref "futon3/library/devmap-coherence/ifr-f1-dhammavicaya.flexiarg",
+    :rel 0.46,
+    :mc 0.414,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 5,
+    :ident "storage/durability-throughput-gate",
+    :ref "futon3/library/storage/durability-throughput-gate.flexiarg",
+    :rel 0.437,
+    :mc 0.306,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 6,
+    :ident "coordination/session-durability-check",
+    :ref "futon3/library/coordination/session-durability-check.flexiarg",
+    :rel 0.437,
+    :mc 0.218,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 7,
+    :ident "invariant-coherence/shape-first-identify",
+    :ref "futon3/library/invariant-coherence/shape-first-identify.flexiarg",
+    :rel 0.437,
+    :mc 0.218,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 8,
+    :ident "futon-theory/derive-exits-on-a-minted-sorry",
+    :ref "futon3/library/futon-theory/derive-exits-on-a-minted-sorry.flexiarg",
+    :rel 0.47,
+    :mc 0.235,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 9,
+    :ident "sidecar/append-only-semantic-audit",
+    :ref "futon3/library/sidecar/append-only-semantic-audit.flexiarg",
+    :rel 0.458,
+    :mc 0.229,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 10,
+    :ident "exotic/tri-store-lineage",
+    :ref "futon3/library/exotic/tri-store-lineage.flexiarg",
+    :rel 0.445,
+    :mc 0.311,
+    :via "ft-legacy-sorry-cleanup-001 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}]},
+ :mission "futon2-d/mission/legacy-sorry-cleanup",
+ :fold-turn/id "ft-legacy-sorry-cleanup-001",
+ :deposit-contract :v2,
+ :turn
+ {:agent "zai-8",
+  :model "zai",
+  :edge "invoke-1783327385437-583-18a2dfc7",
+  :at "2026-07-06T08:46:00Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "the 23 legacy sorries are a SHAPE-FIRST IDENTIFY problem: 'code/v05/sorry' names one type but TWO senses (logged-issue vs interface), and each of the 23 is one instance of a discriminating protocol (improve→interface / keep-logged / evict). Before the per-item review, enumerate the shape: the disposition predicate takes (title, related-missions, resolution, status, underlying code) and returns one of three typed outputs — so the family is named before any single entry is classified. The 4 :open + 6 :n-a-by-design + 11 :addressed + 2 :meta + 1 :external-dependency are the candidate instances.",
+     :fits-pattern "invariant-coherence/shape-first-identify",
+     :addresses-however
+     "HOWEVER says 'don't force generalisation on a true special case'. The mission doc's own scope-out (the 15 A-next interface-sorries are NOT in scope) means the shape here is genuinely narrow — exactly three dispositions over exactly 23 entries. The risk of phantom siblings is real: if the :open entries turn out to all be genuine logged issues (no hidden interface), the 'improve→interface' disposition has zero instances. That empty branch is itself a finding — recorded honestly as 'no legacy sorry hid a real interface', not papered over."}
+    {:id :b2,
+     :role
+     "each disposition is a TYPED EXIT on a minted sorry: the mission's exit criteria require 'every one of the 23 has a recorded disposition with a one-line rationale'. The DERIVE gate here is not a fresh sorry-arrow but the discrimination itself — each entry's (have: logged-issue shape → want: interface|logged|evicted) is a typed sorry disposition that the mission doc's §3 review protocol specifies. The WANT is the aggregate: 23 typed discharges so code/v05/sorry carries one coherent meaning.",
+     :fits-pattern "futon-theory/derive-exits-on-a-minted-sorry",
+     :addresses-however
+     "HOWEVER says 'sorries are not handed to you on a golden plate — identification is real work'. The 23 entries arrived as PROSE (:sorry/title, :sorry/related-missions, resolution/status props) with ZERO have/want orientation and ZERO typed endpoints. Recovering an interface-sorry from one of them requires the A-next method (doc+code+git+XTDB) — real investigation per item, not a type annotation. The entries that don't survive that investigation are KEEP-logged or EVICT, and the distinction between those two (is it a genuine ongoing issue or resolved/n-a-by-design?) is itself identification work."}
+    {:id :b3,
+     :role
+     "the disposition record is durable and append-only: each of the 23 gets a recorded (entry-id, disposition, rationale, evidence-ref) tuple in the mission's output, with the legacy-sorries-snapshot.edn retained as the immutable audit trail. Evictions go through the gated erase path (futon1a/scripts/erase.bb, --reason, dry-run first) — never raw evict. The snapshot sha256 (d242066d…) anchors the 'before' state.",
+     :fits-pattern "sidecar/append-only-semantic-audit",
+     :addresses-however
+     "HOWEVER says 'you need to revise or retire claims over time'. The risk: an entry classified EVICT today might turn out to hide a real interface on deeper investigation. The audit trail (snapshot retained + disposition record with rationale + gated-erase reason) makes the retirement reversible at the evidence level — the XTDB originals are untouched, the snapshot is the audit trail, so an evicted entry can be re-examined. But the disposition itself is NOT revised silently: if new evidence surfaces, it's a new disposition record, not an overwrite."}
+    {:id :b4,
+     :role
+     "the scan itself follows the stack-scan logging protocol: declare scope (the 23 entries from the snapshot), record patterns applied (shape-first discrimination, A-next method for interface candidates), note the disposition diffs (which improved, which kept, which evicted), and append a next-scan note for any entries deferred or flagged for deeper investigation.",
+     :fits-pattern "contributing/stack-scan-logging-protocol",
+     :addresses-however
+     "HOWEVER says 'without a repeatable logging protocol we cannot compare progress between scans'. This is a ONE-TIME validation pass, not a recurring scan — so the protocol's value is not cross-scan comparison but AUDITABILITY: the disposition record IS the scan log, so a future agent reaching for code/v05/sorry can see exactly what was checked and why each entry got its disposition. The next-scan note matters: entries where the A-next investigation was inconclusive get flagged, not silently classified."}
+    {:id :b5,
+     :role
+     "any entry improved→interface must declare its interface signature: typed endpoints over real substrate-2 nodes (have-inputs → want-features), following the A-next schema (labs/A-next-sorry-hyperedge-schema.md). The 4 :open entries are the most likely to name a real interface; recovering their endpoints is where the mission extends the gold corpus.",
+     :fits-pattern "futon-theory/mission-interface-signature",
+     :addresses-however
+     "HOWEVER says 'not all output ports are known at mission start — discovery during implementation may reveal new boundary types'. For the legacy sorries, the boundary types are RECOVERED, not designed: the A-next method (doc+code+git+XTDB) reverse-engineers what interface the sorry was gesturing at. The risk: a sorry's title may name something that LOOKS like an interface but the underlying code reveals it was a prototyping-forward note with no real contract. The composition constraint (output port must be specified + implemented + tested + documented) is the falsifier: if the recovered interface has no real ns-var endpoints, it's KEEP-logged, not improve→interface."}
+    {:id :b6,
+     :role
+     "no paid-for signal is lost: entries that are genuine issue-ledger notes (prototyping-forward, deferred) get :sorry/facet :logged, preserving their value as the 'useful but not this' sense. The discrimination between interface and logged facets is what makes code/v05/sorry unambiguous — the type carries one coherent meaning because the facets are typed.",
+     :fits-pattern "futon-theory/local-gain-persistence",
+     :addresses-however
+     "HOWEVER warns of 'ghost capabilities — it just started working, nobody knows why'. The analog here: a legacy sorry that was prototyping-forward might have been silently addressed by later work (its issue resolved without updating the sorry's status). That's a ghost-gain in reverse — a logged issue that's no longer live. The disposition protocol catches this: if investigation shows the issue is resolved, it's EVICT (with reason), not silently left as :open. The anti-pattern 'we'll capture it later' is exactly what the one-line-rationale-per-entry requirement prevents."}
+    {:id :b7,
+     :role
+     "the commit/diff for each disposition must align with the mission's stated exit criteria: every entry has a recorded disposition + rationale, improved-to-interface ones are minted + added to gold corpus, keep-loggeds are discriminated, evictions done via gated path with reasons. A disposition that stays 'planned' without evidence is drift.",
+     :fits-pattern "stack-coherence/commit-intent-alignment",
+     :addresses-however
+     "HOWEVER says 'that disconnect makes the roadmap lie about where energy went'. The mission's scope-out (the 15 A-next interface-sorries, the substrate-2 enrichment backlog) means the disposition record must be honest about what is NOT done — entries deferred to the substrate-2 backlog are flagged as such, not silently classified as keep-logged to close the entry. The drift flag fires when an entry's disposition cites evidence that doesn't exist in the snapshot or the code."}
+    {:id :b8,
+     :role
+     "the A-next method (doc+code+git+XTDB) is the verification protocol for interface recovery: each candidate entry is cross-checked against documentation, source code, git history, and the XTDB substrate-2 graph. A recovered interface is only valid if all four sources agree on the endpoints.",
+     :fits-pattern "devmap-coherence/ifr-f1-dhammavicaya",
+     :addresses-however
+     "HOWEVER says 'focus headers, ingest scripts, and CLI demos drift unless transport invariants are checked'. For the legacy sorries, the drift risk is the TITLE: a sorry's :sorry/title may name an interface that the code has since refactored away from. The doc+code+git+XTDB cross-check is what catches this — if the title says 'interface to X' but XTDB shows X was renamed or removed, the entry is KEEP-logged (the issue note is still valid) but NOT improve→interface (there's no current endpoint to recover). This is a transport invariant: the sorry's claim must be reproducible against the live graph."}],
+   :wires
+   [{:from :b1, :to :b2, :connective :seq}
+    {:from :b2, :to :b5, :connective :seq}
+    {:from :b2, :to :b6, :connective :copar}
+    {:from :b1, :to :b3, :connective :tensor}
+    {:from :b3, :to :b4, :connective :seq}
+    {:from :b5, :to :b8, :connective :seq}
+    {:from :b6, :to :b7, :connective :seq}
+    {:from :b8, :to :b7, :connective :seq}],
+   :terminals
+   [{:id :b4, :discharges :want-signature}
+    {:id :b7, :discharges :want-signature}],
+   :policy-holes
+   [{:unfolded-pattern "invariant-coherence/shape-first-identify",
+     :free "the exact predicate for the improve→interface disposition",
+     :why
+     "shape-first-identify says 'ask what shape this is one instance of' but the A-next method's doc+code+git+XTDB cross-check is an INVESTIGATION, not a predicate — the threshold for 'this entry names a real interface' is a judgment call per item, not a mechanical rule. The shape is named (the disposition protocol) but the instance-level decision is not derivable from prose + circumstance alone."}
+    {:unfolded-pattern "futon-theory/mission-interface-signature",
+     :free "the composition constraint for recovered interfaces",
+     :why
+     "the pattern's composition constraint (output port must be specified + implemented + tested + documented) assumes a FORWARD-DESIGNED interface. For RECOVERED interfaces from legacy sorries, the test coverage may never have existed — requiring it retroactively would evict entries that genuinely name a real interface but were never tested. Whether to require test coverage for recovered endpoints is an operator policy choice the prose does not decide."}
+    {:unfolded-pattern "futon-theory/local-gain-persistence",
+     :free "the disposition for entries whose status is ambiguous between :addressed and :open",
+     :why
+     "the pattern's enforcement requires a disposition field {persisted, deleted} at LOOP_END. But several of the 23 entries have status :addressed without clear evidence the underlying issue is actually resolved (the 'ghost-gain in reverse' risk). Whether to EVICT these (trusting the :addressed status) or KEEP-logged (requiring fresh verification) is a judgment call about how much trust to place in the legacy status fields — not derivable from the pattern's invariant."}
+    {:unfolded-pattern "storage/durability-throughput-gate",
+     :free nil,
+     :why
+     "this pattern gates durable commit vs throughput for write paths — it does not apply to a read-only classification pass over existing data. The cascade surfaced it (rel 0.437) because the ψ mentions 'gated erase path', but the erase gate's durability semantics are already handled by futon1a/scripts/erase.bb; there is no new write-throughput tradeoff to make here. Scope-out: the charter's 'Out: the substrate-2 enrichment backlog' means this pattern is not folded."}
+    {:unfolded-pattern "coordination/session-durability-check",
+     :free nil,
+     :why
+     "this pattern gates coordinated work on durable persistence — it applies to the DEPOSIT/escrow layer, not to a mission-level classification pass. The cascade surfaced it (rel 0.437) as a co-occurrence with the sorry/durability vocabulary, but the disposition records are durable by construction (they go into the mission output + the snapshot is retained). There is no session-coordination durability question here. Scope-out."}
+    {:unfolded-pattern "exotic/tri-store-lineage",
+     :free nil,
+     :why
+     "this pattern describes a tri-store lineage model (facts/memes/notions) for provenance queries. The legacy sorry cleanup operates on substrate-2 hyperedges directly — the snapshot IS the fact layer, the dispositions are the derived layer. The tri-store architecture is the substrate's concern, not the mission's. The cascade surfaced it (rel 0.445) via the 'audit trail' vocabulary, but the mission consumes substrate-2's existing lineage, it does not redesign it. Scope-out."}]}},
+ :arming
+ {:gate "fold-authoring",
+  :spend-purpose "ground-control-test-2026-07-06: ft-legacy-sorry-cleanup deposit authoring",
+  :balance-after 3,
+  :operator "claude-16",
+  :word "claude-16 has awarded 5 mana to fold-authoring for this test",
+  :at "2026-07-06T08:45:48.724953313Z",
+  :scope :one-fold,
+  :fold-turn/id "ft-legacy-sorry-cleanup-001"},
+ :prompt
+ {:sha256
+  "0b03a758bbb977dccc9077aa7b35092d901422cc03239db2e2c95f6849e209a9",
+  :prose-sha256
+  {"contributing/stack-scan-logging-protocol"
+   "3d30d2fd5b0d3a9cdb292b45dd698dc3734c3f77e7811142e829f8b019b54b82",
+   "futon-theory/mission-interface-signature"
+   "d37dd40b6f9e1f5fdfc5bae631447ca8fe407b9de05c09a918960b8cd0b2d7e4",
+   "futon-theory/local-gain-persistence"
+   "e08d7047b6163725c0451cbafaf63be936bfcb2ae985448246b37585b8a1d0ba",
+   "stack-coherence/commit-intent-alignment"
+   "e1257816164c35402f7ab49e6b39878a90d61e784959715b01862422be854e95",
+   "devmap-coherence/ifr-f1-dhammavicaya"
+   "ec424f7c3ca4c64a1d0c262d446c5b8828ffd3ea822ab99459e67051d1cb104d",
+   "storage/durability-throughput-gate"
+   "e6475ba3f2334cf3c42055e442bd43c81b561e3c48659ccfc4fb39bf99769e28",
+   "coordination/session-durability-check"
+   "94ec03f3fe051f99e9d4dac39df9f3ac08140903ef17cf56372466000b294e88",
+   "invariant-coherence/shape-first-identify"
+   "4c47b8cc7589b9410e075c014ac54e407ba46efc570f8642a29459796044152d",
+   "futon-theory/derive-exits-on-a-minted-sorry"
+   "fd0c913b45701579a9f23053b4ee12583ebdf8f50de339fb9f619570133ca283",
+   "sidecar/append-only-semantic-audit"
+   "20b4c6ea725c9636f768742d372d0862eb3a872bb21b42ba14724c96be892f4e",
+   "exotic/tri-store-lineage"
+   "4a6a28b2423f9899f92b598ff1d5f2f3ecbb2832a4f624fac4960462a1b8e862"},
+  :prose-source
+  "verbatim futon3/library/<pattern-id>.flexiarg"},
+ :eval {:delta-g -0.5714285714285714, :g-grain :coverage}}
