@@ -1,0 +1,6097 @@
+{
+  "cascades_with_patterns": 10,
+  "co_app_edges": 382,
+  "co_app_usage": [
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "aif-as-environment-not-instruction",
+        "baseline-cyber-ant"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "aif-as-environment-not-instruction",
+        "belief-state-operational-hypotheses"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "aif-as-environment-not-instruction",
+        "candidate-pattern-action-space"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "aif-as-environment-not-instruction",
+        "structural-tension-as-observation"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "aif-as-environment-not-instruction",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "all-or-nothing",
+        "churn-as-signal"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "all-or-nothing",
+        "durability-throughput-gate"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "all-or-nothing",
+        "invariants-vs-repair"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "all-or-nothing",
+        "postcommit-materialization-gate"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "all-or-nothing",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "all-or-nothing",
+        "state-in-substrate-deltas-in-messages"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "commit-intent-alignment"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "conclusion-required-others-recommended"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "derive-exits-on-a-minted-sorry"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "durability-throughput-gate"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "explicit-promotion-to-facts"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "fact-lifecycle-event-types"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "ifr-f1-dhammavicaya"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "local-gain-persistence"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "mission-interface-signature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "pattern-to-code-receipts"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "shape-first-identify"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "append-only-semantic-audit",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "baseline-cyber-ant",
+        "belief-state-operational-hypotheses"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "baseline-cyber-ant",
+        "candidate-pattern-action-space"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "baseline-cyber-ant",
+        "structural-tension-as-observation"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "baseline-cyber-ant",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "belief-state-operational-hypotheses"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "budget-bounds-exploration"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "candidate-pattern-action-space"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "declare-the-conditioning"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "expected-free-energy-scorecard"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "experimental-comparison-of-EFE-variants"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "facet-before-aggregating"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "free-energy-as-tick-scalar"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "hierarchical-budget-aware-action-selection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "interest-event-vocabulary"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "learning-event-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "no-self-certification"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "term-to-channel-traceability"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "belief-aware-risk-term",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "budget-bounds-exploration"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "candidate-pattern-action-space"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "declare-the-conditioning"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "expected-free-energy-scorecard"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "experimental-comparison-of-EFE-variants"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "free-energy-as-tick-scalar"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "hierarchical-budget-aware-action-selection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "interest-event-vocabulary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "learning-event-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "structural-tension-as-observation"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "structured-observation-vector"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "belief-state-operational-hypotheses",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "candidate-pattern-action-space"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "currency-before-merge"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "declare-the-conditioning"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "expected-free-energy-scorecard"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "experimental-comparison-of-EFE-variants"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "free-energy-as-tick-scalar"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "hierarchical-budget-aware-action-selection"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "interest-event-vocabulary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "learning-event-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "no-self-certification"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "structured-observation-vector"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "term-to-channel-traceability"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "budget-bounds-exploration",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "currency-before-merge"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "declare-the-conditioning"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "expected-free-energy-scorecard"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "experimental-comparison-of-EFE-variants"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "facet-before-aggregating"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "hierarchical-budget-aware-action-selection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "interest-event-vocabulary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "no-self-certification"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "structural-tension-as-observation"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "structured-observation-vector"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "term-to-channel-traceability"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "candidate-pattern-action-space",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "churn-as-signal",
+        "durability-throughput-gate"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "churn-as-signal",
+        "invariants-vs-repair"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "churn-as-signal",
+        "postcommit-materialization-gate"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "churn-as-signal",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "churn-as-signal",
+        "state-in-substrate-deltas-in-messages"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "commit-intent-alignment",
+        "derive-exits-on-a-minted-sorry"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "commit-intent-alignment",
+        "durability-throughput-gate"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "commit-intent-alignment",
+        "ifr-f1-dhammavicaya"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "commit-intent-alignment",
+        "local-gain-persistence"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "commit-intent-alignment",
+        "mission-interface-signature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "commit-intent-alignment",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "commit-intent-alignment",
+        "shape-first-identify"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "commit-intent-alignment",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "commit-intent-alignment",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "conclusion-required-others-recommended",
+        "explicit-promotion-to-facts"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "conclusion-required-others-recommended",
+        "fact-lifecycle-event-types"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "conclusion-required-others-recommended",
+        "pattern-to-code-receipts"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "cross-validation-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "evidence-over-assertion"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "no-self-certification"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "operational-not-decorative"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "reachable-from-boot"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "turn-design-into-checks"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "crime-relocates-to-a-scarcer-witness",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "cross-mission-escrow",
+        "futon-bridge-health"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "cross-mission-escrow",
+        "mission-interface-signature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "cross-mission-escrow",
+        "ready-blocked-triage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "cross-mission-escrow",
+        "stack-blocker-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "cross-mission-escrow",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "cross-validation-protocol",
+        "evidence-over-assertion"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "cross-validation-protocol",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "cross-validation-protocol",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "cross-validation-protocol",
+        "no-self-certification"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "cross-validation-protocol",
+        "operational-not-decorative"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "cross-validation-protocol",
+        "reachable-from-boot"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "cross-validation-protocol",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "cross-validation-protocol",
+        "turn-design-into-checks"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "cross-validation-protocol",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "declare-the-conditioning"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "expected-free-energy-scorecard"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "experimental-comparison-of-EFE-variants"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "hierarchical-budget-aware-action-selection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "no-self-certification"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "currency-before-merge",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "expected-free-energy-scorecard"
+      ],
+      "weight": 3
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "experimental-comparison-of-EFE-variants"
+      ],
+      "weight": 3
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "facet-before-aggregating"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "free-energy-as-tick-scalar"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "hierarchical-budget-aware-action-selection"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "interest-event-vocabulary"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "learning-event-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "no-self-certification"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "structured-observation-vector"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "term-to-channel-traceability"
+      ],
+      "weight": 3
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "declare-the-conditioning",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "derive-exits-on-a-minted-sorry",
+        "durability-throughput-gate"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "derive-exits-on-a-minted-sorry",
+        "ifr-f1-dhammavicaya"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "derive-exits-on-a-minted-sorry",
+        "local-gain-persistence"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "derive-exits-on-a-minted-sorry",
+        "mission-interface-signature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "derive-exits-on-a-minted-sorry",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "derive-exits-on-a-minted-sorry",
+        "shape-first-identify"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "derive-exits-on-a-minted-sorry",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "derive-exits-on-a-minted-sorry",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "ifr-f1-dhammavicaya"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "invariants-vs-repair"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "local-gain-persistence"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "mission-interface-signature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "postcommit-materialization-gate"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "shape-first-identify"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        },
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "state-in-substrate-deltas-in-messages"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "durability-throughput-gate",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "evidence-over-assertion",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "evidence-over-assertion",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "evidence-over-assertion",
+        "no-self-certification"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "evidence-over-assertion",
+        "operational-not-decorative"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "evidence-over-assertion",
+        "reachable-from-boot"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "evidence-over-assertion",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "evidence-over-assertion",
+        "turn-design-into-checks"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "evidence-over-assertion",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "experimental-comparison-of-EFE-variants"
+      ],
+      "weight": 3
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "facet-before-aggregating"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "free-energy-as-tick-scalar"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "hierarchical-budget-aware-action-selection"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "interest-event-vocabulary"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "learning-event-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "no-self-certification"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "structured-observation-vector"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "term-to-channel-traceability"
+      ],
+      "weight": 3
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "expected-free-energy-scorecard",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "facet-before-aggregating"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "free-energy-as-tick-scalar"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "hierarchical-budget-aware-action-selection"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "interest-event-vocabulary"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "learning-event-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "no-self-certification"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "structured-observation-vector"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "term-to-channel-traceability"
+      ],
+      "weight": 3
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "experimental-comparison-of-EFE-variants",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "explicit-promotion-to-facts",
+        "fact-lifecycle-event-types"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "explicit-promotion-to-facts",
+        "pattern-to-code-receipts"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "facet-before-aggregating",
+        "interest-event-vocabulary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "facet-before-aggregating",
+        "no-self-certification"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "facet-before-aggregating",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "facet-before-aggregating",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "facet-before-aggregating",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "facet-before-aggregating",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-aif-faithfulness-001",
+          "mission": "futon2-d/mission/aif-faithfulness",
+          "n_patterns": 5
+        }
+      ],
+      "stems": [
+        "fact-lifecycle-event-types",
+        "pattern-to-code-receipts"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "free-energy-as-tick-scalar",
+        "hierarchical-budget-aware-action-selection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "free-energy-as-tick-scalar",
+        "interest-event-vocabulary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "free-energy-as-tick-scalar",
+        "learning-event-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "free-energy-as-tick-scalar",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "free-energy-as-tick-scalar",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "free-energy-as-tick-scalar",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "free-energy-as-tick-scalar",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "free-energy-as-tick-scalar",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "futon-bridge-health",
+        "mission-interface-signature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "futon-bridge-health",
+        "ready-blocked-triage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "futon-bridge-health",
+        "stack-blocker-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "futon-bridge-health",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "honest-map-over-flattering-counter"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "interest-event-vocabulary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "learning-event-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "mana-gated-work"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "no-self-certification"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "structured-observation-vector"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "term-to-channel-traceability"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "hierarchical-budget-aware-action-selection",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "mana-gated-work"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "no-self-certification"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "operational-not-decorative"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "reachable-from-boot"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "turn-design-into-checks"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "honest-map-over-flattering-counter",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "ifr-f1-dhammavicaya",
+        "local-gain-persistence"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "ifr-f1-dhammavicaya",
+        "mission-interface-signature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "ifr-f1-dhammavicaya",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "ifr-f1-dhammavicaya",
+        "shape-first-identify"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "ifr-f1-dhammavicaya",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "ifr-f1-dhammavicaya",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "interest-event-vocabulary",
+        "learning-event-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "interest-event-vocabulary",
+        "no-self-certification"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "interest-event-vocabulary",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "interest-event-vocabulary",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "interest-event-vocabulary",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "interest-event-vocabulary",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "interest-event-vocabulary",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "interest-event-vocabulary",
+        "term-to-channel-traceability"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "interest-event-vocabulary",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "invariants-vs-repair",
+        "postcommit-materialization-gate"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "invariants-vs-repair",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "invariants-vs-repair",
+        "state-in-substrate-deltas-in-messages"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "learning-event-detection",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "learning-event-detection",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "learning-event-detection",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "learning-event-detection",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "learning-event-detection",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "local-gain-persistence",
+        "mission-interface-signature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "local-gain-persistence",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "local-gain-persistence",
+        "shape-first-identify"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "local-gain-persistence",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "local-gain-persistence",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-autoclock-in-001",
+          "mission": "futon3c-d/mission/autoclock-in",
+          "n_patterns": 4
+        }
+      ],
+      "stems": [
+        "loop-failure-signals",
+        "loop-recovery-actions"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-autoclock-in-001",
+          "mission": "futon3c-d/mission/autoclock-in",
+          "n_patterns": 4
+        }
+      ],
+      "stems": [
+        "loop-failure-signals",
+        "loop-success-signals"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-autoclock-in-001",
+          "mission": "futon3c-d/mission/autoclock-in",
+          "n_patterns": 4
+        }
+      ],
+      "stems": [
+        "loop-failure-signals",
+        "plan-before-tool"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-autoclock-in-001",
+          "mission": "futon3c-d/mission/autoclock-in",
+          "n_patterns": 4
+        }
+      ],
+      "stems": [
+        "loop-recovery-actions",
+        "loop-success-signals"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-autoclock-in-001",
+          "mission": "futon3c-d/mission/autoclock-in",
+          "n_patterns": 4
+        }
+      ],
+      "stems": [
+        "loop-recovery-actions",
+        "plan-before-tool"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-autoclock-in-001",
+          "mission": "futon3c-d/mission/autoclock-in",
+          "n_patterns": 4
+        }
+      ],
+      "stems": [
+        "loop-success-signals",
+        "plan-before-tool"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "no-self-certification"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "operational-not-decorative"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "reachable-from-boot"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "turn-design-into-checks"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "mana-gated-work",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "mission-interface-signature",
+        "ready-blocked-triage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "mission-interface-signature",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "mission-interface-signature",
+        "shape-first-identify"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "mission-interface-signature",
+        "stack-blocker-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        },
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "mission-interface-signature",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "mission-interface-signature",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "operational-not-decorative"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "placeholder-is-load-bearing"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "reachable-from-boot"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "term-to-channel-traceability"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "turn-design-into-checks"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "no-self-certification",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "operational-not-decorative",
+        "reachable-from-boot"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "operational-not-decorative",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "operational-not-decorative",
+        "turn-design-into-checks"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "operational-not-decorative",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "placeholder-is-load-bearing",
+        "policy-precision-commitment-temperature"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "placeholder-is-load-bearing",
+        "predictive-entropy-as-ambiguity"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "placeholder-is-load-bearing",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "placeholder-is-load-bearing",
+        "term-to-channel-traceability"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "placeholder-is-load-bearing",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "policy-precision-commitment-temperature",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "policy-precision-commitment-temperature",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "policy-precision-commitment-temperature",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "postcommit-materialization-gate",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "postcommit-materialization-gate",
+        "state-in-substrate-deltas-in-messages"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "predictive-entropy-as-ambiguity",
+        "shared-kernel-predictive-forward-model"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "predictive-entropy-as-ambiguity",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "predictive-entropy-as-ambiguity",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "predictive-entropy-as-ambiguity",
+        "term-to-channel-traceability"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "predictive-entropy-as-ambiguity",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "reachable-from-boot",
+        "session-durability-check"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "reachable-from-boot",
+        "turn-design-into-checks"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "reachable-from-boot",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "ready-blocked-triage",
+        "stack-blocker-detection"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "ready-blocked-triage",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "session-durability-check",
+        "shape-first-identify"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "session-durability-check",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "session-durability-check",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "session-durability-check",
+        "turn-design-into-checks"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "session-durability-check",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "shape-first-identify",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "shape-first-identify",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "shared-kernel-predictive-forward-model",
+        "state-is-hypothesis"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "shared-kernel-predictive-forward-model",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "shared-kernel-predictive-forward-model",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-live-geometric-stack-002",
+          "mission": "futon3-d/mission/live-geometric-stack",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "stack-blocker-detection",
+        "stack-scan-logging-protocol"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-bounded-in-flight-state-008",
+          "mission": "futon3c-d/mission/bounded-in-flight-state",
+          "n_patterns": 7
+        }
+      ],
+      "stems": [
+        "stack-scan-logging-protocol",
+        "state-in-substrate-deltas-in-messages"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-legacy-sorry-cleanup-001",
+          "mission": "futon2-d/mission/legacy-sorry-cleanup",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "stack-scan-logging-protocol",
+        "tri-store-lineage"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "state-is-hypothesis",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "state-is-hypothesis",
+        "term-to-channel-traceability"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-aif-head-004",
+          "mission": "futon2-d/mission/aif-head",
+          "n_patterns": 6
+        }
+      ],
+      "stems": [
+        "structural-tension-as-observation",
+        "structured-observation-vector"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-bayesian-structure-learning-003",
+          "mission": "futon6-d/mission/bayesian-structure-learning",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "structured-observation-vector",
+        "term-to-channel-traceability"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": false,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        }
+      ],
+      "stems": [
+        "structured-observation-vector",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 1
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-action-vocabulary-005",
+          "mission": "futon2-d/mission/action-vocabulary",
+          "n_patterns": 15
+        },
+        {
+          "deposit": "ft-evaluate-policies-009",
+          "mission": "futon2-d/mission/evaluate-policies",
+          "n_patterns": 12
+        }
+      ],
+      "stems": [
+        "term-to-channel-traceability",
+        "valuation-reads-the-paperwork"
+      ],
+      "weight": 2
+    },
+    {
+      "novel": true,
+      "provenance": [
+        {
+          "deposit": "ft-peradam-mechanization-006",
+          "mission": "futon2-d/mission/peradam-mechanization",
+          "n_patterns": 11
+        }
+      ],
+      "stems": [
+        "turn-design-into-checks",
+        "ward-off-boundary"
+      ],
+      "weight": 1
+    }
+  ],
+  "deposits_scanned": 11,
+  "known_edges_in_phylogeny": 3425,
+  "novel_edges": 220,
+  "schema": "coapp-live-usage.v1",
+  "source": "futon6/data/fold-turns",
+  "total_patterns_seen": 92
+}
