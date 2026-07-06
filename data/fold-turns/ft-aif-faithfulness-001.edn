@@ -1,0 +1,192 @@
+{:wiring
+ {:nodes
+  [{:id :b1,
+    :role :application,
+    :satiety :full,
+    :via
+    "the R18 badge ledger as an append-only semantic audit trail: every badge transition (:analogical -> :principled-approximation via dark-build flip, or :analogical -> renamed/relocated/deleted via D8 disposition) is persisted as an append-only record at the store boundary with {quantity, from-badge, to-badge, commit-sha, evidence-ref, timestamp}, never overwriting the prior badge state — so the badge history IS the faithfulness audit, and a re-run of the R18 audit reads the latest badge per quantity from the event log, not a mutable field",
+    :rule "fold-turn/box"}
+   {:id :b2,
+    :role :application,
+    :satiety :full,
+    :via
+    "explicit promotion to :principled-approximation via a logged flip action: a quantity's badge rises ONLY through an explicit, recorded flip (operator verdict + evidence + commit), never through implicit drift or a docstring relabel — the D-1a/D-1b/D-1e flips 2026-07-04 are the precedent (each carried a commit, a shadow-evidence ref, and a per-action mode stamp), and the remaining buckets (B-2a struct split, B-3a A-matrix) each require the same promotion record before their badge can rise",
+    :rule "fold-turn/box"}
+   {:id :b3,
+    :role :application,
+    :satiety :full,
+    :via
+    "badge lifecycle events as typed transitions (:awarded :warranted :retired) with rationale and actor: a quantity starts :analogical (audit), earns :principled-approximation via a warranted flip (D-1a pattern), or is retired (renamed/relocated/deleted) via a D8 disposition event — the active badge is derived from the latest event, and retired quantities (G-survival folded into risk-KL, G-structural-pressure relocated to habit prior) clear their active-status as named-pressure-terms, not silently disappearing",
+    :rule "fold-turn/box"}
+   {:id :b4,
+    :role :application,
+    :satiety :full,
+    :via
+    "pattern-to-code receipts for each badge promotion: a commit that flips a quantity's badge carries a footer naming the badge transition and its evidence-ref, structurally linking the code change (the dark-build flip commit) to the faithfulness claim (the badge rise) — the receipt names the witness (E6 shadow evidence, T-calibration, quadrature-verification) so a verifier can re-derive whether the promotion was earned, not just asserted",
+    :rule "fold-turn/box"}
+   {:id :b5,
+    :role :application,
+    :satiety :full,
+    :via
+    "the conclusion-required discipline applied to D8 dispositions: a quantity that cannot canonicalize (G-graph-pragmatic's 1000-mask is a domain restriction not a value; G-survival is homeostatic pressure not an EFE summand) gets a D8 disposition record whose CONCLUSION is its honest endpoint (rename / relocate / delete), not a fabricated IF/HOWEVER tension pretending it can be principled — forcing every quantity toward :principled-approximation would be the definitional refusal this pattern warns against",
+    :rule "fold-turn/box"}],
+  :hyperedges
+  [{:kind :composes, :from :b1, :to :b2, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b1, :to :b3, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b4, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b3, :to :b4, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b3, :to :b5, :connective :copar, :rule "fold-turn/wire"}],
+  :terminals
+  [{:id :b4, :discharges :want-signature}]},
+ :cascade
+ {:psi
+  "WANT: no quantity wears a badge it hasn't paid for — every badge in r18-badges.edn is :principled-approximation or better, OR the quantity is renamed/relocated/deleted per its D8 disposition, and the explainer + badge data reflect reality; tick provenance stamps (B-0a) make every flip attributable to a WM version. Falsifiable: a re-run of the R18 audit reads zero :analogical quantities without a D8 disposition recorded, and wm-version-of answers for every tick since 2026-05-18.\nHUNGRY-FOR: faithfulness as earned-per-declared-model, not blanket :derived-from-FEP; the dark-build flip pattern (build dark, shadow evidence, operator flips on the joint decision); D8 dispositions as the honest endpoint for quantities that cannot canonicalize; version-attributable flips so a behaviour change is auditable against its tick, not recoverable only by hand-correlating commit times.\nHAVE: 16 quantities badged (0 :derived-from-FEP, 7 PA, 9 A at audit); D-1a/D-1b/D-1e flipped live 2026-07-04 with :risk-mode :kl, :ambiguity-mode :gaussian-entropy, :goal-outcome-mode :kl stamped per action; D-1c/D-1d ratified, dark builds landed (776b2f0 structural-pressure, fb15d66 W1-KL); the E6 shadow evidence (winner-flip rates per term); buckets 2-3 repairs (B-2a struct split, B-2c salience, B-3a A-matrix) specified with file:line witnesses; B-0a tick-provenance NOT yet landed (the urgent-before-next-flip gate); 42 daily trace files since 2026-05-18 carrying per-action :risk-mode stamps but no git sha.",
+  :psi-sha256
+  "31520d1d84e200afe529e761c9b082b794e1e1b2db06367b36da5439e0a0cf2b",
+  :psi-recipe
+  "no sealed corpus: the ψ is an empirical sorry-grain authored from the mission doc's actual tension (M-aif-faithfulness §0 + §1.1 + §2.1 verdict ledger), not scored against a blind corpus. no-blind-scoring stated honestly: the ψ-text is the author's reading of the mission's WANT/HUNGRY-FOR/HAVE structure, cross-checked against the R18 badge data and the verdict ledger dates/shas.",
+  :pattern-ids
+  ["sidecar/append-only-semantic-audit"
+   "sidecar/explicit-promotion-to-facts"
+   "sidecar/fact-lifecycle-event-types"
+   "pattern-discipline/pattern-to-code-receipts"
+   "pattern-discipline/conclusion-required-others-recommended"],
+  :size 5,
+  :truncated false,
+  :budget 20,
+  :F-free-energy 0.296,
+  :constructor
+  {:entry "construct_cascade",
+   :epsilon 0.15,
+   :budget 20,
+   :lambda 0.25,
+   :commit "fe8aceab21c48783d0721c4ccb19e3806bb12f45"},
+  :pattern-cites
+  [{:order 0,
+    :ident "sidecar/append-only-semantic-audit",
+    :ref "futon3/library/sidecar/append-only-semantic-audit.flexiarg",
+    :rel 0.478,
+    :mc 0.144,
+    :via "ft-aif-faithfulness-001 cascade, budget-20 window (untruncated, size 5)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 1,
+    :ident "sidecar/explicit-promotion-to-facts",
+    :ref "futon3/library/sidecar/explicit-promotion-to-facts.flexiarg",
+    :rel 0.434,
+    :mc 0.304,
+    :via "ft-aif-faithfulness-001 cascade, budget-20 window (untruncated, size 5)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 2,
+    :ident "sidecar/fact-lifecycle-event-types",
+    :ref "futon3/library/sidecar/fact-lifecycle-event-types.flexiarg",
+    :rel 0.455,
+    :mc 0.319,
+    :via "ft-aif-faithfulness-001 cascade, budget-20 window (untruncated, size 5)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 3,
+    :ident "pattern-discipline/pattern-to-code-receipts",
+    :ref "futon3/library/pattern-discipline/pattern-to-code-receipts.flexiarg",
+    :rel 0.416,
+    :mc 0.291,
+    :via "ft-aif-faithfulness-001 cascade, budget-20 window (untruncated, size 5)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 4,
+    :ident "pattern-discipline/conclusion-required-others-recommended",
+    :ref "futon3/library/pattern-discipline/conclusion-required-others-recommended.flexiarg",
+    :rel 0.4,
+    :mc 0.2,
+    :via "ft-aif-faithfulness-001 cascade, budget-20 window (untruncated, size 5)",
+    :rule "fold-turn/pattern-cite"}]},
+ :mission "futon2-d/mission/aif-faithfulness",
+ :fold-turn/id "ft-aif-faithfulness-001",
+ :deposit-contract :v2,
+ :turn
+ {:agent "zai-6",
+  :model "codex",
+  :edge "invoke-1783327471398-585-d254b101",
+  :at "2026-07-06T08:50:00Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "the R18 badge ledger as an append-only semantic audit trail: every badge transition (:analogical -> :principled-approximation via dark-build flip, or :analogical -> renamed/relocated/deleted via D8 disposition) is persisted as an append-only record at the store boundary with {quantity, from-badge, to-badge, commit-sha, evidence-ref, timestamp}, never overwriting the prior badge state — so the badge history IS the faithfulness audit, and a re-run of the R18 audit reads the latest badge per quantity from the event log, not a mutable field",
+     :fits-pattern "sidecar/append-only-semantic-audit",
+     :addresses-however
+     "the HOWEVER is revising or retiring claims over time — the AIF mission's badge transitions ARE claim revisions (a quantity's faithfulness claim changes as evidence lands); append-only means the audit can reconstruct which badge any quantity wore at any tick, which is the version-attribution WANT when B-0a's git-sha stamp lands"}
+    {:id :b2,
+     :role
+     "explicit promotion to :principled-approximation via a logged flip action: a quantity's badge rises ONLY through an explicit, recorded flip (operator verdict + evidence + commit), never through implicit drift or a docstring relabel — the D-1a/D-1b/D-1e flips 2026-07-04 are the precedent (each carried a commit, a shadow-evidence ref, and a per-action mode stamp), and the remaining buckets (B-2a struct split, B-3a A-matrix) each require the same promotion record before their badge can rise",
+     :fits-pattern "sidecar/explicit-promotion-to-facts",
+     :addresses-however
+     "the HOWEVER is wanting good proposals to become facts when warranted — the dark-build evidence (E6 winner-flip rates, T-calibration) IS the warrant; the explicit flip action prevents a quantity from silently wearing :principled-approximation because its docstring was edited, which was R19's G-goal-outcome fault (#11: non-KL labelled CANONICAL KL)"}
+    {:id :b3,
+     :role
+     "badge lifecycle events as typed transitions (:awarded :warranted :retired) with rationale and actor: a quantity starts :analogical (audit), earns :principled-approximation via a warranted flip (D-1a pattern), or is retired (renamed/relocated/deleted) via a D8 disposition event — the active badge is derived from the latest event, and retired quantities (G-survival folded into risk-KL, G-structural-pressure relocated to habit prior) clear their active-status as named-pressure-terms, not silently disappearing",
+     :fits-pattern "sidecar/fact-lifecycle-event-types",
+     :addresses-however
+     "the HOWEVER is needing fast reads and clear current truth — the explainer + r18-badges.edn ARE the current-truth read surface; lifecycle events mean the explainer regen after each flip reads 'this quantity is :principled-approximation as of commit X, evidence Y' rather than 'this quantity is canonical' with no audit trail behind the claim"}
+    {:id :b4,
+     :role
+     "pattern-to-code receipts for each badge promotion: a commit that flips a quantity's badge carries a footer naming the badge transition and its evidence-ref, structurally linking the code change (the dark-build flip commit) to the faithfulness claim (the badge rise) — the receipt names the witness (E6 shadow evidence, T-calibration, quadrature-verification) so a verifier can re-derive whether the promotion was earned, not just asserted",
+     :fits-pattern "pattern-discipline/pattern-to-code-receipts",
+     :addresses-however
+     "the HOWEVER is no enforced structural link between commit and claim — without receipts, a badge rise is 'an agent said so' (the R19 fault); with receipts, the 776b2f0 structural-pressure relocation and fb15d66 W1-KL flip each carry a checkable witness, and B-0a's tick-provenance stamp makes the receipt attributable to a WM version"}
+    {:id :b5,
+     :role
+     "the conclusion-required discipline applied to D8 dispositions: a quantity that cannot canonicalize (G-graph-pragmatic's 1000-mask is a domain restriction not a value; G-survival is homeostatic pressure not an EFE summand) gets a D8 disposition record whose CONCLUSION is its honest endpoint (rename / relocate / delete), not a fabricated IF/HOWEVER tension pretending it can be principled — forcing every quantity toward :principled-approximation would be the definitional refusal this pattern warns against",
+     :fits-pattern "pattern-discipline/conclusion-required-others-recommended",
+     :addresses-however
+     "the HOWEVER is that requiring all quantities to reach principled-approximation refuses honest endpoints — G-graph-pragmatic's honest disposition is a split (domain restriction vs value), not a canonicalization; the D8 disposition IS the conclusion that makes the quantity's faithfulness claim honest, even when that claim is 'this term does not belong in G-total as named'"}],
+   :wires
+   [{:from :b1, :to :b2, :connective :seq}
+    {:from :b1, :to :b3, :connective :seq}
+    {:from :b2, :to :b4, :connective :seq}
+    {:from :b3, :to :b4, :connective :seq}
+    {:from :b3, :to :b5, :connective :copar}],
+   :terminals [{:id :b4, :discharges :want-signature}],
+   :policy-holes
+   [{:unfolded-pattern nil,
+     :free "B-0a tick-provenance stamp mechanism",
+     :why
+     "the cascade is sidecar/pattern-discipline flavored, not AIF-engine flavored; the B-0a stamp (git sha + mode-flag set in each tick record) is the visibility prerequisite the mission names as urgent-before-next-flip, but no shown pattern grounds HOW to stamp wm_scheduled_run.clj's trace record — the append-only-audit pattern addresses the badge ledger, not the tick provenance stamp"}
+    {:unfolded-pattern nil,
+     :free "the dark-build flip pattern itself",
+     :why
+     "the mission's HUNGRY-FOR names the dark-build flip pattern (build dark behind a mode flag, shadow evidence, operator flips) as the operational rhythm that landed D-1a/D-1b/D-1e; the cascade did not surface it — explicit-promotion-to-facts is adjacent but does not ground the mode-flag mechanism or the shadow-evidence discipline"}
+    {:unfolded-pattern "pattern-discipline/conclusion-required-others-recommended",
+     :free "which D8 dispositions are rename vs relocate vs delete",
+     :why
+     "the pattern says a conclusion is required but does not decide, per quantity, whether G-survival is a fold-into-risk (relocate) or a separate-name (rename); the disposition type per quantity is operator-held and not derivable from the audit alone"}
+    {:unfolded-pattern "pattern-discipline/pattern-to-code-receipts",
+     :free "receipt witness shape per badge transition",
+     :why
+     "the pattern names the receipt structurally but the witness shape for a badge promotion (what counts as sufficient evidence that a quantity earned :principled-approximation) is mission-specific — the E6 shadow threshold, the T-calibration gate, the quadrature-verification are each different witness types for different quantities"}]}},
+ :arming
+ {:gate "fold-authoring",
+  :spend
+  {:purpose "ground-control-test-2026-07-06 ft-aif-faithfulness-001 authoring",
+   :at "2026-07-06T08:43:08.623680383Z",
+   :balance-after 6},
+  :operator "joe",
+  :word
+  "Joe 2026-07-06 ~09:45: 5-agent commissioning test — 'we could test just that part of the loop on, say, 5 or so independently commissioned Zai agents. It shouldn't hurt to seed in a variety of well formed plans.'",
+  :at "2026-07-06T08:37:50.536122772Z",
+  :scope :one-fold,
+  :fold-turn/id "ft-aif-faithfulness-001"},
+ :prompt
+ {:sha256
+  "4cea144955e9d8d56ee3f64513f44b3cbe0e17fda91d05a753a69189cbd279ba",
+  :prose-sha256
+  {"sidecar/append-only-semantic-audit"
+   "20b4c6ea725c9636f768742d372d0862eb3a872bb21b42ba14724c96be892f4e",
+   "sidecar/explicit-promotion-to-facts"
+   "64a898137fb7cfdd19f39e6072c00bace8c2aedc6e745962688d95b3daf2c468",
+   "sidecar/fact-lifecycle-event-types"
+   "83232f9ef4c5c45f73feec70a5d7d7cbf2006b0375271ee01cbe8ad4f8a2a5e3",
+   "pattern-discipline/pattern-to-code-receipts"
+   "abc5e83ed95104547bdfccff0b774a3744f9206fb1436fcfb29ab679f7b25cc3",
+   "pattern-discipline/conclusion-required-others-recommended"
+   "778bc06285d440a76a02f9a15b6b2c11d66a5434d16f7961a8ec6ba43d85ac18"},
+  :prose-source
+  "verbatim futon3/library/<id>.flexiarg"},
+ :eval {:delta-g -0.5555555555555556, :g-grain :coverage}}
