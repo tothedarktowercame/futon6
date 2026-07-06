@@ -1,0 +1,182 @@
+{:wiring
+ {:nodes
+  [{:id :b1,
+    :role :application,
+    :satiety :full,
+    :via
+    "constrain the miner's op field to the WM move-class vocabulary (build/dispatch/deploy/find/close/survey/apply-cascade-with-escrowed-dG), defaulting to the common/empty case ('none' for purely conversational turns): the downstream act-gate can only consume a value in its own vocabulary, so a discourse verb (elaborate/contrast) is downstream-dead — the HAVE's ~10 empirical op-classes vs 3 hand-coded is exactly the allowlist tightening this pattern prescribes, and the miner's already-measured discourse-drift (~50% pre-fix) is the HOWEVER engaged, not restated",
+    :rule "fold-turn/box"}
+   {:id :b2,
+    :role :application,
+    :satiety :full,
+    :via
+    "the mined operational vocabulary enters the WM as typed state-transition events against the mission/sorry entities, not as free-form prose: the mine's memes (have->want) and sorries (want<-have) map onto the eight event types (state/spawned for new meme, state/addressed for a closed sorry, link/asserted for the have->want pairing), so the WM's act-gate reads a vocabulary it can act on rather than re-parsing text",
+    :rule "fold-turn/box"}
+   {:id :b3,
+    :role :application,
+    :satiety :full,
+    :via
+    "the backward/sorry half is the OBSTRUCTION the forward mine cannot force through: 143 open sorries (110 real + 33 boilerplate), the trust filter (status=open AND not-boilerplate), and the deliberate hold-out of sorries from the box run — these are the detour-and-assistance move; the forward mine proceeds (177/177 abstaining missions flip), the backward half waits for its charter (M-a-sorry-enterprise) rather than forcing both halves through one embedding",
+    :rule "fold-turn/box"}
+   {:id :b4,
+    :role :application,
+    :satiety :full,
+    :via
+    "the GPU box run is the RELEASE: once commissioned, the joint reasoner grounds endpoints to real ids, characterizes pattern_apps (PSR), composes cascades, and writes new patterns when no candidate fits — movement resumes after the CPU-validated obstruction, and the promotion paths (new_patterns->library, cascades->move-set, meme-moves->substrate-2 PROOF) restore circulation so the mine's output is durably consumed",
+    :rule "fold-turn/box"}],
+  ;; v2 connective read: b1->b2 is genuine feed-forward (the constrained
+  ;; vocabulary feeds the event-typing); b2->b3 is a parallel monitor
+  ;; (the obstruction audit runs alongside the event-typing, non-signalling
+  ;; — the sorry half is held out, not fed); b3->b4 is feed-forward (the
+  ;; obstruction's resolution gates the release); b1->b4 is a parallel
+  ;; constraint (the allowlist discipline applies to the box run's output
+  ;; independently of the linear chain).
+  :hyperedges
+  [{:kind :composes, :from :b1, :to :b2, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b3, :connective :tensor, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b3, :to :b4, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b1, :to :b4, :connective :tensor, :rule "fold-turn/wire"}],
+  :terminals
+  [{:id :b4, :discharges :want-signature}]},
+ :cascade
+ {:psi
+  "WANT: served/abstaining missions get a non-nil ΔG from REAL provenance — a mined operational vocabulary (memes ← human→agent asks, sorries ← agent→human, concepts ← tagging, structure ← scope-tree) wired as the WM's transition model, so the act-gate stops returning :abstain-missing-leg. Falsifiable: a turn-grounded move beats a structure-borrowed prior at the box run's scale.\nHUNGRY-FOR: forward memes (have→want, modus ponens, methods) AND backward sorries (want⊣have, goals) as two halves of one arrow — ΔG needs both the policy and preference halves; honest island-handling for missions with no foothold; promotion paths (overlay→library/move-set/substrate-2) so the mine's output is durably usable, not a frozen snapshot.\nHAVE: the forward mining pipeline BUILT and CPU-validated end-to-end — structure embedding (198 missions, 161-d, 0.79 NN-match), mined-move generator (177/177 abstaining missions flip abstain→non-nil ΔG, median −7.7e-4), meme-mine runner (~10 op-classes vs 3 hand-coded), consume+floor/cert (186 structure-borrowed · 12 island), targeted sampler (82/198 meme-groundable), concept-tag (1307-surface gazetteer, 32/300 turns route to a mission), joint runner stub-validated; the GPU box run (the at-scale instantiation) is pending commissioning; the backward/sorry half and the promotion paths are chartered as next steps, not built.",
+  :psi-sha256
+  "6d5b9eaa87238385bb8542ee1107138150b0c02dfb142d898e353576a7599614",
+  :psi-recipe
+  "no sealed corpus; no blind scoring — the psi is a hand-authored sorry-grain distilled from the M-operational-vocabulary mission doc's actual tension (§1 the WM abstains because G(π) is nil; §3a the forward/backward duality; §4 the CPU-validated HAVE; §5 the pending box run). The WANT/HUNGRY-FOR/HAVE structure follows the fold-turn contract.",
+  :pattern-ids
+  ["data-mining/constrain-extraction-to-the-downstream-vocabulary"
+   "structure/interest-event-vocabulary"
+   "iching/hexagram-39-jian"
+   "iching/hexagram-40-jie"],
+  :size 4,
+  :truncated false,
+  :budget 20,
+  :F-free-energy -0.863,
+  :constructor
+  {:entry "construct_cascade",
+   :epsilon 0.15,
+   :budget 20,
+   :lambda 0.25,
+   :commit "fe8acea"},
+  :pattern-cites
+  [{:order 0,
+    :ident "data-mining/constrain-extraction-to-the-downstream-vocabulary",
+    :ref "futon3/library/data-mining/constrain-extraction-to-the-downstream-vocabulary.flexiarg",
+    :rel 0.534,
+    :mc 0.16,
+    :via "cascade_serve.py on the operational-vocabulary psi, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 1,
+    :ident "structure/interest-event-vocabulary",
+    :ref "futon3/library/structure/interest-event-vocabulary.flexiarg",
+    :rel 0.534,
+    :mc 0.16,
+    :via "cascade_serve.py on the operational-vocabulary psi, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 2,
+    :ident "iching/hexagram-39-jian",
+    :ref "futon3/library/iching/hexagram-39-jian.flexiarg",
+    :rel 0.506,
+    :mc 0.152,
+    :via "cascade_serve.py on the operational-vocabulary psi, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 3,
+    :ident "iching/hexagram-40-jie",
+    :ref "futon3/library/iching/hexagram-40-jie.flexiarg",
+    :rel 0.45,
+    :mc 0.585,
+    :via "cascade_serve.py on the operational-vocabulary psi, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}]},
+ :mission "futon2-d/mission/operational-vocabulary",
+ :fold-turn/id "ft-operational-vocabulary-001",
+ :deposit-contract :v2,
+ :turn
+ {:agent "zai-4",
+  :model "claude-sonnet-4.5",
+  :edge "invoke-1783327264520-576-73738e2e",
+  :at "2026-07-06T09:30:00Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "constrain the miner's op field to the WM move-class vocabulary (build/dispatch/deploy/find/close/survey/apply-cascade-with-escrowed-dG), defaulting to the common/empty case ('none' for purely conversational turns): the downstream act-gate can only consume a value in its own vocabulary, so a discourse verb (elaborate/contrast) is downstream-dead — the HAVE's ~10 empirical op-classes vs 3 hand-coded is exactly the allowlist tightening this pattern prescribes, and the miner's already-measured discourse-drift (~50% pre-fix) is the HOWEVER engaged, not restated",
+     :fits-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary",
+     :addresses-however
+     "the model labels the SURFACE act not the operational target: the allowlist forces 'closest move-class or none', and the rare-label discipline (new_patterns 95%->8% via default-to-reach + frequency anchor + negatives) directly governs the miner's new_pattern over-firing — the mission's P6 (new-pattern proposals = the R17 signal) is precision-bound, so defaulting to the boring case is what makes the signal usable"}
+    {:id :b2,
+     :role
+     "the mined operational vocabulary enters the WM as typed state-transition events against the mission/sorry entities, not as free-form prose: the mine's memes (have->want) and sorries (want<-have) map onto the eight event types (state/spawned for new meme, state/addressed for a closed sorry, link/asserted for the have->want pairing), so the WM's act-gate reads a vocabulary it can act on rather than re-parsing text",
+     :fits-pattern "structure/interest-event-vocabulary",
+     :addresses-however
+     "free-form rationale loses the structure the projection needs: the state/slash-prefix-neutral namespace lets memes, sorries, and mission-doc tensions use the SAME event types — which is what makes the forward/backward duality (the mission's §3a) consumable by one downstream consumer instead of two parallel inventories; the append-only discipline preserves the provenance trail the promotion paths (overlay->library/move-set/substrate-2) need"}
+    {:id :b3,
+     :role
+     "the backward/sorry half is the OBSTRUCTION the forward mine cannot force through: 143 open sorries (110 real + 33 boilerplate), the trust filter (status=open AND not-boilerplate), and the deliberate hold-out of sorries from the box run — these are the detour-and-assistance move; the forward mine proceeds (177/177 abstaining missions flip), the backward half waits for its charter (M-a-sorry-enterprise) rather than forcing both halves through one embedding",
+     :fits-pattern "iching/hexagram-39-jian",
+     :addresses-however
+     "pushing harder wastes resources: co-embedding sorries with memes in the first GPU run was Joe's correction (the joint architecture keeps them separate); the 33 boilerplate sorries are exactly the 'pushing harder fails' case — including them would degrade the signal; the honest island-handling (12 missions with no foothold surfaced as needs-a-foothold) is the obstruction named, not routed around"}
+    {:id :b4,
+     :role
+     "the GPU box run is the RELEASE: once commissioned, the joint reasoner grounds endpoints to real ids, characterizes pattern_apps (PSR), composes cascades, and writes new patterns when no candidate fits — movement resumes after the CPU-validated obstruction, and the promotion paths (new_patterns->library, cascades->move-set, meme-moves->substrate-2 PROOF) restore circulation so the mine's output is durably consumed",
+     :fits-pattern "iching/hexagram-40-jie",
+     :addresses-however
+     "release without direction can scatter energy: the preregistration (P1-P6 with decision rule) is the alignment that prevents scatter; the promotion paths are the 'restore circulation' step, and the explicit pair-back-to-jian (if obstruction returns) is the island-handling discipline — islands are not forced into the release, they are held for a foothold"}],
+   :wires
+   [{:from :b1, :to :b2, :connective :seq}
+    {:from :b2, :to :b3, :connective :tensor}
+    {:from :b3, :to :b4, :connective :seq}
+    {:from :b1, :to :b4, :connective :tensor}],
+   :terminals [{:id :b4, :discharges :want-signature}],
+   :policy-holes
+   [{:unfolded-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary",
+     :free "the exact move-class allowlist membership",
+     :why
+     "the pattern prescribes an allowlist + sentinel, but WHICH move-classes comprise the WM's downstream vocabulary (is apply-cascade-with-escrowed-dG one class or two?) is not derivable from the prose + circumstance; ft-action-vocabulary-005 declares 4 classes but the miner found ~10 empirical ones — the reconciliation is an operator ruling"}
+    {:unfolded-pattern "structure/interest-event-vocabulary",
+     :free "granularity enum for meme/sorry entities",
+     :why
+     "the pattern's :target/granularity enum is essay/section/annotation/institution-object/basin/composite-arrow — the mined memes and sorries are turn/mission-scale entities, and how they map onto (or extend) this enum is not derivable; the mission doc names the entity classes but not their granularity keywords"}
+    {:unfolded-pattern "iching/hexagram-39-jian",
+     :free "the trust-filter threshold for boilerplate detection",
+     :why
+     "the 33 boilerplate sorries ('mission at unclosed phase') are identified by inspection, but the automated trust filter (status=open AND not-boilerplate) needs a classifier or rule — what counts as boilerplate at scale (the box run's ~6.4k turns) is left free; the pattern says 'seek assistance' but not how to operationalize the filter"}
+    {:unfolded-pattern "iching/hexagram-40-jie",
+     :free "promotion-path prioritization and sequencing",
+     :why
+     "the pattern says 'restore circulation' but three promotion paths exist (new_patterns->library, cascades->move-set, meme-moves->substrate-2 PROOF) and which lands first is not derivable — the mission defers all three to post-run; the order is an operator/economics decision the fold cannot make"}]}},
+ :arming
+ {:gate "fold-authoring",
+  :spend-at "2026-07-06T08:44:00.433298832Z",
+  :purpose "ground-control test 2026-07-06: fold-deposit for M-operational-vocabulary",
+  :balance-after 4,
+  :operator "claude-16",
+  :word "claude-16 has awarded 5 mana to fold-authoring for this test (2026-07-06T08:37:50Z, Joe 2026-07-06 ~09:45 commissioning test); 1 mana consumed for this deposit per §0",
+  :at "2026-07-06T08:44:00.433298832Z",
+  :scope :one-fold,
+  :fold-turn/id "ft-operational-vocabulary-001"},
+ :prompt
+ {:sha256
+  "417331cdd971a24469b301bb522c271c49622147b0c74366b39d9f624f91fbd8",
+  :prose-sha256
+  {"data-mining/constrain-extraction-to-the-downstream-vocabulary"
+   "776e9fff9a2328b6ce8017d15226f385267f3fd7f002fd3d697e0b1ccd1a1d52",
+   "structure/interest-event-vocabulary"
+   "35ae9a5e02976f23e7629997c3d564df5d9e6b2eeacfe1e17c1d23679633b20e",
+   "iching/hexagram-39-jian"
+   "ea434ed455af40dd5106457e72248b1e596322cd0e0119bf4e0be0156c78fffd",
+   "iching/hexagram-40-jie"
+   "cecdaeb0ae4b16b6bec2d57da439c023da66f35902b083f7a9b64bfca96f4bbd"},
+  :prose-source
+  "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\") — the prose-fn the pin reconstruction injects"},
+ :hole
+ {:confidence :authored,
+  :have
+  "the forward mining pipeline BUILT and CPU-validated end-to-end — structure embedding (198 missions, 161-d, 0.79 NN-match), mined-move generator (177/177 abstaining missions flip abstain→non-nil ΔG, median −7.7e-4), meme-mine runner (~10 op-classes vs 3 hand-coded), consume+floor/cert (186 structure-borrowed · 12 island), targeted sampler (82/198 meme-groundable), concept-tag (1307-surface gazetteer, 32/300 turns route to a mission), joint runner stub-validated; the GPU box run (the at-scale instantiation) is pending commissioning; the backward/sorry half and the promotion paths are chartered as next steps, not built.",
+  :want
+  "served/abstaining missions get a non-nil ΔG from REAL provenance — a mined operational vocabulary (memes ← human→agent asks, sorries ← agent→human, concepts ← tagging, structure ← scope-tree) wired as the WM's transition model, so the act-gate stops returning :abstain-missing-leg. Falsifiable: a turn-grounded move beats a structure-borrowed prior at the box run's scale.",
+  :via
+  "ground-control test 2026-07-06 psi recipe (hand-authored sorry-grain from M-operational-vocabulary mission doc tension, WANT/HUNGRY-FOR/HAVE)",
+  :rule "fold-turn/hole-from-sorry-psi"},
+ :eval {:delta-g -0.5, :g-grain :coverage}}
