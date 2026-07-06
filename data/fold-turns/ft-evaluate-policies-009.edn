@@ -1,0 +1,344 @@
+{:wiring
+ {:nodes
+  [{:id :b1,
+    :role :application,
+    :satiety :full,
+    :via
+    "the scorecard: expose canonical G = risk + ambiguity separately from the seven analogical terms, so EFE names only the part that IS one — the R18 audit's minimal repair made structural; each term keeps or loses the EFE label by what it computes, not by aspiration",
+    :rule "fold-turn/box"}
+   {:id :b2,
+    :role :application,
+    :satiety :full,
+    :via
+    "term-to-channel traceability: every term's contribution is tracked per-candidate per-tick in the flight log, so the empirical characterisation (which terms ever flip a decision, is selection effectively 2-term or 3-term) is computed from REAL traces, not argument — the Q1 census over the burn-in corpus",
+    :rule "fold-turn/box"}
+   {:id :b3,
+    :role :application,
+    :satiety :full,
+    :via
+    "the mask question: G-graph-pragmatic's 1000·[not-applicable] is a feasibility HARD constraint smuggled into a value term — split it so infeasibility is a mask applied BEFORE scoring, not a cliff penalty inside the sum; this is the single most dishonest mechanism in the current blend, and its repair is architectural",
+    :rule "fold-turn/box"}
+   {:id :b4,
+    :role :application,
+    :satiety :full,
+    :via
+    "experimental comparison of EFE variants: render real cascades scored under multiple definitions side by side (current 8-term blend; canonical core risk+ambiguity; per-term contributions), so the gap between definitions is VISIBLE per cascade — the exhibit instrument that makes the honesty question inspectable rather than abstract",
+    :rule "fold-turn/box"}
+   {:id :b5,
+    :role :application,
+    :satiety :full,
+    :via
+    "predictive entropy as ambiguity: G-ambiguity already earned principled-approximation (sum of per-channel predicted variance as a monotone Gaussian-entropy proxy) — the repair is ½ln(2πe σ²) under Q(s‖π), the entropy formula that makes the term derived-from-FEP rather than analogical; this is the one term where the canonical standard is provably reachable",
+    :rule "fold-turn/box"}
+   {:id :b6,
+    :role :application,
+    :satiety :full,
+    :via
+    "the units question made explicit: declare the conditioning — incommensurate hand-set weights absorb the units problem invisibly; normalisation per term, or everything as approximate bits/nats, or weights learned rather than hand-set (R12's Beta-credit machinery is adjacent) — each puts the terms in common units, and the choice conditions every other repair",
+    :rule "fold-turn/box"}
+   {:id :b7,
+    :role :application,
+    :satiety :full,
+    :via
+    "the paper's sentence decided by code, not aspiration: either the apparatus earns EFE-scored (after the core-overlay split + ambiguity repair land) or the text says multi-objective score with an EFE core — the we-do discipline applied to the central claim; the label follows the code, verified by what selection does",
+    :rule "fold-turn/box"}
+   {:id :b8,
+    :role :application,
+    :satiety :full,
+    :via
+    "the risk term's distributional repair: G-risk computes a weighted L1 hinge-distance of a point-estimate, not a KL divergence against a preference distribution — the repair shares machinery with the belly's W1 (predictive-KL for G-goal-outcome), making this a real build that connects two missions rather than an isolated fix",
+    :rule "fold-turn/box"}],
+  :hyperedges
+  [{:kind :composes, :from :b1, :to :b2, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b1, :to :b3, :connective :tensor, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b1, :to :b5, :connective :tensor, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b4, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b3, :to :b4, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b6, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b5, :to :b7, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b6, :to :b7, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b6, :to :b8, :connective :seq, :rule "fold-turn/wire"}],
+  :terminals
+  [{:id :b4, :discharges :want-signature}
+   {:id :b7, :discharges :want-signature}]},
+ :pins [:prompt-sha :arming :delta-g-recompute],
+ :cascade
+ {:psi
+  "WANT: the WM's G-total score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \"EFE\" names only the part that is one, and the blend's self-description stops being the least honest layer of a system whose other layers earned their labels. Per-term dispositions (repair / merge / rename / delete) decided empirically: which terms ever flip a decision, and is selection effectively 2-term or 3-term at current weights. The paper's central sentence — \"EFE-scored action selection\" — either earned back or honestly renamed \"multi-objective score with an EFE core\". Falsifiable: the empirical characterisation (per-term decision-influence over the burn-in corpus) decides each term's fate, not argument.\nHUNGRY-FOR: label-honesty (the score's self-description must match what it computes, the we-do discipline — the label follows the code, not the aspiration); units-commensurability (incommensurate hand-set weights absorb the damage invisibly — the 1000·[not-applicable] cliff is a mask smuggled into a value term, not a slope); the R13 lesson at the evaluation layer (the score should be of policies-as-cascades, not next actions — does each term even lift from action-grain to cascade-grain?).\nHAVE: the loop works — it closed live 2026-07-02, γ is calibrating (its calibration pair is coverage-ΔG vs coverage-ΔG, so γ is safe and out of scope); the R18 audit produced the eight verdicts (one principled approximation: G-ambiguity; seven analogicals; a total that is not EFE); G-ambiguity already earned principled-approximation — proof the canonical standard is reachable from this codebase; the flight log carries per-term, per-candidate, per-tick values so every claim about what the score is can be checked against what selection does; the futon6 field-embed diagram already declares its sense honestly (g(s), the integrand, not G(π)).\n",
+  :psi-sha256
+  "345bb0824b8e04b6288077b2146ff0fce24d9badf91bfdfb18c32a775eb33165",
+  :pattern-ids
+  ["aif/expected-free-energy-scorecard"
+   "aif/term-to-channel-traceability"
+   "aif/candidate-pattern-action-space"
+   "aif/experimental-comparison-of-EFE-variants"
+   "aif/predictive-entropy-as-ambiguity"
+   "aif/belief-aware-risk-term"
+   "structure/interest-event-vocabulary"
+   "system-coherence/facet-before-aggregating"
+   "aif/no-self-certification"
+   "aif/declare-the-conditioning"
+   "aif/valuation-reads-the-paperwork"
+   "aif/placeholder-is-load-bearing"],
+  :size 12,
+  :truncated false,
+  :budget 20,
+  :constructor
+  {:entry "construct_cascade",
+   :epsilon 0.15,
+   :budget 20,
+   :lambda 0.25,
+   :commit "fe8aceab21c48783d0721c4ccb19e3806bb12f45"},
+  :pattern-cites
+  [{:order 0,
+    :ident "aif/expected-free-energy-scorecard",
+    :ref "futon3/library/aif/expected-free-energy-scorecard.flexiarg",
+    :rel 0.521,
+    :mc 0.156,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 1,
+    :ident "aif/term-to-channel-traceability",
+    :ref "futon3/library/aif/term-to-channel-traceability.flexiarg",
+    :rel 0.472,
+    :mc 0.614,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 2,
+    :ident "aif/candidate-pattern-action-space",
+    :ref "futon3/library/aif/candidate-pattern-action-space.flexiarg",
+    :rel 0.389,
+    :mc 0.894,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 3,
+    :ident "aif/experimental-comparison-of-EFE-variants",
+    :ref "futon3/library/aif/experimental-comparison-of-EFE-variants.flexiarg",
+    :rel 0.505,
+    :mc 0.555,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 4,
+    :ident "aif/predictive-entropy-as-ambiguity",
+    :ref "futon3/library/aif/predictive-entropy-as-ambiguity.flexiarg",
+    :rel 0.444,
+    :mc 0.666,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 5,
+    :ident "aif/belief-aware-risk-term",
+    :ref "futon3/library/aif/belief-aware-risk-term.flexiarg",
+    :rel 0.351,
+    :mc 0.526,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 6,
+    :ident "structure/interest-event-vocabulary",
+    :ref "futon3/library/structure/interest-event-vocabulary.flexiarg",
+    :rel 0.343,
+    :mc 0.308,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 7,
+    :ident "system-coherence/facet-before-aggregating",
+    :ref "futon3/library/system-coherence/facet-before-aggregating.flexiarg",
+    :rel 0.332,
+    :mc 0.298,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 8,
+    :ident "aif/no-self-certification",
+    :ref "futon3/library/aif/no-self-certification.flexiarg",
+    :rel 0.36,
+    :mc 0.252,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 9,
+    :ident "aif/declare-the-conditioning",
+    :ref "futon3/library/aif/declare-the-conditioning.flexiarg",
+    :rel 0.467,
+    :mc 0.327,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 10,
+    :ident "aif/valuation-reads-the-paperwork",
+    :ref "futon3/library/aif/valuation-reads-the-paperwork.flexiarg",
+    :rel 0.343,
+    :mc 0.583,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 11,
+    :ident "aif/placeholder-is-load-bearing",
+    :ref "futon3/library/aif/placeholder-is-load-bearing.flexiarg",
+    :rel 0.407,
+    :mc 0.367,
+    :via "deposit-009 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}],
+  :F-free-energy 3.999},
+ :mission "futon2-d/mission/evaluate-policies",
+ :fold-turn/id "ft-evaluate-policies-009",
+ :deposit-contract :v2,
+ :turn
+ {:agent "zai-5",
+  :model "zai",
+  :edge "invoke-1783327295882-577-07917bbb",
+  :at "2026-07-06T08:44:09Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "the scorecard: expose canonical G = risk + ambiguity separately from the seven analogical terms, so EFE names only the part that IS one — the R18 audit's minimal repair made structural; each term keeps or loses the EFE label by what it computes, not by aspiration",
+     :fits-pattern "aif/expected-free-energy-scorecard",
+     :addresses-however
+     "the scorecard pattern names the decomposition but not the DISPOSITION of each analogical term (repair/merge/rename/delete): which terms ever flip a decision at current weights is an empirical question the flight-log census must answer before any term is retired — the scorecard is the frame, the term-liveness census (Q1) is its execution",
+     :produces [:core-overlay-split]}
+    {:id :b2,
+     :role
+     "term-to-channel traceability: every term's contribution is tracked per-candidate per-tick in the flight log, so the empirical characterisation (which terms ever flip a decision, is selection effectively 2-term or 3-term) is computed from REAL traces, not argument — the Q1 census over the burn-in corpus",
+     :fits-pattern "aif/term-to-channel-traceability",
+     :addresses-however
+     "traceability gives the raw signal but not the decision-influence metric: counting how often a term's removal would flip the argmax requires a counterfactual re-rank (re-score each tick's candidates without that term and compare) — the trace data EXISTS, the counterfactual re-rank is the analysis step the trace enables but does not perform",
+     :consumes [:core-overlay-split],
+     :produces [:term-liveness-census]}
+    {:id :b3,
+     :role
+     "the mask question: G-graph-pragmatic's 1000·[not-applicable] is a feasibility HARD constraint smuggled into a value term — split it so infeasibility is a mask applied BEFORE scoring, not a cliff penalty inside the sum; this is the single most dishonest mechanism in the current blend, and its repair is architectural",
+     :fits-pattern "aif/placeholder-is-load-bearing",
+     :addresses-however
+     "the pattern says a placeholder marks real work to do, but the 1000·penalty is worse than a placeholder — it actively distorts the gradient field (the units problem as conditioning problem from HEAD tension 8): removing the cliff is necessary but what replaces it (a feasibility mask vs a graded penalty) is a design choice the pattern does not decide",
+     :consumes [:core-overlay-split],
+     :produces [:feasibility-mask]}
+    {:id :b4,
+     :role
+     "experimental comparison of EFE variants: render real cascades scored under multiple definitions side by side (current 8-term blend; canonical core risk+ambiguity; per-term contributions), so the gap between definitions is VISIBLE per cascade — the exhibit instrument that makes the honesty question inspectable rather than abstract",
+     :fits-pattern "aif/experimental-comparison-of-EFE-variants",
+     :addresses-however
+     "the comparison pattern asks for variants measured against each other but does not specify the cascade-grain: the R13 lesson says the thing being scored is a policy-as-cascade, not a next action — does each of the eight terms even lift from action-grain to cascade-grain, or only some? The exhibit must test the lift, not assume it",
+     :consumes [:term-liveness-census :feasibility-mask],
+     :produces [:efe-variant-exhibit]}
+    {:id :b5,
+     :role
+     "predictive entropy as ambiguity: G-ambiguity already earned principled-approximation (sum of per-channel predicted variance as a monotone Gaussian-entropy proxy) — the repair is ½ln(2πe σ²) under Q(s‖π), the entropy formula that makes the term derived-from-FEP rather than analogical; this is the one term where the canonical standard is provably reachable",
+     :fits-pattern "aif/predictive-entropy-as-ambiguity",
+     :addresses-however
+     "the entropy formula is a local repair on ONE term — but changing G-ambiguity's units in isolation changes the blend's effective selection (the weights were tuned for the proxy, not the entropy), so the repair must land behind the reduction-safety discipline (behaviour-identical defaults, sim-first, flight-log before/after), not as a standalone swap",
+     :consumes [:core-overlay-split],
+     :produces [:ambiguity-entropy-repair]}
+    {:id :b6,
+     :role
+     "the units question made explicit: declare the conditioning — incommensurate hand-set weights absorb the units problem invisibly; normalisation per term, or everything as approximate bits/nats, or weights learned rather than hand-set (R12's Beta-credit machinery is adjacent) — each puts the terms in common units, and the choice conditions every other repair",
+     :fits-pattern "aif/declare-the-conditioning",
+     :addresses-however
+     "the pattern says to make the conditioning explicit, but the choice between normalisation schemes IS the conditioning — and it cannot be made until the term-liveness census (b2) shows which terms survive: declaring units for terms that will be deleted is premature work, so this box is gated on the census, not independent",
+     :consumes [:term-liveness-census],
+     :produces [:units-declaration]}
+    {:id :b7,
+     :role
+     "the paper's sentence decided by code, not aspiration: either the apparatus earns EFE-scored (after the core-overlay split + ambiguity repair land) or the text says multi-objective score with an EFE core — the we-do discipline applied to the central claim; the label follows the code, verified by what selection does",
+     :fits-pattern "aif/no-self-certification",
+     :addresses-however
+     "the no-self-certification pattern forbids the author grading their own work, but here the SYSTEM is grading its own label: the sentence can only change when the code changes (the core-overlay split is live and behaviour-verified), not by argument — and an external check (the flight-log census showing the core-only selection behaving acceptably) is what earns the rename, not a self-declaration",
+     :consumes [:ambiguity-entropy-repair :units-declaration],
+     :produces [:paper-sentence-honesty]}
+    {:id :b8,
+     :role
+     "the risk term's distributional repair: G-risk computes a weighted L1 hinge-distance of a point-estimate, not a KL divergence against a preference distribution — the repair shares machinery with the belly's W1 (predictive-KL for G-goal-outcome), making this a real build that connects two missions rather than an isolated fix",
+     :fits-pattern "aif/belief-aware-risk-term",
+     :addresses-however
+     "the belief-aware risk pattern requires predicting an outcome distribution Q(o‖π), which the WM does not yet produce — the point-estimate is what the forward-model currently yields, so the repair is gated on the forward-model producing distributions (the W1 join), making it the deepest repair and correctly the last to land",
+     :consumes [:units-declaration],
+     :produces [:distributional-risk-repair]}],
+   :wires
+   [{:from :b1, :to :b2, :connective :seq}
+    {:from :b1, :to :b3, :connective :tensor}
+    {:from :b1, :to :b5, :connective :tensor}
+    {:from :b2, :to :b4, :connective :seq}
+    {:from :b3, :to :b4, :connective :seq}
+    {:from :b2, :to :b6, :connective :seq}
+    {:from :b5, :to :b7, :connective :seq}
+    {:from :b6, :to :b7, :connective :seq}
+    {:from :b6, :to :b8, :connective :seq}],
+   :terminals
+   [{:id :b4, :discharges :want-signature}
+    {:id :b7, :discharges :want-signature}],
+   :policy-holes
+   [{:unfolded-pattern nil,
+     :free "the term retirement threshold",
+     :why
+     "the census shows how often each term flips a decision, but what COUNTS as 'never matters' (0 flips? <1% of ticks?) before a term is deleted rather than repaired is an operator judgment the flight log cannot make — the deletion-vs-repair line is policy"}
+    {:unfolded-pattern nil,
+     :free "the cascade-grain lift test population",
+     :why
+     "the exhibit (b4) should test whether each term lifts from action-grain to cascade-grain, but which cascades constitute the test population (the burn-in corpus? synthetic cascades? only the missions the WM actually flies?) is not derivable from the prose"}
+    {:unfolded-pattern "aif/experimental-comparison-of-EFE-variants",
+     :free "the exhibit's selection-consequence display",
+     :why
+     "the exhibit shows per-definition scores side by side, but how to render 'what selection of one of them means' (the selection consequence) — as a highlighted chosen cascade? as a diff between definitions' choices? — is a visual-design choice the pattern does not specify"}
+    {:unfolded-pattern "aif/declare-the-conditioning",
+     :free "the normalisation scheme",
+     :why
+     "declare-the-conditioning makes the units problem visible but the CHOICE between per-term normalisation, bits/nats, and learned weights (R12 Beta-credit) is the conditioning itself — it cannot be resolved without the census results and is operator-gated on the JAX gradient-worthiness question (HEAD tension 8)"}
+    {:unfolded-pattern nil,
+     :free "the forward-model distribution output (the W1 join)",
+     :why
+     "the distributional risk repair (b8) requires Q(o‖π) which the forward-model does not yet produce — this is the belly's W1 (E-C-vector-live §11), explicitly out of scope here per §4 boundaries; the dependency is named, not resolved"}]}},
+ :arming
+ {:operator "joe",
+  :word
+  "Joe 2026-07-06 ~09:45: 5-agent commissioning test — 'we could test just that part of the loop on, say, 5 or so independently commissioned Zai agents. It shouldn't hurt to seed in a variety of well formed plans.'",
+  :at "2026-07-06T08:44:09.327175204Z",
+  :scope :mana-gated,
+  :via
+  "mana gate fold-authoring consumed 2026-07-06T08:44:09.327175204Z (balance 4 after spend), award of 5 by operator at 2026-07-06T08:37:50Z for the 5-agent commissioning test",
+  :fold-turn/id "ft-evaluate-policies-009"},
+ :prompt
+ {:sha256
+  "2942248e10ac177b6451895af8d9b403953597dcaa373095c32baaa778502ef5",
+  :prose-sha256
+  {"aif/expected-free-energy-scorecard"
+   "b4f582e89eae9b597cb6d91c6309cb1ad5b1ece394604a1c595f7501a2904c50",
+   "aif/term-to-channel-traceability"
+   "db8095869c36cbe3f3792c10b4a7695ad427f6bac03ea2b394c412f92273c34a",
+   "aif/candidate-pattern-action-space"
+   "0ebcb8b2c595e327ec898c7f7a8aba30fc7ab81da938b797f7eaa680a0d3f87d",
+   "aif/experimental-comparison-of-EFE-variants"
+   "bc7abd99179a443a0dc809d605816a506fb2223d964c5c52f4e1b8e44cab612b",
+   "aif/predictive-entropy-as-ambiguity"
+   "750e9ed93944d2dda48a54c9d82d7f84c497385b5b20c1d2c8eca554e9812d11",
+   "aif/belief-aware-risk-term"
+   "6033f62951601c98788c476a6474a9bbaf95b0ccf77d35d9156ffa687bd43388",
+   "structure/interest-event-vocabulary"
+   "35ae9a5e02976f23e7629997c3d564df5d9e6b2eeacfe1e17c1d23679633b20e",
+   "system-coherence/facet-before-aggregating"
+   "d100e788cb4c3435578301332ce89cae54804b45ff87b28871c3e866f7676489",
+   "aif/no-self-certification"
+   "93d00b09a76fb487f96a11e76abf0d7805281ef27e10d965365ebc0632561d8f",
+   "aif/declare-the-conditioning"
+   "954b803dd9ebf20a91e0a37704aba630886f0e4e58a7485e2b5ae84a79502131",
+   "aif/valuation-reads-the-paperwork"
+   "017585fe18b8e2c54576fd4626bafa6f5b9b67be99da8ec212af15d20feffbdb",
+   "aif/placeholder-is-load-bearing"
+   "1b71274e0caa90aa324d7ef07445a9ea3c3500d882b4944f71ec3f9cb932763a"},
+  :prose-source
+  "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\") — matches enact.clj L3 prose-fn"},
+ :arrow-candidate
+ {:have
+  "the loop works — it closed live 2026-07-02, γ is calibrating (its calibration pair is coverage-ΔG vs coverage-ΔG, so γ is safe and out of scope); the R18 audit produced the eight verdicts (one principled approximation: G-ambiguity; seven analogicals; a total that is not EFE); G-ambiguity already earned principled-approximation — proof the canonical standard is reachable from this codebase; the flight log carries per-term, per-candidate, per-tick values so every claim about what the score is can be checked against what selection does; the futon6 field-embed diagram already declares its sense honestly (g(s), the integrand, not G(π)).\n",
+  :want
+  "the WM's G-total score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \"EFE\" names only the part that is one, and the blend's self-description stops being the least honest layer of a system whose other layers earned their labels. Per-term dispositions (repair / merge / rename / delete) decided empirically: which terms ever flip a decision, and is selection effectively 2-term or 3-term at current weights. The paper's central sentence — \"EFE-scored action selection\" — either earned back or honestly renamed \"multi-objective score with an EFE core\".\n",
+  :format :sorry,
+  :escrow "do-not-write-meme.db"},
+ :hole
+ {:confidence :authored,
+  :have
+  "the loop works — it closed live 2026-07-02, γ is calibrating (its calibration pair is coverage-ΔG vs coverage-ΔG, so γ is safe and out of scope); the R18 audit produced the eight verdicts (one principled approximation: G-ambiguity; seven analogicals; a total that is not EFE); G-ambiguity already earned principled-approximation — proof the canonical standard is reachable from this codebase; the flight log carries per-term, per-candidate, per-tick values so every claim about what the score is can be checked against what selection does; the futon6 field-embed diagram already declares its sense honestly (g(s), the integrand, not G(π)).\n",
+  :want
+  "the WM's G-total score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \"EFE\" names only the part that is one, and the blend's self-description stops being the least honest layer of a system whose other layers earned their labels. Per-term dispositions (repair / merge / rename / delete) decided empirically: which terms ever flip a decision, and is selection effectively 2-term or 3-term at current weights. The paper's central sentence — \"EFE-scored action selection\" — either earned back or honestly renamed \"multi-objective score with an EFE core\".\n",
+  :via
+  "M-evaluate-policies §1 the tension + §0 HEAD (EFE honesty, the Carver question), psi authored from the mission doc",
+  :rule "fold-turn/hole-from-sorry-psi"},
+ :eval {:delta-g -0.6153846153846154, :g-grain :coverage},
+ :psi-recipe
+ {:source "authored from mission doc M-evaluate-policies.md §1 (the tension) + §0 HEAD",
+  :no-blind-scoring
+  "no sealed corpus exists for this psi; blind-scoring was not performed — the sorry-grain is honest about the HAVE (the loop works, the audit verdicts exist, the trace data accumulates) and the WANT (the label must match the code)"}}
