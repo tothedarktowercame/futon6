@@ -11,6 +11,12 @@
     {"id": "proof-search/extend-library-not-proof", "at": "2026-07-05", "commit": "futon3 9f0cef5",
      "why": "finding-3 library gap remedy (this batch)"},
     {"id": "proof-search/typed-hole-as-frontier", "at": "2026-07-05", "commit": "futon3 9f0cef5",
-     "why": "finding-3 library gap remedy (this batch)"}
+     "why": "finding-3 library gap remedy (this batch)"},
+    {"id": "measurement/error-needs-structure-to-teach", "at": "2026-07-06", "commit": "futon3 de11748",
+     "why": "first-flights library gap (E-live-loop-3): first-flights sorry-psi returned size 1 F -0.446 — no measurement vocabulary in the library"},
+    {"id": "measurement/ghost-as-typed-sorry", "at": "2026-07-06", "commit": "futon3 de11748",
+     "why": "first-flights library gap remedy (this batch)"},
+    {"id": "measurement/warrant-travels-with-the-number", "at": "2026-07-06", "commit": "futon3 de11748",
+     "why": "first-flights library gap remedy (this batch)"}
   ]
 }

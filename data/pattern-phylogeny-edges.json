@@ -17685,6 +17685,18 @@
     [
       "world-is-hypergraph",
       "umwelt-not-architecture"
+    ],
+    [
+      "author-the-missing-pattern",
+      "error-needs-structure-to-teach"
+    ],
+    [
+      "author-the-missing-pattern",
+      "ghost-as-typed-sorry"
+    ],
+    [
+      "author-the-missing-pattern",
+      "warrant-travels-with-the-number"
     ]
   ],
   "patterns": [
@@ -18235,6 +18247,9 @@
     "whose-question-is-this",
     "work-examples-first",
     "working-where-others-can-see",
-    "world-is-hypergraph"
+    "world-is-hypergraph",
+    "error-needs-structure-to-teach",
+    "ghost-as-typed-sorry",
+    "warrant-travels-with-the-number"
   ]
 }
