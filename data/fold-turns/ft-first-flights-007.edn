@@ -1,0 +1,114 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via "measurement as discharge judgment: the realised value carries its witness (the commit sha, the scan pair), its predicted-constant (the first-class unscaled prediction), and the error interpretation class (clean/null/fallback/transient/confound) — so a 0.0000 error reading is unambiguously a true null or a censored fabrication, distinguished by the interpretation tag, not guessed from prose"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via "ghosts as typed sorries: begin-state, counterfactual, and act-witness slots are typed absences (:proposal-mode, :not-yet, :excluded-confound) rather than nulls — the type carries the reason, so the record explains its own gaps"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via "warrant recorded with each velocity: the PSR/warrant reasoning that justified the chosen action (cap check, pilot-closeable-hole classification, guardrail class) is written into the record at declaration time, not discarded from pilot context — the cycle-5 escalation dispute becomes checkable against the recorded warrant"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from :b1 :to :b2 :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from :b2 :to :b3 :connective :copar :rule "fold-turn/wire"}]
+  :terminals
+  [{:id :b3 :discharges :want-signature}]
+  :holes
+  [{:id :h1
+    :tag :policy
+    :at :fold-level
+    :want "the term calculus for flight-record derivations: BHK arrows keyed by endpoints, sorry-as-typed-hole, mission-mode binder taxonomy — the composition is named in R0-R10 but not designed (the mission itself says 'the unknown is the specification')"}
+   {:id :h2
+    :tag :policy
+    :at :fold-level
+    :want "the return-channel: even with derivations, nothing trains on the records today (FutonZero R2 deferred); the records are consumable-by-design but the consumer does not yet exist"}
+   {:id :h3
+    :tag :policy
+    :at :fold-level
+    :want "substrate debt vs rendering debt split: -4.9225 is genuinely a bare scalar (substrate, M-substrate-metric's scope), while '215 ranked actions' is a count standing for typed data that exists (rendering, this mission's scope) — the boundary must be enforced in the shape spec"}
+   {:id :h4
+    :tag :pattern-gap
+    :at :fold-level
+    :want "the cascade returned ONE pattern (proof-through-pilots, rel=0.511) for this psi — the library has no pattern for flight-record anatomy, typed discharge judgments, or sorry-as-ghost; the flight-data-calculus domain is absent from the pattern library"}]}
+ :cascade
+ {:psi "WANT: flight records that carry their derivations — measurement as discharge judgment (predicted, realised, witness, error-with-interpretation), ghosts as typed sorries distinguishing proposal-mode/not-yet/excluded-confound, and the warrant for each velocity recorded so the cycle-5 escalation dispute is checkable. HAVE: flight records that are lists of numbers and nulls — real flights recorded, but judgments without derivations (prediction -4.9225 / realised -4.9225 / error 0.0000 taught the model nothing because the error has no structure to propagate); the loop anatomy exists (field-read, velocity, gated act, measurement, self-record) but derivations are discarded after the judgment is recorded."
+  :psi-sha256 "365e91a11aa38d88720a884d148caa5a93fa0a45df7937536560b949f7d52328"
+  :pattern-ids ["vsatlas/proof-through-pilots"]
+  :constructor
+  {:entry "cascade_serve.py"
+   :epsilon 0.15
+   :budget 20
+   :lambda 0.25}
+  :cascade-numbers
+  {:size 1
+   :wholeness 0.511
+   :H-coherence 1.0
+   :T-intensity 0.511
+   :accuracy 0.153
+   :complexity 2.398
+   :F-free-energy -0.446
+   :truncated false}
+  :pattern-cites
+  [{:order 0
+    :ident "vsatlas/proof-through-pilots"
+    :ref "futon3/library/vsatlas/proof-through-pilots.flexiarg"
+    :via "cascade_serve.py over the mission-doc-derived psi"
+    :rule "fold-turn/pattern-cite"
+    :rel 0.511
+    :mc 0.153}]}
+ :mission "futon3c-d/mission/first-flights"
+ :fold-turn/id "ft-first-flights-007"
+ :deposit-contract :v2
+ :turn
+ {:agent "zai-3"
+  :model "zai-3 (unattended overnight, mana-gated)"
+  :edge "invoke-1783309502013-565-781965d6"
+  :at "2026-07-06T03:50:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "measurement as discharge judgment: the realised value carries its witness (the commit sha, the scan pair), its predicted-constant (the first-class unscaled prediction), and the error interpretation class (clean/null/fallback/transient/confound) — so a 0.0000 error reading is unambiguously a true null or a censored fabrication, distinguished by the interpretation tag, not guessed from prose"
+     :fits-pattern "vsatlas/proof-through-pilots"
+     :addresses-however "pilots yield evidence but the evidence must carry its derivation to be persuasive: a flight record that says 'realised -4.9225 | error 0.0000' without the interpretation class is evidence that cannot be interrogated — the pattern's 'template for the interpretive report' maps to the flight-record shape spec that makes each measurement a discharge judgment"}
+    {:id :b2
+     :role "ghosts as typed sorries: begin-state, counterfactual, and act-witness slots are typed absences (:proposal-mode, :not-yet, :excluded-confound) rather than nulls — the type carries the reason, so the record explains its own gaps"
+     :fits-pattern "vsatlas/proof-through-pilots"
+     :addresses-however "the pattern says 'define what counts as proof' — typed absences are part of that definition: a ghost marked :excluded-confound is proof that a measurement was rejected for a reason, not proof of nothing"}
+    {:id :b3
+     :role "warrant recorded with each velocity: the PSR/warrant reasoning that justified the chosen action (cap check, pilot-closeable-hole classification, guardrail class) is written into the record at declaration time, not discarded from pilot context — the cycle-5 escalation dispute becomes checkable against the recorded warrant"
+     :fits-pattern "vsatlas/proof-through-pilots"
+     :addresses-however "the pattern asks for 'persuasive material for future commissions' — a warrant-less velocity is unpersuasive because it cannot be audited; recording the warrant turns each flight from a number into checkable evidence"}]}}
+:prompt
+{:sha256 "a7de215eb3823510bb14bf14225a22bce7bdb8b9c6d218ce83dabc480c52a42b"
+ :prose-sha256
+ {"vsatlas/proof-through-pilots"
+  "00e6c2a123fd6e2bf18a476d20a1eec03a3d78afa10e257e65b76ea45cbff804"}
+ :prose-source
+ "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\") — matches enact.clj L3 prose-fn"}
+ :arming
+ {:operator "Joe"
+  :word "overnight runs approved, zai agents only — 'if I left my laptop running overnight we would actually have something approaching a real dataset of War Machine flights to inspect in the morning'"
+  :at "2026-07-05T22:18:47Z"
+  :scope "fold-authoring"
+  :mana-gate {:gate-id "fold-authoring"
+              :spend-purpose "overnight deposit run"
+              :spend-at "2026-07-06T03:45:33.410364924Z"
+              :balance-after 3}}
+ :eval
+ {:delta-g -1.0
+  :delta-g-derivation "recomputed by fe/coverage-delta-g from the wiring (3 boxes, 4 holes); the conservative -0.6 hand-derivation was overridden to match the loader's pin-3 recomputation — honesty: the thin cascade (1 pattern, F=-0.446) and the pattern-gap hole h4 reduce confidence, but the coverage formula is what the loader enforces"
+  :coverage "3/7"
+  :cascade-f -0.446}
+ :psi-recipe
+ {:source "mission doc M-first-flights.md HEAD + §3.2 requirements register"
+  :recipe "L2: no held-work items for first-flights; psi from the mission doc's actual tension (flight records as numbers-without-derivations)"
+  :blind-scoring :none
+  :blind-scoring-note "no A-next seal exists for this mission; no blind scoring performed — recorded honestly per the 003 no-seal precedent"
+  :scorer-identity "zai-3 (same agent as fold author — no separation of powers for unattended overnight runs; the mana gate IS the consent mechanism)"}}

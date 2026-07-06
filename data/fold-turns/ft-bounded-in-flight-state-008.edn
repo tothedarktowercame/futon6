@@ -1,0 +1,150 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "the invariant: at every observation point the durable state of the file-system substrate must be reachable from a sequence of completed transactions with bounded in-flight scope — uncommitted state is legitimately invisible to other observers ONLY because it is temporary, and temporariness requires a bound"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via "graduated pressure as the enforcement mechanism: P = max(count/N, age_max/D, total_bytes/B) with N=20 paths, D=7 days, B=10MB — silent when P<1, advisory at 1-2, high at 2-4, stop-the-line above 4; the mana-snapshot check-fn already computes this; the invariant's contribution is treating the threshold as a STRUCTURAL PROPERTY not a preference"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via "transaction boundary as semantic act: what counts as a transaction is a question only the operator can answer — the 504-file deletion, the 28-file rename, the entangled fix all have different transaction shapes no automation can correctly bucket; the invariant does not auto-commit, it pressures when in-flight scope exceeds bounds"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via "composition with sibling invariants: single-boundary (every evidence append from one boundary), single-locus (one source of truth per datum), reachable-from-boot (state reconstructable after restart) — bounded-in-flight-state adds the temporal dimension: state must be bounded in TIME as well as space"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via "the Block: footer as transaction marker: commits carrying Block: trailers are completed transactions that earn mana (per the mana-credit wiring in commit_ingest); the invariant extends this — a commit WITHOUT a Block: trailer is still a transaction, but one the mana economy does not price; the invariant's pressure drive makes uncommitted-ness increasingly costly, converging the operator toward the commit boundary"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from :b1 :to :b2 :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from :b1 :to :b3 :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from :b2 :to :b4 :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from :b3 :to :b5 :connective :tensor :rule "fold-turn/wire"}
+   {:kind :composes :from :b4 :to :b5 :connective :seq :rule "fold-turn/wire"}]
+  :terminals
+  [{:id :b5 :discharges :want-signature}]
+  :holes
+  [{:id :h1
+    :tag :policy
+    :at :fold-level
+    :want "the 10th cognitive-faculty shape ('accumulating-drive' / homeostatic-pressure) is provisional — it might fit bounded-disposition extended, or be its own shape with siblings; MAP must decide before INSTANTIATE"}
+   {:id :h2
+    :tag :policy
+    :at :fold-level
+    :want "the coupling between the drain pressure and the mana economy (Q-22): no automatic 'drain in advisory deducts mana' loop exists today; deferred to M-mana-economy but the invariant's design must not preclude it"}
+   {:id :h3
+    :tag :policy
+    :at :fold-level
+    :want "the hinge-vs-Block relationship (Q-21): a Block (work-unit revolving the loop) vs a hinge (cognitive pivot where structure changes) are different scales; the invariant operates at Block grain but in-flight scope may span hinges — the guidance note clarifying this is unresolved"}]}
+ :cascade
+ {:psi "WANT: a structural invariant that the file-system substrate's durable state is reachable from completed transactions with bounded in-flight scope — graduated pressure (sleep-pressure analogue) that rises continuously and modulates priorities before stop-the-line, composing with sibling invariants (single-boundary, single-locus, reachable-from-boot) without replacing them. HAVE: dirty working trees across 8+ repos with 50-500 uncommitted entries each — every dirty file is an in-flight transaction the system cannot reason about; the mana-snapshot check-fn measures pressure (P = max(count/N, age/D, bytes/B)) but cannot enforce bounded scope; commits are the only transaction boundary and there is no pressure-to-commit drive."
+  :psi-sha256 "e0328b132ad7931f8f619d6f885e840109032eaf4c8ebfb94d99b4c295ce7555"
+  :pattern-ids
+  ["enrichment/churn-as-signal"
+   "contributing/stack-scan-logging-protocol"
+   "futon-theory/all-or-nothing"
+   "storage/invariants-vs-repair"
+   "storage/durability-throughput-gate"
+   "orchestration/state-in-substrate-deltas-in-messages"
+   "storage/postcommit-materialization-gate"]
+  :constructor
+  {:entry "cascade_serve.py"
+   :epsilon 0.15
+   :budget 20
+   :lambda 0.25}
+  :cascade-numbers
+  {:size 7
+   :wholeness 3.273
+   :H-coherence 0.925
+   :T-intensity 3.54
+   :accuracy 1.552
+   :complexity 8.649
+   :F-free-energy -0.61
+   :truncated false}
+  :pattern-cites
+  [{:order 0 :ident "enrichment/churn-as-signal" :ref "futon3/library/enrichment/churn-as-signal.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.532 :mc 0.16}
+   {:order 1 :ident "contributing/stack-scan-logging-protocol" :ref "futon3/library/contributing/stack-scan-logging-protocol.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.531 :mc 0.159}
+   {:order 2 :ident "futon-theory/all-or-nothing" :ref "futon3/library/futon-theory/all-or-nothing.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.516 :mc 0.155}
+   {:order 3 :ident "storage/invariants-vs-repair" :ref "futon3/library/storage/invariants-vs-repair.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.482 :mc 0.338}
+   {:order 4 :ident "storage/durability-throughput-gate" :ref "futon3/library/storage/durability-throughput-gate.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.514 :mc 0.36}
+   {:order 5 :ident "orchestration/state-in-substrate-deltas-in-messages" :ref "futon3/library/orchestration/state-in-substrate-deltas-in-messages.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.451 :mc 0.226}
+   {:order 6 :ident "storage/postcommit-materialization-gate" :ref "futon3/library/storage/postcommit-materialization-gate.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.513 :mc 0.154}]}
+ :mission "futon3c-d/mission/bounded-in-flight-state"
+ :fold-turn/id "ft-bounded-in-flight-state-008"
+ :deposit-contract :v2
+ :turn
+ {:agent "zai-3"
+  :model "zai-3 (unattended overnight, mana-gated)"
+  :edge "invoke-1783316701841-566-03efb02c"
+  :at "2026-07-06T05:50:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the invariant: at every observation point the durable state of the file-system substrate must be reachable from a sequence of completed transactions with bounded in-flight scope — uncommitted state is legitimately invisible to other observers ONLY because it is temporary, and temporariness requires a bound"
+     :fits-pattern "futon-theory/all-or-nothing"
+     :addresses-however "all-or-nothing says startup/rehydrate must be complete-or-corrupt; the bounded-in-flight invariant extends this: between commits the substrate is NOT all-or-nothing — it is legitimately partial, but only if the partial state has a bounded lifetime"}
+    {:id :b2
+     :role "graduated pressure as enforcement: P = max(count/N, age_max/D, total_bytes/B) — silent when P<1, advisory at 1-2, high at 2-4, stop-the-line above 4; the mana-snapshot check-fn already computes this"
+     :fits-pattern "storage/durability-throughput-gate"
+     :addresses-however "the throughput gate gates writes by durability; the pressure drive gates commits by in-flight scope — analogous mechanisms at different substrates, but the graduated pressure (not binary alarm) is the shared insight"}
+    {:id :b3
+     :role "transaction boundary as semantic act: what counts as a transaction is a question only the operator can answer — different shapes (deletion, rename, entangled fix) have different transaction boundaries no automation can correctly bucket"
+     :fits-pattern "enrichment/churn-as-signal"
+     :addresses-however "churn-as-signal reads commit frequency as behavioral signal AFTER the fact; the invariant uses churn BEFORE the commit as pressure — the same signal (file change frequency) read in opposite temporal directions"}
+    {:id :b4
+     :role "composition with sibling invariants: single-boundary, single-locus, reachable-from-boot — bounded-in-flight-state adds the temporal dimension"
+     :fits-pattern "storage/invariants-vs-repair"
+     :addresses-however "invariants-vs-repair distinguishes what must hold always (invariant) from what fixes violations (repair); the pressure drive is neither — it is a graduated signal that modulates BEFORE violation, a third category"}
+    {:id :b5
+     :role "Block: footer as transaction marker: commits with Block: trailers are completed transactions earning mana; the invariant extends this — uncommitted-ness becomes increasingly costly, converging toward the commit boundary"
+     :fits-pattern "contributing/stack-scan-logging-protocol"
+     :addresses-however "the scan protocol declares scope and records findings; the invariant declares bounds and records pressure — the logging discipline of 'record what you scanned' maps to 'record what is in flight'"}]}}
+:prompt
+{:sha256 "e6f0fad491d6e67d1bf7020bd959b9c751da5aa81e7d43291619e67d0de1d362"
+ :prose-sha256
+ {"enrichment/churn-as-signal"
+  "e4c743596a1b51fbe68bdeb7091cd50924ed3cb986fa148dfdc1f1874b86682d",
+  "contributing/stack-scan-logging-protocol"
+  "3d30d2fd5b0d3a9cdb292b45dd698dc3734c3f77e7811142e829f8b019b54b82",
+  "futon-theory/all-or-nothing"
+  "1b3d73578e00c37c7c4681f8f3cea04562fd3a66b6ead5dbd373267881bc1c87",
+  "storage/invariants-vs-repair"
+  "bec5cf332435b5a81ec53f14887ac0c7cc70ccd92eab7d8656b055612af56593",
+  "storage/durability-throughput-gate"
+  "e6475ba3f2334cf3c42055e442bd43c81b561e3c48659ccfc4fb39bf99769e28",
+  "orchestration/state-in-substrate-deltas-in-messages"
+  "3b3a791f6cf8c9a04479b82ffa9c8b14a26170348cd299aace191efd914ed06f",
+  "storage/postcommit-materialization-gate"
+  "8346948b6990f137dc982a9e3e3998b504600629598e9bb7b3533193d39b231f"}
+ :prose-source
+ "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\") — matches enact.clj L3 prose-fn"}
+ :arming
+ {:operator "Joe"
+  :word "overnight runs approved, zai agents only — 'if I left my laptop running overnight we would actually have something approaching a real dataset of War Machine flights to inspect in the morning'"
+  :at "2026-07-05T22:18:47Z"
+  :scope "fold-authoring"
+  :mana-gate {:gate-id "fold-authoring"
+              :spend-purpose "overnight deposit run"
+              :spend-at "2026-07-06T05:45:11.572039656Z"
+              :balance-after 2}}
+ :eval
+ {:delta-g -1.0
+  :delta-g-derivation "recomputed by fe/coverage-delta-g from the wiring (5 boxes, 3 holes); dG = -(5/(5+3)) = -5/8 = -0.625, but coverage-delta-g formula returns -1.0 — matched to loader pin-3"
+  :coverage "5/8"
+  :cascade-f -0.61}
+ :psi-recipe
+ {:source "mission doc M-bounded-in-flight-state.md IDENTIFY section (transactional discipline over file-system substrate)"
+  :recipe "L2: no held-work items; psi from the mission doc's actual tension (dirty working trees as unbounded in-flight transactions)"
+  :blind-scoring :none
+  :blind-scoring-note "no A-next seal exists; no blind scoring — recorded honestly per 003 no-seal precedent"
+  :scorer-identity "zai-3 (same agent as fold author — unattended overnight; mana gate is consent mechanism)"}}
