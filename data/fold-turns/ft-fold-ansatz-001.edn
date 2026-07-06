@@ -1,0 +1,239 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "smoke-test the embedding fold on a held-out slice before the paid GPU run: run the smallest discriminating experiment (the FOLD-GAE re-test on real wiring data, or the soft-adjacency optimization on a small cascade→wiring sample) at n≈12-50 FIRST, checking whether signal is steep enough to concentrate a policy — the M1 finding (flat reward landscape) is exactly the failure mode a cheap smoke would surface before committing to a full JAX/GFN training run"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "seed every source of randomness in the embedding-fold ablation: the FOLD-GAE re-test and any soft-adjacency/GFN experiment MUST fix seeds across arms (torch, numpy, python random, CUDA) so the only thing that differs between text-only/struct-only/hybrid embedding arms is the arm itself — report mean±sd over K seeds, and gate any between-arm gap smaller than cross-seed sd as 'no measured difference'"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "gate the first checkpoint of the embedding-fold training as a quality probe: when a real-wiring corpus lands (post CLean port + substrate-2 join) and a training run starts, launch the full corpus but gate-check the first ~200-400 training-step checkpoint — if coverage/policy-concentration quality fails there, bail and fix, don't ride to completion"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "constrain the embedding-fold verdict vocabulary to the downstream interface's terms: the fold interface names {:wiring :delta-g :policy-holes} — so the embedding ansatz's evaluation MUST constrain its output metrics to this vocabulary (delta-g comparability with impl #2, policy-holes honesty) and NOT drift to reporting proxy metrics (link-prediction accuracy on a toy SBM, GFlowNet TB loss) that don't answer whether the fold beats impl #2 on efficiency"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "encode the go/no-go verdict criteria as a runnable checker before running the experiment: the mission's exit criteria (verdict on the bet, stale GAE re-tested, scatter consolidated, plugs into interface) should be turned into a gate that independently reviews the experiment output — same checker reviews the embedding-fold result AND impl #2's baseline, authored separately from whoever runs the experiment"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :full
+    :via
+    "one shared provenance classifier for the (cascade→wiring) corpus, not per-experiment filters: when the corpus lands (CLean port + substrate-2 join), classify each (cascade, wiring) pair's provenance ONCE — is the wiring from an LLM-turn fold, a classical fold, or a hand-authored golden? — so every downstream consumer (the GAE, the GFN, the JAX refine) filters on the same authorship field instead of re-deriving it"
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :partial
+    :via
+    "HOLE: the cascade is thin — all six retrieved patterns are data-mining experimental-discipline patterns, NOT embedding-fold or wiring-generation patterns; they address HOW to test the ansatz honestly but NONE of them address WHETHER the embedding space can provide steeper signal than symbol-level scores (the core bet), or HOW to represent a wiring as a graph in embedding space; the fold's coverage is therefore of the experimental-frame, not of the mechanism — this is the honest finding"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from :b1 :to :b2 :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from :b2 :to :b3 :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from :b1 :to :b4 :connective :tensor :rule "fold-turn/wire"}
+   {:kind :composes :from :b4 :to :b5 :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from :b3 :to :b5 :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from :b5 :to :b6 :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from :b6 :to :b7 :connective :seq :rule "fold-turn/wire"}]
+  ;; v2 connective read: b1→b4 is :tensor (parallel constraint on verdict
+  ;; vocabulary alongside the sequential experimental-ladder b1→b2→b3); every
+  ;; other edge is genuine feed-forward discipline (seq). Recording this as a
+  ;; finding: the cascade's experimental-discipline patterns form a SEQUENTIAL
+  ;; chain (smoke → seed → checkpoint → gate → classify), with one :tensor
+  ;; branch. No :copar because the corpus-blocker means no two steps are
+  ;; coupled-only-valid-together — they are all preconditions that feed forward.
+  :terminals
+  [{:id :b5 :discharges :want-signature}]}
+ :cascade
+ {:psi
+  "WANT: a verdict on the embedding-fold ansatz (impl #3) — can folding cascade→wiring in embedding space beat impl #2 (the LLM-turn fold, which already works) on efficiency without losing soundness or honesty of policy-holes, tested by the smallest discriminating experiment; or an honest \"still open, here is the one experiment that would decide it.\" Falsifiable: a well-argued \"the ansatz is not worth it yet, here's why\" is full success.\nHUNGRY-FOR: the efficiency frontier earned honestly — not assuming the ansatz pays off but testing it; signal steep enough to concentrate a policy (the flat-reward wall M1 found); a real (cascade→wiring) corpus to learn from, not a toy stochastic block model; the scattered JAX/GFlowNet references consolidated so the ~120-file scatter stops being folklore.\nHAVE: impl #2 (the LLM-turn fold) already realizes the interface — so impl #3 is a bet on efficiency, not possibility; DarkTower CT is production Lean (TypedHole/Fill/Comb/Discharge/Coverage/BV, 0-sorry worked examples) — the target schema is well-specified; the JAX soft-adjacency autodiff scaffold (M-differentiable-substrate) exists and works; the GFN config/proxy/flight-probe machinery is live and reusable; BUT the (cascade→wiring) corpus does not exist — CLean is not yet ported to missions/code, and the substrate-2 (have→want) join is unpopulated — so the ansatz is corpus-blocked, not idea-blocked; the stale FOLD-GAE -0.058 was on a toy SBM, not real wiring data, so it carries little weight."
+  :psi-sha256
+  "0ffc4c6f977692b16fb821f45a33e6521adefe3bceee7c1100d9397f12686858"
+  :pattern-ids
+  ["data-mining/constrain-extraction-to-the-downstream-vocabulary"
+   "data-mining/smoke-before-the-paid-run"
+   "data-mining/seed-the-run-for-a-fair-ablation"
+   "data-mining/the-first-checkpoint-is-a-quality-probe"
+   "data-mining/classify-over-one-clean-source"
+   "data-mining/gates-as-code"]
+  :size 6
+  :truncated false
+  :budget 20
+  :constructor
+  {:entry "construct_cascade"
+   :epsilon 0.15
+   :budget 20
+   :lambda 0.25
+   :commit "fe8aceab21c48783d0721c4ccb19e3806bb12f45"}
+  :pattern-cites
+  [{:order 0
+    :ident "data-mining/constrain-extraction-to-the-downstream-vocabulary"
+    :ref "futon3/library/data-mining/constrain-extraction-to-the-downstream-vocabulary.flexiarg"
+    :rel 0.469
+    :mc 0.141
+    :via "ft-fold-ansatz-001 cascade, budget-20 window (untruncated)"
+    :rule "fold-turn/pattern-cite"}
+   {:order 1
+    :ident "data-mining/smoke-before-the-paid-run"
+    :ref "futon3/library/data-mining/smoke-before-the-paid-run.flexiarg"
+    :rel 0.415
+    :mc 0.539
+    :via "ft-fold-ansatz-001 cascade, budget-20 window (untruncated)"
+    :rule "fold-turn/pattern-cite"}
+   {:order 2
+    :ident "data-mining/seed-the-run-for-a-fair-ablation"
+    :ref "futon3/library/data-mining/seed-the-run-for-a-fair-ablation.flexiarg"
+    :rel 0.413
+    :mc 0.537
+    :via "ft-fold-ansatz-001 cascade, budget-20 window (untruncated)"
+    :rule "fold-turn/pattern-cite"}
+   {:order 3
+    :ident "data-mining/the-first-checkpoint-is-a-quality-probe"
+    :ref "futon3/library/data-mining/the-first-checkpoint-is-a-quality-probe.flexiarg"
+    :rel 0.404
+    :mc 0.526
+    :via "ft-fold-ansatz-001 cascade, budget-20 window (untruncated)"
+    :rule "fold-turn/pattern-cite"}
+   {:order 4
+    :ident "data-mining/classify-over-one-clean-source"
+    :ref "futon3/library/data-mining/classify-over-one-clean-source.flexiarg"
+    :rel 0.401
+    :mc 0.521
+    :via "ft-fold-ansatz-001 cascade, budget-20 window (untruncated)"
+    :rule "fold-turn/pattern-cite"}
+   {:order 5
+    :ident "data-mining/gates-as-code"
+    :ref "futon3/library/data-mining/gates-as-code.flexiarg"
+    :rel 0.387
+    :mc 0.504
+    :via "ft-fold-ansatz-001 cascade, budget-20 window (untruncated)"
+    :rule "fold-turn/pattern-cite"}]
+  :F-free-energy -0.829
+  :wholeness 2.36
+  :H-coherence 0.948
+  :T-intensity 2.489
+  :accuracy 2.768
+  :complexity 14.387}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-11"
+  :source "M-fold-ansatz.md HEAD/MAP M1-M4 (the corpus-blocker finding, the flat-reward risk, the stale GAE verdict)"
+  :blind-scoring "NOT POSSIBLE — no sealed corpus; the ψ is adapted from the mission doc's own tension, not from a sealed A-next"}
+ :deposit-contract :v2
+ :mission "futon2-d/mission/fold-ansatz"
+ :fold-turn/id "ft-fold-ansatz-001"
+ :turn
+ {:agent "zai-11"
+  :model "zai"
+  :edge "invoke-1783334525610-633-28a216ee"
+  :at "2026-07-06T10:43:03Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "smoke-test the embedding fold on a held-out slice before the paid GPU run: run the smallest discriminating experiment (the FOLD-GAE re-test on real wiring data, or the soft-adjacency optimization on a small cascade→wiring sample) at n≈12-50 FIRST, checking whether signal is steep enough to concentrate a policy — the M1 finding (flat reward landscape) is exactly the failure mode a cheap smoke would surface before committing to a full JAX/GFN training run"
+     :fits-pattern "data-mining/smoke-before-the-paid-run"
+     :addresses-however "the prompt's failure modes are invisible until the real model runs: for the embedding fold this means the flat-reward wall (M1's GFN sampler stays near-uniform because the reward landscape is too flat) would be invisible until a full training run — a held-out smoke over a small real-wiring sample tests whether the embedding space provides steeper signal than symbol-level scores, which is THE untested bet; if the smoke shows flat reward in embedding space too, the ansatz is deferred on signal grounds, not corpus grounds alone"}
+    {:id :b2
+     :role "seed every source of randomness in the embedding-fold ablation: the FOLD-GAE re-test and any soft-adjacency/GFN experiment MUST fix seeds across arms (torch, numpy, python random, CUDA) so the only thing that differs between text-only/struct-only/hybrid embedding arms is the arm itself — report mean±sd over K seeds, and gate any between-arm gap smaller than cross-seed sd as 'no measured difference'"
+     :fits-pattern "data-mining/seed-the-run-for-a-fair-ablation"
+     :addresses-however "an unseeded ablation measures noise not the arm: the stale FOLD-GAE -0.058 was a single unseeded run on a toy SBM — its result is not just stale but methodologically non-defensible as an ablation; the re-test must seed ALL sources and sweep K seeds or a 'hybrid beats text by 0.03' headline is init noise wearing an experiment's costume, exactly the failure mode the mission's exit criteria demand we not repeat"}
+    {:id :b3
+     :role "gate the first checkpoint of the embedding-fold training as a quality probe: when a real-wiring corpus lands (post CLean port + substrate-2 join) and a training run starts, launch the full corpus but gate-check the first ~200-400 training-step checkpoint — if coverage/policy-concentration quality fails there, bail and fix, don't ride to completion"
+     :fits-pattern "data-mining/the-first-checkpoint-is-a-quality-probe"
+     :addresses-however "two stale habits fight this — capping the corpus 'to be safe' and waiting for the full run to judge quality: for the embedding fold the risk is spending GPU-hours on a training run whose reward landscape is flat (M1's wall) without an early bail point; the first checkpoint is a free, larger, in-distribution probe of whether the embedding signal is steep enough, better than the pre-run smoke at catching convergence-path failures"}
+    {:id :b4
+     :role "constrain the embedding-fold verdict vocabulary to the downstream interface's terms: the fold interface names {:wiring :delta-g :policy-holes} — so the embedding ansatz's evaluation MUST constrain its output metrics to this vocabulary (delta-g comparability with impl #2, policy-holes honesty) and NOT drift to reporting proxy metrics (link-prediction accuracy on a toy SBM, GFlowNet TB loss) that don't answer whether the fold beats impl #2 on efficiency"
+     :fits-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary"
+     :addresses-however "the model labels the surface act instead of the operational target: the stale FOLD-GAE -0.058 measured link-prediction lift on a toy SBM — a surface metric disconnected from the downstream vocabulary (delta-g, policy-holes); an unconstrained evaluation drifts to describing the embedding's geometric properties rather than answering whether it folds cascade→wiring better; the verdict must be constrained to the interface vocabulary or it is downstream-dead"}
+    {:id :b5
+     :role "encode the go/no-go verdict criteria as a runnable checker before running the experiment: the mission's exit criteria (verdict on the bet, stale GAE re-tested, scatter consolidated, plugs into interface) should be turned into a gate that independently reviews the experiment output — same checker reviews the embedding-fold result AND impl #2's baseline, authored separately from whoever runs the experiment"
+     :fits-pattern "data-mining/gates-as-code"
+     :addresses-however "prose bands drift and get rubber-stamped: 'the ansatz is worth it' or 'the ansatz is deferred' as a prose verdict without a counted check is exactly the rubber-stamp failure; the gate must compare delta-g (embedding) vs delta-g (LLM-turn) with a variance floor, check policy-holes honesty (the embedding fold must not hide what it can't wire), and exit nonzero if the embedding fold loses on efficiency OR loses on honesty — author ≠ reviewer means ground control checks the verdict, not the experimenter"}
+    {:id :b6
+     :role "one shared provenance classifier for the (cascade→wiring) corpus, not per-experiment filters: when the corpus lands (CLean port + substrate-2 join), classify each (cascade, wiring) pair's provenance ONCE — is the wiring from an LLM-turn fold, a classical fold, or a hand-authored golden? — so every downstream consumer (the GAE, the GFN, the JAX refine) filters on the same authorship field instead of re-deriving it"
+     :fits-pattern "data-mining/classify-over-one-clean-source"
+     :addresses-however "provenance signals are non-uniform and each consumer re-implements the inference: if the GAE trains on LLM-turn wirings and the GFN trains on classical wirings without a shared classifier, their results are incomparable — a leak that lives in the shared corpus reappears in every consumer that forgets the filter; tag provenance at ingestion (which fold-impl produced this wiring) so consumers filter on a field instead of re-deriving"}
+    {:id :b7
+     :role "HOLE: the cascade is thin — all six retrieved patterns are data-mining experimental-discipline patterns, NOT embedding-fold or wiring-generation patterns; they address HOW to test the ansatz honestly but NONE of them address WHETHER the embedding space can provide steeper signal than symbol-level scores (the core bet), or HOW to represent a wiring as a graph in embedding space; the fold's coverage is therefore of the experimental-frame, not of the mechanism — this is the honest finding"
+     :fits-pattern nil
+     :addresses-however nil}]
+   :wires
+   [{:from :b1 :to :b2 :connective :seq}
+    {:from :b2 :to :b3 :connective :seq}
+    {:from :b1 :to :b4 :connective :tensor}
+    {:from :b4 :to :b5 :connective :seq}
+    {:from :b3 :to :b5 :connective :seq}
+    {:from :b5 :to :b6 :connective :seq}
+    {:from :b6 :to :b7 :connective :seq}]
+   :terminals
+   [{:id :b5 :discharges :want-signature}]
+   :policy-holes
+   [{:unfolded-pattern nil
+     :free "the corpus blocker is not dissolved by experimental discipline"
+     :why "ALL six patterns address how to run the experiment honestly once data exists; NONE address the corpus-blocker (CLean not ported to missions/code, substrate-2 have→want join unpopulated) that MAP M3 identified as THE sequencing blocker — the patterns assume a corpus to experiment on; the mission's own MAP verdict says the ansatz is corpus-blocked not idea-blocked, so even a perfectly disciplined experiment cannot run until upstream gaps close; this is a policy-hole because the fold cannot ground when the corpus arrives from these patterns alone"}
+    {:unfolded-pattern nil
+     :free "the flat-reward risk is named but not resolved"
+     :why "M1 found that the GFN sampler's reward landscape is too flat to concentrate a policy — the smoke (b1) tests for this but the patterns provide no remedy if embedding-space reward is ALSO flat; the deeper risk the MAP surfaced (even with a corpus, the signal may be too flat for ANY method) is not addressed by experimental discipline patterns; whether the embedding space provides steeper signal is THE untested bet, and no retrieved pattern speaks to it"}
+    {:unfolded-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary"
+     :free "delta-g comparability between impl #2 and impl #3 is not mechanically defined"
+     :why "b4 constrains the verdict vocabulary to {delta-g, policy-holes} but the fold-eval coverage function counts boxes vs holes — it does not measure efficiency (the mission's actual criterion: can the embedding fold beat impl #2 on efficiency); a coverage-delta-g comparison measures construction quality, not computational efficiency; the efficiency metric is left free because no retrieved pattern grounds it"}
+    {:unfolded-pattern nil
+     :free "the embedding representation of a wiring is unspecified"
+     :why "the mission's core bet — that wiring-as-graph in embedding space (GAE link-prediction, GFlowNet generation) can fold cascade→wiring — requires a concrete graph representation of a wiring (what are nodes? edges? features?); none of the data-mining patterns speak to graph representation; the JAX soft-adjacency scaffold (M2) is the closest exemplar but its target is policy-prior moves, not wirings; how to encode a BV-copar of typed-holes as a graph is left entirely free"}]}}
+ :arming
+ {:gate "fold-authoring"
+  :spend "consume! fold-authoring 'ground-control-test-2026-07-06: ft-fold-ansatz-001 deposit authoring'"
+  :at "2026-07-06T10:43:03.659771219Z"
+  :balance-after 2
+  :operator "Joe 2026-07-06 ~09:45: 5-agent commissioning test"
+  :word "we could test just that part of the loop on, say, 5 or so independently commissioned Zai agents. It shouldn't hurt to seed in a variety of well formed plans."
+  :award-ref "2026-07-06T08:37:50.536122772Z"
+  :scope :one-fold
+  :fold-turn/id "ft-fold-ansatz-001"}
+ :prompt
+ {:sha256 "d802ed03a4f437c1715e07d50c1a608009ae5db7a35ff4cbd5f2c43d8b4b9e14"
+  :prose-sha256
+  {"data-mining/constrain-extraction-to-the-downstream-vocabulary"
+   "776e9fff9a2328b6ce8017d15226f385267f3fd7f002fd3d697e0b1ccd1a1d52"
+   "data-mining/smoke-before-the-paid-run"
+   "45bf2e6d4fe6d78a00fc06010ad6ea2eaa8af2760399124f9e24ec418ef7e1f6"
+   "data-mining/seed-the-run-for-a-fair-ablation"
+   "ad1f3a4a9303ce47cad32e2dc6f2eb0d479611d0ce51b483ddc1e844bb5d0b2f"
+   "data-mining/the-first-checkpoint-is-a-quality-probe"
+   "994b08bb36e5eba7b4fefc4fbf490374a7193daf22de3a335073547d7af1acdb"
+   "data-mining/classify-over-one-clean-source"
+   "bc7fc395ae195f669cf0531f53b8650d9070850bec76540f3f6dcacde10ad4fe"
+   "data-mining/gates-as-code"
+   "c702f0223f6b1b4f0767331894c40fef172faf2763905fbb7588e10499dfa1e1"}
+  :prose-source "verbatim futon3/library/<id>.flexiarg"}
+ :arrow-candidate
+ {:have
+  "impl #2 (the LLM-turn fold) already realizes the interface; DarkTower CT is production Lean; the JAX soft-adjacency autodiff scaffold exists and works; the GFN config/proxy/flight-probe machinery is live and reusable; BUT the (cascade→wiring) corpus does not exist — CLean is not yet ported to missions/code, and the substrate-2 (have→want) join is unpopulated; the stale FOLD-GAE -0.058 was on a toy SBM, not real wiring data."
+  :want
+  "a verdict on the embedding-fold ansatz (impl #3) — can folding cascade→wiring in embedding space beat impl #2 on efficiency without losing soundness or honesty of policy-holes, tested by the smallest discriminating experiment; or an honest 'still open, here is the one experiment that would decide it.'"
+  :format :sorry
+  :escrow "do-not-write-meme.db"}
+ :hole
+ {:confidence :authored
+  :have
+  "impl #2 (the LLM-turn fold) already realizes the interface; DarkTower CT is production Lean; the JAX soft-adjacency autodiff scaffold exists and works; the GFN config/proxy/flight-probe machinery is live and reusable; BUT the (cascade→wiring) corpus does not exist — CLean is not yet ported to missions/code, and the substrate-2 (have→want) join is unpopulated; the stale FOLD-GAE -0.058 was on a toy SBM, not real wiring data."
+  :want
+  "a verdict on the embedding-fold ansatz (impl #3) — can folding cascade→wiring in embedding space beat impl #2 on efficiency without losing soundness or honesty of policy-holes, tested by the smallest discriminating experiment; or an honest 'still open, here is the one experiment that would decide it.'"
+  :via "M-fold-ansatz.md MAP M1-M4 sorry-grain (mechanical)"
+  :rule "fold-turn/hole-from-sorry-psi"}
+ :eval {:delta-g -0.6363636363636364, :g-grain :coverage}}
