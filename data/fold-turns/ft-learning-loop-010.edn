@@ -1,0 +1,186 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "capability vocabulary as constrained extraction: the mining loop extracts a capability field per hinge/mission that feeds a downstream navigable hypergraph — constrain it to the vocabulary the hypergraph consumes (capability dimensions), forbid discourse paraphrase, default to the common case (no capability shift), and anchor rare labels (new capability, capability stalled) with frequency expectations so the model does not over-fire them the way the meme miner over-fired 'new pattern' at 95%"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via "the capability signature as a typed observation vector: each mission's hinge-log evidence is normalised into a typed feature map (capability dimensions × four channels × confidence level), so cross-mission scoring and learning can be compared without collapsing into prose interpretation — the structured-observation-vector pattern applied at the cross-mission mining scale"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via "term-to-channel traceability for capability claims: every capability-tag assignment declares which hinge-log evidence channels it consumed and the confidence values used, so post-hoc capability claims are mechanically inspectable rather than indistinguishable from rationalisation — the articulation-floor-noise diagnostic from checkpoint-1 operationalised"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via "tri-store separation for the mining pipeline: facts (crystallised capability dimensions as committed flexiargs in futon3/library/), memes (mission-level capability signatures as inspectable SQLite records), notions (similarity-proposed cross-mission connections as ANN candidates only) — each with a different trust level, so fuzzy notion-level proposals cannot become authoritative capability claims without explicit promotion"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via "interest-event vocabulary for capability state transitions: each capability assertion against a mission is a typed state-transition event (spawned, refined, strengthened, addressed, falsified, foreclosed, reopened) in an append-only event log with provenance — so the capability hypergraph is a projection over durable events, not a mutable store, and the mining pipeline is idempotent and re-runnable"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :full
+    :via "trail enables return: every hinge-log entry, capability-tag, and cross-mission edge is a durable trail marker that enables the mining pipeline to re-derive its conclusions from source evidence — the idempotent re-runnability requirement is the trail-enables-return invariant at the mining-pipeline scale, so a crash or re-run never loses or invents evidence"
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :full
+    :via "deep storage to active graph: the hinge-log markdown and mission docs are deep storage (write-surface, dense, not navigable); the Shape A bridge lifts them into futon1a typed entities; the mining pipeline condenses the lifted entities into an active capability graph that the operator can navigate — the deep-storage-to-active-graph move applied to capability mining, with the condensation illuminating rather than re-describing"
+    :rule "fold-turn/box"}
+   {:id :b8
+    :role :application
+    :satiety :full
+    :via "audit the mining pipeline itself: portal retrieval quality (are the capability dimensions the right vocabulary?), sidecar chain completeness (does every hinge produce a full PSR/PUR chain?), compass scoring actionability (are capability signatures diagnostic, not decorative?) — the piti-audit pattern extended from futon3a-as-hub to the capability mining loop as a consumer of that hub"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1 :b3] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b6] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6 :b2] :to [:b7] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b8] :to [:b7] :connective :tensor :rule "fold-turn/wire"}]
+  :terminals [{:id :b7 :discharges :want-signature}]}
+ :pins [:prompt-sha :arming :delta-g-recompute]
+ :cascade
+ {:psi
+  "WANT: a cross-mission capability mining loop : (hinge-log entities × mission docs) -> capability-vocabulary × capability-signature-per-mission × navigable-hypergraph. reconstitute output — a condensed map of which operator capabilities are accreting across ~25 missions and which are stalling, with non-obvious cross-mission connections visible, base-rate-normalised so signal is distinguished from recording-cadence noise. HUNGRY-FOR: contrast-based signal detection (what fires relative to random, not what fires); per-tag confidence (weak tags are articulation-floor noise, not capability); the fractal mining move (same B→A extraction at turn-scale and mission-scale); a vocabulary that grows by use not by upfront design. HAVE: M-trip-journal's hinge-log / question-pool / sidecar apparatus installed as B→A tagging at mission-scale; Shape A bridge lifting markdown into futon1a typed entities (hinge-entries, questions, learning-updates, cross-mission edges); 25+ active mission docs; pattern-activation visualiser with base-rate correction lesson (normalised hit rates expose artefact namespaces); checkpoint-1 diagnostics (contrast not accumulation, mid-confidence ceiling, articulation-floor noise)."
+  :psi-sha256
+  "444a338a98f755c398f801ef99f885871a8eeea9fc0914b44388a9ee7db60c1d"
+  :pattern-ids
+  ["data-mining/constrain-extraction-to-the-downstream-vocabulary"
+   "devmap-coherence/ifr-f3a-piti-audit"
+   "sidecar/tri-store-separation"
+   "aif/structured-observation-vector"
+   "aif/term-to-channel-traceability"
+   "structure/interest-event-vocabulary"
+   "agent/trail-enables-return"
+   "hdm/deep-storage-to-active-graph"]
+  :size 15
+  :truncated false
+  :budget 20
+  :constructor
+  {:entry "cascade_serve.py"
+   :epsilon 0.15
+   :budget 20
+   :lambda 0.25
+   :commit "fe8acea"}
+  :pattern-cites
+  [{:order 0 :ident "data-mining/constrain-extraction-to-the-downstream-vocabulary" :ref "futon3/library/data-mining/constrain-extraction-to-the-downstream-vocabulary.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.513 :mc 0.154}
+   {:order 1 :ident "devmap-coherence/ifr-f3a-piti-audit" :ref "futon3/library/devmap-coherence/ifr-f3a-piti-audit.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.509 :mc 0.153}
+   {:order 2 :ident "sidecar/tri-store-separation" :ref "futon3/library/sidecar/tri-store-separation.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.507 :mc 0.152}
+   {:order 3 :ident "aif/structured-observation-vector" :ref "futon3/library/aif/structured-observation-vector.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.465 :mc 0.233}
+   {:order 4 :ident "aif/term-to-channel-traceability" :ref "futon3/library/aif/term-to-channel-traceability.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.466 :mc 0.512}
+   {:order 5 :ident "structure/interest-event-vocabulary" :ref "futon3/library/structure/interest-event-vocabulary.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.472 :mc 0.330}
+   {:order 6 :ident "agent/trail-enables-return" :ref "futon3/library/agent/trail-enables-return.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.464 :mc 0.325}
+   {:order 7 :ident "hdm/deep-storage-to-active-graph" :ref "futon3/library/hdm/deep-storage-to-active-graph.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.459 :mc 0.413}]
+  :cascade-numbers
+  {:size 15 :F-free-energy 1.6 :accuracy 4.301 :complexity 10.802 :H-coherence 0.884 :T-intensity 7.013 :truncated false}
+  :f-free-energy 1.6}
+ :mission "futon5a-d/mission/learning-loop"
+ :fold-turn/id "ft-learning-loop-010"
+ :turn
+ {:agent "zai-10"
+  :model "zai"
+  :edge "invoke-1783421620174-690-95c4c697"
+  :at "2026-07-07T10:54:04Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "capability vocabulary as constrained extraction: the mining loop extracts a capability field per hinge/mission that feeds a downstream navigable hypergraph — constrain it to the vocabulary the hypergraph consumes (capability dimensions), forbid discourse paraphrase, default to the common case (no capability shift), and anchor rare labels (new capability, capability stalled) with frequency expectations so the model does not over-fire them the way the meme miner over-fired 'new pattern' at 95%"
+     :fits-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary"
+     :addresses-however "faced with conversational hinge-log input, the model labels the surface act ('this turn elaborates a pattern') instead of the capability operation ('applied backwards-induction'); and it reaches for 'new capability' far more often than the data warrants because nothing tells it the common case is no-shift — the allowlist plus default-to-empty plus frequency anchor is exactly the fix, instantiated for capability extraction instead of move-class extraction"}
+    {:id :b2
+     :role "the capability signature as a typed observation vector: each mission's hinge-log evidence is normalised into a typed feature map (capability dimensions × four channels × confidence level), so cross-mission scoring and learning can be compared without collapsing into prose interpretation — the structured-observation-vector pattern applied at the cross-mission mining scale"
+     :fits-pattern "aif/structured-observation-vector"
+     :addresses-however "tool output and operator feedback arrive as heterogeneous artifacts (markdown, diffs, chat) that are hard to compare or weight consistently — the typed, normalised feature map derived from hinge-log state is the prerequisite for meaningful capability comparison, exactly as it is for AIF policy scoring at the turn scale"}
+    {:id :b3
+     :role "term-to-channel traceability for capability claims: every capability-tag assignment declares which hinge-log evidence channels it consumed and the confidence values used, so post-hoc capability claims are mechanically inspectable rather than indistinguishable from rationalisation — the articulation-floor-noise diagnostic from checkpoint-1 operationalised"
+     :fits-pattern "aif/term-to-channel-traceability"
+     :addresses-however "without explicit traceability, capability tags silently absorb whatever signals are available, making capability-development claims indistinguishable from rationalisation — the term-to-channel linkage that prevents semantic drift in AIF scoring terms is the same linkage that prevents articulation-floor noise in capability mining"}
+    {:id :b4
+     :role "tri-store separation for the mining pipeline: facts (crystallised capability dimensions as committed flexiargs in futon3/library/), memes (mission-level capability signatures as inspectable SQLite records), notions (similarity-proposed cross-mission connections as ANN candidates only) — each with a different trust level, so fuzzy notion-level proposals cannot become authoritative capability claims without explicit promotion"
+     :fits-pattern "sidecar/tri-store-separation"
+     :addresses-however "you still need fast candidate proposals (the non-obvious cross-mission connections) and inspectable semantics (the capability vocabulary) — separation keeps the fuzzy ANN-proposed connection from becoming a fact without the promotion gate, exactly as it keeps fuzzy retrieval from becoming authoritative in the sidecar"}
+    {:id :b5
+     :role "interest-event vocabulary for capability state transitions: each capability assertion against a mission is a typed state-transition event (spawned, refined, strengthened, addressed, falsified, foreclosed, reopened) in an append-only event log with provenance — so the capability hypergraph is a projection over durable events, not a mutable store, and the mining pipeline is idempotent and re-runnable"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however "the vocabulary is to grow by use not upfront design — the state-transition vocabulary provides the typed event surface that downstream consumers (the navigable hypergraph, Click/Tick analytics) read, while the capability dimensions themselves accrete through use as new event types, not through a frozen taxonomy"}
+    {:id :b6
+     :role "trail enables return: every hinge-log entry, capability-tag, and cross-mission edge is a durable trail marker that enables the mining pipeline to re-derive its conclusions from source evidence — the idempotent re-runnability requirement is the trail-enables-return invariant at the mining-pipeline scale, so a crash or re-run never loses or invents evidence"
+     :fits-pattern "agent/trail-enables-return"
+     :addresses-however "the mining pipeline must be idempotent and re-runnable as missions grow — the trail markers (hinge-log entities, typed events, provenance) are what make re-derivation deterministic rather than lossy, exactly as agent trails enable session return after teardown"}
+    {:id :b7
+     :role "deep storage to active graph: the hinge-log markdown and mission docs are deep storage (write-surface, dense, not navigable); the Shape A bridge lifts them into futon1a typed entities; the mining pipeline condenses the lifted entities into an active capability graph that the operator can navigate — the deep-storage-to-active-graph move applied to capability mining, with the condensation illuminating rather than re-describing"
+     :fits-pattern "hdm/deep-storage-to-active-graph"
+     :addresses-however "twenty-five active missions generate landscape intelligence faster than a flat ledger can surface — the active graph is the condensation that makes the deep storage navigable, and the base-rate normalisation (checkpoint-1 lesson) ensures the graph shows signal not recording cadence"}
+    {:id :b8
+     :role "audit the mining pipeline itself: portal retrieval quality (are the capability dimensions the right vocabulary?), sidecar chain completeness (does every hinge produce a full PSR/PUR chain?), compass scoring actionability (are capability signatures diagnostic, not decorative?) — the piti-audit pattern extended from futon3a-as-hub to the capability mining loop as a consumer of that hub"
+     :fits-pattern "devmap-coherence/ifr-f3a-piti-audit"
+     :addresses-however "without regular validation, portal queries return stale patterns, sidecar chains have gaps, compass scores become decorative — the mining pipeline inherits these failure modes as a downstream consumer, so the audit must verify the mining loop's inputs (retrieval, chains, scores) before trusting its outputs (the capability graph)"}]
+   :wires [[:b1 :b2] [:b2 :b3] [:b1 :b3 :b4] [:b4 :b5] [:b5 :b6] [:b6 :b2 :b7] [:b8 :b7]]
+   :terminals [{:id :b7 :discharges :want-signature}]
+   :policy-holes
+   [{:unfolded-pattern nil
+     :free "the capability vocabulary itself"
+     :why "the ~8-12 capability dimensions are the mission's central bet — inventing them wrong is the main risk, and no pattern in the cascade grounds what the dimensions should BE, only how to constrain and validate them once chosen"}
+    {:unfolded-pattern "structure/interest-event-vocabulary"
+     :free "mission-scale vs turn-scale aggregation grain"
+     :why "the mission asks whether the right unit is the whole mission or mission × phase; the event vocabulary does not decide this, and aggregation at the wrong grain washes out intra-mission capability-trajectory"}
+    {:unfolded-pattern "aif/structured-observation-vector"
+     :free "contrast-pair selection methodology"
+     :why "checkpoint-1 found contrast (not accumulation) is load-bearing, but which missions form contrast pairs and how differences are normalised across heterogeneous mission shapes is not derivable from the observation-vector pattern"}
+    {:unfolded-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary"
+     :free "the downstream consumer's vocabulary boundary"
+     :why "the allowlist constrains to a downstream vocabulary, but who IS the downstream — the operator navigating WebArxana, Click/Tick analytics, or the gamma learning feed — and what vocabulary each needs is an open question the mission holds explicitly"}
+    {:unfolded-pattern "hdm/deep-storage-to-active-graph"
+     :free "articulation vs silent competence"
+     :why "operator-reported capability is filtered for articulability; capabilities developed unarticulated are invisible in the hinge-log, and no pattern in the cascade addresses how to detect silent competence — it remains hypothesis-level with no diagnostic"}]}}
+ :arming
+ {:operator "Joe 2026-07-06 ~09:45: 5-agent commissioning test"
+  :word "we could test just that part of the loop on, say, 5 or so independently commissioned Zai agents. It shouldn't hurt to seed in a variety of well formed plans."
+  :at "2026-07-07T10:54:04.546921367Z"
+  :scope :one-fold
+  :fold-turn/id "ft-learning-loop-010"
+  :mana-ref {:gate "fold-authoring" :spend-purpose "selection-authoring deposit for M-learning-loop" :balance-after 3}}
+ :prompt
+ {:sha256 "279664f0030d06f005ce555b9769b677486481eaf41e1e791049a1cc379b3b29"
+  :prose-sha256
+  {"data-mining/constrain-extraction-to-the-downstream-vocabulary" "776e9fff9a2328b6ce8017d15226f385267f3fd7f002fd3d697e0b1ccd1a1d52"
+   "devmap-coherence/ifr-f3a-piti-audit" "d442b37c6e0c1699c4744ba57bb31afe32d550c9c2c4a072c9c0335ef4d15415"
+   "sidecar/tri-store-separation" "c75832f2e2f52e9b29fbb797844d45aac5d849de1636b35b5b9764ca04f0af9e"
+   "aif/structured-observation-vector" "f49d7c200c7908d6b2a4b6b4d05e5345625489131aaf2a2386e7c5b4aa52d19b"
+   "aif/term-to-channel-traceability" "db8095869c36cbe3f3792c10b4a7695ad427f6bac03ea2b394c412f92273c34a"
+   "structure/interest-event-vocabulary" "35ae9a5e02976f23e7629997c3d564df5d9e6b2eeacfe1e17c1d23679633b20e"
+   "agent/trail-enables-return" "e043a947dc107eeca7ca182ec617af196e0007807ac812f41e678c36363bf640"
+   "hdm/deep-storage-to-active-graph" "5394a281f2def43f04a7643e1ad809a528edf3dfaaa38712902cced71475557f"}
+  :prose-source "verbatim futon3/library/<pattern-id>.flexiarg"}
+ :arrow-candidate
+ {:have "M-trip-journal's hinge-log / question-pool / sidecar apparatus; Shape A bridge lifting markdown into futon1a typed entities; 25+ active mission docs; pattern-activation visualiser with base-rate correction lesson; checkpoint-1 diagnostics"
+  :want "cross-mission capability mining loop: (hinge-log entities × mission docs) -> capability-vocabulary × capability-signature-per-mission × navigable-hypergraph"
+  :format :sorry
+  :escrow "do-not-write-meme.db"}
+ :hole
+ {:confidence :authored
+  :have "M-trip-journal's hinge-log / question-pool / sidecar apparatus; Shape A bridge lifting markdown into futon1a typed entities; 25+ active mission docs; pattern-activation visualiser with base-rate correction lesson; checkpoint-1 diagnostics"
+  :want "cross-mission capability mining loop: (hinge-log entities × mission docs) -> capability-vocabulary × capability-signature-per-mission × navigable-hypergraph"
+  :via "selection-authoring flight L2 psi recipe (A-next EMPIRICAL sorry, mechanical)"
+  :rule "fold-turn/hole-from-sorry-psi"}
+ :eval {:delta-g -0.6153846153846154 :g-grain :coverage}
+ :delta-g-derivation "hand: -(8/(8+5)) = -8/13 ≈ -0.6154; loader-recomputed via fe/coverage-delta-g = -0.6153846153846154; match confirmed"
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-10"
+  :source "M-learning-loop.md IDENTIFY/the-actual-sorry/scope-in (capability mining across ~25 missions)"
+  :blind-scoring "NOT POSSIBLE — no seal exists for this mission; no blind scoring performed — recorded honestly per the 003 no-seal precedent"}
+ :deposit-contract :v2
+ :cascade-f 1.6
+ :blind-scoring-note "no A-next seal exists for this mission; no blind scoring performed — recorded honestly per the 003 no-seal precedent"}
