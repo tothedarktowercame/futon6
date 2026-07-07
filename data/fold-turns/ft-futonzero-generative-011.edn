@@ -1,0 +1,396 @@
+{:wiring
+ {:nodes
+  [{:id :b1,
+    :role :application,
+    :satiety :full,
+    :via
+    "the self-bootstrapping loop as the Sen distinction made operational: propose play-out → predict field effect → execute if guardrail-admissible → score with anti-laundered witness → update policy/value → distinguish functioning (one-off fruit) from capability (repeatable clearing); the loop exists to convert the former into the latter, not to maximize activity",
+    :rule "fold-turn/box"}
+   {:id :b2,
+    :role :application,
+    :satiety :full,
+    :via
+    "anti-laundered reward as the non-negotiable gate: build discharge ≠ witness discharge; operator approval is a gate, not retroactive proof of fruit; the reward red-team fixture (8 laundering shapes, each rejected) is the certification that makes this mechanical rather than aspirational — no reward signal trains the learner unless it passes the red-team",
+    :rule "fold-turn/box"}
+   {:id :b3,
+    :role :application,
+    :satiety :full,
+    :via
+    "calibration honesty as the G-SIM gate's evidence standard: the field simulator's predicted-vs-realised pairs must be independent (the calibration pair is coverage-ΔG vs coverage-ΔG, not predicted≈realised by construction); the degeneracy verdict must not be clearable by more degeneracy — the canonical reader emits :insufficient-evidence honestly, and measured pairs are accruing but not yet enough (~11+ needed)",
+    :rule "fold-turn/box"}
+   {:id :b4,
+    :role :application,
+    :satiety :full,
+    :via
+    "the static rollout ledger as the training-data substrate: schema for recording proposed play-outs, predicted consequences, actual outcomes, and witness class — this is what the learner will train on when both gates clear; it exists now (futon0/data/futonzero-rollout-ledger.edn), reconstructed from canonical calibration evidence, so the data shape is ready before the learner is",
+    :rule "fold-turn/box"}
+   {:id :b5,
+    :role :application,
+    :satiety :full,
+    :via
+    "the toy field fixture as the safe update-math testbed: a deliberately small 4-state graph with known transitions, used only to test the learner's update math and failure modes — it demonstrates both a successful value update AND a refusal to learn from laundered reward (18 tests/88 assertions); this is the proof that the update mechanism is sound before it touches real data",
+    :rule "fold-turn/box"}
+   {:id :b6,
+    :role :application,
+    :satiety :full,
+    :via
+    "the policy/value vocabulary as the data shapes with no actuator: pattern-as-policy proposals (the cascade as a policy) and value estimates (the EFE over play-out consequences) are specified as data shapes, but no live actuator consumes them — this is the frozen interface the learner will implement against when both gates clear",
+    :rule "fold-turn/box"}
+   {:id :b7,
+    :role :application,
+    :satiety :full,
+    :via
+    "design as a function of evidence — the learner's architecture is gated on what the field simulator and reward certifier can actually support, not on the AlphaZero aspiration; the rollout ledger accrues evidence, the calibration reader measures simulator adequacy, and the red-team certifies reward rigor — the design expands as the evidence base grows, not before",
+    :rule "fold-turn/box"}
+   {:id :b8,
+    :role :application,
+    :satiety :full,
+    :via
+    "the rollout ledger and calibration evidence as durable state loaded fresh per read — no authoritative in-JVM atom to reset; the canonical reader (futon3c.aif.calibration) reads the evidence EDN and emits the verdict, the futon0 post-process turns it into the ledger; reconstruction is deterministic from the evidence, not from mutable state",
+    :rule "fold-turn/box"}],
+  :hyperedges
+  [{:kind :composes, :from :b1, :to :b2, :connective :copar, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b1, :to :b3, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b1, :to :b6, :connective :tensor, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b3, :to :b4, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b5, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b4, :to :b5, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b3, :to :b7, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b7, :connective :copar, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b4, :to :b8, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b5, :to :b7, :connective :seq, :rule "fold-turn/wire"}],
+  :terminals
+  [{:id :b5, :discharges :want-signature}
+   {:id :b7, :discharges :want-signature}],
+  :holes
+  [{:unfolded-pattern nil,
+    :free "the G-SIM adequacy threshold",
+    :why
+    "the canonical reader emits :insufficient-evidence and needs ~11+ independent measured pairs for :calibratable, but the exact number and what counts as 'independent' (different missions? different ticks? different capability dimensions?) is an evidence-standard judgment the mission doc does not specify — the gate names the criterion (calibratable), the threshold population is unset"}
+   {:unfolded-pattern "aif/no-self-certification",
+    :free "the continuous-laundering guard",
+    :why
+    "the reward red-team fixture tests 8 known laundering shapes, but new shapes emerge as the loop evolves; whether the red-team must be re-run on every new reward path (continuous) or only at gate-clearance (snapshot) is an operational policy the fixture does not decide"}
+   {:unfolded-pattern "agent/sense-deliberate-act",
+    :free "the actuator interface",
+    :why
+    "the policy/value vocabulary specifies data shapes but the act-step remains a typed absence — what the actuator IS (an enactment call? an apply-cascade!? an operator-bridged execution?) is out of scope until both gates clear, but the interface shape affects whether the vocabulary is sufficient"}
+   {:unfolded-pattern nil,
+    :free "the capability-classification criterion",
+    :why
+    "the Sen distinction says functioning ≠ capability, but what EVIDENCE converts a functioning record into a capability claim (repeatable clearing under what conditions? how many successful play-outs? at what confidence?) is the learner's core judgment, not derivable from the ledger schema alone"}
+   {:unfolded-pattern "ukrns/design-as-function-of-evidence",
+    :free "the gate-clearance sequencing",
+    :why
+    "both gates could clear simultaneously or sequentially (G-REWARD before G-SIM, or vice versa); the mission does not specify whether one gate's clearance unblocks partial work on the other, or whether both must clear before ANY rollout-learning prototype begins"}]},
+ :pins [:prompt-sha :arming :delta-g-recompute],
+ :cascade
+ {:psi
+  "WANT: a self-bootstrapping learner that converts one-off warranted functionings into repeatable capabilities — the generative sibling of FutonZero's monitor. The loop: propose a bounded play-out over the capability landscape, predict its field effect, execute only if guardrail-admissible, score the outcome with anti-laundered witness logic, update policy/value estimates, distinguish functioning from capability. Falsifiable: G-SIM (field-simulator adequacy) and G-REWARD (anti-laundered reward) are the two hard gates — until both clear, no autonomous self-play runner.\nHUNGRY-FOR: the Sen distinction made operational (functioning = one play-out lands a fruit; capability = the system learns a policy that clears that class repeatably); anti-laundering (build discharge vs witness discharge — operator approval is a gate, not retroactive proof of fruit); calibration honesty (the forward model's predicted-vs-realised pairs must be independent, not self-referential — the degenerate calibration verdict must not be clearable by more degeneracy).\nHAVE: §4 safe work products all complete — rollout ledger schema (futon0/data/futonzero-rollout-ledger.edn), calibration audit with canonical reader (futon3c.aif.calibration, verdict :insufficient-evidence with ~11+ measured pairs needed), toy field fixture (4-state chain, 18 tests/88 assertions, demonstrates successful update + refusal to learn from laundered reward), policy/value vocabulary (pattern-as-policy + value-estimate shapes, no actuator), reward red-team fixture (8 laundering shapes rejected, 21 tests/127 assertions); the AlphaZero→WM mapping frozen; first non-fallback measured calibration pairs accruing via the WM pilot loop; the two hard gates named with testable clearance criteria.\n",
+  :psi-sha256
+  "c795c9c27a480afc26322865df679bd0f51bd66dd651ae8bf692355bcccb6c18",
+  :pattern-ids
+  ["aif/no-self-certification"
+   "futon-theory/honest-map-over-flattering-counter"
+   "ants/baseline-cyber-ant"
+   "agent/trail-enables-return"
+   "futon-theory/local-gain-persistence"
+   "agent/state-is-hypothesis"
+   "agent/sense-deliberate-act"
+   "agent/budget-bounds-exploration"
+   "coordination/session-durability-check"
+   "agent/provisional-claims-ledger"
+   "ukrns/design-as-function-of-evidence"
+   "t3/capability-not-functioning"
+   "budgeted-action-selection/mana-gated-work"
+   "invariant-coherence/reachable-from-boot"
+   "ukrns/calibrate-impact-promises-to-current-indicator-capacity"],
+  :size 15,
+  :truncated false,
+  :budget 20,
+  :constructor
+  {:entry "construct_cascade",
+   :epsilon 0.15,
+   :budget 20,
+   :lambda 0.25,
+   :commit "fe8aceab21c48783d0721c4ccb19e3806bb12f45"},
+  :pattern-cites
+  [{:order 0,
+    :ident "aif/no-self-certification",
+    :ref "futon3/library/aif/no-self-certification.flexiarg",
+    :rel 0.584,
+    :mc 0.175,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 1,
+    :ident "futon-theory/honest-map-over-flattering-counter",
+    :ref "futon3/library/futon-theory/honest-map-over-flattering-counter.flexiarg",
+    :rel 0.461,
+    :mc 0.783,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 2,
+    :ident "ants/baseline-cyber-ant",
+    :ref "futon3/library/ants/baseline-cyber-ant.flexiarg",
+    :rel 0.473,
+    :mc 0.331,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 3,
+    :ident "agent/trail-enables-return",
+    :ref "futon3/library/agent/trail-enables-return.flexiarg",
+    :rel 0.499,
+    :mc 0.25,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 4,
+    :ident "futon-theory/local-gain-persistence",
+    :ref "futon3/library/futon-theory/local-gain-persistence.flexiarg",
+    :rel 0.498,
+    :mc 0.448,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 5,
+    :ident "agent/state-is-hypothesis",
+    :ref "futon3/library/agent/state-is-hypothesis.flexiarg",
+    :rel 0.499,
+    :mc 0.349,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 6,
+    :ident "agent/sense-deliberate-act",
+    :ref "futon3/library/agent/sense-deliberate-act.flexiarg",
+    :rel 0.489,
+    :mc 0.343,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 7,
+    :ident "agent/budget-bounds-exploration",
+    :ref "futon3/library/agent/budget-bounds-exploration.flexiarg",
+    :rel 0.475,
+    :mc 0.332,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 8,
+    :ident "coordination/session-durability-check",
+    :ref "futon3/library/coordination/session-durability-check.flexiarg",
+    :rel 0.461,
+    :mc 0.414,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 9,
+    :ident "agent/provisional-claims-ledger",
+    :ref "futon3/library/agent/provisional-claims-ledger.flexiarg",
+    :rel 0.46,
+    :mc 0.23,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 10,
+    :ident "ukrns/design-as-function-of-evidence",
+    :ref "futon3/library/ukrns/design-as-function-of-evidence.flexiarg",
+    :rel 0.523,
+    :mc 0.157,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 11,
+    :ident "t3/capability-not-functioning",
+    :ref "futon3/library/t3/capability-not-functioning.flexiarg",
+    :rel 0.51,
+    :mc 0.153,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 12,
+    :ident "budgeted-action-selection/mana-gated-work",
+    :ref "futon3/library/budgeted-action-selection/mana-gated-work.flexiarg",
+    :rel 0.468,
+    :mc 0.234,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 13,
+    :ident "invariant-coherence/reachable-from-boot",
+    :ref "futon3/library/invariant-coherence/reachable-from-boot.flexiarg",
+    :rel 0.475,
+    :mc 0.238,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 14,
+    :ident "ukrns/calibrate-impact-promises-to-current-indicator-capacity",
+    :ref "futon3/library/ukrns/calibrate-impact-promises-to-current-indicator-capacity.flexiarg",
+    :rel 0.501,
+    :mc 0.15,
+    :via "deposit-011 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}],
+  :F-free-energy 2.378},
+ :mission "futon0-d/mission/futonzero-generative",
+ :fold-turn/id "ft-futonzero-generative-011",
+ :deposit-contract :v2,
+ :turn
+ {:agent "zai-5",
+  :model "zai",
+  :edge "invoke-1783424563290-698-31aac3a4",
+  :at "2026-07-07T11:45:40Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "the self-bootstrapping loop as the Sen distinction made operational: propose play-out → predict field effect → execute if guardrail-admissible → score with anti-laundered witness → update policy/value → distinguish functioning (one-off fruit) from capability (repeatable clearing); the loop exists to convert the former into the latter, not to maximize activity",
+     :fits-pattern "t3/capability-not-functioning",
+     :addresses-however
+     "the pattern names the distinction but not the LOOP that converts functioning to capability — the conversion requires a field simulator (G-SIM) to predict consequences and an anti-laundered reward (G-REWARD) to score them, both of which are hard gates not yet cleared; the distinction is the objective, the gates are the blocking preconditions",
+     :produces [:generative-loop-shape]}
+    {:id :b2,
+     :role
+     "anti-laundered reward as the non-negotiable gate: build discharge ≠ witness discharge; operator approval is a gate, not retroactive proof of fruit; the reward red-team fixture (8 laundering shapes, each rejected) is the certification that makes this mechanical rather than aspirational — no reward signal trains the learner unless it passes the red-team",
+     :fits-pattern "aif/no-self-certification",
+     :addresses-however
+     "the red-team fixture tests KNOWN laundering shapes from the WM-pilot arc, but the pattern's deeper concern is that new laundering shapes emerge as the loop evolves — the fixture is a snapshot, not a continuous guard, so the G-REWARD gate must be re-runnable against future shapes, not just the 8 it was certified against",
+     :produces [:reward-anti-laundering]}
+    {:id :b3,
+     :role
+     "calibration honesty as the G-SIM gate's evidence standard: the field simulator's predicted-vs-realised pairs must be independent (the calibration pair is coverage-ΔG vs coverage-ΔG, not predicted≈realised by construction); the degeneracy verdict must not be clearable by more degeneracy — the canonical reader emits :insufficient-evidence honestly, and measured pairs are accruing but not yet enough (~11+ needed)",
+     :fits-pattern "futon-theory/honest-map-over-flattering-counter",
+     :addresses-however
+     "the honest-map pattern says to show more holes when truth requires, but the calibration reader's :insufficient-evidence verdict is a holding position, not a map — the counter only moves when enough independent measured pairs land, and the rate of accrual depends on the WM pilot loop flying missions that keep post-field readings (the gating dependency is operational, not architectural)",
+     :consumes [:generative-loop-shape],
+     :produces [:calibration-honesty]}
+    {:id :b4,
+     :role
+     "the static rollout ledger as the training-data substrate: schema for recording proposed play-outs, predicted consequences, actual outcomes, and witness class — this is what the learner will train on when both gates clear; it exists now (futon0/data/futonzero-rollout-ledger.edn), reconstructed from canonical calibration evidence, so the data shape is ready before the learner is",
+     :fits-pattern "agent/provisional-claims-ledger",
+     :addresses-however
+     "the ledger records play-outs but does not yet distinguish FUNCTIONING records from CAPABILITY records — a play-out that landed a fruit is a functioning datum, but whether it evidences a repeatable capability is the learner's eventual judgment; the ledger schema captures the play-out shape but not the capability-classification shape, which is the learner's output, not its input",
+     :consumes [:calibration-honesty],
+     :produces [:rollout-ledger]}
+    {:id :b5,
+     :role
+     "the toy field fixture as the safe update-math testbed: a deliberately small 4-state graph with known transitions, used only to test the learner's update math and failure modes — it demonstrates both a successful value update AND a refusal to learn from laundered reward (18 tests/88 assertions); this is the proof that the update mechanism is sound before it touches real data",
+     :fits-pattern "agent/state-is-hypothesis",
+     :addresses-however
+     "the toy fixture's known transitions are a simplification that the real field simulator cannot match — the fixture tests the UPDATE MATH (does the value function converge correctly?) but not the FIELD ADEQUACY (does the simulator predict real consequences?); G-SIM is about the latter, and the fixture cannot substitute for it",
+     :consumes [:rollout-ledger :reward-anti-laundering],
+     :produces [:toy-field-validation]}
+    {:id :b6,
+     :role
+     "the policy/value vocabulary as the data shapes with no actuator: pattern-as-policy proposals (the cascade as a policy) and value estimates (the EFE over play-out consequences) are specified as data shapes, but no live actuator consumes them — this is the frozen interface the learner will implement against when both gates clear",
+     :fits-pattern "agent/sense-deliberate-act",
+     :addresses-however
+     "the sense-deliberate-act pattern requires the full loop to be operational, but the vocabulary only specifies the DATA SHAPES — the deliberate (policy selection) and act (execution) legs are explicitly NOT wired (scope-out until gates clear); the vocabulary is the interface contract, not the implementation, and the pattern's act-step remains a typed absence",
+     :consumes [:generative-loop-shape],
+     :produces [:policy-value-vocabulary]}
+    {:id :b7,
+     :role
+     "design as a function of evidence — the learner's architecture is gated on what the field simulator and reward certifier can actually support, not on the AlphaZero aspiration; the rollout ledger accrues evidence, the calibration reader measures simulator adequacy, and the red-team certifies reward rigor — the design expands as the evidence base grows, not before",
+     :fits-pattern "ukrns/design-as-function-of-evidence",
+     :addresses-however
+     "the pattern says design follows evidence, but the two hard gates are DESIGN DECISIONS about what evidence standard is sufficient — how many independent measured pairs make G-SIM 'adequate', and which laundering shapes make G-REWARD 'anti-laundered', are judgments the evidence alone cannot make; the gates name the standard, the evidence fills it",
+     :consumes [:calibration-honesty :reward-anti-laundering],
+     :produces [:evidence-gated-design]}
+    {:id :b8,
+     :role
+     "the rollout ledger and calibration evidence as durable state loaded fresh per read — no authoritative in-JVM atom to reset; the canonical reader (futon3c.aif.calibration) reads the evidence EDN and emits the verdict, the futon0 post-process turns it into the ledger; reconstruction is deterministic from the evidence, not from mutable state",
+     :fits-pattern "invariant-coherence/reachable-from-boot",
+     :addresses-however
+     "the boot-reachable pattern ensures the ledger survives restarts, but the calibration EVIDENCE accrues from the WM pilot loop's live ticks — if the pilot stops flying missions with post-field readings, the evidence stops accruing and G-SIM never clears; the durability is of the READ path, not the WRITE path (the write path is the live loop, which is a separate operational concern)",
+     :consumes [:rollout-ledger],
+     :produces [:durable-evidence-store]}],
+   :wires
+   [{:from :b1, :to :b2, :connective :copar}
+    {:from :b1, :to :b3, :connective :seq}
+    {:from :b1, :to :b6, :connective :tensor}
+    {:from :b3, :to :b4, :connective :seq}
+    {:from :b2, :to :b5, :connective :seq}
+    {:from :b4, :to :b5, :connective :seq}
+    {:from :b3, :to :b7, :connective :seq}
+    {:from :b2, :to :b7, :connective :copar}
+    {:from :b4, :to :b8, :connective :seq}
+    {:from :b5, :to :b7, :connective :seq}],
+   :terminals
+   [{:id :b5, :discharges :want-signature}
+    {:id :b7, :discharges :want-signature}],
+   :policy-holes
+   [{:unfolded-pattern nil,
+     :free "the G-SIM adequacy threshold",
+     :why
+     "the canonical reader emits :insufficient-evidence and needs ~11+ independent measured pairs for :calibratable, but the exact number and what counts as 'independent' (different missions? different ticks? different capability dimensions?) is an evidence-standard judgment the mission doc does not specify — the gate names the criterion (calibratable), the threshold population is unset"}
+    {:unfolded-pattern "aif/no-self-certification",
+     :free "the continuous-laundering guard",
+     :why
+     "the reward red-team fixture tests 8 known laundering shapes, but new shapes emerge as the loop evolves; whether the red-team must be re-run on every new reward path (continuous) or only at gate-clearance (snapshot) is an operational policy the fixture does not decide"}
+    {:unfolded-pattern "agent/sense-deliberate-act",
+     :free "the actuator interface",
+     :why
+     "the policy/value vocabulary specifies data shapes but the act-step remains a typed absence — what the actuator IS (an enactment call? an apply-cascade!? an operator-bridged execution?) is out of scope until both gates clear, but the interface shape affects whether the vocabulary is sufficient"}
+    {:unfolded-pattern nil,
+     :free "the capability-classification criterion",
+     :why
+     "the Sen distinction says functioning ≠ capability, but what EVIDENCE converts a functioning record into a capability claim (repeatable clearing under what conditions? how many successful play-outs? at what confidence?) is the learner's core judgment, not derivable from the ledger schema alone"}
+    {:unfolded-pattern "ukrns/design-as-function-of-evidence",
+     :free "the gate-clearance sequencing",
+     :why
+     "both gates could clear simultaneously or sequentially (G-REWARD before G-SIM, or vice versa); the mission does not specify whether one gate's clearance unblocks partial work on the other, or whether both must clear before ANY rollout-learning prototype begins"}]}},
+ :arming
+ {:operator "Joe",
+  :word
+  "Let's do the ones you selected via Zai handoffs as suggested. This isn't really a mana spend b/c we are engineering, mana would apply to automated runs.",
+  :at "2026-07-07T11:45:40Z",
+  :scope :one-fold,
+  :via
+  "operator-directed engineering handoff via claude-4 bell invoke-1783424563290-698-31aac3a4; NOT mana-gated (operator explicit: engineering, not autonomous run)",
+  :fold-turn/id "ft-futonzero-generative-011"},
+ :prompt
+ {:sha256
+  "3ce849372f4d382c3205a1a9fa701f11a607ea4217cc7b79d8b4982971483df3",
+  :prose-sha256
+  {"aif/no-self-certification"
+   "93d00b09a76fb487f96a11e76abf0d7805281ef27e10d965365ebc0632561d8f",
+   "futon-theory/honest-map-over-flattering-counter"
+   "766563b29ccd37d2f52c83a0c595490973e8f2800b828f238d0171e5298f7ae4",
+   "ants/baseline-cyber-ant"
+   "4427b74cd0198201dad821b64c1f26e8db47fec1210bd62cde72819e03911dd8",
+   "agent/trail-enables-return"
+   "e043a947dc107eeca7ca182ec617af196e0007807ac812f41e678c36363bf640",
+   "futon-theory/local-gain-persistence"
+   "e08d7047b6163725c0451cbafaf63be936bfcb2ae985448246b37585b8a1d0ba",
+   "agent/state-is-hypothesis"
+   "9a3d929f3d764698d9f6d082a81b62ae7232ec57e3b23de3a8175b37a75cdbf9",
+   "agent/sense-deliberate-act"
+   "a1b28f17814d2d666f0767e6f45ed836c652d7760b026a43fae96882cd8a8a12",
+   "agent/budget-bounds-exploration"
+   "2b7ccc18d3040a3dc3cbc0776fba54fdb048114746b908b2d98e87c2e9407db3",
+   "coordination/session-durability-check"
+   "94ec03f3fe051f99e9d4dac39df9f3ac08140903ef17cf56372466000b294e88",
+   "agent/provisional-claims-ledger"
+   "c088ddfe4841d55ae9d6d56d34bc128d75f05b65cc5220350efa67e22ceae02b",
+   "ukrns/design-as-function-of-evidence"
+   "fb8626214a8c98a938b1270fa76e0320ece556babf28322da137738effb314ee",
+   "t3/capability-not-functioning"
+   "77b391cb29a2b7a2a4ba49658e6454819838753d55b8174f4b1e9ffc023fd2aa",
+   "budgeted-action-selection/mana-gated-work"
+   "e54b2a1f8904b23dc41724419cc25cfd8c4da843e46f73c0991b94c14aacd01d",
+   "invariant-coherence/reachable-from-boot"
+   "7866b547d9e2aa912ce3cd68532ffc09c9bd6fd6c421c315b18c4ea004afd0f7",
+   "ukrns/calibrate-impact-promises-to-current-indicator-capacity"
+   "b9ea653de2a8fabd3ebf383ead29614b2a85142172a0db7e2718f14952193b6e"},
+  :prose-source
+  "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\") — matches enact.clj L3 prose-fn"},
+ :arrow-candidate
+ {:have
+  "§4 safe work products all complete — rollout ledger schema (futon0/data/futonzero-rollout-ledger.edn), calibration audit with canonical reader (futon3c.aif.calibration, verdict :insufficient-evidence with ~11+ measured pairs needed), toy field fixture (4-state chain, 18 tests/88 assertions, demonstrates successful update + refusal to learn from laundered reward), policy/value vocabulary (pattern-as-policy + value-estimate shapes, no actuator), reward red-team fixture (8 laundering shapes rejected, 21 tests/127 assertions); the AlphaZero→WM mapping frozen; first non-fallback measured calibration pairs accruing via the WM pilot loop; the two hard gates named with testable clearance criteria.\n",
+  :want
+  "a self-bootstrapping learner that converts one-off warranted functionings into repeatable capabilities — the generative sibling of FutonZero's monitor. The loop: propose a bounded play-out over the capability landscape, predict its field effect, execute only if guardrail-admissible, score the outcome with anti-laundered witness logic, update policy/value estimates, distinguish functioning from capability. Falsifiable: G-SIM (field-simulator adequacy) and G-REWARD (anti-laundered reward) are the two hard gates — until both clear, no autonomous self-play runner.\n",
+  :format :sorry,
+  :escrow "do-not-write-meme.db"},
+ :hole
+ {:confidence :authored,
+  :have
+  "§4 safe work products all complete — rollout ledger schema (futon0/data/futonzero-rollout-ledger.edn), calibration audit with canonical reader (futon3c.aif.calibration, verdict :insufficient-evidence with ~11+ measured pairs needed), toy field fixture (4-state chain, 18 tests/88 assertions, demonstrates successful update + refusal to learn from laundered reward), policy/value vocabulary (pattern-as-policy + value-estimate shapes, no actuator), reward red-team fixture (8 laundering shapes rejected, 21 tests/127 assertions); the AlphaZero→WM mapping frozen; first non-fallback measured calibration pairs accruing via the WM pilot loop; the two hard gates named with testable clearance criteria.\n",
+  :want
+  "a self-bootstrapping learner that converts one-off warranted functionings into repeatable capabilities — the generative sibling of FutonZero's monitor. The loop: propose a bounded play-out over the capability landscape, predict its field effect, execute only if guardrail-admissible, score the outcome with anti-laundered witness logic, update policy/value estimates, distinguish functioning from capability. Falsifiable: G-SIM (field-simulator adequacy) and G-REWARD (anti-laundered reward) are the two hard gates — until both clear, no autonomous self-play runner.\n",
+  :via
+  "M-futonzero-generative §1 IDENTIFY + §2 Hard Gates + §4 Safe Work Products; psi authored from the mission doc",
+  :rule "fold-turn/hole-from-sorry-psi"},
+ :eval {:delta-g -0.6153846153846154, :g-grain :coverage},
+ :psi-recipe
+ {:source "authored from mission doc M-futonzero-generative.md §1 (IDENTIFY) + §2 (Hard Gates) + §4 (Safe Work Products)",
+  :no-blind-scoring
+  "no sealed corpus exists for this psi; blind-scoring was not performed — the sorry-grain is honest about the HAVE (§4 complete, gates not cleared) and the WANT (the generative loop, gated on G-SIM and G-REWARD)"}}
