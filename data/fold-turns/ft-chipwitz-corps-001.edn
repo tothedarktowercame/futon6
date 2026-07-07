@@ -1,0 +1,165 @@
+{:wiring
+ {:nodes
+  [{:id :b1,
+    :role :application,
+    :satiety :full,
+    :via
+    "the determined-fork test as the ChipWitz gate's first move: at every choice point, run the warrant-finder BEFORE escalating — is the warrant findable? The cycle-5 motivating example IS the canonical instance: expected-information-gain was the findable warrant for option B, but the consent gate fired on FORM (a fork exists) rather than SUBSTANCE (is the fork undetermined by existing warrants?). The proto-PSR ('choosing B because expected-information-gain prefers measured pairs') should have been logged and flown; Joe should have gotten a notification, not a question.",
+    :rule "fold-turn/box"}
+   {:id :b2,
+    :role :application,
+    :satiety :full,
+    :via
+    "the autopen rate as the honest-map metric: if the ChipWitz layer proceeds on warrant for everything, the threshold is too loose — the autopen rate (fraction of warranted-proceeds where the warrant turned out to be rubber-stamp) is the operator-reviewable signal that must be moveable the WRONG way by truth. A high autopen rate RAISES the threshold (makes hidden over-proceeding visible), just as the honest map must be able to raise the hole-count when the territory has more holes than the map shows.",
+    :rule "fold-turn/box"}
+   {:id :b3,
+    :role :application,
+    :satiety :full,
+    :via
+    "the NAG as the dual of the warranted-proceed: a choice-point the patterns CANNOT decide is surfaced to the operator WITH its warrant (the firing pattern + signed-off rationale), the specific undecidable gap, and the minimal unblock — 'Because of pattern P which you set, I can't decide this one thing; fill the gap and we roll.' This turns the generic 'operator confirmation required' into a legible handoff over a named gap, reusing the existing :fork-warrant channel rather than building a parallel one.",
+    :rule "fold-turn/box"}],
+  :hyperedges
+  [{:kind :composes, :from :b1, :to :b2, :connective :seq, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b1, :to :b3, :connective :copar, :rule "fold-turn/wire"}
+   {:kind :composes, :from :b2, :to :b3, :connective :tensor, :rule "fold-turn/wire"}],
+  :terminals
+  [{:id :b3, :discharges :want-signature}],
+  :holes
+  [{:unfolded-pattern "collaboration-coherence/determined-fork-proto-psr",
+    :free "the warrant threshold — what cascade C-score / match quality counts as 'found'",
+    :why
+    "the pattern says 'is the warrant findable?' but does not specify the numeric threshold — what cascade score or match quality determines that a warrant DETERMINES the choice (not merely consistent with it). Too loose re-creates autopen-creep; too tight re-creates rubber-stamp asks. The mission doc names this as 'the one knob' but leaves it free; it is an operator-economics decision"}
+   {:unfolded-pattern "futon-theory/honest-map-over-flattering-counter",
+    :free "the autopen-rate measurement protocol — what counts as a rubber-stamp post-hoc",
+    :why
+    "the pattern says the counter must be moveable the wrong way by truth, but what DISTINGUISHES a warranted-proceed that was correct from one that was an autopen rubber-stamp is not derivable — it requires post-hoc outcome evidence (did the proceed achieve what the warrant predicted?), which is the PUR stream the typed PXR channel must carry, and that channel is UNBUILT"}
+   {:unfolded-pattern "orchestration/pattern-warranted-choice-point",
+    :free "the typed PXR channel wiring — PSR+PUR records with choice-point refs",
+    :why
+    "the pattern says 'reuse :fork-warrant' but the typed PXR channel (sibling of discipline-events) that carries PSR+PUR records with choice-point refs into FutonZero's calibration reader is explicitly UNBUILT in the mission doc. The rule-to-pattern mapping table is DATA not code, but the channel that transports it does not exist yet; wiring it is pilot-flow integration work the fold cannot do"}
+   {:unfolded-pattern nil,
+    :free "the no-warrant→sorry-mining hook",
+    :why
+    "the mission doc names this as remaining work: when the warrant-finder returns nothing, the ask is genuine AND marks a library gap that should feed the sorry-mining chain. The hook from ChipWitz's NAG output to the sorry-registry adapter is not built; it is a cross-mission integration the fold cannot derive from the patterns + circumstance"}]},
+ :cascade
+ {:psi
+  "WANT: a warranted-work control layer where choice points are resolved by FINDING WARRANTS (the pattern library), not by asking the operator — warrant found → log PSR and proceed; no warrant → genuine operator question AND a library gap. Falsifiable: the operator-question rate drops from consent-form-fired to genuinely-undetermined, measured by the autopen rate.\nHUNGRY-FOR: the warrant threshold that DETERMINES the choice (not merely consistent with it — ambiguity defaults to ASK); the diagnostic inversion (asking despite a findable warrant is the smell, asking without one is productive); anti-laundering guards (agents cannot mint warrants mid-choice, the autopen rate is operator-reviewable); a typed PXR channel (PSR+PUR with choice-point refs) feeding FutonZero's calibration reader.\nHAVE: the motivating example mapped (WM pilot cycle 5: claude-3's consent fork fired on FORM not substance — the warrant for option B was findable via expected-information-gain, the operator was a lookup table); the warrant-finder apparatus exists (cascade-policy-for returns scored coherence-greedy pattern sets); the PSR evidence-store and PUR closure-folds are live; FutonZero's calibration reader consumes PXR-grain evidence; the corps/ pattern namespace in futon3/library/. Remaining work: the warrant threshold knob, typed PXR channel wiring, pilot flow integration, and no-warrant→sorry-mining hook are all UNBUILT.",
+  :psi-sha256
+  "303d7a07534680517124853bb31d86b09677bcd3160ed911ce1d47d022e4563a",
+  :psi-recipe
+  "no sealed corpus; no blind scoring — the psi is a hand-authored sorry-grain from the M-chipwitz-corps mission doc's actual tension (§1 the cycle-5 consent fork fired on form not substance; §2 the warrant-finder protocol; §3 the anti-laundering guards; Remaining work the unbuilt pieces). WANT/HUNGRY-FOR/HAVE structure per the fold-turn contract.",
+  :pattern-ids
+  ["collaboration-coherence/determined-fork-proto-psr"
+   "futon-theory/honest-map-over-flattering-counter"
+   "orchestration/pattern-warranted-choice-point"],
+  :size 3,
+  :truncated false,
+  :budget 20,
+  :F-free-energy -0.409,
+  :constructor
+  {:entry "construct_cascade",
+   :epsilon 0.15,
+   :budget 20,
+   :lambda 0.25,
+   :commit "fe8acea"},
+  :pattern-cites
+  [{:order 0,
+    :ident "collaboration-coherence/determined-fork-proto-psr",
+    :ref "futon3/library/collaboration-coherence/determined-fork-proto-psr.flexiarg",
+    :rel 0.576,
+    :mc 0.173,
+    :via "cascade_serve.py on the chipwitz-corps psi, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 1,
+    :ident "futon-theory/honest-map-over-flattering-counter",
+    :ref "futon3/library/futon-theory/honest-map-over-flattering-counter.flexiarg",
+    :rel 0.429,
+    :mc 0.214,
+    :via "cascade_serve.py on the chipwitz-corps psi, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 2,
+    :ident "orchestration/pattern-warranted-choice-point",
+    :ref "futon3/library/orchestration/pattern-warranted-choice-point.flexiarg",
+    :rel 0.568,
+    :mc 0.17,
+    :via "cascade_serve.py on the chipwitz-corps psi, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}]},
+ :mission "futon3c-d/mission/chipwitz-corps",
+ :fold-turn/id "ft-chipwitz-corps-001",
+ :deposit-contract :v2,
+ :turn
+ {:agent "zai-4",
+  :model "claude-sonnet-4.5",
+  :edge "invoke-1783424561911-697-6bc5c75c",
+  :at "2026-07-07T12:00:00Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "the determined-fork test as the ChipWitz gate's first move: at every choice point, run the warrant-finder BEFORE escalating — is the warrant findable? The cycle-5 motivating example IS the canonical instance: expected-information-gain was the findable warrant for option B, but the consent gate fired on FORM (a fork exists) rather than SUBSTANCE (is the fork undetermined by existing warrants?). The proto-PSR ('choosing B because expected-information-gain prefers measured pairs') should have been logged and flown; Joe should have gotten a notification, not a question.",
+     :fits-pattern "collaboration-coherence/determined-fork-proto-psr",
+     :addresses-however
+     "most forks are determined — the warrant exists and is findable: the HOWEVER is not abstract, it IS the cycle-5 case — the standing contract already preferred the measured-pair path, the warrant was findable via cascade-policy-for, and escalating it burned a round-trip the agent was equipped to make. The fix: the warrant-finder consultation becomes a mandatory step BEFORE surfacing operator questions; the proto-PSR is the logged warrant that distinguishes 'determined and proceeded' from 'genuinely undetermined and escalated'"}
+    {:id :b2,
+     :role
+     "the autopen rate as the honest-map metric: if the ChipWitz layer proceeds on warrant for everything, the threshold is too loose — the autopen rate (fraction of warranted-proceeds where the warrant turned out to be rubber-stamp) is the operator-reviewable signal that must be moveable the WRONG way by truth. A high autopen rate RAISES the threshold (makes hidden over-proceeding visible), just as the honest map must be able to raise the hole-count when the territory has more holes than the map shows.",
+     :fits-pattern "futon-theory/honest-map-over-flattering-counter",
+     :addresses-however
+     "a counter only ever moved downward rewards concealment: the autopen rate is the counter that the ChipWitz layer can influence by proceeding on warrant — if it can only go down (fewer operator questions = good), the layer launders over-proceeding as efficiency. The honest move is to RAISE the autopen count when warranted-proceeds that should have been asks are found post-hoc — accepting the worse-looking number when it is the true one. This is the erosion check inherited from calibration's independent-pairs rule, now at the warrant layer."}
+    {:id :b3,
+     :role
+     "the NAG as the dual of the warranted-proceed: a choice-point the patterns CANNOT decide is surfaced to the operator WITH its warrant (the firing pattern + signed-off rationale), the specific undecidable gap, and the minimal unblock — 'Because of pattern P which you set, I can't decide this one thing; fill the gap and we roll.' This turns the generic 'operator confirmation required' into a legible handoff over a named gap, reusing the existing :fork-warrant channel rather than building a parallel one.",
+     :fits-pattern "orchestration/pattern-warranted-choice-point",
+     :addresses-however
+     "a generic operator-confirmation block is illegible — the operator cannot tell whether it is their own rule firing or an arbitrary obstruction, so they rubber-stamp it (gate erodes) or stall (loop wedges): the fix is the rule-to-pattern mapping as DATA ({guardrail-rule → {pattern-id, warrant-text, gap, unblock}}), so the WM's needs-you.edn carries the firing pattern's warrant. The NAG is NOT a failure of the ChipWitz layer — it is its CORRECT output when the warrant-finder returns nothing above threshold, simultaneously a genuine operator question and a library gap (feeds the sorry-mining hook)"}],
+   :wires
+   [{:from :b1, :to :b2, :connective :seq}
+    {:from :b1, :to :b3, :connective :copar}
+    {:from :b2, :to :b3, :connective :tensor}],
+   :terminals [{:id :b3, :discharges :want-signature}],
+   :policy-holes
+   [{:unfolded-pattern "collaboration-coherence/determined-fork-proto-psr",
+     :free "the warrant threshold — what cascade C-score / match quality counts as 'found'",
+     :why
+     "the pattern says 'is the warrant findable?' but does not specify the numeric threshold — what cascade score or match quality determines that a warrant DETERMINES the choice (not merely consistent with it). Too loose re-creates autopen-creep; too tight re-creates rubber-stamp asks. The mission doc names this as 'the one knob' but leaves it free; it is an operator-economics decision"}
+    {:unfolded-pattern "futon-theory/honest-map-over-flattering-counter",
+     :free "the autopen-rate measurement protocol — what counts as a rubber-stamp post-hoc",
+     :why
+     "the pattern says the counter must be moveable the wrong way by truth, but what DISTINGUISHES a warranted-proceed that was correct from one that was an autopen rubber-stamp is not derivable — it requires post-hoc outcome evidence (did the proceed achieve what the warrant predicted?), which is the PUR stream the typed PXR channel must carry, and that channel is UNBUILT"}
+    {:unfolded-pattern "orchestration/pattern-warranted-choice-point",
+     :free "the typed PXR channel wiring — PSR+PUR records with choice-point refs",
+     :why
+     "the pattern says 'reuse :fork-warrant' but the typed PXR channel (sibling of discipline-events) that carries PSR+PUR records with choice-point refs into FutonZero's calibration reader is explicitly UNBUILT in the mission doc. The rule-to-pattern mapping table is DATA not code, but the channel that transports it does not exist yet; wiring it is pilot-flow integration work the fold cannot do"}
+    {:unfolded-pattern nil,
+     :free "the no-warrant→sorry-mining hook",
+     :why
+     "the mission doc names this as remaining work: when the warrant-finder returns nothing, the ask is genuine AND marks a library gap that should feed the sorry-mining chain. The hook from ChipWitz's NAG output to the sorry-registry adapter is not built; it is a cross-mission integration the fold cannot derive from the patterns + circumstance"}]}},
+ :arming
+ {:operator "Joe",
+  :word
+  "Let's do the ones you selected via Zai handoffs as suggested. This isn't really a mana spend b/c we are engineering, mana would apply to automated runs.",
+  :at "2026-07-07T12:00:00Z",
+  :scope :one-fold,
+  :fold-turn/id "ft-chipwitz-corps-001"},
+ :prompt
+ {:sha256
+  "62aa0ec4d4b86d6a7d31d39058b36b43462a5e101cd9d38376237e1ec9160879",
+  :prose-sha256
+  {"collaboration-coherence/determined-fork-proto-psr"
+   "dbd7454d61b5e30aba88ec4fc4aa9304d93f54ee99b2cafa788c29b25dce560f",
+   "futon-theory/honest-map-over-flattering-counter"
+   "766563b29ccd37d2f52c83a0c595490973e8f2800b828f238d0171e5298f7ae4",
+   "orchestration/pattern-warranted-choice-point"
+   "b62b00deb1415fa9e25dfa986e16254a4d9497bb0d934ec2642b380227c00fe9"},
+  :prose-source
+  "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\") — the prose-fn the pin reconstruction injects"},
+ :hole
+ {:confidence :authored,
+  :have
+  "the motivating example mapped (WM pilot cycle 5: claude-3's consent fork fired on FORM not substance — the warrant for option B was findable via expected-information-gain, the operator was a lookup table); the warrant-finder apparatus exists (cascade-policy-for returns scored coherence-greedy pattern sets); the PSR evidence-store and PUR closure-folds are live; FutonZero's calibration reader consumes PXR-grain evidence; the corps/ pattern namespace in futon3/library/. Remaining work: the warrant threshold knob, typed PXR channel wiring, pilot flow integration, and no-warrant→sorry-mining hook are all UNBUILT.",
+  :want
+  "a warranted-work control layer where choice points are resolved by FINDING WARRANTS (the pattern library), not by asking the operator — warrant found → log PSR and proceed; no warrant → genuine operator question AND a library gap. Falsifiable: the operator-question rate drops from consent-form-fired to genuinely-undetermined, measured by the autopen rate.",
+  :via
+  "operator-directed engineering handoff psi recipe (hand-authored sorry-grain from M-chipwitz-corps mission doc tension, WANT/HUNGRY-FOR/HAVE)",
+  :rule "fold-turn/hole-from-sorry-psi"},
+ :eval {:delta-g -0.42857142857142855, :g-grain :coverage}}
