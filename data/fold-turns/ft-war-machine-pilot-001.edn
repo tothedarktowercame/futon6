@@ -1,0 +1,272 @@
+{:wiring
+ {:boxes
+  [{:id :b1,
+    :role
+    "turn the pilot's READ step into a typed observation bundle: record the mission id, the current have/want text, the selected cascade pattern ids, arm states, and any missing fold-deposit fact before evaluating the lane",
+    :fits-pattern "aif/predictive-coding-belief-update",
+    :addresses-however
+    "the update rule needs an observation, not an instruction; this box makes the silent-stall fact an explicit observation that can move belief/precision instead of disappearing"}
+   {:id :b2,
+    :role
+    "score each candidate lane with a persisted term breakdown: delta-F from the cascade, delta-G from replayed escrow when present, abstain reason when absent, plus the active risk/ambiguity/EIG modes",
+    :fits-pattern "aif/expected-free-energy-scorecard",
+    :addresses-however
+    "opaque totals would hide why the pilot did or did not act; the scorecard keeps the missing-leg cause inspectable"}
+   {:id :b3,
+    :role
+    "enforce the environment boundary: the pilot may author a missing fold deposit inline, but the live tick replays only hash-gated deposits and never treats the AIF prose itself as a command to mutate the world",
+    :fits-pattern "gauntlet/aif-as-environment-not-instruction",
+    :addresses-however
+    "this resolves the risk that the machine reads its theory as an instruction; authoring produces a pinned artifact, while actuation remains separately gated"}
+   {:id :b4,
+    :role
+    "persist the pilot's current state as a revisable hypothesis: deposit coverage, prompt hash, replay result, and policy holes are recorded so later cycles can update the state rather than restart from undocumented operator memory",
+    :fits-pattern "agent/state-is-hypothesis",
+    :addresses-however
+    "state without provenance hardens into false certainty; the state is kept revisable by attaching the prompt hash and the holes that remain free"}
+   {:id :b5,
+    :role
+    "wrap the authoring step as an explicit command object: inputs are mission id plus answer EDN, outputs are a validated ft-*.edn deposit or a loud rejection reason",
+    :fits-pattern "software-design/agent-command-pattern",
+    :addresses-however
+    "without a command boundary the authoring act is an informal transcript; the boundary gives the pilot one auditable operation to invoke"}
+   {:id :b6,
+    :role
+    "attach an intent handshake to the deposit: operator, verbatim arming word, timestamp, fold-turn id, and scope travel inside the record and are checked before the deposit is accepted",
+    :fits-pattern "agent/intent-handshake-is-binding",
+    :addresses-however
+    "intent that lives only in chat cannot be replay-gated; embedding it in :arming turns consent into a load-time invariant"}],
+  :wires
+  [{:from :b1, :to :b2, :connective :seq}
+   {:from :b2, :to :b3, :connective :seq}
+   {:from :b3, :to :b5, :connective :seq}
+   {:from :b5, :to :b6, :connective :seq}
+   {:from :b4, :to :b2, :connective :tensor}
+   {:from :b6, :to :b4, :connective :seq}],
+  :terminals
+  [{:id :b6, :discharges :armed-fold-deposit}
+   {:id :b4, :discharges :pilot-state-record}],
+  :policy-holes
+  [{:unfolded-pattern "software-design/agent-decorator-pattern",
+    :free "which pilot surface gets decorated",
+    :why
+    "the cascade names a decorator pattern, but the circumstance does not choose whether decoration belongs in the Emacs surface, scheduled runner, or Pilot backend"}
+   {:unfolded-pattern "agent/provisional-claims-ledger",
+    :free "ledger integration for provisional claims",
+    :why
+    "the construction records prompt hash and holes, but the prompt does not specify the durable claim-ledger table or its write gate"}
+   {:unfolded-pattern nil,
+    :free "reviewer/builder handoff after a passing deposit",
+    :why
+    "G1 stops at authoring the fold deposit; endpoint review and substrate write remain separate G2/A3 responsibilities"}]},
+ :cascade
+ {:psi
+  "WANT: per-mission-lifecycle.md:-every-map-question-has-a-concrete-answer.-the-ready-vs-missing-table-is-complete.-q1q8-above-all-have-concrete-factual-answers-ready-v. HAVE: in-the-operators-foreword-it-says:-in-one-tantalisingly-close-possible--realisation-of-these-ideas-the-software-system-can-be-largely--self-guiding-noticing-its.",
+  :psi-sha256
+  "672f42c5952a400d188e24956625876ae0d09261d8ea3c666d045eff4f97aa82",
+  :pattern-ids
+  ["aif/predictive-coding-belief-update"
+   "aif/expected-free-energy-scorecard"
+   "gauntlet/aif-as-environment-not-instruction"
+   "agent/state-is-hypothesis"
+   "software-design/agent-decorator-pattern"
+   "software-design/agent-command-pattern"
+   "agent/intent-handshake-is-binding"
+   "agent/provisional-claims-ledger"],
+  :constructor
+  {:entry "fold-author",
+   :source
+   "/home/joe/code/futon6/data/mission-triples/M-war-machine-pilot.edn",
+   :cascade-source :mission-triple-pattern-cites},
+  :pattern-cites
+  [{:order 0,
+    :ident "aif/predictive-coding-belief-update",
+    :ref "futon3/library/aif/predictive-coding-belief-update.flexiarg",
+    :offset 70215,
+    :section "Pattern cross-reference (the 6 grounding patterns)",
+    :phase "pattern",
+    :via
+    "| WHAT the engine IS (belief update) | predictive-coding-belief-update | `futon3/library/aif/predictive-coding-belief-update.flexiarg` |",
+    :rule "fold-turn/pattern-cite"}
+   {:order 1,
+    :ident "aif/expected-free-energy-scorecard",
+    :ref "futon3/library/aif/expected-free-energy-scorecard.flexiarg",
+    :offset 70354,
+    :section "Pattern cross-reference (the 6 grounding patterns)",
+    :phase "pattern",
+    :via
+    "| WHAT the engine IS (action selection) | expected-free-energy-scorecard | `futon3/library/aif/expected-free-energy-scorecard.flexiarg` |",
+    :rule "fold-turn/pattern-cite"}
+   {:order 2,
+    :ident "gauntlet/aif-as-environment-not-instruction",
+    :ref
+    "futon3/library/gauntlet/aif-as-environment-not-instruction.flexiarg",
+    :offset 70505,
+    :section "Pattern cross-reference (the 6 grounding patterns)",
+    :phase "pattern",
+    :via
+    "| WHY the engine doesn't act (load-bearing) | aif-as-environment-not-instruction | `futon3/library/gauntlet/aif-as-environment-not-instruction.flexiarg` |",
+    :rule "fold-turn/pattern-cite"}
+   {:order 3,
+    :ident "agent/state-is-hypothesis",
+    :ref "futon3/library/agent/state-is-hypothesis.flexiarg",
+    :offset 70880,
+    :section "Pattern cross-reference (the 6 grounding patterns)",
+    :phase "pattern",
+    :via
+    "| Discipline 2: revisable beliefs | state-is-hypothesis | `futon3/library/agent/state-is-hypothesis.flexiarg` |",
+    :rule "fold-turn/pattern-cite"}
+   {:order 4,
+    :ident "software-design/agent-decorator-pattern",
+    :ref
+    "futon3/library/software-design/agent-decorator-pattern.flexiarg",
+    :offset 71021,
+    :section "Pattern cross-reference (the 6 grounding patterns)",
+    :phase "pattern",
+    :via
+    "build). The four PSRs in §DERIVE (`agent-decorator-pattern`,",
+    :rule "fold-turn/pattern-cite"}
+   {:order 5,
+    :ident "software-design/agent-command-pattern",
+    :ref
+    "futon3/library/software-design/agent-command-pattern.flexiarg",
+    :offset 71048,
+    :section "Pattern cross-reference (the 6 grounding patterns)",
+    :phase "pattern",
+    :via "`agent-command-pattern`, `intent-handshake-is-binding`,",
+    :rule "fold-turn/pattern-cite"}
+   {:order 6,
+    :ident "agent/intent-handshake-is-binding",
+    :ref "futon3/library/agent/intent-handshake-is-binding.flexiarg",
+    :offset 71073,
+    :section "Pattern cross-reference (the 6 grounding patterns)",
+    :phase "pattern",
+    :via "`agent-command-pattern`, `intent-handshake-is-binding`,",
+    :rule "fold-turn/pattern-cite"}
+   {:order 7,
+    :ident "agent/provisional-claims-ledger",
+    :ref "futon3/library/agent/provisional-claims-ledger.flexiarg",
+    :offset 71104,
+    :section "Pattern cross-reference (the 6 grounding patterns)",
+    :phase "pattern",
+    :via
+    "`provisional-claims-ledger`) are the implementation primitives (HOW to build",
+    :rule "fold-turn/pattern-cite"}]},
+ :deposit-contract :v2,
+ :mission "M-war-machine-pilot",
+ :fold-turn/id "ft-war-machine-pilot-001",
+ :turn
+ {:agent "codex-2",
+  :model "gpt-5-codex",
+  :edge "invoke-1783547022554-848-72e47af2",
+  :at "2026-07-08T21:48:08Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "turn the pilot's READ step into a typed observation bundle: record the mission id, the current have/want text, the selected cascade pattern ids, arm states, and any missing fold-deposit fact before evaluating the lane",
+     :fits-pattern "aif/predictive-coding-belief-update",
+     :addresses-however
+     "the update rule needs an observation, not an instruction; this box makes the silent-stall fact an explicit observation that can move belief/precision instead of disappearing"}
+    {:id :b2,
+     :role
+     "score each candidate lane with a persisted term breakdown: delta-F from the cascade, delta-G from replayed escrow when present, abstain reason when absent, plus the active risk/ambiguity/EIG modes",
+     :fits-pattern "aif/expected-free-energy-scorecard",
+     :addresses-however
+     "opaque totals would hide why the pilot did or did not act; the scorecard keeps the missing-leg cause inspectable"}
+    {:id :b3,
+     :role
+     "enforce the environment boundary: the pilot may author a missing fold deposit inline, but the live tick replays only hash-gated deposits and never treats the AIF prose itself as a command to mutate the world",
+     :fits-pattern "gauntlet/aif-as-environment-not-instruction",
+     :addresses-however
+     "this resolves the risk that the machine reads its theory as an instruction; authoring produces a pinned artifact, while actuation remains separately gated"}
+    {:id :b4,
+     :role
+     "persist the pilot's current state as a revisable hypothesis: deposit coverage, prompt hash, replay result, and policy holes are recorded so later cycles can update the state rather than restart from undocumented operator memory",
+     :fits-pattern "agent/state-is-hypothesis",
+     :addresses-however
+     "state without provenance hardens into false certainty; the state is kept revisable by attaching the prompt hash and the holes that remain free"}
+    {:id :b5,
+     :role
+     "wrap the authoring step as an explicit command object: inputs are mission id plus answer EDN, outputs are a validated ft-*.edn deposit or a loud rejection reason",
+     :fits-pattern "software-design/agent-command-pattern",
+     :addresses-however
+     "without a command boundary the authoring act is an informal transcript; the boundary gives the pilot one auditable operation to invoke"}
+    {:id :b6,
+     :role
+     "attach an intent handshake to the deposit: operator, verbatim arming word, timestamp, fold-turn id, and scope travel inside the record and are checked before the deposit is accepted",
+     :fits-pattern "agent/intent-handshake-is-binding",
+     :addresses-however
+     "intent that lives only in chat cannot be replay-gated; embedding it in :arming turns consent into a load-time invariant"}],
+   :wires
+   [{:from :b1, :to :b2, :connective :seq}
+    {:from :b2, :to :b3, :connective :seq}
+    {:from :b3, :to :b5, :connective :seq}
+    {:from :b5, :to :b6, :connective :seq}
+    {:from :b4, :to :b2, :connective :tensor}
+    {:from :b6, :to :b4, :connective :seq}],
+   :terminals
+   [{:id :b6, :discharges :armed-fold-deposit}
+    {:id :b4, :discharges :pilot-state-record}],
+   :policy-holes
+   [{:unfolded-pattern "software-design/agent-decorator-pattern",
+     :free "which pilot surface gets decorated",
+     :why
+     "the cascade names a decorator pattern, but the circumstance does not choose whether decoration belongs in the Emacs surface, scheduled runner, or Pilot backend"}
+    {:unfolded-pattern "agent/provisional-claims-ledger",
+     :free "ledger integration for provisional claims",
+     :why
+     "the construction records prompt hash and holes, but the prompt does not specify the durable claim-ledger table or its write gate"}
+    {:unfolded-pattern nil,
+     :free "reviewer/builder handoff after a passing deposit",
+     :why
+     "G1 stops at authoring the fold deposit; endpoint review and substrate write remain separate G2/A3 responsibilities"}]}},
+ :arming
+ {:operator "joe",
+  :word
+  "G1 — build the INLINE FOLD-AUTHOR (the escrow-writer step that never existed).",
+  :at "2026-07-08T21:48:08Z",
+  :scope :one-fold,
+  :fold-turn/id "ft-war-machine-pilot-001"},
+ :prompt
+ {:sha256
+  "acae14ae4cc84f5fe56d62f440ecc727d1d2e5d202e567b7a9f1ac8c29c3dff3",
+  :prose-sha256
+  {"agent/intent-handshake-is-binding"
+   "67fb8152a68470f8b869b4ca99a228af5f68fc07d8f54d6ff710c9133b3d95cc",
+   "agent/provisional-claims-ledger"
+   "c088ddfe4841d55ae9d6d56d34bc128d75f05b65cc5220350efa67e22ceae02b",
+   "agent/state-is-hypothesis"
+   "9a3d929f3d764698d9f6d082a81b62ae7232ec57e3b23de3a8175b37a75cdbf9",
+   "aif/expected-free-energy-scorecard"
+   "b4f582e89eae9b597cb6d91c6309cb1ad5b1ece394604a1c595f7501a2904c50",
+   "aif/predictive-coding-belief-update"
+   "e55c1770f9f374b101f2c31f3e9594f62f4beb9f973d9cfd6b9b20a3d88677c4",
+   "gauntlet/aif-as-environment-not-instruction"
+   "f5806f54dec5be0f27830f71312b47622bc6e63f111c3474a37a8fd1693b9535",
+   "software-design/agent-command-pattern"
+   "3d773060eb6c6c199d03358fc1860fea0e4a6a8709b217bec61e2731a8ae8512",
+   "software-design/agent-decorator-pattern"
+   "cc488f1a20141c11d15e033582f4dda8f2e82efa8b5e4e34079ee2f57c4595d7"},
+  :prose-source
+  "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\")"},
+ :arrow-candidate
+ {:have
+  "in-the-operators-foreword-it-says:-in-one-tantalisingly-close-possible--realisation-of-these-ideas-the-software-system-can-be-largely--self-guiding-noticing-its",
+  :want
+  "per-mission-lifecycle.md:-every-map-question-has-a-concrete-answer.-the-ready-vs-missing-table-is-complete.-q1q8-above-all-have-concrete-factual-answers-ready-v",
+  :format :sorry,
+  :escrow "do-not-write-meme.db"},
+ :hole
+ {:confidence :authored,
+  :id nil,
+  :have
+  "in-the-operators-foreword-it-says:-in-one-tantalisingly-close-possible--realisation-of-these-ideas-the-software-system-can-be-largely--self-guiding-noticing-its",
+  :want
+  "per-mission-lifecycle.md:-every-map-question-has-a-concrete-answer.-the-ready-vs-missing-table-is-complete.-q1q8-above-all-have-concrete-factual-answers-ready-v",
+  :source-section "HEAD/IDENTIFY/MAP fallback",
+  :via
+  "HAVE quote: > In the Operator's Foreword it says: *\"In one tantalisingly-close possible > realisation of these ideas, the software system can be largely > self-guiding, noticing its own points of tension, and repairing them.\"* > > I would like to put this to the test. We have all the right ingredients > now: a full AIF workup, a sorry registry, a list of warnings, and an > established way of working with peripherals > (`README-peripherals.md`). We have the ability to set up long-running > loops via a \"conductor\" so that agents can run without stopping; we > also have bells and whistles they can use for inter-agent > communication. Therefore, I believe it is straightforwardly possible > to build a War Ma WANT quote: Per mission-lifecycle.md: *\"Every MAP question has a concrete answer. The 'ready vs missing' table is complete.\"* Q1–Q8 above all have concrete factual answers; ready-vs-missing table is complete; surprises documented. **PASSED** — Joe greenlit DERIVE drafting (emacs-repl 2026-05-24, \"Go\").",
+  :rule "fold-turn/hole-from-mission-triple"},
+ :eval {:delta-g -0.6666666666666666, :g-grain :coverage}}
+
