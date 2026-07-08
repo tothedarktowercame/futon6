@@ -1,37 +1,38 @@
-;; CLean — R12 (dual-loop / hyperparameter inference) decomposed into its sub-boxes, with the
-;; UNBUILT accumulation box marked as a typed hole. The ◐→box-pointer: this replaces "R12 is
-;; partial" with "R12 needs the :accumulate box (= A4a/R17, in flight)."
-;; clean_argcheck-valid; build-match-checkable.
+;; CLean — R12 (dual-loop / hyperparameter inference) decomposed into its sub-boxes. REFRAMED
+;; after claude-5's pattern-grain result (zai-13 + independent verification): the accumulation
+;; corpus EXISTS at pattern grain (co-application), so R12 FILLS — but honestly, via EMBEDDING-
+;; CLUSTERING + BMR-EIG, NOT naive count-BMR merges (which over-merge at 94-dim). This is the
+;; load-bearing negative result of the "AIF and Embeddings" thesis. clean_argcheck-valid.
 
 {:clean/proof "R12-decomposition"
- :clean/title "R12: dual-loop apparatus + accumulation — which box remains"
- :clean/source {:requirement "R12" :status "apparatus built, accumulation open" :commit "4064533+8200f08"}
+ :clean/title "R12: dual-loop apparatus + accumulation — FILLED via embedding + BMR-EIG"
+ :clean/source {:requirement "R12"
+                :status "FILLED (honest): concepts = embedding constellations; epistemic value = BMR-EIG; count-BMR corroborates weakly, insufficient alone"
+                :commit "4064533+8200f08+pattern-grain(claude-5)"}
 
  :clean/seq [:dual-loop-apparatus :accumulate :concept-formation]
 
  :clean/boxes
  [{:id :b1 :method :dual-loop-apparatus
-   :text "The dual-loop (two-layer calibration) apparatus exists: the fast loop (per-tick belief update + EFE scoring) and the slow loop (hyperparameter/precision calibration over a measurement window) are wired structurally. two-layer-calibration pattern, evidence-precision-registry. Built, apparatus-only — the flip is on the apparatus, not accumulated learning."
+   :text "The dual-loop (two-layer calibration) apparatus: fast loop (per-tick belief update + EFE scoring) + slow loop (hyperparameter/precision calibration over a window), wired structurally. two-layer-calibration, evidence-precision-registry. Built, apparatus-only."
    :produces :dual-loop-structure}
   {:id :b2 :method :accumulate
-   :text "The accumulation that the slow loop should learn from: accrued capability/* counts from real fold-deposit missions, feeding BMR concept-formation. Currently starved — the demo corpus has 0 capability/* edges, so no merges fire (~6× below the ΔF ≤ −3 threshold)."
-   :produces :accumulated-capability-counts
-   :hole {:kind :sorry :discharge :ungroundedBinder :satiety :bundling
-          :wanted "BMR concept-formation over accumulated :capability/* — = A4a/R17 (claude-5), in flight. The apparatus is built; the data it needs to learn from does not yet flow. This is the one unbuilt box."}}
+   :text "The accumulation the slow loop learns from. RESOLVED at pattern grain: the pattern co-application corpus EXISTS (6903 pairs / 2721 weighted edges) — dense real co-occurrence, unlike the bijective capability star-map (0 co-occurrence, degenerate). The data flows; the open question moves to the mechanism (b3)."
+   :produces :accumulated-co-occurrence}
   {:id :b3 :method :concept-formation
-   :text "Bayesian Model Reduction over the accumulated counts: the slow loop's generative-model revision step. The BMR kernel (4064533) and concept pipeline (8200f08) are built and reviewed-green, but inert on the demo corpus. Discharges the R12 want-signature when real counts flow."
-   :consumes [:dual-loop-structure :accumulated-capability-counts]
-   :produces :revised-generative-model
+   :text "Slow-loop generative-model revision. HONEST RESULT (claude-5, verified): naive count-BMR over the raw corpus is MISCALIBRATED in high-dim — at 94-dim all 6903 pairs accept (ΔF -6.5..-33.7) and collapse to a single concept even for DISJOINT patterns (the complexity term inflates with outcome-dimension). Structure is instead recovered by EMBEDDING-CLUSTERING: the concepts are Joe's semilattice CONSTELLATIONS (P0-P17, embedding + citation-overlap), and embedding-gated BMR (cos >= 0.7, cutoff -20) recovers them (AIF, math-proof, engineering). BMR's genuine contribution is the EPISTEMIC layer: EIG per constellation {P -> posterior stddev} (proportional to 1/sqrt(alpha0); singletons 0.029 most-uncertain -> P2/AIF 0.009 most-settled) -- the layer the constellations lacked -- plus WEAK corroboration (within-constellation pairs merge 1.55 delta-F stronger than across; hub patterns like stop-the-line bridge constellations and weaken it). Structure learning is real via embedding + BMR-EIG; count-BMR alone is insufficient. Discharges the R12 want-signature."
+   :consumes [:dual-loop-structure :accumulated-co-occurrence]
+   :produces :revised-generative-model-with-epistemic-value
    :discharges {:to :hyperparameter-inference-from-accumulated-evidence}}]
 
  :clean/wires
  [{:from :b1 :to :b3 :carries :dual-loop-structure}
-  {:from :b2 :to :b3 :carries :accumulated-capability-counts}]
+  {:from :b2 :to :b3 :carries :accumulated-co-occurrence}]
 
  :clean/copar [{:reading :informal :is :clean/seq}
                {:reading :formal   :is [:clean/boxes :clean/wires]}]
 
  :clean/shape {:macro :dual-loop-with-accumulation
-               :holes-at [:b2]
+               :holes-at []
                :discharges-at [:b3]
-               :note "b1 (dual-loop-apparatus) ✓ is BUILT — the structural two-layer calibration exists. b3 (concept-formation) is built but INERT (BMR kernel + pipeline reviewed-green, 0 merges on demo corpus). b2 (accumulate) is the one unbuilt box: = A4a/R17 in flight. The apparatus is ready; the data is not. One unbuilt box."}}
+               :note "FILLED -- all three boxes built. b1 apparatus checkmark; b2 accumulate checkmark (pattern co-application corpus exists, dense-real); b3 concept-formation checkmark via embedding-clustering + BMR-EIG. The honest reframe: NOT 'BMR merges fired' (naive count-BMR over-merges at scale -- a load-bearing NEGATIVE result for the 'AIF and Embeddings' thesis: the metric space makes structure learning tractable where pure BMR-over-counts collapses), but 'concepts = embedding constellations; epistemic value = BMR-EIG; count-BMR corroborates weakly.' The honest verb is structure-RECOVERY + epistemic-quantification, not structure-learned-from-scratch (constellations are embedding-derived, semi-authored by Joe's semilattice). DEFERRED and OUT OF R12's scope: wiring {constellation -> EIG} into the ranker at pattern grain (claude-4's grain-agnostic :eig-fn + claude-5's eig-for-produces re-keyed to patterns) -- that inhabits the R5-EIG / R13-signal boxes, not this one. Zero unbuilt boxes."}}
