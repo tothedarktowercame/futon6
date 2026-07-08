@@ -22,10 +22,10 @@
    :consumes [:precision-weighted-errors]
    :produces :variational-free-energy}
   {:id :b4 :method :sign-aggregation
-   :text "R3d (the hard half): combine the 8 precision-weighted errors into one R3d driver. The channels differ on health direction (sorry-count-norm is −1, the other 7 are +1). channel-health-signs def committed (3347575), signed precision-weighted mean designed and reviewer-approved — but NOT wired into judge."
+   :text "R3d (the hard half): combine the 8 precision-weighted errors into one R3d driver. channel-health-signs for all 8 channels; r3d-aggregate-driver uses the precision-weighted average: Sigma(sign_c · precision_c · error_c) / Sigma(precision_c). BUILT behind *r3d-multichannel?* flag (default OFF — annotation-health alone byte-identical; ON — 8-channel signed aggregate)."
    :produces :aggregated-r3d-driver
    :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
-          :wanted "the flag-gated live wiring of the approved sign-aggregation design (3347575); per-entity attribution (which entity does a channel-level error apply to?) is a separate open concern. This is the one unbuilt box."}}
+          :wanted "per-entity attribution (which entity does a channel-level error apply to?) is a separate open concern. The aggregation itself is BUILT behind *r3d-multichannel?* (default off); flag-flip + live validation is the operator's call."}}
   {:id :b5 :method :belief-update
    :text "R3d (the wired half): the belief-update event currently draws its sign and magnitude from :annotation-health alone. Discharges the R3 want-signature when the sign-aggregation is wired (currently partial — one channel driving the update)."
    :consumes [:variational-free-energy :aggregated-r3d-driver]
@@ -44,4 +44,4 @@
  :clean/shape {:macro :predictive-coding-with-sign-aggregation
                :holes-at [:b4]
                :discharges-at [:b5]
-               :note "b1 (per-channel-errors) ✓, b2 (precision-weighting) ✓, b3 (VFE) ✓ are BUILT — the easy half (channel coverage) is done. b5 (belief-update) is PARTIALLY wired (annotation-health only). b4 (sign-aggregation) is the one unbuilt box: designed-dark (channel-health-signs committed, signed precision-weighted mean approved), awaiting flag-gated live wiring. One unbuilt box."}}
+               :note "b1 (per-channel-errors) ✓, b2 (precision-weighting) ✓, b3 (VFE) ✓ are BUILT — the easy half (channel coverage) is done. b4 (sign-aggregation) is BUILT behind *r3d-multichannel?* (default off, 8-channel precision-weighted average when on; precision-weighted average normalizer per claude-4 review). b5 (belief-update) is PARTIALLY wired. The hole is now per-entity attribution, not the aggregation itself. Zero unbuilt boxes (aggregation built, flag-gated)."}}
