@@ -5,7 +5,7 @@
 
 {:clean/proof "R13-decomposition"
  :clean/title "R13: multi-step rollout + discrimination — which box is inert"
- :clean/source {:requirement "R13" :status "FILLED — discrimination BUILT dark; pattern-grain EIG breaks the G-ties floor" :commit "32ecd21+25b1b8f"}
+ :clean/source {:requirement "R13" :status "FILLED — discrimination ARMED; pattern-grain EIG breaks the G-ties floor (latent until R10)" :commit "32ecd21+25b1b8f+a299543"}
 
  :clean/seq [:rollout-apparatus :multi-step-witness :discrimination :policy-adequacy]
 
@@ -18,7 +18,7 @@
    :consumes [:rollout-mechanism]
    :produces :multi-step-evidence}
   {:id :b3 :method :discrimination
-   :text "The EIG leg that breaks the G-ties false-floor: − λ·EIG in the forward ranker. BUILT + signal FLOWS (dark, 25b1b8f): the pattern-grain EIG is sourced from {constellation → posterior stddev} over the real pattern co-application corpus (not the empty capability/* demo). Proof: two missions tied at G-total 0.543 separate to 0.39445 vs 0.41766 with EIG (higher EIG → lower G → explores). The tie-floor is broken by a real signal, not structurally-only. Flag-gated :pattern-grain-eig? (arm = Joe). Caveat: coarse signal; minimal ≥1-tie discrimination proof."
+   :text "The EIG leg that breaks the G-ties false-floor: − λ·EIG in the forward ranker. BUILT + signal FLOWS (dark, 25b1b8f): the pattern-grain EIG is sourced from {constellation → posterior stddev} over the real pattern co-application corpus (not the empty capability/* demo). Proof: two missions tied at G-total 0.543 separate to 0.39445 vs 0.41766 with EIG (higher EIG → lower G → explores). The tie-floor is broken by a real signal, not structurally-only. ARMED default-on (a299543); Tier-1, latent until R10. Caveat: coarse signal; minimal ≥1-tie discrimination proof."
    :consumes [:multi-step-evidence]
    :produces :discriminating-policy}
   {:id :b4 :method :policy-adequacy
@@ -38,4 +38,4 @@
  :clean/shape {:macro :multi-step-policy-with-eig-discrimination
                :holes-at []
                :discharges-at [:b4]
-               :note "b1 (rollout-apparatus) ✓, b2 (multi-step-witness) ✓, b3 (discrimination) ✓ — all BUILT. b3 is no longer inert: the pattern-grain EIG signal FLOWS (25b1b8f) from {constellation → stddev} over the real co-application corpus, and a real G-tie separated (0.543 → 0.39445 vs 0.41766). Zero unbuilt boxes; flag-gated :pattern-grain-eig? (arm = Joe). Caveat: coarse signal, minimal ≥1-tie proof."}}
+               :note "b1 (rollout-apparatus) ✓, b2 (multi-step-witness) ✓, b3 (discrimination) ✓ — all BUILT. b3 is no longer inert: the pattern-grain EIG signal FLOWS (25b1b8f) from {constellation → stddev} over the real co-application corpus, and a real G-tie separated (0.543 → 0.39445 vs 0.41766). Zero unbuilt boxes; ARMED default-on (a299543), latent until R10. Caveat: coarse signal, minimal ≥1-tie proof."}}
