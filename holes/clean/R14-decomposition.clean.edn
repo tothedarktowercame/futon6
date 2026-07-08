@@ -5,7 +5,7 @@
 
 {:clean/proof "R14-decomposition"
  :clean/title "R14: γ as a learned, two-sided precision — which boxes remain"
- :clean/source {:requirement "R14" :status "grounding + live-wire BUILT (dark); 1 data box + the arm remain" :commit "723cacf+a3cbc56+d36086f"}
+ :clean/source {:requirement "R14" :status "grounding + live-wire BUILT + ARMED (default-on); 1 data box remains (real variance)" :commit "723cacf+a3cbc56+d36086f+b624242"}
 
  :clean/seq [:grounded-realized :grounded-expected :live-wire :accumulate :gamma-learned]
 
@@ -17,7 +17,7 @@
    :text "Two-sided expected leg: the fold's coverage forecast → predicted-remaining. Built this cycle — γ can now commit, not just hedge."
    :produces :expected-forecast}
   {:id :b3 :method :live-wire
-   :text "Wire the grounded producer into the live γ source, replacing coverage-ΔG. BUILT (dark, d36086f): *gamma-grounded-feed?* (default OFF ⇒ byte-identical) routes with-realized-outcome → realized-outcome-grounded when armed alongside *live-wire?*. Only the operator flip remains — an arm, not missing code."
+   :text "Wire the grounded producer into the live γ source, replacing coverage-ΔG. BUILT + ARMED (b624242): *gamma-grounded-feed?* + *live-wire?* now default ON (Joe-directed) route with-realized-outcome → realized-outcome-grounded. Latent until R10 runs — armed ≠ running; bind either false to restore."
    :produces :live-gamma-feed}
   {:id :b4 :method :accumulate
    :text "Accrue realized samples with genuine variance."
@@ -42,4 +42,4 @@
  :clean/shape {:macro :two-sided-grounded-precision
                :holes-at [:b4]
                :discharges-at [:b5]
-               :note "b1 (realized) ✓, b2 (expected) ✓, and now b3 (live-wire) ✓ are BUILT — the migration is coded dark (d36086f: *gamma-grounded-feed?*, default OFF). What remains is NOT code: b4 (real variance, a data dependency) and the two operator arms (*live-wire?* then *gamma-grounded-feed?*). One data box; zero unbuilt code boxes."}}
+               :note "b1 (realized) ✓, b2 (expected) ✓, and now b3 (live-wire) ✓ are BUILT — the migration is coded dark (d36086f: *gamma-grounded-feed?*, default OFF). Both arms now FLIPPED (*live-wire?* + *gamma-grounded-feed?* default-on, b624242, Joe-directed). What remains is NOT code, NOT arms: b4 (real variance, a data dependency) + an R10 run. One data box; zero unbuilt code boxes."}}
