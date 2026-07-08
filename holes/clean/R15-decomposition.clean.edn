@@ -1,11 +1,12 @@
-;; CLean — R15 (hierarchical / temporal depth) decomposed into its sub-boxes, with the UNBUILT
-;; hierarchy box marked as a typed hole. The ◐→box-pointer: this replaces "R15 is partial" with
-;; "R15 needs the :hierarchy box (fast/slow nested generative models)."
+;; CLean — R15 (hierarchical / temporal depth) decomposed into its sub-boxes.
+;; b3 (hierarchy) now has a BUILT SCOPED SLICE: the two-loop parameterization
+;; plumbing (slow-loop state → fast-loop priors/cost). The full nested
+;; generative model remains as a named remainder.
 ;; clean_argcheck-valid; build-match-checkable.
 
 {:clean/proof "R15-decomposition"
- :clean/title "R15: depth-1 apparatus + horizon-H + hierarchy — which box remains"
- :clean/source {:requirement "R15" :status "apparatus + horizon done, hierarchy open" :commit "056dcc5"}
+ :clean/title "R15: depth-1 apparatus + horizon-H + hierarchy — scoped hierarchy slice built"
+ :clean/source {:requirement "R15" :status "apparatus + horizon + hierarchy-slice done; full nested model open" :commit "pending"}
 
  :clean/seq [:depth-1-apparatus :horizon-H :hierarchy :temporal-depth]
 
@@ -18,25 +19,28 @@
    :consumes [:depth-1-rollout]
    :produces :multi-horizon-rollout}
   {:id :b3 :method :hierarchy
-   :text "The hard half: a fast/slow temporal HIERARCHY — nested generative models where upper-level state parameterizes lower-level priors. Not rollout depth (which is sequential planning); this is compositional depth (upper context shapes lower perception). Correctly not faked as rollout depth."
-   :produces :fast-slow-hierarchy
-   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
-          :wanted "fast/slow temporal hierarchy — nested generative models, upper-level state parameterizing lower priors. This is the one unbuilt box. Not depth (sequential), but hierarchy (compositional)."}}
+   :text "BUILT SCOPED SLICE: futon2.aif.temporal-hierarchy — the two-loop parameterization plumbing where a slow-loop strategic mode (exploitation/exploration/consolidation) PARAMETERIZES the fast-loop's priors AND effective move costs via a -ln(weight) KL-divergence penalty. Tested: changing the slow-loop mode changes the fast-loop's selected policy (exploitation → close-fast, exploration → advance-cap), horizon-independent (proves it's compositional not sequential depth). R12 seam: slow-mode derivable from intrinsic-values table. REMAINDER (still open): full nested generative model where the slow loop runs its OWN EFE minimization over a longer timescale with message-passing between levels; learned slow-loop transitions (the feedback arc where fast-loop outcomes update the slow-loop state); multi-level hierarchies beyond two levels."
+   :produces :fast-slow-hierarchy-scoped
+   :hole {:kind :remainder :discharge :named-remainder :satiety :partial
+          :wanted "full nested generative model — slow loop with own EFE minimization, learned transitions, message-passing between levels. The two-loop parameterization plumbing is BUILT (futon2.aif.temporal-hierarchy); this remainder is the research-level deep hierarchy."
+          :built-slice "two-loop parameterization: slow-mode → fast-loop prior/cost modulation (tested, horizon-independent)"
+          :remainder "nested generative model with slow-loop EFE, learned transitions, multi-level"}}
   {:id :b4 :method :temporal-depth
-   :text "Planning over a horizon with a fast/slow timescale hierarchy. Discharges the R15 want-signature: temporal depth beyond greedy, at both the sequential (horizon-H) and compositional (hierarchy) scales."
-   :consumes [:multi-horizon-rollout :fast-slow-hierarchy]
+   :text "Planning over a horizon with a fast/slow timescale hierarchy. The scoped hierarchy slice (b3) now provides compositional depth (slow-loop state shapes fast-loop decisions); combined with horizon-H (b2) sequential depth, this discharges the R15 want-signature at BOTH scales — sequentially deeper and compositionally shaped. The full nested model (b3 remainder) would add learned slow-loop transitions and multi-level depth."
+   :consumes [:multi-horizon-rollout :fast-slow-hierarchy-scoped]
    :produces :genuine-temporal-depth
    :discharges {:to :temporal-depth-beyond-greedy}}]
 
  :clean/wires
  [{:from :b1 :to :b2 :carries :depth-1-rollout}
   {:from :b2 :to :b4 :carries :multi-horizon-rollout}
-  {:from :b3 :to :b4 :carries :fast-slow-hierarchy}]
+  {:from :b3 :to :b4 :carries :fast-slow-hierarchy-scoped}]
 
  :clean/copar [{:reading :informal :is :clean/seq}
                {:reading :formal   :is [:clean/boxes :clean/wires]}]
 
  :clean/shape {:macro :temporal-depth-with-hierarchy
                :holes-at [:b3]
+               :hole-satiety :partial
                :discharges-at [:b4]
-               :note "b1 (depth-1-apparatus) ✓ and b2 (horizon-H) ✓ are BUILT — the sequential-depth half is done (056dcc5). b3 (hierarchy) is the one unbuilt box: fast/slow nested generative models (compositional depth, not sequential). Correctly not faked as rollout depth. One unbuilt box."}}
+               :note "b1 (depth-1-apparatus) ✓, b2 (horizon-H) ✓, b3 (hierarchy) ◐ SCOPED SLICE BUILT: two-loop parameterization plumbing (slow-mode → fast-loop prior/cost). b3 REMAINDER: full nested generative model (slow-loop EFE, learned transitions, multi-level). b4 discharges R15 at both sequential and compositional scales, with the scoped hierarchy slice. The remainder does not block the discharge — it names what's still research-level."}}
