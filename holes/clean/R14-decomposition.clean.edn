@@ -5,7 +5,7 @@
 
 {:clean/proof "R14-decomposition"
  :clean/title "R14: γ as a learned, two-sided precision — which boxes remain"
- :clean/source {:requirement "R14" :status "hard half done (grounding); 2 boxes gated" :commit "723cacf+a3cbc56"}
+ :clean/source {:requirement "R14" :status "grounding + live-wire BUILT (dark); 1 data box + the arm remain" :commit "723cacf+a3cbc56+d36086f"}
 
  :clean/seq [:grounded-realized :grounded-expected :live-wire :accumulate :gamma-learned]
 
@@ -17,10 +17,8 @@
    :text "Two-sided expected leg: the fold's coverage forecast → predicted-remaining. Built this cycle — γ can now commit, not just hedge."
    :produces :expected-forecast}
   {:id :b3 :method :live-wire
-   :text "Wire the grounded producer into the live γ source, replacing coverage-ΔG."
-   :produces :live-gamma-feed
-   :hole {:kind :sorry :discharge :queryAnswer :satiety :role
-          :wanted "the migration + *gamma-grounded-feed?* flip (flag-gated, logged) — an operator/joint arm, not missing code. Unbuilt box #1."}}
+   :text "Wire the grounded producer into the live γ source, replacing coverage-ΔG. BUILT (dark, d36086f): *gamma-grounded-feed?* (default OFF ⇒ byte-identical) routes with-realized-outcome → realized-outcome-grounded when armed alongside *live-wire?*. Only the operator flip remains — an arm, not missing code."
+   :produces :live-gamma-feed}
   {:id :b4 :method :accumulate
    :text "Accrue realized samples with genuine variance."
    :produces :real-variance-samples
@@ -42,6 +40,6 @@
                {:reading :formal   :is [:clean/boxes :clean/wires]}]
 
  :clean/shape {:macro :two-sided-grounded-precision
-               :holes-at [:b3 :b4]
+               :holes-at [:b4]
                :discharges-at [:b5]
-               :note "b1 (realized) ✓ and b2 (expected) ✓ are BUILT this cycle — the HARD half (grounding) is done, and γ moved on real data (1.0→0.912). The two unbuilt boxes are b3 (live-wire, an operator/joint arm) and b4 (real variance, a data dependency) — both gated, neither missing code. Two unbuilt boxes."}}
+               :note "b1 (realized) ✓, b2 (expected) ✓, and now b3 (live-wire) ✓ are BUILT — the migration is coded dark (d36086f: *gamma-grounded-feed?*, default OFF). What remains is NOT code: b4 (real variance, a data dependency) and the two operator arms (*live-wire?* then *gamma-grounded-feed?*). One data box; zero unbuilt code boxes."}}
