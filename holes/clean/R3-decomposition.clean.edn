@@ -1,0 +1,47 @@
+;; CLean — R3 (predictive-coding belief update) decomposed into its sub-boxes, with the UNBUILT
+;; sign-aggregation box marked as a typed hole. The ◐→box-pointer: this replaces "R3 is partial"
+;; with "R3 needs the :sign-aggregation box (designed-dark, approved, not wired)."
+;; clean_argcheck-valid; build-match-checkable.
+
+{:clean/proof "R3-decomposition"
+ :clean/title "R3: prediction error + precision + VFE + belief update — which box remains"
+ :clean/source {:requirement "R3" :status "easy done (8 channels), hard designed-dark" :commit "3347575"}
+
+ :clean/seq [:per-channel-errors :precision-weighting :vfe-decomposition :sign-aggregation :belief-update]
+
+ :clean/boxes
+ [{:id :b1 :method :per-channel-errors
+   :text "R3a: prediction error per observation channel. 8 of 14 channels have likelihood models (predict-* functions producing {:mean :variance}). compute-prediction-error returns {:observed :predicted-mean :error} per channel. Built, validated on real runs (2026-05-18: +0.37/−0.15/−0.24/−0.20)."
+   :produces :per-channel-errors}
+  {:id :b2 :method :precision-weighting
+   :text "R3b: precision Π = 1/max(variance, ε) with ε = 0.01. weighted-error = error × Π. Applied per channel at the prediction-error step. Built for all 8 covered channels."
+   :consumes [:per-channel-errors]
+   :produces :precision-weighted-errors}
+  {:id :b3 :method :vfe-decomposition
+   :text "R3c: variational free energy decomposed into pragmatic + epistemic + per-channel detail. compute-free-energy reports G per tick. In shape since v0.2."
+   :consumes [:precision-weighted-errors]
+   :produces :variational-free-energy}
+  {:id :b4 :method :sign-aggregation
+   :text "R3d (the hard half): combine the 8 precision-weighted errors into one R3d driver. The channels differ on health direction (sorry-count-norm is −1, the other 7 are +1). channel-health-signs def committed (3347575), signed precision-weighted mean designed and reviewer-approved — but NOT wired into judge."
+   :produces :aggregated-r3d-driver
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "the flag-gated live wiring of the approved sign-aggregation design (3347575); per-entity attribution (which entity does a channel-level error apply to?) is a separate open concern. This is the one unbuilt box."}}
+  {:id :b5 :method :belief-update
+   :text "R3d (the wired half): the belief-update event currently draws its sign and magnitude from :annotation-health alone. Discharges the R3 want-signature when the sign-aggregation is wired (currently partial — one channel driving the update)."
+   :consumes [:variational-free-energy :aggregated-r3d-driver]
+   :produces :updated-belief-state
+   :discharges {:to :predictive-coding-belief-update}}]
+
+ :clean/wires
+ [{:from :b1 :to :b2 :carries :per-channel-errors}
+  {:from :b2 :to :b3 :carries :precision-weighted-errors}
+  {:from :b3 :to :b5 :carries :variational-free-energy}
+  {:from :b4 :to :b5 :carries :aggregated-r3d-driver}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :predictive-coding-with-sign-aggregation
+               :holes-at [:b4]
+               :discharges-at [:b5]
+               :note "b1 (per-channel-errors) ✓, b2 (precision-weighting) ✓, b3 (VFE) ✓ are BUILT — the easy half (channel coverage) is done. b5 (belief-update) is PARTIALLY wired (annotation-health only). b4 (sign-aggregation) is the one unbuilt box: designed-dark (channel-health-signs committed, signed precision-weighted mean approved), awaiting flag-gated live wiring. One unbuilt box."}}

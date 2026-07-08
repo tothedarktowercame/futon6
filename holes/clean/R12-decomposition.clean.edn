@@ -1,0 +1,37 @@
+;; CLean — R12 (dual-loop / hyperparameter inference) decomposed into its sub-boxes, with the
+;; UNBUILT accumulation box marked as a typed hole. The ◐→box-pointer: this replaces "R12 is
+;; partial" with "R12 needs the :accumulate box (= A4a/R17, in flight)."
+;; clean_argcheck-valid; build-match-checkable.
+
+{:clean/proof "R12-decomposition"
+ :clean/title "R12: dual-loop apparatus + accumulation — which box remains"
+ :clean/source {:requirement "R12" :status "apparatus built, accumulation open" :commit "4064533+8200f08"}
+
+ :clean/seq [:dual-loop-apparatus :accumulate :concept-formation]
+
+ :clean/boxes
+ [{:id :b1 :method :dual-loop-apparatus
+   :text "The dual-loop (two-layer calibration) apparatus exists: the fast loop (per-tick belief update + EFE scoring) and the slow loop (hyperparameter/precision calibration over a measurement window) are wired structurally. two-layer-calibration pattern, evidence-precision-registry. Built, apparatus-only — the flip is on the apparatus, not accumulated learning."
+   :produces :dual-loop-structure}
+  {:id :b2 :method :accumulate
+   :text "The accumulation that the slow loop should learn from: accrued capability/* counts from real fold-deposit missions, feeding BMR concept-formation. Currently starved — the demo corpus has 0 capability/* edges, so no merges fire (~6× below the ΔF ≤ −3 threshold)."
+   :produces :accumulated-capability-counts
+   :hole {:kind :sorry :discharge :ungroundedBinder :satiety :bundling
+          :wanted "BMR concept-formation over accumulated :capability/* — = A4a/R17 (claude-5), in flight. The apparatus is built; the data it needs to learn from does not yet flow. This is the one unbuilt box."}}
+  {:id :b3 :method :concept-formation
+   :text "Bayesian Model Reduction over the accumulated counts: the slow loop's generative-model revision step. The BMR kernel (4064533) and concept pipeline (8200f08) are built and reviewed-green, but inert on the demo corpus. Discharges the R12 want-signature when real counts flow."
+   :consumes [:dual-loop-structure :accumulated-capability-counts]
+   :produces :revised-generative-model
+   :discharges {:to :hyperparameter-inference-from-accumulated-evidence}}]
+
+ :clean/wires
+ [{:from :b1 :to :b3 :carries :dual-loop-structure}
+  {:from :b2 :to :b3 :carries :accumulated-capability-counts}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :dual-loop-with-accumulation
+               :holes-at [:b2]
+               :discharges-at [:b3]
+               :note "b1 (dual-loop-apparatus) ✓ is BUILT — the structural two-layer calibration exists. b3 (concept-formation) is built but INERT (BMR kernel + pipeline reviewed-green, 0 merges on demo corpus). b2 (accumulate) is the one unbuilt box: = A4a/R17 in flight. The apparatus is ready; the data is not. One unbuilt box."}}

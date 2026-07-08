@@ -1,0 +1,34 @@
+;; CLean — R1 (explicit belief state) decomposed into its sub-boxes. The ◐→box-pointer:
+;; R1 is DONE for the belief-derivable half — no unbuilt boxes, no holes. The 6 N/A-by-design
+;; channels are OUT OF SCOPE, not gaps. clean_argcheck-valid; build-match-checkable.
+
+{:clean/proof "R1-decomposition"
+ :clean/title "R1: explicit belief state — which boxes remain (none)"
+ :clean/source {:requirement "R1" :status "done for belief-derivable half" :commit "3347575"}
+
+ :clean/seq [:belief-vector :channel-likelihoods :combine-belief]
+
+ :clean/boxes
+ [{:id :b1 :method :belief-vector
+   :text "Per-entity posterior over the tagged status set {:spawned :refined :strengthened :addressed :falsified :foreclosed :reopened}, carried across ticks with mean (argmax) and precision (entropy). Initial belief state, update-entity-belief, bootstrap-from-stack-annotations. Built v0.2, symmetric bootstrap v0.9."
+   :produces :belief-distribution}
+  {:id :b2 :method :channel-likelihoods
+   :text "8 of 14 observation channels have likelihood models (predict-* functions). The remaining 6 are N/A-by-design — externally-measured signals (commit-%, loop-health, depositing-signal) with no per-entity belief substrate. A fake mapping would be fabrication, not coverage. The doc's '4 of 14' was stale; the actual count is 8."
+   :produces :channel-coverage}
+  {:id :b3 :method :combine-belief
+   :text "The belief state is the posterior map updated tick-over-tick via multiplicative likelihood (legacy) or explicit A-matrix (v0.24, dark). Discharges the R1 want-signature: an explicit belief distribution with mean and precision, carried across calls."
+   :consumes [:belief-distribution :channel-coverage]
+   :produces :explicit-belief-state
+   :discharges {:to :explicit-belief-state-with-mean-and-precision}}]
+
+ :clean/wires
+ [{:from :b1 :to :b3 :carries :belief-distribution}
+  {:from :b2 :to :b3 :carries :channel-coverage}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :belief-state-complete
+               :holes-at []
+               :discharges-at [:b3]
+               :note "b1 (belief-vector) ✓ and b2 (channel-likelihoods) ✓ are BOTH BUILT. No unbuilt boxes — R1 is done for the belief-derivable half. The 6 N/A-by-design channels are OUT OF SCOPE (no per-entity belief substrate), not holes. The doc's stale '4/14' is corrected to 8/14 (6 N/A). Zero unbuilt boxes."}}

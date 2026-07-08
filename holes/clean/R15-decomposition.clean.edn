@@ -1,0 +1,42 @@
+;; CLean — R15 (hierarchical / temporal depth) decomposed into its sub-boxes, with the UNBUILT
+;; hierarchy box marked as a typed hole. The ◐→box-pointer: this replaces "R15 is partial" with
+;; "R15 needs the :hierarchy box (fast/slow nested generative models)."
+;; clean_argcheck-valid; build-match-checkable.
+
+{:clean/proof "R15-decomposition"
+ :clean/title "R15: depth-1 apparatus + horizon-H + hierarchy — which box remains"
+ :clean/source {:requirement "R15" :status "apparatus + horizon done, hierarchy open" :commit "056dcc5"}
+
+ :clean/seq [:depth-1-apparatus :horizon-H :hierarchy :temporal-depth]
+
+ :clean/boxes
+ [{:id :b1 :method :depth-1-apparatus
+   :text "futon2.aif.rollout depth-1: project-policy over a one-step horizon with the shared kernel. Reactive control — real but not yet planning. Built v0.21."
+   :produces :depth-1-rollout}
+  {:id :b2 :method :horizon-H
+   :text "Horizon-H + temporal discount: the rollout projects over H steps with γ^t discounting. :horizon and :temporal-discount params bridged this cycle (056dcc5), tested H=2-shortcut vs H=3-delayed-payoff. The depth apparatus extends beyond reactive one-step."
+   :consumes [:depth-1-rollout]
+   :produces :multi-horizon-rollout}
+  {:id :b3 :method :hierarchy
+   :text "The hard half: a fast/slow temporal HIERARCHY — nested generative models where upper-level state parameterizes lower-level priors. Not rollout depth (which is sequential planning); this is compositional depth (upper context shapes lower perception). Correctly not faked as rollout depth."
+   :produces :fast-slow-hierarchy
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "fast/slow temporal hierarchy — nested generative models, upper-level state parameterizing lower priors. This is the one unbuilt box. Not depth (sequential), but hierarchy (compositional)."}}
+  {:id :b4 :method :temporal-depth
+   :text "Planning over a horizon with a fast/slow timescale hierarchy. Discharges the R15 want-signature: temporal depth beyond greedy, at both the sequential (horizon-H) and compositional (hierarchy) scales."
+   :consumes [:multi-horizon-rollout :fast-slow-hierarchy]
+   :produces :genuine-temporal-depth
+   :discharges {:to :temporal-depth-beyond-greedy}}]
+
+ :clean/wires
+ [{:from :b1 :to :b2 :carries :depth-1-rollout}
+  {:from :b2 :to :b4 :carries :multi-horizon-rollout}
+  {:from :b3 :to :b4 :carries :fast-slow-hierarchy}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :temporal-depth-with-hierarchy
+               :holes-at [:b3]
+               :discharges-at [:b4]
+               :note "b1 (depth-1-apparatus) ✓ and b2 (horizon-H) ✓ are BUILT — the sequential-depth half is done (056dcc5). b3 (hierarchy) is the one unbuilt box: fast/slow nested generative models (compositional depth, not sequential). Correctly not faked as rollout depth. One unbuilt box."}}
