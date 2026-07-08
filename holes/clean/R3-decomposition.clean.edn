@@ -5,7 +5,7 @@
 
 {:clean/proof "R3-decomposition"
  :clean/title "R3: prediction error + precision + VFE + belief update — which box remains"
- :clean/source {:requirement "R3" :status "easy done (8 channels), hard designed-dark" :commit "3347575"}
+ :clean/source {:requirement "R3" :status "FILLED — 8 channels + sign-aggregation + per-entity attribution all built/live; only fine per-channel attribution (research-level, partly infeasible) remains" :commit "3347575+ced3aec+v0.17-attribution"}
 
  :clean/seq [:per-channel-errors :precision-weighting :vfe-decomposition :sign-aggregation :belief-update]
 
@@ -23,11 +23,9 @@
    :produces :variational-free-energy}
   {:id :b4 :method :sign-aggregation
    :text "R3d (the hard half): combine the 8 precision-weighted errors into one R3d driver. channel-health-signs for all 8 channels; r3d-aggregate-driver uses the precision-weighted average: Sigma(sign_c · precision_c · error_c) / Sigma(precision_c). BUILT behind *r3d-multichannel?* flag (default OFF — annotation-health alone byte-identical; ON — 8-channel signed aggregate)."
-   :produces :aggregated-r3d-driver
-   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
-          :wanted "per-entity attribution (which entity does a channel-level error apply to?) is a separate open concern. The aggregation itself is BUILT behind *r3d-multichannel?* (default off); flag-flip + live validation is the operator's call."}}
+   :produces :aggregated-r3d-driver}
   {:id :b5 :method :belief-update
-   :text "R3d (the wired half): the belief-update event currently draws its sign and magnitude from :annotation-health alone. Discharges the R3 want-signature when the sign-aggregation is wired (currently partial — one channel driving the update)."
+   :text "R3d belief-update, per-entity. BUILT + LIVE (war_machine.clj:3806-3833, v0.17 sorry/r3d-per-entity-attribution): the aggregated R3d driver is distributed ACROSS entities weighted by each entity's inconsistency with the error direction (1-h when healthier-than-predicted, h when unhealthier), normalised so the mean equals the event-weight — aggregate magnitude preserved, attribution honest (not uniform, not flag-gated). Discharges the R3 want-signature. RESEARCH REMAINDER (not a clean build): FINE per-channel per-entity attribution — routing each channel's error to the entities that channel concerns — is only feasible for the per-entity channels (annotation/support/attack-coverage, active-repo-ratio); the graph-global channels (coupling-density, mission-health, ticks-firing-ratio) have no per-entity decomposition. Today's attribution uses the annotation-health expected-health as a single-channel proxy for the whole aggregate."
    :consumes [:variational-free-energy :aggregated-r3d-driver]
    :produces :updated-belief-state
    :discharges {:to :predictive-coding-belief-update}}]
@@ -42,6 +40,6 @@
                {:reading :formal   :is [:clean/boxes :clean/wires]}]
 
  :clean/shape {:macro :predictive-coding-with-sign-aggregation
-               :holes-at [:b4]
+               :holes-at []
                :discharges-at [:b5]
-               :note "b1 (per-channel-errors) ✓, b2 (precision-weighting) ✓, b3 (VFE) ✓ are BUILT — the easy half (channel coverage) is done. b4 (sign-aggregation) is BUILT behind *r3d-multichannel?* (default off, 8-channel precision-weighted average when on; precision-weighted average normalizer per claude-4 review). b5 (belief-update) is PARTIALLY wired. The hole is now per-entity attribution, not the aggregation itself. Zero unbuilt boxes (aggregation built, flag-gated)."}}
+               :note "b1 (per-channel-errors) ✓, b2 (precision-weighting) ✓, b3 (VFE) ✓, b4 (sign-aggregation) ✓ (BUILT behind *r3d-multichannel?*, precision-weighted average), b5 (belief-update) ✓ — per-entity attribution is BUILT + LIVE (war_machine.clj:3806-3833, v0.17): the aggregate is distributed by per-entity inconsistency, not uniformly. ZERO unbuilt boxes. The only remainder is RESEARCH-level: fine per-channel per-entity attribution (partly infeasible — graph-global channels have no per-entity decomposition), tracked on b5."}}
