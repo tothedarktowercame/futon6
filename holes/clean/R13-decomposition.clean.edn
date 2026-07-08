@@ -5,7 +5,7 @@
 
 {:clean/proof "R13-decomposition"
  :clean/title "R13: multi-step rollout + discrimination — which box is inert"
- :clean/source {:requirement "R13" :status "apparatus built, discrimination built-but-inert" :commit "32ecd21"}
+ :clean/source {:requirement "R13" :status "FILLED — discrimination BUILT dark; pattern-grain EIG breaks the G-ties floor" :commit "32ecd21+25b1b8f"}
 
  :clean/seq [:rollout-apparatus :multi-step-witness :discrimination :policy-adequacy]
 
@@ -18,11 +18,9 @@
    :consumes [:rollout-mechanism]
    :produces :multi-step-evidence}
   {:id :b3 :method :discrimination
-   :text "The EIG leg that breaks the G-ties false-floor: − λ·EIG in the forward ranker. BUILT (3a EIG leg, commit 32ecd21) but INERT — the EIG signal is 0 on the demo corpus because no capability/* edges exist for the posterior-stddev to vary over. The tie-floor is broken structurally but no real signal flows through it yet."
+   :text "The EIG leg that breaks the G-ties false-floor: − λ·EIG in the forward ranker. BUILT + signal FLOWS (dark, 25b1b8f): the pattern-grain EIG is sourced from {constellation → posterior stddev} over the real pattern co-application corpus (not the empty capability/* demo). Proof: two missions tied at G-total 0.543 separate to 0.39445 vs 0.41766 with EIG (higher EIG → lower G → explores). The tie-floor is broken by a real signal, not structurally-only. Flag-gated :pattern-grain-eig? (arm = Joe). Caveat: coarse signal; minimal ≥1-tie discrimination proof."
    :consumes [:multi-step-evidence]
-   :produces :discriminating-policy
-   :hole {:kind :sorry :discharge :queryAnswer :satiety :payoff
-          :wanted "real EIG signal from A4a (currently 0 on the demo corpus) — the discrimination apparatus is built but starved of the posterior-variance signal that would make ranks 2+ separate. Built-but-inert, not missing code."}}
+   :produces :discriminating-policy}
   {:id :b4 :method :policy-adequacy
    :text "A multi-step policy that discriminates among candidates (not just beats greedy). Discharges the R13 want-signature when the EIG signal flows."
    :consumes [:discriminating-policy]
@@ -38,6 +36,6 @@
                {:reading :formal   :is [:clean/boxes :clean/wires]}]
 
  :clean/shape {:macro :multi-step-policy-with-eig-discrimination
-               :holes-at [:b3]
+               :holes-at []
                :discharges-at [:b4]
-               :note "b1 (rollout-apparatus) ✓ and b2 (multi-step-witness) ✓ are BUILT. b3 (discrimination) is BUILT-BUT-INERT: the EIG leg is wired (32ecd21) but the signal is 0 on the demo corpus (no capability/* edges for posterior-stddev to vary over). Needs A4a to merge fire. One unbuilt box (built-but-inert, not missing code)."}}
+               :note "b1 (rollout-apparatus) ✓, b2 (multi-step-witness) ✓, b3 (discrimination) ✓ — all BUILT. b3 is no longer inert: the pattern-grain EIG signal FLOWS (25b1b8f) from {constellation → stddev} over the real co-application corpus, and a real G-tie separated (0.543 → 0.39445 vs 0.41766). Zero unbuilt boxes; flag-gated :pattern-grain-eig? (arm = Joe). Caveat: coarse signal, minimal ≥1-tie proof."}}

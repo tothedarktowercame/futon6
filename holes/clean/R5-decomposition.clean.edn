@@ -5,7 +5,7 @@
 
 {:clean/proof "R5-decomposition"
  :clean/title "R5: EFE = risk + ambiguity − EIG (nats) — which boxes remain"
- :clean/source {:requirement "R5" :status "⅔ built, hard third done" :commit "b28ebf3"}
+ :clean/source {:requirement "R5" :status "FILLED — all three EFE legs built; EIG wired dark at pattern grain" :commit "b28ebf3+25b1b8f"}
 
  :clean/seq [:nats-risk :nats-ambiguity :eig :combine-efe]
 
@@ -17,10 +17,8 @@
    :text "The ambiguity term in nats: :ambiguity-mode :gaussian-entropy (Σ 0.5·ln(2πe·σ²)). Built, validated, provenance-ready; library-default dark, arena-resolved."
    :produces :ambiguity-nats}
   {:id :b3 :method :eig
-   :text "The epistemic-value term (subtracted). The open third."
-   :produces :eig-nats
-   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
-          :wanted "the EIG leg — = the 3a/A4a strand (BMR posterior stddev, − λ·EIG in the forward ranker). This is the one unbuilt box."}}
+   :text "The epistemic-value term (subtracted). BUILT (dark, 25b1b8f, codex-2/claude-5): pattern-grain {constellation → posterior stddev} → mission-EIG → − λ·EIG in the forward ranker (194 missions resolve to non-zero EIG). Flag-gated :pattern-grain-eig? (default OFF, arm = Joe). Caveat: coarse ~1/√evidence signal, not fine-grained."
+   :produces :eig-nats}
   {:id :b4 :method :combine-efe
    :text "G = risk + ambiguity − EIG, in nats. Discharges the R5 want-signature (a principled EFE, not a blend)."
    :consumes [:risk-nats :ambiguity-nats :eig-nats]
@@ -36,6 +34,6 @@
                {:reading :formal   :is [:clean/boxes :clean/wires]}]
 
  :clean/shape {:macro :efe-in-nats
-               :holes-at [:b3]
+               :holes-at []
                :discharges-at [:b4]
-               :note "b1 (nats-risk) ✓ and b2 (nats-ambiguity) ✓ are BUILT — the hard third (risk) is done. Only b3 (EIG) remains, and it is exactly the 3a/A4a strand already in flight. One unbuilt box."}}
+               :note "b1 (nats-risk) ✓, b2 (nats-ambiguity) ✓, b3 (EIG) ✓ — all three EFE legs BUILT. b3 wired dark at pattern grain (25b1b8f): {constellation → stddev} → mission-EIG → − λ·EIG. G = risk + ambiguity − EIG complete. Zero unbuilt boxes; flag-gated :pattern-grain-eig? (arm = Joe). Caveat: coarse ~1/√evidence EIG."}}
