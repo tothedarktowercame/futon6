@@ -1,0 +1,47 @@
+;; CLean — R14 (precision over policies, γ) decomposed into its sub-boxes, unbuilt boxes marked.
+;; The ◐→box-pointer: "R14 needs the :live-wire and :accumulate boxes." clean_argcheck-valid;
+;; build-match-checkable. Disaggregated this cycle — the HARD half (grounding) is done; two
+;; unbuilt boxes remain, both gated (an operator/joint arm + real data), not missing code.
+
+{:clean/proof "R14-decomposition"
+ :clean/title "R14: γ as a learned, two-sided precision — which boxes remain"
+ :clean/source {:requirement "R14" :status "hard half done (grounding); 2 boxes gated" :commit "723cacf+a3cbc56"}
+
+ :clean/seq [:grounded-realized :grounded-expected :live-wire :accumulate :gamma-learned]
+
+ :clean/boxes
+ [{:id :b1 :method :grounded-realized
+   :text "Realized outcome grounded in the substrate dial (bound − inhabited), replacing coverage-over-reproduction. Built this cycle — the hard conceptual half (killing the tautology)."
+   :produces :realized-dial}
+  {:id :b2 :method :grounded-expected
+   :text "Two-sided expected leg: the fold's coverage forecast → predicted-remaining. Built this cycle — γ can now commit, not just hedge."
+   :produces :expected-forecast}
+  {:id :b3 :method :live-wire
+   :text "Wire the grounded producer into the live γ source, replacing coverage-ΔG."
+   :produces :live-gamma-feed
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :role
+          :wanted "the migration + *gamma-grounded-feed?* flip (flag-gated, logged) — an operator/joint arm, not missing code. Unbuilt box #1."}}
+  {:id :b4 :method :accumulate
+   :text "Accrue realized samples with genuine variance."
+   :produces :real-variance-samples
+   :hole {:kind :sorry :discharge :ungroundedBinder :satiety :bundling
+          :wanted "real fold-deposit missions producing genuine variance (currently 2/5 samples carry real forecasts). A data dependency. Unbuilt box #2."}}
+  {:id :b5 :method :gamma-learned
+   :text "γ = clamp(2^(gain·perf̄), floor, cap), calibrated from realized-vs-expected on grounded, variance-bearing samples. Discharges the R14 want-signature."
+   :consumes [:realized-dial :expected-forecast :live-gamma-feed :real-variance-samples]
+   :produces :two-sided-gamma
+   :discharges {:to :learned-bounded-precision}}]
+
+ :clean/wires
+ [{:from :b1 :to :b5 :carries :realized-dial}
+  {:from :b2 :to :b5 :carries :expected-forecast}
+  {:from :b3 :to :b5 :carries :live-gamma-feed}
+  {:from :b4 :to :b5 :carries :real-variance-samples}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :two-sided-grounded-precision
+               :holes-at [:b3 :b4]
+               :discharges-at [:b5]
+               :note "b1 (realized) ✓ and b2 (expected) ✓ are BUILT this cycle — the HARD half (grounding) is done, and γ moved on real data (1.0→0.912). The two unbuilt boxes are b3 (live-wire, an operator/joint arm) and b4 (real variance, a data dependency) — both gated, neither missing code. Two unbuilt boxes."}}

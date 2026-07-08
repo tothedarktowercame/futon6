@@ -1,0 +1,41 @@
+;; CLean — R5 (EFE with ≥2 principled terms) decomposed into its sub-boxes, with the UNBUILT
+;; box marked as a typed hole. The ◐→box-pointer: this replaces "R5 is partial" with "R5 needs
+;; the :eig box." clean_argcheck-valid (the decomposition is well-formed); build-match-checkable
+;; (which sub-boxes are inhabited). Disaggregated from b28ebf3 — ⅔ built, hard third done.
+
+{:clean/proof "R5-decomposition"
+ :clean/title "R5: EFE = risk + ambiguity − EIG (nats) — which boxes remain"
+ :clean/source {:requirement "R5" :status "⅔ built, hard third done" :commit "b28ebf3"}
+
+ :clean/seq [:nats-risk :nats-ambiguity :eig :combine-efe]
+
+ :clean/boxes
+ [{:id :b1 :method :nats-risk
+   :text "The risk term in nats: :risk-mode :kl (Bernoulli/Gaussian KL of predicted vs preferred). The HARD part — built and arena-flipped 2026-07-04."
+   :produces :risk-nats}
+  {:id :b2 :method :nats-ambiguity
+   :text "The ambiguity term in nats: :ambiguity-mode :gaussian-entropy (Σ 0.5·ln(2πe·σ²)). Built, validated, provenance-ready; library-default dark, arena-resolved."
+   :produces :ambiguity-nats}
+  {:id :b3 :method :eig
+   :text "The epistemic-value term (subtracted). The open third."
+   :produces :eig-nats
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "the EIG leg — = the 3a/A4a strand (BMR posterior stddev, − λ·EIG in the forward ranker). This is the one unbuilt box."}}
+  {:id :b4 :method :combine-efe
+   :text "G = risk + ambiguity − EIG, in nats. Discharges the R5 want-signature (a principled EFE, not a blend)."
+   :consumes [:risk-nats :ambiguity-nats :eig-nats]
+   :produces :nats-efe
+   :discharges {:to :principled-efe-in-nats}}]
+
+ :clean/wires
+ [{:from :b1 :to :b4 :carries :risk-nats}
+  {:from :b2 :to :b4 :carries :ambiguity-nats}
+  {:from :b3 :to :b4 :carries :eig-nats}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :efe-in-nats
+               :holes-at [:b3]
+               :discharges-at [:b4]
+               :note "b1 (nats-risk) ✓ and b2 (nats-ambiguity) ✓ are BUILT — the hard third (risk) is done. Only b3 (EIG) remains, and it is exactly the 3a/A4a strand already in flight. One unbuilt box."}}
