@@ -6,7 +6,7 @@
 
 {:clean/proof "R15-decomposition"
  :clean/title "R15: depth-1 apparatus + horizon-H + hierarchy — scoped hierarchy slice built"
- :clean/source {:requirement "R15" :status "apparatus + horizon + hierarchy-slice done; full nested model open" :commit "pending"}
+ :clean/source {:requirement "R15" :status "apparatus + horizon + hierarchy-slice done; full nested model open" :commit "056dcc5+32b9429"}
 
  :clean/seq [:depth-1-apparatus :horizon-H :hierarchy :temporal-depth]
 
@@ -21,7 +21,7 @@
   {:id :b3 :method :hierarchy
    :text "BUILT SCOPED SLICE: futon2.aif.temporal-hierarchy — the two-loop parameterization plumbing where a slow-loop strategic mode (exploitation/exploration/consolidation) PARAMETERIZES the fast-loop's priors AND effective move costs via a -ln(weight) KL-divergence penalty. Tested: changing the slow-loop mode changes the fast-loop's selected policy (exploitation → close-fast, exploration → advance-cap), horizon-independent (proves it's compositional not sequential depth). R12 seam: slow-mode derivable from intrinsic-values table. REMAINDER (still open): full nested generative model where the slow loop runs its OWN EFE minimization over a longer timescale with message-passing between levels; learned slow-loop transitions (the feedback arc where fast-loop outcomes update the slow-loop state); multi-level hierarchies beyond two levels."
    :produces :fast-slow-hierarchy-scoped
-   :hole {:kind :remainder :discharge :named-remainder :satiety :partial
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
           :wanted "full nested generative model — slow loop with own EFE minimization, learned transitions, message-passing between levels. The two-loop parameterization plumbing is BUILT (futon2.aif.temporal-hierarchy); this remainder is the research-level deep hierarchy."
           :built-slice "two-loop parameterization: slow-mode → fast-loop prior/cost modulation (tested, horizon-independent)"
           :remainder "nested generative model with slow-loop EFE, learned transitions, multi-level"}}
@@ -41,6 +41,6 @@
 
  :clean/shape {:macro :temporal-depth-with-hierarchy
                :holes-at [:b3]
-               :hole-satiety :partial
+               :hole-satiety :payoff
                :discharges-at [:b4]
                :note "b1 (depth-1-apparatus) ✓, b2 (horizon-H) ✓, b3 (hierarchy) ◐ SCOPED SLICE BUILT: two-loop parameterization plumbing (slow-mode → fast-loop prior/cost). b3 REMAINDER: full nested generative model (slow-loop EFE, learned transitions, multi-level). b4 discharges R15 at both sequential and compositional scales, with the scoped hierarchy slice. The remainder does not block the discharge — it names what's still research-level."}}
