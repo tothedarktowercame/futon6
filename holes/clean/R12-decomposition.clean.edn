@@ -8,7 +8,7 @@
  :clean/title "R12: dual-loop apparatus + accumulation — FILLED via embedding + BMR-EIG"
  :clean/source {:requirement "R12"
                 :status "FILLED (honest): concepts = embedding constellations; epistemic value = BMR-EIG; count-BMR corroborates weakly, insufficient alone"
-                :commit "4064533+8200f08+pattern-grain(claude-5)"}
+                :commit "4064533+8200f08+81e231c(structure-learning-explainer,claude-5)"}
 
  :clean/seq [:dual-loop-apparatus :accumulate :concept-formation]
 
