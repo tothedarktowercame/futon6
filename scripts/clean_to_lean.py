@@ -111,6 +111,16 @@ def emit_proof(d):
     for w in wires:
         w["from"] = idmap.get(w["from"], camel(w["from"]))
         w["to"] = idmap.get(w["to"], camel(w["to"]))
+    # Domain copar extensions (E-scope-organism-copar). A CLean may declare its
+    # own :readings (e.g. scope∥organism) and :co-app meets (the cascade
+    # semilattice's BV.copar overlaps). Both live in :clean/shape. When absent,
+    # every line below is byte-identical to the informal∥formal default — the
+    # 102-paper / fold corpus renders unchanged.
+    _shape = {kw(k): v for k, v in dict(d.get("shape") or {}).items()}
+    domain_readings = [camel(kw(x)) for x in (_shape.get("readings") or [])]
+    coapp_pairs = [(idmap.get(kw(e[0]), camel(kw(e[0]))),
+                    idmap.get(kw(e[1]), camel(kw(e[1]))))
+                   for e in (_shape.get("co-app") or []) if len(e) >= 2]
     # mission ids carry hyphens (autoclock-in, <repo>-d/mission/<id>); a Lean
     # namespace identifier cannot. Sanitize hyphens->underscores for the ns
     # (the comment on the next line keeps the original id for provenance).
@@ -203,13 +213,36 @@ def emit_proof(d):
     a(f"def wires : List (Stp × Stp) := [{wlist}]")
     a("")
 
-    # copar reading
-    a("/-- The two readings held together (M-typed-holes copar): informal ∥ formal. -/")
-    a("inductive Reading where")
-    a("  | informal | formal")
-    a("  deriving DecidableEq, Repr")
-    a("def readings : BV Reading :=")
-    a("  BV.copar (BV.atom Reading.informal) (BV.atom Reading.formal)")
+    # co-application MEETS — the semilattice's BV.copar overlaps, as data. A
+    # single position may sit in several meets at once: this is what makes the
+    # cascade a semilattice, not a tree (TN-a-proof-is-not-a-tree).
+    if coapp_pairs:
+        mlist = ", ".join(f"(Stp.{a2}, Stp.{b2})" for (a2, b2) in coapp_pairs)
+        a("/-- The co-application meets (BV.copar overlaps): the semilattice's cross-cuts. -/")
+        a(f"def meets : List (Stp × Stp) := [{mlist}]")
+        a("")
+
+    # copar reading — the CLean's declared domain readings, else informal ∥ formal.
+    if len(domain_readings) >= 2:
+        rlist = domain_readings
+        def _rcopar(xs):
+            return (f"BV.atom Reading.{xs[0]}" if len(xs) == 1
+                    else f"BV.copar (BV.atom Reading.{xs[0]}) ({_rcopar(xs[1:])})")
+        a(f"/-- The readings held together (M-typed-holes copar): {' ∥ '.join(rlist)}. -/")
+        a("inductive Reading where")
+        for rn in rlist:
+            a(f"  | {rn}")
+        a("  deriving DecidableEq, Repr")
+        a("def readings : BV Reading :=")
+        a(f"  {_rcopar(rlist)}")
+    else:
+        rlist = ["informal", "formal"]
+        a("/-- The two readings held together (M-typed-holes copar): informal ∥ formal. -/")
+        a("inductive Reading where")
+        a("  | informal | formal")
+        a("  deriving DecidableEq, Repr")
+        a("def readings : BV Reading :=")
+        a("  BV.copar (BV.atom Reading.informal) (BV.atom Reading.formal)")
     a("")
 
     # --- self-verifying examples (0 sorry) ---
@@ -234,9 +267,21 @@ def emit_proof(d):
         a(f"    (BV.seq (BV.seq (BV.atom Method.{m0}) (BV.atom Method.{m1})) (BV.atom Method.{m2}))")
         a(f"    (BV.seq (BV.atom Method.{m0}) (BV.seq (BV.atom Method.{m1}) (BV.atom Method.{m2}))) :=")
         a(f"  BV.Cong.seq_assoc (BV.atom Method.{m0}) (BV.atom Method.{m1}) (BV.atom Method.{m2})")
-    a("/-- The informal ∥ formal copar reading commutes (one object, two readings). -/")
-    a("example : BV.Cong readings (BV.copar (BV.atom Reading.formal) (BV.atom Reading.informal)) :=")
-    a("  BV.Cong.copar_comm (BV.atom Reading.informal) (BV.atom Reading.formal)")
+    if len(domain_readings) >= 2:
+        r0, r1 = rlist[0], rlist[1]
+        a(f"/-- The {r0} ∥ {r1} copar reading commutes (one object, its readings). -/")
+        a(f"example : BV.Cong (BV.copar (BV.atom Reading.{r0}) (BV.atom Reading.{r1})) (BV.copar (BV.atom Reading.{r1}) (BV.atom Reading.{r0})) :=")
+        a(f"  BV.Cong.copar_comm (BV.atom Reading.{r0}) (BV.atom Reading.{r1})")
+    else:
+        a("/-- The informal ∥ formal copar reading commutes (one object, two readings). -/")
+        a("example : BV.Cong readings (BV.copar (BV.atom Reading.formal) (BV.atom Reading.informal)) :=")
+        a("  BV.Cong.copar_comm (BV.atom Reading.informal) (BV.atom Reading.formal)")
+    if coapp_pairs:
+        ma, mb = coapp_pairs[0]
+        a("/-- A representative co-application meet is a well-formed BV.copar and commutes:")
+        a("    overlap is symmetric (a semilattice meet, not a directed wire). -/")
+        a(f"example : BV.Cong (BV.copar (BV.atom Stp.{ma}) (BV.atom Stp.{mb})) (BV.copar (BV.atom Stp.{mb}) (BV.atom Stp.{ma})) :=")
+        a(f"  BV.Cong.copar_comm (BV.atom Stp.{ma}) (BV.atom Stp.{mb})")
     a("")
     a(f"end {ns}")
     return "\n".join(L)
