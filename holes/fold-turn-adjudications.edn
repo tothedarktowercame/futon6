@@ -1,0 +1,160 @@
+;; fold-turn-adjudications.edn — fold-grain ground-truth expansion from the escrow deposits
+;; (futon6/data/fold-turns/*.edn). Curated by Fable 2026-07-10, run-here pass.
+;;
+;; LABEL SEMANTICS: :success answers 'did this fold-turn's proposed cascade, once flown,
+;; discharge the mission's want?' — adjudicated ONLY where the plan was actually flown and
+;; the outcome is documented (evidence quoted per record). :success :unadjudicated means the
+;; deposit is an escrowed PLAN whose outcome was never realized (mission pre-complete,
+;; still chartered, or the fold was a machinery exercise) — such records are NOT usable as
+;; reward ground truth and are listed so the census is complete and the gap visible.
+;; The want text is the deposit's own :hole :want (psi authored from the mission doc
+;; BEFORE the fold — resolver-blind by provenance).
+[
+ {:fold-turn/id "ft-action-vocabulary-005"
+  :mission "futon2-d/mission/action-vocabulary"
+  :used ["aif/declare-the-conditioning" "aif/currency-before-merge" "aif/placeholder-is-load-bearing" "aif/valuation-reads-the-paperwork" "aif/expected-free-energy-scorecard" "aif/structured-observation-vector" "aif/policy-precision-commitment-temperature" "aif/candidate-pattern-action-space" "aif/term-to-channel-traceability" "aif/hierarchical-budget-aware-action-selection" "aif/experimental-comparison-of-EFE-variants" "agent/budget-bounds-exploration" "aif/no-self-certification" "futon-theory/honest-map-over-flattering-counter" "budgeted-action-selection/mana-gated-work"]
+  :want "a move-class value spec — per-class intensity formulas over substrate-metric quantities (resolvedness, staleness, kappa/W1): advance x (1-resolvedness); close x resolvedness; survey for stale-early targets — plus a composition-aware bundle score that values a portfolio of picks AS a portfolio, not a sum of solo scores. Falsifiable: the operator's sealed golden picks (rounds 1-2) re-rank to top-quartile median under the new vocabulary."
+  :success false
+  :evidence "M-action-vocabulary.md: STOPPED BY KILL CRITERION 2026-07-05; plan-of-record = this deposit (P1); P2 dark implementation f5fde3a3; P3 negative x2 against the pre-registered falsifiable target (sealed golden picks top-quartile re-rank) — E-live-loop-3.md 'P3-retry results: VERDICT: FAIL — P3 negative #2 of 2.'"
+  :provenance "futon6/data/fold-turns/ft-action-vocabulary-005.edn; deposit at 2026-07-05T20:06:14Z"}
+ {:fold-turn/id "ft-aif-faithfulness-001"
+  :mission "futon2-d/mission/aif-faithfulness"
+  :used ["sidecar/append-only-semantic-audit" "sidecar/explicit-promotion-to-facts" "sidecar/fact-lifecycle-event-types" "pattern-discipline/pattern-to-code-receipts" "pattern-discipline/conclusion-required-others-recommended"]
+  :want ""
+  :success :unadjudicated
+  :evidence "mission status: M-aif-faithfulness.md: **Status:** ACTIVE (2026-07-04: Joe ratified the §3 scope boundary and took ALL"
+  :provenance "futon6/data/fold-turns/ft-aif-faithfulness-001.edn; deposit at 2026-07-06T08:50:00Z"}
+ {:fold-turn/id "ft-aif-head-004"
+  :mission "futon2-d/mission/aif-head"
+  :used ["ants/baseline-cyber-ant" "futon-theory/structural-tension-as-observation" "aif/candidate-pattern-action-space" "aif/structured-observation-vector" "aif/belief-state-operational-hypotheses" "gauntlet/aif-as-environment-not-instruction"]
+  :want "aif-head : (peripheral x structural-law-inventory x evidence-landscape) -> AIFHead x DefaultMode x RefusalSurface. Each peripheral has an AIF head that consults the structural law inventory as its gen"
+  :success :unadjudicated
+  :evidence "mission status: M-aif-head.md: **Status:** COMPLETE (2026-03-15)"
+  :provenance "futon6/data/fold-turns/ft-aif-head-004.edn; deposit at 2026-07-05T12:00:00Z"}
+ {:fold-turn/id "ft-autoclock-in-001"
+  :mission "futon3c-d/mission/autoclock-in"
+  :used ["musn/plan-before-tool" "realtime/loop-recovery-actions" "realtime/loop-failure-signals" "realtime/loop-success-signals"]
+  :want "clock-in : (agent, session, target) -> DurableLineage. reconstitute output — {missions [{:target :agents :sessions :held-count}] } surviving teardown."
+  :success :unadjudicated
+  :evidence "mission status: M-autoclock-in.md: **Status:** INSTANTIATE-1 (first implementation, 2026-06-03) — explicit resolved target auto-promotion is implemented in `agent-chat.el`; broader confirmation/XTDB witnesses remain "
+  :provenance "futon6/data/fold-turns/ft-autoclock-in-001.edn; deposit at 2026-07-05T07:24:35Z"}
+ {:fold-turn/id "ft-bayesian-structure-learning-003"
+  :mission "futon6-d/mission/bayesian-structure-learning"
+  :used ["structure/interest-event-vocabulary" "aif/expected-free-energy-scorecard" "aif/structured-observation-vector" "aif/term-to-channel-traceability" "aif/belief-state-operational-hypotheses" "aif/hierarchical-budget-aware-action-selection" "aif/free-energy-as-tick-scalar" "aif/experimental-comparison-of-EFE-variants" "aif/predictive-entropy-as-ambiguity" "agent/state-is-hypothesis" "aif/belief-aware-risk-term" "aif/shared-kernel-predictive-forward-model" "aif/declare-the-conditioning" "agent/budget-bounds-exploration" "f6/learning-event-detection"]
+  :want "bayesian-structure-learning : (strategy-library × accumulated-bindings × gold-corpus) -> ReliabilityPosteriors × CanonPosteriors × EIG-decision × reduced-model. HUNGRY-FOR: posteriors-not-counters — p"
+  :success :unadjudicated
+  :evidence "mission status: M-bayesian-structure-learning.md: **Status:** SUPERSEDED-AS-MISSION → recast toward Campaign-bayesian-structure-learning (Joe 2026-06-08; see §7b). Idea-of-record; NOT WM-pickable (a Campaign across m"
+  :provenance "futon6/data/fold-turns/ft-bayesian-structure-learning-003.edn; deposit at 2026-07-05T10:01:18Z"}
+ {:fold-turn/id "ft-bounded-in-flight-state-008"
+  :mission "futon3c-d/mission/bounded-in-flight-state"
+  :used ["enrichment/churn-as-signal" "contributing/stack-scan-logging-protocol" "futon-theory/all-or-nothing" "storage/invariants-vs-repair" "storage/durability-throughput-gate" "orchestration/state-in-substrate-deltas-in-messages" "storage/postcommit-materialization-gate"]
+  :want ""
+  :success :unadjudicated
+  :evidence "mission status: no status line found"
+  :provenance "futon6/data/fold-turns/ft-bounded-in-flight-state-008.edn; deposit at 2026-07-06T05:50:00Z"}
+ {:fold-turn/id "ft-canon-fingerprint-store-001"
+  :mission "futon6-d/mission/canon-fingerprint-store"
+  :used ["library-coherence/library-evidence-ledger" "agent/handoff-preserves-context" "aif/declare-the-conditioning" "peripherals/canonical-typed-event-vs-side-channel"]
+  :want "a canon fingerprint store that makes symbol-grounding improve with each batch — SQLite, scope bindings, frequency-ordered MAP-REDUCE, in-run queryable, the canon distribution IS the prior."
+  :success :unadjudicated
+  :evidence "mission status: M-canon-fingerprint-store.md: **Status:** DERIVE → INSTANTIATE — decisions resolved + holes articulated (Joe 2026-06-08): scope bindings (§2.1) + frequency-ordered MAP-REDUCE (§3.1) + SQLite; F1 schem"
+  :provenance "futon6/data/fold-turns/ft-canon-fingerprint-store-001.edn; deposit at 2026-07-07T22:30:00Z"}
+ {:fold-turn/id "ft-chipwitz-corps-001"
+  :mission "futon3c-d/mission/chipwitz-corps"
+  :used ["collaboration-coherence/determined-fork-proto-psr" "futon-theory/honest-map-over-flattering-counter" "orchestration/pattern-warranted-choice-point"]
+  :want "a warranted-work control layer where choice points are resolved by FINDING WARRANTS (the pattern library), not by asking the operator — warrant found → log PSR and proceed; no warrant → genuine operat"
+  :success :unadjudicated
+  :evidence "mission status: M-chipwitz-corps.md: **Status:** IDENTIFY (chartered 2026-06-11 from a live motivating example); M-chipwitz-corps.md: **Status:** IDENTIFY (chartered 2026-06-11 from a live motivating example)"
+  :provenance "futon6/data/fold-turns/ft-chipwitz-corps-001.edn; deposit at 2026-07-07T12:00:00Z"}
+ {:fold-turn/id "ft-evaluate-policies-009"
+  :mission "futon2-d/mission/evaluate-policies"
+  :used ["aif/expected-free-energy-scorecard" "aif/term-to-channel-traceability" "aif/candidate-pattern-action-space" "aif/experimental-comparison-of-EFE-variants" "aif/predictive-entropy-as-ambiguity" "aif/belief-aware-risk-term" "structure/interest-event-vocabulary" "system-coherence/facet-before-aggregating" "aif/no-self-certification" "aif/declare-the-conditioning" "aif/valuation-reads-the-paperwork" "aif/placeholder-is-load-bearing"]
+  :want "the WM's G-total score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \\\"EFE\\\" names only the part that is one, and the blend's self-"
+  :success :unadjudicated
+  :evidence "mission status: M-evaluate-policies.md: **Status:** ALL PHASES THROUGH DOCUMENT complete 2026-07-03 — single day, operator; E-evaluate-policies-spikes.md: **Status:** two spikes COMPLETE same-day (chartered from M-ev"
+  :provenance "futon6/data/fold-turns/ft-evaluate-policies-009.edn; deposit at 2026-07-06T08:44:09Z"}
+ {:fold-turn/id "ft-first-flights-007"
+  :mission "futon3c-d/mission/first-flights"
+  :used ["vsatlas/proof-through-pilots"]
+  :want ""
+  :success :unadjudicated
+  :evidence "mission status: no status line found"
+  :provenance "futon6/data/fold-turns/ft-first-flights-007.edn; deposit at 2026-07-06T03:50:00Z"}
+ {:fold-turn/id "ft-fold-ansatz-001"
+  :mission "futon2-d/mission/fold-ansatz"
+  :used ["data-mining/constrain-extraction-to-the-downstream-vocabulary" "data-mining/smoke-before-the-paid-run" "data-mining/seed-the-run-for-a-fair-ablation" "data-mining/the-first-checkpoint-is-a-quality-probe" "data-mining/classify-over-one-clean-source" "data-mining/gates-as-code"]
+  :want "a verdict on the embedding-fold ansatz (impl #3) — can folding cascade→wiring in embedding space beat impl #2 on efficiency without losing soundness or honesty of policy-holes, tested by the smallest "
+  :success :unadjudicated
+  :evidence "mission status: M-fold-ansatz.md: **Status:** MAP COMPLETE (claude-4 — the scatter is mapped; see §MAP M1–M4; awaiting Joe's ARGUE steer). IDENTIFY complete below."
+  :provenance "futon6/data/fold-turns/ft-fold-ansatz-001.edn; deposit at 2026-07-06T10:43:03Z"}
+ {:fold-turn/id "ft-futonzero-generative-011"
+  :mission "futon0-d/mission/futonzero-generative"
+  :used ["aif/no-self-certification" "futon-theory/honest-map-over-flattering-counter" "ants/baseline-cyber-ant" "agent/trail-enables-return" "futon-theory/local-gain-persistence" "agent/state-is-hypothesis" "agent/sense-deliberate-act" "agent/budget-bounds-exploration" "coordination/session-durability-check" "agent/provisional-claims-ledger" "ukrns/design-as-function-of-evidence" "t3/capability-not-functioning" "budgeted-action-selection/mana-gated-work" "invariant-coherence/reachable-from-boot" "ukrns/calibrate-impact-promises-to-current-indicator-capacity"]
+  :want "a self-bootstrapping learner that converts one-off warranted functionings into repeatable capabilities — the generative sibling of FutonZero's monitor. The loop: propose a bounded play-out over the ca"
+  :success :unadjudicated
+  :evidence "mission status: M-futonzero-generative.md: **Status:** HEAD / IDENTIFY charter"
+  :provenance "futon6/data/fold-turns/ft-futonzero-generative-011.edn; deposit at 2026-07-07T11:45:40Z"}
+ {:fold-turn/id "ft-learning-loop-010"
+  :mission "futon5a-d/mission/learning-loop"
+  :used ["data-mining/constrain-extraction-to-the-downstream-vocabulary" "devmap-coherence/ifr-f3a-piti-audit" "sidecar/tri-store-separation" "aif/structured-observation-vector" "aif/term-to-channel-traceability" "structure/interest-event-vocabulary" "agent/trail-enables-return" "hdm/deep-storage-to-active-graph"]
+  :want "cross-mission capability mining loop: (hinge-log entities × mission docs) -> capability-vocabulary × capability-signature-per-mission × navigable-hypergraph"
+  :success :unadjudicated
+  :evidence "mission status: M-learning-loop.md: **Status:** IDENTIFY (stub — develop alongside first mining experiments)"
+  :provenance "futon6/data/fold-turns/ft-learning-loop-010.edn; deposit at 2026-07-07T10:54:04Z"}
+ {:fold-turn/id "ft-legacy-sorry-cleanup-001"
+  :mission "futon2-d/mission/legacy-sorry-cleanup"
+  :used ["contributing/stack-scan-logging-protocol" "futon-theory/mission-interface-signature" "futon-theory/local-gain-persistence" "stack-coherence/commit-intent-alignment" "devmap-coherence/ifr-f1-dhammavicaya" "storage/durability-throughput-gate" "coordination/session-durability-check" "invariant-coherence/shape-first-identify" "futon-theory/derive-exits-on-a-minted-sorry" "sidecar/append-only-semantic-audit" "exotic/tri-store-lineage"]
+  :want ""
+  :success :unadjudicated
+  :evidence "mission status: M-legacy-sorry-cleanup.md: **Status:** IDENTIFY (2026-07-02, spawned from M-fold-ansatz / the A-next gold-corpus work)."
+  :provenance "futon6/data/fold-turns/ft-legacy-sorry-cleanup-001.edn; deposit at 2026-07-06T08:46:00Z"}
+ {:fold-turn/id "ft-live-geometric-stack-002"
+  :mission "futon3-d/mission/live-geometric-stack"
+  :used ["stack-coherence/stack-blocker-detection" "stack-coherence/ready-blocked-triage" "contributing/stack-scan-logging-protocol" "stack-coherence/futon-bridge-health" "futon-theory/mission-interface-signature" "campaign-coherence/cross-mission-escrow"]
+  :want "substrate-2 : (source-corpus × git-history × existing-math-hg) -> LiveGeometricStack. HUNGRY-FOR: LiveGeometricStack — the codomain, per the mission's 5 sub-properties: (1) Coverage — every code/doc/m"
+  :success :unadjudicated
+  :evidence "mission status: M-live-geometric-stack.md: **Status:** COMPLETE (2026-04-28). All seven phases delivered;"
+  :provenance "futon6/data/fold-turns/ft-live-geometric-stack-002.edn; deposit at 2026-07-05T08:08:56Z"}
+ {:fold-turn/id "ft-operational-vocabulary-001"
+  :mission "futon2-d/mission/operational-vocabulary"
+  :used ["data-mining/constrain-extraction-to-the-downstream-vocabulary" "structure/interest-event-vocabulary" "iching/hexagram-39-jian" "iching/hexagram-40-jie"]
+  :want "served/abstaining missions get a non-nil ΔG from REAL provenance — a mined operational vocabulary (memes ← human→agent asks, sorries ← agent→human, concepts ← tagging, structure ← scope-tree) wired as"
+  :success :unadjudicated
+  :evidence "mission status: M-operational-vocabulary.md: **Status:** **INSTANTIATE** — the FORWARD mining pipeline is BUILT and CPU-validated end-to-end; the GPU **box run** (joint mine over ~6.4k turns) is the at-scale instanti"
+  :provenance "futon6/data/fold-turns/ft-operational-vocabulary-001.edn; deposit at 2026-07-06T09:30:00Z"}
+ {:fold-turn/id "ft-pattern-mining-011"
+  :mission "futon3-d/mission/pattern-mining"
+  :used ["devmap-coherence/ifr-f3a-piti-audit" "devmap-coherence/ifr-f1-dhammavicaya" "devmap-coherence/ifr-f2-viriya" "stack-coherence/futon-bridge-health" "devmap-coherence/ifr-f7-upa-upekkha" "devmap-coherence/ifr-f6-upekkha" "devmap-coherence/ifr-f5-samadhi" "devmap-coherence/ifr-f4-passaddhi" "devmap-coherence/ifr-state-convergence"]
+  :want ""
+  :success :unadjudicated
+  :evidence "mission status: M-pattern-mining.md: **Status:** MAP (entered 2026-04-27, IDENTIFY 2026-04-26)."
+  :provenance "futon6/data/fold-turns/ft-pattern-mining-011.edn; deposit at 2026-07-07T00:30:00Z"}
+ {:fold-turn/id "ft-peradam-mechanization-006"
+  :mission "futon2-d/mission/peradam-mechanization"
+  :used ["aif/no-self-certification" "futon-theory/honest-map-over-flattering-counter" "futon-theory/crime-relocates-to-a-scarcer-witness" "system-coherence/turn-design-into-checks" "agent/evidence-over-assertion" "invariant-coherence/reachable-from-boot" "war-machine/operational-not-decorative" "budgeted-action-selection/mana-gated-work" "coordination/session-durability-check" "coordination/cross-validation-protocol" "eight-gates/ward-off-boundary"]
+  :want "the peradam certificate mechanized without corrupting it — a record binding {deposit sha, seal ref, blind-score, scorer-not-author proof, arming/mana ref} whose loader REJECTS on any missing witness; a mana gate (award/consume/balance, operator-topped-up, every spend logged) replacing blanket consent; and one certificate REFUSED by machinery for cause — the Pudding-Prover stance, evidenced by rejection, mechanically. Falsifiable: refusal without false-positives that make the gate unusable."
+  :success true
+  :evidence "M-peradam-mechanization.md: P1-P3 MACHINERY LANDED DARK 2026-07-05, 'flown end-to-end ... plan of record = ft-peradam-mechanization-006'; peradam_cert loader refusing correctly on ALL six real deposits + four synthetic violations with named witnesses. Caveat recorded: AWAITING two operator rulings (scorer pool; retroactive legitimacy)."
+  :provenance "futon6/data/fold-turns/ft-peradam-mechanization-006.edn; deposit at 2026-07-05T21:43:28Z"}
+ {:fold-turn/id "ft-reachable-from-boot-001"
+  :mission "futon3c-d/mission/reachable-from-boot"
+  :used ["invariant-coherence/reachable-from-boot" "futon-theory/stop-the-line" "system-coherence/turn-design-into-checks" "storage/invariants-vs-repair" "futon-theory/all-or-nothing" "eight-gates/ward-off-boundary"]
+  :want "a structural invariant that makes long-lived state mutations impossible outside the bootstrap construction path — grep-verifiable + pre-commit refusal"
+  :success :unadjudicated
+  :evidence "mission status: M-reachable-from-boot.md: **Status:** INSTANTIATE complete (2026-05-01) for evidence-store sibling — **STOP-THE-LINE HOT-FIX, outside normal queue cadence.** Three remaining siblings handed to Codex v"
+  :provenance "futon6/data/fold-turns/ft-reachable-from-boot-001.edn; deposit at 2026-07-08T01:00:00Z"}
+ {:fold-turn/id "ft-state-snapshot-witness-001"
+  :mission "futon3c-d/mission/state-snapshot-witness"
+  :used ["invariant-coherence/state-snapshot-witness" "invariant-coherence/reachable-from-boot" "invariant-coherence/shape-first-identify" "library-coherence/library-staleness-scan" "sidecar/fact-lifecycle-event-types" "structure/interest-event-vocabulary"]
+  :want "a state-snapshot-witness that emits per-cycle full-state projections as queryable evidence — inventory-snapshot sibling as worked example"
+  :success :unadjudicated
+  :evidence "mission status: M-state-snapshot-witness.md: **Status:** INSTANTIATE in progress (2026-05-01) for the inventory-snapshot sibling; siblings to Codex.; M-state-snapshot-witness.md: **Status:** INSTANTIATE in progress ("
+  :provenance "futon6/data/fold-turns/ft-state-snapshot-witness-001.edn; deposit at 2026-07-08T00:15:00Z"}
+ {:fold-turn/id "ft-war-machine-pilot-001"
+  :mission "M-war-machine-pilot"
+  :used ["aif/predictive-coding-belief-update" "aif/expected-free-energy-scorecard" "gauntlet/aif-as-environment-not-instruction" "agent/state-is-hypothesis" "software-design/agent-decorator-pattern" "software-design/agent-command-pattern" "agent/intent-handshake-is-binding" "agent/provisional-claims-ledger"]
+  :want "per-mission-lifecycle.md:-every-map-question-has-a-concrete-answer.-the-ready-vs-missing-table-is-complete.-q1q8-above-all-have-concrete-factual-answers-ready-v"
+  :success :unadjudicated
+  :evidence "mission status: no status line found"
+  :provenance "futon6/data/fold-turns/ft-war-machine-pilot-001.edn; deposit at 2026-07-08T21:48:08Z"}
+]
