@@ -185,4 +185,42 @@
   :evidence "Flight 3: h1+h2 slice flown — warrant_finder.py (TF-IDF, deterministic, cwd-robust, THRESHOLD_V0=0.15 documented UNCALIBRATED) + pxr-log.edn with 3 PSR+PUR records over real session forks (futon3c/holes/labs/M-chipwitz-corps/). Finding: TF-IDF score-ordering inverts warrant quality (semantic 0.19 < keyword-overlap 0.27) — h1 calibration confirmed live. Threshold calibration NOT claimed; want-grain adjudication pending."
   :proposal/hash "0ad620d68d3a9b35"
   :provenance "FLIGHTS-2026-07-10.md"}
+
+ ;; ---- FLIGHTS-BATCH2-2026-07-10 (zai-2 flew, claude-2 adjudicated; preregistered acceptance) ----
+ {:fold-turn/id "ft-chipwitz-corps-013" :mission "futon3c-d/mission/chipwitz-corps"
+  :used ["career-coherence/free-solo-vs-rope" "collaboration-coherence/determined-fork-proto-psr" "futon-theory/reverse-morphogenesis" "futon-theory/task-as-arrow" "orchestration/consent-gate"]
+  :want "warranted-work control layer: findable warrant -> PSR -> proceed; operator attention only on genuinely undetermined forks"
+  :success :flight-slice-pass :grain :flight-slice
+  :evidence "B2-F1: determination_test.py — DETERMINED/CND/UNDETERMINED classifier over b3 failure modes; correctly re-derives Flight-3 judgments on 3 real forks (reviewer re-ran from /var/tmp). Finding: POST-HOC only (needs PUR self-report) — h1 splits into retrospective calibration (tractable) vs choice-time determination (open)."
+  :proposal/hash "63ad417adb2734a0" :provenance "FLIGHTS-BATCH2-2026-07-10.md"}
+ {:fold-turn/id "ft-chipwitz-corps-014" :mission "futon3c-d/mission/chipwitz-corps"
+  :used ["orchestration/pattern-warranted-choice-point" "collaboration-coherence/determined-fork-proto-psr" "futon-theory/derive-exits-on-a-minted-sorry" "budgeted-action-selection/mana-gated-work" "futon-theory/task-as-arrow" "coordination/task-shape-validation" "futon-theory/curry-howard-operational" "agent/intent-handshake-is-binding" "ants/baseline-cyber-ant"]
+  :want "warranted-work control layer (same want, 9-pattern cascade)"
+  :success :flight-slice-pass :grain :flight-slice
+  :evidence "B2-F2: choice_point_validator.py — G5-style shape gate; real pxr-log green, 2 malformed rejected, reviewer re-ran from /var/tmp. Boundary: shape-green != warrantable (vacuous well-formed fork = residual, belongs to choice-time determination)."
+  :proposal/hash "e5bd3c89c552b896" :provenance "FLIGHTS-BATCH2-2026-07-10.md"}
+ {:fold-turn/id "ft-learning-loop-013" :mission "futon5a-d/mission/learning-loop"
+  :used ["agency/invariants" "devmap-coherence/ifr-f7-upa-upekkha" "or2/ukrn-horizon-bridge" "storage/graph-memory-contract" "structure/hinge-entry-slots"]
+  :want "cross-mission capability mining loop, base-rate-normalised hypergraph"
+  :success :flight-slice-pass :grain :flight-slice
+  :evidence "B2-F3: contract extended with :evidence-channel-invariants (A0-A5) + :source-noise-filter (b5 anti-patterns); bb test 7/11 green from any cwd (reviewer re-ran). Boundary: invariants are published expectations, trust-assumed until pipeline tests exercise them (A3 aspirational)."
+  :proposal/hash "eb0975c3b7228f48" :provenance "FLIGHTS-BATCH2-2026-07-10.md"}
+ {:fold-turn/id "ft-learning-loop-014" :mission "futon5a-d/mission/learning-loop"
+  :used ["structure/hinge-entry-slots" "structure/whose-question-is-this" "structure/interest-event-vocabulary"]
+  :want "cross-mission capability mining loop (source-side cascade)"
+  :success :flight-slice-pass :grain :flight-slice
+  :evidence "B2-F4: inhabitation_gate.py on 14 REAL hinge-log voice blocks (5 inhabited / 9 consultant) + typed event log. REVIEWER FIX: emitter one brace short, outer map unclosed; claimed parens pass was false — writer fixed, log regenerated, gate verified OK. Finding: classifier tag-dominated (14/14), content signals vestigial until calibrated vs known I-1 violations."
+  :proposal/hash "e51ddfc1f634829e" :provenance "FLIGHTS-BATCH2-2026-07-10.md"}
+ {:fold-turn/id "ft-futonzero-generative-013" :mission "futon6-d/mission/futonzero-generative"
+  :used ["aif/candidate-pattern-action-space" "devmap-coherence/status-keywords" "futon-theory/mission-lifecycle" "iching/hexagram-07-shi" "war-machine/advanceability"]
+  :want "self-bootstrapping WM learner gated by G-SIM and G-REWARD (a RUNNING gated generative loop)"
+  :success false
+  :evidence "B2-F5 (preregistered honest negative): advanceability triage — 12 holes, 0 advanceable, 4 gate-blocked, 8 safe-product; want NOT discharged (gates measured uncleared per Flight-2 gap report). REVIEWER FIX: file one brace short + claimed gate output was a NON-RUN (library loaded, checker never invoked); fixed, real gate OK, EDN parsed and content verified. Finding: binary blocked/done cannot represent accruing-toward-clearance; PROGRESS-TOWARD-BLOCKED-CLEARANCE proposed."
+  :proposal/hash "cdf7857d2ee36c99" :provenance "FLIGHTS-BATCH2-2026-07-10.md; futonzero-advanceability-triage.edn"}
+ {:fold-turn/id "ft-futonzero-generative-014" :mission "futon6-d/mission/futonzero-generative"
+  :used ["iching/hexagram-07-shi"]
+  :want "self-bootstrapping WM learner gated by G-SIM and G-REWARD (single-pattern cascade)"
+  :success false
+  :evidence "B2-F6 (preregistered honest negative): shi sequencing plan — owners (substrate-2 -> G-SIM; M-pudding-peradams -> G-REWARD; WM pilot = pair accrual), 5 restraints, kill criteria carried from sec:prereg; want NOT discharged (same gates). Gate discipline held this time: zai-2 self-reported first-run parens FAIL, fixed, pasted real OK. Finding: plan gives coordination discipline, not tempo — gate work is other missions with ungoverned completion."
+  :proposal/hash "47385246a68934e2" :provenance "FLIGHTS-BATCH2-2026-07-10.md; futonzero-sequencing-plan.edn"}
 ]
