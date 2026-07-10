@@ -1,0 +1,80 @@
+;; CLean — CT treatment of MISSION a-sorry-enterprise (sorry-driven organisation; typed holes as
+;; the backlog, pattern activation as the work signal, Bayesian closure posteriors as the model).
+;; M-fold-ansatz A-small corpus (claude as the #2 LLM-fold, 2026-07-01).
+;; Folded from the mission's live cascade (2 applied + 7 candidate patterns) into a typed-hole
+;; wiring. The construction IS the Active-Inference loop the mission names: sorrys are prediction
+;; errors, pattern activation is the error-reducing action, Beta-binomial posteriors track closure.
+;; Honest notes (Joe): (1) mission status is IDENTIFY — this spine is the DESIGNED loop plus its
+;; one landed partial lift (the auto-miner, 2026-05-29), not a completed run; the final discharge
+;; is the model's live-test evaluation, which is genuinely open (Bristol/Test-1 is the first closure
+;; event). (2) The two APPLIED peripheral patterns are load-bearing and paired: surface-earns-
+;; inhabitation (the sorry-proximity signal must surface in the HUD/notification for the operator to
+;; inhabit it) and inhabitation-feeds-evolution (inhabited turns feed closure events back into the
+;; posteriors — the loop closes on itself). (3) No new life-logging: every signal reuses existing
+;; repeat signals (commits, evidence turns, retrieval certificates, file existence) — an honest
+;; constraint, represented as s1's consumes, not fabricated instrumentation.
+
+{:clean/proof  "a-sorry-enterprise"
+ :clean/title  "Sorry-driven organisation: pattern activation as work signal, Bayesian closure posteriors"
+ :clean/source {:mission "futon5a-d/mission/a-sorry-enterprise"
+                :cascade [:peripherals/surface-earns-inhabitation
+                          :peripherals/inhabitation-feeds-evolution
+                          :control/agential-pattern-hygiene
+                          :war-machine/ambient-pattern-retrieval
+                          :ants/baseline-cyber-ant]}
+
+ :clean/seq [:baseline-cyber-ant          ;; s1 — bootstrap affinity sets from existing repeat signals
+             :ambient-pattern-retrieval   ;; s2 — per-turn retrieval certificate = the activation signal
+             :agential-pattern-hygiene    ;; s3 — score turn's retrieved patterns against each sorry's affinity
+             :inhabitation-feeds-evolution;; s4 — the APPLIED loop-close: accumulate → Beta-binomial posterior
+             :surface-earns-inhabitation  ;; s5 — the APPLIED surface: sorry-proximity into HUD/notification
+             :baseline-cyber-ant]         ;; s6 — post-Bristol: did activation predict the closure trajectory?
+
+ :clean/boxes
+ [{:id :s1 :method :baseline-cyber-ant
+   :text "Bootstrap: for each live-test sorry (SORRY-market-interface, prospectus, policy-transition) define an affinity pattern-set from existing REPEAT signals only — git commits, evidence turns, retrieval certificates, file existence. No new life-logging; the cargo inventory is what the hands/heart/system already leave behind."
+   :produces :sorry-affinity-sets}
+
+  {:id :s2 :method :ambient-pattern-retrieval
+   :text "Each A→B turn already emits a context-retrieval certificate: protopattern (prompt+response), top-k retrieved patterns, embedding similarities. This per-turn retrieval IS the activation signal — the patterns that fire reflect the semantic content of the work being done, not random noise."
+   :consumes [:sorry-affinity-sets] :produces :per-turn-activation
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "affinity scoring runs in the per-turn pipeline WITHOUT adding latency — the retrieved-vs-affinity overlap is computable inline from the certificate the turn already produces"}}
+
+  {:id :s3 :method :agential-pattern-hygiene
+   :text "Sorry-proximity score: compare each turn's retrieved patterns against every sorry's affinity set. Overlap ⇒ that turn moves toward closing that sorry (spreading activation: activating patterns near a sorry primes its closure trajectory). Discipline against spurious activation — a turn of pure stack work should NOT falsely register as market-interface progress."
+   :consumes [:per-turn-activation] :produces :sorry-proximity-scores
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "the proximity score discriminates: turns that genuinely activate a sorry's affinity patterns score high, pure-stack turns flatten — the model detects the trend before the operator notices it"}}
+
+  {:id :s4 :method :inhabitation-feeds-evolution
+   :text "The APPLIED loop-close: accumulate proximity scores across ≥5 sessions and maintain a Beta-binomial posterior P(closure progress | patterns activated) per sorry (Click template). Sorrys are prediction errors; pattern activation is the error-reducing action; observed closure events update the posterior — inhabited work feeds the model's evolution."
+   :consumes [:sorry-proximity-scores] :produces :closure-posteriors
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "the posterior over each sorry's closure updates coherently from activation trajectories, starting from embedding-based priors and moving on observed closure events (the auto-miner's candidate sorries are the current floor this back-fits to)"}}
+
+  {:id :s5 :method :surface-earns-inhabitation
+   :text "The APPLIED surface (surface-earns-inhabitation): render per-turn sorry-proximity into the joe-hud Operator panel AND the desktop notification certificate. The signal must be visible for the operator to inhabit it — a posterior no one sees earns no inhabitation and drives no action."
+   :consumes [:closure-posteriors] :produces :surfaced-proximity-signal
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "sorry-proximity is live in HUD and/or notification each turn, legible enough that the operator acts on the trajectory rather than re-deriving it"}}
+
+  {:id :s6 :method :baseline-cyber-ant
+   :text "Live-test evaluation: after Bristol (Test 1, SORRY-market-interface), check whether increasing affinity-pattern activation actually predicted the closure trajectory — and record ONE real sorry closing with its evidence trajectory. Success here is the model's warrant to scale to every future client engagement (each engagement = a sorry in the JSDQ hypergraph)."
+   :consumes [:surfaced-proximity-signal] :produces :evaluated-closure-model
+   :discharges {:to :live-test-1-closure-evaluation}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :sorry-affinity-sets}
+  {:from :s2 :to :s3 :carries :per-turn-activation}
+  {:from :s3 :to :s4 :carries :sorry-proximity-scores}
+  {:from :s4 :to :s5 :carries :closure-posteriors}
+  {:from :s5 :to :s6 :carries :surfaced-proximity-signal}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :active-inference-closure-loop
+               :holes-at [:s2 :s3 :s4 :s5]
+               :discharges-at [:s6]
+               :note "an AIF error-reduction loop rendered as a spine: sorrys are prediction errors (s1 targets), per-turn retrieval is the activation signal (s2), proximity scoring is the error measurement (s3), the Beta-binomial posterior is the learned action-model (s4, APPLIED inhabitation-feeds-evolution), and the HUD surface is what closes the loop back to the operator (s5, APPLIED surface-earns-inhabitation). s6 discharges to the live-test evaluation — genuinely open, gated on a real closure event (Bristol/Test-1)."}}

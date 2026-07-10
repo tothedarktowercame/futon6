@@ -1,0 +1,71 @@
+;; CLean — CT treatment of MISSION agency-rebuild (Agency A0-A5 invariants made explicit, tested, enforced).
+;; M-fold-ansatz A-small corpus (the #2 LLM-fold, 2026-07-01). Folded from the mission's live cascade
+;; (applied: agency/single-routing-authority, futon-theory/all-or-nothing; candidate: pattern-hygiene,
+;; tension-before-code, verify-before-compose) into a typed-hole wiring over the REAL Phase-0..3 rebuild.
+;; NOTE: this was NOT a clean top-to-bottom build. Phase 1 deliberately produced a SPOILED registry
+;; (same agent-id live in 3 routing stores at once — the A1 split-brain), which Phase 2 REPAIRS by
+;; collapsing to a single routing authority. That repair is the load-bearing move and is honest here as
+;; a hole at s3 (spoiled) → s4 (unified), not hidden.
+
+{:clean/proof  "agency-rebuild"
+ :clean/title  "Agency A0-A5: single routing authority, bounded lifecycle, loud failure — proven green"
+ :clean/source {:mission "futon3-d/mission/agency-rebuild"
+                :cascade [:agency/single-routing-authority
+                          :social/tension-before-code
+                          :futon-theory/all-or-nothing
+                          :control/agential-pattern-hygiene
+                          :social/verify-before-compose]}
+
+ :clean/seq [:tension-before-code          ;; s1 — inventory the boundary + wire-protocol mismatch first
+             :agential-pattern-hygiene     ;; s2 — spec each invariant as a proof test (initially red)
+             :single-routing-authority     ;; s3 — the split-brain: one agent-id in 3 stores (SPOILED)
+             :single-routing-authority     ;; s4 — REPAIR: collapse to one authoritative route (A1)
+             :all-or-nothing               ;; s5 — atomic state + bounded lifecycle + loud failure (A2/A5/A3)
+             :verify-before-compose]       ;; s6 — agent-boundary + soak validation, then discharge green
+
+ :clean/boxes
+ [{:id :s1 :method :tension-before-code
+   :text "Phase 0 base camp: fix the Agency boundary (HTTP run/rollover/whistle/bell/ack, WS message types, Drawbridge paths), resolve the page-vs-whistle wire-protocol mismatch (whistle canonical, page aliased), and inventory the six state atoms (secrets/acks/rendezvous/connected-agents/local-handlers/pending-whistles) with their current lifecycle."
+   :produces :agency-boundary-inventory}
+
+  {:id :s2 :method :agential-pattern-hygiene
+   :text "Phase 1 spec-to-tests: encode A0-A5 as a proof-test suite (test/futon3/agency/invariants/), each initially RED where reality diverges, plus an A3 build-failing grep for catch-and-swallow. Result: 134 tests, 18 failures + 1 error — the gaps are now named as failing tests, not prose."
+   :consumes [:agency-boundary-inventory] :produces :red-invariant-suite}
+
+  {:id :s3 :method :single-routing-authority
+   :text "The A1 split-brain, made explicit: the SAME agent-id can exist simultaneously in registry + local-handlers + WS connected-agents. Sends resolve by concat/distinct across stores, so routing is ambiguous and A0 delivery has no single target to receipt against."
+   :consumes [:red-invariant-suite] :produces :routing-split-brain
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "for any agent-id, exactly one authoritative route exists at a time; multi-store concat/distinct is not that — a message send has no unique addressee"}}
+
+  {:id :s4 :method :single-routing-authority
+   :text "Phase 2 A1 repair (c5b5929): unify routing resolution into a single authority with cross-store eviction watches — WS registration wins, local-handler entry is evicted. The registry becomes the sole route; Drawbridge dual-registration is dropped when a WS URL is configured."
+   :consumes [:routing-split-brain] :produces :single-routing-authority
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "single-routing-authority: resolve(agent-id) yields exactly one route for every agent-id, and every bell/whistle send addresses that one route"}}
+
+  {:id :s5 :method :all-or-nothing
+   :text "Phase 2 remaining invariants over the now-unambiguous route: A2 atomic state (corruption loud, temp+rename writes, continuity id never nil — 804fe8f), A5 bounded lifecycle (acks bounded, lazy-on-read secret TTL, disconnect cascades to pending whistles — 5dcb28b), A0 explicit delivery receipts (5f85287), A3 loud failure with layer+agent-id+cause attribution (3f0aa3a)."
+   :consumes [:single-routing-authority] :produces :enforced-invariants
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "state transitions are all-or-nothing (no partial writes, no nil continuity), resources are bounded, and every failure surfaces loudly at its causing layer"}}
+
+  {:id :s6 :method :verify-before-compose
+   :text "Phase 3 validation: repair the agent boundary (fubar-agency.el reconnect-with-backoff, Drawbridge single-registration) so agents correctly participate in the A0/A1 contracts, then soak-test sustained bell/whistle traffic (atom sizes stable, cleanup deterministic) and prove A4 diagnosability. The A0-A5 proof suite goes green under clj -M:test."
+   :consumes [:enforced-invariants] :produces :validated-agency
+   :discharges {:to :a0-a5-proof-suite-green}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :agency-boundary-inventory}
+  {:from :s2 :to :s3 :carries :red-invariant-suite}
+  {:from :s3 :to :s4 :carries :routing-split-brain}
+  {:from :s4 :to :s5 :carries :single-routing-authority}
+  {:from :s5 :to :s6 :carries :enforced-invariants}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :build-then-repair-then-discharge
+               :holes-at [:s3 :s4 :s5]
+               :discharges-at [:s6]
+               :note "NOT a clean linear build: s3 exposes the A1 routing split-brain (one agent-id across three stores), s4 (single-routing-authority again) repairs it to a single authoritative route — the load-bearing move — before all-or-nothing state/lifecycle/failure (s5) and agent-boundary + soak validation (s6) discharge the mission to a green A0-A5 proof suite."}}

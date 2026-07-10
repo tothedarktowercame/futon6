@@ -1,0 +1,66 @@
+;; CLean — CT treatment of MISSION invariant-queue-unstuck (make the operational-invariant queue flow again).
+;; M-fold-ansatz A-small corpus (the #2 LLM-fold, 2026-07-01). Folded from the mission's live cascade
+;; (applied: agency/single-routing-authority; candidate: storage/error-layer-hierarchy, ants/baseline-cyber-ant,
+;; stack-coherence/{futon-bridge-health, futon1-storage-coherence}) over the REAL INSTANTIATE-1..4 build.
+;; This one WAS a clean linear build: each box installs one meta-invariant on top of the previous. The
+;; genuine gaps are the invariant OBLIGATIONS each box must discharge (the property it claims to bind),
+;; not a repair — so the shape is build-and-discharge, not build-then-repair.
+
+{:clean/proof  "invariant-queue-unstuck"
+ :clean/title  "Single evidence boundary → coverage ratchet → live-state probe → projection taps (fatberg → stream)"
+ :clean/source {:mission "futon3c-d/mission/invariant-queue-unstuck"
+                :cascade [:agency/single-routing-authority
+                          :storage/error-layer-hierarchy
+                          :stack-coherence/futon1-storage-coherence
+                          :stack-coherence/futon-bridge-health
+                          :ants/baseline-cyber-ant]}
+
+ :clean/seq [:single-routing-authority   ;; s1 — one evidence-write boundary (I-single-boundary)
+             :futon1-storage-coherence   ;; s2 — verify-persisted read-back (I-evidence-per-turn)
+             :error-layer-hierarchy      ;; s3 — coverage ratchet: status can't drop silently
+             :baseline-cyber-ant         ;; s4 — live-state probe: canary per family (I-family-canary)
+             :futon-bridge-health]       ;; s5 — projection taps read from where invariants already live
+
+ :clean/boxes
+ [{:id :s1 :method :single-routing-authority
+   :text "INSTANTIATE-1/2: futon3c.evidence.boundary/append! becomes the SOLE path to the evidence store. All ~50 direct estore/append* callers refactor through it (peripheral/common delegation routes ~25 at once). I-single-boundary is grep-verifiable: zero direct append* outside boundary.clj."
+   :produces :single-evidence-boundary
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "I-single-boundary: every evidence append originates from boundary/append! — partial single-boundary is structurally indistinguishable from none, so the refactor must be exhaustive"}}
+
+  {:id :s2 :method :futon1-storage-coherence
+   :text "The boundary shape-coerces (string→keyword tags/ref-type), appends via estore/append*, then verify-persisted reads the entry BACK from futon1a XTDB and refuses to acknowledge on failure. The nil-store false-positive is fixed by resolving the backend ONCE and passing it to both append and verify."
+   :consumes [:single-evidence-boundary] :produces :durable-verified-entry
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "I-evidence-per-turn: every emit persists durably and reads back — a write that returns success but did not durably land is impossible (the bot-evidence silent-loss class)"}}
+
+  {:id :s3 :method :error-layer-hierarchy
+   :text "Coverage ratchet (logic/ratchet.clj): status-ordering strongest→weakest; a family's :status cannot decrease without a matching :family-demoted evidence entry (itself written through the boundary — recursive). Enforced at inventory-mutation time via pre-commit hook comparing staged vs HEAD."
+   :consumes [:durable-verified-entry] :produces :ratcheted-inventory
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "I-coverage-ratchet: no operational-family status decreases without a reconciling demotion event — the (b)-test that blocks silently working around an invariant"}}
+
+  {:id :s4 :method :baseline-cyber-ant
+   :text "Live-state probe (logic/probe.clj): a scheduled sweep (hourly default / on-demand / autoshutter) walks the operational-families and runs each family's check, emitting one :family-fired {:ok|:violation|:inactive} record per family per run. An unregistered family surfaces as :inactive — the claim visible without a live signal."
+   :consumes [:ratcheted-inventory] :produces :live-fire-records
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "I-family-canary: every :operational family has a live-fire-record inside its staleness window, else surfaces distinctly as :inactive — 'operational' stops being aspirational"}}
+
+  {:id :s5 :method :futon-bridge-health
+   :text "INSTANTIATE-4 projection wave (logic/probe_taps.clj): factory taps bridge the three already-operational core.logic layers (agency/tickle/portfolio) into the probe registry; substrate-2 phase-1/2 and War-Machine AIF taps are the deferred follow-on. The queue becomes a 1-d projection of what is alive throughout the stack, not a hand-curated list."
+   :consumes [:live-fire-records] :produces :live-projection
+   :discharges {:to :four-meta-invariants-bound}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :single-evidence-boundary}
+  {:from :s2 :to :s3 :carries :durable-verified-entry}
+  {:from :s3 :to :s4 :carries :ratcheted-inventory}
+  {:from :s4 :to :s5 :carries :live-fire-records}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :build-and-discharge
+               :holes-at [:s1 :s2 :s3 :s4]
+               :discharges-at [:s5]
+               :note "A clean linear build (INSTANTIATE-1..4): each box installs one meta-invariant obligation over the prior — single boundary (s1) → verified durability (s2) → coverage ratchet (s3) → live-state canary (s4) — and the projection-tap wave (s5) discharges to the four bound/scaffolded meta-invariants. The load-bearing framing is projection-not-enumeration: the count falls out of the apparatus."}}

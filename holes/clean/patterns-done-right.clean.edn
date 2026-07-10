@@ -1,0 +1,61 @@
+;; CLean — CT treatment of MISSION patterns-done-right (patterns threaded through every
+;; layer: authoring peripheral -> categorical library -> code receipts; M-fold-ansatz A-small).
+;; Folded from the mission's live cascade (2 applied + 7 candidate patterns) into a typed-hole
+;; wiring. The four levels are a graduation ladder: each is a box built on the previous. Level 1
+;; is SHIPPED (discharged-in-spirit); Levels 3 and 4 are genuinely open research holes, marked
+;; honestly as sorries rather than presented as done.
+
+{:clean/proof  "patterns-done-right"
+ :clean/title  "Patterns as first-class objects: Sokoban authoring -> categorical admission -> code receipts"
+ :clean/source {:mission "futon0-d/mission/patterns-done-right"
+                :cascade [:agent/intent-handshake-is-binding
+                          :writing-coherence/meet-the-reader-where-they-are
+                          :control/agential-pattern-hygiene
+                          :peripherals/pattern-becomes-peripheral
+                          :meta/scaffolding-emergent-clarity]}
+
+ :clean/seq [:pattern-becomes-peripheral         ;; s1 — Level 1: Sokoban over text shape
+             :meet-the-reader-where-they-are      ;; s2 — Level 2: algorithm-guided authoring
+             :scaffolding-emergent-clarity        ;; s3 — Level 3: functorial admission
+             :agential-pattern-hygiene            ;; s4 — Level 4: pattern -> code receipts
+             :intent-handshake-is-binding]        ;; s5 — the honest-application invariant discharged
+
+ :clean/boxes
+ [{:id :s1 :method :pattern-becomes-peripheral
+   :text "Level 1 (SHIPPED): the pattern peripheral is a pre-write capability envelope, not a downstream validator. A single bound submit-draft! action either lands a canonical .flexiarg or returns structured violations and writes nothing — no leakage. Validated cold-start: an unprimed session authored a Sokoban-admissible pattern from ambient corpus signal alone."
+   :produces :capability-envelope}
+
+  {:id :s2 :method :meet-the-reader-where-they-are
+   :text "Level 2: algorithm-guided authoring. Before invoking submit-draft!, the author follows author-flexiarg-core-and-wire-discoverability — lifecycle modes, companion flexiargs, orthogonalisation, discoverability wiring. Soft setup that meets the author where they are; the peripheral stays the hard gate."
+   :consumes [:capability-envelope] :produces :prepared-draft}
+
+  {:id :s3 :method :scaffolding-emergent-clarity
+   :text "Level 3 (RESEARCH): functorial admission. The admission predicate is not 'does the draft parse into the canonical seven?' but 'do the draft's required morphisms compose cleanly with the existing futon5 pattern-category?' A pattern lands iff its morphisms satisfy the categorical laws with sibling objects, and a wiring diagram is generated on success."
+   :consumes [:prepared-draft] :produces :composable-object
+   :hole {:kind :sorry :discharge :sorryProof :satiety :bundling
+          :wanted "decide which of the canonical seven are REQUIRED morphisms vs optional, and which categorical laws must hold (associativity is easy; naturality of :tension<->:move is the hard open claim); then wire ct/dsl as the admission predicate"}}
+
+  {:id :s4 :method :agential-pattern-hygiene
+   :text "Level 4 (RESEARCH): pattern -> code receipts. A pattern is honestly applied only when a verifiable receipt links the built code back to the pattern's claim: a Pattern: <ns>/<name> commit footer joined to the geometric substrate (:witness-shape, region of effect, T-before/T-after pair), checked by invariant-pattern-receipts-resolve. Cutover discipline; historical commits stay as they are."
+   :consumes [:composable-object] :produces :structural-receipt
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :payoff
+          :wanted "the geometric T-before/T-after witness distinguishes an HONEST pattern claim from drift/gaming; if the witness is weak, Level 4 collapses to advisory — that discriminating power is the open question"}}
+
+  {:id :s5 :method :intent-handshake-is-binding
+   :text "The honest-application invariant: a pattern is 'applied' iff the authoring intent (Level 1/2 handshake) is BINDING all the way through to a structural code receipt (Level 4) whose morphisms compose in the category (Level 3). The four levels crystallise as flexiargs authored THROUGH the peripheral they specify — the substrate validating itself."
+   :consumes [:structural-receipt] :produces :threaded-pattern
+   :discharges {:to :self-referential-pattern-discipline}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :capability-envelope}
+  {:from :s2 :to :s3 :carries :prepared-draft}
+  {:from :s3 :to :s4 :carries :composable-object}
+  {:from :s4 :to :s5 :carries :structural-receipt}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :graduation-ladder-then-discharge
+               :holes-at [:s3 :s4]
+               :discharges-at [:s5]
+               :note "four-level graduation ladder: Level 1 (s1) shipped, Level 2 (s2) soft setup, Levels 3 (s3, functorial admission) and 4 (s4, code receipts) are genuinely-open research holes; the intent-handshake invariant (s5) is what binds authoring intent through to a checkable code receipt — the mission's integrative thesis, discharged to self-referential pattern discipline."}}

@@ -1,0 +1,70 @@
+;; CLean — CT treatment of MISSION stepper-calibration (calibrate the proof stepper
+;; against First Proof's 10 known-answer problems; M-fold-ansatz A-small corpus).
+;; Folded from the mission's live cascade (1 applied + 8 candidate patterns) into a
+;; typed-hole wiring. The construction is NOT linear-clean: the calibration reads out
+;; three distinct error classes, and two of them (missing-technique, C) come back RED —
+;; the corpus can't discharge them yet. Those RED holes are represented honestly as
+;; open sorries, not hidden.
+
+{:clean/proof  "stepper-calibration"
+ :clean/title  "Calibrating the framing-first proof stepper on First Proof's 10 problems"
+ :clean/source {:mission "futon3c-d/mission/stepper-calibration"
+                :cascade [:agent/evidence-over-assertion
+                          :agent/hypothetical-proof-architecture
+                          :math-strategy/route-exploration-and-pivot
+                          :social/verify-before-compose
+                          :hdm/outline-first-detail-later]}
+
+ :clean/seq [:outline-first-detail-later      ;; s1 — triage the 10 problems into error classes
+             :evidence-over-assertion         ;; s2 — the framing-first gate (discipline signal)
+             :hypothetical-proof-architecture ;; s3 — Class A: foundational-error trace
+             :verify-before-compose           ;; s4 — Class B: problem-substitution / claim-typing
+             :route-exploration-and-pivot     ;; s5 — Class C: missing-technique / propose-search
+             :evidence-over-assertion]        ;; s6 — aggregate the calibration verdict
+
+ :clean/boxes
+ [{:id :s1 :method :outline-first-detail-later
+   :text "Triage the 10 First Proof problems by known official answer into three error classes: Class A foundational (P1,P7 — false premise), Class B substitution (P3 — solved a related variant), Class C missing-technique (P4,P6 — right direction, no closing tool); the rest are success baselines (P2,P5,P8,P9,P10)."
+   :produces :problem-triage}
+
+  {:id :s2 :method :evidence-over-assertion
+   :text "The framing-first gate: L-preconditions and L-obstruction-scan must resolve before L-bridge unblocks. The evidence-over-assertion discipline fires even without domain data, forcing the agent to mark an unverified premise as unverified rather than build a proof on it silently."
+   :consumes [:problem-triage] :produces :framing-gate}
+
+  {:id :s3 :method :hypothetical-proof-architecture
+   :text "Class A trace (P1 Phi^4_3, P7 lattice 2-torsion): both answered YES when the truth was NO. Run each golden-path script through the gate and check whether the gate would have caught the false premise. Result RED at the DOMAIN level (no corpus signal for Hairer/Novikov) but the discipline-level gate correctly holds L-preconditions open."
+   :consumes [:framing-gate] :produces :class-a-calibration
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :payoff
+          :wanted "the framing gate would have caught the P1/P7 false premise — at least at discipline level, keeping L-bridge blocked while the premise is unverified"}}
+
+  {:id :s4 :method :verify-before-compose
+   :text "Class B trace (P3 ASEP polynomials): we solved the standard variant instead of the interpolation variant. The L-claim-type obligation forces classifying which variant is actually asked before any bridge argument; corpus-check queries the standard-vs-interpolation distinction. Verify-before-compose is exactly the guard against composing a proof of the wrong claim."
+   :consumes [:class-a-calibration] :produces :class-b-calibration
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "claim typing catches the variant mismatch: L-claim-type distinguishes F*_mu (asked) from F_eta (solved) before the bridge is built"}}
+
+  {:id :s5 :method :route-exploration-and-pivot
+   :text "Class C trace (P4 finite-free Stam, P6 epsilon-light subsets): correct direction, but the closing technique (hyperbolic-polynomial Hessians; modified BSS barrier) is outside the repertoire. The structural obstruction from :failed-route-add becomes the propose-phase corpus query. Result RED: today's text-only corpus does not surface the missing technique — it identifies the minimum ArXiv seed instead."
+   :consumes [:class-b-calibration] :produces :class-c-calibration
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "propose-phase search surfaces the missing technique from the :failed-route-add obstruction; open until the superpod structural embeddings upgrade corpus-check from text to wiring-diagram search"}}
+
+  {:id :s6 :method :evidence-over-assertion
+   :text "Aggregate: every problem carries a stepper trace with a GREEN/YELLOW/RED calibration verdict per query, and the union of RED cells names the minimum ArXiv seed set for all 10 problems — the concrete requirement handed to the ArXiv pipeline, discharging the mission's aggregate exit criterion."
+   :consumes [:class-c-calibration] :produces :calibration-report
+   :discharges {:to :minimum-arxiv-seed-set}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :problem-triage}
+  {:from :s2 :to :s3 :carries :framing-gate}
+  {:from :s3 :to :s4 :carries :class-a-calibration}
+  {:from :s4 :to :s5 :carries :class-b-calibration}
+  {:from :s5 :to :s6 :carries :class-c-calibration}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :gate-then-triage-then-discharge
+               :holes-at [:s3 :s4 :s5]
+               :discharges-at [:s6]
+               :note "framing-first gate (s2) feeds three parallel-in-spirit error-class traces (s3 Class A, s4 Class B, s5 Class C) sequenced as a spine; the Class-A/C holes are RED (no corpus signal yet) and stay open, the aggregate (s6) discharges to the minimum ArXiv seed set — the honest, gating-relevant deliverable."}}

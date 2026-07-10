@@ -51,3 +51,6 @@ test*.pdf
 data/question-patterns/*.json
 .clj-kondo/
 .lsp/
+
+# canonical mine PIN — tracked metadata (M-post-mining-ingest DERIVE), data itself stays ignored
+!data/mine-registry.edn

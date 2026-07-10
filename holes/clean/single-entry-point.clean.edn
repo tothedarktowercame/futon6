@@ -1,0 +1,62 @@
+;; CLean — CT treatment of MISSION single-entry-point (one launcher owns every long-running dev process).
+;; M-fold-ansatz A-small corpus (the #2 LLM-fold, 2026-07-01). Folded from the mission's live cascade
+;; (applied: invariant-coherence/reachable-from-boot, structure/block-as-futonic-revolution; candidate:
+;; futon-theory/mission-interface-signature, ants/baseline-cyber-ant, stack-coherence/futon1-storage-coherence).
+;; This mission is at IDENTIFY→DERIVE, so the construction is a DERIVATION with real undecided forks, not a
+;; landed build. The load-bearing tension is the process-group escape (children reparent to systemd on parent
+;; death); the A-vs-B integration choice is a genuinely open hole, honestly represented as such at s3.
+
+{:clean/proof  "single-entry-point"
+ :clean/title  "One dev-laptop-env launcher owns every long-running JVM; SIGINT tears them all down; no orphans"
+ :clean/source {:mission "futon3c-d/mission/single-entry-point"
+                :cascade [:invariant-coherence/reachable-from-boot
+                          :structure/block-as-futonic-revolution
+                          :futon-theory/mission-interface-signature
+                          :ants/baseline-cyber-ant
+                          :stack-coherence/futon1-storage-coherence]}
+
+ :clean/seq [:baseline-cyber-ant                 ;; s1 — audit: three orphaned JVMs reparented to systemd
+             :reachable-from-boot                ;; s2 — claim: one launcher is sole owner; boot makes all reachable
+             :mission-interface-signature        ;; s3 — the A(in-JVM)/B(sub-process) integration fork (OPEN)
+             :block-as-futonic-revolution        ;; s4 — process-group escape: children MUST NOT outlive the launcher
+             :reachable-from-boot]               ;; s5 — shutdown-hook teardown + double-launch guard → criteria
+
+ :clean/boxes
+ [{:id :s1 :method :baseline-cyber-ant
+   :text "2026-05-02 audit: three long-running JVMs (webarxana Ring :3100, two shadow-cljs watchers) started by hand and forgotten, ~1.5 GB resident, survived multiple dev-laptop-env restarts. None owned by the futon3c lifecycle — the boot-time invariants can't surface what they don't see; JVM-level state (ports, RSS, process trees) is the blind spot."
+   :produces :orphan-jvm-audit}
+
+  {:id :s2 :method :reachable-from-boot
+   :text "The structural claim: a single ./scripts/dev-laptop-env invocation is the SOLE launcher of every long-running futon-stack dev process (webarxana Ring in-JVM, war-machine + webarxana shadow-cljs watchers). Not literally one PID — sub-processes are fine IFF the launcher owns them and shutdown tears them down."
+   :consumes [:orphan-jvm-audit] :produces :single-launcher-claim}
+
+  {:id :s3 :method :mission-interface-signature
+   :text "DERIVE fork, UNDECIDED: (A) in-JVM embedding — add webarxana + shadow-cljs as futon3c deps, mount in bootstrap.clj (one JVM, but hundreds of MB classpath + version-conflict risk); (B) managed sub-processes — spawn watchers via ProcessBuilder, register with cyder as :daemon (lower classpath risk, but >1 JVM and stuck-child handling). Default lean: A for Ring, B for shadow-cljs."
+   :consumes [:single-launcher-claim] :produces :integration-strategy
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :payoff
+          :wanted "resolve Q-classpath-compat (does thheller/shadow-cljs conflict with futon3c deps?) and Q-shadow-cljs-shared-server (two watch :app in one JVM with different CWD configs) to pick A or B per subsystem"}}
+
+  {:id :s4 :method :block-as-futonic-revolution
+   :text "The load-bearing tension (Q-orphan-survival): the audit found shadow-cljs JVMs REPARENTING to systemd after their node parent died. Whichever integration path, the child processes must be captured in a process group (setsid / Process.toHandle) so they CANNOT survive the launcher — a managed sub-process is a 'block' in the mana-allostasis sense: bounded, owned, reclaimable."
+   :consumes [:integration-strategy] :produces :escape-proof-process-group
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "no child JVM can reparent to systemd: on launcher death every spawned process is in a killable group, verified by parent==1 check returning empty after SIGINT"}}
+
+  {:id :s5 :method :reachable-from-boot
+   :text "Discharge the completion criteria: the bootstrap.clj shutdown hook SIGTERMs (then SIGKILL-fallback) every managed child before futon1a goes down; each subsystem registers with cyder so it shows in (dev/status); a second dev-laptop-env invocation fails fast on the shared-port collision rather than silently double-launching."
+   :consumes [:escape-proof-process-group] :produces :owned-dev-stack
+   :discharges {:to :single-entry-point-completion-criteria}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :orphan-jvm-audit}
+  {:from :s2 :to :s3 :carries :single-launcher-claim}
+  {:from :s3 :to :s4 :carries :integration-strategy}
+  {:from :s4 :to :s5 :carries :escape-proof-process-group}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :audit-derive-then-discharge
+               :holes-at [:s3 :s4]
+               :discharges-at [:s5]
+               :note "A derivation, not a landed build (mission at IDENTIFY→DERIVE): the orphan audit (s1) motivates the single-launcher claim (s2); s3 carries a GENUINELY OPEN fork (in-JVM A vs managed-sub-process B, Q-classpath-compat undecided); s4 is the load-bearing process-group-escape obligation (children reparenting to systemd is the failure to preclude); s5 discharges shutdown-teardown + double-launch guard to the completion criteria."}}

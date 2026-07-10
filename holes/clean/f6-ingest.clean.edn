@@ -1,0 +1,73 @@
+;; CLean — CT treatment of MISSION f6-ingest (math.SE superpod NLP corpus run, f6/P7).
+;; M-fold-ansatz A-small corpus (claude as the #2 LLM-fold, 2026-07-01).
+;; Folded from the mission's live cascade (1 applied + 8 candidate patterns) into a typed-hole
+;; wiring. The mission is a FAN-OUT pipeline: C-parse is the sole root; five stages consume the
+;; parsed entities INDEPENDENTLY (no SPOF); C-manifest aggregates. Honest note (Joe): only
+;; f6/scope-chain-tracking is `applied` in the cascade — it is the one load-bearing move that
+;; carries a real construction hole (LaTeX symbol-binding extraction from scope openers). The
+;; iching/state-snapshot candidates are treated as the manifest's witness discipline, not fabricated
+;; into their own boxes. Status: archived — the spine is the design-time construction, faithful to
+;; the machine-checked wiring at futon5/data/missions/f6-ingest.edn (all 8 checks pass).
+
+{:clean/proof  "f6-ingest"
+ :clean/title  "math.SE annotated corpus via a no-SPOF fan-out NLP pipeline (superpod run)"
+ :clean/source {:mission "futon3-d/mission/f6-ingest"
+                :cascade [:f6/scope-chain-tracking
+                          :agent/budget-bounds-exploration
+                          :storage/open-world-continuity
+                          :invariant-coherence/state-snapshot-witness]}
+
+ :clean/seq [:budget-bounds-exploration   ;; s1 — bound the superpod window before touching it
+             :deterministic-ingest        ;; s2 — the streaming XML parse (the fan-out root)
+             :parallel-annotation         ;; s3 — embed/tag/NER run off the parse independently
+             :scope-chain-tracking        ;; s4 — the APPLIED move: scope openers → symbol bindings
+             :open-world-continuity       ;; s5 — bootstrap: absorb new tags, re-spot (kernel grows)
+             :state-snapshot-witness]     ;; s6 — manifest aggregates every channel + validates
+
+ :clean/boxes
+ [{:id :s1 :method :budget-bounds-exploration
+   :text "Bound the run: a 2–4h superpod window and a fixed dump. Dry-run the 5-stage pipeline locally on a physics.SE subset (--skip-embeddings --skip-llm) FIRST so bugs cost local time, not GPU time."
+   :produces :bounded-run-plan}
+
+  {:id :s2 :method :deterministic-ingest
+   :text "C-parse: stream the math.SE XML dump (constant-memory) into entities + question→answer relations. This is the SOLE fan-out root — every downstream stage consumes its output, so removing any one stage disconnects only its own channel."
+   :consumes [:bounded-run-plan] :produces :parsed-entities}
+
+  {:id :s3 :method :parallel-annotation
+   :text "Off the parse, C-embed (bge-large-en-v1.5), C-tag (Llama-3 pattern classification), C-ner (classical term spotting from the 19K kernel) and C-cluster (HDBSCAN on embeddings) run INDEPENDENTLY. Three glacial config constraints flow strictly downward — no I4 exogeneity violation."
+   :consumes [:parsed-entities] :produces :annotation-channels
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "each annotation channel is a pure function of the parsed entities alone (no cross-channel dependency), so the fan-out has no single point of failure"}}
+
+  {:id :s4 :method :scope-chain-tracking
+   :text "C-scope (the APPLIED pattern): detect Let/Define/Assume/Consider openers in each answer and extract the LaTeX symbol bindings they introduce, emitting scopes.json binding-records. This is where an informal proof's variable scope becomes machine-legible."
+   :consumes [:parsed-entities] :produces :scope-bindings
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "scope openers found in >30% of answers and each opener's symbol bindings extracted correctly — the scope chain is a faithful projection of the answer's variable-introduction structure"}}
+
+  {:id :s5 :method :open-world-continuity
+   :text "Bootstrap loop: extract the freshly-produced math.SE tags, MERGE them into the NER kernel, and re-run the term spotter — an open-world step where the kernel grows monotonically (expect 1000+ new terms) without invalidating prior hits."
+   :consumes [:scope-bindings :annotation-channels] :produces :expanded-kernel
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "kernel expansion is monotone: absorbing math.SE tags only adds terms, and re-spotting on the expanded kernel achieves >95% entity coverage without dropping earlier hits"}}
+
+  {:id :s6 :method :state-snapshot-witness
+   :text "C-manifest aggregates all channels (entities, embeddings, tags, clusters, NER hits, scopes, expanded kernel) into a single validated manifest.json — the run's witness: counts, config, stats. The blob downloads and re-validates locally, closing the mission's success criteria."
+   :consumes [:expanded-kernel] :produces :validated-manifest
+   :discharges {:to :manifest-validation-8-checks}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :bounded-run-plan}
+  {:from :s2 :to :s3 :carries :parsed-entities}
+  {:from :s2 :to :s4 :carries :parsed-entities}
+  {:from :s3 :to :s5 :carries :annotation-channels}
+  {:from :s4 :to :s5 :carries :scope-bindings}
+  {:from :s5 :to :s6 :carries :expanded-kernel}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :fan-out-then-aggregate
+               :holes-at [:s3 :s4 :s5]
+               :discharges-at [:s6]
+               :note "NOT a linear chain: s2 (parse) is the sole fan-out root feeding s3 (parallel annotation) and s4 (scope) independently; s5 (bootstrap) rejoins both channels; s6 (manifest) aggregates and validates. The applied scope-chain-tracking (s4) is the one non-candidate move — the load-bearing symbol-binding extraction. No-SPOF is the structural invariant."}}

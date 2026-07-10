@@ -1,0 +1,77 @@
+;; CLean — CT treatment of MISSION pattern-ingest (XTDB as the authoritative pattern record).
+;; M-fold-ansatz A-small corpus (claude as the #2 LLM-fold, 2026-07-01).
+;; Folded from the mission's live cascade (2 applied + 7 candidate patterns) into a typed-hole
+;; wiring. The mission REVERSES a degradation: the v0 projector emits a bare `has-doc` vertex and
+;; lets downstream re-parse; the legacy stance Joe wants restored makes XTDB authoritative and the
+;; flexiarg file a checkout. So the spine is shape-check → rich projection → mechanical sigil
+;; canonicalisation → provenance link → one inference move. Honest notes (Joe): (1) the two APPLIED
+;; patterns are code-coherence/dead-code-hygiene (the TSV becomes a DERIVED view — dead authority
+;; removed) and realtime/learn-as-you-go (the sigil canonicaliser assigns-and-commits incrementally
+;; rather than rejecting). (2) sigil canonicalisation is MECHANICAL (checkable vs a canonical
+;; allowlist), NOT a consent-gated semantic decision — so its hole discharges by :queryAnswer
+;; against the allowlist, with a genuine :sigil/pending residual escape valve when signals disagree.
+
+{:clean/proof  "pattern-ingest"
+ :clean/title  "Rich pattern projection with mechanical sigil canonicalisation — XTDB as authority"
+ :clean/source {:mission "futon3-d/mission/pattern-ingest"
+                :cascade [:realtime/learn-as-you-go
+                          :code-coherence/dead-code-hygiene
+                          :invariant-coherence/shape-first-identify
+                          :hdm/outline-first-detail-later
+                          :storage/deterministic-ingest-pipeline]}
+
+ :clean/seq [:shape-first-identify        ;; s1 — Toulmin/sigil shape is a precondition, not afterthought
+             :outline-first-detail-later  ;; s2 — project title+conclusion+named slots onto the vertex
+             :learn-as-you-go             ;; s3 — the APPLIED move: sigil assign-and-commit (or pend)
+             :deterministic-ingest        ;; s4 — provenance edge back to first-proposing evidence
+             :dead-code-hygiene           ;; s5 — the APPLIED move: TSV demoted to a derived view
+             :dead-code-hygiene]          ;; s6 — pilot inference move impossible against v0 props
+
+ :clean/boxes
+ [{:id :s1 :method :shape-first-identify
+   :text "Shape-check the flexiarg FIRST: a Toulmin-slotted structure (IF/HOWEVER/THEN/BECAUSE, plus the orchestration-namespace RELATED/DOES-NOT-APPLY extensions) is a precondition of ingest. A malformed pattern is skipped with a structured failure record — it does not silently degrade to a bare `unknown/unknown` vertex."
+   :produces :shape-checked-pattern}
+
+  {:id :s2 :method :outline-first-detail-later
+   :text "v1 projector: emit @title, ! conclusion, and one code/v05/pattern-slot edge per named clause (slot type, text, position) onto the code/v05/var vertex — so slots are individually queryable. The whole pattern's content now lives ON the vertex, not just `:var/has-doc true`."
+   :consumes [:shape-checked-pattern] :produces :rich-vertex
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "the projected vertex + slot edges are a faithful, lossless projection of the flexiarg's Toulmin structure — every authored slot round-trips"}}
+
+  {:id :s3 :method :learn-as-you-go
+   :text "Sigil canonicaliser (APPLIED, learn-as-you-go): replace reject-on-invalid with a verified three-step — canonicalise (emoji∈allowlist, hanzi∈allowlist), auto-rewrite+git-commit on ≥2 agreeing signals (author bot/sigil-canonicaliser, original preserved in the commit body), else mark :sigil/pending. Mechanical (gofmt-like), NOT consent-gated: sigil validity is checkable against a canonical ground truth."
+   :consumes [:rich-vertex] :produces :canonical-or-pending-sigil
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "for each invalid sigil, the verifier either assigns a defensible canonical (emoji,hanzi) pair from the allowlist with ≥2 agreeing signals, or falls through to an explicit :sigil/pending residual — never a forced guess, never unknown/unknown"}}
+
+  {:id :s4 :method :deterministic-ingest
+   :text "Provenance: on first-seen of a flexiarg qname, emit a code/v05/pattern-origin hyperedge linking the pattern vertex to (a) the introducing commit and (b) the Evidence entry where it was first proposed — heuristic v0 over proximate references, deterministic given the evidence store."
+   :consumes [:canonical-or-pending-sigil] :produces :provenance-linked-vertex
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "each newly-ingested pattern carries a pattern-origin edge with a non-trivial witness (commit-sha + evidence-id, or an operator-asserted origin marker for retroactively-true legacy patterns)"}}
+
+  {:id :s5 :method :dead-code-hygiene
+   :text "Demote the TSV to a DERIVED view (APPLIED, dead-code-hygiene): patterns-index.tsv stops being the authority on sigils — XTDB is. The literal unknown/unknown rows (today ~144) are dead references to a lost authority; they are removed / regenerated FROM the substrate. The file system becomes a checkout of the vertex, not an independent source of truth."
+   :consumes [:provenance-linked-vertex] :produces :substrate-authoritative-record
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "post-mission the TSV carries zero unknown/unknown rationale rows and is reconstructible entirely from substrate-2 props — the substrate is the single authority"}}
+
+  {:id :s6 :method :dead-code-hygiene
+   :text "Pilot the payoff: run one inference move that was IMPOSSIBLE against v0 props — e.g. emit code/v05/related-to edges from each RELATED clause so the pattern library renders as a navigable graph, or rank candidates by IF/HOWEVER slot-overlap. The move consumes the rich substrate directly, no corpus re-walk."
+   :consumes [:substrate-authoritative-record] :produces :inference-demonstration
+   :discharges {:to :substrate-query-cross-pattern-inference}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :shape-checked-pattern}
+  {:from :s2 :to :s3 :carries :rich-vertex}
+  {:from :s3 :to :s4 :carries :canonical-or-pending-sigil}
+  {:from :s4 :to :s5 :carries :provenance-linked-vertex}
+  {:from :s5 :to :s6 :carries :substrate-authoritative-record}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :shape-gate-then-enrich-then-demote-authority
+               :holes-at [:s2 :s3 :s4 :s5]
+               :discharges-at [:s6]
+               :note "linear enrichment chain, but the load-bearing inversion is at s3+s5: s3 (learn-as-you-go) makes sigil assignment authoritative-by-default via mechanical canonicalisation with a real :sigil/pending residual; s5 (dead-code-hygiene) demotes the TSV from authority to derived view. Together they flip 'file system authoritative, XTDB derived' to 'XTDB authoritative, file system a checkout'."}}

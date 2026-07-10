@@ -1,0 +1,89 @@
+{
+  "mine/version" "2026-06-25-v1"
+  "mine/pinned-at-ms" 1782786879623
+  "mine/generator" "scripts/pin_mine.py"
+  "mine/note" "Canonical pin for the M-operational-vocabulary + M-goals-and-holes mining run. The unsuffixed *.openai.json set is canonical; this freezes it by checksum so consumers read one pinned source (M-post-mining-ingest DERIVE (a)). The mine/meme substrate-2 ingest (b) is a separate step."
+  "mine/products" [{
+    "id" "joint-memes"
+    "path" "data/meme-mine/joint-memes.openai.json"
+    "class" :data
+    "node-type" "meme"
+    "node-id-pattern" "meme:ask-*"
+    "canonical?" true
+    "sha256" "a80d757e9b19b298dbe1ba0acf110f78ee137548528ac3cac45733d0fa53da7e"
+    "bytes" 1452458
+    "mtime" "2026-06-25T22:52:57"
+    "model" "openai"
+    "gate-status" :unverified
+    "count" 1393
+    "provenance/sessions" ["008c5683" "020cc7d2" "029f0ea1" "04bc6b8c" "06a48964" "13ee796b" "15bd9b63" "1cc1595e" "1cdbf0af" "2097f5b8" "252a47d9" "29e3183f" "2d67a95c" "2faf3fac" "34299d44" "3430ba3f" "38a52728" "3b1b8bc7" "3effa2fd" "41e58a57" "445227f5" "45c09bd3" "491705ee" "56a58fc0" "56f02900" "56f1dc3e" "586c6fa7" "66e16ba5" "699a5ae5" "6bc498d0" "6f95659f" "7150b1b9" "7248e0c9" "78a51947" "7cc0cf3c" "8146485e" "853b1ff0" "8787be75" "89b7b9ff" "8ad487b4" "8c0f9a5c" "8d4cccc9" "8df5777c" "9a1061df" "9aaeeeb0" "9ce38771" "9e19ebcb" "a5c81f4d" "aaaaaaaa" "aac1bf74" "ae16431c" "b4fdcdce" "b5b295f6" "bb648909" "bb8df1fc" "bb98ab2c" "bbd4529b" "bee86442" "c26c5be4" "c54ed7e7" "ca55e82a" "cdc21af7" "d0ae969f" "d5bd17a4" "d75518a2" "f1295667" "f813a7b8"]
+  } {
+    "id" "resolved-memes"
+    "path" "data/meme-mine/resolved-memes.openai.json"
+    "class" :data
+    "node-type" "meme"
+    "node-id-pattern" "meme:ask-*"
+    "canonical?" true
+    "sha256" "4f5c8a5d304f2f12337a0f1a34d98939ae8a2cba2a017cf0a1756240e10272a8"
+    "bytes" 1130148
+    "mtime" "2026-06-25T22:52:57"
+    "model" "openai"
+    "gate-status" :unverified
+    "count" 1419
+    "provenance/sessions" ["008c5683" "020cc7d2" "029f0ea1" "04bc6b8c" "06a48964" "13ee796b" "15bd9b63" "1cc1595e" "1cdbf0af" "2097f5b8" "252a47d9" "29e3183f" "2d67a95c" "2faf3fac" "34299d44" "3430ba3f" "38a52728" "3b1b8bc7" "3effa2fd" "41e58a57" "445227f5" "45c09bd3" "491705ee" "56a58fc0" "56f02900" "56f1dc3e" "586c6fa7" "66e16ba5" "699a5ae5" "6bc498d0" "6f95659f" "7150b1b9" "7248e0c9" "78a51947" "7cc0cf3c" "8146485e" "853b1ff0" "8787be75" "89b7b9ff" "8ad487b4" "8c0f9a5c" "8d4cccc9" "8df5777c" "9a1061df" "9aaeeeb0" "9ce38771" "9e19ebcb" "a5c81f4d" "aaaaaaaa" "aac1bf74" "ae16431c" "b4fdcdce" "b5b295f6" "bb648909" "bb8df1fc" "bb98ab2c" "bbd4529b" "bee86442" "c26c5be4" "c54ed7e7" "ca55e82a" "cdc21af7" "d0ae969f" "d5bd17a4" "d75518a2" "f1295667" "f813a7b8"]
+  } {
+    "id" "concept-index"
+    "path" "data/meme-mine/concept-index.json"
+    "class" :derived
+    "node-type" "concept"
+    "note" "keys are mission/* & pattern/* strings -> ingest as mine/concept-about REFERENCE edges, NOT TYPE claims (would collide with O3 mission: typing). Deferred from car 1."
+    "canonical?" true
+    "sha256" "602c994730c8708edc3d15b31e95520c2fe5f9cb8d50a070bfba7d19ed14e53a"
+    "bytes" 29120
+    "mtime" "2026-06-25T22:53:21"
+    "model" "unrecorded"
+    "gate-status" :unverified
+    "count" 229
+  } {
+    "id" "action-cert"
+    "path" "data/meme-mine/action-cert.json"
+    "class" :data
+    "canonical?" true
+    "sha256" "309a91b1ab6dd0b787d9c4e8d2f7f96a687421899fa6067ef25de858703d60bf"
+    "bytes" 8472
+    "mtime" "2026-06-25T22:52:57"
+    "model" "unrecorded"
+    "gate-status" :unverified
+    "count" 198
+  } {
+    "id" "c-entries"
+    "path" "data/c-vector/c-entries.openai.json"
+    "class" :data
+    "node-type" "c-entry"
+    "node-id-pattern" "ask-*"
+    "canonical?" true
+    "sha256" "deb88fb0cb392cb6dc0e3939222d7145004562ecbcabfc86a36283b676c2131f"
+    "bytes" 2826330
+    "mtime" "2026-06-26T12:22:13"
+    "model" "openai"
+    "gate-status" :unverified
+    "count" 1849
+    "provenance/sessions" ["008c5683" "020cc7d2" "029f0ea1" "04bc6b8c" "06a48964" "0e5ab33a" "13ee796b" "15bd9b63" "1cc1595e" "1cdbf0af" "1e5abee2" "2097f5b8" "238af325" "252a47d9" "29e3183f" "2d67a95c" "2fd1a487" "34299d44" "3430ba3f" "38a52728" "3b1b8bc7" "3effa2fd" "41e58a57" "445227f5" "45c09bd3" "491705ee" "56a58fc0" "56f02900" "56f1dc3e" "586c6fa7" "5c9973f7" "66e16ba5" "699a5ae5" "6bc498d0" "6f95659f" "7150b1b9" "7248e0c9" "78a51947" "7cc0cf3c" "8146485e" "853b1ff0" "8787be75" "89b7b9ff" "8ad487b4" "8c0f9a5c" "8d4cccc9" "8df5777c" "956e82f6" "9a1061df" "9aaeeeb0" "9ce38771" "9e19ebcb" "a5c81f4d" "aaaaaaaa" "aac1bf74" "ae16431c" "b4fdcdce" "b5b295f6" "bb648909" "bb8df1fc" "bb98ab2c" "bbd4529b" "bee86442" "c54ed7e7" "ca55e82a" "cdc21af7" "d0ae969f" "d5b19b87" "d5bd17a4" "d75518a2" "dd831284" "eff34cd1" "f1295667" "f813a7b8"]
+  } {
+    "id" "move-basins"
+    "path" "data/c-vector/move-basins.json"
+    "class" :derived
+    "note" "MiniLM move classifier (build/reach/steer) \u2014 NOT node rows; pin the recipe."
+    "canonical?" true
+    "sha256" "daef75d817f6c36e205c7f0c6ff6967b8263d8758193707e7609f85311562143"
+    "bytes" 25834
+    "mtime" "2026-06-26T17:51:34"
+    "model" "all-MiniLM-L6-v2"
+    "gate-status" :unverified
+    "recipe" {
+      "model" "all-MiniLM-L6-v2"
+      "classes" ["build" "reach" "steer"]
+      "val_accuracy" 0.702
+    }
+  }]
+}

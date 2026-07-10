@@ -1,0 +1,67 @@
+;; CLean — CT treatment of MISSION autoclock-in (durable agent↔session↔mission lineage, C-cascade-real O3/D1).
+;; The FIRST mission-grain CLean wiring (M-fold-ansatz A-small pilot, claude-4 as the #2 LLM-fold, 2026-07-01).
+;; Folded from the mission's live cascade (10 patterns; on-demand + candidate) into a typed-hole wiring.
+;; NOTE (Joe): autoclock-in was NOT a clean top-to-bottom run — it had a load-bearing REPAIR (the
+;; order-independent retract). That repair is represented honestly as a Gu box (s4), not hidden.
+
+{:clean/proof  "autoclock-in"
+ :clean/title  "Durable single-active agent↔session↔mission lineage (no sheet of paper)"
+ :clean/source {:mission "futon3c-d/mission/autoclock-in"
+                :cascade [:invariant-coherence/shape-first-identify
+                          :storage/durability-throughput-gate
+                          :coordination/session-durability-check
+                          :iching/hexagram-18-gu
+                          :invariant-coherence/state-snapshot-witness
+                          :sidecar/per-id-audit-timeline-linkage]}
+
+ :clean/seq [:shape-first-identify        ;; s1 — canonical identity is the target
+             :durability-throughput-gate  ;; s2 — the durable write
+             :session-durability-check    ;; s3 — single-active guard (spoiled: order-dependent)
+             :hexagram-18-gu              ;; s4 — REPAIR the guard (order-independent retract)
+             :state-snapshot-witness      ;; s5 — each clock carries its witness
+             :per-id-audit-timeline-linkage] ;; s6 — reconstitute the lineage after teardown
+
+ :clean/boxes
+ [{:id :s1 :method :shape-first-identify
+   :text "Clock targets resolve to the CANONICAL node <repo>-d/mission/<id>, never a bare M-* alias; a target with no canonical node is a no-op, never a minted island."
+   :produces :canonical-endpoints}
+
+  {:id :s2 :method :durability-throughput-gate
+   :text "persist-clock! writes a clock/clocked-on hyperedge (agent↔canonical-target, witnessed, timestamped) durably to substrate-2 — survives pouch/JVM teardown."
+   :consumes [:canonical-endpoints] :produces :durable-clock-edge}
+
+  {:id :s3 :method :session-durability-check
+   :text "Single-active: dispatching/editing an agent onto a new target must retract its PRIOR target so exactly one clock is active per agent."
+   :consumes [:durable-clock-edge] :produces :single-active-spoiled
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "retract the agent's prior target CORRECTLY — the first cut retracted by the in-RAM old-clock, which is ORDER-DEPENDENT and drops edges under out-of-order dispatch"}}
+
+  {:id :s4 :method :hexagram-18-gu
+   :text "Gu — repair what was spoiled: retract by QUERYING the durable prior targets (agent-current-targets) rather than trusting RAM old-clock, making single-active order-INDEPENDENT."
+   :consumes [:single-active-spoiled] :produces :single-active-invariant
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "order-independence: for any dispatch order, the set of active clocks per agent is exactly {current}"}}
+
+  {:id :s5 :method :state-snapshot-witness
+   :text "Every clock carries a witness {rule, source, edit-count, window, old/new-target} — the audit that makes a clock-in inspectable and never a silent mis-clock (the claude-1 failure cannot recur)."
+   :consumes [:single-active-invariant] :produces :witnessed-clock}
+
+  {:id :s6 :method :per-id-audit-timeline-linkage
+   :text "reconstitute groups durable clocks by canonical target and JOINS the held-work ledger (held/on-mission) per node — answering 'N recent missions, who/which sessions, and what held work is pending' after a teardown."
+   :consumes [:witnessed-clock] :produces :reconstitutable-lineage
+   :discharges {:to :exit-criterion-2-reconstitution}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :canonical-endpoints}
+  {:from :s2 :to :s3 :carries :durable-clock-edge}
+  {:from :s3 :to :s4 :carries :single-active-spoiled}
+  {:from :s4 :to :s5 :carries :single-active-invariant}
+  {:from :s5 :to :s6 :carries :witnessed-clock}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :build-then-repair-then-discharge
+               :holes-at [:s3 :s4]
+               :discharges-at [:s6]
+               :note "NOT a clean linear build: s3 produces a SPOILED single-active guard, s4 (Gu) repairs it to order-independence — the load-bearing move — before witness + reconstitution discharge the mission's Exit criterion."}}

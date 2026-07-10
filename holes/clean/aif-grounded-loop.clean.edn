@@ -1,0 +1,83 @@
+;; CLean — the grounded active-inference loop, folded from its own R-patterns.
+;; This is the pipeline describing ITSELF: the essential core of R1–R16 (library/aif/*.flexiarg)
+;; reworked as a cascade and folded into a typed-hole wiring, hand-authored by claude-4 as the
+;; #2 LLM-fold (2026-07-08). OPTATIVE MODE: box :text states each stage's positive function;
+;; the typed holes state WANTS (the live frontier we are closing), never "broken/half-built."
+;; Pruned to the 7-box spine: perceive → predict → evaluate → choose → act → calibrate → accumulate.
+;; Companion to the R1–R19-on-a-brain figure; passes clean_argcheck.
+
+{:clean/proof "aif-grounded-loop"
+ :clean/title "The grounded active-inference loop — choosing (AIF) coupled to doing (a witness outside the model)"
+ :clean/source {:mission "futon2-d/mission/aif-grounded-loop"
+                :cascade [:aif/structured-observation-vector
+                          :aif/shared-kernel-predictive-forward-model
+                          :aif/expected-free-energy-scorecard
+                          :aif/policy-precision-commitment-temperature
+                          :aif/grounded-actuation-not-reobservation]}
+
+ :clean/seq [:perceive     ;; b1 — R1+R2 explicit belief over typed channels
+             :predict      ;; b2 — R4 forward model
+             :evaluate     ;; b3 — R5 EFE scorecard (named terms)
+             :choose       ;; b4 — R6+R13 softmax-with-abstain over G(π)
+             :actuate      ;; b5 — R16 grounded act: an ungameable witness outside the model
+             :calibrate    ;; b6 — R14+R7 learned precision (γ) from the realized witness
+             :accumulate]  ;; b7 — R12 the witness re-ranks the next decision; capability accrues
+
+ :clean/boxes
+ [{:id :b1 :method :perceive
+   :text "R1+R2 — the agent holds an EXPLICIT belief over a harmonized vector of observation channels. Perception is a typed state estimate, not a vibe."
+   :produces :belief-over-channels}
+
+  {:id :b2 :method :predict
+   :text "R4 — a shared predictive forward model maps the current belief to a predicted next observation, with per-channel variance."
+   :consumes [:belief-over-channels]
+   :produces :predicted-observation}
+
+  {:id :b3 :method :evaluate
+   :text "R5 — expected free energy scores each candidate policy as NAMED terms (risk + ambiguity + information gain), an auditable scorecard, never a single opaque scalar."
+   :consumes [:predicted-observation]
+   :produces :efe-scored-candidates}
+
+  {:id :b4 :method :choose
+   :text "R6+R13 — softmax-with-abstain over multi-step G(π) selects a policy; abstain is a first-class option, not a failure."
+   :consumes [:efe-scored-candidates]
+   :produces :chosen-policy
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "the score SEPARATES the best candidate from the field — sharpen G so the ranking discriminates rather than resting on a shared floor. (This is what makes selection informative.)"}}
+
+  {:id :b5 :method :actuate
+   :text "R16 — the chosen policy becomes a GROUNDED act: a typed, ungameable witness written to a substrate OUTSIDE the generative model — the sorry's endpoints proven inhabited by a query derived from authored bindings, and the built structure matched box-for-box to its CLean spec. Producing the structure IS the work; it cannot be claimed."
+   :consumes [:chosen-policy]
+   :produces :provable-substrate-witness}
+
+  {:id :b6 :method :calibrate
+   :text "R14+R7 — precision over policies (γ) is a learned, bounded posterior, updated from the realized witness; τ_eff = τ/γ. Alexander's star-rating, but learned."
+   :consumes [:provable-substrate-witness]
+   :produces :learned-precision
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "realized outcomes carrying genuine VARIANCE, so γ sharpens on real signal — each grounded act that moves a real dial feeds the precision a sample the mirror never could."}}
+
+  {:id :b7 :method :accumulate
+   :text "R12 — the realized witness and the updated precision RE-RANK the next decision, and capability accrues across missions (work descends into capability). Here the loop returns."
+   :consumes [:learned-precision :provable-substrate-witness]
+   :produces :grounded-aif-loop
+   :discharges {:to :grounded-aif-loop}
+   :hole {:kind :sorry :discharge :ungroundedBinder :satiety :bundling
+          :wanted "the substrate dial FEEDS the next decision — re-observation changes what the agent does next, closing the seam between grounded doing and active-inference choosing. This is the loop's live frontier."}}]
+
+ :clean/wires
+ [{:from :b1 :to :b2 :carries :belief-over-channels}
+  {:from :b2 :to :b3 :carries :predicted-observation}
+  {:from :b3 :to :b4 :carries :efe-scored-candidates}
+  {:from :b4 :to :b5 :carries :chosen-policy}
+  {:from :b5 :to :b6 :carries :provable-substrate-witness}
+  {:from :b5 :to :b7 :carries :provable-substrate-witness}
+  {:from :b6 :to :b7 :carries :learned-precision}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :grounded-aif-loop
+               :holes-at [:b4 :b6 :b7]
+               :discharges-at [:b7]
+               :note "The spine is whole: perceive → predict → evaluate → choose → ACT (a grounded witness outside the model) → calibrate → accumulate. Three open WANTS mark the live frontier — a selection that discriminates (b4), a precision fed by real variance (b6), and the re-ranking that returns the witness to the next decision (b7). These are the construction's growing edge, stated optatively: what closes, not what lacks."}}

@@ -1,0 +1,58 @@
+;; CLean — CT treatment of MISSION state-snapshot-witness (periodic point-in-time projection
+;; as queryable evidence; M-fold-ansatz A-small corpus). Sibling of autoclock-in's s5 witness:
+;; a clean LINEAR build. Folded from the mission's live cascade (2 applied + 7 candidate patterns)
+;; into a typed-hole wiring. This one folds top-to-bottom with no repair — a genuine clean run,
+;; closing the pipeline-tracer track-4-2-snapshot-as-evidence.
+
+{:clean/proof  "state-snapshot-witness"
+ :clean/title  "Per-cycle full-state projection as one queryable evidence entry (the inventory sibling)"
+ :clean/source {:mission "futon3c-d/mission/state-snapshot-witness"
+                :cascade [:invariant-coherence/reachable-from-boot
+                          :invariant-coherence/state-snapshot-witness
+                          :invariant-coherence/shape-first-identify
+                          :sidecar/per-id-audit-timeline-linkage
+                          :contributing/stack-scan-logging-protocol]}
+
+ :clean/seq [:shape-first-identify            ;; s1 — decide the event SHAPE (separate :state-snapshot)
+             :reachable-from-boot             ;; s2 — snapshot creation on the bootstrap path
+             :state-snapshot-witness          ;; s3 — the per-cycle full-state projection
+             :stack-scan-logging-protocol     ;; s4 — emit one witnessed evidence entry through the boundary
+             :per-id-audit-timeline-linkage]  ;; s5 — snapshots + deltas reconstruct full history
+
+ :clean/boxes
+ [{:id :s1 :method :shape-first-identify
+   :text "Shape-first decision: a SEPARATE :event :state-snapshot type (namespace-discriminated subtype :inventory-snapshot), NOT an extension of :family-fired. Conflating per-event deltas with cycle-boundary state muddies downstream consumers (HUD, time-travel, inventory diff), and per-event snapshots would be wasteful."
+   :produces :snapshot-event-shape}
+
+  {:id :s2 :method :reachable-from-boot
+   :text "snapshot-inventory! is wired into bootstrap.clj after the registrar block: snapshot creation is part of the reachable-from-boot construction path. The snapshot evidence thereby becomes the structural witness that boot-time construction actually worked, plus an operator-on-demand snapshot-inventory-now!."
+   :consumes [:snapshot-event-shape] :produces :boot-reachable-snapshot}
+
+  {:id :s3 :method :state-snapshot-witness
+   :text "The witness itself: snapshot-inventory! reads docs/structural-law-inventory.sexp and projects each family + sibling-invariant to a flat map — one per-cycle full-state projection. This is the sibling of autoclock-in's clock-witness: every snapshot carries the state that makes the cycle boundary inspectable."
+   :consumes [:boot-reachable-snapshot] :produces :cycle-witness}
+
+  {:id :s4 :method :stack-scan-logging-protocol
+   :text "Emit exactly one :event :inventory-snapshot evidence entry through the boundary, tagged [:invariant-queue :state-snapshot :inventory], subject :ref/type :pattern :ref/id state-snapshot/inventory. Tested for empty-input, real-stack-pass, and emit-shape."
+   :consumes [:cycle-witness] :produces :snapshot-evidence
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :canon
+          :wanted "exactly one well-shaped evidence entry emits per cycle through the boundary (no throw on a clean stack; empty-input handled) — the queryable projection the HUD and time-travel queries read"}}
+
+  {:id :s5 :method :per-id-audit-timeline-linkage
+   :text "Composition with the family-canary: the canary emits per-family deltas, this snapshot emits per-cycle state; together they reconstruct full history. The tracer track-4-2-snapshot-as-evidence closes via emit-tracer-closed!, and the HUD flips STUCK -> MOVING."
+   :consumes [:snapshot-evidence] :produces :reconstructable-history
+   :discharges {:to :tracer-track-4-2-closed}}]
+
+ :clean/wires
+ [{:from :s1 :to :s2 :carries :snapshot-event-shape}
+  {:from :s2 :to :s3 :carries :boot-reachable-snapshot}
+  {:from :s3 :to :s4 :carries :cycle-witness}
+  {:from :s4 :to :s5 :carries :snapshot-evidence}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :linear-build-then-discharge
+               :holes-at [:s4]
+               :discharges-at [:s5]
+               :note "clean LINEAR build (sibling of autoclock-in's s5 witness, no repair): shape-first decision (s1) -> boot-reachable creation (s2) -> per-cycle projection (s3) -> single witnessed evidence emit (s4, the one open hole) -> canary-composed full-history reconstruction (s5), discharging the pipeline-tracer track-4-2-snapshot-as-evidence."}}

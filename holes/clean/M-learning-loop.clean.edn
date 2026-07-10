@@ -1,0 +1,91 @@
+;; CLean — CT treatment of MISSION learning-loop (cross-mission capability mining).
+;; The box-typing (CANALIZE) of fold-turn deposit ft-learning-loop-010 (zai-10, 2026-07-07),
+;; hand-authored by claude-4 to pressure-test the "fold emits a CLean" contract and to serve
+;; as the loader-gate fixture. The 8 boxes + wires are ft-learning-loop-010's; the :produces/
+;; :consumes typing and the typed holes are the new CANALIZE content.
+;; The mission's CENTRAL BET is itself an open hole (h1 on b1): the vocabulary is unknown, so
+;; the whole pipeline constrains extraction to a vocabulary it cannot yet name.
+
+{:clean/proof "M-learning-loop"
+ :clean/title "Cross-mission capability mining: (hinge-log × mission-docs) → vocabulary × signature × navigable hypergraph"
+ :clean/source {:mission "futon5a-d/mission/learning-loop"
+                :deposit "ft-learning-loop-010"
+                :cascade [:data-mining/constrain-extraction-to-the-downstream-vocabulary]}
+
+ :clean/seq [:constrain-extraction-to-vocabulary   ;; b1 — extract a capability field, constrained to the (unknown) vocabulary
+             :capability-signature-vector          ;; b2 — normalise each mission's evidence into a typed observation vector
+             :term-to-channel-traceability         ;; b3 — every capability-tag declares the channels+confidence it consumed
+             :tri-store-separation                 ;; b4 — facts / memes / notions kept in separate stores
+             :interest-event-vocabulary            ;; b5 — each capability assertion is a typed state-transition event
+             :trail-enables-return                 ;; b6 — durable trail markers make conclusions re-derivable from source
+             :audit-the-pipeline                   ;; b8 — audit portal/sidecar/compass quality of the mining itself
+             :deep-storage-to-active-graph]        ;; b7 — lift deep storage into the navigable active graph (DISCHARGE)
+
+ :clean/boxes
+ [{:id :b1 :method :constrain-extraction-to-vocabulary
+   :text "Capability vocabulary as constrained extraction: extract a capability field per hinge/mission, constrained to the vocabulary the downstream hypergraph consumes; forbid discourse paraphrase; default to the common case; anchor rare labels with frequency expectations (do not over-fire 'new capability' the way the meme miner over-fired 'new pattern')."
+   :produces :constrained-capability-field
+   :hole {:kind :sorry :discharge :sorryProof :satiety :canon
+          :wanted "the ~8-12 capability DIMENSIONS themselves — the mission's central bet; no pattern in the cascade grounds what the dimensions should BE, only how to constrain and validate them once chosen"}}
+
+  {:id :b2 :method :capability-signature-vector
+   :text "The capability signature as a typed observation vector: each mission's hinge-log evidence is normalised into a typed feature map (capability dimensions × four channels × confidence), so cross-mission scoring compares without collapsing into prose."
+   :consumes [:constrained-capability-field]
+   :produces :capability-signature-vector
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "contrast-pair selection methodology: which missions form contrast pairs, and how differences normalise across heterogeneous mission shapes (checkpoint-1 found contrast, not accumulation, is load-bearing)"}}
+
+  {:id :b3 :method :term-to-channel-traceability
+   :text "Term-to-channel traceability: every capability-tag assignment declares which hinge-log evidence channels it consumed and the confidence values used, so a post-hoc capability claim can be re-derived, never asserted."
+   :consumes [:capability-signature-vector]
+   :produces :capability-traceability}
+
+  {:id :b4 :method :tri-store-separation
+   :text "Tri-store separation for the mining pipeline: facts (crystallised capability dimensions as committed flexiargs), memes (mission-level signatures as inspectable records), notions (cross-mission hypergraph candidates) kept in separate stores so provenance never blurs."
+   :consumes [:constrained-capability-field :capability-traceability]
+   :produces :tri-store-layout
+   :hole {:kind :sorry :discharge :queryAnswer :satiety :role
+          :wanted "the downstream consumer's vocabulary boundary: who IS the downstream (operator navigating WebArxana, Click/Tick analytics, the gamma learning feed) and what vocabulary each needs"}}
+
+  {:id :b5 :method :interest-event-vocabulary
+   :text "Interest-event vocabulary for capability state transitions: each capability assertion against a mission is a typed state-transition event (spawned, refined, strengthened, addressed, falsified, foreclosed), not a static tag."
+   :consumes [:tri-store-layout]
+   :produces :capability-state-events
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff
+          :wanted "mission-scale vs turn-scale aggregation grain: whether the unit is the whole mission or mission × phase; the wrong grain washes out intra-mission capability trajectory"}}
+
+  {:id :b6 :method :trail-enables-return
+   :text "Trail enables return: every hinge-log entry, capability-tag, and cross-mission edge is a durable trail marker, so the mining pipeline can re-derive its conclusions from source evidence — idempotent re-runnability."
+   :consumes [:capability-state-events]
+   :produces :reversible-trail}
+
+  {:id :b8 :method :audit-the-pipeline
+   :text "Audit the mining pipeline itself: portal retrieval quality (are the dimensions the right vocabulary?), sidecar chain completeness (does every hinge produce a full PSR/PUR chain?), compass calibration (base-rate correction on rare labels)."
+   :produces :audit-report}
+
+  {:id :b7 :method :deep-storage-to-active-graph
+   :text "Deep storage to active graph: hinge-log markdown + mission docs are deep storage (dense, not navigable); the Shape A bridge lifts them into futon1a typed entities; the mining pipeline emits the navigable capability hypergraph over those nodes — the mission's want-signature."
+   :consumes [:reversible-trail :capability-signature-vector :audit-report]
+   :produces :navigable-capability-hypergraph
+   :discharges {:to :navigable-capability-hypergraph}
+   :hole {:kind :sorry :discharge :ungroundedBinder :satiety :bundling
+          :wanted "articulation vs silent competence: operator-reported capability is filtered for articulability; capabilities developed unarticulated are invisible in the hinge-log, and no pattern detects silent competence"}}]
+
+ :clean/wires
+ [{:from :b1 :to :b2 :carries :constrained-capability-field}
+  {:from :b2 :to :b3 :carries :capability-signature-vector}
+  {:from :b1 :to :b4 :carries :constrained-capability-field}
+  {:from :b3 :to :b4 :carries :capability-traceability}
+  {:from :b4 :to :b5 :carries :tri-store-layout}
+  {:from :b5 :to :b6 :carries :capability-state-events}
+  {:from :b6 :to :b7 :carries :reversible-trail}
+  {:from :b2 :to :b7 :carries :capability-signature-vector}
+  {:from :b8 :to :b7 :carries :audit-report}]
+
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+
+ :clean/shape {:macro :constrained-mining-with-open-vocabulary
+               :holes-at [:b1 :b2 :b4 :b5 :b7]
+               :discharges-at [:b7]
+               :note "NOT a clean build: the CENTRAL type (the capability vocabulary, b1's hole) is open, so the whole pipeline constrains extraction to a vocabulary it cannot name. The terminal b7 discharges the navigable hypergraph yet CARRIES a residual hole (silent competence is invisible in the hinge-log). Four interior holes remain (vocabulary, contrast-pairs, downstream boundary, aggregation grain) — an honest partial construction."}}
