@@ -157,4 +157,32 @@
   :success :unadjudicated
   :evidence "mission status: no status line found"
   :provenance "futon6/data/fold-turns/ft-war-machine-pilot-001.edn; deposit at 2026-07-08T21:48:08Z"}
+
+ ;; ---- FLIGHTS-2026-07-10 (zai-1 flew, claude-2 adjudicated; preregistered acceptance) ----
+ {:fold-turn/id "ft-learning-loop-012"
+  :mission "futon5a-d/mission/learning-loop"
+  :used ["devmap-coherence/prototype-alignment-bridge" "or2/ukrn-horizon-bridge" "p4ng/bridge-before-portal" "scan-coherence/mission-anchored-scan" "storage/graph-memory-contract"]
+  :want "cross-mission capability mining loop condensing hinge-log evidence into a navigable base-rate-normalised capability hypergraph"
+  :success :flight-slice-pass
+  :grain :flight-slice
+  :evidence "Flight 1: b5+b1 slice flown — capability-graph contract + bb schema test (5/7 green from any cwd after reviewer path fix) + 6-link handoff audit with ob-1 at the Shape-A->mining seam (futon5a/holes/labs/M-learning-loop/). Terminal b3 NOT claimed; want-grain adjudication pending."
+  :proposal/hash "50eebf78f29c0b64"
+  :provenance "FLIGHTS-2026-07-10.md; futon5a commit on warranted-play branch"}
+ {:fold-turn/id "ft-futonzero-generative-012"
+  :mission "futon6-d/mission/futonzero-generative"
+  :used ["f6/self-play-loop" "iching/hexagram-04-meng" "t3/capability-not-functioning" "war-machine/dynamic-over-static" "war-machine/ideal-actual-gap"]
+  :want "a self-bootstrapping WM learner converting one-off functionings into repeatable capabilities via propose/predict/execute/score/update, gated by G-SIM (field simulator adequacy) and G-REWARD (anti-laundered reward)"
+  :success false
+  :evidence "Flight 2 (preregistered honest negative): want = a RUNNING gated loop; NOT discharged. G-SIM uncleared (calibration :insufficient-evidence, :degenerate? true — 13/15 pairs censored-fallback copies, 0 independent measured pairs, no forward model). G-REWARD uncleared (rejection side 8/8 red-team PASS reproduced by reviewer via bb; positive substance deferred to M-pudding-peradams). Attempt evidence: futon6/holes/labs/slush-demo-flights/futonzero-gap-report.edn."
+  :proposal/hash "ae8d0daea7bd3897"
+  :provenance "FLIGHTS-2026-07-10.md; red-team fixture futon0/scripts/futon0/futonzero/reward_red_team.clj"}
+ {:fold-turn/id "ft-chipwitz-corps-012"
+  :mission "futon3c-d/mission/chipwitz-corps"
+  :used ["collaboration-coherence/determined-fork-proto-psr"]
+  :want "a warranted-work control layer: findable warrant -> PSR -> proceed -> PUR; no warrant -> genuine operator question + library gap"
+  :success :flight-slice-pass
+  :grain :flight-slice
+  :evidence "Flight 3: h1+h2 slice flown — warrant_finder.py (TF-IDF, deterministic, cwd-robust, THRESHOLD_V0=0.15 documented UNCALIBRATED) + pxr-log.edn with 3 PSR+PUR records over real session forks (futon3c/holes/labs/M-chipwitz-corps/). Finding: TF-IDF score-ordering inverts warrant quality (semantic 0.19 < keyword-overlap 0.27) — h1 calibration confirmed live. Threshold calibration NOT claimed; want-grain adjudication pending."
+  :proposal/hash "0ad620d68d3a9b35"
+  :provenance "FLIGHTS-2026-07-10.md"}
 ]
