@@ -54,3 +54,6 @@ data/question-patterns/*.json
 
 # canonical mine PIN — tracked metadata (M-post-mining-ingest DERIVE), data itself stays ignored
 !data/mine-registry.edn
+
+# mission pattern scopes — tracked metadata (data itself under data/* stays ignored)
+!data/mission-pattern-scopes.edn
