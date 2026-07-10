@@ -223,4 +223,42 @@
   :success false
   :evidence "B2-F6 (preregistered honest negative): shi sequencing plan — owners (substrate-2 -> G-SIM; M-pudding-peradams -> G-REWARD; WM pilot = pair accrual), 5 restraints, kill criteria carried from sec:prereg; want NOT discharged (same gates). Gate discipline held this time: zai-2 self-reported first-run parens FAIL, fixed, pasted real OK. Finding: plan gives coordination discipline, not tempo — gate work is other missions with ungoverned completion."
   :proposal/hash "47385246a68934e2" :provenance "FLIGHTS-BATCH2-2026-07-10.md; futonzero-sequencing-plan.edn"}
+
+ ;; ---- FLIGHTS-BATCH3-2026-07-10 (zai-3 folded AND flew; claude-2 adjudicated) ----
+ ;; NOTE (label-grain finding): all six flights passed their preregistered slice
+ ;; acceptance, but NONE yields a mission-want-grain label — these missions'
+ ;; completion criteria are not met by evening-scale slices, and two are further
+ ;; confounded by stale docs (work landed before the fold). The batch exposed the
+ ;; loop's label bottleneck: mission-want grain is too coarse for flight-scale
+ ;; adjudication; deposit-psi grain is the candidate unit (OPERATOR DECISION).
+ {:fold-turn/id "ft-canon-fingerprint-store-002" :success :flight-slice-pass :grain :flight-slice
+  :used ["agent/handoff-preserves-context" "iching/hexagram-63-jiji" "invariant-coherence/state-snapshot-witness" "structure/interest-event-vocabulary" "ukrns/publication-cadence"]
+  :want "persistent in-run-queryable SQLite canon fingerprint store; canon distribution as Bayesian prior"
+  :evidence "B3-F1: schema (evidence NOT NULL) + smoke with jiji idempotence (byte-identical re-run hash, computed_at varied) + NULL-evidence rejection; reviewer re-ran /var/tmp. Finding: cite-your-evidence not fill-every-field (NOT NULL for evidence fields only; NULL canon is honest data)."
+  :proposal/hash "d157be7b848343ca" :provenance "FLIGHTS-BATCH3-2026-07-10.md"}
+ {:fold-turn/id "ft-canon-fingerprint-store-003" :success :flight-slice-pass :grain :flight-slice
+  :used ["library-coherence/library-evidence-ledger"]
+  :want "every fingerprint record cites verifiable evidence (paper+strategy+anchor) — ledger not lore"
+  :evidence "B3-F2: ledger_check.py — 6/6 fixtures green, MISSING + BLANK (whitespace) both rejected; two-layer architecture finding (schema floor / ledger ceiling; 'lore with a green checkmark')."
+  :proposal/hash "b661f0cb20315323" :provenance "FLIGHTS-BATCH3-2026-07-10.md"}
+ {:fold-turn/id "ft-autoclock-in-002" :success :flight-slice-pass :grain :flight-slice
+  :used ["aif/scheduled-observer-entrypoint" "futon-theory/event-protocol" "iching/hexagram-17-sui" "iching/hexagram-43-guai" "iching/hexagram-57-xun"]
+  :want "autoclock capturing operator AND agent mission-attribution; agent-side mirror; explicit witnessed rules"
+  :evidence "B3-F3: reclock_decision.py + 14 tests green (reviewer re-ran) — one test per hexagram-named risk (guai burst-thrash, xun sparse-drift, sui no-op trap); thresholds UNCALIBRATED with change-guard test. First complete chain: orientational pattern -> fold via -> named risk -> failing test -> implementation."
+  :proposal/hash "6a5d81ccab989066" :provenance "FLIGHTS-BATCH3-2026-07-10.md"}
+ {:fold-turn/id "ft-autoclock-in-003" :success :flight-slice-pass :grain :flight-slice
+  :used ["orchestration/pattern-warranted-choice-point"]
+  :want "every auto-clock promotion carries its warrant; surface the silent undecidable forks"
+  :evidence "B3-F4: warrant-table.edn (3 rules x 4 fields from the LANDED elisp, line-cited) + validator. DISCOVERY (reviewer-confirmed): agent-chat.el implements a FOURTH rule (explicit-switch-arrow, lines 810-857) absent from the mission doc — doc-vs-code divergence; the :silent-fork interrogation surfaced it. Stop clause was about discovery, not accuracy."
+  :proposal/hash "f2ccba63041e1879" :provenance "FLIGHTS-BATCH3-2026-07-10.md"}
+ {:fold-turn/id "ft-state-snapshot-witness-002" :success :flight-slice-pass :grain :flight-slice
+  :used ["invariant-coherence/protocol-family-naming" "realtime/structured-events-only" "structure/interest-event-vocabulary" "ukrns/design-state-lineage"]
+  :want "state-snapshot-witness family: queryable container history, namespaced siblings, append-only provenance, reconstructible lineage"
+  :evidence "B3-F5: family-schema.edn 4x4 all-substantive with real path citations + validator. DISCOVERY #2 (reviewer-confirmed): snapshot.clj implements ALL FOUR siblings + boot wiring + tests; mission doc ('three handed to Codex') is STALE. Fold h1 = resolved-by-stale-doc, NOT counted against the cascade."
+  :proposal/hash "0649e22fc124bc6d" :provenance "FLIGHTS-BATCH3-2026-07-10.md"}
+ {:fold-turn/id "ft-state-snapshot-witness-003" :success :flight-slice-pass :grain :flight-slice
+  :used ["invariant-coherence/state-snapshot-witness" "invariant-coherence/shape-first-identify" "invariant-coherence/protocol-family-naming" "sidecar/append-only-semantic-audit" "exotic/tri-store-lineage" "sidecar/fact-lifecycle-event-types" "structure/interest-event-vocabulary"]
+  :want "snapshot family as tri-store lineage; active state derived from event log by replay"
+  :evidence "B3-F6: replay_state.py + 14 tests green (reviewer re-ran) incl. as-of-N view (fold h4 minimally realized), duplicate rejection, derived-not-stored (deepcopy at the derivation boundary — 'looks like replay' vs 'actually replay'). Honest first-run FAIL self-reported and fixed."
+  :proposal/hash "59fc540364657a55" :provenance "FLIGHTS-BATCH3-2026-07-10.md"}
 ]
