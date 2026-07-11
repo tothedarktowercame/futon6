@@ -1,0 +1,127 @@
+;; arse-phase1-run-report.edn — B5-F5 flight (ft-artificial-stack-exchange-001, the full-ArSE psi)
+;;
+;; PSI ADJUDICATION: FALSE (the preregistered honest negative).
+;; The psi asks for the running triadic 100-iteration loop + Phases 2-5.
+;; This report is the ATTEMPT EVIDENCE: Phase-1 scripts executed in bounded
+;; demonstration mode (where they run without substrate writes), the full
+;; loop gap enumerated with file refs.
+;;
+;; Produced by: zai-6 (flight runner), 2026-07-11
+;; Deposit psi-sha256: c8bdbb20f5aab658bc36b26d9060f3833873537b6cf7dcd6db79cef9a7a3fe85
+
+{:fold-turn/id "ft-artificial-stack-exchange-001"
+ :flight "B5-F5"
+ :psi-adjudication false
+ :psi-adjudication-reason
+ "the psi asks for the running Artificial Stack Exchange — a triadic Asker/Answerer/Critic self-play loop for 100 iterations with measurable graph growth, plus Phases 2-5 (institutional modelling, agents writing agents M16, agents writing institutions M17, GitHub integration). The landed Phase-1 scripts implement COMPONENTS (the hotspot loop, the arse-store, synthetic QA generation), but the full self-play loop is not wired end-to-end and cannot run without prerequisites (proof-wiring data) that do not exist on this box. Phases 2-5 are specified but not started. The verdict the psi asks for is not reached."
+
+ ;; ============================================================
+ ;; WHAT RAN (real Phase-1 scripts executed)
+ ;; ============================================================
+ :scripts-executed
+ [{:script "futon6/scripts/arse-store.py"
+   :mode "stats + query (read-only operations, no substrate writes)"
+   :command "python3 scripts/arse-store.py stats"
+   :output
+   "ArSE Store: /home/joe/code/storage/arse
+  Entities:    93
+  Hypergraphs: 0
+  Updated:     2026-06-15T19:55:59.677166795Z
+  Indexed:     never"
+   :what-it-demonstrates
+   "the ArSE store exists and holds 93 synthetic QA entities (QAPair format with title, question-body, answer-body, tags). The store is file-based at ~/code/storage/arse/ with entities.json + manifest.json. The query operation works (keyword search returns ranked results). This is the hypergraph-native storage layer — one component of the self-play loop."}
+
+  {:script "futon6/scripts/arse-store.py"
+   :mode "query (keyword search, read-only)"
+   :command "python3 scripts/arse-store.py query 'surgery obstruction torsion'"
+   :output
+   "Top 2 results for 'surgery obstruction torsion':
+  [1] ask-1774791959-1: [t01A01] What is the key insight needed to solve this?
+      tags: ['apm', 'apm/topology', 'apm/topology/2001', ...]
+  [1] ask-1774795209-8: [t01A01] What is the key insight needed to solve this?"
+   :what-it-demonstrates
+   "keyword retrieval works on the store. The existing synthetic QA entities are proof-hotspot-derived (tags like 'apm/topology/2001/01/what-crux' — proof-graph gap questions). The retrieval layer is functional but uses keyword match, not FAISS (reindex degrades: sentence-transformers not installed)."}
+
+  {:script "futon6/scripts/arse-store.py"
+   :mode "reindex (degraded — no sentence-transformers)"
+   :command "python3 scripts/arse-store.py reindex"
+   :output
+   "Reindexing 93 entities...
+sentence-transformers not installed, skipping text embeddings"
+   :what-it-demonstrates
+   "the reindex path is coded (BGE text embeddings + optional GNN structural index) but degrades gracefully when sentence-transformers is absent. The FAISS index is not built — the store operates in keyword-only mode locally."}]
+
+ ;; ============================================================
+ ;; WHAT DID NOT RUN (documented could-not-run findings)
+ ;; ============================================================
+ :scripts-could-not-run
+ [{:script "futon6/scripts/run-arse-hotspot-loop.py"
+   :command "python3 scripts/run-arse-hotspot-loop.py --problem 7 --retrieve-only"
+   :finding
+   "No hotspot markdown found for problem 7. The hotspot loop requires pre-run proof data: a hotspot stepper manifest (data/first-proof/stepper/problem7-hotspot-stepper-*.json) and hotspot markdown (data/first-proof/stepper/problem7-hotspots-*.md). Neither the stepper directory nor the first-proof directory exists on this box. The script correctly identifies the missing prerequisite and prints 'Run: python3 scripts/prepare-proof-hotspot-stepper.py --problem 7' — the upstream proof-polish pipeline that generates the hotspot data."
+   :blocking-factor "the proof-polish pipeline (prepare-proof-hotspot-stepper.py) must run first to produce hotspot manifests; it needs codex proof-verification results in data/first-proof/ which are absent"}
+
+  {:script "futon6/scripts/generate-synthetic-qa.py"
+   :command "python3 scripts/generate-synthetic-qa.py --dry-run"
+   :finding
+   "Wiring not found: /home/joe/code/futon6/data/first-proof/problem7-wiring.json. The synthetic QA generator needs proof-wiring data (the typed graph of a proof's nodes/edges) to identify gaps and generate targeted questions. This data does not exist on this box."
+   :blocking-factor "same upstream: the proof-polish pipeline must produce problem7-wiring.json"}]
+
+ ;; ============================================================
+ ;; THE LOOP GAP — what the full self-play mechanism still needs
+ ;; ============================================================
+ :loop-gap
+ {:missing-mechanism "the triadic Asker/Answerer/Critic loop is NOT wired end-to-end"
+  :h1-mechanism-gap
+  "the f6/self-play-loop pattern (Asker/Answerer/Critic defined, per the mission doc's own table: 'Defined, not instantiated') is the h1 gap — the three agents and their inter-agent communication protocol are not connected into a running loop. The landed scripts are COMPONENTS:
+   - arse-store.py = the storage/retrieval layer (Answerer's corpus)
+   - run-arse-hotspot-loop.py = the Asker's gap-analysis + retrieval (needs proof data upstream)
+   - generate-synthetic-qa.py = the Answerer's generation path (needs wiring data upstream)
+   The Critic (gate-scored evaluation, G5→G0) and the threshold-gated graph update (the commit-or-reject step) are NOT IMPLEMENTED in any landed script."
+
+  :prerequisite-gaps
+  [{:gap "proof-polish pipeline data (hotspot manifests + wiring graphs)"
+    :files ["data/first-proof/stepper/" (absent)
+            "data/first-proof/problem7-wiring.json" (absent)]
+    :upstream "futon6/scripts/prepare-proof-hotspot-stepper.py + codex proof-verification runs"
+    :note "without this, neither the hotspot loop nor the QA generator can run"}]
+
+  :loop-phases-not-started
+  [{:phase "Phase 1 — self-play instantiation"
+    :status "PARTIAL (components exist, loop not wired)"
+    :missing ["the Critic agent (gate-scored Q&A evaluation)"
+              "the threshold-gated graph update (commit new edges when score exceeds threshold)"
+              "the 100-iteration pilot run"
+              "the inter-agent communication protocol"]
+    :mission-ref "M-artificial-stack-exchange.md L138-153 (Phase 1: Self-Play Instantiation)"}
+
+   {:phase "Phase 2 — institutional modelling (IAD → gate rules)"
+    :status "NOT STARTED"
+    :mission-ref "M-artificial-stack-exchange.md L155-165"}
+
+   {:phase "Phase 3 — agents writing agents (M16)"
+    :status "NOT STARTED"
+    :mission-ref "M-artificial-stack-exchange.md L167-179"}
+
+   {:phase "Phase 4 — agents writing institutions (M17)"
+    :status "NOT STARTED"
+    :mission-ref "M-artificial-stack-exchange.md L181-189"}
+
+   {:phase "Phase 5 — GitHub integration (futon7)"
+    :status "NOT STARTED"
+    :mission-ref "M-artificial-stack-exchange.md L191-201"}]
+
+  :success-criteria-not-met
+  [{:criterion "Self-play loop runs for 100 iterations"
+    :status "NOT MET — loop not wired"
+    :mission-ref "M-artificial-stack-exchange.md L239 (success criterion 1)"}
+
+   {:criterion "Measurable graph growth (new relations, confidence scores)"
+    :status "NOT MET — the store has 93 static entities, no loop-driven growth"
+    :mission-ref "M-artificial-stack-exchange.md L239"}]}
+
+ ;; ============================================================
+ ;; ATTEMPT SUMMARY
+ ;; ============================================================
+ :attempt-summary
+ "executed the arse-store.py in read-only modes (stats, query, reindex): 93 synthetic QA entities, keyword search works, reindex degrades without sentence-transformers. The hotspot loop and QA generator could not run (missing upstream proof-polish data). The full triadic self-play loop is not wired end-to-end — the Critic agent and the threshold-gated graph update are unimplemented. Phases 2-5 are not started. This is the preregistered honest FALSE with attempt evidence: the components exist and some run, but the psi's want (the running loop + phases) is not discharged."}
