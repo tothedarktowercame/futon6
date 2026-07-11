@@ -301,4 +301,55 @@
   :success false :grain :deposit-psi
   :evidence "B5-F6 (preregistered honest negative, the informative pair-counterpart): triadic_loop_v0.py instantiates the mechanism SHAPE (Asker/Answerer/Critic, threshold-gated updates, 5 tests green incl. below-threshold rejection, deterministic; reviewer re-ran). 3 fixture iterations != the 100-iteration real loop. Finding: fixture too clean to exercise the Critic's judgment — gate discrimination needs a real corpus with thin answers."
   :proposal/hash "79fb55e7378fc0d1" :provenance "FLIGHTS-BATCH5-2026-07-11.md"}
+
+ ;; ---- FLIGHTS-BATCH6-2026-07-11 (parallel lanes: zai-7/zai-8 folded, CROSS-LANE
+ ;; flights; claude-2 adjudicated :grain :deposit-psi; all 8 matched preregistration) ----
+ {:fold-turn/id "ft-daily-scan-001" :mission "futon7-d/mission/daily-scan"
+  :used ["devmap-coherence/ifr-f0-sati" "devmap-coherence/ifr-f3-piti" "devmap-coherence/ifr-f7-upa-upekkha" "futon-theory/rapid-debugging" "social/weekly-rhythm"]
+  :want "20 scan-days + publication surface + evidence emission + surface-render depth"
+  :success false :grain :deposit-psi
+  :evidence "B6-F1 (prereg FALSE): render_scan_trail.py — browsable index of the 6 REAL landed scan-days (adaptive parser; frame format evolved across days). 6 != 20; publication/emission unwired. Reviewer re-ran /var/tmp."
+  :proposal/hash "87cd07aecff2035e" :provenance "FLIGHTS-BATCH6-2026-07-11.md"}
+ {:fold-turn/id "ft-daily-scan-002" :mission "futon7-d/mission/daily-scan"
+  :used ["structure/hinge-entry-slots" "futon-theory/typed-hole-as-frontier" "stack-coherence/churn-as-signal" "devmap-coherence/ifr-f2-viriya" "devmap-coherence/ifr-f7-upa-upekkha" "exotic/futon-bridge-health"]
+  :want "trail-indexing + held budget shape + bridge wiring + investigation discipline held"
+  :success false :grain :deposit-psi
+  :evidence "B6-F2 (prereg FALSE): scan_trail_index.py — queryable index, 3 real queries (reviewer re-ran one). Trail-enables-return conjunct genuinely discharged; budget/bridge/discipline remain. Finding: cardinal distribution across scan-days = the mission's strategic trajectory made visible."
+  :proposal/hash "7c06581d9af3e776" :provenance "FLIGHTS-BATCH6-2026-07-11.md"}
+ {:fold-turn/id "ft-single-entry-point-001" :mission "futon3c-d/mission/single-entry-point"
+  :used ["exotic/reachable-from-boot" "futon-theory/proof-path" "futon-theory/structural-tension-as-observation" "futon-theory/mission-interface-signature" "peripherals/hot-reload-as-default-fix-path"]
+  :want "dev/status subsystem listing + Path A/B resolved + orphan-verification attested"
+  :success false :grain :deposit-psi
+  :evidence "B6-F3 (prereg FALSE; ONE REVISION — the probe's ss-regex port check produced false negatives on live ports; reviewer caught it against same-session live evidence; fixed to curl-based liveness with embedded cross-check). Corrected probe shows real partial state incl. PID-file-vs-process drift — the psi's motivating blind spot demonstrated with real data."
+  :proposal/hash "a4494a8636aaa4b3" :provenance "FLIGHTS-BATCH6-2026-07-11.md"}
+ {:fold-turn/id "ft-single-entry-point-002" :mission "futon3c-d/mission/single-entry-point"
+  :used ["futon-theory/mission-interface-signature" "futon-theory/structural-tension-as-observation" "exotic/reachable-from-boot" "peripherals/read-existing-seam-before-implementing" "peripherals/hot-reload-as-default-fix-path" "coordination/mana-budget-gate" "stack-coherence/cross-futon-wiring" "futon-theory/theory-as-exotype" "devmap-coherence/ifr-f1-dhammavicaya" "invariant-coherence/state-snapshot-witness" "exotic/live-sync-source-truth" "ants/baseline-cyber-ant" "storage/deterministic-ingest-pipeline" "structure/interest-event-vocabulary"]
+  :want "single launcher full conjunction: seam-reading + budget-gating + cross-futon wiring + hot-reload default + boot-reachability + visibility"
+  :success false :grain :deposit-psi
+  :evidence "B6-F4 (prereg FALSE): Q-classpath-compat-analysis.md resolves the mission's open question GREEN from real configs (shadow-cljs already integrated+running; deps mirrored, zero skew; citations spot-checked). One resolved sub-question != 14-pattern conjunction. Finding: the QUESTION outlived its answer in the doc — new doc-drift species."
+  :proposal/hash "ebff8c1d932a5314" :provenance "FLIGHTS-BATCH6-2026-07-11.md"}
+ {:fold-turn/id "ft-war-machine-wiring-001" :mission "futon5a-d/mission/war-machine-wiring"
+  :used ["futon-theory/proof-path" "devmap-coherence/ifr-f0-sati" "p4ng/agent-pattern-triad" "social/ARGUMENT" "invariant-coherence/futon1-determinism"]
+  :want "D-7.5 v1 vocabulary + V-1 coverage current + V-2.4 mechanical + Checkpoint 2"
+  :success false :grain :deposit-psi
+  :evidence "B6-F5 (prereg FALSE): D-7.5-v1-vocabulary-draft.md — 4 primitives each with concrete detection mechanism over EXISTING substrate channels, every term line-cited to real contract sketches (reviewer spot-checked L715/L771/L1841). Finding: vocabulary is second-order readings, not design — the gap is V-1 computation."
+  :proposal/hash "5ed9447506d8b7bd" :provenance "FLIGHTS-BATCH6-2026-07-11.md"}
+ {:fold-turn/id "ft-war-machine-wiring-002" :mission "futon5a-d/mission/war-machine-wiring"
+  :used ["futon-theory/structural-tension-as-observation" "ants/baseline-cyber-ant" "futon-theory/mission-interface-signature" "futon-theory/theory-as-exotype" "futon-theory/the-woven-form" "exotic/world-is-hypergraph" "coordination/mana-budget-gate" "futon-theory/block-as-futonic-revolution" "devmap-coherence/ifr-f1-dhammavicaya" "invariant-coherence/state-convergence" "exotic/futon-bridge-health" "peripherals/hot-reload-as-default-fix-path" "musn/plan-before-tool"]
+  :want "the full two-loop AIF wiring spec (fast head-loop + glacial library-loop sharing consent-gate boundary)"
+  :success false :grain :deposit-psi
+  :evidence "B6-F6 (prereg FALSE): commit_vertex_staleness.bb — V-1 measured for real: staleness BIMODAL (5 repos current, 3 abandoned 22-45d, futon3b NO vertices; avg 9.5d vs fold's ~6d estimate). Diagnosis: per-repo watcher coverage, not uniform lag. Reviewer verified method + worst-case git date."
+  :proposal/hash "59f11f159546142b" :provenance "FLIGHTS-BATCH6-2026-07-11.md"}
+ {:fold-turn/id "ft-trip-journal-001" :mission "futon5a-d/mission/trip-journal"
+  :used ["futon-theory/typed-hole-as-frontier" "futon-theory/mission-interface-signature" "structure/worked-contrast" "exotic/state-capture" "enrichment/ARGUMENT"]
+  :want "adoption validation (criterion 7) + structurally-void sorry + 3 deferred infrastructure pieces"
+  :success false :grain :deposit-psi
+  :evidence "B6-F7 (prereg FALSE): DR-3 mapping built+validated against the real hinge-log (reviewer re-ran); DR-1/DR-2 correctly diagnosed externally-blocked. Finding: P-1..P-6 framework ALREADY STRUCTURALLY EMBEDDED in hinge-log conventions (5/6 P-primes evidenced); DR-3 narrows to one use-data question (P-4')."
+  :proposal/hash "4eeb16716731d90c" :provenance "FLIGHTS-BATCH6-2026-07-11.md"}
+ {:fold-turn/id "ft-trip-journal-002" :mission "futon5a-d/mission/trip-journal"
+  :used ["stack-coherence/stop-the-line" "coordination/cross-mission-escrow" "futon-theory/mission-interface-signature" "structure/interest-event-vocabulary" "peripherals/read-existing-seam-before-implementing" "campaign/campaign-as-temporary-institution"]
+  :want "the protective apparatus EXPRESSED: DRs as two-step escrow + tripwires as stop-the-line + anti-life-logging as negative port specs"
+  :success true :grain :deposit-psi
+  :evidence "B6-F8 (prereg TRUE — the batch's one dischargeable, representational psi): dr_escrow_ledger.bb (4 entries incl. void-sorry, genuine two-step release, checker re-run clean from /var/tmp) + protections-as-specs.md (5/5 tripwires condition->halt->resume; 5/5 protections as behavioral port constraints; citations verified at the real doc lines). Doctrine minted: the bar is HIGHER when you are expected to clear it."
+  :proposal/hash "5b32802bf04f366a" :provenance "FLIGHTS-BATCH6-2026-07-11.md"}
 ]
