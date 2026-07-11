@@ -261,4 +261,44 @@
   :want "snapshot family as tri-store lineage; active state derived from event log by replay"
   :evidence "B3-F6: replay_state.py + 14 tests green (reviewer re-ran) incl. as-of-N view (fold h4 minimally realized), duplicate rejection, derived-not-stored (deepcopy at the derivation boundary — 'looks like replay' vs 'actually replay'). Honest first-run FAIL self-reported and fixed."
   :proposal/hash "59fc540364657a55" :provenance "FLIGHTS-BATCH3-2026-07-10.md"}
+
+ ;; ---- FLIGHTS-BATCH5-2026-07-11 (zai-5 folded, zai-6 flew — author!=flyer;
+ ;; claude-2 adjudicated at :grain :deposit-psi, boolean per each psi's own
+ ;; text; expected outcomes were PREREGISTERED per flight and all six matched) ----
+ {:fold-turn/id "ft-fold-ansatz-003" :mission "futon2-d/mission/fold-ansatz"
+  :used ["devmap-coherence/ifr-f1-dhammavicaya"]
+  :want "deterministic check!-style gate certifying embedding-fold outputs have reproducible twins and flagging popularity-flattered phantoms"
+  :success true :grain :deposit-psi
+  :evidence "B5-F1: verify_fold_outputs.py runs on the REAL recorded f1 outputs (extracted faithfully from the mission doc, reviewer-confirmed), twin-checks each prediction, flags the popularity-flattered rank-0 cluster (deg pct 0.998 — the f1-v1 correction made mechanical), rejects 2 malformed fixtures. Reviewer re-ran from /var/tmp."
+  :proposal/hash "00581e6ed2196867" :provenance "FLIGHTS-BATCH5-2026-07-11.md"}
+ {:fold-turn/id "ft-fold-ansatz-002" :mission "futon2-d/mission/fold-ansatz"
+  :used ["coordination/ARGUMENT" "social/ARGUMENT" "exotype/024-contextual" "exotype/094-contextual" "exotype/201-contextual"]
+  :want "the trained-embedding ansatz VERDICT (R-GCN/SAGE vs degree on A-next gold, laptop-inferable)"
+  :success false :grain :deposit-psi
+  :evidence "B5-F2 (preregistered honest negative): verdict needs the unrun Linode Stages C+D (train_fold_embed.py authored, torch absent locally). Attempt evidence: degree baseline REPRODUCED on A-next gold (recall@20 0.279 vs random 0.239 — zero shared endpoints, popularity degenerates to near-random; the fair-test bar is LOWER than the mission's shallow negatives implied). ansatz-attempt-report.edn."
+  :proposal/hash "213f965e403c7c19" :provenance "FLIGHTS-BATCH5-2026-07-11.md"}
+ {:fold-turn/id "ft-bounded-in-flight-state-002" :mission "futon3c-d/mission/bounded-in-flight-state"
+  :used ["coordination/ARGUMENT" "devmap-coherence/ifr-f3-piti" "futon-theory/proof-path" "futon-theory/rapid-debugging" "stack-coherence/readme-devmap-sync"]
+  :want "the remaining gaps closed, centered on Q-21 (the guidance note the 2026-05-04 reopen names)"
+  :success true :grain :deposit-psi
+  :evidence "B5-F3: Q-21-guidance-hinge-vs-block.md answers BOTH halves of the reopen (many-to-many scale relationship; in-flight identification via pressure symptoms), every code citation verified at exact lines (reviewer-confirmed), 1124 words. Finding: the gap is NO ATTRIBUTION not NO SIGNAL. Preregistered: TRUE iff Q-21 note accepted (psi's own text names Q-21 as the open item)."
+  :proposal/hash "4ccaa1db5a58b78a" :provenance "FLIGHTS-BATCH5-2026-07-11.md"}
+ {:fold-turn/id "ft-bounded-in-flight-state-003" :mission "futon3c-d/mission/bounded-in-flight-state"
+  :used ["stack-coherence/stop-the-line" "stack-coherence/all-or-nothing" "invariant-coherence/invariants-vs-repair" "stack-coherence/churn-as-signal" "stack-coherence/commit-intent-alignment" "social/tension-before-code" "exotic/state-in-substrate" "structure/interest-event-vocabulary" "peripherals/read-existing-seam-before-implementing" "stack-coherence/readme-devmap-sync" "stack-coherence/library-staleness-scan" "stack-coherence/stack-blocker-detection" "contributing/stack-scan-logging-protocol" "musn/use-requires-evidence" "musn/plan-before-tool" "futon-theory/dead-code-hygiene" "realtime/loop-recovery-actions"]
+  :want "the full remaining conjunction: Q-21 + Q-22 + WM three views + counterfeit-closure + cross-repo block-id"
+  :success false :grain :deposit-psi
+  :evidence "B5-F4 (preregistered honest negative on a conjunctive psi): open_blocks_view.bb parses real Block: footers from git history with the shipped parser's exact regex (21 blocks; reviewer's loose recount of 22 traced to prose the strict regex CORRECTLY rejects). One view does not discharge a five-part conjunction. F3-TRUE/F4-FALSE on near-identical psis is per-psi-text adjudication working, not inconsistency."
+  :proposal/hash "918d4fcfc34c7d4a" :provenance "FLIGHTS-BATCH5-2026-07-11.md"}
+ {:fold-turn/id "ft-artificial-stack-exchange-001" :mission "futon6-d/mission/artificial-stack-exchange"
+  :used ["exotic/world-is-hypergraph" "agential-oss/infrastructure" "social/teaching-inversion" "ai4ci/umbrella" "structure/f0-f4-boundary"]
+  :want "the running triadic Asker/Answerer/Critic loop (100 iterations) + Phases 2-5"
+  :success false :grain :deposit-psi
+  :evidence "B5-F5 (preregistered honest negative): landed Phase-1 scripts demonstrated where runnable (arse-store stats/query/reindex — 93 entities, reviewer re-ran) and could-not-run findings documented (hotspot loop + QA generator cascade-blocked on absent proof-polish data). Diagnosis: the loop's INPUT SUBSTRATE does not exist yet; true prerequisite = proof-wiring pipeline. arse-phase1-run-report.edn."
+  :proposal/hash "c8ba0db7e1d88eed" :provenance "FLIGHTS-BATCH5-2026-07-11.md"}
+ {:fold-turn/id "ft-artificial-stack-exchange-002" :mission "futon6-d/mission/artificial-stack-exchange"
+  :used ["f6/self-play-loop" "futon-theory/graph-enhanced-evaluation" "exotic/world-is-hypergraph" "agential-oss/infrastructure" "agential-oss/pattern-hygiene" "devmap-coherence/ifr-f6-upekkha" "devmap-coherence/ifr-f7-upa-upekkha" "devmap-coherence/ifr-f2-viriya" "social/teaching-inversion" "ai4ci/umbrella" "structure/f0-f4-boundary" "invariant-coherence/prototype-alignment-embedding" "musn/plan-before-tool"]
+  :want "the full loop, grounded via f6/self-play-loop mechanism (100 iterations + phases)"
+  :success false :grain :deposit-psi
+  :evidence "B5-F6 (preregistered honest negative, the informative pair-counterpart): triadic_loop_v0.py instantiates the mechanism SHAPE (Asker/Answerer/Critic, threshold-gated updates, 5 tests green incl. below-threshold rejection, deterministic; reviewer re-ran). 3 fixture iterations != the 100-iteration real loop. Finding: fixture too clean to exercise the Critic's judgment — gate discrimination needs a real corpus with thin answers."
+  :proposal/hash "79fb55e7378fc0d1" :provenance "FLIGHTS-BATCH5-2026-07-11.md"}
 ]
