@@ -352,4 +352,68 @@
   :success true :grain :deposit-psi
   :evidence "B6-F8 (prereg TRUE — the batch's one dischargeable, representational psi): dr_escrow_ledger.bb (4 entries incl. void-sorry, genuine two-step release, checker re-run clean from /var/tmp) + protections-as-specs.md (5/5 tripwires condition->halt->resume; 5/5 protections as behavioral port constraints; citations verified at the real doc lines). Doctrine minted: the bar is HIGHER when you are expected to clear it."
   :proposal/hash "5b32802bf04f366a" :provenance "FLIGHTS-BATCH6-2026-07-11.md"}
+
+ ;; ---- FLIGHTS-BATCH7-2026-07-11 (parallel lanes zai-9/zai-10 folded, CROSS-LANE
+ ;; flights; FIRST FULL PER-OBLIGATION ACCOUNTING: :obligations-total/:obligations-discharged
+ ;; alongside the boolean; adjudicator rulings logged; all 10 matched preregistration) ----
+ {:fold-turn/id "ft-weird-modernism-001" :mission "futon3-d/mission/weird-modernism"
+  :used ["relationship-coherence/lexicon-minting" "iching/hexagram-49-ge" "iching/hexagram-38-kui" "ukrns/stewardship-succession" "ukrns/anchor-case-maintenance"]
+  :want "PKD-through-futon-theory: mint vocabulary, time revolution, hold opposition, succeed convener, steward anchors (perpetual-projection)"
+  :success false :grain :deposit-psi :obligations-total 5 :obligations-discharged 0
+  :evidence "B7-F1 (prereg FALSE ~1/5, ruled 0/5 — candidates != ratified handles, strictness precedent): mint_lexicon_candidates.py extracts 17 real handles with citations + recurrence; two-tier finding: recurrence IS the computable ratification signal (mere-X=10, Skuld=9 already ratified; Verdandi-surface=3 coined-only). obs 2-5 scholar practice."
+  :proposal/hash "407ea73f5abd51c4" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
+ {:fold-turn/id "ft-weird-modernism-002" :mission "futon3-d/mission/weird-modernism"
+  :used ["ukrns/anchor-case-maintenance"]
+  :want "anchor stewardship: pair named w/ dates+rationale, succession plan, per-cycle review event, canonical+archive declared, cycle identifiers"
+  :success true :grain :deposit-psi :obligations-total 5 :obligations-discharged 5
+  :evidence "B7-F2 (prereg TRUE, 5/5): anchor-stewardship.md + anchor-review-log.edn — citations verified at real doc lines (S3 L229ff Flow My Tears; S5 L290ff brand-name); the review's :valid verdicts carry a THEORETICAL RESULT (Parr-Friston grounding REINFORCES both anchors — formal and hermeneutic tracks converge). Gates green, reviewer re-ran."
+  :proposal/hash "1559f778d0f2ce8e" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
+ {:fold-turn/id "ft-cold-chain-001" :mission "futon7-d/mission/cold-chain"
+  :used ["exotic/grounded-actuation" "exotic/honest-map-over-flattering-counter" "contributing/status-keywords" "coordination/recorded-handoff" "exotic/state-capture"]
+  :want "cold chain ACTS honestly: actuation witness, honest counter, status keywords, recorded handoffs, anti-capture (send gate = operator's)"
+  :success false :grain :deposit-psi :obligations-total 5 :obligations-discharged 3
+  :evidence "B7-F3 (prereg FALSE ~3/5, landed 3/5): rung_status_verifier.bb — honest-counter invariant WITNESSED (n=1 = 1 typed record), all 5 rungs consistent, 5-step Hyatt handoff chain listed; found the registry once UNDER-reported T2.2 and corrected with entailment note (honest map moving on truth). ob-1 P14D window open; ob-5 ongoing judgment. Reviewer re-ran."
+  :proposal/hash "80b3798f22b080bb" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
+ {:fold-turn/id "ft-cold-chain-002" :mission "futon7-d/mission/cold-chain"
+  :used ["invariant-coherence/shape-first-identify" "exotic/reachable-from-boot" "invariant-coherence/state-snapshot-witness" "exotic/honest-map-over-flattering-counter" "contributing/operational-not-decorative" "structure/interest-event-vocabulary"]
+  :want "cold chain STATE persists honestly: boot-reconstructible, per-rung snapshots, shape-first, honest counter, operational, typed append-only events"
+  :success false :grain :deposit-psi :obligations-total 6 :obligations-discharged 4
+  :evidence "B7-F4 (prereg FALSE ~3/6, RULED UP to 4/6 — ob-4 invariant witnessed by F3's verifier; citation-discharge counts per doctrine): cold_chain_state.bb reconstructs full state from disk alone (5 rungs + 12 kits), --rung snapshots demonstrated, events typed w/ provenance (append-only trivial at n=1, as the psi itself predicts). ob-3 generality designed-not-evidenced; ob-5 judgment."
+  :proposal/hash "9736922c69790f59" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
+ {:fold-turn/id "ft-hypergraph-operator-001" :mission "futon5a-d/mission/hypergraph-operator"
+  :used ["iching/hexagram-06-song" "iching/hexagram-15-qian" "iching/hexagram-20-guan" "iching/hexagram-60-jie" "scan-coherence/mission-anchored-scan"]
+  :want "person-facing JSDQ operator: topology render, sorry holes person-facing, live constraint signal, AIF observables bound, bb-queryable"
+  :success false :grain :deposit-psi :obligations-total 5 :obligations-discharged 3
+  :evidence "B7-F5 (prereg FALSE ~2-3/5, landed 3/5): jsdq_operator_view.bb — 8-sector/39-item render from real data w/ maturity bars, ALL EIGHT sorry holes person-facing (psi undercounted 4; flyer served ob text over author enumeration), --sector query any cwd. obs 3-4 need unbuilt live hooks. First person-facing JSDQ view the mission has had."
+  :proposal/hash "6968af7f00db80c5" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
+ {:fold-turn/id "ft-hypergraph-operator-002" :mission "futon5a-d/mission/hypergraph-operator"
+  :used ["devmap-coherence/ifr-f2-viriya" "ants/baseline-cyber-ant" "futon-theory/structural-tension-as-observation" "gauntlet/aif-as-environment-not-instruction" "agent/sense-deliberate-act" "structure/interest-event-vocabulary"]
+  :want "AIF loop CIRCULATES: energy through hooks, cyberant instantiated per-sector, tension as observation, state as environment, phase boundaries, provenance transitions"
+  :success false :grain :deposit-psi :obligations-total 6 :obligations-discharged 1
+  :evidence "B7-F6 (prereg FALSE ~1-2/6, landed 1/6): sector_instantiation_v0.bb — the ONE-STEP gap the fold identified, built: all 8 sectors bound forage/carry/deposit/trail from real data, 8 tests green any cwd. FINDING: S4-craft carries NO sorry — confirming-negative firing in flight (the sector where the ant has already arrived). Other obs need live circulation."
+  :proposal/hash "a800524301199a8a" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
+ {:fold-turn/id "ft-a-sorry-enterprise-001" :mission "futon5a-d/mission/a-sorry-enterprise"
+  :used ["ants/baseline-cyber-ant" "devmap-coherence/ifr-f6-upekkha" "war-machine/ambient-pattern-retrieval" "p4ng/pattern-priming" "social/ARGUMENT"]
+  :want "sorry mechanism: transcript mining, affinity scoring wired per-turn, promotion pipeline, substrate-2 emission, cyberant circuit"
+  :success false :grain :deposit-psi :obligations-total 5 :obligations-discharged 0
+  :evidence "B7-F7 (prereg FALSE ~1/5, RULED 0/5 — ob-2 text names wiring+HUD, standalone scorer = attempted-with-artifact; strictness precedent): affinity_score_v0.py implements the real spec (stack-logic-model.edn :sorry-pattern-affinity, cited at source), scores real sorries. FINDING: TWO sorry populations under one name (registry 22 WM-lifecycle vs topology 8 market-capability, no shared IDs; spec references topology)."
+  :proposal/hash "3522bb2b3fd90f4b" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
+ {:fold-turn/id "ft-a-sorry-enterprise-002" :mission "futon5a-d/mission/a-sorry-enterprise"
+  :used ["devmap-coherence/ifr-f3a-piti-audit" "devmap-coherence/ifr-f1-dhammavicaya" "invariant-coherence/state-convergence" "devmap-coherence/ifr-f6-upekkha" "devmap-coherence/ifr-f4-passaddhi" "devmap-coherence/ifr-f5-samadhi" "devmap-coherence/ifr-f7-upa-upekkha" "pattern-discipline/patterns-as-categorical-objects" "control/agential-pattern-hygiene" "war-machine/ambient-pattern-retrieval" "aif/candidate-pattern-action-space" "ants/baseline-cyber-ant" "futon-theory/structural-tension-as-observation" "structure/interest-event-vocabulary" "invariant-coherence/shape-first-identify" "exotic/live-sync-source-truth" "exotic/full-lift-registry" "peripherals/pattern-becomes-peripheral" "futon-theory/theory-as-exotype"]
+  :want "sorry-enterprise SCAFFOLDING (11 obligations: categorical library, hygiene, graph memory, auditable coordination, energy discipline, action-space, shape-first, tension pressure, provenance transitions, source-of-truth, peripheral bridge)"
+  :success false :grain :deposit-psi :obligations-total 11 :obligations-discharged 1
+  :evidence "B7-F8 (prereg FALSE ~2/11, landed 1/11 + ob-4 attempted-with-artifact): sorry_transition_ledger.bb — 64 provenance-bearing transitions from 22 registry sorries, validator 64/64 any cwd; 7-step auditable proximity proof for one sorry citing F7 scorer. FINDING: the registry was ALREADY an event log in disguise (provenance embedded in status fields) — several out-of-scope obligations cheaper than described. THE PER-OBLIGATION SHOWCASE: 11-ob psi legible as 1/11+attempt, not flat FALSE."
+  :proposal/hash "c4937fe6ad61e2b7" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
+ {:fold-turn/id "ft-peeragogy-rewrite-001" :mission "futon4-d/mission/peeragogy-rewrite"
+  :used ["peeragogy/roadmap" "peeragogy/newcomer" "relationship-coherence/lexicon-minting" "t4r/training" "vsatlas/askew-layer"]
+  :want "post-2016 voice: essay written, next-wave flexiargs mined, retrospective-as-MAP note, mini-handbook, coauthor invitations sent"
+  :success false :grain :deposit-psi :obligations-total 5 :obligations-discharged 1
+  :evidence "B7-F9 (prereg FALSE ~1/5, landed 1/5): 2 candidate flexiargs mined with >=2 cross-transcript quoted evidence (calling-in-not-out, check-in-rhythm), QUARANTINED in candidates/. FINDING: psi's six named candidates were the author's hopes; corpus yield is two — 4 correctly NOT drafted for lack of recurrence (discerning-a-pattern discipline validating itself). ob-1 essay + ob-5 sends = out-of-scope BY THE MISSION'S OWN TERMS."
+  :proposal/hash "6b5147269e9e2922" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
+ {:fold-turn/id "ft-peeragogy-rewrite-002" :mission "futon4-d/mission/peeragogy-rewrite"
+  :used ["peeragogy/creating-a-guide" "peeragogy/discerning-a-pattern" "peeragogy/curating-not-experting" "collaboration-coherence/weak-tie-conflation" "peeragogy/polling-for-ideas" "ai4ci/collective-intelligence-framing"]
+  :want "practice layer: guide-while-practice, discernment continued, curatorial stance, tie-matched asks, questions before commitment, inspectable intermediates"
+  :success false :grain :deposit-psi :obligations-total 6 :obligations-discharged 3
+  :evidence "B7-F10 (prereg FALSE ~2/6, RULED UP to 3/6 — ob-2 witnessed by F9's landed candidates; citation-discharge precedent): handoff-packages.md — 3 tier-matched invitation DRAFTS (nothing leaves machine) + 9 inspectable intermediates verified as real files. FINDING: the tiering forced different asks (wrong tier = wrong work, not impoliteness) — the artifact instances the pattern it packages."
+  :proposal/hash "017cd4b768c8d37d" :provenance "FLIGHTS-BATCH7-2026-07-11.md"}
 ]
