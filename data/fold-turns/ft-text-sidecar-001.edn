@@ -1,0 +1,196 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "the sidecar IS a tri-store boundary: XTDB (facts, the authoritative bitemporal store) is separated from FTS5 (a candidate-proposing index whose results are NOT facts until re-checked). The D1 acceptance bar explicitly encodes this: the sidecar returns candidate ids, the caller re-checks against XTDB — exactly 'ANN results only create proposals' with FTS5 standing in for the fuzzy/notion layer. The mission's chalk-note semantics (candidate pre-filter + per-candidate XTDB re-check) IS the tri-store separation instantiated at the application layer. The trust boundary is structural: FTS5 can never be the source of truth (its unicode61 tokenizer can mis-segment, its posting lists lag by ~4s); only XTDB's bitemporal re-check decides membership. The separation keeps the index's fuzz (tokenizer choices, stop-word skew, staleness window) from becoming fact"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via "the oracle-agreement acceptance bar IS dhammavicaya applied to the sidecar: 'scan + re-check' is the investigative method — exhaustive scan over 1,525 docs is the ground truth, the sidecar's answers are checked against it, and 10/10 queries agreeing exactly IS the reproducible-twin verification. The field census (textprobe_census.clj) is the same move at IDENTIFY: 'which fields are text-bearing?' answered by measuring, not assuming. The divergence probe (P1) is dhammavicaya at the population scale: ever-held vs current measured on the full corpus, not estimated. Without this discipline the sidecar's correctness would be oral history ('it seems to work'); the oracle makes it auditable. The mission's P1-first ordering ('the car') is dhammavicaya as sequencing: investigate what exists before building what doesn't"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via "the migration store (147,893 docs in futon1b/migration-store) IS deep storage — a large heterogeneous corpus (PlanetMath-adjacent, essays, revision-heavy evidence) that lacks uniform text-search structure. The sidecar activates it: ingest the text-bearing fields into a queryable FTS5 index, annotate with BM25 scores, and maintain mappings back to the XTDB document ids (the origin-site provenance). The pattern's 'consolidation of old backup drives into active linked storage' transposes: the migration export is the deep-storage source, the FTS5 index is the active-graph activation. HOWEVER the pattern's design center is mathematical repositories (PlanetMath MSC26, arXiv, nLab) with cross-linking and proof-skeleton annotation — the sidecar does token-level indexing, not semantic cross-linking or pattern annotation. The activation principle transposes (deep storage -> queryable graph with provenance); the mathematical-knowledge-graph ambition does not. The sidecar is the substrate that would make the HDM activation possible, not the activation itself"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via "the sidecar grounds text queries on deterministic artifacts (XTDB document ids, FTS5 rowids) with explicit mention spans, not embeddings alone. The FTS5 index IS a deterministic extraction output: tokenize (unicode61, no stemming — chosen so the oracle stays exact), record posting lists (token -> doc-id sets), and every query result is a deterministic set operation over those postings. The :text filter in memory-search returns BM25-scored candidates that are grounded in rowids traceable to XTDB iids — 'grounding makes proposals auditable.' The mission's choice of unicode61-over-stemming IS the grounding discipline: stemming would make the oracle inexact (stemmed matches don't equal surface matches), so the deterministic anchor is preserved. The re-check against XTDB is the final grounding step: FTS5 proposes, XTDB confirms the document still exists with that content"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via "XTDB is the immutable, versioned source of truth; the FTS5 index is a derived view that must stay synchronized. The mission's P3 sync contract IS live-sync: 'refresh rides the append path' (on-append indexing, measured staleness ~4s) with XTDB as the authoritative source the index mirrors. The checkpoint-ratchet restart mechanism (compound (at, id) keyset) logs exactly which version of the store was indexed — the pattern's 'log which pattern version was used in each run' transposes to 'log which (at, id) checkpoint was indexed.' The delete-and-rebuild-safe property IS the versioning discipline: the FTS5 file is derived data, regenerable from the immutable XTDB source. The bidirectional-flow aspect (drafts back upstream) does NOT transpose — the sidecar is read-only with respect to XTDB; no FTS5 result writes back. The one-way-sync-with-version-logging half transposes fully; the bidirectional half is out of scope for a pre-filter"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :partial
+    :via "the sidecar's text-search surface needs a reproducible embedding discipline if the zaif controller's ranked retrieval is to be trusted: BM25 scores ARE the 'embedding' (a compression of document relevance into a scalar), and the unicode61 tokenizer + no-stemming choice IS the canonical mapping that must be frozen and logged before any comparison. The mission's acceptance bar ('index rebuild is deterministic') IS prototype-alignment: the patterns-index is the tokenizer config, and any change to it requires re-indexing (the compression-log equivalent). HOWEVER the pattern's design center is sigil/Tokipona/Hanzi fake-embeddings for pattern similarity — a different embedding space than BM25 over document tokens. The discipline (canonical mapping + change-log + regenerate-before-use) transposes; the specific embedding technology does not. The zaif seed's 'earn structural embeddings' backoff note is where the two embedding disciplines would actually meet, but the sidecar POC uses BM25, not sigil embeddings"
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :non-contributor
+    :via "NON-CONTRIBUTOR. The pattern addresses keeping sigil embedding matrices in lockstep with the pattern canon via CI gates and refresh timestamps. The sidecar has no sigil embeddings, no pattern-canon coupling, and no CI-gated matrix regeneration. The sidecar's determinism is enforced by the oracle (b2/dhammavicaya) and the rebuild-checkpoint (b5/live-sync), not by an embedding-refresh ritual. Forcing this pattern onto the sidecar would be pattern-laundering: the refresh-discipline shape is real but its binding mode (sigil matrices + CI + pattern_store.edn timestamp) has no sidecar analogue. The honest call: this pattern contributes nothing to the sidecar's have→want gap that b6 (prototype-alignment, the parent) does not already supply. Recorded as non-contributor rather than forced"
+    :rule "fold-turn/box"}
+   {:id :b8
+    :role :application
+    :satiety :partial
+    :via "the sidecar's FTS5 index IS a lineage layer in the tri-store model: facts (XTDB bitemporal documents — the append-only source of truth), memes (the FTS5 posting lists — derived, rebuildable from facts), and notions (the BM25 scores — fuzzy ranking over the derived layer). The separation matches: facts provide auditability (replay the migration), memes provide queryability (posting-list AND/OR), notions provide discoverability (BM25 ranking). The ever-held measurement (P1) IS a lineage query against the facts layer: 'what tokens has this entity EVER held across its history?' — answered by replaying the bitemporal log, not by reading the current FTS5 meme. HOWEVER the pattern's design center is exotic-programming genotype lineage (mutation/scoring/adaptation events), not document-index lineage. The three-layer shape transposes cleanly; the event-schema (mutation events for genotypes vs token-ingest events for documents) does not. The pattern supplies the architecture; the schema is sidecar-specific"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b2] :to [:b4] :connective :seq :rule "fold-turn/wire"
+    :rationale "dhammavicaya (b2) grounds the investigation method that artifact-entity-mention-grounding (b4) operationalizes: the oracle IS the grounding discipline applied — deterministic extraction (tokenize, record spans, re-check) verified against exhaustive scan. seq because grounding presupposes the investigative frame (measure, don't assume)"}
+   {:kind :composes :from [:b4] :to [:b1] :connective :seq :rule "fold-turn/wire"
+    :rationale "grounding (b4) supplies the deterministic artifacts (rowids, posting lists) that the tri-store-separation (b1) partitions by trust level: grounded candidates in FTS5 (low trust), confirmed facts in XTDB (high trust). seq because the trust boundary presupposes the grounded artifacts it separates"}
+   {:kind :composes :from [:b1] :to [:b5] :connective :seq :rule "fold-turn/wire"
+    :rationale "tri-store-separation (b1) establishes XTDB as the source of truth and FTS5 as derived; live-sync (b5) then governs HOW the derived layer stays synchronized with the source. seq because the sync contract presupposes the trust hierarchy the separation establishes"}
+   {:kind :composes :from [:b8] :to [:b1] :connective :copar :rule "fold-turn/wire"
+    :rationale "tri-store-lineage (b8) co-applies with tri-store-separation (b1): the lineage model supplies the three-layer architecture (facts/memes/notions), the separation pattern supplies the trust-boundary enforcement. copar because lineage shapes the architecture and separation shapes the boundary — they co-constitute the sidecar's store design without one consuming the other sequentially"}
+   {:kind :composes :from [:b3] :to [:b5] :connective :copar :rule "fold-turn/wire"
+    :rationale "deep-storage-to-active-graph (b3) co-applies with live-sync (b5): the activation move (ingest from deep storage with provenance) and the sync move (keep the derived index current with the source) are two faces of the same relationship between XTDB and FTS5. copar because activation describes the initial build and sync describes the ongoing refresh — they frame the same data-flow without sequential consumption"}
+   {:kind :composes :from [:b6] :to [:b4] :connective :copar :rule "fold-turn/wire"
+    :rationale "prototype-alignment-embedding (b6) co-applies with artifact-entity-mention-grounding (b4): the embedding discipline (canonical tokenizer config, change-log) and the grounding discipline (deterministic extraction, auditable spans) are complementary — embeddings need grounding to be auditable, grounding needs frozen config to be reproducible. copar because each frames the other's trustworthiness without sequential consumption"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b5 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: an out-of-process text index (the sidecar) over the futon1b corpus that exposes free-text candidate lookup composing with the existing memory-search seam — the sidecar returns candidate ids, the caller re-checks against XTDB 2 (chalk-note candidate-prefilter-plus-recheck semantics at the application layer), with a measured evidence packet for XTDB #5637 (ever-held vs current divergence, posting-list skew, false-positive rates). The sidecar IS landed (D1 accepted: FTS5 embedded in the store JVM, oracle 10/10, 94,430 rows, ~4s append staleness); what REMAINS is the D2 evidence comment for #5637 (Joe-gated) and the deferred follow-on scope (prefix/phrase/relevance-beyond-BM25). The sidecar also serves as the zaif controller's perception substrate (ranked C-inference retrieval, retroactive correction-lexicon scans). HUNGRY-FOR: 1) the trust boundary between the index (proposes) and XTDB (decides) made structural — FTS5 fuzz cannot become fact (ob-1, :artifact); 2) the deterministic grounding of text queries — token extraction, posting lists, and re-check as auditable artifacts, not embedding-only recall (ob-2, :artifact); 3) the sync contract — XTDB as immutable versioned source of truth, FTS5 as derived view with checkpoint-logged rebuild (ob-3, :practice); 4) the oracle-agreement verification — exhaustive scan as ground truth, the sidecar must agree (ob-4, :practice); 5) the D2 evidence packet — every number reproducible from a script, corpus shape stated (ob-5, :outward); 6) the activation of deep storage — 147k docs made queryable with provenance back to XTDB ids (ob-6, :artifact). HAVE: D1 landed (futon1b_text.clj, fts_oracle.clj, /api/alpha/evidence/text-search route, :text filter in zai_memory_1b.clj); P1 answered (ever-held 1.028 entity / 1.000 evidence, heavy tail not multiplier, measured on full population); P2 decided (FTS5, Joe); P3 decided (append-path refresh, ~4s staleness); P4 answered (zaif query surface); probe scripts and measured outputs on disk; 12G store copy on lucy."
+  :psi-sha256
+  "26fc2f1f2c8f39e2272f5cf769fc15f5cdc6c41527517d04f4e1ed24db8d3d5b"
+  :pattern-ids
+  ["sidecar/tri-store-separation"
+   "devmap-coherence/ifr-f1-dhammavicaya"
+   "hdm/deep-storage-to-active-graph"
+   "sidecar/artifact-entity-mention-grounding"
+   "exotic/live-sync-source-truth"
+   "devmap-coherence/prototype-alignment-embedding"
+   "library-coherence/library-embedding-refresh"
+   "exotic/tri-store-lineage"]
+  :size 8
+  :truncated false
+  :budget 8
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "4baf4e74193228c0"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-12"
+  :source "M-text-sidecar.md HEAD/IDENTIFY/MAP/VERIFY/D1-ACCEPTANCE/CHECKPOINTS (resolver-blind: gap described in the mission's own terms — out-of-process text index with chalk-note candidate-prefilter-plus-recheck semantics, composing with memory-search, with measured evidence for XTDB #5637 — without reading the proposer's pattern rationale)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author. The proposal brought its own 8-pattern cascade; the psi was authored from the mission doc alone. Staleness probe verified D1 artifacts on disk (futon1b_text.clj, fts_oracle.clj, text-search route, :text filter) and P1 measured outputs (divergence-full.edn: 1.028 entity inflation matching doc claims)."}
+ :deposit-contract :v2
+ :mission "futon2/holes/M-text-sidecar"
+ :proposal/hash "4baf4e74193228c0"
+ :fold-turn/id "ft-text-sidecar-001"
+ :turn
+ {:agent "zai-12"
+  :model "zai"
+  :edge "invoke-1783933077181-293-fb262210"
+  :at "2026-07-12T12:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "trust boundary: FTS5 proposes candidates, XTDB re-check decides membership — the chalk-note semantics at the application layer"
+     :fits-pattern "sidecar/tri-store-separation"
+     :addresses-however
+     "without the trust boundary, FTS5's tokenizer fuzz (unicode61 mis-segmentation), posting-list staleness (~4s lag), and stop-word skew would leak into query results as if they were facts; the separation keeps the index's approximations from becoming authoritative"
+     :produces [:trust-boundary-fts5-proposes-xtdb-decides]}
+    {:id :b2
+     :role "investigative verification: oracle = exhaustive scan over 1,525 docs as ground truth, sidecar must agree exactly (10/10 queries)"
+     :fits-pattern "devmap-coherence/ifr-f1-dhammavicaya"
+     :addresses-however
+     "without the oracle, the sidecar's correctness is oral history ('it seems to work'); the exhaustive scan is the reproducible twin that makes the claim auditable. P1's ever-held measurement on the full population is the same discipline at corpus scale"
+     :produces [:oracle-verification-discipline]}
+    {:id :b3
+     :role "activation: 147,893 migrated docs ingested from deep storage into a queryable FTS5 index with provenance back to XTDB ids"
+     :fits-pattern "hdm/deep-storage-to-active-graph"
+     :addresses-however
+     "the migration store is inert for text search without activation; the sidecar makes it queryable while preserving origin metadata (XTDB iid -> FTS5 rowid mapping). Partial: the pattern's mathematical-knowledge-graph ambition (cross-linking, proof-skeleton annotation) is beyond the POC's token-level indexing"
+     :produces [:deep-storage-activation]}
+    {:id :b4
+     :role "deterministic grounding: tokenize (unicode61, no stemming), record posting lists, re-check against XTDB — auditable artifacts not embedding-only"
+     :fits-pattern "sidecar/artifact-entity-mention-grounding"
+     :addresses-however
+     "embedding-only recall is unauditable (you cannot trace why a document matched); deterministic token extraction with explicit posting lists makes every match traceable to a token-doc pair, and the XTDB re-check is the final grounding"
+     :produces [:deterministic-text-grounding]}
+    {:id :b5
+     :role "sync contract: XTDB is immutable versioned source of truth, FTS5 is derived with checkpoint-logged rebuild, append-path refresh ~4s"
+     :fits-pattern "exotic/live-sync-source-truth"
+     :addresses-however
+     "one-time index drifts stale as the corpus grows; the append-path refresh with compound (at, id) checkpoint logging keeps the derived index synchronized with the source, and delete-and-rebuild-safe means the index is regenerable from the immutable XTDB store"
+     :produces [:sync-contract-xtdb-source-fts5-derived]}
+    {:id :b6
+     :role "canonical tokenizer config (unicode61, no stemming) frozen and logged as the embedding mapping; rebuild required on any change"
+     :fits-pattern "devmap-coherence/prototype-alignment-embedding"
+     :addresses-however
+     "without a frozen tokenizer config, the oracle cannot be exact (a config change would invalidate prior query results); the deterministic-rebuild acceptance bar IS the alignment discipline. Partial: the pattern's sigil-embedding design center does not match BM25-over-tokens"
+     :produces [:canonical-tokenizer-alignment]}
+    {:id :b7
+     :role "NON-CONTRIBUTOR: sigil embedding refresh ritual has no sidecar analogue"
+     :fits-pattern "library-coherence/library-embedding-refresh"
+     :addresses-however
+     "the pattern addresses CI-gated sigil-matrix regeneration for pattern similarity — the sidecar has no sigil embeddings and no pattern-canon coupling. The refresh-discipline shape is real but unboundable here; forcing it would be pattern-laundering. b6 (prototype-alignment, the parent) already supplies the discipline that applies"
+     :produces []}
+    {:id :b8
+     :role "three-layer lineage: XTDB facts (append-only source) -> FTS5 memes (derived posting lists) -> BM25 notions (fuzzy ranking); ever-held is a facts-layer query"
+     :fits-pattern "exotic/tri-store-lineage"
+     :addresses-however
+     "a single flat FTS5 index conflates the source of truth with the derived view; the lineage separation keeps each layer's guarantees clean (facts = replayable, memes = queryable, notions = discoverable). Partial: the pattern's genotype-lineage event-schema does not transpose to document indexing"
+     :produces [:tri-store-lineage-architecture]}]
+   :hyperedges
+   [{:from :b2 :to :b4 :connective :seq
+     :rationale "dhammavicaya (b2) grounds the investigation method that grounding (b4) operationalizes — the oracle IS grounding verified against exhaustive scan; seq because grounding presupposes the investigative frame"}
+    {:from :b4 :to :b1 :connective :seq
+     :rationale "grounding (b4) supplies the deterministic artifacts that tri-store-separation (b1) partitions by trust; seq because the trust boundary presupposes grounded artifacts"}
+    {:from :b1 :to :b5 :connective :seq
+     :rationale "tri-store-separation (b1) establishes XTDB-as-source; live-sync (b5) governs how the derived layer stays synchronized; seq because sync presupposes the trust hierarchy"}
+    {:from :b8 :to :b1 :connective :copar
+     :rationale "tri-store-lineage (b8) co-applies with tri-store-separation (b1): lineage supplies the architecture, separation supplies the boundary enforcement; copar because they co-constitute the store design"}
+    {:from :b3 :to :b5 :connective :copar
+     :rationale "deep-storage-to-active-graph (b3) co-applies with live-sync (b5): activation is the initial build, sync is the ongoing refresh — two faces of the same data-flow; copar because they frame the same relationship"}
+    {:from :b6 :to :b4 :connective :copar
+     :rationale "prototype-alignment (b6) co-applies with grounding (b4): embedding discipline and grounding discipline are complementary — embeddings need grounding to be auditable, grounding needs frozen config to be reproducible; copar because each frames the other's trustworthiness"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b5 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the D2 evidence comment for XTDB #5637 is Joe-gated and not yet posted"
+     :why
+     "the mission's D2 deliverable (the #5637 comment with ever-held divergence, posting-list skew, false-positive rates) is authored but posting is gated on Joe's read. No pattern in this cascade grounds the operator-gating decision — it is a social/process boundary, not a technical one. The evidence packet is reproducible from scripts (P1 outputs on disk), but the act of posting to JUXT is an outward obligation no pattern discharges. This is the mission's open outward obligation: the work is done, the contribution is drafted, the gate is human"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the deferred follow-on scope (prefix/phrase/relevance-beyond-BM25) is named but ungrounded"
+     :why
+     "the mission explicitly defers prefix search, phrase queries, and relevance ranking beyond BM25 to a follow-on mission 'if JUXT engages.' No pattern in this cascade grounds what that follow-on's shape would be — the boundary is hit ('state the boundary when reached, not left implicit'), but the follow-on design is not pattern-grounded. This is honest scope-deferral, not a gap in the current mission; but the cascade cannot ground the future mission's shape"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the zaif controller's perception substrate is named as a consumer but its active inference loop is not grounded by this cascade"
+     :why
+     "the mission's P4 checkpoint names three zaif consumers (C-inference retrieval, gamma event stream, sorry prose), and the zaif seed design records per-turn controller arms (retrieve/act/ask/yield). But the cascade's patterns ground the sidecar's text-indexing architecture, not the AIF controller that consumes it. The zaif harness (M-zaif-harness) is a sibling mission; the sidecar is its perception substrate but the controller loop is out of scope here. The cascade honestly records this as a cross-mission dependency, not a gap in the sidecar's own obligations"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "b3 (deep-storage-to-active-graph) and b8 (tri-store-lineage) overlap on the activation/ingestion move"
+     :why
+     "b3 grounds the activation principle (deep storage -> queryable graph with provenance); b8 grounds the architecture (facts -> memes -> notions lineage). Both address how the migration corpus becomes the FTS5 index. b3 carries the provenance-back-to-origin discipline; b8 carries the three-layer-separation discipline. The overlap is genuine: both are ingestion-architecture patterns whose CORE (the source of truth is separate from the derived queryable view) is the same move. b3 carries the initial-build framing; b8 carries the ongoing-lineage framing. Recording as honest overlap, not false independence"}
+    {:id :h5
+     :unfolded-pattern "library-coherence/library-embedding-refresh"
+     :free "b7 is a non-contributor: the sigil-refresh ritual has no sidecar binding, and b6 (its parent) already supplies what discipline does transfer"
+     :why
+     "the cascade honestly marks b7 as non-contributor rather than forcing a partial satiety. The refresh-discipline SHAPE (CI gate + timestamp + regenerate-before-use) is real and partially captured by b6's canonical-tokenizer-alignment, but b7's specific binding mode (sigil matrices, pattern_store.edn, clojure -M:sigils) has zero sidecar analogue. This is the batch-7 precedent in action: a cascade with an honest non-contributor is more compressed than one that launders the pattern into false partial satiety. The non-contributor IS the finding — the sidecar does not need an embedding-refresh ritual because its 'embedding' (BM25 over unicode61 tokens) is regenerated on rebuild, not maintained incrementally via CI gates"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "D1 landed (FTS5 in store JVM, oracle 10/10, 94,430 rows, ~4s staleness, :text filter in memory-search); P1 answered (ever-held 1.028 entity / 1.000 evidence, heavy tail, full population); P2 decided (FTS5); P3 decided (append-path refresh); P4 answered (zaif query surface); probe scripts + measured outputs on disk; 12G store copy on lucy."
+  :want
+  "An out-of-process text index composing with memory-search via chalk-note candidate-prefilter-plus-recheck semantics, with measured evidence for XTDB #5637 — the trust boundary structural, queries deterministically grounded, sync contract honored, oracle-verified, and the migration corpus activated as queryable deep storage. D2 (the #5637 comment) remains Joe-gated; the deferred follow-on scope is named but ungrounded."
+  :via
+  "psi authored by zai-12 from futon2/holes/M-text-sidecar.md (HEAD/IDENTIFY/MAP/VERIFY/D1-ACCEPTANCE/CHECKPOINTS + staleness-probe verifying D1 artifacts and P1 outputs on disk), resolver-blind to the proposer's pattern rationale"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:delta-g "not-computed — blinded proposal fold, no cascade_serve.py run" :g-grain :coverage}}
