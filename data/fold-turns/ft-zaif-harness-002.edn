@@ -1,0 +1,167 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via
+    "the pattern maps directly to the zaif controller's ARM-SELECTION GATE: the controller G-compares four arms (retrieve/act/ask/yield) per turn, and the mana-gate is the metabolic awareness the controller needs — operator attention is the scarce resource (the mission's explicit framing: 'ask spends the scarce resource: operator attention'). The pattern's two-step selection (priority sort then budget-gate walk) transposes to: G-rank the four arms by expected value, then gate each by whether the session's current precision-state balance can afford its expected cost. The pattern's cost channels (working-tree pressure, mission-proliferation, session-sprawl, untriaged-evidence) map to the controller's real costs: act costs rework risk if C is misread (working-tree pressure analogue); ask costs operator attention (the binding constraint); retrieve costs tokens (mission-proliferation analogue — context budget); yield costs nothing (the always-available safe action, exactly the pattern's low-cost maintenance action). HOWEVER the pattern's budget is METABOLIC (session sustainability: can the operator sustain this pace?), while the controller's primary objective is EPISTEMIC (expected information gain about C). These are different selection criteria: mana-gated-work says 'can you afford it?'; the controller says 'is it worth it given what you know?'. The gate composes with G but is not G itself. The pattern supplies the affordability check; the mission's G-comparison supplies the value check. The yield arm maps cleanly (zero-cost, always-affordable); the ask arm is where the gate bites hardest (highest cost, most likely to be budget-rejected when the session is already attention-saturated)"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via
+    "the pattern applies to the GENERATION TRACK of the zaif controller's evolution: the mission's deliverables Z1 (query library + retro-bootstrap) and Z2 (controller in runner) are being built in draft form (lab scripts: b1_gamma_mission_fold.clj, z1_views.clj, pz1_lexicon_scan.clj) before promotion to stable (the :profile option in zai_api.clj, the production XTQL forms). The dual-track discipline maps: drafts live in namespaced lab files with implicit :status :draft; review (external adjudication — claude-5's pre-locked recomputations, Joe's gold passes) checks evidence and fit; promotion moves the query/pattern to the stable runner namespace. The ✘/✓ marks vocabulary itself follows this track (v0 ratified, growing slowly per Table-25 stance). HOWEVER the pattern's track is about PATTERN canonization, not query-library canonization — the analogy is strong (draft → review → stable; rejected → archived) but the pattern's specific mechanism (namespaced IDs, :status field, promotion workflow with evidence requirement) is designed for library patterns, not XTQL queries or controller code. The discipline transposes; the specific artifact-type does not. The mission already operates this implicitly (lab dir = draft namespace, zai_api.clj = stable); the pattern would formalize what is already practice"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via
+    "the pattern supplies the DECISION-RECORD shape for the controller's arm choices: the mission requires that the controller 'records its arm choices + G terms as evidence (queries-as-provenance, §2).' The tradeoff-record template (options considered, assumptions, rationale, reversal triggers, recorded-at timestamp) maps to the controller's per-turn arm-selection record: the four arms ARE the options considered; the G terms ARE the assumptions (task belief, C belief, precision state); the chosen arm IS the rationale; reversal triggers map to the controller's own correction channels (if γ drops below threshold, reconsider; if operator ✘s the act, that is the reversal trigger). The bitemporal store makes these records auditable retroactively (§4 of the XTQL section). HOWEVER enforcement is pending (the pattern's own next-step: 'require at least one tradeoff-record when a scope or risk change is accepted') — the template exists but is not yet wired into the controller's evidence-emission path. The pattern supplies the SHAPE of the decision record; the controller's evidence-emission path (which does not yet exist — Z2 is unbuilt) is where the shape would be instantiated. The pattern grounds the record's structure; it does not ground the controller that produces the decisions being recorded"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "the pattern is the closest fit in the cascade: the zaif controller's precision ledgers (γ(mission), C-channel, actand-indexed) ARE a state-transition vocabulary against interest-network entities (missions, operator-intent cells, actand cells). The pattern's eight-event vocabulary (spawned, refined, linked, etc.) maps to the γ event stream's transitions: a ✘ mark is a state/refined event (precision lowered); a ✓ mark is a state/confirmed event (precision raised); an adjudication PASS is state/refined; an adjudication FAIL is state/refuted. The pattern's emission discipline (explicit emission at checkpoint boundaries, append-only, payload schema with provenance) maps directly to the mission's design: the ledgers are derived views (folds over the evidence stream), the evidence is append-only (P1's 1.000 finding), and each event carries provenance (queries-as-provenance, §2). The neutral state/* namespace maps to the γ/C/actand vocabulary: the mission's three ledgers are three entity classes consuming the same state-transition vocabulary. The cross-mission consumer design (substrate-2 sorry-typing, M-a-sorry-enterprise mining-track adopting the same vocabulary) IS the mission's own query-library-sharing design (§5: one query library, three harnesses). The ✘/✓ marks vocabulary is itself an interest-event vocabulary instance. This is a strong, near-identical structural match — the pattern was designed for exactly this kind of checkpoint-asserted state-transition"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "the pattern applies to the MISSION ITSELF as an autonomous target: M-zaif-harness is an open mission with articulated open work (counted holes: Z1, Z2, Z3 unbuilt; B0 marks recognizer prerequisite identified; B2 triangulation pending codex-2's M1). The pattern's gate (open? AND open-hole-count ≥ 1) confirms the mission IS advanceable — it has ≥1 concrete next hole. The single-cycle-leaf preference (exactly one open hole = one bounded cycle) maps to the mission's own sequencing: Z1 is the car (PZ1/PZ2/PZ3 closed, Z1 unblocked), Z2 depends on Z1, Z3 depends on Z2. The advanceability discipline (advance one hole per cycle, don't flood) maps to the mission's serial build order. HOWEVER the pattern is a GUARDRAIL for autonomous mission selection (the WM picking which mission to advance), not a design pattern for the mission's CONTENT. It tells you the mission is ready to work on; it does not tell you how to build the controller. The pattern grounds the mission's WORK-SEQUENCING discipline (one hole per cycle, Z1 first); it does not ground any deliverable's design. Applied to zaif: the pattern confirms the mission is admissible for autonomous advancement (it has holes), and the single-cycle-leaf principle says the NEXT cycle should close exactly one hole (Z1), not try to build Z1+Z2+Z3 at once"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:edges [:b1 :b3]
+    :role "mana-gated-work's arm-selection gate PRODUCES the decisions that tradeoff-record CAPTURES: the controller G-ranks + budget-gates the four arms, then the tradeoff-record template stamps the chosen arm + G terms + assumptions as evidence. The gate is the decision; the record is the audit trail. Bitemporality (§4) makes the record queryable as-of any system time"
+    :rule "fold-turn/hyperedge"}
+   {:edges [:b4 :b1]
+    :role "interest-event-vocabulary's state-transition events are the INPUT STREAM the mana-gate's budget channels consume: γ-lowering events (✘ marks) deplete the precision-state balance (the controller's metabolic budget); γ-raising events (✓ marks) restore it. The vocabulary defines what events EXIST; the mana-gate defines what the controller DOES with them"
+    :rule "fold-turn/hyperedge"}
+   {:edges [:b4 :b3]
+    :role "interest-event-vocabulary's payload schema (provenance, append-only, checkpoint-emitted) IS the substrate that tradeoff-record's template stamps: the decision record is itself an interest-event (a state/refined against the controller's decision-cell entity). The pattern's cross-mission-consumer design (same vocabulary across entity classes) is what lets the decision record share the store with the γ/C/actand ledgers"
+    :rule "fold-turn/hyperedge"}]
+  :terminals
+  [{:id :b4 :discharges :ob-1-partial}
+   {:id :b5 :discharges :ob-3-work-sequencing}
+   {:id :b1 :discharges :ob-3-arm-gate-partial}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a G-scored controller for the interactive loop (zaif) that sits between turns holding (task belief, operator-C belief, precision state) and G-compares four arms — retrieve, act, ask, yield — so that every turn's act/ask/yield choice is principled rather than heuristic, with the operator's latent C-vector inferred from each message as the highest-precision evidence about it. The controller is mission-parameterized (G governed by the clocked mission), built around the store not the prompt (the FuLab lesson: formalism in-band fights the agents), and its observations are a named library of XTQL queries over the futon1b store so that what-the-agent-saw is replayable, not narrated. The three precision ledgers (γ(mission) [R14 fold ported], C-channel [R7 operator model], actand-indexed [R7 world model]) are derived views — folds over the evidence stream, recomputable from scratch — not state files. Bitemporality makes precision auditable and the loop replayable.\nHUNGRY-FOR: ob-1 (:artifact) the named XTQL query library for all three ledgers and the C-hydration path, with the offline retro-bootstrap fold over the historical corpus producing initial γ/C/actand tables with provenance — Z1; ob-2 (:artifact) the :profile option in zai_api.clj (:zaif = the G controller) that consults Z1's views between turns and records arm choices + G terms as evidence with queries-as-provenance — Z2; ob-3 (:practice) the controller's four-arm G-comparison at each turn boundary, with retrieve EIG estimable pre-query from posting statistics, asymmetric admissibility (agent self-talk may only LOWER precisions; only operator text or discharged interface-sorry may raise them), and corrections routed by lexicon (γ/C/actand); ob-4 (:outward) the zai-vs-zaif A/B on lucy-joe sessions, scored from the record (bitemporal): asks per achieved outcome, corrections per act, yield timing — Z3; ob-5 (:artifact) the marks channel (✘/✓ vocabulary, M-points-de-fuite integration) as operator-gold γ events, with the turn-end recognizer stamping :correction/:approval tags so the γ stream is queryable without content scans — the FTS5 marks-invisibility finding promoted this from later to prerequisite.\nHAVE: the zai runner (zai_api.clj, 773 lines, six read-only memory tools); U1 transcript persistence VERIFIED (per-round self-talk and tool calls as typed evidence); PZ1 CLOSED (correction lexicon: precision 0.417, recall 0.186, routing accuracy 1.000 — disqualified as measurement instrument, survives as candidate seeder; ✘/✓ marks vocabulary ratified by Joe); PZ2 CLOSED (γ starts at γ(mission): cascade/pattern grain = zero substrate on lucy's store; 38 labeled corrections over 17 cells, 4 ≥3 events); PZ3 CLOSED (R14 fold portability confirmed adapter-only: the fold core in policy_precision.clj is pure and signal-agnostic); B1 BUILT (b1_gamma_mission_fold.clj loads the R14 fold at runtime, 46 events, 18 cells, 1 burned-in: M-futon-forward-model γ=0.7071); the futon1b store (append-only evidence semantics, bitemporal); the R14 fold implementation (futon2/src/futon2/aif/policy_precision.clj); the p4ng paper's preregistration (the stopping rule routes here on S3 failure); the limit-pushdown fix (limit/ephemeral pushdown when membership is server-decidable); the anti-laundering guards (no mid-choice warrant minting, ambiguity defaults to ASK)."
+  :psi-sha256
+  "a238474dfb0220a2e50082a6167b2d78c3b242d69eda2c7cb2918e53c299ab66"
+  :pattern-ids
+  ["budgeted-action-selection/mana-gated-work"
+   "exotic/dual-track-generation"
+   "fulab/tradeoff-record"
+   "structure/interest-event-vocabulary"
+   "war-machine/advanceability"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "720bfdc51b457828"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-11"
+  :source "M-zaif-harness.md full doc (HEAD + IDENTIFY + XTQL section + Controller design + Deliverables Z1-Z3 + Probes PZ1-PZ3 + U1 + B1 + post-PZ1 marks decision), authored through the 5-pattern cascade lens — resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-zaif-harness-001"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author. The proposal brought its own 5-pattern cascade; the psi was authored from the mission doc alone."}
+ :deposit-contract :v2
+ :mission "futon2/holes/M-zaif-harness"
+ :proposal/hash "720bfdc51b457828"
+ :fold-turn/id "ft-zaif-harness-002"
+ :turn
+ {:agent "zai-11"
+  :model "zai"
+  :edge "invoke-1783933076587-292-a38b0aa6"
+  :at "2026-07-13T09:01:44Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the arm-selection budget gate: G-rank the four arms (retrieve/act/ask/yield), then gate each by whether the session's precision-state balance can afford its cost — operator attention is the scarce resource (ask costs the most, yield is always-affordable)"
+     :fits-pattern "budgeted-action-selection/mana-gated-work"
+     :addresses-however
+     "PARTIAL: the pattern's budget is METABOLIC (session sustainability), while the controller's primary objective is EPISTEMIC (expected information gain about C). These are different selection criteria — the gate composes with G but is not G itself. The pattern supplies the affordability check; the mission's G-comparison supplies the value check. The yield arm maps cleanly (zero-cost); the ask arm is where the gate bites hardest. But the pattern's cost channels (working-tree pressure, mission-proliferation, session-sprawl, untriaged-evidence) are session-level metabolic signals, not the controller's per-turn epistemic costs. The composition is real (G × affordability) but the pattern grounds only the affordability half"
+     :produces [:arm-selection-budget-gate]}
+    {:id :b2
+     :role "the draft-to-stable track for the query library and controller code: lab scripts are the draft namespace, zai_api.clj is the stable namespace, external adjudication is the review process"
+     :fits-pattern "exotic/dual-track-generation"
+     :addresses-however
+     "PARTIAL: the pattern's track is designed for PATTERN canonization (library patterns with namespaced IDs, :status field, promotion workflow), not for XTQL query libraries or controller code. The discipline transposes (draft → review → stable; rejected → archived) but the specific artifact-type does not. The mission already operates this implicitly (lab dir = draft, zai_api.clj = stable); formalizing it adds rigor but the pattern's concrete mechanism (gen/<domain>/<slug> IDs) does not apply to .clj query files. NON-NOVEL: the mission already practices this without naming the pattern"
+     :produces [:draft-stable-track-formalization]}
+    {:id :b3
+     :role "the decision-record shape for arm choices: the controller records (options = four arms, assumptions = G terms, rationale = chosen arm, reversal triggers = correction channels) as stamped evidence"
+     :fits-pattern "fulab/tradeoff-record"
+     :addresses-however
+     "PARTIAL: enforcement is pending (the pattern's own next-step). The template exists (in pattern_competence.clj) but is not yet wired into the controller's evidence-emission path — because the controller itself (Z2) does not exist yet. The pattern grounds the record's STRUCTURE; it does not ground the controller that produces the decisions being recorded. When Z2 is built, the tradeoff-record template would stamp each arm choice; until then it is a shape waiting for a producer"
+     :produces [:arm-choice-decision-record-shape]}
+    {:id :b4
+     :role "the state-transition vocabulary for the precision ledgers: ✘/✓ marks and adjudication outcomes ARE state-transition events against mission/intent/actand entities, emitted at checkpoint boundaries with provenance, append-only, consumed by the three ledgers as derived views"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "FULL: this is a near-identical structural match. The pattern's eight-event vocabulary maps to the γ event stream's transitions. The emission discipline (explicit at checkpoints, append-only, payload schema with provenance) maps to the mission's evidence design (queries-as-provenance, §2; append-only semantics, P1's 1.000 finding). The cross-mission consumer design maps to the one-query-library-three-harnesses design (§5). The ✘/✓ marks vocabulary is itself an interest-event vocabulary instance. The pattern was designed for exactly this checkpoint-asserted state-transition structure. The only gap is that the pattern's specific eight event types (spawned, refined, linked, etc.) need mapping to zaif's event types (corrected, approved, adjudicated-pass, adjudicated-fail) — but the neutral state/* namespace is explicitly designed for this cross-entity-class reuse"
+     :produces [:precision-ledger-event-vocabulary :marks-as-interest-events :cross-harness-vocabulary-sharing]}
+    {:id :b5
+     :role "the mission's advanceability confirmation: M-zaif-harness has ≥1 open hole (Z1/Z2/Z3 unbuilt), so it is an admissible autonomous target; the single-cycle-leaf principle says the next cycle closes Z1 (the car), not Z1+Z2+Z3 at once"
+     :fits-pattern "war-machine/advanceability"
+     :addresses-however
+     "PARTIAL: the pattern is a GUARDRAIL for autonomous mission selection (the WM picking which mission to advance), not a design pattern for the mission's content. It confirms the mission is ready to work on and supplies the work-sequencing discipline (one hole per cycle), but it does not ground any deliverable's design. The pattern grounds the MISSION'S WORK-SEQUENCING, not the controller's architecture. Applied to zaif: it says 'Z1 first, one at a time' — which the mission already states. The pattern formalizes what is already the mission's implicit plan"
+     :produces [:work-sequencing-discipline]}]
+   :hyperedges
+   [{:edges [:b1 :b3]
+     :composition "the mana-gate's arm-selection decision is CAPTURED by the tradeoff-record template: the gate produces the choice (which arm), the record stamps it (options, G terms, rationale, reversal triggers). The gate is the decision-maker; the record is the audit trail. Without the gate (b1), there are no arm choices to record; without the record (b3), the gate's decisions are unauditable. The controller needs both: a principled selector AND a replayable record of what it selected and why"
+     :rule "fold-turn/hyperedge"}
+    {:edges [:b4 :b1]
+     :composition "the interest-event vocabulary's state-transition events (✘/✓ marks, adjudication outcomes) are the INPUT STREAM that feeds the mana-gate's budget channels: γ-lowering events deplete the precision-state balance (metabolic cost of corrections), γ-raising events restore it. The vocabulary defines what events EXIST in the stream; the mana-gate defines what the controller DOES in response (how depleted precision shifts the arm ranking). Without the vocabulary (b4), the gate has no budget signal to consume; without the gate (b1), the vocabulary's events have no consumer in the action-selection loop"
+     :rule "fold-turn/hyperedge"}
+    {:edges [:b4 :b3]
+     :composition "the interest-event vocabulary's payload schema IS the substrate that the tradeoff-record stamps: a controller arm-choice IS a state-transition event against a decision-cell entity (state/refined: the controller's precision state changed, here is why). The cross-mission consumer design (same vocabulary across entity classes) is what lets the decision record share the bitemporal store with the γ/C/actand ledgers — they are all interest-events against different entity classes, consuming the same state/* namespace. The vocabulary is the shared grammar; the tradeoff-record is one sentence in that grammar"
+     :rule "fold-turn/hyperedge"}]
+   :terminals
+   [{:id :b4 :discharges :ob-1-partial}
+   {:id :b5 :discharges :ob-3-work-sequencing}
+   {:id :b1 :discharges :ob-3-arm-gate-partial}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the G-comparison itself (the epistemic value ranking of retrieve/act/ask/yield) — the mission's CENTRAL innovation — is ungrounded by the cascade"
+     :why
+     "the cascade grounds the budget GATE (b1: mana-gated-work — can you afford it?), the event VOCABULARY (b4: interest-event-vocabulary — what transitions exist?), the decision RECORD (b3: tradeoff-record — how is the choice stamped?), the draft/stable TRACK (b2: dual-track-generation — how does code mature?), and the work SEQUENCING (b5: advanceability — which hole next?). But NONE of these grounds the G-comparison itself: the epistemic expected-value calculation that ranks retrieve (EIG about C, priced in tokens) vs act (pragmatic value, rework risk) vs ask (high EIG, costs attention) vs yield (safe, zero-cost). The mana-gate is an affordability FILTER on G's ranking; it does not compute G. The mission names this as the controller's core — 'G-compares four arms' — and no pattern in the cascade supplies the expected-free-energy or value-of-information calculus that the G-comparison requires"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the XTQL query library as perception model (Z1, the port's motivation made cash) is ungrounded"
+     :why
+     "the mission's load-bearing claim is that observations are a named library of XTQL forms — queries-as-provenance, aggregations-as-ledgers, bitemporal-reads-as-audit. The cascade grounds the EVENT VOCABULARY (b4) that the queries return and the TRADEOFF-RECORD (b3) that stamps decisions, but it does not ground the PERCEPTION MODEL: the design decision that the controller's observation channels are XTQL queries (not code that interprets the store), that queries are data (so observations carry their provenance), and that bitemporality makes precision auditable. This is an architecture decision about how the controller SEES, upstream of what it DOES with what it sees. No pattern in the cascade addresses query-as-perception"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the asymmetric admissibility rule is ungrounded"
+     :why
+     "the controller's safety invariant — agent self-talk may only LOWER precisions; only operator text or discharged interface-sorry may RAISE them — is a source-credibility predicate over evidence authorship + tags (PZ3 delta 5). The cascade grounds the event vocabulary (b4: what transitions exist) and the budget gate (b1: what the controller does with events), but the admissibility rule is a FILTER between events and the fold: it decides which events may carry positive vs negative perf BEFORE the fold processes them. The mana-gate is downstream of the fold (it reads γ, which is fold output); admissibility is upstream (it filters fold input). No pattern in the cascade grounds this asymmetric source-credibility filter"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the mission-parameterization of G (clock-in swaps the mission's G parameterization) is ungrounded"
+     :why
+     "the mission's refinement — that G is parameterized by the clocked mission, with γ(cascade|mission), retrieval scoped via mission_orientation, and autoclock ambiguity feeding the ask arm — is a controller-design decision that scopes G to a mission context. The advanceability pattern (b5) grounds which MISSION to work on; it does not ground how the controller's objective function is parameterized by the chosen mission. The mana-gate (b1) is mission-agnostic (metabolic budget does not change per mission); the G-comparison is mission-specific (different missions have different want-structures, different γ priors, different C-belief slices). No pattern in the cascade grounds this mission-scoping of G"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the A/B evaluation design (Z3) — the outward-facing measurement of zai-vs-zaif — is ungrounded"
+     :why
+     "the cascade grounds internal controller mechanics (gate, vocabulary, record, track, sequencing) but not the EXPERIMENTAL DESIGN for measuring whether the controller helps. Z3 requires: same operator, same stack, alternating profiles; metrics fixed before the first scored session (asks per achieved outcome, corrections per act, yield timing vs operator lane); scored from the record (bitemporal). This is a causal-inference / measurement-design problem — alternating-treatment design with pre-registered metrics — that no pattern in the cascade addresses. The tradeoff-record (b3) could record WHICH profile ran each session, but the A/B design itself (how to alternate, what to measure, how to score from the record) is ungrounded"}
+    {:id :h6
+     :unfolded-pattern nil
+     :free "the retrieve arm's existence depends on M-text-sidecar (D1's text candidates) — the cross-mission dependency is ungrounded"
+     :why
+     "the controller's retrieve arm — 'epistemic action about C priced in tokens, the text sidecar makes this arm exist' — depends on M-text-sidecar's D1 FTS5 text index providing candidate operator-intent signals that the controller can retrieve. The cascade grounds what the controller does WITH retrieved context (mana-gate prices it, tradeoff-record stamps the choice), but it does not ground the retrieve arm's perceptual substrate (the text index, the FTS5 candidate generation, the BM25-rank-as-score-input design). This is a cross-mission dependency: zaif's retrieve arm is inert without text-sidecar's D1. No pattern in the cascade grounds the text-retrieval substrate"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The zai runner with six read-only memory tools; U1 transcript persistence VERIFIED; PZ1 CLOSED (lexicon measured, ✘/✓ marks vocabulary ratified); PZ2 CLOSED (γ at mission grain); PZ3 CLOSED (R14 fold adapter-only portable); B1 BUILT (γ(mission) fold running); the futon1b store (bitemporal, append-only); the R14 fold source (policy_precision.clj); the limit-pushdown fix."
+  :want
+  "A G-scored controller for the interactive loop — four arms (retrieve/act/ask/yield) G-compared per turn, mission-parameterized, built around the store, with the three precision ledgers as derived XTQL views and the marks channel as operator-gold γ events — so that act/ask/yield choices are principled, not heuristic."
+  :via
+  "psi authored by zai-11 from futon2/holes/M-zaif-harness.md (full doc), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-zaif-harness-001"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:delta-g "not-computed — blinded proposal fold, no cascade_serve.py run" :g-grain :coverage}}
