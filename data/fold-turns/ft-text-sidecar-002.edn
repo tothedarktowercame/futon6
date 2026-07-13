@@ -1,0 +1,152 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "the sidecar's D1 acceptance IS a baseline freeze with audit hooks: the oracle (fts_oracle.clj) captures 10 canonical queries as the frozen reference, and every rebuild must agree exactly with that frozen baseline. The compound (at, id) keyset checkpoint IS the baseline snapshot — a canonical transcript of 'what was indexed at this point.' The mission's acceptance bar ('index rebuild is deterministic; the seam envelope contract is preserved') IS the freeze-and-audit discipline: snapshot the canonical state, wire a check hook (the oracle), and every change proves it still matches. The unicode61-no-stemming tokenizer config IS a frozen baseline: changing it requires re-running the oracle and re-freezing. Without the freeze, 'the sidecar works' becomes oral history — the pattern's own language, which the mission's VERIFY section echoes ('the oracle-agreement check from the acceptance bar')"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via "XTDB is the immutable, versioned source of truth; the FTS5 index is a derived view that must stay synchronized. The mission's P3 sync contract IS live-sync: refresh rides the append path (on-append indexing, measured staleness ~4s), and the checkpoint-ratchet logs exactly which (at, id) version was indexed — the pattern's 'log which version was used in each run.' The delete-and-rebuild-safe property IS versioning: FTS5 is derived data, regenerable from the immutable XTDB source. The one-way sync (XTDB -> FTS5) with version logging transposes fully; the bidirectional-flow aspect (drafts back upstream) does NOT transpose — the sidecar is read-only with respect to XTDB. The WAL-mode fix (rollback-journal let writers block readers) IS a sync-contract refinement: the derived layer's access mode must not block the source's write path"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via "the sidecar's scope boundary IS bounded-disposition applied to feature scope: the mission explicitly classifies its capabilities into a fixed vocabulary — IN SCOPE (exact-match token lookup, boolean AND/OR, one analysis chain per field class, batch build + defined refresh) vs DEFERRED (prefix, phrase, relevance-beyond-BM25, in-core XTDB). The mission doc's POC-scope-boundary section IS the disposition record: each deferred capability carries a rationale ('deferred to a follow-on mission if JUXT engages') and a trigger ('the follow-on gets authored when the boundary is hit, not left implicit'). The bound is the scope itself: the POC cannot accumulate indefinite 'maybe later' features without triggering a follow-on mission. HOWEVER the pattern's design center is latent-work artifact populations (stashes, branches, mission-docs) with count/age bounds — the sidecar's scope-boundary is a one-time design decision, not a continuously-accumulating population that needs a bound. The disposition-discipline shape (fixed vocabulary + explicit triage + bound on the undecided) transposes to scope-management; the population-enforcement machinery (git stash list, pre-commit hooks, family-check probes) does not. The pattern supplies the discipline; the enforcement mechanism is mission-specific"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via "the sidecar's deterministic-rebuild acceptance bar IS the futon1-determinism discipline at the sidecar layer: the oracle (exhaustive scan as ground truth, 10/10 queries agree) is the test suite, and the rebuild must reproduce the same FTS5 state from the same XTDB source — 'every new change proves it still matches the frozen reference.' The checkpoint-ratchet restart (survived two JVM restarts, resuming exactly at checkpoint) IS the determinism guarantee: the index is reproducible across restarts. The unicode61-no-stemming choice IS the determinism substrate: stemming would make rebuilds non-deterministic (stemmer version drift). HOWEVER the pattern's binding mode is futon1's CI GitHub Action (futon1-stack-tests.yml, cognitect.test-runner, baseline snapshot regeneration) — the sidecar has no CI Action, no cognitect test-runner, and no demo_session.edn baseline. The determinism PRINCIPLE (test suite + baseline + regenerate-or-fix-on-regression) transposes; the futon1-specific CI machinery does not. The oracle IS the sidecar's determinism gate, but it is a script (bb fts_oracle.clj), not a CI badge"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via "the sidecar's append-path refresh IS durability-first at the index layer: a document is not queryable in FTS5 until the XTDB write is durably committed. The mission's measured ~4s staleness (nonce append -> BM25-ranked hit) IS the durability-confirmation lag — the index never reads uncommitted state. The on-append hook fires AFTER the XTDB transaction commits, never before — 'acknowledge writes only after durable commit.' The WAL-mode fix is durability-first in action: rollback-journal mode let writers block readers (SQLITE_BUSY on a stats read during a write), which meant the derived layer's access could interfere with the source's durability — WAL separates readers from writers so the write path's durability is never compromised by index reads. The checkpoint-ratchet restart (no heap bumps, stop-rule honored) IS the 'fail loudly when durability cannot be verified' discipline: when the GC spiral hit, the build restarted from checkpoint rather than continuing with potentially-corrupt state. The 1536m heap stop-rule IS the durability boundary: don't sacrifice write-path stability for build speed"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b4] :connective :seq :rule "fold-turn/wire"
+    :rationale "baseline-freeze (b1) captures the canonical reference; futon1-determinism (b4) runs the check that proves current state matches the freeze. seq because the determinism gate presupposes a frozen baseline to check against — the oracle IS the check, the 10-query reference IS the freeze"}
+   {:kind :composes :from [:b5] :to [:b2] :connective :seq :rule "fold-turn/wire"
+    :rationale "durability-first (b5) ensures XTDB writes are durable before the index sees them; live-sync (b2) governs how the index stays synchronized with those durable writes. seq because the sync contract presupposes durable commits — you cannot sync from uncommitted state. The ~4s staleness IS the durability-confirmation lag"}
+   {:kind :composes :from [:b4] :to [:b2] :connective :copar :rule "fold-turn/wire"
+    :rationale "futon1-determinism (b4) co-applies with live-sync (b2): the determinism gate verifies the index matches the frozen baseline, and the sync contract keeps it current with the source. copar because determinism and sync are two guarantees over the same derived-state relationship — one checks correctness at a point, the other maintains correctness over time"}
+   {:kind :composes :from [:b3] :to [:b1] :connective :copar :rule "fold-turn/wire"
+    :rationale "bounded-disposition (b3) co-applies with baseline-freeze (b1): the scope boundary determines WHAT is in the freeze (in-scope capabilities are frozen and tested; deferred capabilities are explicitly out). copar because disposition shapes the freeze's content without being consumed sequentially by the freeze discipline"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b5 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: an out-of-process text index (the sidecar) over the futon1b corpus whose free-text candidate lookup composes with the existing memory-search seam, verified to be deterministic, durable, and scope-bounded — the sidecar returns candidate ids, the caller re-checks against XTDB 2 (chalk-note candidate-prefilter-plus-recheck at the application layer). The sidecar IS landed (D1 accepted: FTS5 in the store JVM, oracle 10/10, 94,430 rows, ~4s append staleness); what REMAINS is the D2 evidence comment for XTDB #5637 (Joe-gated) and the deferred follow-on scope (prefix/phrase/relevance-beyond-BM25). HUNGRY-FOR: 1) a frozen baseline with audit hooks — canonical queries as the reference, every rebuild must agree (ob-1, :practice); 2) deterministic rebuild from the immutable XTDB source — the index is reproducible across restarts (ob-2, :artifact); 3) the durability gate — XTDB writes confirmed before the index sees them, the index never reads uncommitted state (ob-3, :artifact); 4) the sync contract — XTDB as versioned source of truth, FTS5 as derived view with checkpoint-logged refresh (ob-4, :practice); 5) the scope boundary explicitly triaged — in-scope capabilities frozen and tested, deferred capabilities named with triggers (ob-5, :practice). HAVE: D1 landed (futon1b_text.clj, fts_oracle.clj, /api/alpha/evidence/text-search, :text filter, WAL mode, checkpoint-ratchet rebuild, 1536m heap stop-rule); P1 answered (ever-held measured on full population); P2 decided (FTS5); P3 decided (append-path refresh); P4 answered (zaif query surface); probe scripts + measured outputs on disk."
+  :psi-sha256
+  "ea16d7d60a0c59f3bd10591174bc54c897b3f3e0a7e0f1303b7624854934de57"
+  :pattern-ids
+  ["devmap-coherence/baseline-freeze"
+   "exotic/live-sync-source-truth"
+   "invariant-coherence/bounded-disposition"
+   "stack-coherence/futon1-determinism"
+   "storage/durability-first"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "83ed23a084e321a7"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-12"
+  :source "M-text-sidecar.md HEAD/IDENTIFY/MAP/VERIFY/D1-ACCEPTANCE/CHECKPOINTS (resolver-blind: gap described in the mission's own terms — deterministic, durable, scope-bounded text index composing with memory-search — without reading the proposer's pattern rationale; authored fresh through the storage-determinism lens, not inherited from ft-text-sidecar-001)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author. Staleness probe verified D1 artifacts on disk (futon1b_text.clj, fts_oracle.clj, WAL mode, checkpoint-ratchet) and P1 measured outputs (divergence-full.edn)."}
+ :deposit-contract :v2
+ :mission "futon2/holes/M-text-sidecar"
+ :proposal/hash "83ed23a084e321a7"
+ :fold-turn/id "ft-text-sidecar-002"
+ :turn
+ {:agent "zai-12"
+  :model "zai"
+  :edge "invoke-1783933077181-293-fb262210"
+  :at "2026-07-12T12:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "frozen baseline with audit hooks: 10 canonical oracle queries as the reference, every rebuild must agree exactly"
+     :fits-pattern "devmap-coherence/baseline-freeze"
+     :addresses-however
+     "without the freeze, 'the sidecar works' is oral history; the oracle captures canonical queries as a frozen reference and wires a check hook (exhaustive scan vs sidecar). The compound (at, id) keyset checkpoint IS the baseline snapshot. The unicode61-no-stemming config IS a frozen parameter — changing it requires re-freezing"
+     :produces [:frozen-baseline-with-oracle-audit-hook]}
+    {:id :b2
+     :role "sync contract: XTDB is immutable versioned source, FTS5 is derived with checkpoint-logged append-path refresh (~4s staleness)"
+     :fits-pattern "exotic/live-sync-source-truth"
+     :addresses-however
+     "one-time index drifts stale; the append-path refresh with (at, id) checkpoint logging keeps the derived index synchronized. Delete-and-rebuild-safe means FTS5 is regenerable from the immutable XTDB source. WAL mode separates readers from writers so the write path is never blocked"
+     :produces [:sync-contract-xtdb-source-fts5-derived]}
+    {:id :b3
+     :role "scope boundary triaged: in-scope (exact-match, AND/OR, one analyzer, batch+refresh) vs deferred (prefix, phrase, relevance, in-core) with triggers"
+     :fits-pattern "invariant-coherence/bounded-disposition"
+     :addresses-however
+     "without explicit scope triage, the POC accumulates 'maybe later' features indefinitely; the mission's POC-scope-boundary section IS the disposition record — each deferred capability carries a rationale and trigger. Partial: the pattern's population-enforcement machinery (stash/branch/mission-doc bounds with pre-commit hooks) does not transpose to a one-time scope decision"
+     :produces [:scope-disposition-triage]}
+    {:id :b4
+     :role "deterministic rebuild: oracle as test suite, checkpoint-ratchet restart proves reproducibility across JVM restarts"
+     :fits-pattern "stack-coherence/futon1-determinism"
+     :addresses-however
+     "without the determinism gate, rebuild correctness is assumed; the oracle (10/10 queries agree) and the checkpoint-ratchet (survived two restarts, resumed exactly) prove the index is reproducible. Partial: the pattern's futon1-CI binding (GitHub Action, cognitect.test-runner, demo_session.edn) has no sidecar analogue — the oracle is a script, not a CI badge"
+     :produces [:deterministic-rebuild-gate]}
+    {:id :b5
+     :role "durability gate: XTDB writes confirmed before FTS5 indexes them; WAL mode protects the write path; checkpoint-ratchet fails loudly on GC spiral"
+     :fits-pattern "storage/durability-first"
+     :addresses-however
+     "without the durability gate, the index could read uncommitted state; the on-append hook fires AFTER XTDB commit, never before. The WAL fix (readers don't block writers) and the 1536m heap stop-rule (don't sacrifice write-path stability for build speed) ARE durability-first in action — Layer 0 errors surface as Layer 0 errors"
+     :produces [:durability-gate-on-index-refresh]}]
+   :hyperedges
+   [{:from :b1 :to :b4 :connective :seq
+     :rationale "baseline-freeze (b1) captures the reference; futon1-determinism (b4) checks current state against it; seq because the determinism gate presupposes a frozen baseline"}
+    {:from :b5 :to :b2 :connective :seq
+     :rationale "durability-first (b5) ensures XTDB commits are durable; live-sync (b2) syncs the index from those durable commits; seq because sync presupposes durability — ~4s staleness IS the durability-confirmation lag"}
+    {:from :b4 :to :b2 :connective :copar
+     :rationale "futon1-determinism (b4) co-applies with live-sync (b2): determinism checks correctness at a point, sync maintains correctness over time — two guarantees over the same derived-state relationship; copar because they frame each other without sequential consumption"}
+    {:from :b3 :to :b1 :connective :copar
+     :rationale "bounded-disposition (b3) co-applies with baseline-freeze (b1): the scope boundary determines what capabilities are frozen and tested; copar because disposition shapes the freeze's content without being consumed by it"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b5 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the D2 evidence comment for XTDB #5637 is Joe-gated and not yet posted — an outward obligation no pattern discharges"
+     :why
+     "the mission's D2 deliverable (the #5637 comment with measured numbers) is authored but posting is gated on Joe's read. None of the 5 patterns in this cascade (baseline-freeze, live-sync, bounded-disposition, futon1-determinism, durability-first) ground the operator-gating decision — it is a social/process boundary. The evidence packet is reproducible from scripts, but the act of posting to JUXT is outward. This is the mission's open outward obligation shared with ft-text-sidecar-001 h1: the work is done, the contribution is drafted, the gate is human"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the oracle is a script (bb fts_oracle.clj), not a CI-gated determinism badge — the futon1-determinism CI machinery does not bind"
+     :why
+     "b4 (futon1-determinism) supplies the determinism PRINCIPLE (test + baseline + regenerate-or-fix) but its binding mode (GitHub Action, cognitect.test-runner, demo_session.edn snapshot) has no sidecar analogue. The oracle verifies correctness on-demand but is not wired into CI — there is no red-badge blocking condition for a regression. The mission's acceptance bar ran the oracle live (10/10), but future regressions would only be caught if someone re-runs the oracle. The gap: the sidecar lacks the automated CI enforcement that futon1-determinism specifies. This is honest — the POC verified determinism manually; CI-gating is a follow-on engineering task no pattern in this cascade grounds"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "b3 (bounded-disposition) partially transposes: scope-triage shape applies, but population-enforcement machinery does not"
+     :why
+     "the pattern's design center is continuously-accumulating artifact populations (stashes growing daily, branches accreting) that need count/age bounds enforced by pre-commit hooks and family-check probes. The sidecar's scope-boundary is a one-time design decision recorded in the mission doc — it does not accumulate. The disposition-discipline (fixed vocabulary + explicit triage + named triggers for deferred items) transposes to scope-management; the enforcement machinery (git stash list, for-each-ref, register-family-check!) does not. The pattern supplies the discipline; the enforcement is mission-specific. Recording as honest partial transposition, not forced full satiety"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the zaif controller's perception substrate (the sidecar's downstream consumer) is not grounded by this storage-determinism cascade"
+     :why
+     "this cascade grounds the sidecar's storage, determinism, durability, and scope — the infrastructure layer. The zaif controller that consumes the sidecar (ranked C-inference retrieval, gamma event stream, sorry prose) is a sibling mission (M-zaif-harness) whose AIF loop is out of scope here. The cascade honestly records this as a cross-mission dependency: the sidecar is the perception substrate, but the controller that perceives through it is grounded elsewhere. No storage-determinism pattern grounds an active-inference controller"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "b1 (baseline-freeze) and b4 (futon1-determinism) overlap on the freeze-and-check move"
+     :why
+     "b1 grounds the freeze-and-audit-hooks discipline (capture canonical reference, wire check hook); b4 grounds the determinism-gate discipline (run test suite, prove match to baseline). Both address how the sidecar's correctness is verified against a frozen reference. b1 carries the snapshot-and-hook framing; b4 carries the test-suite-and-regression framing. The overlap is genuine: both are determinism-verification patterns whose CORE (frozen reference + check that current state matches) is the same move. b1 carries the capture discipline; b4 carries the verification discipline. Recording as honest overlap, not false independence"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "D1 landed (FTS5 in store JVM, oracle 10/10, 94,430 rows, ~4s staleness, WAL mode, checkpoint-ratchet rebuild, 1536m heap stop-rule, :text filter in memory-search); P1 answered (ever-held 1.028 entity / 1.000 evidence on full population); P2 decided (FTS5); P3 decided (append-path refresh); P4 answered (zaif query surface); probe scripts + measured outputs on disk; 12G store copy on lucy."
+  :want
+  "An out-of-process text index composing with memory-search, verified deterministic (frozen baseline + oracle audit hook), durable (XTDB commits confirmed before indexing, WAL mode protecting the write path), scope-bounded (explicit triage of in-scope vs deferred), and synchronized (XTDB as versioned source, FTS5 as derived with checkpoint-logged refresh). D2 (#5637 comment) remains Joe-gated; CI-gating of the oracle is a follow-on; the zaif controller is a sibling mission."
+  :via
+  "psi authored by zai-12 from futon2/holes/M-text-sidecar.md (HEAD/IDENTIFY/MAP/VERIFY/D1-ACCEPTANCE/CHECKPOINTS + staleness-probe verifying D1 artifacts and P1 outputs on disk), resolver-blind to the proposer's pattern rationale; authored fresh through the storage-determinism lens, not inherited from ft-text-sidecar-001"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:delta-g "not-computed — blinded proposal fold, no cascade_serve.py run" :g-grain :coverage}}
