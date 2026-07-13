@@ -1,0 +1,86 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via
+    "the pattern applies to the correction-lexicon detection layer that feeds the γ event stream: the zaif controller's precision ledgers depend on correctly classifying operator turns as corrections (✘) or approvals (✓) and routing them (γ / C-channel / actand). PZ1 measured the lexicon's precision at 0.417 and recall at 0.186 — the model over-fires on interesting labels (reaching for 'correction' far more than the data warrants) and misses most real corrections, exactly the pattern's HOWEVER (the model labels the surface act instead of the operational target, and reaches for the interesting label because nothing tells it the common case is boring). The pattern's THEN supplies the fix shape: (1) give the field an ALLOWLIST — the downstream vocabulary, which for zaif is the three ledger routes plus the non-correction sentinel; (2) make the DEFAULT the common case (most turns are NOT corrections — the measured base rate is ~24%, so the default is 'no correction'); (3) reinforce with few-shot NEGATIVES; (4) GATE it with an allowlist check, not just a blocklist. The pattern also maps to the marks vocabulary design: ✘ and ✓ are the constrained downstream vocabulary (two values), and the turn-end recognizer that stamps :correction/:approval tags is the GATE — runtime enforcement that the emitted field is in-vocabulary. HOWEVER the pattern addresses only the DETECTION/EXTRACTION layer, not the controller itself: it constrains what the γ stream EATS but says nothing about how the controller USES the γ stream (the four-arm G-comparison, the asymmetric admissibility, the mission-parameterization). The pattern's scope is the signal-extraction boundary; the controller is downstream of that boundary. PZ1 already applied this pattern's LESSONS (the lexicon was measured and found wanting; the ✘/✓ vocabulary is the constrained allowlist; the turn-end recognizer is the gate) — so the fold records the pattern as already-partially-instantiated rather than novel"
+    :rule "fold-turn/box"}]
+  :hyperedges []
+  :terminals [{:id :b1 :discharges :ob-5-partial}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a G-scored controller for the interactive loop (zaif) that sits between turns holding (task belief, operator-C belief, precision state) and G-compares four arms — retrieve, act, ask, yield — so that every turn's act/ask/yield choice is principled rather than heuristic, with the operator's latent C-vector inferred from each message as the highest-precision evidence about it. The controller is mission-parameterized (G governed by the clocked mission), built around the store not the prompt (the FuLab lesson: formalism in-band fights the agents), and its observations are a named library of XTQL queries over the futon1b store so that what-the-agent-saw is replayable, not narrated. The three precision ledgers (γ(mission) [R14 fold ported], C-channel [R7 operator model], actand-indexed [R7 world model]) are derived views — folds over the evidence stream, recomputable from scratch — not state files. Bitemporality makes precision auditable and the loop replayable.\nHUNGRY-FOR: ob-1 (:artifact) the named XTQL query library for all three ledgers and the C-hydration path, with the offline retro-bootstrap fold over the historical corpus producing initial γ/C/actand tables with provenance — Z1; ob-2 (:artifact) the :profile option in zai_api.clj (:zaif = the G controller) that consults Z1's views between turns and records arm choices + G terms as evidence with queries-as-provenance — Z2; ob-3 (:practice) the controller's four-arm G-comparison at each turn boundary, with retrieve EIG estimable pre-query from posting statistics, asymmetric admissibility (agent self-talk may only LOWER precisions; only operator text or discharged interface-sorry may raise them), and corrections routed by lexicon (γ/C/actand); ob-4 (:outward) the zai-vs-zaif A/B on lucy-joe sessions, scored from the record (bitemporal): asks per achieved outcome, corrections per act, yield timing — Z3; ob-5 (:artifact) the marks channel (✘/✓ vocabulary, M-points-de-fuite integration) as operator-gold γ events, with the turn-end recognizer stamping :correction/:approval tags so the γ stream is queryable without content scans — the FTS5 marks-invisibility finding promoted this from later to prerequisite.\nHAVE: the zai runner (zai_api.clj, 773 lines, six read-only memory tools); U1 transcript persistence VERIFIED (per-round self-talk and tool calls as typed evidence); PZ1 CLOSED (correction lexicon: precision 0.417, recall 0.186, routing accuracy 1.000 — disqualified as measurement instrument, survives as candidate seeder; ✘/✓ marks vocabulary ratified by Joe); PZ2 CLOSED (γ starts at γ(mission): cascade/pattern grain = zero substrate on lucy's store; 38 labeled corrections over 17 cells, 4 ≥3 events); PZ3 CLOSED (R14 fold portability confirmed adapter-only: the fold core in policy_precision.clj is pure and signal-agnostic); B1 BUILT (b1_gamma_mission_fold.clj loads the R14 fold at runtime, 46 events, 18 cells, 1 burned-in: M-futon-forward-model γ=0.7071); the futon1b store (append-only evidence semantics, bitemporal); the R14 fold implementation (futon2/src/futon2/aif/policy_precision.clj); the p4ng paper's preregistration (the stopping rule routes here on S3 failure); the limit-pushdown fix (limit/ephemeral pushdown when membership is server-decidable); the anti-laundering guards (no mid-choice warrant minting, ambiguity defaults to ASK)."
+  :psi-sha256
+  "a238474dfb0220a2e50082a6167b2d78c3b242d69eda2c7cb2918e53c299ab66"
+  :pattern-ids
+  ["data-mining/constrain-extraction-to-the-downstream-vocabulary"]
+  :size 1
+  :truncated false
+  :budget 1
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "ca0e53ad5b021cb3"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-11"
+  :source "M-zaif-harness.md full doc (HEAD + IDENTIFY + XTQL section + Controller design + Deliverables Z1-Z3 + Probes PZ1-PZ3 + U1 + B1 + post-PZ1 marks decision), authored through the constrain-extraction lens — resolver-blind to the proposer's pattern rationale"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author. The proposal brought its own 1-pattern cascade; the psi was authored from the mission doc alone."}
+ :deposit-contract :v2
+ :mission "futon2/holes/M-zaif-harness"
+ :proposal/hash "ca0e53ad5b021cb3"
+ :fold-turn/id "ft-zaif-harness-001"
+ :turn
+ {:agent "zai-11"
+  :model "zai"
+  :edge "invoke-1783933076587-292-a38b0aa6"
+  :at "2026-07-13T09:01:44Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the correction-detection allowlist + default-common-case + gate: the zaif controller's γ event stream depends on correctly extracting the correction signal from operator turns, and the pattern supplies the extraction discipline — downstream vocabulary (the three routes + non-correction sentinel), default-to-common-case (base rate 24%, so default is no-correction), few-shot negatives, and an allowlist gate (the turn-end recognizer stamping tags)"
+     :fits-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary"
+     :addresses-however
+     "PARTIAL: the pattern's scope is the SIGNAL-EXTRACTION BOUNDARY — it constrains what the γ stream eats (how turns are classified as corrections and routed). It says nothing about the CONTROLLER itself: the four-arm G-comparison, the asymmetric admissibility filter, the mission-parameterization of G, the retrieve-EIG estimation, the yield arm. The pattern is upstream of the controller, not the controller. Moreover, PZ1 already APPLIED this pattern's lessons (measured the lexicon, found it wanting at 0.417/0.186, and the ✘/✓ marks vocabulary IS the constrained allowlist the pattern prescribes, with the turn-end recognizer as the gate). The pattern is already partially instantiated in the mission's landed work; the fold records this honestly rather than claiming novelty. The pattern cannot ground Z1 (the XTQL query library), Z2 (the controller in the runner), Z3 (the A/B), or the controller's act/ask/yield logic — it grounds only the detection layer that feeds γ"
+     :produces [:correction-detection-allowlist :marks-vocabulary-as-gate]}]
+   :hyperedges []
+   :terminals [{:id :b1 :discharges :ob-5-partial}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the four-arm G-comparison controller (retrieve/act/ask/yield) — the mission's central deliverable (Z2) — is ungrounded by this single pattern"
+     :why
+     "the pattern constrains extraction, not action selection. The controller's core act — G-comparing four arms per turn, with retrieve EIG estimable from posting statistics, act priced by rework risk, ask priced by operator-attention cost, yield as the always-available safe action — is the mission's central innovation and the pattern says nothing about it. A single-pattern cascade through constrain-extraction can ground how the γ stream is fed but not how the controller uses γ to choose between acting, asking, retrieving, or yielding"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the XTQL query library and queries-as-provenance design (Z1) is ungrounded"
+     :why
+     "the mission's load-bearing claim — that observations are a named library of XTQL forms, versioned in the repo, one name per observation channel, so that what-the-agent-saw is replayable — is ungrounded by an extraction-discipline pattern. The pattern addresses what field values are allowed; it does not address how observations are structured as queries or how provenance is carried. The perception-is-a-query-library design is upstream of extraction"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the asymmetric admissibility rule (agent self-talk may only LOWER; operator text or discharged sorry may RAISE) is ungrounded"
+     :why
+     "the admissibility filter is a pre-fold predicate over evidence authorship + tags (PZ3 delta 5), distinct from extraction. The pattern's gate is an allowlist check on extracted VALUES; admissibility is a SOURCE-credibility check on who may assert what. These are different gates at different points in the pipeline. The pattern cannot ground the asymmetry between operator-authored and agent-authored evidence"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the R14 fold port and the three-ledger aggregation design (γ/C/actand as derived views) is ungrounded"
+     :why
+     "the precision ledgers are folds over the evidence stream — aggregations, not extractions. The pattern constrains how individual fields are labeled; it does not address how aggregate quantities (γ = clamp(2^(gain·perf̄), 0.5, 2.0) over a rolling window of 20) are computed from event streams. PZ3 confirmed the fold core is pure and signal-agnostic; the pattern has nothing to say about fold design"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the mission-parameterization of G (clock-in swaps the mission's G parameterization) is ungrounded"
+     :why
+     "the mission's refinement — that G is parameterized by the clocked mission, with γ(cascade|mission), retrieval scoped via mission_orientation, and autoclock ambiguity feeding the ask arm — is a controller-design decision ungrounded by an extraction pattern. The pattern addresses what labels are in-vocabulary; it does not address how the controller's objective function is scoped to a mission context"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The zai runner with six read-only memory tools; U1 transcript persistence VERIFIED; PZ1 CLOSED (lexicon measured, ✘/✓ marks vocabulary ratified); PZ2 CLOSED (γ at mission grain); PZ3 CLOSED (R14 fold adapter-only portable); B1 BUILT (γ(mission) fold running); the futon1b store (bitemporal, append-only); the R14 fold source (policy_precision.clj); the limit-pushdown fix."
+  :want
+  "A G-scored controller for the interactive loop — four arms (retrieve/act/ask/yield) G-compared per turn, mission-parameterized, built around the store, with the three precision ledgers as derived XTQL views and the marks channel as operator-gold γ events — so that act/ask/yield choices are principled, not heuristic."
+  :via
+  "psi authored by zai-11 from futon2/holes/M-zaif-harness.md (full doc), resolver-blind to the proposer's pattern rationale"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:delta-g "not-computed — blinded proposal fold, no cascade_serve.py run" :g-grain :coverage}}
