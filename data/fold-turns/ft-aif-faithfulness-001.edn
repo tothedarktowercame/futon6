@@ -16,7 +16,7 @@
     :role :application,
     :satiety :full,
     :via
-    "badge lifecycle events as typed transitions (:awarded :warranted :retired) with rationale and actor: a quantity starts :analogical (audit), earns :principled-approximation via a warranted flip (D-1a pattern), or is retired (renamed/relocated/deleted) via a D8 disposition event — the active badge is derived from the latest event, and retired quantities (G-survival folded into risk-KL, G-structural-pressure relocated to habit prior) clear their active-status as named-pressure-terms, not silently disappearing",
+    "badge lifecycle events as typed transitions (:awarded :warranted :retired) with rationale and actor: a quantity starts :analogical (audit), earns :principled-approximation via a warranted flip (D-1a pattern), or is retired (renamed/relocated/deleted) via a D8 disposition event — the active badge is derived from the latest event, and retired quantities (homeostatic-pressure folded into risk-KL, structural-pressure relocated to habit prior) clear their active-status as named-pressure-terms, not silently disappearing",
     :rule "fold-turn/box"}
    {:id :b4,
     :role :application,
@@ -28,7 +28,7 @@
     :role :application,
     :satiety :full,
     :via
-    "the conclusion-required discipline applied to D8 dispositions: a quantity that cannot canonicalize (G-graph-pragmatic's 1000-mask is a domain restriction not a value; G-survival is homeostatic pressure not an EFE summand) gets a D8 disposition record whose CONCLUSION is its honest endpoint (rename / relocate / delete), not a fabricated IF/HOWEVER tension pretending it can be principled — forcing every quantity toward :principled-approximation would be the definitional refusal this pattern warns against",
+    "the conclusion-required discipline applied to D8 dispositions: a quantity that cannot canonicalize (graph-control-score's 1000-mask is a domain restriction not a value; homeostatic-pressure is homeostatic pressure not an EFE summand) gets a D8 disposition record whose CONCLUSION is its honest endpoint (rename / relocate / delete), not a fabricated IF/HOWEVER tension pretending it can be principled — forcing every quantity toward :principled-approximation would be the definitional refusal this pattern warns against",
     :rule "fold-turn/box"}],
   :hyperedges
   [{:kind :composes, :from :b1, :to :b2, :connective :seq, :rule "fold-turn/wire"}
@@ -54,7 +54,7 @@
   :size 5,
   :truncated false,
   :budget 20,
-  :F-free-energy 0.296,
+  :cascade-score 0.296,
   :constructor
   {:entry "construct_cascade",
    :epsilon 0.15,
@@ -121,7 +121,7 @@
      "the HOWEVER is wanting good proposals to become facts when warranted — the dark-build evidence (E6 winner-flip rates, T-calibration) IS the warrant; the explicit flip action prevents a quantity from silently wearing :principled-approximation because its docstring was edited, which was R19's G-goal-outcome fault (#11: non-KL labelled CANONICAL KL)"}
     {:id :b3,
      :role
-     "badge lifecycle events as typed transitions (:awarded :warranted :retired) with rationale and actor: a quantity starts :analogical (audit), earns :principled-approximation via a warranted flip (D-1a pattern), or is retired (renamed/relocated/deleted) via a D8 disposition event — the active badge is derived from the latest event, and retired quantities (G-survival folded into risk-KL, G-structural-pressure relocated to habit prior) clear their active-status as named-pressure-terms, not silently disappearing",
+     "badge lifecycle events as typed transitions (:awarded :warranted :retired) with rationale and actor: a quantity starts :analogical (audit), earns :principled-approximation via a warranted flip (D-1a pattern), or is retired (renamed/relocated/deleted) via a D8 disposition event — the active badge is derived from the latest event, and retired quantities (homeostatic-pressure folded into risk-KL, structural-pressure relocated to habit prior) clear their active-status as named-pressure-terms, not silently disappearing",
      :fits-pattern "sidecar/fact-lifecycle-event-types",
      :addresses-however
      "the HOWEVER is needing fast reads and clear current truth — the explainer + r18-badges.edn ARE the current-truth read surface; lifecycle events mean the explainer regen after each flip reads 'this quantity is :principled-approximation as of commit X, evidence Y' rather than 'this quantity is canonical' with no audit trail behind the claim"}
@@ -133,10 +133,10 @@
      "the HOWEVER is no enforced structural link between commit and claim — without receipts, a badge rise is 'an agent said so' (the R19 fault); with receipts, the 776b2f0 structural-pressure relocation and fb15d66 W1-KL flip each carry a checkable witness, and B-0a's tick-provenance stamp makes the receipt attributable to a WM version"}
     {:id :b5,
      :role
-     "the conclusion-required discipline applied to D8 dispositions: a quantity that cannot canonicalize (G-graph-pragmatic's 1000-mask is a domain restriction not a value; G-survival is homeostatic pressure not an EFE summand) gets a D8 disposition record whose CONCLUSION is its honest endpoint (rename / relocate / delete), not a fabricated IF/HOWEVER tension pretending it can be principled — forcing every quantity toward :principled-approximation would be the definitional refusal this pattern warns against",
+     "the conclusion-required discipline applied to D8 dispositions: a quantity that cannot canonicalize (graph-control-score's 1000-mask is a domain restriction not a value; homeostatic-pressure is homeostatic pressure not an EFE summand) gets a D8 disposition record whose CONCLUSION is its honest endpoint (rename / relocate / delete), not a fabricated IF/HOWEVER tension pretending it can be principled — forcing every quantity toward :principled-approximation would be the definitional refusal this pattern warns against",
      :fits-pattern "pattern-discipline/conclusion-required-others-recommended",
      :addresses-however
-     "the HOWEVER is that requiring all quantities to reach principled-approximation refuses honest endpoints — G-graph-pragmatic's honest disposition is a split (domain restriction vs value), not a canonicalization; the D8 disposition IS the conclusion that makes the quantity's faithfulness claim honest, even when that claim is 'this term does not belong in G-total as named'"}],
+     "the HOWEVER is that requiring all quantities to reach principled-approximation refuses honest endpoints — graph-control-score's honest disposition is a split (domain restriction vs value), not a canonicalization; the D8 disposition IS the conclusion that makes the quantity's faithfulness claim honest, even when that claim is 'this term does not belong in controller-score as named'"}],
    :wires
    [{:from :b1, :to :b2, :connective :seq}
     {:from :b1, :to :b3, :connective :seq}
@@ -156,7 +156,7 @@
     {:unfolded-pattern "pattern-discipline/conclusion-required-others-recommended",
      :free "which D8 dispositions are rename vs relocate vs delete",
      :why
-     "the pattern says a conclusion is required but does not decide, per quantity, whether G-survival is a fold-into-risk (relocate) or a separate-name (rename); the disposition type per quantity is operator-held and not derivable from the audit alone"}
+     "the pattern says a conclusion is required but does not decide, per quantity, whether homeostatic-pressure is a fold-into-risk (relocate) or a separate-name (rename); the disposition type per quantity is operator-held and not derivable from the audit alone"}
     {:unfolded-pattern "pattern-discipline/pattern-to-code-receipts",
      :free "receipt witness shape per badge transition",
      :why
@@ -189,4 +189,4 @@
    "778bc06285d440a76a02f9a15b6b2c11d66a5434d16f7961a8ec6ba43d85ac18"},
   :prose-source
   "verbatim futon3/library/<id>.flexiarg"},
- :eval {:delta-g -0.5555555555555556, :g-grain :coverage}}
+ :eval {:coverage-score-delta -0.5555555555555556, :score-grain :coverage}}

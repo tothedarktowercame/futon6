@@ -1,0 +1,195 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the state-snapshot-witness shape IS the mission's source pattern: per-cycle full-state projection as one evidence entry of shape :event :state-snapshot (or namespace-discriminated subtype). The four-component sibling definition (container, projection-fn, cadence, emit-fn) IS the architecture the mission implements. The inventory-snapshot IS the first worked example: container = structural-law-inventory.sexp parsed; projection-fn = flatten families + sibling-invariants to [{:family-id :status :siblings [...]}]; cadence = boot-time + on-demand; emit-fn = write one evidence entry tagged [:invariant-queue :state-snapshot :inventory]. The pattern's anti-patterns are load-bearing: snapshotting inside per-event evidence (wastes storage, confuses delta/state distinction), snapshotting volatile state without filtering (noise not signal), per-tick snapshots without cadence discipline (wastes XTDB), per-event computed snapshot (defeats cycle-boundary purpose). The mission's IDENTIFY decision (separate :event :inventory-snapshot vs extending :family-fired) follows directly from the pattern's anti-pattern on snapshotting-inside-per-event-evidence"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "the mission IS the exemplar of shape-first IDENTIFY: the IDENTIFY phase named the shape (state-snapshot-witness) BEFORE the instance (inventory), enumerated four plausible instances (inventory, registry, repo-refs, hud-render), and only progressed to MAP because a shape with multiple instances was visible. The pattern's discipline maps directly: step 1 (ask 'what shape is this one instance of?') was answered — the shape is periodic point-in-time projection; step 2 (enumerate 2-3 plausible instances) was answered — four containers named; step 3 (progress to MAP only if shape with multiple instances is visible) was satisfied; step 4 (adopt namespace IDs) was fulfilled via protocol-family-naming. The pattern's anti-pattern (implementing only the literal sentence when a shape generalisation is at hand) is exactly what the mission AVOIDED by naming the shape first — a one-off inventory-snapshot without the family would have been narrow and brittle, and the next container would rederive the projection discipline from scratch"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "the protocol-family naming discipline: state-snapshot-witness/{inventory, registry, repo-refs, hud-render} — namespace-discriminated IDs express 'one shape, four instances' without inventing subfamily as a new structural element. The inventory's existing family-to-invariants schema supports namespace IDs naturally. The three anti-patterns are rejected: inventing subfamily (schema migration + all consumers updating — heavy for a naming choice); flattening into one big invariant (per-sibling projection-fns and cadences invisible to the probe); splitting into separate families (breaks the one-shape-many-instances relationship). The three Codex siblings MUST follow this naming when they land: each as state-snapshot-witness/<artifact-class> with its own four-component shape. Probe-tap registration uses the same ID as keyword (:state-snapshot-witness/registry); tag-based queries work without modification"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "the append-only semantic audit at the store boundary: every snapshot IS a semantic write (a claim about system state at a point in time) persisted as an append-only record with identifiers and audit metadata (:event :inventory-snapshot, :container, :state, :emitted-at, :probe-run-id). Snapshots are never overwritten or deleted — a corrected state produces a new snapshot event, not a mutation of the prior one. The evidence store IS the store boundary: snapshots traverse it through the emit-fn, and the store's append-only contract guarantees no silent mutation. The pattern's 'reject duplicate ids at the store boundary' applies: each snapshot carries a unique :emitted-at + :probe-run-id so duplicate boot-snapshots are rejected, not silently swallowed. This is the integrity layer: without append-only discipline, a snapshot trail that could be retroactively edited would be useless for reconstruction (you cannot trust a history that might have been changed)"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "the tri-store lineage model applied to snapshots: (1) Facts = the append-only snapshot event log (every :inventory-snapshot evidence entry — the single source of truth, every state at every boot); (2) Memes = the derived lineage graph and summaries, rebuilt from facts (the reconstructible inventory state at any past boot, derived by querying the snapshot trail — a time-travel view); (3) Notions = optional fuzzy index for similarity queries (a future snapshot-diff tool: 'which boots had inventory states similar to this one?'). The separation keeps each layer's guarantees clean: Facts provide auditability (you can always replay the snapshot trail); Memes provide queryability (you can ask 'what was the inventory at boot N?'); Notions provide discoverability (you can find similar past states). The current system has Facts (the evidence entries) and the seed of Memes (the query is possible because snapshots are structured events); Notions (diff/similarity) are deferred but the tri-store shape names where they live"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :full
+    :via
+    "the fact-lifecycle event typing: each snapshot IS a lifecycle event — type 'fact' (a new inventory state observed at boot N), and the active state is DERIVED from the latest fact event (the most recent snapshot IS the current truth). Prior snapshots are not 'retired' in the sidecar sense (they are not deactivated — they remain as history, permanently queryable). But the lifecycle model's core insight applies: active state is derived from the event log by replay, not stored as a separate mutable field. The 'latest-active-fact' derivation maps to 'latest-snapshot' — the current inventory state is always derivable as the most recent :inventory-snapshot event, without a separate 'current state' variable that could drift from the log. The lifecycle event types (fact, warrant, retired) partially map: fact = each boot-snapshot; warrant = the bootstrap.clj wire-in that authorises the snapshot (the construction-path policy); retired = not applicable (snapshots are never retired, they accrete). The derivation discipline (derive active from log, don't store it separately) is the load-bearing contribution"
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :partial
+    :via
+    "the snapshot as typed state-transition event: each :inventory-snapshot IS a state-transition against the inventory container, and the 8-event vocabulary's append-only discipline and provenance requirements transpose. The state/* lifecycle events map: state/strengthened (each boot-snapshot adds evidence — the system booted, the projection was taken); state/refined (if the inventory structure changed — new families or siblings appeared between boots). HOWEVER the full 8-event vocabulary is designed for EoI interest-network entities: link/asserted (cross-essay relation) has no analogue for system-state containers. A snapshot of the inventory is a self-contained projection, not a relation between documents. The append-only + provenance + lifecycle-typing core transposes; the relational-event machinery does not. The :event/type keyword (:inventory-snapshot) IS the vocabulary's :event/type field; the :evidence/refs maps to :probe-run-id"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b2] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b7] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b4] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b5 :discharges :want-signature}
+              {:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a state-snapshot-witness invariant family where every long-lived runtime state container's full state is periodically projected as a single evidence entry — queryable, reconstructible, and provenance-bearing — so that 'what was the system's state at boot N?' is one query, not a delta walk. The inventory-snapshot sibling is in INSTANTIATE (first worked example); the shape was found before the instance (shape-first IDENTIFY), the family was named with namespace IDs (state-snapshot-witness/{inventory,registry,repo-refs,hud-render}), and three siblings remain for Codex. The remaining want is: the append-only audit discipline that makes the snapshot trail trustworthy at the store boundary; the tri-store lineage (facts = snapshot events, memes = derived reconstructible state, notions = optional diff/similarity) that makes past states queryable and future states discoverable; the fact-lifecycle typing (each snapshot IS a lifecycle event: the latest is active, prior ones are history, none are deleted) that makes the current truth derivable from the event log; and the structured-event vocabulary that downstream consumers parse reliably.\nHUNGRY-FOR: the three Codex siblings landing with the same shape (container, projection-fn, cadence, emit-fn) — the shape-first discipline demands the family was found before the instance, and the protocol-family naming demands namespace IDs without subfamily invention; the append-only store-boundary discipline (snapshots are never mutated, always appended with provenance metadata); the tri-store separation (facts for auditability, memes for queryability, notions for discoverability — each layer's guarantees kept clean); the fact-lifecycle derivation (active state = latest snapshot; prior snapshots are history not deletion); the structured event schema stable across all four siblings' emit-fns.\nHAVE: the state-snapshot-witness shape authored as a library flexiarg (the four-component sibling definition: container, projection-fn, cadence, emit-fn); the IDENTIFY that named the shape before the instance and enumerated four siblings; the protocol-family naming convention adopted (state-snapshot-witness/<artifact-class>); the inventory-snapshot implementation in progress (snapshot-inventory! reading structural-law-inventory.sexp, projecting to flat EDN, emitting :event :inventory-snapshot through the evidence boundary); bootstrap.clj wire-in after registrar; the tagging convention ([:invariant-queue :state-snapshot :inventory]); the companion family-canary (per-family deltas between snapshots); reachable-from-boot composition; the evidence store as the append-only boundary the snapshots traverse; the tracer track-4-2 closing on this mission.\n"
+  :psi-sha256
+  "14937b63a079e80e409bab7204506083f0f247cb77ee1e92539466f429e296a6"
+  :pattern-ids
+  ["invariant-coherence/state-snapshot-witness"
+   "invariant-coherence/shape-first-identify"
+   "invariant-coherence/protocol-family-naming"
+   "sidecar/append-only-semantic-audit"
+   "exotic/tri-store-lineage"
+   "sidecar/fact-lifecycle-event-types"
+   "structure/interest-event-vocabulary"]
+  :size 7
+  :truncated false
+  :budget 7
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "59fc540364657a55"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-3"
+  :source "M-state-snapshot-witness.md IDENTIFY/scope/completion-criteria/checkpoints authored fresh through this 7-pattern cascade's lens (shape-first methodology + protocol-family naming + append-only audit + tri-store lineage + fact-lifecycle typing + structured-event vocabulary + the source shape itself) — resolver-blind to the proposer's pattern rationale; not inherited from ft-state-snapshot-witness-002 (first-contact discipline between own deposits)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3c-d/mission/state-snapshot-witness"
+ :proposal/hash "59fc540364657a55"
+ :fold-turn/id "ft-state-snapshot-witness-003"
+ :turn
+ {:agent "zai-3"
+  :model "zai"
+  :edge "invoke-1783704183727-85-638e626c"
+  :at "2026-07-10T21:55:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the state-snapshot-witness source shape: per-cycle full-state projection as one evidence entry; four-component sibling (container, projection-fn, cadence, emit-fn); anti-patterns (snapshotting inside per-event, volatile state, per-tick without cadence, per-event computed) are load-bearing design constraints"
+     :fits-pattern "invariant-coherence/state-snapshot-witness"
+     :addresses-however
+     "the pattern IS the mission's source shape — the mission was chartered to instantiate it. The inventory-snapshot is the first worked example; the anti-patterns govern what NOT to do (don't mix snapshots into :family-fired, don't snapshot counters, don't snapshot per-tick, don't couple snapshots to events). The shape's recursive property (the apparatus's own state is worth snapshotting) is what makes the four-sibling family natural"
+     :produces [:snapshot-source-shape]}
+    {:id :b2
+     :role "the mission IS the exemplar of shape-first IDENTIFY: named the shape before the instance, enumerated four siblings, progressed to MAP because a shape with multiple instances was visible"
+     :fits-pattern "invariant-coherence/shape-first-identify"
+     :addresses-however
+     "without shape-first, the inventory-snapshot would have been a one-off check tied to the structural-law-inventory — narrow, brittle, unreusable. The next container (registry, repo-refs) would rederive the projection discipline from scratch. The shape-first move made the family visible before the implementation, so the four-component shape is shared across all siblings"
+     :produces [:shape-first-methodology]}
+    {:id :b3
+     :role "the protocol-family naming: state-snapshot-witness/{inventory,registry,repo-refs,hud-render} — namespace IDs express one shape four instances without subfamily invention; three anti-patterns rejected"
+     :fits-pattern "invariant-coherence/protocol-family-naming"
+     :addresses-however
+     "the instinct to invent subfamily or split into separate families would require schema migration and break the one-shape-many-instances relationship; namespace-discriminated IDs carry the relationship through the existing family-to-invariants schema, surviving every tool (parser, priority queue, arxana renderer, ratchet, probe)"
+     :produces [:sibling-namespace-discipline]}
+    {:id :b4
+     :role "the append-only semantic audit: snapshots are append-only records with provenance at the evidence-store boundary; never mutated, always appended; duplicate ids rejected"
+     :fits-pattern "sidecar/append-only-semantic-audit"
+     :addresses-however
+     "without append-only discipline, a snapshot trail that could be retroactively edited would be useless for reconstruction — you cannot trust a history that might have been changed. The evidence store IS the store boundary; the emit-fn traverses it; the store's append-only contract guarantees integrity. Each snapshot carries unique :emitted-at + :probe-run-id so duplicates are rejected"
+     :consumes [:snapshot-source-shape :sibling-namespace-discipline]
+     :produces [:append-only-snapshot-audit]}
+    {:id :b5
+     :role "the tri-store lineage: facts = append-only snapshot events (source of truth), memes = derived reconstructible state (time-travel queries), notions = optional diff/similarity (deferred); separation keeps each layer's guarantees clean"
+     :fits-pattern "exotic/tri-store-lineage"
+     :addresses-however
+     "a single flat log is hard to query for lineage; a derived graph alone loses auditability; a fuzzy index alone lacks grounding. The tri-store separation gives: facts for auditability (replay the snapshot trail), memes for queryability (ask 'what was the inventory at boot N?'), notions for discoverability (find similar past states). The current system has facts + the seed of memes; notions (diff tool) are deferred but the shape names where they live"
+     :consumes [:append-only-snapshot-audit :fact-lifecycle-derivation]
+     :produces [:tri-store-snapshot-lineage]}
+    {:id :b6
+     :role "the fact-lifecycle derivation: each snapshot IS a lifecycle event; active state derived from latest event (not stored separately); prior snapshots are history not deletion"
+     :fits-pattern "sidecar/fact-lifecycle-event-types"
+     :addresses-however
+     "if the 'current inventory state' were stored as a separate mutable field, it could drift from the event log — the fact-lifecycle discipline says derive active state from the log by replay. The latest :inventory-snapshot event IS the current truth; prior events are permanently queryable history. The lifecycle types (fact/warrant/retired) partially map: fact = each boot-snapshot, warrant = the bootstrap wire-in, retired = not applicable (snapshots accrete, never retire)"
+     :produces [:fact-lifecycle-derivation]}
+    {:id :b7
+     :role "the snapshot as typed state-transition event: state/strengthened lifecycle transposes; append-only + provenance discipline transposes; link/asserted does not"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "the 8-event vocabulary's state/* lifecycle events (spawned/strengthened/refined) transpose to snapshot lifecycle (each boot IS state/strengthened); but link/asserted (cross-essay relation) has no analogue for system-state containers. PARTIAL: the append-only + provenance + lifecycle-typing core transposes; the relational-event machinery designed for EoI interest-network entities does not"
+     :produces [:typed-snapshot-events]}]
+   :hyperedges
+   [{:from :b2 :to :b1 :connective :seq
+     :rationale "shape-first IDENTIFY (b2) is the methodology that PRODUCED the source shape (b1) — order-dependent: the shape was found before the instance, so the methodology precedes the shape it found in the causal story of how the mission arrived at its architecture"}
+    {:from :b2 :to :b3 :connective :seq
+     :rationale "shape-first IDENTIFY (b2) produces the enumerated siblings; protocol-family naming (b3) names them — order-dependent: the instances must be enumerated before they can be named with namespace IDs"}
+    {:from :b1 :to :b4 :connective :seq
+     :rationale "the source shape (b1) defines the four-component sibling (container, projection-fn, cadence, emit-fn); the append-only audit (b4) governs the emit-fn's store-boundary behaviour — order-dependent: the shape must define what is emitted before the audit discipline governs how it is persisted"}
+    {:from :b4 :to :b5 :connective :seq
+     :rationale "the append-only audit (b4) produces the facts layer; the tri-store lineage (b5) is the architecture that organises facts into facts/memes/notions — order-dependent: the facts must be append-only records before the tri-store can derive memes and notions from them"}
+    {:from :b6 :to :b5 :connective :copar
+     :rationale "the fact-lifecycle derivation (b6) co-applies with the tri-store lineage (b5) — b6 governs how active state is derived from the event log; b5 governs how the log is organised into three layers; copar because both govern the snapshot trail's reconstructibility from different angles (derivation vs architecture) without sequential dependence"}
+    {:from :b7 :to :b4 :connective :copar
+     :rationale "the typed event vocabulary (b7) co-applies with the append-only audit (b4) — b7 governs the event's type and lifecycle semantics; b4 governs its persistence discipline; copar because both govern the snapshot-as-event from different concerns (typing vs storage) without sequential dependence"}
+    {:from :b3 :to :b4 :connective :copar
+     :rationale "the namespace naming (b3) co-applies with the append-only audit (b4) — b3 governs how siblings are identified; b4 governs how their snapshots are persisted; copar because naming and persistence are independent integrity layers that co-apply without order dependence"}]
+   :terminals
+   [{:id :b5 :discharges :want-signature}
+    {:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the three Codex siblings' projection-fns — what state each container projects"
+     :why
+     "the shape-first methodology (b2) and protocol-family naming (b3) ground HOW siblings enter the inventory (named with namespace IDs, sharing the four-component shape), but the CONTENT of each sibling's projection-fn is container-specific: registry projects (keys @family-check-fns) plus deferred-flags; repo-refs projects git HEAD + branch; hud-render projects last widget render. None of the 7 patterns ground what state a specific container should project — that is a per-container design decision. The shape is fully grounded across 7 patterns; the per-container content is not"}
+    {:id :h2
+     :unfolded-pattern "structure/interest-event-vocabulary"
+     :free "link/asserted event type has no snapshot-system analogue"
+     :why
+     "the 8-event vocabulary's link/asserted (cross-essay relation between interest-network entities) presupposes a relational structure between documents. A system-state container (inventory, registry) has no relational surface: a snapshot is a self-contained projection, not a relation between entities. The state/* lifecycle events transpose because they describe the container's own state; link/asserted does not. b7 is :satiety :partial for this reason. The append-only + lifecycle core is load-bearing even without the relational event"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the notions layer of the tri-store — snapshot diff/similarity tooling"
+     :why
+     "the tri-store lineage (b5) names three layers: facts (landed), memes (seed), notions (deferred). The notions layer — a fuzzy index for similarity queries ('which boots had similar inventory states?') or a diff tool ('what changed between boot N and boot N+1?') — is explicitly out of scope for the first sibling (IDENTIFY scope-out: 'snapshot diff tooling — separate concern'). The tri-store pattern names where notions live; none of the 7 patterns ground their implementation. The architecture has a named slot; the slot is empty"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the periodic cadence beyond boot-only — hourly canary-coupled snapshots"
+     :why
+     "the source shape (b1) names cadence as one of four sibling components (boot-time + on-demand + optional periodic via canary). The IDENTIFY scopes boot-only as sufficient for the first sibling, with hourly deferred. The cadence calibration (how often to snapshot, balanced against XTDB storage cost) is an empirical trade-off none of the 7 patterns ground. The shape defines the cadence SLOT; the calibration of its periodic setting is ungrounded"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "b4 (append-only-semantic-audit) and b6 (fact-lifecycle-event-types) overlap: both ground the append-only provenance discipline"
+     :why
+     "b4 grounds append-only persistence at the store boundary (snapshots are never mutated, always appended with provenance metadata, duplicate ids rejected); b6 grounds append-only lifecycle event typing (each snapshot IS a typed lifecycle event, active state derived from the log by replay). Both address 'the snapshot must be a trustworthy, append-only, provenance-bearing record' — b4 from the store-integrity angle (the boundary rejects mutation), b6 from the derivation angle (active state is replay-derived, not stored). The overlap is genuine: they are two patterns from the same namespace (sidecar/) whose CORE (append-only provenance) is the same discipline applied from different layers (storage vs derivation). Recording as honest overlap, not false independence. b7 (interest-event-vocabulary) further overlaps on the event-typing dimension, but at :partial satiety its contribution is narrower"}
+    {:id :h6
+     :unfolded-pattern nil
+     :free "b1 (state-snapshot-witness) and b2 (shape-first-identify) are genealogically linked, not independent contributions"
+     :why
+     "b1 IS the shape; b2 IS the methodology that found it. They are not independent contributions to the mission — b2 produced b1 as its output. The wiring reflects this (b2 -> b1 is :seq, the methodology preceding the shape it found), but the honest-overlap convention requires flagging that these two patterns are not contributing distinct architectural insights: b2 contributes the DISCIPLINE (find the shape before the instance), b1 contributes the SHAPE (the four-component sibling). Two patterns, one genealogical chain. Recording so the cascade's true independent-contribution count is honest: 7 patterns, but 6 independent contributions after the b1/b2 genealogy"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The state-snapshot-witness shape authored (four-component sibling); the shape-first IDENTIFY (shape found before instance, four siblings enumerated); the protocol-family naming convention; the inventory-snapshot in INSTANTIATE (snapshot-inventory!, bootstrap wire-in, tagging convention); the companion family-canary; reachable-from-boot composition; the evidence store as append-only boundary; tracer track-4-2 closing."
+  :want
+  "A state-snapshot-witness invariant family where every container's full state is periodically projected as a single provenance-bearing, append-only evidence entry — organised as tri-store lineage (facts/memes/notions), with active state derived from the event log, and all four siblings sharing the same structured-event shape."
+  :via
+  "psi authored by zai-3 from futon3c/holes/missions/M-state-snapshot-witness.md (IDENTIFY/scope/completion-criteria), through this 7-pattern cascade's lens, resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-state-snapshot-witness-002"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

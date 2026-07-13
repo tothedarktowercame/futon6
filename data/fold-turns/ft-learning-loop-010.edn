@@ -49,7 +49,7 @@
    {:kind :composes :from [:b6 :b2] :to [:b7] :connective :seq :rule "fold-turn/wire"}
    {:kind :composes :from [:b8] :to [:b7] :connective :tensor :rule "fold-turn/wire"}]
   :terminals [{:id :b7 :discharges :want-signature}]}
- :pins [:prompt-sha :arming :delta-g-recompute]
+ :pins [:prompt-sha :arming :coverage-score-delta-recompute]
  :cascade
  {:psi
   "WANT: a cross-mission capability mining loop : (hinge-log entities × mission docs) -> capability-vocabulary × capability-signature-per-mission × navigable-hypergraph. reconstitute output — a condensed map of which operator capabilities are accreting across ~25 missions and which are stalling, with non-obvious cross-mission connections visible, base-rate-normalised so signal is distinguished from recording-cadence noise. HUNGRY-FOR: contrast-based signal detection (what fires relative to random, not what fires); per-tag confidence (weak tags are articulation-floor noise, not capability); the fractal mining move (same B→A extraction at turn-scale and mission-scale); a vocabulary that grows by use not by upfront design. HAVE: M-trip-journal's hinge-log / question-pool / sidecar apparatus installed as B→A tagging at mission-scale; Shape A bridge lifting markdown into futon1a typed entities (hinge-entries, questions, learning-updates, cross-mission edges); 25+ active mission docs; pattern-activation visualiser with base-rate correction lesson (normalised hit rates expose artefact namespaces); checkpoint-1 diagnostics (contrast not accumulation, mid-confidence ceiling, articulation-floor noise)."
@@ -83,7 +83,7 @@
    {:order 6 :ident "agent/trail-enables-return" :ref "futon3/library/agent/trail-enables-return.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.464 :mc 0.325}
    {:order 7 :ident "hdm/deep-storage-to-active-graph" :ref "futon3/library/hdm/deep-storage-to-active-graph.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.459 :mc 0.413}]
   :cascade-numbers
-  {:size 15 :F-free-energy 1.6 :accuracy 4.301 :complexity 10.802 :H-coherence 0.884 :T-intensity 7.013 :truncated false}
+  {:size 15 :cascade-score 1.6 :accuracy 4.301 :complexity 10.802 :H-coherence 0.884 :T-intensity 7.013 :truncated false}
   :f-free-energy 1.6}
  :mission "futon5a-d/mission/learning-loop"
  :fold-turn/id "ft-learning-loop-010"
@@ -174,13 +174,13 @@
   :want "cross-mission capability mining loop: (hinge-log entities × mission docs) -> capability-vocabulary × capability-signature-per-mission × navigable-hypergraph"
   :via "selection-authoring flight L2 psi recipe (A-next EMPIRICAL sorry, mechanical)"
   :rule "fold-turn/hole-from-sorry-psi"}
- :eval {:delta-g -0.6153846153846154 :g-grain :coverage}
- :delta-g-derivation "hand: -(8/(8+5)) = -8/13 ≈ -0.6154; loader-recomputed via fe/coverage-delta-g = -0.6153846153846154; match confirmed"
+ :eval {:coverage-score-delta -0.6153846153846154 :score-grain :coverage}
+ :coverage-score-delta-derivation "hand: -(8/(8+5)) = -8/13 ≈ -0.6154; loader-recomputed via fe/coverage-coverage-score-delta = -0.6153846153846154; match confirmed"
  :psi-recipe
  {:version "2-adapted-mission-doc"
   :author "zai-10"
   :source "M-learning-loop.md IDENTIFY/the-actual-sorry/scope-in (capability mining across ~25 missions)"
   :blind-scoring "NOT POSSIBLE — no seal exists for this mission; no blind scoring performed — recorded honestly per the 003 no-seal precedent"}
  :deposit-contract :v2
- :cascade-f 1.6
+ :cascade-score 1.6
  :blind-scoring-note "no A-next seal exists for this mission; no blind scoring performed — recorded honestly per the 003 no-seal precedent"}

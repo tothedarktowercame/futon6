@@ -22,7 +22,7 @@
     :role :application
     :satiety :full
     :via
-    "constrain the embedding-fold verdict vocabulary to the downstream interface's terms: the fold interface names {:wiring :delta-g :policy-holes} — so the embedding ansatz's evaluation MUST constrain its output metrics to this vocabulary (delta-g comparability with impl #2, policy-holes honesty) and NOT drift to reporting proxy metrics (link-prediction accuracy on a toy SBM, GFlowNet TB loss) that don't answer whether the fold beats impl #2 on efficiency"
+    "constrain the embedding-fold verdict vocabulary to the downstream interface's terms: the fold interface names {:wiring :coverage-score-delta :policy-holes} — so the embedding ansatz's evaluation MUST constrain its output metrics to this vocabulary (coverage-score-delta comparability with impl #2, policy-holes honesty) and NOT drift to reporting proxy metrics (link-prediction accuracy on a toy SBM, GFlowNet TB loss) that don't answer whether the fold beats impl #2 on efficiency"
     :rule "fold-turn/box"}
    {:id :b5
     :role :application
@@ -123,7 +123,7 @@
     :mc 0.504
     :via "ft-fold-ansatz-001 cascade, budget-20 window (untruncated)"
     :rule "fold-turn/pattern-cite"}]
-  :F-free-energy -0.829
+  :cascade-score -0.829
   :wholeness 2.36
   :H-coherence 0.948
   :T-intensity 2.489
@@ -157,13 +157,13 @@
      :fits-pattern "data-mining/the-first-checkpoint-is-a-quality-probe"
      :addresses-however "two stale habits fight this — capping the corpus 'to be safe' and waiting for the full run to judge quality: for the embedding fold the risk is spending GPU-hours on a training run whose reward landscape is flat (M1's wall) without an early bail point; the first checkpoint is a free, larger, in-distribution probe of whether the embedding signal is steep enough, better than the pre-run smoke at catching convergence-path failures"}
     {:id :b4
-     :role "constrain the embedding-fold verdict vocabulary to the downstream interface's terms: the fold interface names {:wiring :delta-g :policy-holes} — so the embedding ansatz's evaluation MUST constrain its output metrics to this vocabulary (delta-g comparability with impl #2, policy-holes honesty) and NOT drift to reporting proxy metrics (link-prediction accuracy on a toy SBM, GFlowNet TB loss) that don't answer whether the fold beats impl #2 on efficiency"
+     :role "constrain the embedding-fold verdict vocabulary to the downstream interface's terms: the fold interface names {:wiring :coverage-score-delta :policy-holes} — so the embedding ansatz's evaluation MUST constrain its output metrics to this vocabulary (coverage-score-delta comparability with impl #2, policy-holes honesty) and NOT drift to reporting proxy metrics (link-prediction accuracy on a toy SBM, GFlowNet TB loss) that don't answer whether the fold beats impl #2 on efficiency"
      :fits-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary"
-     :addresses-however "the model labels the surface act instead of the operational target: the stale FOLD-GAE -0.058 measured link-prediction lift on a toy SBM — a surface metric disconnected from the downstream vocabulary (delta-g, policy-holes); an unconstrained evaluation drifts to describing the embedding's geometric properties rather than answering whether it folds cascade→wiring better; the verdict must be constrained to the interface vocabulary or it is downstream-dead"}
+     :addresses-however "the model labels the surface act instead of the operational target: the stale FOLD-GAE -0.058 measured link-prediction lift on a toy SBM — a surface metric disconnected from the downstream vocabulary (coverage-score-delta, policy-holes); an unconstrained evaluation drifts to describing the embedding's geometric properties rather than answering whether it folds cascade→wiring better; the verdict must be constrained to the interface vocabulary or it is downstream-dead"}
     {:id :b5
      :role "encode the go/no-go verdict criteria as a runnable checker before running the experiment: the mission's exit criteria (verdict on the bet, stale GAE re-tested, scatter consolidated, plugs into interface) should be turned into a gate that independently reviews the experiment output — same checker reviews the embedding-fold result AND impl #2's baseline, authored separately from whoever runs the experiment"
      :fits-pattern "data-mining/gates-as-code"
-     :addresses-however "prose bands drift and get rubber-stamped: 'the ansatz is worth it' or 'the ansatz is deferred' as a prose verdict without a counted check is exactly the rubber-stamp failure; the gate must compare delta-g (embedding) vs delta-g (LLM-turn) with a variance floor, check policy-holes honesty (the embedding fold must not hide what it can't wire), and exit nonzero if the embedding fold loses on efficiency OR loses on honesty — author ≠ reviewer means ground control checks the verdict, not the experimenter"}
+     :addresses-however "prose bands drift and get rubber-stamped: 'the ansatz is worth it' or 'the ansatz is deferred' as a prose verdict without a counted check is exactly the rubber-stamp failure; the gate must compare coverage-score-delta (embedding) vs coverage-score-delta (LLM-turn) with a variance floor, check policy-holes honesty (the embedding fold must not hide what it can't wire), and exit nonzero if the embedding fold loses on efficiency OR loses on honesty — author ≠ reviewer means ground control checks the verdict, not the experimenter"}
     {:id :b6
      :role "one shared provenance classifier for the (cascade→wiring) corpus, not per-experiment filters: when the corpus lands (CLean port + substrate-2 join), classify each (cascade, wiring) pair's provenance ONCE — is the wiring from an LLM-turn fold, a classical fold, or a hand-authored golden? — so every downstream consumer (the GAE, the GFN, the JAX refine) filters on the same authorship field instead of re-deriving it"
      :fits-pattern "data-mining/classify-over-one-clean-source"
@@ -190,8 +190,8 @@
      :free "the flat-reward risk is named but not resolved"
      :why "M1 found that the GFN sampler's reward landscape is too flat to concentrate a policy — the smoke (b1) tests for this but the patterns provide no remedy if embedding-space reward is ALSO flat; the deeper risk the MAP surfaced (even with a corpus, the signal may be too flat for ANY method) is not addressed by experimental discipline patterns; whether the embedding space provides steeper signal is THE untested bet, and no retrieved pattern speaks to it"}
     {:unfolded-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary"
-     :free "delta-g comparability between impl #2 and impl #3 is not mechanically defined"
-     :why "b4 constrains the verdict vocabulary to {delta-g, policy-holes} but the fold-eval coverage function counts boxes vs holes — it does not measure efficiency (the mission's actual criterion: can the embedding fold beat impl #2 on efficiency); a coverage-delta-g comparison measures construction quality, not computational efficiency; the efficiency metric is left free because no retrieved pattern grounds it"}
+     :free "coverage-score-delta comparability between impl #2 and impl #3 is not mechanically defined"
+     :why "b4 constrains the verdict vocabulary to {coverage-score-delta, policy-holes} but the fold-eval coverage function counts boxes vs holes — it does not measure efficiency (the mission's actual criterion: can the embedding fold beat impl #2 on efficiency); a coverage-coverage-score-delta comparison measures construction quality, not computational efficiency; the efficiency metric is left free because no retrieved pattern grounds it"}
     {:unfolded-pattern nil
      :free "the embedding representation of a wiring is unspecified"
      :why "the mission's core bet — that wiring-as-graph in embedding space (GAE link-prediction, GFlowNet generation) can fold cascade→wiring — requires a concrete graph representation of a wiring (what are nodes? edges? features?); none of the data-mining patterns speak to graph representation; the JAX soft-adjacency scaffold (M2) is the closest exemplar but its target is policy-prior moves, not wirings; how to encode a BV-copar of typed-holes as a graph is left entirely free"}]}}
@@ -236,4 +236,4 @@
   "a verdict on the embedding-fold ansatz (impl #3) — can folding cascade→wiring in embedding space beat impl #2 on efficiency without losing soundness or honesty of policy-holes, tested by the smallest discriminating experiment; or an honest 'still open, here is the one experiment that would decide it.'"
   :via "M-fold-ansatz.md MAP M1-M4 sorry-grain (mechanical)"
   :rule "fold-turn/hole-from-sorry-psi"}
- :eval {:delta-g -0.6363636363636364, :g-grain :coverage}}
+ :eval {:coverage-score-delta -0.6363636363636364, :score-grain :coverage}}

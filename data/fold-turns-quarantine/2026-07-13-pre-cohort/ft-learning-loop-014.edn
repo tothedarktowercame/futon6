@@ -1,0 +1,119 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "the five-field MVSG hinge-log slot structure IS the source-data shape the mining pipeline reads: entry-state/rūpa, dominant-tension/saññā, shift/saṅkhāra, residual-unknowns/viññāṇa, energy-signature/vedanā — the mining extraction's job is to read these slots and tag them with four-channel + capability-dimension labels. The pattern's anti-patterns are load-bearing for the mining design: 'filling all five fields performatively → schema becomes checklist' warns the miner not to treat filled slots as signal by default (this is the articulation-floor noise problem at the source-data layer); 'empty fields record absence-of-load, not absence-of-recording' means the miner must distinguish structural emptiness from missing data — the base-rate normalisation problem starts here, in the slot-filling discipline"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via "the mining pipeline MUST distinguish inhabited operator-voice from consultant-voice or agent-drafted noise — and whose-question-is-this is the source-side gate that defines the distinction. The pattern's anti-patterns ARE the mining pipeline's noise sources: 'generic best-practice answers that could have been given before the mission started' = articulation-floor noise (no capability signal); 'answers written for a future reviewer rather than the mission's current direction' = ledger-content smuggled into journal register; 'agent-drafted answers attributed to the operator' = I-1 violation producing fabricated phenomenology. The mining pipeline's contrast-based signal detection depends on this gate: an inhabited answer in the operator's first-person voice carries capability signal; a consultant-voice answer is recording-cadence noise dressed as signal. The pattern says 'inhabited answers are often smaller' — the mining must not weight verbosity as signal"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via "the capability hypergraph should be built from typed state-transition events in an append-only provenance-bearing log, not a mutable store — interest-event-vocabulary supplies the 8 event types (spawned/refined/strengthened/addressed/falsified/foreclosed/reopened/link-asserted) that the mining pipeline emits as it extracts capability signal from hinge-log evidence. Each capability assertion against a mission is a typed event with prior-state, posterior-state, evidence-refs, and operator-rationale — so the capability hypergraph is a PROJECTION over durable events, not a mutable graph. This grounds the mission's idempotent-re-run invariant: the mining pipeline re-derives its conclusions by replaying the event log, and a crash or re-run never loses or invents evidence because the events are append-only. The no-op-days-emit-no-checkpoint discipline prevents synthetic events from polluting the projection's signal-to-noise"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b2] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :seq :rule "fold-turn/wire"}]
+  :terminals [{:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a cross-mission capability mining loop that reads hinge-log evidence across ~25 missions and condenses it into a navigable capability hypergraph — the operator can see which capabilities are accreting and which are stalling, with non-obvious cross-mission connections visible. The mining must distinguish real signal from articulation-floor noise and recording-cadence noise. HUNGRY-FOR: the source-data structure that carries the capability signal (which hinge-log fields, which aggregates, which entries are inhabited vs performatively-filled); the event vocabulary that makes capability state-transitions durable and replayable; the quality gate that separates inhabited operator-voice from consultant-voice or agent-drafted noise. HAVE: M-trip-journal's hinge-log apparatus with five MVSG-aligned entry slots (rūpa/saññā/saṅkhāra/viññāṇa/vedanā); the whose-question-is-this inhabitation discipline (I-1: answers must be operator's first-person); a typed state-transition event vocabulary (8 events: spawned/refined/strengthened/addressed/falsified/foreclosed/reopened/link-asserted) with append-only provenance-bearing event log; the Shape A bridge lifting markdown into futon1a; a published capability-graph-contract (Flight 1); a 4-step mining pipeline v0 with one honest negative; checkpoint-1 diagnostics (contrast not accumulation, mid-confidence ceiling, articulation-floor noise)."
+  :psi-sha256
+  "e9a08bc455f6d0f0471900afb6e4d3c70d37a662132ebfa4d3af9219b671d934"
+  :pattern-ids
+  ["structure/hinge-entry-slots"
+   "structure/whose-question-is-this"
+   "structure/interest-event-vocabulary"]
+  :size 3
+  :truncated false
+  :budget 3
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "e51ddfc1f634829e"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-1"
+  :source "M-learning-loop.md HEAD/IDENTIFY/sorry/completion-criteria + Flight 1 artifacts as HAVE (resolver-blind: gap described in the mission's own terms — cross-mission capability mining loop reading hinge-log evidence — without reading the proposer's pattern rationale; authored fresh, not inherited from 012 or 013)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a-d/mission/learning-loop"
+ :proposal/hash "e51ddfc1f634829e"
+ :fold-turn/id "ft-learning-loop-014"
+ :turn
+ {:agent "zai-1"
+  :model "zai"
+  :edge "invoke-1783698114378-48-3c8682e5"
+  :at "2026-07-10T16:15:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the five-field MVSG slot structure as the source-data shape the mining pipeline reads"
+     :fits-pattern "structure/hinge-entry-slots"
+     :addresses-however
+     "the mining extraction reads hinge-log slots and tags them — but performatively-filled slots are articulation-floor noise (not signal by default), and empty slots record absence-of-load (not absence-of-recording); the slot-filling discipline IS the base-rate problem at the source-data layer"
+     :produces [:hinge-log-slot-structure]}
+    {:id :b2
+     :role "the inhabitation gate: distinguish operator-voice (signal) from consultant-voice (noise) in the hinge-log source data"
+     :fits-pattern "structure/whose-question-is-this"
+     :addresses-however
+     "generic best-practice answers, answers for future reviewers, and agent-drafted answers attributed to the operator are ALL noise sources the mining pipeline must reject — the whose-question-is-this gate defines the inhabited-vs-extractive distinction the miner needs to separate signal from articulation-floor noise"
+     :produces [:inhabitation-quality-gate]}
+    {:id :b3
+     :role "the 8-event typed state-transition vocabulary as the append-only event log mechanism for the capability hypergraph"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "without typed events the capability hypergraph is a mutable store that cannot be replayed idempotently — the 8 event types (spawned/refined/strengthened/addressed/falsified/foreclosed/reopened/link-asserted) with append-only provenance make the hypergraph a projection over durable events, grounding the idempotent-re-run invariant"
+     :consumes [:hinge-log-slot-structure :inhabitation-quality-gate]
+     :produces [:capability-event-log]}]
+   :hyperedges
+   [{:from [:b2] :to [:b1] :connective :copar
+     :rationale "the inhabitation gate (b2) co-applies with the slot structure (b1) — the gate qualifies WHICH slot-fillings count as signal; copar because the gate shapes the interpretation of the slots without being a sequential step"}
+    {:from [:b1] :to [:b3] :connective :seq
+     :rationale "the slot structure (b1) defines what the mining reads; the event vocabulary (b3) defines how the mining writes — order-dependent: the extraction reads slots then emits events"}
+    {:from [:b2] :to [:b3] :connective :seq
+     :rationale "the inhabitation gate (b2) determines which slot-fillings pass quality; only inhabited signal produces events in the log (b3) — order-dependent: quality-gate before event emission prevents noise from entering the append-only log permanently"}]
+   :terminals [{:id :b3 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the base-rate normalisation formula is ungrounded"
+     :why
+     "this cascade grounds the SOURCE-SIDE of the base-rate problem (b1's slot-filling discipline, b2's inhabitation gate define what IS and IS NOT signal), but it cannot ground the CALIBRATION — the actual numerical thresholds that separate real capability signal from recording-cadence noise across ~25 missions. The cascade tells the miner what to exclude (consultant-voice, performatively-filled slots); it does not tell the miner how to weight what remains. The normalisation formula needs empirical tuning, not pattern-text."}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the schema contract for the OUTPUT hypergraph is not grounded by this cascade"
+     :why
+     "all three patterns are SOURCE-SIDE (hinge-log structure, inhabitation quality, event vocabulary); none grounds the OUTPUT schema (what entities, what relations, what salience metadata the navigable hypergraph renders). Flight 1's capability-graph-contract.edn partially fills this gap, but the cascade itself cannot reach it — the patterns are about reading and recording evidence, not about rendering it navigable."}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the navigable condensation (completion criterion 3: the hypergraph illuminates rather than re-describes) is not grounded"
+     :why
+     "the event log (b3) is the MECHANISM for durable evidence; the navigable hypergraph is the RENDER of that evidence. All three patterns are upstream of the render — they govern how evidence is structured and recorded, not how it is condensed for operator navigation. The condensation step (from event log to illuminating map) needs patterns about visualisation, salience, and operator-capacity-matching that this cascade does not contain."}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the fractal mining move (turn-scale AND mission-scale) is not grounded"
+     :why
+     "same as 012/013: the mission's central bet that the same B→A extraction works at two scales is not grounded by source-data patterns. b1's slot structure is the same at both scales (hinge-log entries at turn-scale, mission docs at mission-scale), but WHY the extraction move should be the same is a structural claim the cascade does not address."}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the cascade is entirely source-side — it cannot reach the output, the normalisation, or the navigation"
+     :why
+     "this is the honest limitation of a 3-pattern cascade where all three patterns are in the same namespace (structure/) and address the same pipeline stage (source-data ingestion). The cascade deeply grounds HOW the mining pipeline reads hinge-log evidence (slots → inhabitation gate → typed events), but it cannot reach the downstream stages (schema, normalisation, condensation, navigation). The policy-holes h1-h4 carry this story: the cascade is not stretched to cover what it does not ground."}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "M-trip-journal's hinge-log apparatus with five MVSG-aligned entry slots; the whose-question-is-this inhabitation discipline; the 8-event typed state-transition vocabulary with append-only provenance; the Shape A bridge; a published capability-graph-contract (Flight 1); a 4-step mining pipeline v0 with one honest negative; checkpoint-1 diagnostics."
+  :want
+  "A cross-mission capability mining loop that reads hinge-log evidence and condenses it into a navigable, base-rate-normalised capability hypergraph."
+  :via
+  "psi authored by zai-1 from futon5a/holes/missions/M-learning-loop.md (HEAD/IDENTIFY/sorry/completion-criteria) + Flight 1 artifacts as HAVE, resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from 012 or 013"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

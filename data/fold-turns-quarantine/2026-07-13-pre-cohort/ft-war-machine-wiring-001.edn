@@ -1,0 +1,135 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the proof-path as the wiring's audit spine: the three contracts (manifold-read, head-write, trace-emit) are each a proof-path instance. Manifold-read is OBSERVE (the head reads T/nabla-T/delta-T/drift at its (vertex, commit) position — substrate-2's XTDB query functions ARE the observation step). Head-write is PROPOSE_CLAIM → APPLY_CHANGE gated by consent (D-1 addendum: scheduler PROPOSES via :head/proposed-action, operator/autopen AUTHORIZES, substrate-2 WRITES on the :pending → :authorized transition — the consent gate IS the invariant-check that preserves WM-I4). Trace-emit is PROOF_COMMIT (each WM cycle appends one row to the forward-extending piano roll — the durable evidence chain). The stepper trial at VERIFY Checkpoint 1 IS a proof-path replay: it walked 5 commits tracing intent → operation → change → verification, and found that commit 5 (STOP-THE-LINE) was qualitatively different from commits 1-4 because it reached OUTSIDE the queue's catalog — the proof-path's auditability axiom (A1: fully traceable from intent to outcome) is exactly what made that distinction visible. What REMAINS: the mechanical-mode proof-path (V-2.4 with live substrate values at HEAD~1 vs HEAD) is blocked because substrate-2 commit-vertex coverage lags ~6 days — the OBSERVE step can't read the field at recent commits, so the proof-path can't close mechanically. The vocabulary trial ran by-hand, which is the proof-path without its OBSERVE step automated."
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "sati as the ground that makes the wiring observable rather than assumed: F0's discipline is that vitality signals must be traceable into telemetry, not claimed as oral history. The WM-wiring mission's entire VERIFY phase is a sati move — it asks 'are the geometric quantities (T, nabla-T, delta-T, drift) actually flowing from substrate-2 into the head's observation, or is the coupling merely asserted?' The MAP discovery confirmed substrate-2 IS more operational than IDENTIFY assumed (all four fields queryable via XTDB), but the VERIFY setup probe found commit-vertex coverage stale by ~6 days — the signals ARE flowing but with a freshness gap. Sati's next-steps (add a telemetry check confirming signals arrived; log missed rhythm reviews as drift markers) transpose directly: the V-1 pre-condition IS the sati check for this wiring. The stepper trial's finding that commit 5 was 'silently depending on I0 invariants that hadn't been verified' (the reachable-from-boot data loss) is precisely sati's warning — the mindful ground was assumed, not observed. What REMAINS: the freshness gap must close before V-2.4 mechanical mode can run; until then the wiring's sati is partial — present in capability, stale in coverage."
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "the agent-pattern-triad (Command/Strategy/Decorator) as the head's internal architecture: the portfolio-inference scheduler already instantiates this triad — Commands are the five-action EFE repertoire (:advance-mission, :gate-submission, :evidence-deposit, :propose-binding, :abstain per D-7), the SchedulingStrategy is expected-free-energy ranking over the 16-channel portfolio observation, and Decorators are the consent gate + corroboration check + autopen that wrap each command before it reaches substrate-2. The D-1 decision (scheduler-as-head, option 3) is the move that names this existing triad as the WM head rather than building a new actor. The proposal queue (D-1 addendum) is the Decorator layer made explicit: it wraps every head-write command with operator-mediated consent, making WM-I4 observable and configurable rather than an architectural fiat. What REMAINS: the triad's Decorator layer is specified (consent gate, corroboration) but not implemented — INSTANTIATE is deferred. The autopen (a deterministic Decorator that replaces operator consent with auto-approval when EFE confidence > 0.8) is named but unbuilt. The triad is the right shape; the wiring hasn't landed in code."
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "social/ARGUMENT as the operator-coupled cross-check's theoretical grounding: the social-coordination argument establishes that a system which only ratifies operator priorities is a yes-machine (the kowtow defense). D-2.5's three corroboration outcomes (high-confidence ratify / partial with caveats / explicit disagreement flag) are the social layer's requirement that every claim be cross-checked rather than merely echoed. The stepper trial implicitly demonstrated this: a v0 vocabulary reading commit 5 as 'another invariant family added' (same as commits 2-4) would be unfalsifiable — the kowtow at the vocabulary level. The trial PASSED because it distinguished commit 5, which IS the disagreement-flagging mode working. HOWEVER the social/ARGUMENT pattern's full machinery (typed delivery receipts, single routing authority, state-atomicity for proposal-queue transitions, the A0-A5 invariant set) is designed for the futon3c social-coordination layer (agent-to-agent messaging) — the WM-wiring's cross-check is operator-to-system, not agent-to-agent. The cross-check PRINCIPLE transposes cleanly (R1-R9 requirements ground the consent gate and corroboration check); the message-routing MACHINERY (delivery receipts between agents, transport-ID separation, rendezvous handshake) does not — the WM head's writes go to substrate-2 via XTDB, not through an agent message bus. The partial satiety: the argument's structural requirements ground the design; its transport-level patterns are a different substrate."
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "futon1-determinism as the substrate-honesty gate for the wiring: the determinism pattern says that whenever the stack changes, the determinism suite must be re-run and a red badge is a blocking condition. For the WM-wiring, this transposes as: the stepper trial (V-2.4) IS the determinism check — it asks whether the vocabulary's outputs are determined by the substrate values (if T drops from 0.85 to 0.05 but the reading still calls the vertex 'tense', the vocabulary is decoupled from the substrate — a determinism failure). The V-2.4 pass conditions (mechanical: quantities change in expected direction; composite-coherence: interpretation agrees with numbers; predictive-shift: what's-next candidate moves) are determinism gates on the interpretive layer. The trial's finding that substrate-2 commit-vertex coverage is stale (~6 days) is exactly the futon1-determinism warning: 'that promise drifts unless we check the determinism suite whenever the stack changes.' HOWEVER futon1-determinism is specifically about the Willie/Jane focus-header fixture and XTDB mirror determinism in futon1's Prototype 0-1 — the concrete CI workflow (futon1-stack-tests.yml, baseline/demo_session.edn regeneration) is substrate-1 machinery. The PRINCIPLE (determinism must be checked, not assumed; drift is the default failure mode) transposes to the WM-wiring's vocabulary-validation layer; the concrete test fixtures and CI workflow do not. The partial satiety: the discipline transposes; the futon1-specific test infrastructure is a different layer."
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b2] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b1] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a war-machine wiring that connects the WM head (portfolio-inference scheduler, EFE policy, 5-action repertoire) to the live geometric manifold (substrate-2: T, nabla-T, delta-T, drift over vertex-by-commit positions) via three contracts — manifold-read (head queries the field at its position), head-write (scheduler proposes actions through a consent-gated proposal queue that respects WM-I4/Hobbes), and trace-emit (forward-going piano roll as live runtime output, not post-hoc render). The TM-on-manifold framing: the head's tape is always-already coupled to its substrate. Single-head architecture confirmed (the 16-channel portfolio observation flattens N missions into one stack-scale summary).\nHUNGRY-FOR: the interpretive vocabulary that translates raw geometric quantities (T, |nabla-T|, delta-T, drift) into operator-meaningful composite readings — the D-7.5 vocabulary that names structural moves (generalization vs addition vs supersession, implicit-to-typed lift, catalog-coverage) and carries an epistemic-humility primitive so the system can flag 'I am operating within my catalog; external incidents may correct'; mechanical-mode V-2.4 (before/after differential against a real fix, computing whether T drops and the what's-next candidate shifts when the substrate picture moves); the operator-coupled cross-check (the kowtow defense: the system does not merely ratify operator priorities but cross-checks them against geometric + AIF corroboration, flagging disagreement as signal, not suppressing it); substrate-2 commit-vertex coverage current enough to run V-2.4 mechanically (not by hand on prose).\nHAVE: VERIFY Checkpoint 1 landed (2026-05-01) — a by-hand stepper trial against the M-reachable-from-boot 5-commit trajectory that PASSED on vocabulary-captures-local-state and vocabulary-distinguishes-structurally-different-commits (commit 5 STOP-THE-LINE reads qualitatively different from commits 1-4 queue-self-extending), and PASSED on differential-narrative-operator-meaningful; the D-1 decision (scheduler-as-head, option 3) preserves WM-I4 via an explicit consent gate (proposal queue: scheduler PROPOSES, operator or autopen AUTHORIZES, substrate-2 WRITES); the D-2.5 multi-substrate hybrid model (geometric + AIF-internal + normative-pull + operator-coupled as observation channels into a joint model); the MAP gaps document with its four-way classification (a/b/c/d) across three contracts; substrate-2's four fields ALL operational as XTDB query functions over (vertex-id, commit-id); the piano roll prototype (futon5a/scripts/piano_roll.py) as evidence the TM-on-manifold framing is load-bearing; single-head confirmed; the five-action EFE repertoire already in the scheduler.\nREMAINS: D-7.5 vocabulary v1 NOT landed — catalog-coverage, generalization-vs-addition, implicit-to-typed-lift, epistemic-humility primitives identified by the stepper trial but not yet folded into the vocabulary; V-1 pre-condition NOT satisfied — substrate-2 commit-vertex coverage is stale (~6 days lag), blocking V-2.4 mechanical mode (the trial ran by-hand on prose evidence, rigorous enough to surface the narrative but not the mechanical lower bound of substrate values shifting in expected directions); VERIFY Checkpoint 2 NOT run (re-run stepper after D-7.5 v1 lands with commit-vertex coverage in place; compare hand-composed vs auto-generated readings); V-2.1/V-2.2/V-2.3 corpora trials NOT run (invariant queue, active missions, commit clusters); V-3 cross-substrate corroboration check NOT run; V-4 trace-emit smoke test NOT run (I1 forward-going emitter not built); INSTANTIATE entirely deferred — the three contracts are at function-signature sketch level (D-6 manifold-read multi-substrate, D-7 head-write through proposal queue, I1 trace-emit) but none implemented; the autopen (deterministic auto-approval policy for option-3 to option-1 migration) not built; the per-mission wiring-diagram emitter (chapter-0 pattern as runtime output) explicitly out of scope, its own follow-up."
+  :psi-sha256
+  "582707c88c9ee33db69c422f468ed9775a935300cb33e6ed24320f38d6ce1410"
+  :pattern-ids
+  ["devmap-coherence/ifr-f0-sati"
+   "futon-theory/proof-path"
+   "p4ng/agent-pattern-triad"
+   "social/ARGUMENT"
+   "stack-coherence/futon1-determinism"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "5ed9447506d8b7bd"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-8"
+  :source "M-war-machine-wiring.md sections 1-6 (IDENTIFY/MAP/DERIVE/ARGUE/VERIFY/INSTANTIATE) authored fresh from the mission's current VERIFY-Checkpoint-1 state — resolver-blind to the proposer's pattern rationale; the doc's status says VERIFY but Checkpoint 1 has landed (by-hand stepper trial PASSED), so the psi covers what REMAINS: D-7.5 v1 vocabulary refinements, V-1 substrate-2 commit-vertex coverage, V-2.4 mechanical mode, VERIFY Checkpoint 2, and the entirely-deferred INSTANTIATE"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a/mission/war-machine-wiring"
+ :proposal/hash "5ed9447506d8b7bd"
+ :fold-turn/id "ft-war-machine-wiring-001"
+ :turn
+ {:agent "zai-8"
+  :model "zai"
+  :edge "invoke-1783774158491-170-4cc0ee7d"
+  :at "2026-07-11T20:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "proof-path as audit spine: the three contracts (manifold-read=OBSERVE, head-write=PROPOSE_CLAIM→APPLY_CHANGE with consent gate as invariant-check, trace-emit=PROOF_COMMIT) are proof-path instances; the stepper trial replayed 5 commits as a proof-path and found commit 5 qualitatively different by reaching outside the catalog — auditability axiom A1 made the distinction visible"
+     :fits-pattern "futon-theory/proof-path"
+     :addresses-however
+     "without an explicit proof-path, the head's actions on the manifold are unauditable — a write that moves the field can't be traced from intent to effect; the stepper trial's by-hand replay is a proof-path without its OBSERVE step automated (substrate-2 commit-vertex coverage stale ~6 days blocks the mechanical OBSERVE)"
+     :produces [:audit-spine-for-three-contracts]}
+    {:id :b2
+     :role "sati as the observability ground: VERIFY is a sati move asking whether geometric signals actually flow from substrate-2 to the head, or the coupling is merely asserted; the commit-vertex freshness gap IS the sati warning that vitality signals scatter and the mindful ground becomes oral history"
+     :fits-pattern "devmap-coherence/ifr-f0-sati"
+     :addresses-however
+     "the wiring's coupling between head and manifold is currently claimed (all four fields operational per MAP) but not verified at recent commits (coverage stale ~6 days); sati's discipline — verify signals reach telemetry, don't assume — is exactly the V-1 pre-condition that blocks V-2.4 mechanical mode"
+     :produces [:observability-discipline]}
+    {:id :b3
+     :role "agent-pattern-triad as the head's internal architecture: Commands = 5-action EFE repertoire, Strategy = expected-free-energy ranking over 16-channel portfolio, Decorators = consent gate + corroboration + autopen wrapping each command; D-1 (scheduler-as-head) names this existing triad rather than building new"
+     :fits-pattern "p4ng/agent-pattern-triad"
+     :addresses-however
+     "without naming the triad, the scheduler's existing command/strategy/decorator structure stays opaque — the consent gate (WM-I4) is an unnamed decorator rather than a first-class artifact; making it explicit upgrades WM-I4 from architectural fiat to observable, configurable, inspectable consent step"
+     :produces [:head-architecture-named]}
+    {:id :b4
+     :role "social/ARGUMENT as the kowtow-defense grounding: the operator-coupled cross-check (D-2.5) requires that the system not merely ratify operator priorities but cross-check against geometric + AIF corroboration; three outcomes (ratify / partial-caveats / explicit-disagreement) are the social layer's anti-yes-machine requirement"
+     :fits-pattern "social/ARGUMENT"
+     :addresses-however
+     "a WM that only kowtows to operator priorities provides no value beyond what the operator already had; the stepper trial implicitly tested this — a v0 vocabulary reading commit 5 same-as-commits-2-4 would be unfalsifiable (kowtow at vocabulary level); the trial PASSED by distinguishing commit 5"
+     :consumes [:audit-spine-for-three-contracts]
+     :produces [:kowtow-defense]}
+    {:id :b5
+     :role "futon1-determinism as the substrate-honesty gate: V-2.4's pass conditions (mechanical: quantities change expected direction; composite-coherence: interpretation agrees with numbers; predictive-shift: what's-next moves) are determinism gates on the interpretive layer; the stale commit-vertex coverage IS the determinism-pattern warning that promises drift unless checked"
+     :fits-pattern "stack-coherence/futon1-determinism"
+     :addresses-however
+     "the vocabulary's outputs could be decoupled from substrate values (T drops 0.85→0.05 but reading still says 'tense') — that's a determinism failure; the determinism discipline (check whenever the stack changes, red badge = blocking) transposes to: vocabulary must be validated against substrate, not assumed coherent"
+     :produces [:substrate-honesty-gate]}]
+   :policy-holes
+   [{:id :ph1
+     :kind :partial-satiety-domain-mismatch
+     :affects :b4
+     :pattern "social/ARGUMENT"
+     :description
+     "social/ARGUMENT's full machinery (typed delivery receipts R1, single routing authority R2, state-atomicity R3, A0-A5 invariant set) is designed for futon3c's agent-to-agent social-coordination layer. The WM-wiring's cross-check is operator-to-system (head writes to substrate-2 via XTDB, not through an agent message bus). The anti-kowtow PRINCIPLE and the corroboration requirements transpose cleanly; the message-routing MACHINERY (transport-ID separation, rendezvous handshake, delivery receipts between agents) does not — different substrate, different transport."
+     :absorbed-patterns []}
+    {:id :ph2
+     :kind :partial-satiety-domain-mismatch
+     :affects :b5
+     :pattern "stack-coherence/futon1-determinism"
+     :description
+     "futon1-determinism is specifically about the Willie/Jane focus-header fixture and XTDB mirror determinism in futon1's Prototype 0-1 (concrete CI: futon1-stack-tests.yml, baseline/demo_session.edn regeneration). The WM-wiring's determinism need is vocabulary-vs-substrate coherence (does the reading track the numbers?). The DISCIPLINE transposes (determinism must be checked not assumed; drift is default failure); the concrete futon1 test infrastructure and CI workflow are a different layer's machinery."
+     :absorbed-patterns []}
+    {:id :ph3
+     :kind :honest-overlap
+     :affects [:b1 :b2]
+     :description
+     "proof-path (b1) and sati (b2) both ground the SAME contribution: the V-1 pre-condition (substrate-2 commit-vertex coverage staleness blocking V-2.4 mechanical mode). b1 frames it as 'the OBSERVE step of the proof-path can't execute mechanically'; b2 frames it as 'the sati check reveals signals assumed but not verified.' These are two lenses on one gap, not two independent contributions. Recorded as overlap, not double-counted."
+     :absorbed-patterns []}]
+   :library-alternatives
+   [{:for :b4
+     :suggest "aif/measurement-window-hygiene"
+     :why "the V-2.4 before/after differential is literally a measurement-window problem: stale baseline (HEAD~1 captured too early) and transient readback (reading at first post-action sample catches an in-flight spike). measurement-window-hygiene names exactly the two failure modes the V-2.4 procedure must guard against — it may ground the V-2.4 methodology better than social/ARGUMENT's corroboration principle, which is about multi-agent claim ratification, not measurement validity."}]}
+  :gates
+  {:check-parens "PENDING"
+   :battery "PENDING"}}}

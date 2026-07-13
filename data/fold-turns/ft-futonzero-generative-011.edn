@@ -83,7 +83,7 @@
     :free "the gate-clearance sequencing",
     :why
     "both gates could clear simultaneously or sequentially (G-REWARD before G-SIM, or vice versa); the mission does not specify whether one gate's clearance unblocks partial work on the other, or whether both must clear before ANY rollout-learning prototype begins"}]},
- :pins [:prompt-sha :arming :delta-g-recompute],
+ :pins [:prompt-sha :arming :coverage-score-delta-recompute],
  :cascade
  {:psi
   "WANT: a self-bootstrapping learner that converts one-off warranted functionings into repeatable capabilities — the generative sibling of FutonZero's monitor. The loop: propose a bounded play-out over the capability landscape, predict its field effect, execute only if guardrail-admissible, score the outcome with anti-laundered witness logic, update policy/value estimates, distinguish functioning from capability. Falsifiable: G-SIM (field-simulator adequacy) and G-REWARD (anti-laundered reward) are the two hard gates — until both clear, no autonomous self-play runner.\nHUNGRY-FOR: the Sen distinction made operational (functioning = one play-out lands a fruit; capability = the system learns a policy that clears that class repeatably); anti-laundering (build discharge vs witness discharge — operator approval is a gate, not retroactive proof of fruit); calibration honesty (the forward model's predicted-vs-realised pairs must be independent, not self-referential — the degenerate calibration verdict must not be clearable by more degeneracy).\nHAVE: §4 safe work products all complete — rollout ledger schema (futon0/data/futonzero-rollout-ledger.edn), calibration audit with canonical reader (futon3c.aif.calibration, verdict :insufficient-evidence with ~11+ measured pairs needed), toy field fixture (4-state chain, 18 tests/88 assertions, demonstrates successful update + refusal to learn from laundered reward), policy/value vocabulary (pattern-as-policy + value-estimate shapes, no actuator), reward red-team fixture (8 laundering shapes rejected, 21 tests/127 assertions); the AlphaZero→WM mapping frozen; first non-fallback measured calibration pairs accruing via the WM pilot loop; the two hard gates named with testable clearance criteria.\n",
@@ -220,7 +220,7 @@
     :mc 0.15,
     :via "deposit-011 cascade, budget-20 window (untruncated)",
     :rule "fold-turn/pattern-cite"}],
-  :F-free-energy 2.378},
+  :cascade-score 2.378},
  :mission "futon0-d/mission/futonzero-generative",
  :fold-turn/id "ft-futonzero-generative-011",
  :deposit-contract :v2,
@@ -389,7 +389,7 @@
   :via
   "M-futonzero-generative §1 IDENTIFY + §2 Hard Gates + §4 Safe Work Products; psi authored from the mission doc",
   :rule "fold-turn/hole-from-sorry-psi"},
- :eval {:delta-g -0.6153846153846154, :g-grain :coverage},
+ :eval {:coverage-score-delta -0.6153846153846154, :score-grain :coverage},
  :psi-recipe
  {:source "authored from mission doc M-futonzero-generative.md §1 (IDENTIFY) + §2 (Hard Gates) + §4 (Safe Work Products)",
   :no-blind-scoring

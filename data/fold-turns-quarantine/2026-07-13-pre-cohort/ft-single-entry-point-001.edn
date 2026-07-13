@@ -1,0 +1,142 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "baseline-freeze as the orphan-JVM baseline (2026-05-02 audit: 3 orphaned JVMs — webarxana Ring on :3100 84 MB, war-machine shadow-cljs watch 978 MB, webarxana shadow-cljs watch 431 MB, ~1.5 GB resident, all reparented to systemd after their parent shells died) frozen as the BEFORE state the mission must not regress to. The baseline-freeze is the invariant's negative pole: 'this is what unowned dev infrastructure looks like.' The audit itself (commit 5f18bc2, the 2026-05-02 invariant session) froze the baseline by recording the exact PIDs, RSS, and reparenting pattern. Every subsequent change (dev-laptop-env ownership, PID-file tracking, shutdown hooks) is measured against this frozen baseline — a regression is any JVM that survives SIGINT or reparents to PID 1. The baseline-freeze also captures the coupling weakness the mission named: 'dev infrastructure that operates outside the substrate's awareness can drift indefinitely — boot-time invariants can't surface what they don't see.' The freeze makes that blind spot visible"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "upekkha (equanimity) as the non-reactive stance that held both integration paths open without forcing a premature decision: Path A (in-JVM embedding — shadow-cljs as a futon3c dep, single JVM, single shutdown) and Path B (managed sub-processes — ProcessBuilder, child process groups, SIGTERM/SIGKILL fallback). The mission's default lean ('A for the Ring server, B for shadow-cljs — pick the cheaper integration per subsystem') is upekkha: neither path is RIGHT, each has genuine tradeoffs (A: classpath fragility, shadow-cljs's hidden build-server state; B: >1 JVM at runtime, process-group escape risk). The operative implementation reflects this equanimity: both paths are IMPLEMENTED and coexist — start-webarxana! is Path A for Ring (in-JVM, gated ON), start-shadow! is Path A for shadow-cljs (in-JVM, gated OFF by default), start_shadow_watch_sidecar is Path B for shadow-cljs (sub-process, gated ON by default). The equanimity is not indecision — it is the recognition that the tradeoffs are real and the default-on-B choice is the conservative one (lower classpath risk) until Q-classpath-compat is explicitly resolved"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "mission-interface-signature as the single entry point contract: ./scripts/dev-laptop-env is the sole launcher, and its interface signature defines what the dev stack IS from the outside — one invocation, one SIGINT to stop, one JVM (or one launcher owning sub-processes), one futon1a lock. The script's structure (force FUTON3C_ROLE=laptop, set up durable queue, kangaroo pouch, drainer v2, parked-on continuations, invoke lanes, bind host, then preflight checks, then start subsystems) IS the interface: it encodes the laptop dev profile as a single deterministic invocation. The completion criterion 4 (second invocation fails fast with a recognizable error) is part of the signature — the interface rejects ambiguous state. The double-launch detection (futon1a lock + PID-file checks + already-running messages) IS the interface enforcing its own cardinality-1 contract. The make restart → fdev --restart delegation extends the signature: the operator's one-liner bounce is part of the same interface surface"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "proof-path as the evidence trail from the audit through the fix to the invariant: the 2026-05-02 audit (3 orphaned JVMs, ~1.5 GB, reparented to systemd) is the proof-path's STARTING POINT — the observation that motivated the mission. The fix (dev-laptop-env ownership, PID files, shutdown hooks, start_shadow_watch_sidecar with process-group management, start-webarxana! in-JVM, start-shadow! in-JVM) is the proof-path's MIDDLE — the construction that addresses the observation. The invariant (completion criterion 2: after SIGINT, no orphans; criterion 1: after fresh boot, all expected JVMs reachable) is the proof-path's ENDPOINT — the attested state. HOWEVER the proof-path is incomplete: the shutdown hooks exist in code (bootstrap.clj lines 703-711: multi-watcher stop!, shadow stop!) but the orphan-verification re-run (criterion 2 attestation: ps -ef showing no parent==1 reparenting) has not been explicitly recorded as met. The audit was the proof-path's opening; the invariant attestation is its closing — and the closing hasn't landed. PARTIAL: the observation and construction are fully grounded; the invariant attestation is not yet recorded"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "bounded-disposition as the launcher's bounding of what's in-flight: the dev-laptop-env script bounds the dev process set to a known, owned, lifecycle-managed collection — war-machine shadow watch, webarxana shadow watch, webarxana Ring server, futon1a, multi-watcher — each with a start function, a stop function, and a PID file or in-JVM registration. The .futon-disposition.edn mechanism (from sibling mission M-bounded-in-flight-state) is the analogue for working-tree edits: both missions bound what's 'in flight' (this one: dev processes; sibling: uncommitted edits). The bounded-disposition transposes directly: the launcher's subsystem list IS a disposition — it declares what the dev stack runs, what it doesn't, and what the shutdown scope is. The already-running detection (PID-file checks) is the disposition's guard against scope-creep (a second launch trying to add what's already in-flight). The cross-mission back-reference to M-bounded-in-flight-state (block-as-futonic-revolution and mana-allostasis apply here too — managed sub-processes are blocks, process spawning is in-flight-scope) grounds the disposition's shape in the sibling's landed work"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b2] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b4 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a single invocation of ./scripts/dev-laptop-env as the sole launcher of every long-running dev process in the futon stack — webarxana Ring server (:3100), war-machine shadow-cljs watch, webarxana shadow-cljs watch — with clean SIGINT shutdown (no orphan JVMs reparented to systemd), double-launch protection, and every subsystem visible in (dev/status).\nHUNGRY-FOR: completion criterion 3 ((dev/status) listing each subsystem — the current status function reports agents/IRC/evidence but does not surface webarxana/shadow/war-machine as registered subsystems); the Path A vs Path B decision (both paths are IMPLEMENTED — in-JVM start-shadow! gated OFF by default, sidecar start_shadow_watch_sidecar gated ON — but the mission's open questions Q-classpath-compat and Q-shadow-cljs-shared-server were never explicitly resolved; the default lean of A-for-Ring-B-for-shadow is the operative choice but was never ARGUED through); the orphan-verification re-run (completion criterion 2: ps -ef showing no parent==1 reparenting after SIGINT — the shutdown hooks exist but the criterion hasn't been attested as met).\nHAVE: dev-laptop-env launches war-machine and webarxana shadow watches via start_shadow_watch_sidecar() with PID files (FUTON3C_WAR_MACHINE_PIDFILE, FUTON3C_WEBARXANA_PIDFILE), autostart flags, already-running detection (PID check + process-name match), and cleanup on shutdown; start-webarxana! in bootstrap.clj embeds the Ring server in-JVM (Path A for Ring, gated by FUTON3C_WEBARXANA_SERVER_AUTOSTART); start-shadow! in bootstrap.clj embeds shadow-cljs watches in-JVM (Path A for shadow, gated OFF by default FUTON3C_SHADOW_AUTOSTART=false); futon1a lock-based double-launch detection (preflight_futon1a_lock); shutdown hooks for shadow (stop!), webarxana (stop!), and multi-watcher in bootstrap shutdown sequence; war-machine consolidated from futon0 to futon2; webarxana asset-path fix (/wa/dev avoids /js collision); make restart delegates to fdev --restart (the canonical launcher).\n"
+  :psi-sha256
+  "ad7b6dbdf11753a659e9d4105d5abbbd6bdc42dba254fb10ee53725a42b4135c"
+  :pattern-ids
+  ["devmap-coherence/baseline-freeze"
+   "devmap-coherence/ifr-f7-upa-upekkha"
+   "futon-theory/mission-interface-signature"
+   "futon-theory/proof-path"
+   "invariant-coherence/bounded-disposition"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "a4494a8636aaa4b3"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-7"
+  :source "M-single-entry-point.md (IDENTIFY phase: tension, claim, scope, candidate integration patterns A/B, open questions, completion criteria, risk register, evidence) PLUS landed work probed from git history and live source: dev-laptop-env script (start_shadow_watch_sidecar, PID files, autostart, already-running detection, futon1a lock double-launch protection), bootstrap.clj (start-webarxana! in-JVM Path A, start-shadow! in-JVM Path A gated off, shutdown hooks), dev.clj status function, and commits 5f18bc2/89cf69b/7508147/ea0d545/8805f97/71839a9/48a9d2e. The mission status banner says IDENTIFY but substantial DERIVE/implementation work has landed."
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3c/mission/single-entry-point"
+ :proposal/hash "a4494a8636aaa4b3"
+ :fold-turn/id "ft-single-entry-point-001"
+ :turn
+ {:agent "zai-7"
+  :model "zai"
+  :edge "invoke-1783774142003-169-6d636e92"
+  :at "2026-07-11T14:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "baseline-freeze as the orphan-JVM baseline (3 JVMs, ~1.5 GB, reparented to systemd) frozen as the BEFORE state the mission must not regress to"
+     :fits-pattern "devmap-coherence/baseline-freeze"
+     :addresses-however
+     "without a frozen baseline, regressions are invisible — a future JVM orphan looks like normal drift, not regression. The 2026-05-02 audit (commit 5f18bc2) froze the exact state: PIDs, RSS, reparenting pattern. Every subsequent fix is measured against this. The baseline also captures the coupling weakness: boot-time invariants can't see what they don't query"
+     :produces [:frozen-baseline]}
+    {:id :b2
+     :role "upekkha as the equanimity that held both integration paths open: Path A (in-JVM) and Path B (sub-process), each with real tradeoffs. The operative implementation reflects this: both paths implemented, Path B default-on for shadow-cljs, Path A default-on for Ring"
+     :fits-pattern "devmap-coherence/ifr-f7-upa-upekkha"
+     :addresses-however
+     "without upekkha, the mission would force a premature either/or decision — Path A (classpath fragility, shadow-cljs hidden state) or Path B (>1 JVM, process-group escape). The equanimity is not indecision: it holds both paths open while the default-on-B choice is the conservative one. REMAINS: Q-classpath-compat and Q-shadow-cljs-shared-server were never explicitly resolved; the default is operative but unargued"
+     :produces [:dual-path-equanimity]}
+    {:id :b3
+     :role "mission-interface-signature as the single-entry-point contract: ./scripts/dev-laptop-env is the sole launcher, one SIGINT stops everything, one futon1a lock prevents double-launch. The script's structure encodes the laptop dev profile as one deterministic invocation"
+     :fits-pattern "futon-theory/mission-interface-signature"
+     :addresses-however
+     "without an explicit interface signature, the dev stack's entry point is ambiguous — hand-started JVMs (the orphans) coexist with launcher-started ones, and nobody owns the lifecycle. The signature makes dev-laptop-env the sole authority. The make restart → fdev --restart delegation extends the same surface. Completion criterion 4 (second invocation fails fast) is the signature enforcing its own cardinality"
+     :produces [:single-entry-contract]}
+    {:id :b4
+     :role "proof-path as the evidence trail: audit (3 orphans) → fix (launcher ownership, PID files, shutdown hooks) → invariant (no orphans after SIGINT). The observation and construction are grounded; the invariant attestation is not yet recorded"
+     :fits-pattern "futon-theory/proof-path"
+     :addresses-however
+     "without a proof-path, the fix is unmoored from the problem it addresses and the invariant it should establish. The audit is the observation, the implementation is the construction, the no-orphan state is the endpoint. PARTIAL: observation and construction grounded; completion criterion 2 (ps -ef showing no parent==1 after SIGINT) not attested"
+     :consumes [:frozen-baseline :bounded-process-set]
+     :produces [:evidence-trail]}
+    {:id :b5
+     :role "bounded-disposition as the launcher's bounding of the dev process set: each subsystem (war-machine watch, webarxana watch, Ring server, futon1a, multi-watcher) has a start, a stop, and a PID file or in-JVM registration. The .futon-disposition.edn analogue from sibling M-bounded-in-flight-state grounds the shape"
+     :fits-pattern "invariant-coherence/bounded-disposition"
+     :addresses-however
+     "without bounded disposition, the dev process set is unbounded — any hand-started JVM joins it with no lifecycle owner. The launcher bounds the set: what runs, what doesn't, what the shutdown scope is. The cross-mission back-reference (block-as-futonic-revolution, mana-allostasis — managed sub-processes are blocks, process spawning is in-flight-scope) grounds the disposition in the sibling's landed work"
+     :produces [:bounded-process-set]}]
+   :wires
+   [{:from :b1 :to :b4 :connective :seq
+     :rationale "the frozen baseline (b1 baseline-freeze) precedes the evidence trail (b4 proof-path) — order-dependent: the audit IS the proof-path's starting observation, and the baseline-freeze makes it the reference point for every subsequent step. Without the frozen baseline, the proof-path has no observation to ground its construction"}
+    {:from :b4 :to :b2 :connective :seq
+     :rationale "the evidence trail (b4 proof-path) leads to the dual-path decision (b2 upekkha) — order-dependent: the proof-path's construction phase is where both paths were implemented, and the equanimity about which to default-on is the stance the proof-path's incompleteness (criterion 2 unattested) requires. The proof-path doesn't close because the path-decision isn't argued through"}
+    {:from :b3 :to :b1 :connective :copar
+     :rationale "the single-entry contract (b3 mission-interface-signature) co-applies with the frozen baseline (b1 baseline-freeze) — the interface signature defines what the entry point IS; the baseline defines what it must NOT regress to. Copar because the contract and the baseline are co-active constraints: the signature's cardinality-1 rule and the baseline's no-orphan rule reinforce each other without being sequential"}
+    {:from :b5 :to :b4 :connective :copar
+     :rationale "the bounded process set (b5 bounded-disposition) co-applies with the evidence trail (b4 proof-path) — the disposition bounds what the proof-path's construction phase built. Copar because the disposition defines the scope the proof-path verifies: the shutdown hooks work because the process set is bounded, and the bounding is what makes verification possible"}
+    {:from :b3 :to :b2 :connective :copar
+     :rationale "the single-entry contract (b3 mission-interface-signature) co-applies with the dual-path equanimity (b2 upekkha) — the interface signature holds both paths under one entry point (dev-laptop-env launches both in-JVM and sidecar subsystems). Copar because the signature and the path-decision are co-active: the interface's generality (one launcher, multiple integration strategies) IS the equanimity made structural"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b4 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "futon-theory/proof-path"
+     :free "the invariant attestation (completion criterion 2: no orphans after SIGINT) has not been recorded as met"
+     :why
+     "the proof-path pattern grounds the evidence trail from audit to invariant, but the trail is open-ended: the shutdown hooks exist in code (bootstrap.clj: multi-watcher stop!, shadow stop!, webarxana stop!) but the orphan-verification re-run has not been attested. The proof-path's endpoint (a ps -ef snapshot showing no parent==1 reparenting after a clean SIGINT) is the closing observation the mission needs. b4 is :partial for this reason — the observation and construction are fully grounded; the invariant attestation is not yet recorded. This is not a pattern failure (proof-path transposes cleanly) but an incomplete application of it: the path exists, the endpoint hasn't been reached"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "completion criterion 3 ((dev/status) listing each subsystem) is not met — the status function reports agents/IRC/evidence/queues but not webarxana/shadow/war-machine"
+     :why
+     "the dev/status function (dev.clj line 2279) returns a map with :agent-ids, :agents, :agent-counts, :tickle, :mentor, :irc, :evidence-count, :ct-queue, :arse-queue — but does not include the dev subsystems (webarxana Ring, shadow-cljs watches, war-machine web) that the launcher started. The subsystems ARE lifecycle-managed (bootstrap.clj registers stop-fns for each), but they are not surfaced in the status query. This gap is not grounded by any of the 5 patterns — it is an observability requirement (criterion 3) that the mission-interface-signature pattern points at (the interface should be queryable) but none of the patterns directly ground. The subsystems are owned but not visible"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "dev-laptop-env launches war-machine and webarxana shadow watches via sidecar sub-processes with PID files, autostart, already-running detection, and shutdown cleanup; start-webarxana! embeds Ring server in-JVM (Path A, gated ON); start-shadow! embeds shadow-cljs in-JVM (Path A, gated OFF by default); futon1a lock double-launch protection; shutdown hooks for shadow/webarxana/multi-watcher in bootstrap.clj; war-machine consolidated to futon2; webarxana asset-path fix; make restart → fdev --restart canonical launcher delegation."
+  :want
+  "(dev/status) surfacing each subsystem (criterion 3); the Path A vs Path B open questions (Q-classpath-compat, Q-shadow-cljs-shared-server) explicitly resolved or argued; orphan-verification re-run attesting criterion 2 (no parent==1 reparenting after SIGINT); the mission's status advanced from IDENTIFY to reflect the landed DERIVE/implementation work."
+  :via
+  "psi authored by zai-7 from futon3c/holes/missions/M-single-entry-point.md (IDENTIFY phase full document) PLUS landed-work probe (git history commits 5f18bc2/89cf69b/7508147/ea0d545/8805f97/71839a9/48a9d2e; live source: dev-laptop-env script, bootstrap.clj start-webarxana!/start-shadow!/shutdown, dev.clj status function). Resolver-blind to the proposer's pattern rationale."
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

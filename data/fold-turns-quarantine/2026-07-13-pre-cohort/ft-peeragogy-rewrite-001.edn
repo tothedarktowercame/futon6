@@ -1,0 +1,117 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the roadmap as the mission's semilattice queue made public: the revision queue v5 (32 clusters, 11 concerns, 3-tier priority, contributor-handoff block) IS a public, provisional map of where the project is going. The DERIVE's three+one artifact plan is the roadmap's instantiation. The peeragogy/roadmap pattern says the map must be PUBLIC (the contributor-handoff block with its claim-convention makes pick-up cheap for any coauthor) and PROVISIONAL (the queue evolved v1→v2→v3→v4→v5, each revision shifting cluster boundaries as denser evidence arrived). The carrier-shape decision (b+e settled, carrier-a declined) is itself roadmap maintenance — the project chose its direction by tracing the practical bearings of each carrier option against the corpus evidence. The roadmap discipline matters because the mission's INSTANTIATE is invitation-shaped, not solo-driven: coauthors need to see where the project is going to decide whether to join. The queue's lattice structure (each annotation has multiple parents: concern, cluster, section, pattern) is the multi-axis navigation a public roadmap needs — a contributor can enter by chapter, by concern, by pattern, or by coordination cost"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "newcomer arrival as the renewing pressure that triggered the IDENTIFY-redux: the proof-of-concept work (bot edits, .mw flip, annotation migration) was a NEWCOMER — a new capability arriving in the project — and its arrival renewed the mission's shape. The prior IDENTIFY assumed 'near-complete rewrite'; the newcomer (editing capability) surfaced the question 'what is the right thing to build, given that we now can build it?' The peeragogy/newcomer pattern says newcomer arrival is renewing pressure: the newcomer doesn't just add capability, it renews the project's self-understanding. This applies recursively to INSTANTIATE: each coauthor invitation IS a newcomer whose arrival renews the artifact. The mission's own framing — 'if it's only me doing the work then it isn't really peeragogy' — IS the newcomer pattern applied to the production layer: solo-driving excludes the renewing pressure that makes peeragogy peeragogy. The 2026 podcast corpus itself brought newcomer voices (Sohail, Leo, Richard, David, Paola) whose perspectives renewed the mission's theoretical anchoring (CLA layers 3-4, practice-supporting-infrastructure, ethics-as-bottleneck)"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "lexicon-minting as the peeragogy vocabulary's self-articulation: the mission IS an act of lexicon-minting — 'peeragogy' itself is a coined word, and the pattern names (Heartbeat, Wrapper, Newcomer, Roadmap, PAR, Curating-not-Experting, Stewardship-Succession, Reciprocal-Participation) are minted handles for shared coordination moves. The relationship-coherence/lexicon-minting pattern says coining a word compresses history into a handle — 'peeragogy' carries the whole genealogy (paragogy → peeragogy → Handbook → community of practice → 2026 podcast corpus) in a single word. The minor-literature position (708 GS hits vs ~20,200 for active inference) means the lexicon is a handle for a shared world that doesn't yet know it's shared. The DERIVE's Artifact 1 (the essay 'What is peeragogy in 2026') IS a lexicon-minting act: it names the worldview/metaphor-shift (CLA layers 3-4) and the convergent-practice family (sangha, Quaker meeting, LUGs, OGM) so others can pick up the handle. The next-wave flexiargs (Artifact 2) extend the minted lexicon: calling-in, check-in, brave-safe-space, listening-as-discipline are new coins from the podcast corpus"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "t4r/training as the mini-handbook's structural template: the mini-handbook 'Futonic Missions for Collectives' (Artifact 4, ~48 pages) IS training infrastructure for multi-operator teams. The t4r/training pattern provides the shape: collaborative and polyphonic supervision (pairing disciplinary mentors with methodological companions), cohort practices (listening clinics, signal-boost workshops), portfolio assessment with open datasets. The mini-handbook ports mission-lifecycle.md to multi-operator context: distributed phase-authorship, phase-boundary consent protocols, adoption invariant. HOWEVER the t4r pattern's specific context (UKRN-S supervision/training/cohort-building with REPL rhythm, ethnography + data science + design pairing) does not fully transpose to the mini-handbook's context (agentic-coding teams, multi-operator mission lifecycle). The collaborative-polyphonic-supervision shape transposes; the specific disciplinary pairing (ethnography + data science + design) does not. The REPL-rhythm grounding transposes conceptually (shared protocol as cohort substrate) but the mini-handbook's protocol is mission-lifecycle-shaped, not REPL-shaped. Partial: the cohort-building and collaborative-supervision template transposes; the specific t4r disciplinary structure does not"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "the askew-layer as the posterior synthesis's interpretive-overlay discipline: the 2016-prior-vs-2026-podcast posterior synthesis IS an askew layer — an interpretive overlay placed on the Handbook that lets relational meaning emerge (the podcasts surface co-learning moves the Handbook misses, and the Handbook provides the rubric the podcast analysis applies) while protecting authorial integrity (the rubric-from-inside bootstrap reads what the Handbook says about ITSELF before evaluating other surfaces, so the overlay doesn't smuggle in external judgments). The vsatlas/askew-layer pattern says interpretive overlays let relational meaning emerge while protecting authorial integrity — the mission's MAP sequencing (handbook-self-claims first → podcasts semi-in/semi-out → outward survey) IS the askew-layer discipline. The 13 podcast transcripts are the overlay material; the 2016-prior rubric is the protection mechanism. The posterior synthesis's 13 promotions (cross-corpus patterns surfaced from per-source noise) are the relational meaning that emerged. The four-axis annotation system is the askew-layer made structural: each axis is an interpretive overlay (writing-coherence, critique, peeragogy, collaboration-coherence) that lets a different kind of meaning emerge from the same source text"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b5] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :seq :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a peeragogy rewrite that has found its post-2016 voice — not a chapter-by-chapter rewrite (carrier a, declined: it inherits the Handbook's 6-year stall mechanism) but an essay + practice-infrastructure carrier (b+e) that produces a short essay naming what peeragogy is in 2026, a next wave of pattern flexiargs mined from the podcast corpus, a retrospective-as-MAP method note, and a mini-handbook for collectives. The Pragmatist inquiry order (why does peeragogy → what is peeragogy → why do these patterns matter-together) is committed; the carrier shape is settled; the four artifacts are scoped with handoff packages. The mission is at the INSTANTIATE-ready boundary — artifacts scoped, coauthor invitations shaped, infrastructure landed (88 annotations, 4 pattern libraries totalling 38 flexiargs, semilattice queue v5, canonical .mw flip, 13 podcast transcripts, posterior synthesis, surgical-edit bot). What remains is the writing itself, produced through invitation (peeragogy-applied-to-self: solo-driving a book about peer learning would itself be the isolation antipattern).\nHUNGRY-FOR:\n1. The essay 'What is peeragogy in 2026' actually written (~3,000 words) — the single most coherence-forcing task; names the worldview/metaphor-shift spine (CLA layers 3-4), the timeless-practice family (sangha, Quaker meeting, LUGs, OGM), the minor-literature situation honestly, and the ethics-as-bottleneck register\n2. Next-wave flexiargs mined from the podcast corpus (4-6 new patterns: calling-in, check-in, brave-safe-space, listening-as-discipline, causal-layered-analysis, register-moderation — taking the peeragogy library from 16 to ~20+)\n3. The retrospective-as-MAP method note written as general-purpose infrastructure (lineage: Joe's PhD thesis → PlanetMath retrospective → M-live-geometric-stack → this mission; serves UKRN-S consulting potential)\n4. The mini-handbook 'Futonic Missions for Collectives' (~48 pages, months-not-weeks horizon, multiple drafts with named reviewers, peer-tested by external multi-operator team — the careful-writing discipline Joe demanded)\n5. Coauthor invitations sent (not assignments — the INSTANTIATE IS the practice; each invitation package includes what/why-this-person/what's-in-place/smallest-viable/larger-ask/how-to-send/technical-editing-role)\nHAVE: 88 annotations across 4 axes (writing-coherence, critique, peeragogy, collaboration-coherence) covering 31/31 sections; 4 pattern libraries (peeragogy 16, collaboration-coherence 7, writing-coherence 13, pattern-coherence 6 = 42 total flexiargs); semilattice revision queue v5 (32 clusters, 11 concerns, 3-tier priority, contributor-handoff block, lattice integrity verified); canonical .mw wikitext source-of-truth (31 chapters, Pandoc lossiness eliminated); surgical-edit bot path proven (6 live Wikibooks edits, revids 4633108-4633113); 13 podcast transcripts (~75,500 words, locally transcribed via faster-whisper-small); 2016-prior rubric (handbook self-claims extracted); posterior synthesis (2016-prior vs 2026-podcast comparison, 13 cross-corpus promotions); reviewer report (452 lines, narrative rendering of the queue); DERIVE carrier-shape decision (b+e settled); INSTANTIATE handoff packages scoped (4 artifacts, per-artifact coauthor candidates identified); proof-of-concept capability landed (bot edits + .mw flip + annotation migration = feasibility evidence, reframed from INSTANTIATE-progress to reframe trigger)."
+  :psi-sha256
+  "a5a213df516925a72c94d220268b3b68926f205f60674eb99f65f64c9dd03402"
+  :pattern-ids
+  ["peeragogy/newcomer"
+   "peeragogy/roadmap"
+   "relationship-coherence/lexicon-minting"
+   "t4r/training"
+   "vsatlas/askew-layer"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "6b5147269e9e2922"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-10"
+  :source "M-peeragogy-rewrite.md (IDENTIFY-redux 2026-04-29 + MAP + DERIVE + ARGUE + VERIFY + INSTANTIATE + checkpoints through 2026-05-02) authored fresh from post-redux current state — staleness probe found IDENTIFY-redux is the latest phase (doc current to its redux), with substantial landed infrastructure (88 annotations, 42 flexiargs, queue v5, .mw flip, 13 transcripts, posterior synthesis)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon4/mission/peeragogy-rewrite"
+ :proposal/hash "6b5147269e9e2922"
+ :fold-turn/id "ft-peeragogy-rewrite-001"
+ :turn
+ {:agent "zai-10"
+  :model "zai"
+  :edge "invoke-1783802284206-219-7389490c"
+  :at "2026-07-11T22:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the roadmap as public, provisional map: the semilattice queue v5 IS the roadmap (32 clusters, 11 concerns, contributor-handoff block); DERIVE carrier-shape decision is roadmap maintenance; multi-axis lattice lets contributors enter by chapter/concern/pattern/coordination-cost"
+     :fits-pattern "peeragogy/roadmap"
+     :addresses-however
+     "without a public, provisional roadmap, coauthors can't see where to enter — the queue's contributor-handoff block with its claim-convention makes pick-up cheap; the queue's v1→v5 evolution proves provisionality (boundaries shift as denser evidence arrives)"
+     :consumes [:lexicon-as-handle :interpretive-overlay]
+     :produces [:public-provisional-roadmap]}
+    {:id :b2
+     :role "newcomer arrival as the renewing pressure that triggered IDENTIFY-redux: the proof-of-concept capability (bot edits, .mw flip) was a newcomer that renewed the mission's self-understanding; each coauthor invitation IS a newcomer whose arrival renews the artifact"
+     :fits-pattern "peeragogy/newcomer"
+     :addresses-however
+     "without newcomer pressure, the mission would have stayed in the prior IDENTIFY's 'near-complete rewrite' assumption — the newcomer pattern says arrival doesn't just add capability, it renews the project's shape. The mission's own 'if it's only me doing the work then it isn't really peeragogy' IS newcomer applied to production: solo-driving excludes the renewing pressure"
+     :consumes [:public-provisional-roadmap]
+     :produces [:renewing-pressure-surface]}
+    {:id :b3
+     :role "lexicon-minting as the peeragogy vocabulary's self-articulation: 'peeragogy' is a coined word; the pattern names are minted handles; the essay (Artifact 1) IS a lexicon-minting act; the next-wave flexiargs extend the minted lexicon"
+     :fits-pattern "relationship-coherence/lexicon-minting"
+     :addresses-however
+     "without lexicon-minting discipline, the vocabulary is inert citation hygiene — the pattern says coining a word compresses history into a handle. The minor-literature position (708 GS hits) means the lexicon is a handle for a shared world that doesn't yet know it's shared; the essay names that shared world so others can pick up the handle"
+     :produces [:lexicon-as-handle]}
+    {:id :b4
+     :role "t4r/training as the mini-handbook's structural template: collaborative-polyphonic supervision, cohort practices, portfolio assessment — the mini-handbook ports mission-lifecycle.md to multi-operator context with REPL-rhythm grounding"
+     :fits-pattern "t4r/training"
+     :addresses-however
+     "without a training-structured artifact, the mini-handbook is theory-only — the t4r pattern provides the cohort-building shape. HOWEVER the specific disciplinary pairing (ethnography + data science + design) does not transpose to agentic-coding teams; the REPL-rhythm is conceptually analogous but the mini-handbook's protocol is mission-lifecycle-shaped. Partial: cohort template transposes, specific t4r structure does not"
+     :consumes [:renewing-pressure-surface]
+     :produces [:cohort-training-template]}
+    {:id :b5
+     :role "the askew-layer as posterior synthesis's interpretive-overlay discipline: the 2016-prior-vs-2026-podcast synthesis IS an askew layer — overlay lets relational meaning emerge (podcasts surface moves the Handbook misses) while protecting authorial integrity (rubric-from-inside bootstrap reads what the Handbook says about ITSELF first)"
+     :fits-pattern "vsatlas/askew-layer"
+     :addresses-however
+     "without the askew-layer discipline, the outward survey smuggles in external judgments — the MAP sequencing (handbook-self-claims first → podcasts → outward) IS the protection mechanism. The four-axis annotation system is the askew-layer made structural: each axis is an overlay that lets different meaning emerge from the same source text"
+     :consumes [:cohort-training-template]
+     :produces [:interpretive-overlay]}]
+   :policy-holes
+   [{:hole :b3-b5-naming-vs-interpreting-proximity
+     :note "relationship-coherence/lexicon-minting (coin a word → shared world gets a handle) and vsatlas/askew-layer (interpretive overlay → relational meaning emerges) both concern the creation of shared meaning from text. Assessed as DISTINCT contributions: lexicon-minting grounds the NAMING move (coinage compresses history into a word; the essay and flexiargs are minting acts), askew-layer grounds the INTERPRETING move (overlay lets meaning emerge while protecting the source). Same domain (shared meaning), different move (naming vs interpreting). The mission needs both: the essay names what peeragogy is (minting), the posterior synthesis interprets what the corpus says (askew-layer)"
+     :nominal-contribution 5
+     :true-contribution 5}]
+   :prediction-errors
+   "EXPECTED: a writing/community mission at IDENTIFY-redux would have minimal landed infrastructure — the 'redux' label suggested a restart from scratch. ACTUAL: this mission has the MOST landed infrastructure of any mission in lane A — 88 annotations across 4 axes, 42 flexiargs across 4 libraries, a v5 semilattice queue with lattice integrity verified, 13 locally-transcribed podcast transcripts (~75,500 words), a canonical .mw flip, a proven surgical-edit bot path, a posterior synthesis with 13 cross-corpus promotions, and a 452-line reviewer report. The IDENTIFY-redux is not a restart — it's a REFRAME that preserved everything and reopened one question (carrier shape). The staleness probe's two-layer challenge (what landed before the redux + what the redux re-scoped) resolved cleanly: everything landed before is preserved as MAP-stage evidence; the redux re-scoped only the carrier-shape decision and the INSTANTIATE shape (invitation, not solo-drive). The surprise: the redux is the mission's healthiest move — it caught the 6-year stall mechanism structurally (carrier-a inherits the stall) and chose carriers (b+e) that break it. This mission is at the INSTANTIATE-ready boundary, not at an IDENTIFY stub."}}}

@@ -1,0 +1,158 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the cold chain IS a grounded-actuation loop: the send writes a typed ungameable witness (:outreach-sent event in pudding-prover-evidence.edn, carrying send-witness + lead-class + outcome-window) to a substrate OUTSIDE the generative model — the pudding-prover registry, not the stack's internal belief state. That witness feeds the next decision: T2.3's n=1 changes what the deliberator knows about the world's response distribution. The anti-pattern (re-observing your own construction) maps precisely to counting authored-but-unsent EOIs as progress — an EOI sitting in the staged outbox with send-witness nil is a construction the executor built, not an act the world received. The Hyatt send (2026-07-05) crossed the Markov blanket: the witness <87bjcl8818.fsf@hyperreal.enterprises> is outside the model, ungameable (it is a real email message-id), and it changed the registry dial (T2.3 :held n=0 to :satisfied n=1). The OPEN half of the pattern (the deliberator does not yet re-rank on the substrate dial) maps to kit-cadence :held — the Beta posterior pricing model cannot re-rank until it has conversion data (n_conversion>0); the loop is grounded-actuation (the send happened), not yet a closed decision loop (the response has not fed the next targeting decision)"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "the n_outreach counter IS the honest-map-over-flattering-counter canonical instance. Exit condition 5 states the discipline verbatim: 'an exit with n_outreach=0 and all apparatus standing is a valid (if unsatisfying) close; a claimed star without its typed record is not.' The counter can move the wrong way by truth: T2.2's initial :held status ('demo is a fixture') was the honest refusal to discharge on a staged-but-not-real draft; when the real Hyatt send happened (2026-07-05), the same staging surface produced a typed record and T2.2 flipped to :satisfied — the counter moved on truth, not on apparatus-existence. The star-map's :operator-disposition annotations ('operator-witnessed, gated-by :consent-gate, author-ne-send') encode the anti-gaming discipline: a star claims progress only when its typed record exists, not when its apparatus is built. The registry's note on T2.2 ('flipped 2026-07-05 on T2.3 discharge: a cold EOI cannot pass the send gate without first being authored into the outbox, so T2.3 acceptance entails T2.2') is the honest map recognizing that the counter had been UNDER-reporting (T2.2 was satisfied before it was marked satisfied)"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "status keywords make each rung's epistemic depth inspectable: :held vs :satisfied carries the difference between apparatus-built and event-witnessed. The status-mapping table transposes directly: T2.4 (cold-send-response) has next-steps (the P14D outcome window is open, observe! lane ready) but no evidence yet (outcome nil, outcome-logged-at nil) — status :active (precision prior 0.8, ongoing dynamics). T2.2/T2.3 have no next-steps (discharged) and evidence (send-witness, intake-result) — status :settled (precision prior 0.9, surface-stable). kit-cadence has next-steps (design exists) but no evidence (not wired, no live data) — status :greenfield (precision prior 0.4, competing hypotheses in play). The litany/system/worldview/myth ladder applies: :settled rungs are litany (use without reopening interpretation); :active rungs are system (feedback and coordination costs matter); :greenfield kits are worldview (competing hypotheses still in play). The shared status language prevents different reviewers from reading the same rung as done, active, or speculative"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "the cold chain's multi-agent builds are recorded handoffs: kit-intake (codex-1 intake! verb futon7 743ecf2 + codex-3 guard logic-model futon3c 9267c9c, reviewed by claude-2 with 15/15 prover tests + run-verify true), kit-outbox (codex-4 staging script futon7 4c9445b, reviewed by claude-2, claude-3-signed-off). Each carries spec summary, acceptance one-liner, worker, review verdict — exactly the recorded-handoff discipline. The send event itself is a handoff: authored-by (kit-outbox staged draft) to operator (Joe's send gate) to world (Andrew Hyatt receives) to intake (kit-intake records :outreach-sent with provenance). The commit-trailer discipline applies: the registry records which commits answered which kit-build, making the dispatch-to-result chain auditable. The evidence log (pudding-prover-evidence.edn) IS the handoff record for the send — it carries the send-witness (message-id), the lead provenance (person:andrew-hyatt, cold-scan-lead), and the intake result, all on disk"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "state-capture resistance: the cold chain exists to prevent the stack from becoming better at maintaining itself than at external deposition. The mission's scope exclusions (no mass outreach, no send automation, no conversion engineering) are structural anti-capture constraints — the apparatus cannot redirect toward self-reproduction because the send gate is permanently the operator's. The pattern's test ('every stack work item must answer which outside obligation it closes') applies: kit-intake closes T2.3 (the send-evidence obligation); kit-outbox closes T2.2 (the staging obligation); kit-cadence closes... nothing yet — it is :held precisely because there is no live data to justify wiring it, and wiring it prematurely would be infrastructure-serving-infrastructure. HOWEVER the pattern's remedy (pocketwatch-style constraints, explicit external-sorry checks, bounded stack hours) is already structurally embedded in the mission's scope and exit conditions; the pattern's CONCEPT (state capture as a failure mode) transposes as vigilance, but its REMEDY-DESIGN (how to bound stack hours, how to enforce external-sorry checks operationally) is not load-bearing here because the mission's constitution already encodes the constraints"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b5] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b2 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: to ground the four cold-* stars as one ladder of typed evidence from authored-outbox through send to response and conversion — where the chain's movement is recorded honestly at each rung, the send gate stays the operator's permanently (author is not send; \"sent\" is never a dischargeable obligation for this loop), and the apparatus serves the external world's reply rather than reproducing itself. The ladder has ADVANCED since IDENTIFY: rungs 1-2 (T2.2 cold-eoi-authored-outbox, T2.3 cold-eoi-sent) are now :satisfied with n=1 (Andrew Hyatt cold-scan-lead, sent 2026-07-05, send-witness in pudding-prover-evidence.edn). What remains: rungs 3-4 (T2.4 cold-send-response, T2.5 cold-response-conversion) are :held at n=0 — the P14D outcome window for the Hyatt send is open (outcome nil, outcome-logged-at nil); the apparatus must observe and record whichever way the world answers. The kit-cadence forward model (Beta posterior pricing) is :held — it becomes a conversion model only after n_conversion>0. The mission's exit conditions remain: the send-gate surface exists and Joe has seen it; kit-intake path is demonstrated; star-map nodes reference this mission; mission-close is Joe's call.\nHUNGRY-FOR: 1) the actuation witness must close the loop outside the model — the send writes a typed ungameable witness (:outreach-sent event in pudding-prover-evidence.edn) to a substrate outside the generative model, and the world's response (or logged silence) must feed the next decision; the chain is NOT a mirror (re-observing authored EOIs as progress); 2) the honest map over the flattering counter — n_outreach must move only on typed records, never on authored-but-unsent drafts; an exit with n=0 and all apparatus standing is valid, a claimed star without its typed record is not; truth can move the counter the wrong way (raising the count when hidden work surfaces, refusing discharge when the close is unearned); 3) status keywords that make each rung's epistemic depth inspectable — :held vs :satisfied carries the difference between apparatus-built and event-witnessed; the rung's status must reflect both activity (apparatus exists) and epistemic depth (event recorded, outcome observed); 4) recorded handoffs for the multi-agent builds — kit-outbox (claude-3's thread), kit-intake (codex-1/codex-3 builds), each with spec + acceptance bar + gates + commit trailers; the send event itself is a handoff from author to operator to world; 5) state-capture resistance — the apparatus must serve the external sorry (actual cold outreach), not reproduce itself; infrastructure-building (kit-cadence, kit-observables) is justified only by the external obligation it closes; the test is whether today's work closes an external sorry or only improves the infrastructure for closing sorrys.\nHAVE: rungs 1-2 satisfied (T2.2 :satisfied via kit-outbox staging, T2.3 :satisfied n=1 via Andrew Hyatt cold send 2026-07-05, send-witness <87bjcl8818.fsf@hyperreal.enterprises>); kit-intake built and :satisfied (two-part guard in outreach_intake_guard.clj + intake! verb in pudding-prover.bb); kit-outbox built and :satisfied (staging script per M-cold-chain.kit-outbox-design.md §6); kit-observables :satisfied (observe! lane); kit-cadence :held (forward model designed but not wired, no live data at n=0 for pricing); rungs 3-4 (T2.4, T2.5) :held at n=0 (the Hyatt outcome window P14D is open); the send-gate ritual designed (operator sees staged EOI + provenance + scorecard); M-cold-chain.cadence-consumption-design.md (Beta posterior + 3-state machine); the pudding-prover-evidence.edn intake log; the star-map operator-disposition annotations.\n"
+  :psi-sha256
+  "23622326b5594c0b28fa4bc6d5a06df7e65e2c54313fe2552eb1f6923e51ea14"
+  :pattern-ids
+  ["aif/grounded-actuation-not-reobservation"
+   "devmap-coherence/status-keywords"
+   "futon-theory/honest-map-over-flattering-counter"
+   "orchestration/recorded-handoff"
+   "war-machine/state-capture"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "80b3798f22b080bb"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-9"
+  :source "M-cold-chain.md (full doc: IDENTIFY + scope + exit conditions + Checkpoints 0-1) PLUS staleness-probe findings: pudding-prover-evidence.edn (real intake event 2026-07-05, T2.3 n=1), pudding-prover-registry.edn (T2.2/T2.3 :satisfied, kit-outbox/kit-intake :satisfied). Authored fresh from the mission's own terms — the landed work is HAVE; the psi covers what REMAINS. Resolver-blind to the proposer's pattern rationale."
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon7/holes/M-cold-chain"
+ :proposal/hash "80b3798f22b080bb"
+ :fold-turn/id "ft-cold-chain-001"
+ :turn
+ {:agent "zai-9"
+  :model "zai"
+  :edge "invoke-1783801334156-211-62cf4e66"
+  :at "2026-07-11T22:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the cold chain as grounded-actuation loop: send writes typed witness outside the model (pudding-prover-evidence.edn), world's response feeds next decision; anti-pattern = counting authored-but-unsent as progress"
+     :fits-pattern "aif/grounded-actuation-not-reobservation"
+     :addresses-however
+     "the Hyatt send (2026-07-05) crossed the Markov blanket — the witness is a real email message-id, ungameable, and it changed the registry dial (T2.3 :held n=0 to :satisfied n=1). The OPEN half: the deliberator does not yet re-rank on the substrate dial (kit-cadence :held; no conversion data to price against). The loop is grounded-actuation, not yet a closed decision loop"
+     :produces [:typed-actuation-witness]}
+    {:id :b2
+     :role "n_outreach as the honest-map canonical instance: counter moves only on typed records, never on apparatus-existence; truth can move it the wrong way"
+     :fits-pattern "futon-theory/honest-map-over-flattering-counter"
+     :addresses-however
+     "exit condition 5 is the honest-map discipline as policy: n=0 with all apparatus standing is valid; a claimed star without typed record is not. T2.2's under-reporting (satisfied before marked satisfied) was the counter moving the wrong way by truth. The star-map annotations (operator-witnessed, gated-by :consent-gate) encode the anti-gaming discipline structurally"
+     :produces [:honest-counter-discipline]}
+    {:id :b3
+     :role "status keywords per rung: :held vs :satisfied reflects apparatus-built vs event-witnessed; the status-mapping table makes each rung's epistemic depth inspectable"
+     :fits-pattern "devmap-coherence/status-keywords"
+     :addresses-however
+     "without a shared status language, different reviewers read the same rung as done (apparatus built), active (event pending), or speculative (design only). The status-mapping table resolves this: T2.2/T2.3 = :settled (no next-steps + evidence); T2.4 = :active (next-steps + no evidence); kit-cadence = :greenfield (next-steps + no evidence, competing hypotheses). The litany/system/worldview/myth ladder communicates epistemic depth alongside activity"
+     :produces [:inspectable-rung-status]}
+    {:id :b4
+     :role "recorded handoffs for multi-agent builds: kit-intake (codex-1/codex-3, claude-2 review), kit-outbox (codex-4, claude-2 review); the send event is itself a handoff chain (author to operator to world to intake)"
+     :fits-pattern "orchestration/recorded-handoff"
+     :addresses-however
+     "the evidence log (pudding-prover-evidence.edn) IS the handoff record for the send: it carries send-witness, lead provenance, intake result — all on disk. Each kit-build's registry entry carries spec + acceptance bar + review verdict + commit shas. The dispatch-to-result chain is auditable by the same scope instruments that audit everything else"
+     :consumes [:typed-actuation-witness]
+     :produces [:auditable-build-chain]}
+    {:id :b5
+     :role "state-capture resistance: the cold chain exists to prevent the stack from reproducing itself instead of depositing externally; scope exclusions (no mass outreach, no send automation) are structural anti-capture constraints"
+     :fits-pattern "war-machine/state-capture"
+     :addresses-however
+     "PARTIAL: the state-capture CONCEPT transposes as vigilance — the apparatus must serve the external sorry, not itself. kit-cadence's :held status is the anti-capture discipline in action: no live data means no justification for wiring it, and wiring it prematurely would be infrastructure-serving-infrastructure. BUT the pattern's REMEDY-DESIGN (pocketwatch constraints, bounded stack hours, operational external-sorry checks) is already structurally embedded in the mission's scope and exit conditions. The mission's constitution encodes the constraints; the pattern adds the name and the vigilance, not the constraint-mechanism"
+     :consumes [:honest-counter-discipline :inspectable-rung-status]
+     :produces [:external-sorry-vigilance]}]
+   :wires
+   [{:from :b1 :to :b2 :connective :seq
+     :rationale "the actuation witness (b1) must exist before the honest-counter discipline (b2) has anything to count — order-dependent: the typed witness is the substance the counter tracks; without it, the counter measures apparatus, not actuation"}
+    {:from :b2 :to :b3 :connective :seq
+     :rationale "the honest counter (b2) determines what MOVEMENT looks like; the status keywords (b3) make that movement inspectable — order-dependent: the counter's honesty criteria (typed record required) define what :satisfied means before the status language can communicate it"}
+    {:from :b4 :to :b1 :connective :copar
+     :rationale "the recorded handoffs (b4) co-apply with the actuation loop (b1) — the send event is a handoff from author to operator to world; copar because the handoff recording shapes the witness's provenance without being a sequential step in the actuation loop"}
+    {:from :b5 :to :b2 :connective :copar
+     :rationale "the state-capture vigilance (b5) co-applies with the honest counter (b2) — the counter's trustworthiness IS the anti-capture check (a counter that only goes down rewards self-serving reporting); copar because the vigilance frames the counter's purpose without being consumed sequentially"}
+    {:from :b3 :to :b5 :connective :copar
+     :rationale "the status keywords (b3) co-apply with the state-capture vigilance (b5) — the :held/:satisfied distinction makes capture visible (a rung stuck at :held while apparatus proliferates is the capture signal); copar because the status language enables the vigilance without being a sequential input"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b2 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "aif/grounded-actuation-not-reobservation"
+     :free "the deliberator does not yet re-rank on the substrate dial — the response has not fed the next targeting decision"
+     :why
+     "the pattern's OPEN half (the witness lands but does not change the next decision) maps to kit-cadence :held. The Beta posterior pricing model needs conversion data (n_conversion>0) to re-rank targeting decisions. The Hyatt send produced a typed witness (T2.3 satisfied) but the response has not arrived (T2.4 :held, outcome nil). Until the response feeds back — or the P14D window closes with logged silence — the loop is grounded-actuation, not a closed decision loop. The actuation half of the pattern is satisfied; the re-ranking half is not"}
+    {:id :h2
+     :unfolded-pattern "war-machine/state-capture"
+     :free "the pocketwatch-constraint and bounded-stack-hours remedy-design is structurally embedded but not operationally enforced"
+     :why
+     "the mission's scope exclusions encode the constraints declaratively (no mass outreach, no send automation, no conversion engineering), but the pattern's operational mechanics — requiring each stack task to name the external sorry it closes, treating nameless tasks as capture, bounding stack hours relative to portfolio/consulting — are not wired as enforcement. The concept transposes as vigilance; the enforcement discipline would need a separate operationalisation (a check at task-creation time, a dashboard tracking stack-vs-external hours)"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "b2 and b5 overlap: both contribute an 'honest-counting-that-resists-self-serving-reporting' lens"
+     :why
+     "b2 (honest-map-over-flattering-counter) and b5 (state-capture) both address the same structural risk: the counter/metric/stack serving itself rather than the external obligation. b2 grounds the COUNTER discipline (move only on typed records, accept the worse-looking number); b5 grounds the PURPOSE discipline (the apparatus serves the external sorry, not itself). The overlap is genuine: both are anti-gaming patterns whose CORE (truthful reporting that resists self-serving distortion) is the same move. b2 carries the measurement integrity; b5 carries the teleological integrity. Both are needed but they are not independent contributions to the same want. Recording as honest overlap, not false independence"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the outcome-window observation apparatus (P14D for the Hyatt send) is not grounded by any of the 5 patterns"
+     :why
+     "rungs 3-4 (T2.4 cold-send-response, T2.5 cold-response-conversion) are observables in the prover's sense — the apparatus records whichever way the world answers. The P14D outcome window (14-day observation period after the send) is the measurement window. None of the 5 patterns ground the observation-window discipline: grounded-actuation grounds the SEND (the act); honest-map grounds the COUNTER (the recording); status-keywords grounds the STATUS (the label); recorded-handoff grounds the BUILD (the multi-agent dispatch); state-capture grounds the PURPOSE (the anti-self-reproduction). The observation-window — when to check for a response, how long to wait, how to record silence as data — falls between these patterns. It is an operational-scheduling decision grounded in the pudding-prover's observe! lane, not in any of the 5 proposed patterns"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the audience-first targeting discipline (person/org targets, not topic-phrased audiences) is not grounded by any of the 5 patterns"
+     :why
+     "the mission's scope specifies 'one real cold lead selected by the audience-first discipline (a person or an org, not a topic).' The star-map cross-references memories noting that 'audience-first-probes work; topic-phrased audiences decay.' This targeting discipline — how the daily-scan and interest-network select the lead that becomes rung 1's target — is upstream of all 5 patterns. The patterns ground the chain's evidence-recording and apparatus-integrity; the targeting discipline grounds the chain's INPUT. Without it, the apparatus has nothing to send. None of the 5 patterns halo lead-selection or audience-first discipline"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "rungs 1-2 satisfied (T2.2 via kit-outbox, T2.3 n=1 via Hyatt cold send 2026-07-05); kit-intake/kit-outbox/kit-observables :satisfied; kit-cadence :held; rungs 3-4 :held at n=0 (P14D outcome window open); the send-gate ritual designed; the cadence-consumption design; the pudding-prover-evidence.edn intake log."
+  :want
+  "to ground the cold chain as one ladder of typed evidence where the send writes an ungameable witness outside the model, the counter moves only on truth, each rung's status is inspectable, the multi-agent builds are recorded handoffs, and the apparatus serves the external sorry — with the send gate permanently the operator's."
+  :via
+  "psi authored by zai-9 from futon7/holes/M-cold-chain.md (full doc + staleness-probe: pudding-prover-evidence.edn, pudding-prover-registry.edn), resolver-blind to the proposer's pattern rationale; first fold of this mission"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

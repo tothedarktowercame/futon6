@@ -1,0 +1,86 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the auto-clock promotion IS a choice-point in an autonomous loop, and every choice-point should carry its warrant: the audit witness (rule, source, tokens/file, old-target, new-target) is the BEGINNING of a warrant but not the whole shape. The pattern demands the warrant cite the firing rule's signed-off rationale and the specific gap when the rules cannot decide. Applied to autoclock-in: each promotion rule (explicit-resolved-target, creation-clock, edit-activity) IS a warranted autonomous pick — the rule name IS the pattern-id, the conditions (floor-only, exact-ID resolution, N-threshold, dominance test) ARE the warrant-text, and the witness IS the audit record. The autonomous picks (clock moved without operator confirmation) are the decided-fork face: the patterns decided, recorded and auditable. The UNDECIDED face — when the rules are silent (no token resolves), conflicting (multiple targets named at one level), or genuinely undecidable (creation-vs-mention ambiguity) — is where the NAG should surface: 'Because of the explicit-resolved-target rule you approved, I found two mission tokens and cannot decide which — pick one and we clock in.' The current system records the autonomous picks (witness on success) but does NOT surface the undecidable forks (silent no-promotion when the rules fail to decide). The pattern's DATA-not-code warrant table maps directly: a table mapping each auto-clock rule to {pattern-id, warrant-text (the DERIVE conditions), gap (what makes it undecidable), unblock (what the operator provides)}"
+    :rule "fold-turn/box"}]
+  :hyperedges []
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: an autoclock-in system where every promotion choice-point carries its warrant — the rule that decided it, the signed-off rationale, and when the rules cannot decide, a legible NAG surfacing the specific undecidable gap to the operator. Three auto-clock rules landed (explicit-resolved-target, creation-clock, edit-activity reclock) but the choice-points are under-warranted: the audit witness records WHAT happened (rule, source, old-target, new-target) but not WHY this rule applied or WHAT gap prevents promotion when the rules are silent. A promotion that the operator cannot trace to a named rule looks like caprice; an unresolved-token silence that the operator cannot see looks like the system ignoring them. The warrant turns the block into the operator's own rule asking for one confirmation, and the autonomous pick into an auditable decision with a cited rationale.\nHUNGRY-FOR: the warrant table (a mapping from each auto-clock rule to its pattern-id + warrant-text + gap + unblock — DATA not code branches, so warrants stay auditable and editable); the NAG surface (when the rules are silent or conflicting — multiple targets named, token unresolved, creation-vs-mention ambiguity — surface to the operator with the firing rule, the specific gap, and the minimal unblock); the rubber-stamp signal (promotions approved with no operator dwell = the gate eroding to a no-op, a trust-erosion metric); the confirmation prompt (listed as Missing in the MAP — the first cut auto-promotes without confirmation; the NAG is the upgrade path from silent promotion to warranted confirmation); the evidence shape for warranted vs unwarranted promotions (decision-latency, outcome, whether the operator agreed or corrected).\nHAVE: three auto-clock rules with audit witnesses (explicit-resolved-target: floor-only + exact-ID; creation-clock: post-creation switch; edit-activity: after-save-hook with threshold); the manual clock-in hydra as override surface; agent-chat--last-auto-clock-witness attached to user-turn evidence; the smoke-test coverage for the accepted cases (3-save switch, 1-save no-switch, two-mission no-promote); the MAP's identified safe-first-implementation-point (agent-chat-send-input, before before-send hook); the DERIVE witnessed-promotion rule (6 conditions for auto-clock, explicit-not-fuzzy); the INSTANTIATE-1.1 floor-only guard (the first review fix that prevented over-detection).\n"
+  :psi-sha256
+  "85d9c44ba7496126888a344b501ae51de0f9364a130315ae520a9b2009de28ce"
+  :pattern-ids
+  ["orchestration/pattern-warranted-choice-point"]
+  :size 1
+  :truncated false
+  :budget 1
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "f2ccba63041e1879"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-3"
+  :source "M-autoclock-in.md HEAD/IDENTIFY/MAP/DERIVE/INSTANTIATE-1-through-4 authored fresh through the warranted-choice-point lens (every promotion carries its warrant; the NAG is the undecidable fork surfaced with its gap) — resolver-blind to the proposer's pattern rationale; not inherited from ft-autoclock-in-002 (first-contact discipline between own deposits)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3c-d/mission/autoclock-in"
+ :proposal/hash "f2ccba63041e1879"
+ :fold-turn/id "ft-autoclock-in-003"
+ :turn
+ {:agent "zai-3"
+  :model "zai"
+  :edge "invoke-1783703879594-81-b162cf91"
+  :at "2026-07-10T20:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "every auto-clock promotion as a warranted choice-point: the autonomous picks (clock moved) carry their warrant (rule name = pattern-id, DERIVE conditions = warrant-text, witness = audit record); the undecidable forks (silent no-promotion) should surface as NAGs with the firing rule + specific gap + minimal unblock; the warrant is DATA not code branches"
+     :fits-pattern "orchestration/pattern-warranted-choice-point"
+     :addresses-however
+     "the current audit witness records WHAT happened but not WHY this rule applied or WHAT gap prevented promotion. A silent no-promotion (two missions named, token unresolved) is invisible — the operator does not know the system tried and failed to decide. The pattern's NAG-as-undecidable-fork is exactly the missing surface: 'your explicit-resolved-target rule found two tokens and cannot pick — confirm one.' Without the warrant, the block is illegible (operator cannot tell their own rule fired) and the autonomous pick looks like caprice (no cited rationale). The witness is the beginning of the warrant shape, not its completion"
+     :produces [:warranted-promotion-choice-points]}]
+   :hyperedges []
+   :terminals [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the NAG surface itself — how the undecidable fork reaches the operator"
+     :why
+     "the pattern describes the NAG's SHAPE (firing pattern + gap + unblock) but not its DELIVERY mechanism in the autoclock-in context. The mission's MAP lists 'confirmation prompt' as Missing — the first cut auto-promotes without confirmation. The NAG requires a surface in the REPL (a prompt, a one-key confirm in the hydra, a system line) that interrupts the turn flow to ask the operator. The pattern says 'surface it' but the autoclock-in system has no interruption surface designed — the audit witness is post-hoc (attached to the next turn evidence), not interactive. The delivery mechanism for the NAG is ungrounded by the single pattern"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the rubber-stamp / trust-erosion metric — are warranted promotions actually checked?"
+     :why
+     "the pattern names rubber-stamp rate (approvals with no dwell) as a trust-erosion signal and proposes evidence-shape {:nag/warranted, :decision/latency-ms, :decision/outcome}. But the current auto-clock rules promote AUTONOMOUSLY (no operator confirmation at all for the decided cases), so there is no decision-latency to measure — the operator never sees the promotion until after it happens. The rubber-stamp metric requires a confirmation step that does not exist in INSTANTIATE-1/2/3. The pattern grounds the metric's importance; the single pattern cannot ground its implementation (it requires the confirmation surface from h1, which the pattern also does not supply)"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the agent-side promotion warrant — INSTANTIATE-4's agent reclock has no operator to NAG"
+     :why
+     "the pattern's NAG surfaces an undecidable fork TO THE OPERATOR. But INSTANTIATE-4 (agent-side reclock) involves agent tool-edits where the operator may not be present — the agent's session clock reclocks from tool-edits, and if the rules are silent or conflicting (agent edited two mission docs), there is no interactive operator to surface the NAG to. The warrant shape still applies (record the rule + gap) but the surface-to-operator dimension of the NAG does not transpose to the agent-side case. A single-pattern cascade cannot ground the agent-side warrant delivery"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the warrant table as editable DATA — the rule-to-pattern mapping is not yet authored"
+     :why
+     "the pattern says the rule-to-pattern mapping is DATA (a table {guardrail-rule to {pattern-id, warrant-text, gap, unblock}}), so warrants stay auditable and editable. The three auto-clock rules have their conditions documented in the DERIVE section and INSTANTIATE logs, but they are not yet extracted into a standalone warrant table that an operator could inspect or edit independently of the code. The warrant currently lives in the mission doc prose + the elisp implementation, not in a data file. The pattern grounds the SHAPE of the warrant table; the single pattern cannot author its CONTENT (the specific warrant-text for each rule, the specific gap descriptions)"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the DOES-NOT-APPLY boundary — which auto-clock choices are low-consequence enough to skip the warrant?"
+     :why
+     "the pattern's DOES-NOT-APPLY section says: low-consequence, fully-reversible choices do not need warrant overhead. The auto-clock system has a spectrum: explicit-resolved-target at the floor is low-consequence (filling a no-target floor, easily hydra-overridden), but edit-activity SWITCH of an active stale clock is higher-consequence (displacing a real attribution). Where the warrant boundary sits — which promotions need the full NAG treatment and which can proceed autonomously — is a calibration the pattern names but does not resolve. The pattern says 'warrant every choice-point' but also 'does-not-apply to low-consequence choices'; the autoclock-in system must decide which rule fires at which grade, and the single pattern cannot ground that boundary"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "Three auto-clock rules with audit witnesses (explicit-resolved-target, creation-clock, edit-activity); the manual clock-in hydra as override; agent-chat--last-auto-clock-witness on user-turn evidence; smoke-test coverage; the DERIVE witnessed-promotion rule (6 conditions); the INSTANTIATE-1.1 floor-only guard."
+  :want
+  "An autoclock-in system where every promotion carries its warrant (rule + rationale + gap + unblock), the undecidable forks surface as legible NAGs to the operator, and the warrant is editable DATA — so the block reads as the operator's own rule asking for one confirmation, not machine caprice."
+  :via
+  "psi authored by zai-3 from futon3c/holes/missions/M-autoclock-in.md (HEAD/IDENTIFY/MAP/DERIVE/INSTANTIATE), through the warranted-choice-point lens, resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-autoclock-in-002"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

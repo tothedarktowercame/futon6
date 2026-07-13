@@ -1,0 +1,115 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the foraging→depositing mode collision as conflict resolved through boundary-setting: the terminal vocabulary snapshot (2026-04-09) diagnoses mode :foraging when it should be :depositing, policy :π-scholar when it should be :π-free-solo, with three constraints violated (cargo-implies-depositing, signal-implies-follow-up, deadline-implies-urgency). Sòng (Conflict) says this collision is not resolved by forcing the mode (domination — 'just switch to depositing') but by boundary-setting: the JSDQ operator must render the mode-boundary itself — what counts as foraging vs depositing per sector, so the operator sees WHERE the boundary is crossed, not merely THAT it is. The constraint-implies-action structure (each violation names a required action) IS the boundary-setting move: the boundary between modes is made explicit and typed, not policed by domination. The JSDQ operator surfaces these typed boundary violations in person-facing terms (which sector, which inter-edge, which constraint) — this is the conflict-resolution surface the WM's generic EFE does not provide"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "modesty (Qiān) as the anti-laundering discipline: the MAP ruling's core warning is that WM / capability-star-map / pudding-prover progress must NOT be laundered as JSDQ maturity. The JSDQ measures MARKET-report (can the buyer see this?), not self-report — modesty means the operator claims only the maturity the market has confirmed. The I0→I4 axis is the tempering mechanism: I0 (capability exists) through I4 (capability sustains itself) — each level is an external attestation, not an internal feeling. Balance is sustained when extremes are tempered: the operator must not inflate I1 sectors to I3 because the WM shows capability in the abstract. The JSDQ operator's scoring discipline IS Qiān — honest, market-attested, tempered against over-claiming. This is the integrity guard that keeps the person-facing model from becoming a self-congratulation engine"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via
+    "contemplation (Guān) as the operator's viewing instrument: the JSDQ hypergraph operator IS a contemplative tool — accurate perception of the maturity topology guides effective action. The 8-sector / 39-item topology is what the operator CONTEMPLATES: which sectors are stuck, which inter-edges are typed holes, where the sorry register points. The alignment.edn adapter chain (Placemat → Terminal Vocabulary → Hypergraph) is the optical system — it refracts system-facing sustainability through the AIF adapter into person-facing capability. Accurate perception guides the depositing action: the operator sees 'S2-modelling is at I1 but revenue-proximity is 0.15' and the perception itself drives the mode shift. HOWEVER the full viewing instrument — a queryable UI over the hypergraph that renders the topology at a glance — is not yet built; the data exists (jsdq-hypergraph.edn) and the lens exists (alignment.edn) but the contemplated surface (what the operator actually LOOKS AT) is unbuilt. The pattern grounds the requirement; the artifact does not yet exist"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "limitation (Jié) as the sorry topology's coherence-preserving boundaries: the typed holes in alignment.edn (SORRY-vsat-revenue, SORRY-peer-eval-artifact, SORRY-governance-interface, SORRY-paragogy-revenue) ARE the limitations that preserve the model's coherence. Each sorry is a boundary that says 'this connection should exist but doesn't — do not pretend it does.' The resource-integrity dimension: the JSDQ tracks reserves (£ in account), burn-rate, deadline-proximity — limitation means the model must respect these hard constraints, not optimise past them. The pocketwatch's tick-frequency (the MAP ruling's Q4: ride the WM scheduler cadence) is itself a Jié discipline — periodic limitation checks, not continuous surveillance. Boundaries preserve coherence: the sorry register prevents the model from claiming completeness it doesn't have, the £2K/month invariant is the resource-boundary, and the I0→I4 scoring limits are the integrity-boundary. The JSDQ operator must surface these limitations as first-class features (typed holes), not hide them"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "mission-anchored scan as the operator's reason for existing: the JSDQ hypergraph operator is not an orphaned visualisation — it answers a LIVE MISSION QUESTION (which sectors are stuck at I0-I1? what action resolves the constraint cluster? is the operator foraging when they should be depositing?). Mission-anchoring supplies the named hypothesis the frame-005 discipline demands: 'the operator's mode is stuck at :foraging when it should be :depositing because three constraints are violated simultaneously.' The confirming-negative is the most valuable result: if a scan of the JSDQ topology confirms that a sector has NO sorry (no typed hole), that gap-validation tells the operator the territory is theirs — that capability is genuinely mature. The instrument-split (audience-probing vs concept-research) maps to the JSDQ's dual nature: market-facing (audience-probing: can the buyer see this?) vs self-facing (concept-research: what is my actual maturity?). The mission anchor guarantees the operator lands in this mission's MAP, not as orphaned 'something'"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b5] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :seq :rule "fold-turn/wire"}]
+  :terminals [{:id :b3 :discharges :want-signature}
+              {:id :b5 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a JSDQ hypergraph operator — a person-facing capability model over the 8-sector / 39-item JSDQ hypergraph (jsdq-hypergraph.edn) and its AIF adapter (jsdq-terminal-vocabulary.edn), aligned to the Grand Unified Placemat via alignment.edn, that exposes Joe's current maturity topology (I0→I4 per sector) and the foraging→depositing constraint diagnosis as a readable, queryable operator model — so the operator can see which sectors are stuck at I0-I1, which inter-edges are typed holes (the sorry topology), and which constraint violations cluster on the same action. The April IDENTIFY bundled an operational-loop half (machine-readable topology, constraint checks, pocketwatch, mission-selection pressure) that the MAP ruling (2026-06-09) declared SUPERSEDED by the now-live WM / capability-star-map / pudding-prover machinery — so the generic pocketwatch is NOT rebuilt; what remains live is the JSDQ-specific person-facing capability operator that the WM surfaces do not provide (the 8-sector/39-item maturity topology rendered as Joe's own market-interface model, without laundering generic WM progress as JSDQ maturity).\nHUNGRY-FOR:\n1. JSDQ-specific rendering of the 8-sector / 39-item maturity topology (the WM capability-star-map renders generic capability; the JSDQ sectors are Joe's market interfaces — a distinct, unbuilt view)\n2. The sorry topology as typed holes surfaced in person-facing terms (alignment.edn defines SORRY-* identifiers: SORRY-vsat-revenue, SORRY-peer-eval-artifact, SORRY-governance-interface, SORRY-paragogy-revenue — each is a connection that should exist but doesn't; these need a JSDQ-native surface, not the WM's held→satisfied frontier)\n3. The foraging→depositing constraint diagnosis as a live operator signal (the terminal vocabulary's snapshot shows mode :foraging when it should be :depositing, policy :π-scholar when it should be :π-free-solo, three constraints violated — this diagnosis is JSDQ-specific and must not be laundered through the WM's generic EFE)\n4. Observables bound to JSDQ sectors (edge-activity, signal-strength, revenue-proximity, cargo, reserves per sector — the AIF observables from jsdq-terminal-vocabulary.edn projected onto the 8-sector topology)\n5. Inter-edge topology queryable from babashka/clojure (the alignment.edn maps placemat inter-edges to JSDQ inter-edges with sorry annotations — this is machine-readable but not yet person-facing-operational)\nHAVE: jsdq-hypergraph.edn (8 sectors, 39 items, I0→I4 maturity axis, :mission/state :design); jsdq-terminal-vocabulary.edn (AIF adapter: observables, beliefs, policies, actions, constraints, free-energy, snapshot — fully authored); alignment.edn (vertex→sector map, inter-edge map with sorry annotations, the adapter chain Placemat→Terminal Vocabulary→Hypergraph); MAP ruling 2026-06-09 declaring the operational-loop half superseded (WM capability-star-map + pudding-prover + WM scheduler now live in futon2); the deferred re-entry from M-trip-journal DR-1 (hinge-log entries as Click-observables when M-hypergraph-operator stabilises); Click 1 Beta-binomial template (futon0/analysis/notebooks/recording_model.clj, read-only port)."
+  :psi-sha256
+  "790d0374be05416434b7fadd9a41b622cddad23ef34c879c272b23c433de7851"
+  :pattern-ids
+  ["iching/hexagram-06-song"
+   "iching/hexagram-15-qian"
+   "iching/hexagram-20-guan"
+   "iching/hexagram-60-jie"
+   "scan-coherence/mission-anchored-scan"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "6968af7f00db80c5"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-10"
+  :source "M-hypergraph-operator.md (IDENTIFY sections 1 + MAP ruling 2026-06-09 partial-fold) authored fresh from the mission's current landed state — resolver-blind to the proposer's pattern rationale; staleness probe confirmed doc current to its latest ruling (2026-06-09), no JSDQ-specific operator code landed since ruling, WM/capability-star-map/pudding-prover confirmed live in futon2"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a/mission/hypergraph-operator"
+ :proposal/hash "6968af7f00db80c5"
+ :fold-turn/id "ft-hypergraph-operator-001"
+ :turn
+ {:agent "zai-10"
+  :model "zai"
+  :edge "invoke-1783802284206-219-7389490c"
+  :at "2026-07-11T20:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the foraging→depositing mode collision resolved through boundary-setting: the constraint violations (cargo-implies-depositing, signal-implies-follow-up, deadline-implies-urgency) are typed boundaries the operator must see per-sector, not a forced mode switch"
+     :fits-pattern "iching/hexagram-06-song"
+     :addresses-however
+     "without a conflict-resolution surface, the operator knows the mode is wrong but cannot see WHERE the boundary is crossed — Sòng says the collision is resolved by making the mode-boundary explicit and typed (each constraint names a required action), not by domination ('just switch to depositing'). The JSDQ operator must render this per-sector, in person-facing terms the WM's generic EFE does not provide"
+     :produces [:constraint-violation-surface]}
+    {:id :b2
+     :role "the anti-laundering discipline: market-attested maturity scoring (I0→I4 by external confirmation, not self-report) prevents inflating JSDQ maturity from generic WM progress"
+     :fits-pattern "iching/hexagram-15-qian"
+     :addresses-however
+     "the MAP ruling's core warning — WM/capability-star-map progress must NOT be laundered as JSDQ maturity. Without Qiān's tempering discipline, the person-facing model becomes a self-congratulation engine. The JSDQ measures MARKET-report (can the buyer see this before I explain it?); modesty means claiming only what the market has confirmed"
+     :produces [:anti-laundering-guard]}
+    {:id :b3
+     :role "the operator as viewing instrument: the 8-sector / 39-item topology is what the operator contemplates — accurate perception of stuck sectors and typed holes guides the depositing action"
+     :fits-pattern "iching/hexagram-20-guan"
+     :addresses-however
+     "the data (jsdq-hypergraph.edn) and the lens (alignment.edn adapter chain) exist, but the contemplated SURFACE — a queryable person-facing rendering of the topology at a glance — is not yet built. Guān grounds the requirement for the viewing instrument; the artifact is unbuilt (hence :partial — the perception-guides-action requirement is met conceptually, not yet operationally)"
+     :consumes [:constraint-violation-surface :anti-laundering-guard]
+     :produces [:topology-viewing-surface]}
+    {:id :b4
+     :role "the sorry topology as coherence-preserving limitation: typed holes (SORRY-vsat-revenue, SORRY-peer-eval-artifact, SORRY-governance-interface, SORRY-paragogy-revenue) and resource constraints (£2K/month invariant, burn-rate, deadline) are first-class boundaries"
+     :fits-pattern "iching/hexagram-60-jie"
+     :addresses-however
+     "without limitation discipline, the model claims completeness it doesn't have — Jié says the sorry boundaries preserve coherence by marking what should exist but doesn't. The JSDQ operator must surface these as features (typed holes, resource constraints), not hide them. The tick-frequency discipline (ride the WM scheduler cadence) is itself Jié — periodic limitation checks"
+     :produces [:sorry-boundary-surface]}
+    {:id :b5
+     :role "the mission anchor: the JSDQ operator answers a live mission question (which sectors are stuck? what action resolves the constraint cluster?) — not an orphaned visualisation"
+     :fits-pattern "scan-coherence/mission-anchored-scan"
+     :addresses-however
+     "without mission-anchoring, a hypergraph visualisation is orphaned 'something' — the scan pattern says anchor to the live question (is the operator foraging when they should be depositing?), split the instruments (market-facing audience-probing vs self-facing concept-research), and treat the confirming-negative as a result (a sector with no sorry = genuine maturity = the territory is yours)"
+     :consumes [:sorry-boundary-surface]
+     :produces [:mission-anchored-operator]}]
+   :policy-holes
+   [{:hole :b1-b4-boundary-overlap
+     :note "hexagram-06-song (conflict resolved through boundary-setting) and hexagram-60-jie (boundaries preserve coherence) both invoke boundary discipline. Assessed as DISTINCT contributions, not absorption: song grounds the ACTIVE conflict-resolution surface (the foraging→depositing collision — reactive, the boundary is already crossed), while jie grounds the PREVENTIVE coherence-preservation surface (the sorry topology's typed limits — proactive, the boundary prevents false claims). Same concept-word ('boundary'), different move (reactive resolution vs preventive limitation). If the reviewer judges these as same-move-different-phase, they would absorb to one :partial box; I assessed them as genuinely distinct contributions and kept both as :full"
+     :nominal-contribution 5
+     :true-contribution 5}]
+   :prediction-errors
+   "EXPECTED: the 5 iching/scan patterns would feel generic against a mission whose own theoretical anchoring is AIF/cyberant/Click-model (the mission doc names Active Inference, cyberant foraging, Click Beta-binomial — none of which appear in this proposal's pattern set). ACTUAL: the iching patterns grounded the mission's HUMAN-facing dimension (the operator Joe looks at) rather than its machine-facing dimension (the AIF loop), which is the correct split — the MAP ruling explicitly narrowed the live work to the person-facing model, and the WM already owns the machine-facing loop. The proposal's pattern set, which looked mismatched to the mission's AIF vocabulary at first read, is actually well-matched to what REMAINS after the MAP ruling's partial fold. The staleness probe was the key: reading IDENTIFY alone (without the MAP ruling) would have folded against the superseded operational-loop half."}}}

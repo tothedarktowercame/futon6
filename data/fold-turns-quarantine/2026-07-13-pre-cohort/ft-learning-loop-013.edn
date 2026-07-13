@@ -1,0 +1,146 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "the mining pipeline's evidence channel inherits Agency's A0-A5 invariants: every PXR record (PSR/PUR) flowing through the mining loop must be delivery-receipted (A0 — no lost evidence), self-attributed (A1 — the agent that logged the PSR is identifiable), atomic (A2 — a re-run does not leave partially-updated state), error-surfaced (A3 — a mining failure is loud, not silently caught), diagnosable (A4 — a bad extraction is traceable), and bounded (A5 — the evidence store does not grow without bound). The mission's idempotent-re-run invariant (completion criterion 5) and the trail-enables-return invariant both depend on these: a mining pipeline that loses PSR records (A0 violation) or silently catches extraction errors (A3 violation) cannot be re-run idempotently because its state is not trustworthy"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via "the mining pipeline's outputs must be tagged and interpretable by downstream consumers — the F7 audit checks that lower-futon artifacts deliver consumable exports, and the capability hypergraph IS the export the mining pipeline delivers to WebArxana (monitor) and M-hypergraph-operator's Click/Tick (analytic layer). The core 'tag your exports so consumers can use them' applies. HOWEVER, F7 is about Futon7 civic translation (policies, rituals, accountability loops for Hyperreal Enterprises) — the civic-institutional framing and the quarterly-audit-of-Amazon-breaker-sphere-architectures do not transpose to cross-mission capability mining in a single-operator stack. The export-tagging discipline contributes; the Hyperreal/civic substance does not"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via "the mining loop as horizon-bridge: translating long-arc cross-mission capability intelligence into lightweight operator-actionable moves, routed through the centerline. The 'translate horizon signals into usable moves' core applies — 25 missions' worth of hinge-log evidence is horizon intelligence that must reach the operator as actionable condensation, not raw dump. HOWEVER, the institutional cadence (quarterly altitude calls with PVC/ORPM) and the funder/REF credibility framing are sector-specific and do not transpose to a single-operator mission stack. Same partial-satiety assessment as fold 012 b2: the translate-to-moves core transposes; the institutional machinery does not"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via "the capability hypergraph needs a published, enforced entity/relation schema and salience contract before downstream tools can depend on it — graph-memory-contract requires defining typed entities, typed relations, and salience metadata as a stable contract with schema-mirroring tests. This contract is now PARTIALLY LANDED (Flight 1 delivered capability-graph-contract.edn with 4 entity types, 4 relations, salience metadata, 4 invariants, and a passing Babashka schema-mirroring test). The contract exists; what remains is the salience-rule calibration (which entities surface, at what confidence, in which visual lane) — the base-rate normalisation the psi is hungry for"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via "the hinge-log entry slot structure IS the source-data shape the mining pipeline reads: five optional fields (entry-state/rūpa, dominant-tension/saññā, shift/saṅkhāra, residual-unknowns/viññāṇa, energy-signature/vedanā), each corresponding to a specific aggregate in the MVSG mapping. The mining extraction's job is to read these slots and tag them with four-channel + capability-dimension labels — the slots are WHERE the capability signal lives. The pattern's anti-patterns are load-bearing for the mining design: 'filling all five fields performatively → schema becomes checklist' warns the miner not to treat filled slots as signal by default (articulation-floor noise); 'writing saṅkhāra-content into phenomenological slots → register collapse' warns the miner to distinguish ledger-content from journal-content; and 'empty fields do not invalidate the entry; they record that this aggregate did not carry load' means the miner must distinguish absence-of-signal from absence-of-recording"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b5] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b4] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b4 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a cross-mission capability mining loop that reads hinge-log evidence across ~25 missions and condenses it into a navigable capability hypergraph — typed entities (capability-dimensions, operator-turns, cross-mission edges) the operator can read to see which capabilities are accreting and which are stalling. The mining must be base-rate-normalised so signal is distinguished from recording-cadence noise, and the vocabulary of capability dimensions must grow by use, not by upfront design. HUNGRY-FOR: the hinge-log source structure that the mining pipeline reads (what fields exist, which are load-bearing, which carry the capability signal); the evidence-channel invariants that make the mining pipeline's PXR stream durable and idempotent; the schema contract that makes the output hypergraph dependable for downstream tools; the base-rate normalisation that separates real signal from articulation-floor noise. HAVE: M-trip-journal's hinge-log apparatus with five MVSG-aligned entry slots (entry-state/rupa, tension/sanna, shift/sankhara, residual-unknown/vinnana, energy-signature/vedana); the Shape A bridge lifting markdown into futon1a typed entities; the agency backbone (A0-A5 invariants: delivery, identity, atomicity, error-hierarchy, debugging, bounded); a published capability-graph-contract (Flight 1: typed entities, relations, salience metadata, invariants); a 4-step mining pipeline v0 (input -> existing-pattern check / recurrence-test / novel-candidate -> cluster -> confirm) with one honest negative (apparatus-to-end reframing did not recur at hinge 2); 25+ active mission docs; checkpoint-1 diagnostics (contrast not accumulation, mid-confidence ceiling, articulation-floor noise)."
+  :psi-sha256
+  "b8456cde7de1e8d70a7c99370d59518c26410c84d3f8627506dea11546871988"
+  :pattern-ids
+  ["agency/invariants"
+   "devmap-coherence/ifr-f7-upa-upekkha"
+   "or2/ukrn-horizon-bridge"
+   "storage/graph-memory-contract"
+   "structure/hinge-entry-slots"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "eb0975c3b7228f48"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-1"
+  :source "M-learning-loop.md HEAD/IDENTIFY/sorry/completion-criteria + Flight 1 lab artifacts as HAVE (resolver-blind: gap described in the mission's own terms — cross-mission capability mining loop — without reading the proposer's pattern rationale; authored fresh, not inherited from ft-learning-loop-012)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a-d/mission/learning-loop"
+ :proposal/hash "eb0975c3b7228f48"
+ :fold-turn/id "ft-learning-loop-013"
+ :turn
+ {:agent "zai-1"
+  :model "zai"
+  :edge "invoke-1783697946778-44-e051ef8e"
+  :at "2026-07-10T16:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "Agency A0-A5 invariants as the evidence-channel guarantees the mining pipeline inherits"
+     :fits-pattern "agency/invariants"
+     :addresses-however
+     "features built on Agency inherit all deficiencies (20+ silent error catches, no delivery guarantees) — the mining pipeline's PXR stream is built on Agency, so without A0-A5 its evidence records can be lost, mis-attributed, or silently corrupted, making idempotent re-run impossible"
+     :produces [:evidence-channel-invariants]}
+    {:id :b2
+     :role "F7 export-tagging audit: mining outputs must be tagged and consumable by downstream tools"
+     :fits-pattern "devmap-coherence/ifr-f7-upa-upekkha"
+     :addresses-however
+     "civic equanimity collapses if exports aren't tagged, interpretable, and usable — the capability hypergraph IS an export, but the F7 framing (Hyperreal seed crystal, Amazon-breaker sphere) is about Futon7 civic translation, not cross-mission mining; PARTIAL: export-tagging core transposes, civic substance does not"
+     :produces [:export-tagging-discipline]}
+    {:id :b3
+     :role "the mining loop as horizon-bridge: translate long-arc cross-mission intelligence into lightweight operator moves"
+     :fits-pattern "or2/ukrn-horizon-bridge"
+     :addresses-however
+     "the UKRN lead sits far from operations and horizon intelligence remains abstract without explicit ties — structurally the mining loop's position; PARTIAL: translate-to-moves core transposes, institutional cadence does not"
+     :produces [:horizon-translation-shape]}
+    {:id :b4
+     :role "the published schema contract for the capability hypergraph (now partially landed via Flight 1)"
+     :fits-pattern "storage/graph-memory-contract"
+     :addresses-however
+     "without a schema contract queries and ingest drift and become brittle — Flight 1 delivered the contract (4 entity types, relations, salience, invariants, schema-mirroring test); the remaining gap is salience-rule calibration (base-rate normalisation)"
+     :consumes [:hinge-log-slot-structure :evidence-channel-invariants :export-tagging-discipline :horizon-translation-shape]
+     :produces [:capability-graph-schema]}
+    {:id :b5
+     :role "the five-field MVSG hinge-log slot structure as the source-data shape the mining pipeline reads"
+     :fits-pattern "structure/hinge-entry-slots"
+     :addresses-however
+     "the mining extraction reads hinge-log slots and tags them — but the pattern's anti-patterns are load-bearing: performatively-filled slots are articulation-floor noise (the miner must not treat filled slots as signal by default), and empty slots record absence-of-load (the miner must distinguish absence-of-signal from absence-of-recording)"
+     :produces [:hinge-log-slot-structure]}]
+   :hyperedges
+   [{:from [:b5] :to [:b4] :connective :seq
+     :rationale "the hinge-log slot structure (b5) defines the source shape; the schema contract (b4) defines the output shape — order-dependent: the schema must cover what the slots produce before the mining pipeline can run end-to-end"}
+    {:from [:b1] :to [:b4] :connective :copar
+     :rationale "the evidence-channel invariants (b1) co-apply with the schema contract (b4) — the invariants govern HOW evidence reaches the schema; copar because both are required for trustworthy mining but neither subsumes the other"}
+    {:from [:b2] :to [:b4] :connective :copar
+     :rationale "the export-tagging discipline (b2) co-applies with the schema contract (b4) — tagging is a quality gate on the schema's outputs; copar because tagging informs the schema's consumability without being a sequential step"}
+    {:from [:b3] :to [:b4] :connective :copar
+     :rationale "the horizon-translation shape (b3) co-applies with the schema contract (b4) — the translation lens shapes what the schema must render navigable; copar because the translation frames the schema's purpose without being consumed"}]
+   :terminals [{:id :b4 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the base-rate normalisation formula remains ungrounded"
+     :why
+     "the psi is hungry for contrast-based signal detection; b4 delivers the schema contract (partially landed) and b5 delivers the source slot structure, but NO pattern in the cascade grounds the actual base-rate computation — how recording-cadence noise is quantitatively separated from capability signal. The contract's salience-rule names the problem (entities surface by confidence level) but cannot calibrate the thresholds. Same structural hole as fold 012 h1: the mining loop's discrimination mechanism is ungrounded."}
+    {:id :h2
+     :unfolded-pattern "devmap-coherence/ifr-f7-upa-upekkha"
+     :free "b2's Futon7 civic framing does not transpose"
+     :why
+     "F7 is about auditing that lower-futon exports feed the Hyperreal seed crystal (policies, rituals, accountability loops for Amazon-breaker sphere architectures). The export-tagging CORE transposes (mining outputs must be tagged and consumable), but the civic-institutional substance does not. b2 is :satiety :partial for this reason. A dedicated cross-mission-export-tagging pattern for the operator-scale would carry this load more honestly than forcing the Futon7 civic pattern to fit."}
+    {:id :h3
+     :unfolded-pattern "or2/ukrn-horizon-bridge"
+     :free "b3's institutional cadence does not transpose"
+     :why
+     "same assessment as fold 012 b2/h2: the translate-to-lightweight-moves CORE transposes; the quarterly altitude-call cadence and funder/REF credibility framing do not. b3 is :satiety :partial. Noted again as a policy-hole rather than padding a false :full."}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the fractal mining move (turn-scale AND mission-scale) is not grounded"
+     :why
+     "same as fold 012 h3: the mission's central bet is that the same B→A extraction works at turn-scale and mission-scale; the cascade provides source structure (b5), channel invariants (b1), export discipline (b2/b3), and schema contract (b4) — none grounds WHY the same extraction shape should hold at two scales."}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "b2 and b3 overlap: both are partial-transposition 'translate/tag for downstream consumption' patterns"
+     :why
+     "b2 (F7 export-tagging) and b3 (UKRN horizon-bridge) both contribute a 'make the output consumable by downstream' lens at partial satiety, and both fail to transpose for the same reason (institutional/civic machinery does not fit a single-operator stack). The overlap is genuine: they are two different sector-specific patterns whose CORE (tag/translate for consumers) is the same move applied to the mining pipeline. Recording as honest overlap, not false independence."}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "M-trip-journal's hinge-log apparatus with five MVSG-aligned entry slots; the Shape A bridge lifting markdown into futon1a typed entities; the agency backbone (A0-A5 invariants); a published capability-graph-contract (Flight 1); a 4-step mining pipeline v0 with one honest negative; 25+ active mission docs; checkpoint-1 diagnostics."
+  :want
+  "A cross-mission capability mining loop that reads hinge-log evidence and condenses it into a navigable, base-rate-normalised capability hypergraph."
+  :via
+  "psi authored by zai-1 from futon5a/holes/missions/M-learning-loop.md (HEAD/IDENTIFY/sorry/completion-criteria) + Flight 1 artifacts as HAVE, resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-learning-loop-012"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

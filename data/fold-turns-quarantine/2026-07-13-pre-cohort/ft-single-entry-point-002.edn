@@ -1,0 +1,217 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "mission-interface-signature as the single entry point's interface contract — ./scripts/dev-laptop-env IS the interface: one invocation, one SIGINT, one futon1a lock, the laptop dev profile encoded as a deterministic sequence. The interface signature declares what the dev stack IS from outside: its cardinality-1 contract (completion criterion 4: second invocation fails fast), its subsystem list (what runs, what doesn't), its shutdown scope. The signature extends through make restart → fdev --restart delegation — the operator's one-liner bounce is the same interface surface. ABSORBS theory-as-exotype: the single entry point IS an exotype — a shared interface constraint that all dev subsystems conform to (webarxana Ring, war-machine shadow, webarxana shadow each implement start!/stop! against the launcher's lifecycle, not their own ad-hoc conventions). Theory-as-exotype says 'without the shared constraint, each domain reinvents ad-hoc' — exactly the orphan-JVM failure mode: each subsystem was started by hand with its own convention, and the shared constraint was absent. The launcher imposes the exotype; the interface signature specifies it"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "structural-tension-as-observation as the orphan-JVM tension that motivated the mission: the 2026-05-02 audit found 3 JVMs (~1.5 GB) reparented to systemd — the structural irritation (recurring gap: hand-started processes drift), the pre-symbolic pressure (repeated failures: nobody knew what was running), the trans-situational reappearance (same pattern across webarxana + war-machine + webarxana-UI). The audit was the observation vector: the tension between 'dev infrastructure exists' and 'the substrate can't see it' is what surfaced the need for a single entry point. ABSORBS dhammavicaya (truth-seeking investigation): the audit IS the dhammavicaya event — investigating what's actually running, diagnosing the coupling weakness ('boot-time invariants can't surface what they don't see'), and naming the root cause (unowned dev processes). The structural-tension pattern names the three detection criteria; dhammavicaya names the investigative discipline that applied them. Both ground the same audit observation"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via
+    "reachable-from-boot as the post-fresh-boot reachability invariant: completion criterion 1 — after a fresh boot, every long-running JVM the user expects (webarxana Ring, war-machine UI hot-reload, webarxana UI hot-reload) is reachable. The dev-laptop-env autostart flags (FUTON3C_WAR_MACHINE_AUTOSTART=true, FUTON3C_WEBARXANA_AUTOSTART=true, FUTON3C_WEBARXANA_SERVER_AUTOSTART=true) ensure each subsystem starts on boot. The in-JVM subsystems (webarxana Ring via start-webarxana!, shadow-cljs via start-shadow!) register stop-fns with the bootstrap lifecycle, making them reachable from the REPL and teardown-able from SIGINT. ABSORBS state-snapshot-witness: dev/status IS the snapshot-witness — a point-in-time projection of what's running, queryable after the fact. The reachability invariant (criterion 1) and the snapshot-witness (criterion 3) are the same want at two phases: reachability asks 'can I connect to it?', the snapshot asks 'does the system know it's there?'. PARTIAL: reachability is grounded (autostart + bootstrap registration); the snapshot-witness is NOT — dev/status reports agents/IRC/evidence but does not surface webarxana/shadow/war-machine as subsystems (criterion 3 unmet, same gap as A3's h2)"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "read-existing-seam-before-implementing as the integration discipline that read bootstrap.clj's existing conventions rather than inventing new ones: the mission's Next-move asked 'how is the current start-futon5!/start-irc! pattern in bootstrap.clj shaped? New subsystems should match that convention rather than invent a new one.' The landed implementation followed this: start-webarxana! and start-shadow! in bootstrap.clj match the existing start-futon5! pattern (requiring-resolve the start!/stop! functions, register :stop-fn with the lifecycle, return system map). The dev-laptop-env script's start_shadow_watch_sidecar reads the existing shadow-cljs watch invocation pattern (npx shadow-cljs watch app per project) and wraps it with PID-file ownership rather than replacing it with a different mechanism. The webarxana.server.core/start!-stop!-status seam was read and reused, not re-architected. The seam-reading discipline prevented the mission from inventing a parallel lifecycle system alongside bootstrap's existing one"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "hot-reload-as-default-fix-path as shadow-cljs watch IS the default development fix path: when a CLJS source file changes, shadow-cljs recompiles and pushes the change to the running browser UI via WebSocket — the developer sees the fix immediately without restarting anything. This is why shadow-cljs watch processes exist in the dev stack at all (they are NOT production servers; they are hot-reload development tools), and why the single-entry-point mission must own them: a hot-reload tool left orphaned (the 978 MB war-machine shadow watch reparented to systemd) is a fix-path that outlived its owner. ABSORBS live-sync-source-truth: shadow-cljs watch IS live-sync from source of truth — the source files are the immutable truth, shadow-cljs syncs changes to the running browser in real-time, and the browser reflects the current source state. Both patterns ground the same move: source changes flow to the running UI without restart. The single-entry-point ensures the hot-reload/live-sync tooling is owned by the launcher rather than drifting as an orphan"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :full
+    :via
+    "futon-bridge-health as the cross-futon wiring integrity: the single-entry-point mission is inherently cross-futon — dev-laptop-env (futon3c) launches subsystems from futon2 (war-machine shadow watch at ~/code/futon2/web/war-machine) and futon4 (webarxana shadow watch at ~/code/futon4/dev/web/webarxana, webarxana Ring server from futon4/dev/web/webarxana as a :local/root dep). The bridge health is the integrity of this cross-repo wiring: futon3c's deps.edn includes futon4/dev/web/webarxana as a :local/root dependency (Path A in-JVM embedding), the dev-laptop-env script references paths across repos, and the war-machine consolidation (futon0 → futon2, commit 89cf69b) was a bridge-health repair (the old futon0 path was a broken bridge). The bridge-health pattern grounds the structural fact that the single entry point must wire across futon boundaries, not just within futon3c. The asset-path fix (/wa/dev avoiding /js collision, commit 8805f97) is bridge-health maintenance: two subsystems sharing a browser origin needed distinct asset paths"
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :partial
+    :via
+    "mana-gated-work as the launcher's budget-bounded subsystem-gating: dev-laptop-env gates which subsystems start via budget flags (FUTON3C_WAR_MACHINE_AUTOSTART, FUTON3C_WEBARXANA_AUTOSTART, FUTON3C_WEBARXANA_SERVER_AUTOSTART, FUTON3C_SHADOW_AUTOSTART). The mana-gated-work pattern composes priority (which subsystem matters) with budget (what the system can sustain — RSS, ports, classpath weight). The default-on for Ring+sidecar-shadow and default-off for in-JVM-shadow IS a budget gate: the conservative choice (Path B sidecar, lower classpath risk) is the budget-bounded default, while Path A (in-JVM, higher classpath risk) is available but gated off until Q-classpath-compat is resolved. PARTIAL: the budget-gating transposes (the flags exist and compose priority+budget), but the mana-gated-work pattern's full machinery (the priority-and-budget gate as an action-selection algorithm, the capacity-tracking feedback loop) is not exercised — the flags are static defaults, not a dynamic budget-aware selector. The pattern names the shape; the implementation is simpler"
+    :rule "fold-turn/box"}
+   {:id :b8
+    :role :application
+    :satiety :partial
+    :via
+    "interest-event-vocabulary as the process-lifecycle event discipline: each subsystem's lifecycle (start → running → stop) IS an event sequence against the launcher's entity. The vocabulary partially transposes: state/spawned (the launcher starts the subsystem), state/strengthened (the subsystem is already-running, detected by PID check), state/refined (the subsystem's configuration changes via flag override). The already-running detection in dev-laptop-env (PID-file check + process-name match → 'already running' message) IS a lifecycle-event interpretation. The bootstrap shutdown sequence (multi-watcher stop! → shadow stop! → webarxana stop!) is an ordered event-teardown. HOWEVER the full 8-event vocabulary is designed for EoI interest-network entities — link/asserted (cross-essay relation) does not map to process lifecycle. The spawned/strengthened/refined lifecycle transposes; the relational event machinery does not. PARTIAL: the lifecycle-typing core transposes; the relational-event vocabulary does not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b7] :to [:b8] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b8] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b6] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a single launcher (./scripts/dev-laptop-env) owning every long-running dev process — webarxana Ring (:3100), war-machine shadow-cljs watch, webarxana shadow-cljs watch — where the launcher reads existing seams rather than inventing new ones, gates subsystem starts by budget and priority, wires cross-futon subsystems (futon3c hosting futon2/futon4 components), hot-reloads source changes into running UIs as the default dev fix path, and makes every running subsystem reachable from a fresh boot and visible as a state snapshot — all grounded in the structural tension that orphaned JVMs outside the substrate's awareness exposed.\nHUNGRY-FOR: the subsystem visibility gap (dev/status reports agents/IRC/evidence but not webarxana/shadow/war-machine — completion criterion 3 unmet); the orphan-verification attestation (criterion 2: ps -ef showing no parent==1 reparenting after SIGINT — shutdown hooks exist but not attested); the cross-futon classpath-compat question (Q-classpath-compat and Q-shadow-cljs-shared-server never explicitly resolved — Path A in-JVM exists but defaults off, Path B sidecar defaults on, the open questions bypassed not answered).\nHAVE: dev-laptop-env launches war-machine and webarxana shadow watches via start_shadow_watch_sidecar() with PID files, autostart, already-running detection (PID + process-name match), and shutdown cleanup; start-webarxana! embeds Ring server in-JVM (Path A, gated ON); start-shadow! embeds shadow-cljs in-JVM (Path A, gated OFF); start/stop functions in bootstrap.clj match existing start-futon5!/start-irc! convention (the seam was read, not invented); futon1a lock double-launch protection; shutdown hooks for shadow/webarxana/multi-watcher; war-machine consolidated from futon0 to futon2; webarxana asset-path /wa/dev fix; shadow-cljs watches hot-reload CLJS changes into the running browser UI; make restart → fdev --restart canonical launcher.\n"
+  :psi-sha256
+  "4e0febea160b125eab2c019543d7505b66a00a4678b9e679a0033acfbb9979ca"
+  :pattern-ids
+  ["budgeted-action-selection/mana-gated-work"
+   "invariant-coherence/reachable-from-boot"
+   "invariant-coherence/state-snapshot-witness"
+   "futon-theory/theory-as-exotype"
+   "futon-theory/structural-tension-as-observation"
+   "ants/baseline-cyber-ant"
+   "exotic/live-sync-source-truth"
+   "futon-theory/mission-interface-signature"
+   "devmap-coherence/ifr-f1-dhammavicaya"
+   "stack-coherence/futon-bridge-health"
+   "storage/deterministic-ingest-pipeline"
+   "structure/interest-event-vocabulary"
+   "peripherals/read-existing-seam-before-implementing"
+   "peripherals/hot-reload-as-default-fix-path"]
+  :size 14
+  :truncated false
+  :budget 14
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "ebff8c1d932a5314"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-7"
+  :source "M-single-entry-point.md (IDENTIFY phase full document) PLUS landed-work probe from A3 (git history + live source: dev-laptop-env, bootstrap.clj, dev.clj). Authored fresh through this 14-pattern cascade's lens (interface-as-exotype, tension-as-observation, reachability+snapshot, seam-reading, hot-reload/live-sync absorption, cross-futon bridge-health, budget-gating, lifecycle-events). Distinct from ft-single-entry-point-001's lens (baseline-freeze/equanimity/proof-path/disposition). Resolver-blind to the proposer's pattern rationale."
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3c/mission/single-entry-point"
+ :proposal/hash "ebff8c1d932a5314"
+ :fold-turn/id "ft-single-entry-point-002"
+ :turn
+ {:agent "zai-7"
+  :model "zai"
+  :edge "invoke-1783774142003-169-6d636e92"
+  :at "2026-07-11T14:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "mission-interface-signature as the single entry point contract: dev-laptop-env IS the interface (one invocation, one SIGINT, one lock, cardinality-1). ABSORBS theory-as-exotype — the entry point IS the shared constraint all subsystems conform to (start!/stop! against the launcher lifecycle, not ad-hoc)"
+     :fits-pattern "futon-theory/mission-interface-signature"
+     :addresses-however
+     "without an explicit interface signature, each subsystem invents its own lifecycle convention (the orphan-JVM failure mode: hand-started, unowned). The signature makes dev-laptop-env the sole authority; theory-as-exotype grounds WHY: without the shared constraint, each domain reinvents ad-hoc. The interface signature specifies the constraint; the exotype grounds its necessity"
+     :produces [:single-entry-contract]}
+    {:id :b2
+     :role "structural-tension-as-observation as the orphan-JVM tension that motivated the mission (3 criteria: structural irritation, pre-symbolic pressure, trans-situational reappearance). ABSORBS dhammavicaya — the audit IS the truth-seeking investigation that applied the three criteria to diagnose the coupling weakness"
+     :fits-pattern "futon-theory/structural-tension-as-observation"
+     :addresses-however
+     "without the tension-as-observation discipline, the orphan JVMs are invisible drift, not signal. The audit made them observable; dhammavicaya named the root cause (unowned dev processes outside substrate awareness). Both ground the same audit observation from different angles (detection criteria vs investigative discipline)"
+     :produces [:tension-observation]}
+    {:id :b3
+     :role "reachable-from-boot as the post-boot reachability invariant (criterion 1). ABSORBS state-snapshot-witness — dev/status IS the snapshot-witness of what's running. Reachability (can I connect?) and snapshot (does the system know it's there?) are the same want at two phases"
+     :fits-pattern "invariant-coherence/reachable-from-boot"
+     :addresses-however
+     "without reachability, the subsystems start but can't be connected to; without the snapshot-witness, they run but nobody knows. PARTIAL: reachability is grounded (autostart + bootstrap registration); snapshot-witness is NOT (dev/status doesn't list subsystems — criterion 3 unmet)"
+     :consumes [:single-entry-contract]
+     :produces [:boot-reachability]}
+    {:id :b4
+     :role "read-existing-seam-before-implementing as the integration discipline: start-webarxana!/start-shadow! match existing start-futon5!/start-irc! convention in bootstrap.clj. The shadow-sidecar reads existing npx shadow-cljs watch invocation. The webarxana start!/stop!/status seam was reused, not re-architected"
+     :fits-pattern "peripherals/read-existing-seam-before-implementing"
+     :addresses-however
+     "without seam-reading, the mission invents a parallel lifecycle system alongside bootstrap's existing one — duplicating ownership, diverging conventions. The seam-reading discipline ensured the new subsystems integrated with the existing bootstrap lifecycle, not alongside it"
+     :produces [:seam-integration]}
+    {:id :b5
+     :role "hot-reload-as-default-fix-path: shadow-cljs watch IS the default dev fix path (CLJS changes flow to running browser via WebSocket). ABSORBS live-sync-source-truth — shadow-cljs watch IS live-sync from source files (immutable truth) to the running browser. Both ground the same move: source changes → running UI without restart"
+     :fits-pattern "peripherals/hot-reload-as-default-fix-path"
+     :addresses-however
+     "without understanding shadow-cljs watch AS hot-reload (the default fix path), the mission treats these processes as arbitrary long-running JVMs rather than development tools that exist specifically for the fix-path. The single entry point owns the hot-reload tooling so it doesn't orphan"
+     :consumes [:boot-reachability :lifecycle-events]
+     :produces [:hot-reload-ownership]}
+    {:id :b6
+     :role "futon-bridge-health as the cross-futon wiring: dev-laptop-env (futon3c) launches subsystems from futon2 (war-machine) and futon4 (webarxana). The :local/root dep, the cross-repo path references, the futon0→futon2 consolidation, and the /wa/dev asset-path fix are all bridge-health"
+     :fits-pattern "stack-coherence/futon-bridge-health"
+     :addresses-however
+     "without bridge health, the cross-futon wiring is fragile — a path change in futon2 or futon4 breaks the launcher silently. The bridge-health pattern grounds the structural fact that the single entry point must wire across futon boundaries, and each cross-repo reference is a bridge that needs maintenance"
+     :produces [:cross-futon-wiring]}
+    {:id :b7
+     :role "mana-gated-work as the launcher's budget-bounded subsystem-gating: autostart flags compose priority (which subsystem matters) with budget (RSS, ports, classpath). Default-on for Ring+sidecar, default-off for in-JVM-shadow IS a budget gate (conservative = lower classpath risk)"
+     :fits-pattern "budgeted-action-selection/mana-gated-work"
+     :addresses-however
+     "without budget gating, the launcher starts everything unconditionally — classpath conflicts, port collisions, RSS exhaustion. PARTIAL: the flags exist as static defaults, not a dynamic budget-aware selector. The priority+budget gate shape transposes; the dynamic capacity-tracking feedback loop does not"
+     :produces [:budget-gated-startup]}
+    {:id :b8
+     :role "interest-event-vocabulary as the process-lifecycle event discipline: spawned (launcher starts), strengthened (already-running detected), refined (config changes). The already-running PID-check and the ordered shutdown sequence are lifecycle-event interpretations"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "without lifecycle-event typing, the launcher treats start/stop as opaque commands, not typed state transitions. PARTIAL: the spawned/strengthened/refined lifecycle transposes; the link/asserted relational event (cross-essay relation in EoI) does not map to process lifecycle. The lifecycle-typing core transposes; the relational-event machinery does not"
+     :produces [:lifecycle-events]}]
+   :wires
+   [{:from :b1 :to :b3 :connective :seq
+     :rationale "the single-entry contract (b1) precedes boot-reachability (b3) — order-dependent: the interface signature must declare what subsystems exist before their reachability can be verified. The contract defines the set; reachability checks each member"}
+    {:from :b3 :to :b5 :connective :seq
+     :rationale "boot-reachability (b3) precedes hot-reload-ownership (b5) — order-dependent: a subsystem must be reachable (started, connectable) before its hot-reload fix-path can function. Shadow-cljs watch can only hot-reload if the launcher started it and it's running"}
+    {:from :b4 :to :b3 :connective :copar
+     :rationale "seam-integration (b4) co-applies with boot-reachability (b3) — the seam-reading discipline determines HOW subsystems are registered (matching existing conventions), which determines whether they're reachable. Copar because the seam shapes the registration without being a sequential step"}
+    {:from :b2 :to :b1 :connective :copar
+     :rationale "tension-observation (b2) co-applies with the single-entry contract (b1) — the orphan-JVM tension IS what the interface signature resolves. Copar because the observation motivates the contract without being consumed sequentially: the tension persists as the regression-check even after the contract is established"}
+    {:from :b6 :to :b5 :connective :copar
+     :rationale "cross-futon wiring (b6) co-applies with hot-reload-ownership (b5) — shadow-cljs watches run from futon2 and futon4 directories, launched by futon3c. Copar because the cross-futon paths shape where the hot-reload tooling lives without being a sequential step"}
+    {:from :b7 :to :b8 :connective :seq
+     :rationale "budget-gated-startup (b7) precedes lifecycle-events (b8) — order-dependent: the budget gate determines WHETHER a subsystem starts (the flag), and only if it starts does the lifecycle event sequence (spawned → running → stop) apply. The gate is before the lifecycle"}
+    {:from :b8 :to :b5 :connective :copar
+     :rationale "lifecycle-events (b8) co-applies with hot-reload-ownership (b5) — the hot-reload process has a lifecycle (spawned by launcher, strengthened by already-running check, stopped by shutdown hook). Copar because the lifecycle typing describes the hot-reload process's states without being a sequential step before it"}
+    {:from :b2 :to :b6 :connective :copar
+     :rationale "tension-observation (b2) co-applies with cross-futon wiring (b6) — the orphan-JVM tension was partly a cross-futon problem (subsystems from different repos, no unified ownership). Copar because the tension exposed the bridge-health gap without being consumed sequentially"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b3 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "ants/baseline-cyber-ant"
+     :free "the AIF cyber-ant pattern (pattern-flashing twin of the current species) does not transpose to dev-process-launching"
+     :why
+     "the baseline-cyber-ant pattern is about Futon5 attaching a :cyber/baseline operator that emits an AIF config identical to Futon2's defaults — making cyber-ants 'pattern flashed' twins of the current species. This is an active-inference-agent-construction pattern with no analogue in the single-entry-point mission's domain (dev-process lifecycle management). The launcher does not construct agents, pattern-flash configurations, or emit AIF configs. The pattern is a non-contributor: it was proposed for this cascade but does not ground any contribution to the single-entry-point want. Recording as policy-hole (non-contributor → excluded) rather than forcing a false mapping"}
+    {:id :h2
+     :unfolded-pattern "storage/deterministic-ingest-pipeline"
+     :free "the deterministic ingest pipeline (reproducible ingest for a storage substrate) does not transpose to process launching"
+     :why
+     "the deterministic-ingest-pipeline pattern provides reproducible, tokenised ingest for a deterministic storage substrate. The single-entry-point mission is about dev-process lifecycle ownership, not data ingest. The dev-laptop-env script's startup sequence IS deterministic (same flags, same order, same subsystems each time), but this is boot-determinism (the launcher's own sequencing), not ingest-determinism (reproducible data processing). The pattern's core (tokenise → pipeline → substrate) has no analogue in process launching. Non-contributor: proposed for this cascade but does not ground any contribution to the single-entry-point want"}
+    {:id :h3
+     :unfolded-pattern "futon-theory/theory-as-exotype"
+     :free "theory-as-exotype ABSORBED into b1 (mission-interface-signature): both frame the single entry point as a shared interface constraint"
+     :why
+     "theory-as-exotype ('without the shared constraint, each domain reinvents ad-hoc') and mission-interface-signature ('the single entry point's interface contract') are the same move on different abstraction levels: the exotype grounds WHY the shared constraint is necessary (without it, ad-hoc reinvention = the orphan-JVM failure mode), and the interface signature specifies WHAT the constraint is (one launcher, one SIGINT, one lock). Folding them as one box (b1, fits-pattern = mission-interface-signature as the best representative) with the absorbed pattern documented here is more honest than two parallel boxes sharing one contribution. Nominal 2 patterns → true 1 contribution. ABSORPTION per Run 25/27 contract rule"}
+    {:id :h4
+     :unfolded-pattern "devmap-coherence/ifr-f1-dhammavicaya"
+     :free "dhammavicaya ABSORBED into b2 (structural-tension-as-observation): both ground the orphan-JVM audit observation"
+     :why
+     "structural-tension-as-observation (three detection criteria: structural irritation, pre-symbolic pressure, trans-situational reappearance) and dhammavicaya (truth-seeking investigation) both ground the same audit event. The tension pattern names the detection criteria; dhammavicaya names the investigative discipline that applied them. The audit IS where both converge: the tension criteria made the orphans visible, and dhammavicaya drove the root-cause diagnosis. Folding as one box (b2, fits-pattern = structural-tension-as-observation as the more specific pattern for this mission) is more honest than two boxes sharing one audit. Nominal 2 patterns → true 1 contribution"}
+    {:id :h5
+     :unfolded-pattern "invariant-coherence/state-snapshot-witness"
+     :free "state-snapshot-witness ABSORBED into b3 (reachable-from-boot): both ground the 'is it running/visible?' question at two phases"
+     :why
+     "reachable-from-boot (criterion 1: can I connect to each subsystem after fresh boot?) and state-snapshot-witness (criterion 3: does dev/status surface each subsystem?) are the same want at two phases — reachability is the runtime check, the snapshot is the queryable projection. Folding as one box (b3, fits-pattern = reachable-from-boot as the more fundamental invariant) with the snapshot-witness documented as the unmet-criterion-3 gap is more honest than two boxes. Nominal 2 patterns → true 1 contribution. The snapshot-witness's unmet status (criterion 3) makes b3 :partial"}
+    {:id :h6
+     :unfolded-pattern "exotic/live-sync-source-truth"
+     :free "live-sync-source-truth ABSORBED into b5 (hot-reload-as-default-fix-path): both ground shadow-cljs watch as source→running-UI sync"
+     :why
+     "hot-reload-as-default-fix-path (shadow-cljs watch IS the default dev fix path: source changes flow to running browser) and live-sync-source-truth (the source files are immutable truth, shadow-cljs syncs changes to the running UI in real-time) are the same move: source changes → running UI without restart. The fix-path pattern names WHY shadow-cljs exists (it's a dev tool, not a production server); the live-sync pattern names the mechanism (source is truth, browser reflects current source). Folding as one box (b5, fits-pattern = hot-reload-as-default-fix-path as the better representative for a dev-tooling mission) is more honest than two parallel boxes. Nominal 2 patterns → true 1 contribution"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "dev-laptop-env launches war-machine and webarxana shadow watches via sidecar sub-processes with PID files, autostart, already-running detection, and shutdown cleanup; start-webarxana! embeds Ring server in-JVM (Path A, gated ON); start-shadow! embeds shadow-cljs in-JVM (Path A, gated OFF); start/stop functions match existing bootstrap conventions (seam read); futon1a lock double-launch protection; shutdown hooks for shadow/webarxana/multi-watcher; war-machine consolidated to futon2; webarxana asset-path /wa/dev fix; cross-futon :local/root dep for webarxana; shadow-cljs hot-reload to browser; budget-gating via autostart flags; make restart → fdev --restart."
+  :want
+  "(dev/status) surfacing each subsystem (criterion 3); orphan-verification attestation (criterion 2: no parent==1 after SIGINT); Q-classpath-compat and Q-shadow-cljs-shared-server explicitly resolved; dynamic budget-aware subsystem selector (current flags are static defaults); the mission's status advanced beyond IDENTIFY to reflect the landed implementation."
+  :via
+  "psi authored by zai-7 from futon3c/holes/missions/M-single-entry-point.md (IDENTIFY phase full document) PLUS landed-work probe (git history + live source). Authored fresh through this 14-pattern cascade's lens, distinct from ft-single-entry-point-001's 5-pattern lens. Resolver-blind to the proposer's pattern rationale."
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

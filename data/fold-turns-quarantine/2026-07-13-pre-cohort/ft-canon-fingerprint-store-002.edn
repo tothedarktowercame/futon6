@@ -1,0 +1,157 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the canon fingerprint store as handoff record: SQLite canon_store.db persists the current canon-distribution (state hypothesis), which strategies emitted which canons with what confidence (decisions made + why), first_seen/last_seen timestamps (evidence/trail anchors), and the aggregate itself (provisional-claim ledger) — so batch N+1 opens the store on startup and resumes from batch N's posterior, not from a uniform prior. This is the explicit handoff that converts ephemeral within-batch posteriors (which stabilise but don't grow, per commit 94bd227) into durable cross-batch project state. The handoff record is defined: CanonAggregate rows ARE the state-hypothesis + evidence-anchors + decisions-made, emitted at batch boundary (session-end equivalent), loaded fresh at next batch (resume)"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "After Completion (既濟): each batch's fingerprint MAP-step reaches 'completion' — the CanonFingerprint rows are written, the aggregate is state-merged — but that completion is fragile and must be sustained. The store's coherence is a dynamic achievement, not a final state: the incremental REDUCE must not drift from its inputs (idempotent re-run is the completion criterion), schema migrations between batches must preserve prior aggregates, and the frequency-ordered seed must not regress as the long tail accretes. The jiji discipline applies directly: guard the edges (the merge boundary), maintain vigilance (idempotent-re-run check per batch), introduce light maintenance cycles (the REDUCE is incremental, not a full re-scan). The fox-wets-its-tail warning is the anti-pattern: a batch that writes fingerprints but corrupts the aggregate (silent merge error, lost provenance) has wet its tail — the 'completion' was not sustained"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "the CanonAggregate as state-snapshot-witness: each aggregate IS a point-in-time projection of the full fingerprint state for a (symbol, canon) pair — {n_occurrences, source_paper_ids, strategy_breakdown, first_seen, last_seen} — queryable after the fact. The snapshot answers 'what was the canon distribution for symbol X at batch N?' without walking every CanonFingerprint row (one query returns one aggregate, not delta-aggregation gymnastics). The cadence is per-batch-boundary (the MAP-REDUCE cycle boundary), and the projection drops noisy per-row detail in favour of semantically-meanful aggregate state. Time-travel reconstruction works: the per-batch JSONL files are the frozen snapshots, the SQLite aggregate is the current projection, and both are queryable. This is the cycle-boundary witness shape the mission's 'queryable after the fact' requirement asks for"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "the append-only event discipline: each CanonFingerprint record IS a provenance-bearing event against a (symbol, canon) entity — it carries paper_id (evidence-ref), strategy_anchor (the structural locator), and timestamp (emission point). The append-only discipline transposes directly: fingerprints are never edited or deleted; the aggregate is derived by replay. The state/* lifecycle vocabulary partially transposes: state/spawned (first binding of a symbol-canonical pair), state/strengthened (subsequent occurrences add evidence), state/refined (a binding's scope or role is sharpened). HOWEVER the full 8-event vocabulary is designed for EoI interest-network entities — link/asserted (cross-essay relation) is specific to the interest-network domain and does not map cleanly to fingerprint records (a fingerprint is a binding-event, not a relation-assertion between essays). The append-only + provenance + lifecycle-typing core transposes; the relational-event machinery does not"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "the publication-cadence axis: the store operates in composition (3) — living document (the current SQLite canon_store.db aggregate, continuously updated each batch) + frozen snapshots (per-batch JSONL fingerprint files, timestamped, citable by batch-id). Each snapshot declares its evidence-revision (which papers, which strategies) and compute-date (batch timestamp). This resolves the citation ambiguity: 'what did the canon distribution look like when processing batch 009?' points to a specific frozen snapshot; 'what is the current canon distribution?' points to the living SQLite aggregate. HOWEVER the DOI-bearing archival citation machinery (the academic-publication-specific layer: grant-application citations, peer-reviewer fixed targets, archival norms) does not transpose to an internal symbol-grounding store. The living/snapshot axis and the declare-your-composition discipline transpose; the academic-citation-integrity layer does not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b1] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a canon fingerprint store that makes the symbol-grounding engine improve with each Stage 5 batch — a persistent, in-run-queryable store of {symbol, canon, paper_id, strategy, strategy_anchor, role, scope} fingerprint records aggregated into CanonAggregate, queried DURING the run by symbol, where the canon distribution IS the prior for the next batch's Bayesian arbitration. Billey-Tenner shaped (OEIS-for-theorems): small, language-independent, canonical fingerprints that are searchable and citable. Frequency-ordered MAP-REDUCE (the mathematical genome): most-cited papers + most-common objects reduced first so later batches reuse already-reduced structure. Scope bindings (§2.1): a theorem fingerprint is {scoped-inputs -> output-relation}, the binder/role is the invariant, not surface symbols. Anchor is strategy (Arxana structural locator), NOT byte position. Statements now; proof fingerprints (OEIS-of-steps) are a separate later deliverable. Falsifiable: after batch N+1, arbitration precision on common symbols lifts vs the empty-store baseline; held-out gold measures it.\nHUNGRY-FOR: persistence (knowledge carries forward across batches, not just stabilises within one — commit 94bd227 showed posteriors stabilise but don't grow); reuse-as-we-go (the genome's conserved regions laid down first, the long tail accretes against them); in-run queryability (Stage 5 asks the store DURING the run, not just offline — §8c: SQLite); scope over symbol (a theorem is a scoped relation, not a bag of bindings — §2.1 Pythagoras test); the store IS the prior (P(c|X) read from canon-distribution, normalised — §4).\nHAVE: Stage 5 emits learned-newcommand-vocab.json snapshots per batch (Channel-2 commit 94bd227 — posteriors stabilise within-batch but do NOT carry forward); detect_grounded_symbols in the QC viewer (the per-binding canon emission surface, returns single canon); M-bayesian-structure-learning §3.2 (the per-binding posterior formula the store feeds); the literature graph (PM pmrelated, ProofWiki namespaces, nLab parent-links) for the F4 strategy-merge lift; the existing strategy vocabulary (let-binding, single, comma-list, relation-chain); the §8 decisions RESOLVED — SQLite, scope bindings, frequency-ordered, strategy-anchor not position; slices F1-F5 specified (schema+writer, reducer+query, posterior-consumes-store, strategy-merge-proposer, Stage-5-closes-loop).\n"
+  :psi-sha256
+  "ce1fcd71fc4a3c23ffbb1a91c050610483ec945139f8669bce3d3bbbf338f4b5"
+  :pattern-ids
+  ["agent/handoff-preserves-context"
+   "iching/hexagram-63-jiji"
+   "invariant-coherence/state-snapshot-witness"
+   "structure/interest-event-vocabulary"
+   "ukrns/publication-cadence"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "d157be7b848343ca"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-3"
+  :source "M-canon-fingerprint-store.md sections 1-9 (HEAD/IDENTIFY/§8-decisions-resolved/§9-next-holes + F1-F5 slices) authored fresh from the mission's own terms — resolver-blind to the proposer's pattern rationale; not inherited from ft-canon-fingerprint-store-001"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon6-d/mission/canon-fingerprint-store"
+ :proposal/hash "d157be7b848343ca"
+ :fold-turn/id "ft-canon-fingerprint-store-002"
+ :turn
+ {:agent "zai-3"
+  :model "zai"
+  :edge "invoke-1783703177815-75-26aaf5db"
+  :at "2026-07-10T18:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "cross-batch persistence via handoff record: the store IS the handoff — current canon distribution (state hypothesis), strategy-canons emitted (decisions + why), first_seen/last_seen (evidence anchors), aggregate (provisional-claim ledger)"
+     :fits-pattern "agent/handoff-preserves-context"
+     :addresses-however
+     "without explicit handoff, successors face cold starts and repeat discoveries — batch N+1 without the store restarts from a uniform prior and re-derives what batch N already learned; the SQLite store IS the handoff record, loaded fresh at each Stage 5 startup, so knowledge carries forward"
+     :produces [:cross-batch-persistence]}
+    {:id :b2
+     :role "After Completion vigilance: each batch's MAP-step 'completes' (fingerprints written, aggregate merged) but that completion is fragile — the store's coherence must be sustained through idempotent re-run checks, schema-migration safety, and incremental-merge correctness"
+     :fits-pattern "iching/hexagram-63-jiji"
+     :addresses-however
+     "completion invites drift — a batch that writes fingerprints but silently corrupts the aggregate (merge error, lost provenance, schema drift between batches) has wet its tail; the jiji discipline of guarding the edges and maintaining vigilance through light correction cycles is exactly the idempotent-re-run completion criterion (§9, F2 tests)"
+     :produces [:completion-vigilance]}
+    {:id :b3
+     :role "the CanonAggregate as state-snapshot-witness: a point-in-time projection of the full fingerprint state per (symbol, canon) pair, queryable after the fact, enabling time-travel reconstruction without delta-aggregation"
+     :fits-pattern "invariant-coherence/state-snapshot-witness"
+     :addresses-however
+     "existing per-binding evidence records deltas (individual CanonFingerprint rows), not full-state; reconstructing the canon distribution at a past batch requires walking every row and inferring — the CanonAggregate IS the snapshot: one query returns the full projection at the batch boundary, with per-batch JSONL files as the frozen historical snapshots"
+     :consumes [:cross-batch-persistence :append-only-event-discipline]
+     :produces [:queryable-snapshot]}
+    {:id :b4
+     :role "append-only provenance-bearing event discipline: each CanonFingerprint record is a state-transition event against a (symbol, canon) entity, carrying paper_id + strategy_anchor + timestamp as provenance; the aggregate is derived by replay"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "the 8-event state/* vocabulary partially transposes: state/spawned (first binding), state/strengthened (subsequent evidence), state/refined (scope sharpened) map to fingerprint lifecycle; but link/asserted (cross-essay relation) is interest-network-specific and does not transpose to binding-events. PARTIAL: append-only + provenance + lifecycle-typing core transposes; relational-event machinery does not"
+     :produces [:append-only-event-discipline]}
+    {:id :b5
+     :role "publication-cadence axis: the store operates composition (3) — living SQLite aggregate (continuously updated) + frozen per-batch JSONL snapshots (timestamped, citable by batch-id), resolving 'which version of the canon distribution' ambiguity"
+     :fits-pattern "ukrns/publication-cadence"
+     :addresses-however
+     "the living/snapshot axis and declare-your-composition discipline transpose (SQLite living + JSONL frozen = exactly the living+snapshot composition); but DOI-bearing archival citation machinery (grant applications, peer-reviewer fixed targets) is academic-publication-specific and does not transpose to an internal symbol-grounding store. PARTIAL: the publication mechanic transposes; the academic-citation-integrity layer does not"
+     :produces [:living-snapshot-composition]}]
+   :wires
+   [{:from :b1 :to :b3 :connective :seq
+     :rationale "the handoff record (b1) defines WHAT persists; the snapshot witness (b3) defines HOW it is projected and queried — order-dependent: the snapshot shape must cover what the handoff carries before the store is queryable after the fact"}
+    {:from :b3 :to :b2 :connective :seq
+     :rationale "the snapshot (b3) is the completion artifact; the jiji vigilance (b2) guards that completion — order-dependent: the snapshot must exist before there is a 'completion' to sustain against drift"}
+    {:from :b4 :to :b3 :connective :copar
+     :rationale "the append-only event discipline (b4) co-applies with the snapshot witness (b3) — events are the deltas the snapshot aggregates; copar because both are required for reconstructible history but neither subsumes the other"}
+    {:from :b5 :to :b1 :connective :copar
+     :rationale "the living/snapshot composition (b5) co-applies with the handoff (b1) — the composition shapes how the handoff is published (living vs frozen); copar because the composition frames the handoff's accessibility without being consumed sequentially"}
+    {:from :b4 :to :b1 :connective :copar
+     :rationale "the append-only event discipline (b4) co-applies with the handoff record (b1) — events with provenance ARE the handoff's evidence trail; copar because the event discipline governs the handoff's integrity without being a sequential step"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b3 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "structure/interest-event-vocabulary"
+     :free "link/asserted event type does not transpose to fingerprint records"
+     :why
+     "the 8-event vocabulary's link/asserted (cross-essay relation between interest-network entities) has no analogue in the canon fingerprint store: a fingerprint is a binding-event (symbol -> canonical form), not a relation-assertion between documents. The state/* lifecycle events (spawned/strengthened/refined) transpose; the relational event does not. Recording as policy-hole rather than forcing a false mapping or dropping the pattern — the append-only + provenance core is load-bearing even without the relational event"}
+    {:id :h2
+     :unfolded-pattern "ukrns/publication-cadence"
+     :free "DOI-bearing archival citation machinery does not transpose"
+     :why
+     "the publication-cadence pattern's academic-citation layer (DOIs, grant-application citations, peer-reviewer fixed targets, archival norms for academic work) is specific to externally-published academic artefacts; the canon fingerprint store is an internal symbol-grounding store with no external readership or citation requirement. The living/snapshot composition mechanic transposes; the citation-integrity substance does not"}
+    {:id :h3
+     :unfolded-pattern "iching/hexagram-63-jiji"
+     :free "the hexagram's failure-mode (over-conservation leads to stagnation) bounds the vigilance"
+     :why
+     "jiji warns that over-conservation leads to stagnation and vulnerability — the store's idempotent-re-run vigilance must not become over-conservative (refusing schema evolution, locking the frequency-ordering permanently). The pattern's adapt-trigger (drift -> switch to hexagram-64-weiji readiness) names the escape valve but does not specify WHEN the store should re-open for structural change vs hold its completed order. The vigilance discipline transposes; the stagnation-threshold calibration does not"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "b4 and b5 overlap: both contribute a 'persist-with-provenance' lens at partial satiety"
+     :why
+     "b4 (interest-event-vocabulary) and b5 (publication-cadence) both contribute provenance-bearing persistence at partial satiety — b4's append-only event discipline and b5's frozen-snapshot composition both address 'how does the store maintain a trustworthy trail'. The overlap is genuine: they are two patterns whose CORE (durable, traceable records) is the same move applied to the fingerprint store. b4 grounds the per-record provenance; b5 grounds the per-batch publication; both are needed but they are not independent contributions to the same want. Recording as honest overlap, not false independence"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the scope-binding extraction (how role/scope fields are populated from detect_grounded_symbols output) is not grounded by any of the 5 patterns"
+     :why
+     "the schema carries role and scope fields per §2.1, but HOW Stage 5's detect_grounded_symbols output maps to binder/role values (the extraction strategy for theorem-level scope bindings) is not derivable from the handoff, jiji, snapshot-witness, event-vocabulary, or publication-cadence patterns — it is an extraction-design decision grounded in the Arxana strategy vocabulary, which none of these 5 patterns halo. The schema is decidable from the patterns; the population is not"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "Stage 5 emits learned-newcommand-vocab.json snapshots per batch (posteriors stabilise within-batch but do NOT carry forward); detect_grounded_symbols in the QC viewer (returns single canon); M-bayesian-structure-learning §3.2 (the posterior formula); the literature graph (PM/ProofWiki/nLab); the existing strategy vocabulary; the §8 decisions RESOLVED (SQLite, scope, frequency-ordered, strategy-anchor); slices F1-F5 specified."
+  :want
+  "a canon fingerprint store that makes symbol-grounding improve with each batch — persistent SQLite, scope bindings, frequency-ordered MAP-REDUCE, in-run queryable, the canon distribution IS the prior, with completion-vigilance guarding against aggregate drift."
+  :via
+  "psi authored by zai-3 from futon6/holes/missions/M-canon-fingerprint-store.md (sections 1-9, HEAD/IDENTIFY/§8-decisions/§9-holes + F1-F5 slices), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-canon-fingerprint-store-001"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

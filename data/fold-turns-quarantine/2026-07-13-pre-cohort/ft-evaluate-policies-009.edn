@@ -16,7 +16,7 @@
     :role :application,
     :satiety :full,
     :via
-    "the mask question: G-graph-pragmatic's 1000·[not-applicable] is a feasibility HARD constraint smuggled into a value term — split it so infeasibility is a mask applied BEFORE scoring, not a cliff penalty inside the sum; this is the single most dishonest mechanism in the current blend, and its repair is architectural",
+    "the mask question: graph-control-score's 1000·[not-applicable] is a feasibility HARD constraint smuggled into a value term — split it so infeasibility is a mask applied BEFORE scoring, not a cliff penalty inside the sum; this is the single most dishonest mechanism in the current blend, and its repair is architectural",
     :rule "fold-turn/box"}
    {:id :b4,
     :role :application,
@@ -61,10 +61,10 @@
   :terminals
   [{:id :b4, :discharges :want-signature}
    {:id :b7, :discharges :want-signature}]},
- :pins [:prompt-sha :arming :delta-g-recompute],
+ :pins [:prompt-sha :arming :coverage-score-delta-recompute],
  :cascade
  {:psi
-  "WANT: the WM's G-total score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \"EFE\" names only the part that is one, and the blend's self-description stops being the least honest layer of a system whose other layers earned their labels. Per-term dispositions (repair / merge / rename / delete) decided empirically: which terms ever flip a decision, and is selection effectively 2-term or 3-term at current weights. The paper's central sentence — \"EFE-scored action selection\" — either earned back or honestly renamed \"multi-objective score with an EFE core\". Falsifiable: the empirical characterisation (per-term decision-influence over the burn-in corpus) decides each term's fate, not argument.\nHUNGRY-FOR: label-honesty (the score's self-description must match what it computes, the we-do discipline — the label follows the code, not the aspiration); units-commensurability (incommensurate hand-set weights absorb the damage invisibly — the 1000·[not-applicable] cliff is a mask smuggled into a value term, not a slope); the R13 lesson at the evaluation layer (the score should be of policies-as-cascades, not next actions — does each term even lift from action-grain to cascade-grain?).\nHAVE: the loop works — it closed live 2026-07-02, γ is calibrating (its calibration pair is coverage-ΔG vs coverage-ΔG, so γ is safe and out of scope); the R18 audit produced the eight verdicts (one principled approximation: G-ambiguity; seven analogicals; a total that is not EFE); G-ambiguity already earned principled-approximation — proof the canonical standard is reachable from this codebase; the flight log carries per-term, per-candidate, per-tick values so every claim about what the score is can be checked against what selection does; the futon6 field-embed diagram already declares its sense honestly (g(s), the integrand, not G(π)).\n",
+  "WANT: the WM's controller-score score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \"EFE\" names only the part that is one, and the blend's self-description stops being the least honest layer of a system whose other layers earned their labels. Per-term dispositions (repair / merge / rename / delete) decided empirically: which terms ever flip a decision, and is selection effectively 2-term or 3-term at current weights. The paper's central sentence — \"EFE-scored action selection\" — either earned back or honestly renamed \"multi-objective score with an EFE core\". Falsifiable: the empirical characterisation (per-term decision-influence over the burn-in corpus) decides each term's fate, not argument.\nHUNGRY-FOR: label-honesty (the score's self-description must match what it computes, the we-do discipline — the label follows the code, not the aspiration); units-commensurability (incommensurate hand-set weights absorb the damage invisibly — the 1000·[not-applicable] cliff is a mask smuggled into a value term, not a slope); the R13 lesson at the evaluation layer (the score should be of policies-as-cascades, not next actions — does each term even lift from action-grain to cascade-grain?).\nHAVE: the loop works — it closed live 2026-07-02, γ is calibrating (its calibration pair is coverage-ΔG vs coverage-ΔG, so γ is safe and out of scope); the R18 audit produced the eight verdicts (one principled approximation: G-ambiguity; seven analogicals; a total that is not EFE); G-ambiguity already earned principled-approximation — proof the canonical standard is reachable from this codebase; the flight log carries per-term, per-candidate, per-tick values so every claim about what the score is can be checked against what selection does; the futon6 field-embed diagram already declares its sense honestly (g(s), the integrand, not G(π)).\n",
   :psi-sha256
   "345bb0824b8e04b6288077b2146ff0fce24d9badf91bfdfb18c32a775eb33165",
   :pattern-ids
@@ -174,7 +174,7 @@
     :mc 0.367,
     :via "deposit-009 cascade, budget-20 window (untruncated)",
     :rule "fold-turn/pattern-cite"}],
-  :F-free-energy 3.999},
+  :cascade-score 3.999},
  :mission "futon2-d/mission/evaluate-policies",
  :fold-turn/id "ft-evaluate-policies-009",
  :deposit-contract :v2,
@@ -202,7 +202,7 @@
      :produces [:term-liveness-census]}
     {:id :b3,
      :role
-     "the mask question: G-graph-pragmatic's 1000·[not-applicable] is a feasibility HARD constraint smuggled into a value term — split it so infeasibility is a mask applied BEFORE scoring, not a cliff penalty inside the sum; this is the single most dishonest mechanism in the current blend, and its repair is architectural",
+     "the mask question: graph-control-score's 1000·[not-applicable] is a feasibility HARD constraint smuggled into a value term — split it so infeasibility is a mask applied BEFORE scoring, not a cliff penalty inside the sum; this is the single most dishonest mechanism in the current blend, and its repair is architectural",
      :fits-pattern "aif/placeholder-is-load-bearing",
      :addresses-however
      "the pattern says a placeholder marks real work to do, but the 1000·penalty is worse than a placeholder — it actively distorts the gradient field (the units problem as conditioning problem from HEAD tension 8): removing the cliff is necessary but what replaces it (a feasibility mask vs a graded penalty) is a design choice the pattern does not decide",
@@ -325,7 +325,7 @@
  {:have
   "the loop works — it closed live 2026-07-02, γ is calibrating (its calibration pair is coverage-ΔG vs coverage-ΔG, so γ is safe and out of scope); the R18 audit produced the eight verdicts (one principled approximation: G-ambiguity; seven analogicals; a total that is not EFE); G-ambiguity already earned principled-approximation — proof the canonical standard is reachable from this codebase; the flight log carries per-term, per-candidate, per-tick values so every claim about what the score is can be checked against what selection does; the futon6 field-embed diagram already declares its sense honestly (g(s), the integrand, not G(π)).\n",
   :want
-  "the WM's G-total score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \"EFE\" names only the part that is one, and the blend's self-description stops being the least honest layer of a system whose other layers earned their labels. Per-term dispositions (repair / merge / rename / delete) decided empirically: which terms ever flip a decision, and is selection effectively 2-term or 3-term at current weights. The paper's central sentence — \"EFE-scored action selection\" — either earned back or honestly renamed \"multi-objective score with an EFE core\".\n",
+  "the WM's controller-score score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \"EFE\" names only the part that is one, and the blend's self-description stops being the least honest layer of a system whose other layers earned their labels. Per-term dispositions (repair / merge / rename / delete) decided empirically: which terms ever flip a decision, and is selection effectively 2-term or 3-term at current weights. The paper's central sentence — \"EFE-scored action selection\" — either earned back or honestly renamed \"multi-objective score with an EFE core\".\n",
   :format :sorry,
   :escrow "do-not-write-meme.db"},
  :hole
@@ -333,11 +333,11 @@
   :have
   "the loop works — it closed live 2026-07-02, γ is calibrating (its calibration pair is coverage-ΔG vs coverage-ΔG, so γ is safe and out of scope); the R18 audit produced the eight verdicts (one principled approximation: G-ambiguity; seven analogicals; a total that is not EFE); G-ambiguity already earned principled-approximation — proof the canonical standard is reachable from this codebase; the flight log carries per-term, per-candidate, per-tick values so every claim about what the score is can be checked against what selection does; the futon6 field-embed diagram already declares its sense honestly (g(s), the integrand, not G(π)).\n",
   :want
-  "the WM's G-total score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \"EFE\" names only the part that is one, and the blend's self-description stops being the least honest layer of a system whose other layers earned their labels. Per-term dispositions (repair / merge / rename / delete) decided empirically: which terms ever flip a decision, and is selection effectively 2-term or 3-term at current weights. The paper's central sentence — \"EFE-scored action selection\" — either earned back or honestly renamed \"multi-objective score with an EFE core\".\n",
+  "the WM's controller-score score to be what its label says — expose canonical EFE (risk + ambiguity) separately from the seven analogical terms, so \"EFE\" names only the part that is one, and the blend's self-description stops being the least honest layer of a system whose other layers earned their labels. Per-term dispositions (repair / merge / rename / delete) decided empirically: which terms ever flip a decision, and is selection effectively 2-term or 3-term at current weights. The paper's central sentence — \"EFE-scored action selection\" — either earned back or honestly renamed \"multi-objective score with an EFE core\".\n",
   :via
   "M-evaluate-policies §1 the tension + §0 HEAD (EFE honesty, the Carver question), psi authored from the mission doc",
   :rule "fold-turn/hole-from-sorry-psi"},
- :eval {:delta-g -0.6153846153846154, :g-grain :coverage},
+ :eval {:coverage-score-delta -0.6153846153846154, :score-grain :coverage},
  :psi-recipe
  {:source "authored from mission doc M-evaluate-policies.md §1 (the tension) + §0 HEAD",
   :no-blind-scoring

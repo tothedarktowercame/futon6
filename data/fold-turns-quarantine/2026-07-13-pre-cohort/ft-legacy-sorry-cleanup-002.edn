@@ -1,0 +1,129 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the mission IS a stack-coherence scan: 23 entries to review, each requiring scope declaration, pattern application, raw findings capture, and fix/diff notation. The protocol's four steps transpose directly: (1) declare scope — the 23 code/v05/sorry entries from the snapshot (sha256 d242066d, 2026-07-02); (2) record patterns applied — the review protocol's per-item method (read title + related-missions + resolution + underlying code/git); (3) note diffs/fixes — the improve/keep/evict dispositions with one-line rationales, the retype executions, the gated erasures; (4) append next-scan note — outstanding issues (e.g., the nil-kind 6 that need further investigation) plus the evidence path (snapshot file, commit hashes, XTDB state). The legacy-sorries-snapshot.edn IS the scan's starting log; the exit criteria (every entry has a recorded disposition) ARE the scan's completion check. Without this protocol the review is unverifiable: a future contributor cannot tell which entries were checked and why they received their disposition"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via
+    "batch-run check! against each of the 23 entries, log proof states (the disposition: improve/keep/evict + rationale), and emit follow-on obligations (the improved-to-interface entries generate new gold-corpus memberships; the evicted entries generate erase-path obligations). The joy metric (time-to-proof, obligations cleared) maps to review velocity: how many of the 23 are classified per session, how many improve-to-interface discoveries are made. HOWEVER the check! DSL and devmap obligation machinery are specific to futon3's pattern/proof system — this mission's 'obligations' are substrate-2 sorry entries, not devmap clauses. The batch-check discipline (check every item, log the result, emit follow-ons) transposes; the specific check! mechanism does not. The mission would need its own check function (does this entry name a real interface? does it have have/want orientation? is it resolved?) rather than the devmap check! DSL"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via
+    "the mission's exit criterion 3 — keep-loggeds discriminated so code/v05/sorry (interface sense) is unambiguous — IS the artifact-tagging audit this pattern prescribes. The sorry entries must be properly tagged (:sorry/facet :interface vs :sorry/facet :logged) so downstream consumers (the fold's phase-2 target, the A-next gold corpus) receive interpretable artifacts. The 'tag any missing or unusable artifacts with follow-up obligations' maps to the nil-kind 6 entries that need further investigation before classification. HOWEVER the pattern's framing is futon7's civic/Hyperreal translation layer — auditing that lower-futon metrics/proofs/ledgers are consumable by Hyperreal seed institutions. The artifact-tagging discipline transposes (ensure artifacts are tagged and interpretable for downstream consumers); the Hyperreal/civic-institution layer is far upstream of a substrate-2 sorry-type cleanup"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "the snapshot-vs-live drift risk: the 23 entries were pulled from :7071 on 2026-07-02 (sha256 d242066d), XTDB originals untouched. If the live XTDB state has changed since the snapshot — entries evicted, retyped, or new entries added — dispositions made against the stale snapshot are drift. The commit-intent-alignment discipline transposes: correlate the snapshot with the live :7071 state; if an entry's status in XTDB disagrees with its snapshot status, flag as drift and reconcile before classifying. The :addressed 11 and :constructed 1 entries are the highest drift risk: their XTDB state may have advanced since the snapshot (a status marked :addressed in the snapshot may have been evicted or re-opened in XTDB). The gated erase path (dry-run first, penholder joe, --reason) IS the reconciliation mechanism — it verifies the live state before acting. The snapshot IS the 'devmap says planned'; the live XTDB IS the 'commits show work done'; the alignment check catches the mismatch"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b2] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: the 23 legacy code/v05/sorry entries in substrate-2 each validated and classified — improve to interface-sorry, keep as logged-issue, or evict — so the sorry type carries one coherent meaning when the 15 A-next interface-sorries land alongside them. This is a validation-and-improvement pass, not a mass migration: some loggeds may name a real interface (have→want over substrate-2 nodes) worth recovering via the A-next method; others are genuine issue-ledger notes to retype; others are resolved/n-a-by-design and evictable. Every one of the 23 needs a recorded disposition with a one-line rationale, and the keep-loggeds must be discriminated (:sorry/facet :logged) so code/v05/sorry (interface sense) is unambiguous.\nHUNGRY-FOR: a durable review log (scope declared, patterns applied, findings captured per item, next-scan note) so the audit trail is trustworthy and future reviewers can compare dispositions; a batch-check discipline (each entry checked against the improve/keep/evict criteria, proof state logged, follow-on obligations emitted) so no entry is rubber-stamped; artifact-tagging discipline so downstream consumers (the fold's phase-2 target, the A-next gold corpus, the E-futon1a-archivist write/erase gate) receive properly discriminated sorry artifacts they can act on; drift-detection between the snapshot (sha256 d242066d, pulled 2026-07-02, XTDB originals untouched) and the live :7071 state, so dispositions made against the snapshot are not stale.\nHAVE: the legacy-sorries-snapshot.edn (23 entries pulled from :7071); the per-item shape (all 23 have single self-endpoint, prose :sorry/title, :sorry/related-missions, resolution/status props; zero have/want orientation, zero typed endpoints); the first-pass hypotheses (:sorry/kind distribution: prototyping-forward 8, n-a-by-design 6, nil 6, meta 2, external-dependency 1; :sorry/status: addressed 11, n-a-by-design 6, open 4, acknowledged-v1-in-force 1, constructed 1; the 4 :open most likely to hide a real interface); the A-next sorry hyperedge schema (done); the gated erase path (futon1a/scripts/erase.bb, penholder joe, --reason, dry-run first); the review protocol (per item: read title + related-missions + resolution + underlying code/git, then classify)."
+  :psi-sha256
+  "ee4ccc3fedfc38c03983fc5f12391960a108207a410e3ee89409f1ffca85b364"
+  :pattern-ids
+  ["contributing/stack-scan-logging-protocol"
+   "devmap-coherence/ifr-f3-piti"
+   "devmap-coherence/ifr-f7-upa-upekkha"
+   "stack-coherence/commit-intent-alignment"]
+  :size 4
+  :truncated false
+  :budget 4
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "94bf96d06a24e008"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-4"
+  :source "M-legacy-sorry-cleanup.md (HEAD/IDENTIFY/MAP/review-protocol/exit-criteria) authored fresh from the mission's own terms through the four-pattern combined lens — resolver-blind to the proposer's pattern rationale; first-contact with this mission doc"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon2-d/mission/legacy-sorry-cleanup"
+ :proposal/hash "94bf96d06a24e008"
+ :fold-turn/id "ft-legacy-sorry-cleanup-002"
+ :turn
+ {:agent "zai-4"
+  :model "zai"
+  :edge "invoke-1783709807117-111-ce68ea04"
+  :at "2026-07-10T22:45:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the mission IS a stack-coherence scan: 23 entries reviewed with scope declared, patterns applied (per-item review method), findings captured, dispositions recorded; the legacy-sorries-snapshot.edn is the starting log; exit criteria are the completion check"
+     :fits-pattern "contributing/stack-scan-logging-protocol"
+     :addresses-however
+     "without a repeatable logging protocol we cannot compare progress between scans or prove that obligations moved forward — the 23 dispositions must be durably logged so a future reviewer can trace why each entry received its classification; the nil-kind 6 entries that need further investigation are the 'next-scan note' the protocol requires"
+     :produces [:durable-review-log]}
+    {:id :b2
+     :role "batch-check discipline: each of the 23 checked against improve/keep/evict criteria, proof state (disposition + rationale) logged, follow-on obligations emitted (gold-corpus memberships for improved entries, erase-path obligations for evicted ones)"
+     :fits-pattern "devmap-coherence/ifr-f3-piti"
+     :addresses-however
+     "the check! DSL and devmap obligation machinery are specific to futon3's pattern/proof system; this mission's obligations are substrate-2 sorry entries, not devmap clauses — the mission needs its own check function (does this entry name a real interface? does it have have/want orientation? is it resolved?), not the devmap check! DSL. The batch-check discipline transposes; the specific mechanism does not"
+     :produces [:batch-checked-dispositions]}
+    {:id :b3
+     :role "artifact-tagging audit: sorry entries tagged :sorry/facet :interface vs :sorry/facet :logged so downstream consumers (the fold, the gold corpus) receive interpretable, discriminated artifacts"
+     :fits-pattern "devmap-coherence/ifr-f7-upa-upekkha"
+     :addresses-however
+     "the pattern's framing is futon7's civic/Hyperreal translation layer — auditing that lower-futon artifacts are consumable by Hyperreal seed institutions. The artifact-tagging discipline transposes (ensure artifacts are tagged for downstream consumers); the Hyperreal/civic-institution layer is far upstream of a substrate-2 sorry-type cleanup. The nil-kind 6 entries needing further investigation are the 'missing or unusable artifacts tagged with follow-up obligations' the pattern prescribes"
+     :consumes [:batch-checked-dispositions]
+     :produces [:discriminated-sorry-artifacts]}
+    {:id :b4
+     :role "snapshot-vs-live drift detection: the 23-entry snapshot (sha256 d242066d, 2026-07-02) must be correlated with the live :7071 XTDB state; entries whose XTDB status disagrees with their snapshot status are flagged as drift and reconciled before classifying"
+     :fits-pattern "stack-coherence/commit-intent-alignment"
+     :addresses-however
+     "the :addressed 11 and :constructed 1 are the highest drift risk — their XTDB state may have advanced since the snapshot; the gated erase path (dry-run first, penholder joe, --reason) IS the reconciliation mechanism that verifies live state before acting. The snapshot IS the 'devmap says planned'; the live XTDB IS the 'commits show work done'; the alignment check catches the mismatch"
+     :produces [:drift-free-dispositions]}]
+   :wires
+   [{:from :b1 :to :b2 :connective :seq}
+    {:from :b4 :to :b1 :connective :copar}
+    {:from :b2 :to :b3 :connective :seq}
+    {:from :b4 :to :b2 :connective :copar}]
+   :terminals [{:id :b3 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "devmap-coherence/ifr-f3-piti"
+     :free "the check! DSL and devmap obligation machinery do not transpose to substrate-2 sorry classification"
+     :why
+     "the pattern specifies batch-running futon3's check! against devmap obligations — the mechanism is tied to futon3's pattern canon, similarity field, and check DSL. This mission's 'obligations' are substrate-2 sorry hyperedges, not devmap clauses. The mission needs its own classification criteria (does this entry name a real interface? does it have have/want orientation? is it resolved/n-a-by-design?) rather than the devmap check! function. The batch-check discipline (check every item, log proof state, emit follow-ons) transposes; the specific check! mechanism does not. Recording as policy-hole at :partial satiety rather than forcing a false check! mapping"}
+    {:id :h2
+     :unfolded-pattern "devmap-coherence/ifr-f7-upa-upekkha"
+     :free "the Hyperreal/civic-institution translation layer does not transpose to a substrate-2 sorry-type cleanup"
+     :why
+     "the pattern audits that futon2 metrics, futon3 proof trails, futon5 ledgers, and futon6 math bundles are consumable by the Hyperreal seed crystal (policies, rituals, accountability loops). This mission's downstream consumers are the fold's phase-2 target and the A-next gold corpus — substrate-2 artifacts, not civic institutions. The artifact-tagging discipline (ensure artifacts are properly tagged and interpretable for downstream consumers) transposes; the Hyperreal/civic framing is far upstream. The discipline applies at the substrate-2 layer; the institutional-translation layer does not"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the A-next method for recovering endpoints (doc+code+git+XTDB) is not grounded by any of the four patterns"
+     :why
+     "the mission's review protocol specifies that improve-to-interface entries must have their endpoints recovered via the A-next method (doc+code+git+XTDB). This is a concrete forensic procedure: read the mission doc, inspect the code, trace git history, query XTDB for the real ns-vars the sorry's have/want should orient over. None of the four patterns (scan-logging, batch-check, artifact-tagging, drift-detection) ground this recovery procedure. They ground the review PROCESS (how to scan, check, tag, detect drift); they do not ground the endpoint RECOVERY (how to find the real substrate-2 nodes a logged-issue sorry should point to). The process is decidable from the patterns; the recovery is the mission's own forensic work"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "b1 (scan-logging) and b2 (batch-check) overlap: both ground the review process discipline"
+     :why
+     "b1 says 'log the scan: scope, patterns, findings, fixes, next-scan' and b2 says 'batch-check each item, log proof state, emit follow-ons.' Both address 'how to review the 23 entries systematically.' b1 grounds the logging protocol (durability, comparability); b2 grounds the checking discipline (every item checked, result logged, follow-ons emitted). The overlap is genuine: they are two patterns whose CORE (systematic per-item review with durable logging) is the same move. b1 names the log shape; b2 names the check discipline; both are needed but they are not independent contributions to the same want. Honest overlap, not false independence"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "the legacy-sorries-snapshot.edn (23 entries, sha256 d242066d, 2026-07-02); the per-item shape (all single self-endpoint, prose title, zero have/want orientation); the first-pass hypotheses (kind/status distributions, the 4 :open most likely to hide a real interface); the A-next sorry hyperedge schema (done); the gated erase path; the review protocol."
+  :want
+  "all 23 entries validated and classified (improve/keep/evict) with recorded dispositions and rationales, the keep-loggeds discriminated so code/v05/sorry is unambiguous, and any improved-to-interface entries minted into the gold corpus."
+  :via
+  "psi authored by zai-4 from futon2/holes/M-legacy-sorry-cleanup.md (HEAD/IDENTIFY/MAP/review-protocol/exit-criteria), resolver-blind to the proposer's pattern rationale; first-contact with this mission doc"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

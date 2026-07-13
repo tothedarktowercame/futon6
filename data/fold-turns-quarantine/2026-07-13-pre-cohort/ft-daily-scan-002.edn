@@ -1,0 +1,164 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "budget-bounds-exploration as the 1-hour-per-scan-day discipline that bounds the consulting scan: the IDENTIFY proposal commits to 1 hour/day (5 min scan + 55 min workup), 20 working days, 20h/month. The budget is not aspirational — it is the falsifiable frame. The observed reality (45 cumulative gap-days across 6 scan-days) shows the daily budget didn't bind, but the budget-SHAPE survived the reframe: '20 scan-days at some cadence' preserves the bounded-exploration principle (each scan-day is still a bounded unit of effort) while releasing the false constraint (daily consecutiveness). The MAP Q2 rate-limit analysis (30 calls/scan, well within GitHub limits) is the budget's technical floor — the probe infrastructure is budget-cheap; the WORKUP budget (the 55 minutes of targeted response) is where the bind actually applies. What REMAINS: the budget must hold for 14 more scan-days, and the workup budget (at least 3 targeted responses: Bayesian model, flexiarg, capability demo) has produced candidates (Day 5: R-contract audit, M-contract, Biff review) but none sent or prepared for a prospect"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "trail-enables-return as the frame-by-frame EDN record that makes each scan-day cumulative: frame-daily-scan-001 through 006 ARE the trail — each frame records what was probed, what was found, what hypotheses were named, what methodology was corrected. The standing-task tracking (scoring-blindspot-for-pre-commercial across 4 data points) IS trail-bearing knowledge: Day 3's first observation returns cheaply at Day 6 because the trail carries it forward. The methodology re-build at Day 5 (fishing-expedition→hypothesis-tested) is a trail-mark: the return path from Day 6 to Day 5's insight doesn't require re-deriving it. What REMAINS: the trail is not INDEXED — cross-scan continuity depends on Joe re-reading frames manually. The probe results cache (data/cache/) is empty; each scan re-derives from scratch unless the cache is populated. The trail exists as artefacts but not as a queryable return-surface. The f7.probe-gen seam (where fresh probes are generated with term←source←warrant) is the trail-indexing point that hasn't been exercised as practice"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "dhammavicaya (truth-seeking investigation / investigation of phenomena) as the methodology re-build that made the scan truthful: Day 5's fishing-expedition-to-hypothesis-tested restructure IS dhammavicaya — the recognition that the probes were not investigating the landscape but trawling it, and the correction (deps-grounded, contract-shaped probes with control-shape discrimination: Sirix-as-no-ecosystem, VERSES-as-no-presence, OpenHands-as-different-substrate). Day 6's confirming-negative ('nobody here owns learning-efficiency; gap validated as Joe's own') is dhammavicaya's negative-result discipline: the investigation found absence and named it as signal, not failure. The intersectional census (direct empty-cell probe rather than whole-space survey) is dhammavicaya's precision: investigating the specific gap, not the whole space. What REMAINS: the discipline-drift standing-task (action-tracking masks un-probed hypotheses) is the anti-dhammavicaya tendency — the scan must keep investigating the landscape, not just record activity about scanning"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "viriya (energy/effort/right exertion) as the sustained effort that drives scan-days forward across gap-days: the mission's energy is not constant — it spikes (Day 5's apparatus restructure, Day 6's mission-driven outward-MAP scan) and drops (the 38-day gap between Day 4 and Day 5). Viriya is not manic energy but RIGHT exertion: the effort that goes into making the apparatus truthful (the code-search probe-type implementation, the xtdb-ecosystem rewrite, the stale-probe removal) is viriya directed at the practice itself, not just at the landscape. The Clojurists Together finding (Day 5: a free-solo-rule-compatible funding channel) is viriya's strategic form: effort directed at the highest-leverage opportunity, not dispersed across all probes. What REMAINS: viriya must sustain through 14 more scan-days — not the forced-daily energy that broke, but the willingness to pick up the scan after a gap and do the workup. The 20h/month hypothesis tests whether viriya at this sustained-but-irregular level produces consulting conversations"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "upekkha (equanimity: non-reactive steadiness under the gap-day reality): 45 cumulative gap-days, a 38-day gap, a daily streak that broke at Day 4. Upekkha is the stance that neither forces the broken rhythm (false optimism: 'the streak will restart tomorrow') nor abandons the mission (despair: 'the gaps prove it doesn't work'). The 2026-05-27 cadence reframe ('Streak is the wrong word; 20 scan-days at some cadence') is upekkha in action: steady recognition that the rhythm changed AND the apparatus improved anyway. The completion-criteria re-evaluation (criterion 5: not held; criterion 6: pending; criterion 7: Day 5 produced candidates) is equanimity adjusting the evaluation frame without dropping the evaluation. What REMAINS: the 14 scan-days owed require equanimity — each gap-day is not failure but data, and the returning-to-scan after a gap is the equanimous act the mission needs"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :partial
+    :via
+    "futon-bridge-health as the scan-to-stack wiring that makes each brief flow through the system: the MAP Q5 analysis specified the bidirectional dependency (M-daily-scan supplies :depositing data and pipeline status to M-war-machine; M-war-machine supplies cardinal directions and frame-derivative schema to M-daily-scan). The pilot architecture (futon7 produces → futon1a stores → futon5a frame-schema registers → futon0 War Machine reads → futon4 WebArxana displays) is designed but NOT WIRED. The evidence-emission shape (MAP Q4: :github-scan-brief evidence entry via curl POST or arxana-store-emit-evidence!) is specified but not implemented. The frame-derivative catalogue (futon5a/data/frame-derivatives-catalogue.edn) defines the :github-scan-brief type but no brief has been emitted as one. What REMAINS: the bridge is DESIGNED but not HEALTHY — nothing downstream of futon7 consumes the scan output. The :depositing cardinal stays at 0.0 because the derivative-event pathway is unbuilt. The futon7a blog (the publication surface, also unbuilt) is the other bridge — from internal EDN to public consulting signal. PARTIAL: the bridge architecture and derivative-event schema are fully specified (HAVE); the wiring, emission, and publication are not implemented (REMAINS)"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b6] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b6 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a daily GitHub scan that explores the consulting landscape within a bounded 1-hour budget, leaves a trail that makes each scan-day returnable and cumulative, investigates the landscape truthfully (not fishing-expedition but hypothesis-tested), sustains effort across gap-days toward 20 scan-days, and wires the scan into the futon stack so each brief flows futon7→futon1a (evidence)→futon5a (frame derivative)→futon0 (War Machine) — making the :depositing cardinal measurably non-zero and testing whether 20h/month of bounded scan+workup produces a consulting conversation.\nHUNGRY-FOR: the trail that makes return cheap (frame-daily-scan-001 through 006 exist but the cross-scan continuity depends on Joe re-reading frames manually — no queryable trail-index exists; each scan-day's findings should be returnable-to without re-deriving); the budget that actually binds (the 1-hour/day assumption broke — 45 cumulative gap-days show the budget didn't hold; the reframe to 20-scan-days-at-some-cadence needs a budget shape that survives irregularity); the bridge wiring (evidence emission to futon1a was specified in MAP Q4 but NEVER wired — the POST endpoint, the :github-scan-brief derivative event type, the War Machine frame reading are all unbuilt; futon7 produces, nothing downstream consumes); investigation discipline (the fresh-probes discipline was minted Day 6+ — every term carries term←source←warrant — but the f7.probe-gen seam exists without the practice holding it; the discipline-drift standing-task flags that action-tracking masks un-probed hypotheses).\nHAVE: 6 scan-days completed with per-frame EDN records (the trail exists but is not indexed); probe infrastructure fully operational (f7/probes.clj, f7/gh.clj, f7/signals.clj — 10 probe categories, 6 signal extractors, scoring); methodology re-built Day 5 (hypothesis-tested deps-grounded contract-shaped probe replacing fishing-expedition); code-search probe-type landed (f7.gh/search-code + :probe-type :code-search dispatch); fresh-probes discipline minted (the resolution of pattern-rule-systems: dissolve the static-probe model, every term carries warrant); scan-coherence/mission-anchored-scan pattern extracted from Day 6 good-frame exemplar; 4 standing-tasks tracked (scoring-blindspot-for-pre-commercial, surface-render-shallowness, static-probe-misalignment, discipline-drift); the MAP Q4 evidence-emission shape specified but not implemented; the MAP Q5 bidirectional dependency on M-war-machine analysed but not wired.\n"
+  :psi-sha256
+  "00eb76b66e1503997cc55180425555240c36f72fcc678ddc90f9a837283e5f1b"
+  :pattern-ids
+  ["agent/budget-bounds-exploration"
+   "agent/trail-enables-return"
+   "devmap-coherence/ifr-f1-dhammavicaya"
+   "devmap-coherence/ifr-f2-viriya"
+   "devmap-coherence/ifr-f7-upa-upekkha"
+   "stack-coherence/futon-bridge-health"]
+  :size 6
+  :truncated false
+  :budget 6
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "7c06581d9af3e776"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-7"
+  :source "M-daily-scan.md full document (IDENTIFY + MAP Q1-Q7 + Day-by-day ledger through Day 6 + standing-tasks + apparatus-cleanup + completion-criteria re-evaluation) authored fresh from the mission's CURRENT state through THIS cascade's lens (budget/trail/investigation/effort/equanimity/bridge-health). Distinct from ft-daily-scan-001's contemplative lens: this psi foregrounds the operational-infrastructure angle (bounded action, trail-indexing, stack wiring) where A1 foregrounded the observational/disciplinary angle. Resolver-blind to the proposer's pattern rationale."
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon7/mission/daily-scan"
+ :proposal/hash "7c06581d9af3e776"
+ :fold-turn/id "ft-daily-scan-002"
+ :turn
+ {:agent "zai-7"
+  :model "zai"
+  :edge "invoke-1783774142003-169-6d636e92"
+  :at "2026-07-11T13:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "budget-bounds-exploration as the 1-hour-per-scan-day discipline: the falsifiable frame (20h/month) that bounds each scan-day's effort. The daily budget broke (45 gap-days) but the budget-shape survived the reframe to 20-scan-days-at-some-cadence"
+     :fits-pattern "agent/budget-bounds-exploration"
+     :addresses-however
+     "without budget bounds, the scan expands unboundedly (the fishing-expedition failure mode Day 5 named) or contracts to nothing (the gap-day drift). The 1-hour budget makes each scan-day a falsifiable unit: did 1 hour of bounded effort produce signal? REMAINS: the budget must hold for 14 more scan-days, and the workup budget (3 targeted responses) has produced candidates but none sent"
+     :produces [:bounded-scan-unit]}
+    {:id :b2
+     :role "trail-enables-return as the frame-by-frame EDN record: frame-daily-scan-001 through 006 are the trail that makes scan-days cumulative. Standing-task tracking (scoring-blindspot across 4 data points) is trail-bearing knowledge that returns cheap"
+     :fits-pattern "agent/trail-enables-return"
+     :addresses-however
+     "without a trail, each scan re-derives from scratch — the methodology corrections, the scoring-blindspot, the control-shape discriminations would all be lost. The trail exists as artefacts but is not INDEXED: cross-scan continuity depends on manual re-reading. REMAINS: no queryable trail-index; the cache (data/cache/) is empty; f7.probe-gen seam unused as practice"
+     :consumes [:bounded-scan-unit :truthful-investigation]
+     :produces [:cumulative-trail]}
+    {:id :b3
+     :role "dhammavicaya as the methodology re-build: Day 5's fishing-expedition-to-hypothesis-tested restructure. The investigation made the probes truthful — deps-grounded, contract-shaped, with control-shape discrimination. Day 6's confirming-negative (learning-efficiency gap validated) is dhammavicaya finding signal in absence"
+     :fits-pattern "devmap-coherence/ifr-f1-dhammavicaya"
+     :addresses-however
+     "without dhammavicaya, the scan trawls rather than investigates — the fishing-expedition failure is the anti-pattern. The methodology re-build IS the dhammavicaya event. REMAINS: the discipline-drift standing-task (action-tracking masks un-probed hypotheses) is the recurring anti-dhammavicaya tendency the mission must guard against"
+     :produces [:truthful-investigation]}
+    {:id :b4
+     :role "viriya as right exertion: the sustained effort driving scan-days forward. Not constant energy but right effort — spikes (Day 5 restructure, Day 6 outward-MAP) and drops (38-day gap). The apparatus-cleanup work (code-search probe-type, xtdb-rewrite, stale-probe removal) is viriya directed at the practice itself"
+     :fits-pattern "devmap-coherence/ifr-f2-viriya"
+     :addresses-however
+     "without viriya, the gap-days win — the mission stalls after the methodology excitement fades. Viriya is not the forced-daily energy that broke but the willingness to return to the scan after a gap and do the workup. REMAINS: the 20h/month hypothesis tests whether this sustained-but-irregular viriya produces consulting conversations"
+     :produces [:sustained-effort]}
+    {:id :b5
+     :role "upekkha as non-reactive steadiness under gap-day reality: 45 cumulative gap-days, a broken daily streak, a reframed evaluation frame. Equanimity that neither forces the broken rhythm nor abandons the mission"
+     :fits-pattern "devmap-coherence/ifr-f7-upa-upekkha"
+     :addresses-however
+     "without upekkha, the cadence failure produces false optimism (pretending the streak holds) or despair (abandoning the mission). The 2026-05-27 reframe ('Streak is the wrong word') and the completion-criteria re-evaluation are upekkha adjusting the frame. REMAINS: each gap-day is data not failure; the return-to-scan after a gap is the equanimous act needed"
+     :produces [:cadence-equanimity]}
+    {:id :b6
+     :role "futon-bridge-health as the scan-to-stack wiring: MAP Q5 specified the bidirectional M-war-machine dependency, the pilot architecture (futon7→futon1a→futon5a→futon0→futon4), and the :github-scan-brief derivative-event type. Designed but not wired"
+     :fits-pattern "stack-coherence/futon-bridge-health"
+     :addresses-however
+     "without bridge health, futon7 produces briefs that nothing downstream consumes — the :depositing cardinal stays at 0.0, the War Machine frame can't read scan evidence, the briefs stay invisible. The bridge architecture is fully specified (MAP Q4-Q5); the wiring, emission, and publication are not implemented. PARTIAL: the bridge is designed but not healthy"
+     :consumes [:cumulative-trail :cadence-equanimity]
+     :produces [:stack-wiring]}]
+   :wires
+   [{:from :b1 :to :b3 :connective :seq
+     :rationale "the bounded budget (b1 budget-bounds) precedes the truthful investigation (b3 dhammavicaya) — order-dependent: the 1-hour budget forces investigation to be selective, which is what makes it truthful rather than trawling. Without the bound, investigation becomes fishing-expedition; the budget is what makes dhammavicaya possible"}
+    {:from :b3 :to :b2 :connective :seq
+     :rationale "truthful investigation (b3 dhammavicaya) precedes the cumulative trail (b2 trail-enables-return) — order-dependent: the trail is only worth returning to if the investigation it records was truthful. The fishing-expedition frames (Days 1-4) are in the trail but their findings are noise; the post-dhammavicaya frames (Days 5-6) are the trail's trustworthy core"}
+    {:from :b4 :to :b2 :connective :copar
+     :rationale "sustained effort (b4 viriya) co-applies with the trail (b2 trail-enables-return) — the trail is what makes viriya's effort cumulative rather than dissipating. Copar because the trail makes effort returnable without being a sequential step: viriya produces the scan-days the trail records"}
+    {:from :b5 :to :b2 :connective :copar
+     :rationale "equanimity (b5 upekkha) co-applies with the trail (b2 trail-enables-return) — the trail's gap-day honesty (recording 45 gap-days) requires equanimity to sustain. Copar because equanimity and trail-bearing are co-active: the trail records the gaps honestly because upekkha doesn't flinch from them"}
+    {:from :b6 :to :b1 :connective :copar
+     :rationale "bridge health (b6 futon-bridge-health) co-applies with the bounded budget (b1 budget-bounds) — the stack wiring is what makes the bounded scan-day's output durable (emitted as evidence, read by the frame). Copar because the bridge amplifies the budget's value without being consumed sequentially: a 1-hour scan that flows through the stack is worth more than one that stays as local EDN"}
+    {:from :b5 :to :b6 :connective :copar
+     :rationale "equanimity (b5 upekkha) co-applies with bridge health (b6 futon-bridge-health) — the bridge wiring requires equanimity because it is the slowest-landing part of the mission (designed since MAP, still unbuilt at Day 6). Copar because equanimity sustains the patience needed for bridge-building without being a sequential step"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b6 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "stack-coherence/futon-bridge-health"
+     :free "the bridge is fully designed but not wired — evidence emission, derivative events, and publication are all unbuilt"
+     :why
+     "the MAP Q4-Q5 analysis specified the :github-scan-brief evidence shape, the bidirectional M-war-machine dependency, and the full pilot architecture (futon7→futon1a→futon5a→futon0→futon4). None of this is implemented: no brief has been emitted as evidence, no derivative event has fired, the :depositing cardinal remains 0.0, the futon7a blog doesn't exist. b6 is :partial because the bridge architecture transposes (it is sound design grounded in real stack seams) but the wiring practice does not (nothing is connected). The bridge is the mission's largest unbuilt component and the one that would make the scan systemically visible"}
+    {:id :h2
+     :unfolded-pattern "agent/trail-enables-return"
+     :free "the trail exists as frame artefacts but is not indexed or queryable — cross-scan continuity depends on manual re-reading"
+     :why
+     "the trail pattern's core (returnable knowledge that makes each scan-day cumulative) transposes partially: the frames ARE returnable artefacts, and the standing-task tracking shows cumulative knowledge (scoring-blindspot across 4 data points). But the trail is not INDEXED: there is no queryable trail-index, the cache is empty, and the f7.probe-gen seam (where fresh probes carry term←source←warrant as trail-markers) exists as code but not as practice. The trail-enables-return pattern's full machinery (structured return-navigation, trail-query surface) goes beyond what the frame artefacts provide. The trail exists; the return-navigation discipline does not"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "b4 (viriya) and b5 (upekkha) overlap: both ground the stance that sustains the mission across gap-days"
+     :why
+     "viriya (right effort, b4) and upekkha (equanimity, b5) both address the same REMAINS — the 14 scan-days owed across irregular cadence. Viriya grounds the energy that returns to scan; upekkha grounds the steadiness that doesn't flinch from the gaps. They are the same developmental arc (the bojjhanga sequence: viriya is factor 4, upekkha is factor 7, with sati/piti/dhammavicaya between). Each box grounds a distinct phase (b4 the effort of returning, b5 the steadiness of staying), but the proposal counts them as two parallel patterns where a developmental-sequence framing would count them as one arc with two phases. Recording as honest overlap — both are needed, both do distinct work, but they are not independent contributions to the same gap-day-survival want"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "6 scan-days completed with per-frame EDN records; probe infrastructure fully operational (10 probe categories, 6 signal extractors, scoring, cache layer); methodology re-built Day 5 (hypothesis-tested deps-grounded contract-shaped probe); code-search probe-type landed (f7.gh/search-code, :probe-type :code-search); fresh-probes discipline minted; scan-coherence/mission-anchored-scan pattern extracted; 4 standing-tasks tracked; MAP Q4 evidence-emission shape and MAP Q5 M-war-machine bidirectional dependency specified."
+  :want
+  "14 more bounded scan-days reaching 20 total; trail-indexed cross-scan continuity; bridge wiring implemented (futon1a evidence emission, :github-scan-brief derivative events, War Machine frame reading, futon7a publication surface); investigation discipline held (fresh-probes practice, discipline-drift guarded); at least 3 targeted workups sent or prepared; at least one consulting conversation produced; the 20h/month hypothesis evaluated."
+  :via
+  "psi authored by zai-7 from futon7/holes/missions/M-daily-scan.md (full document), resolver-blind to the proposer's pattern rationale; authored fresh through this cascade's lens (budget/trail/investigation/effort/equanimity/bridge-health), distinct from ft-daily-scan-001's contemplative lens"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

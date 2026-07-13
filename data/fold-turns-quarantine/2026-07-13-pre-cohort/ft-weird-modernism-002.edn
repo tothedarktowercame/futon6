@@ -1,0 +1,92 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via
+    "anchor-case maintenance for the reading's worked contrasts: the mission's concrete textual anchors (the Flow My Tears chain as wyrd-salience worked example, the brand-name passage as the central anti-pattern, the §8 quotable-passages glossary) function as worked-contrast pairs that make abstract futon-theoretic claims inspectable by grounding them in PKD's text. The pattern's stewardship mechanic applies: each projection-surface cycle should review whether the current anchors still span the reading's discriminative dimensions as the theoretical base evolves. The canonical-plus-archive composition (pattern composition 3) maps to the mission's implicit practice — canonical anchors persist in the doc while superseded readings are archived in the mission log's dated entries. The succession-planning requirement applies: as candidate upgrades land (Parr-Friston, Eightfold Path, Hamilton's Principle), new contrasts may emerge that represent the model's extremes better than the original PKD-essay anchors; the doc needs a stated plan for when and how anchor replacement happens. HOWEVER the pattern's specific scoring substance — the multiplicativity D × A gate, diagnostic-case scoring against model extremes, cross-cycle score comparability — is tied to the UKRN-S working paper's operational model. The mission's anchors are hermeneutic, not diagnostic-scored. The stewardship rhythm transposes; the scoring discipline does not. The pattern's CHECK ('engaged when the current pair is named with a date and a selection rationale; a succession plan exists') names exactly what the mission doc lacks: the anchors are USED but not STEWARDED — no date stamps, no selection rationale, no succession plan, no per-cycle review event in the mission log"
+    :rule "fold-turn/box"}]
+  :hyperedges []
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: to maintain the worked-contrast pairs that ground M-weird-modernism's futon-theoretic reading of PKD as load-bearing rhetoric, not illustration — ensuring the anchors (the Flow My Tears chain as wyrd-salience worked example, the brand-name/Logos passage as the central anti-pattern, the §8 quotable-passages glossary as per-claim anchors) remain valid contrasts as the theoretical base evolves across projection-surface cycles. The mission's projection surfaces (foreword, HEAD reading, candidate upgrades) each depend on concrete textual anchors that make abstract claims inspectable; those anchors age. The reading's central worked contrast — PKD's 1978 confessional-essay register vs futon-theory's 2026 engineering register — must be reviewed each cycle: does the Flow My Tears chain still ground wyrd-salience after the Parr-Friston MAP-phase refinement? Does the brand-name passage still ground the anti-pattern after the formal grounding sharpens what 'articulation' means? The mission operates in perpetual-projection mode (no closure), so the anchor-review cadence is each projection-surface increment, not a terminal verification.\nHUNGRY-FOR: 1) the current anchor pair named with a date and selection rationale — the Flow My Tears chain (selected because it survives translation across six rival containment regimes, demonstrating wyrd-salience by every diagnostic) and the brand-name passage (selected because it is the single most load-bearing anti-pattern instance, the 'mere X' move applied to Logos itself) are the mission's canonical contrast, but neither carries an explicit date stamp or selection rationale in the doc as written; 2) a succession plan for when the current anchors no longer span the model's discriminative dimensions — as candidate upgrades land and the theoretical base evolves (Parr-Friston, Eightfold Path, Hamilton's Principle), new contrasts may emerge that represent the model's extremes better than the original PKD-essay anchors; the doc has no stated plan for anchor rotation or replacement; 3) per-cycle validity review — each projection-surface increment (foreword draft revision, HEAD reading update, candidate-upgrade promotion) should review whether the current anchors still represent the reading's discriminative dimensions, but the mission log records no such review event; 4) the canonical-plus-archive composition declared — the mission already operates this composition implicitly (canonical anchors persist in the doc; superseded readings are implicitly archived in the mission log), but the composition is not declared, so readers cannot tell which anchors are current-canonical vs historical; 5) cross-cycle comparability — claims made with the original PKD-essay anchors should remain comparable to claims made after any anchor evolution, so the archive must carry cycle identifiers (the mission log's dated entries are the natural cycle markers).\nHAVE: the Flow My Tears chain as a six-regime worked example of wyrd-salience (projection surface 2, section 3); the brand-name/Logos passage as the central anti-pattern (section 5); the §8 quotable-passages table as an 11-entry glossary mapping PKD quotes to futon-theoretic glosses; the §2 methodological-signatures table mapping PKD moves to futon-theoretic names; nine candidate upgrades (projection surface 3) that may shift the discriminative dimensions; the Parr-Friston MAP-phase grounding that refines what 'articulation' and 'salience' mean formally; the Eightfold Path correspondence as a fifth triangulation domain; the mission log with dated phase entries (natural cycle markers); the perpetual-projection framing (no closure phase scheduled).\n"
+  :psi-sha256
+  "0829feecd47bb58c18895344addfe613b95a8414314e26c38493692ee2746e5c"
+  :pattern-ids
+  ["ukrns/anchor-case-maintenance"]
+  :size 1
+  :truncated false
+  :budget 1
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "1559f778d0f2ce8e"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-9"
+  :source "M-weird-modernism.md full doc (IDENTIFY + MAP + ARGUE, projection surfaces 1-3, open threads, mission log) authored fresh through the anchor-case-maintenance lens — resolver-blind to the proposer's pattern rationale; not inherited from ft-weird-modernism-001 (first-contact discipline between own deposits)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3/holes/missions/M-weird-modernism"
+ :proposal/hash "1559f778d0f2ce8e"
+ :fold-turn/id "ft-weird-modernism-002"
+ :turn
+ {:agent "zai-9"
+  :model "zai"
+  :edge "invoke-1783801334156-211-62cf4e66"
+  :at "2026-07-11T22:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the reading's worked contrasts as anchor cases requiring stewardship: the Flow My Tears chain and brand-name passage are canonical anchors that make theoretical claims inspectable; they must be reviewed each projection-surface cycle, named with date and rationale, and given a succession plan"
+     :fits-pattern "ukrns/anchor-case-maintenance"
+     :addresses-however
+     "PARTIAL: the stewardship rhythm transposes cleanly — the pattern's CHECK (engaged when the pair is named with date + rationale, has a succession plan, is reviewed each cycle) names exactly what the mission doc lacks. BUT the pattern's scoring substance (multiplicativity D × A gate, diagnostic-case scoring, cross-cycle score comparability) is tied to the UKRN-S working paper. The mission's anchors are hermeneutic/literary examples, not diagnostic-scored cases. The rotation discipline — driven by evolving model discriminative dimensions scored quantitatively — does not transpose to literary anchors whose 'discriminative dimensions' evolve theoretically, not quantitatively. The stewardship rhythm transposes; the scoring discipline does not"
+     :produces [:anchor-stewardship-rhythm]}]
+   :hyperedges []
+   :terminals [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "ukrns/anchor-case-maintenance"
+     :free "the multiplicativity-claim scoring (D × A gate) does not transpose to hermeneutic anchors"
+     :why
+     "the pattern's core claim is that the worked-contrast pair grounds a multiplicativity gate and must be scored against it. The mission's anchors (Flow My Tears chain, brand-name passage) are hermeneutic examples that make theoretical claims inspectable by grounding them in textual evidence, but they do not score against a quantitative gate. Their 'discriminative dimensions' are theoretical (does this example still ground wyrd-salience after Parr-Friston?) not quantitative (does this case still score high on dimension D?). The stewardship rhythm transposes; the scoring substance does not"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the lexicon-minting dimension is not grounded by anchor-case-maintenance"
+     :why
+     "the mission's core act — coining portable futon-theoretic vocabulary from the PKD reading — is not grounded by the anchor-case pattern. The §2 move-to-name table and §8 quotable-passages glossary are minting surfaces, not anchor cases. A single-pattern cascade through anchor-case-maintenance can ground how the examples are stewarded, but not how the vocabulary they generate is coined, ratified, and curated. The lexicon is upstream of the anchors (the anchors USE coined terms like 'wyrd-salience' and 'mere X'); the pattern cannot account for where those terms come from"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the revolutionary-reframing dimension (candidate upgrades as pattern replacements) is not grounded"
+     :why
+     "the nine candidate upgrades in projection surface 3 are revolutionary replacements of old framings (expected to generalised free energy; canonicalization at one granularity to across granularities). The anchor-case pattern stewards existing contrasts; it does not ground the act of replacing the theoretical frame those contrasts serve. The revolution is upstream of anchor stewardship — you steward anchors within a frame, but the pattern cannot account for frame replacement. This is the 革 surface that the single pattern does not halo"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the productive-opposition dimension (PKD-1978 vs futon-2026 as signal, not noise) is not grounded"
+     :why
+     "the reading's central methodological move — that the disagreement between PKD's phenomenological register and futon-theory's formal register IS the signal (combining-methods-as-diagnostic) — is not grounded by anchor-case-maintenance. The pattern stewards contrast pairs; it does not ground why the contrast is productive rather than destructive. The bounded-opposition discipline (睽) that keeps the contrast clarifying rather than fracturing is invisible to the anchor-stewardship lens"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the Parr-Friston / Hamilton's-Principle formal grounding layer is not grounded"
+     :why
+     "the mission's MAP-phase theoretical apparatus (generalised free energy as path integral, Hamilton's Principle of Stationary Action, sorrys.edn as prior-over-outcomes registry) is the most technically substantial upgrade the reading has produced. Anchor-case-maintenance grounds how examples are stewarded, not how physics formalisms are derived or validated. This is the same formal-grounding hole identified in ft-weird-modernism-001 h5 — a single-pattern cascade through any hermeneutic/organisational pattern cannot ground the mathematical-physics surface. The pattern's lens is interpretive stewardship; the formal layer needs a different pattern entirely"}
+   ]
+   :side-channel
+   {:library-alternatives
+    [{:for :h5 :suggest "futon-theory/wyrd" :why "the Parr-Friston triangulation IS a wyrd-survival test. wyrd is the closest existing pattern to the formal-grounding layer, but it needs its own extension or sibling pattern to capture the path-integral / Hamilton's-Principle mechanism"}]
+    :mint-candidates
+    [{:hole :h5 :suggest "futon-theory/generalised-free-energy-grounding" :why "the Parr-Friston formalism is the deepest theoretical grounding the stack has had. It needs its own pattern. This is the same mint signal as ft-weird-modernism-001 — the library's code/process skew leaves the physics surface ungrounded"}]}}}
+ :hole
+ {:confidence :authored
+  :have
+  "the Flow My Tears chain as a six-regime worked example of wyrd-salience; the brand-name/Logos passage as the central anti-pattern; the §8 quotable-passages glossary (11 entries); the §2 methodological-signatures table; nine candidate upgrades; the Parr-Friston MAP-phase grounding; the Eightfold Path correspondence; the mission log with dated phase entries; the perpetual-projection framing."
+  :want
+  "to steward the worked-contrast anchors that ground the reading's theoretical claims — naming them with dates and rationales, reviewing their validity each projection-surface cycle, declaring the canonical-plus-archive composition, and maintaining a succession plan for when evolving theory outgrows the original PKD-essay anchors."
+  :via
+  "psi authored by zai-9 from futon3/holes/missions/M-weird-modernism.md (full doc, through the anchor-case-maintenance lens), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-weird-modernism-001"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

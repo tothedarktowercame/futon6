@@ -1,0 +1,159 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via
+    "the gate-pipeline as the fold's evaluation discipline: the coordination/ARGUMENT six-gate pipeline (G5 TaskSpec→G4 Assignment→G3 PSR→G2 Artifact→G1 PUR→G0 PAR+durability) transposes to the embedding-fold's evaluation as: G5 binds the experiment intent to the mission's success criteria (does embedding beat impl #2 on efficiency + honesty?); G4 authorizes the run (the Linode commission); G3 requires PSR (pattern selection for the ablation arms); G2 runs the bounded training and registers the scorecard artifact; G1 produces PUR by evaluating recall@k/MRR vs baselines; G0 gates the verdict on durability (does it reproduce across seeds? does the laptop export hold?). The typed-evidence-record structure is exactly what the mission needs: a replayable, auditable proof-path for the ansatz verdict so it is not a rubber-stamp. HOWEVER the coordination gate pipeline is for TASK-timescale work records (agents executing missions), not for ML experiment governance — the gate TYPES (TaskSpec, Assignment, PSR, Artifact, PUR, PAR) map to experiment artifacts only by analogy, and the 'first failing gate wins' invariant (which makes the pipeline a genuine gate, not a checklist) has no direct ML-experiment analogue. The auditable-records and proof-path discipline transposes; the specific gate types and the task-timescale invariant structure do not"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via
+    "social/ARGUMENT's three-timescale AIF loop (task → social → glacial) as the embedding-fold's evidence-roundtrip requirement: the fold must emit typed records into the same proof-path store that the glacial loop observes — so an embedding-fold verdict (does it beat impl #2?) flows: agents coordinate the experiment (social), submit through gates (task), accumulate evidence that evolves the pattern library (glacial), and the evolved library constrains future folds. The round-trip test (a social event flows through all three timescales and returns as a library constraint) maps to: an embedding-fold experiment result should feed back into the fold-pattern library, refining which patterns are retrieved for future cascades. The 'verification requires a categorical diagram passing 8 checks' maps to: the embedding-fold's wiring diagram should pass the same categorical checks the coordination argument's wiring did. HOWEVER social/ARGUMENT is pre-implementation theory for real-time multi-agent coordination — its concerns (message routing, delivery receipts, session persistence, agent lifecycle) are about the COORDINATION substrate, not about the fold mechanism. The three-level evidence-loop insight and the round-trip-test discipline transpose; the specific social-layer requirements (R1-R10, the 8 categorical checks for social events) do not map to embedding-fold evaluation"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via
+    "exotype-024 (contextual-mutate+mix, rotation 0, update-prob 0.25, mix-mode none) as the conservative-exploration regime for the embedding fold's search: a stochastic Kleisli kernel-transformer that mutates the kernel-spec with low probability (0.25) and no cross-mixing — this is the 'exploit' end of the fold's design space. For the GFN arm, this maps to a policy that mostly reuses known-good wiring spines (the fold-GFN F1 0.69 regime where gold is dense) with occasional small perturbations. For the embedding arm, it maps to a conservative neighborhood in embedding space (small rotations, low mutation rate). The invariant (normalize + probabilistic-update) ensures the mutated kernel remains a valid distribution. HOWEVER exotype-024's 'mix-mode none' means no recombination — it cannot generate NOVEL wiring structures by combining fragments, only perturb existing ones. This is a real limitation for f2 (sorry→wiring generative), which needs combinatorial novelty. The stochastic-Kleisli machinery and the normalize-invariant transpose; the no-mix constraint bounds this exotype to exploitation, not exploration"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "exotype-094 (contextual-mutate+mix, rotation 1, update-prob 0.75, mix-mode swap-halves, invert-on-phenotype true) as the aggressive-exploration regime: high mutation probability (0.75), swap-halves mixing, and phenotype inversion. This is the 'explore' end — the GFN arm's mechanism for discovering novel cascade→wiring mappings by aggressively recombining wiring fragments (swap-halves = splice two wirings at their midpoints). For the embedding fold, the high update-prob maps to large embedding-space steps; invert-on-phenotype maps to the 'hard negative' discipline (invert the target to find near-miss endpoints). The phenotype-inversion is particularly apt: the E-fold-embed-pipeline's hard-negative mining IS a form of phenotype inversion (near-miss endpoints are the inverted phenotype). HOWEVER swap-halves mixing assumes the wiring has a natural 'halves' structure — a CLean method-spine is a sequence of boxes, so swap-halves means splicing two spines at their midpoint, which may produce type-mismatched wiring (boxes that consume what the other half doesn't produce). The 0-sorry gate would catch this (type-mismatch = sorry), but the exotype itself provides no type-safety guarantee. The exploration+inversion+recombination transposes; the structural assumption about 'halves' does not"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "exotype-201 (contextual-mutate+mix, rotation 3, update-prob 0.5, mix-mode rotate-left) as the balanced-regime between conservative (024) and aggressive (094): medium mutation (0.5), rotate-left mixing (circular shift of the kernel-spec). For the GFN, rotate-left maps to cyclic permutation of the wiring spine — a structural transformation that preserves all box-types but reorders them, testing whether wiring ORDER matters (the mission's copar vs seq distinction). This is the exotype that directly probes the fold's wiring-structure question: if rotate-left permutations of a valid spine still gate 0-sorry, then wiring order is flexible (copar); if they fail, order is load-bearing (seq). The match-threshold 0.222 (lower than 024's 0.444) means this exotype accepts more diverse matches — wider exploration net. HOWEVER rotate-left mixing, like swap-halves, provides no type-safety: a cyclic permutation of a method-spine may break the consumes→produces chain (box N produces what box N+1 needs, but after rotation box N+1 may need what is no longer produced). The exploration-via-permutation transposes; the type-safety of permutations does not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b3] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b5] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a fair verdict on the embedding-fold ansatz (impl #3) — can folding cascade→wiring in embedding space beat impl #2 (the LLM-turn fold, already working) on efficiency (laptop-only, sub-second inference) without losing soundness or policy-holes honesty, tested by the smallest discriminating experiment; or a measured \"not worth it, here's the wall\" that is itself full success. The crux is phase 2 (cascade → substrate-2 sorry endpoints): does the embedding space provide steeper signal than symbol-level popularity/degree, which three shallow-SVD/embedding negatives all tied or lost to? The fair test — a TRAINED relational GNN (R-GCN/SAGE with BGE text features, hard negatives, degree-correction) over the full 125k-node code-graph with the A-next gold corpus as ground truth — is UNRUN (the 4-GPU Linode is commissioned but Stages C+D have not executed).\nHUNGRY-FOR: the GPU-trained embedding verdict (text vs struct vs hybrid ablation on held-out gold-corpus missions — the experiment that retires the shallow-negatives' \"cheap version fails\" caveat); conditioning features for the GFN (the G.1 seed was NEGATIVE on featureless per-mission memorization over disjoint pools — gradient exists only where gold is dense, fold-GFN F1 0.69 confirms the mechanism works WITH signal); f2 (sorry → wiring, phase-3 generative CLean/DarkTower structure, gated by f1 showing endpoint signal); laptop inference export (Stage E — train once on GPU, infer on laptop, sub-second dot-product fold); the data flywheel (pipeline folds → GFN trains → better designer → more folds) composing the two arms.\nHAVE: impl #2 already realizes the fold (so #3 is efficiency, not possibility); DarkTower CT is production Lean (TypedHole/Fill/Comb/Discharge/BV, 0-sorry MissionExample — the target schema is real); A-small corpus (10 mission-grain CLean CT-wirings, 0-sorry-gated, 8 distinct macro-shapes); A-next gold corpus (10 real (cascade, sorry, wiring) triples with empirical sorries recovered post-hoc, holes graded discharged/open/research); the JAX soft-adjacency autodiff scaffold (M-differentiable-substrate, works); the GFN config/proxy/TB-loss/flight-probe machinery (live, reusable); fold-GFN positive (F1 0.69 leave-one-out, laptop — spine selection learns with steep reward); E-fold-embed-pipeline Stages A+B built (62,967-node typed graph, 257,932 edges, 110 pairs), C+D authored (train_fold_embed.py, text/struct/hybrid ablation, parses OK, runs on box); BUT the used-var bundle was retired as ground truth (coarse proxy, empty cascades fixed but wrong target) — A-next gold is the target; G.1 GFN seed NEGATIVE (flat reward on featureless disjoint pools — not a mechanism null, a conditioning-features gap); three shallow-embedding negatives (thin-slice SVD AUC 0.769→corrected to lose-to-popularity, PPMI, code-graph spectral AUC 0.591 vs degree 0.775 — all lose to popularity/degree, but only the cheap linear version is exhausted)."
+  :psi-sha256
+  "860af8f3e37c604c51d61cb81b18140339c3fafd882025b1a697a9b787ada71e"
+  :pattern-ids
+  ["coordination/ARGUMENT"
+   "iiching/exotype-024"
+   "iiching/exotype-094"
+   "iiching/exotype-201"
+   "social/ARGUMENT"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "213f965e403c7c19"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-5"
+  :source "M-fold-ansatz.md HEAD/MAP M1-M4 + ARGUE experiment reclassification + A-small scale-out + A-next gold corpus + f1 results (3 shallow negatives) + fold-GFN positive + G.1 GFN seed negative + E-fold-embed-pipeline LINODE-READY status update — authored fresh from the mission doc's CURRENT state (post-MAP lab work through 2026-07-02), resolver-blind to the proposer's pattern rationale"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon2-d/mission/fold-ansatz"
+ :proposal/hash "213f965e403c7c19"
+ :fold-turn/id "ft-fold-ansatz-002"
+ :turn
+ {:agent "zai-5"
+  :model "zai"
+  :edge "invoke-1783754895648-131-cae3a42e"
+  :at "2026-07-11T20:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the gate-pipeline as the fold's evaluation discipline: the coordination/ARGUMENT six-gate pipeline (G5→G0) transposes to auditable experiment governance — bind intent to mission success criteria, authorize the run, require PSR for ablation arms, register the scorecard artifact, evaluate recall@k/MRR vs baselines (PUR), gate the verdict on durability (cross-seed reproduction + laptop-export hold)"
+     :fits-pattern "coordination/ARGUMENT"
+     :addresses-however
+     "the ansatz verdict risks rubber-stamping: 'the embedding fold works/doesn't' as a prose claim without a counted, replayable, auditable proof-path is exactly the mission's exit-criterion-1 risk (a verdict without evidence backing); the gate pipeline's typed-evidence-record structure and 'first failing gate wins' invariant provide the discipline that turns a flat prose verdict into a gate-checked, replayable record — but only by analogy, because the coordination gates are task-timescale work records (TaskSpec, Assignment, PSR, PUR, PAR), not ML experiment governance gates; the proof-path and auditability transpose, the specific gate types do not"}
+    {:id :b2
+     :role "social/ARGUMENT's three-timescale AIF loop as the fold's evidence-roundtrip: the embedding-fold verdict must flow through all three timescales (social coordination of the experiment → task-level gate submission → glacial library evolution) and return as a library constraint that refines future fold-pattern retrieval"
+     :fits-pattern "social/ARGUMENT"
+     :addresses-however
+     "without the round-trip, the fold's results are isolated experiments that don't feed back into the system: the mission's data-flywheel (pipeline folds → GFN trains → better designer → more folds) IS the social/ARGUMENT round-trip at the fold-mechanism level — but social/ARGUMENT is pre-implementation theory for real-time agent coordination (message routing, delivery receipts, session persistence), not for ML experiment governance; the three-level loop and round-trip-test discipline transpose, the specific social-layer requirements (R1-R10) do not"}
+    {:id :b3
+     :role "exotype-024 (contextual-mutate+mix, rotation 0, update-prob 0.25, mix-mode none) as the conservative-exploitation regime: the stochastic Kleisli kernel-transformer that mostly reuses known-good wiring spines with low-probability perturbation, no recombination — the fold-GFN's known-working regime (gold-dense pools, F1 0.69)"
+     :fits-pattern "iiching/exotype-024"
+     :addresses-however
+     "the GFN works when gold is dense (fold-GFN 0.69) but the G.1 seed FAILED on sparse disjoint pools — exotype-024's low update-prob (0.25) and no-mix maps to the conservative regime that stays near known-good wirings, but this is exactly the limitation: no recombination (mix-mode none) means it cannot generate NOVEL wiring structures by combining fragments, which is what f2 (sorry→wiring generative) needs; the stochastic-Kleisli machinery and normalize-invariant transpose, the no-mix constraint bounds this exotype to exploitation"}
+    {:id :b4
+     :role "exotype-094 (contextual-mutate+mix, rotation 1, update-prob 0.75, mix-mode swap-halves, invert-on-phenotype true) as the aggressive-exploration regime: high mutation + recombination + phenotype-inversion — the GFN arm's mechanism for discovering novel cascade→wiring mappings, with phenotype-inversion mapping to the E-fold-embed-pipeline's hard-negative mining (near-miss endpoints = inverted phenotype)"
+     :fits-pattern "iiching/exotype-094"
+     :addresses-however
+     "the embedding fold needs BOTH exploitation (024) and exploration (094), and 094's swap-halves recombination is the generative move f2 requires — but swap-halves assumes the wiring has a natural 'halves' structure; a CLean method-spine spliced at its midpoint may produce type-mismatched wiring (the 0-sorry gate catches this, but the exotype itself provides no type-safety); the exploration+inversion+recombination transpose, the structural assumption about 'halves' and the type-unsafety of the splice do not"}
+    {:id :b5
+     :role "exotype-201 (contextual-mutate+mix, rotation 3, update-prob 0.5, mix-mode rotate-left) as the balanced regime between conservative (024) and aggressive (094): cyclic permutation of the wiring spine probes whether wiring ORDER matters (the mission's copar vs seq distinction) — if rotated spines still gate 0-sorry, order is flexible (copar); if they fail, order is load-bearing (seq)"
+     :fits-pattern "iiching/exotype-201"
+     :addresses-however
+     "the fold's core structural question (is a wiring a seq or a copar?) is directly probed by rotate-left permutation — but a cyclic permutation may break the consumes→produces chain (box N produces what box N+1 needs, but after rotation the dependency is broken); the exploration-via-permutation transposes, the type-safety of permutations does not; the lower match-threshold (0.222 vs 024's 0.444) widens the exploration net but also increases the type-mismatch rate"}]
+   :wires
+   [{:from :b3 :to :b4 :connective :seq
+     :rationale "the exploitation regime (b3, exotype-024) precedes the exploration regime (b4, exotype-094) in the fold's search order: first exploit known-good wiring spines (the fold-GFN dense-gold regime), then explore via aggressive recombination — order-dependent because the exploration builds on the exploitation's stable base"}
+    {:from :b4 :to :b5 :connective :copar
+     :rationale "the aggressive regime (b4) and the balanced regime (b5) are co-active lenses on the same wiring-generation space — b4 explores via recombination (swap-halves), b5 explores via permutation (rotate-left); copar because both are needed for full exploration coverage but neither subsumes the other (recombination finds cross-wiring novelty; permutation finds order-sensitivity)"}
+    {:from :b1 :to :b2 :connective :seq
+     :rationale "the gate-pipeline evaluation discipline (b1) precedes the three-timescale round-trip (b2) — the gates must exist before the round-trip can flow through them; order-dependent: the round-trip test requires the gate infrastructure to be in place"}
+    {:from :b1 :to :b3 :connective :copar
+     :rationale "the evaluation discipline (b1) co-applies with the exploitation regime (b3) — the gates evaluate what the exotype generates; copar because the evaluation frame and the generation mechanism are independent lenses on the same fold (one governs how we judge, the other governs how we search)"}
+    {:from :b2 :to :b5 :connective :copar
+     :rationale "the round-trip evidence loop (b2) co-applies with the balanced regime (b5) — the round-trip ensures fold results feed back into the library, while the balanced exotype probes structural questions; copar because the evidence-feedback and the structural-exploration are orthogonal concerns that both operate on the fold's output"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "coordination/ARGUMENT"
+     :free "the coordination gate pipeline is task-timescale work governance, not ML experiment governance"
+     :why
+     "the six gates (G5→G0) are typed evidence records for agents executing missions (TaskSpec, Assignment, PSR, Artifact, PUR, PAR) — they govern WHO does WHAT and WHETHER it's durable, not WHETHER an ML model's embedding space carries signal steeper than popularity. The gate TYPES do not transpose: there is no TaskSpec for 'train an R-GCN over 125k nodes', no Assignment for 'commission the Linode', no PUR that evaluates recall@k. The auditable-records and proof-path discipline transposes; the specific gate types and their task-timescale invariant structure do not. Recording as policy-hole rather than forcing a false mapping — the evaluation discipline is load-bearing even without the specific gate types"}
+    {:id :h2
+     :unfolded-pattern "social/ARGUMENT"
+     :free "social/ARGUMENT's 8 categorical checks and R1-R10 requirements are for real-time coordination, not for embedding-fold evaluation"
+     :why
+     "the three-timescale AIF loop and the round-trip-test discipline are genuinely applicable (the fold's results should flow through all levels and return as library constraints), but social/ARGUMENT's specific requirements (delivery receipts, single routing authority, state atomicity, bounded lifecycle) are about the COORDINATION SUBSTRATE — message routing between agents — not about the fold mechanism. The 8 categorical checks verify a SOCIAL exotype diagram (agent connections, message routing), not a fold-wiring diagram. The loop-structure transposes; the specific verification requirements do not"}
+    {:id :h3
+     :unfolded-pattern "iiching/exotype-024"
+     :free "mix-mode none bounds exotype-024 to exploitation — it cannot generate novel wiring structures"
+     :why
+     "exotype-024's contextual-mutate+mix with mix-mode none and update-prob 0.25 is the conservative regime: it perturbs existing kernels with low probability but never recombines. For the fold, this maps to reusing known-good wiring spines (the fold-GFN dense-gold F1 0.69 regime) — but f2 (sorry→wiring generative) requires combinatorial novelty (combining wiring fragments from different missions), which mix-mode none cannot produce. The stochastic-Kleisli machinery transposes; the no-recombination constraint does not. This is a genuine limitation, not a mis-reading: the exotype's own params declare mix-mode none"}
+    {:id :h4
+     :unfolded-pattern "iiching/exotype-094"
+     :free "swap-halves recombination assumes a natural 'halves' structure and provides no type-safety"
+     :why
+     "exotype-094's swap-halves mixing splices two kernel-specs at their midpoint — for a CLean method-spine (a sequence of typed boxes with consumes→produces chains), this splice may produce type-mismatched wiring where box N from spine A consumes what the spliced-in half of spine B doesn't produce. The 0-sorry gate would catch this (type-mismatch = sorry), but the exotype itself has no type-awareness — it operates on the bit-encoding, not on the typed-port structure. The exploration+inversion transposes; the structural assumption and type-unsafety do not"}
+    {:id :h5
+     :unfolded-pattern "iiching/exotype-201"
+     :free "rotate-left permutation may break the consumes→produces dependency chain"
+     :why
+     "exotype-201's rotate-left mixing performs a cyclic shift of the kernel-spec — for a wiring spine, this reorders boxes. If box N produces what box N+1 consumes, a rotation breaks that dependency (box N+1 now follows a different box whose produces don't match). The exploration-via-permutation transposes (it directly probes the seq-vs-copar question), but the type-safety of permutations does not — the exotype operates on the encoding, not on the typed graph structure"}
+    {:id :h6
+     :unfolded-pattern nil
+     :free "b3, b4, b5 overlap: all three exotypes are the SAME program (contextual-mutate+mix) with different params"
+     :why
+     "exotypes 024, 094, and 201 are three parameterizations of the identical stochastic-Kleisli kernel-transformer program — they differ only in rotation, update-prob, mix-mode, and match-threshold. Their CORE contribution (stochastic kernel mutation with normalize + probabilistic-update invariants) is the same move applied three ways: conservative (024), aggressive (094), balanced (201). This is genuine overlap: they are not three independent contributions to the fold, but three regimes of one mechanism. Recording as honest overlap per the convention, not false independence. The three regimes ARE the exploration spectrum (exploit→explore→balance), but they share the same program-id and invariants"}
+    {:id :h7
+     :unfolded-pattern nil
+     :free "the core bet — whether embedding space provides steeper signal than symbol-level scores — is not grounded by any of these 5 patterns"
+     :why
+     "the mission's central open question (does the embedding space provide steeper signal than popularity/degree, which is the untested bet behind the entire ansatz) is not addressed by the coordination gate pipeline (b1), the social AIF loop (b2), or the three exotype kernel-mutators (b3/b4/b5). The coordination and social patterns govern HOW to evaluate and feed back; the exotypes govern HOW to search the wiring space. NONE of them speak to whether the embedding representation itself carries relational signal. This is the honest finding: the cascade covers the evaluation-and-search frame, not the representation question — the representation question is the E-fold-embed-pipeline's job, and no retrieved pattern grounds it"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "impl #2 (the LLM-turn fold) already realizes the interface; DarkTower CT is production Lean; A-small corpus (10 0-sorry-gated CLean wirings); A-next gold corpus (10 real (cascade, sorry, wiring) triples); JAX soft-adjacency autodiff scaffold works; GFN config/proxy/TB/flight-probe machinery live; fold-GFN positive (F1 0.69 laptop); E-fold-embed-pipeline Stages A+B built, C+D authored (runs on box); the three shallow-embedding negatives retire only the cheap linear version."
+  :want
+  "a fair verdict on the embedding-fold ansatz: can a trained relational GNN (R-GCN/SAGE + BGE text features, hard negatives, degree-correction) over the 125k-node code-graph beat popularity/degree at endpoint recovery on held-out gold-corpus missions, laptop-inferable sub-second — the GPU run that is commissioned but unexecuted; plus conditioning features for the GFN (the G.1 seed was featureless); plus f2 generative wiring."
+  :via
+  "psi authored by zai-5 from futon2/holes/M-fold-ansatz.md (HEAD/MAP M1-M4 + ARGUE + A-small/A-next/f1/GFN results + E-fold-embed-pipeline status, through 2026-07-02), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-fold-ansatz-001"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

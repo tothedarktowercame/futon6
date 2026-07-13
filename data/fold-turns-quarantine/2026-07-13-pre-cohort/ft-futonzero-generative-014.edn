@@ -1,0 +1,90 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via "the generative loop is a multi-component system — play-out proposer, field simulator, reward certifier, policy updater — and shi (The Army) names the discipline these components need: collective action requires unified direction and coordinated restraint, without which the group fragments or overreaches. Applied to FutonZero: the loop's components must act under a shared objective (convert functionings into capabilities, not maximize activity) with clear command (the WM guardrails as the command structure) and coordinated timing (propose-then-predict-then-execute-then-score-then-update is a sequential discipline, not a free-for-all). The 'perseverance furthers' reading supports the charter's patient stance: the gates are blocked, the safe work products proceed, and the loop waits for its preconditions rather than forcing forward. HOWEVER, the ant/CA numerics (Pi-o 0.7, tau 0.4, policy-priors {:forage 0.3 :return 0.3 :hold 0.2 :pheromone 0.2}, update-prob 0.35) are domain-specific calibration for ant-trail foraging that do not transpose to a WM learner's component orchestration. The coordinated-force wisdom-shape contributes; the parameter substance does not — partial satiety per convention"
+    :rule "fold-turn/box"}]
+  :hyperedges []
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a self-bootstrapping learner that converts one-off warranted functionings into repeatable capabilities — the generative loop of propose play-out, predict field effect, execute under guardrail, score with anti-laundered witness logic, update policy/value, and distinguish functioning from capability. The two hard gates (G-SIM: field-simulator adequacy; G-REWARD: anti-laundered reward) block the loop until they clear. HUNGRY-FOR: the field simulator that predicts with confidence and uncertainty; the positive reward substance (what genuine witness discharge IS, not just what laundering IS); the coordinated discipline to run the multi-component loop under shared objective without fragmentation or overreach. HAVE: the War Machine selecting bounded moves under guardrails; the capability star map; FutonZero-monitor; a static rollout ledger schema; a toy field fixture (4-state chain, demonstrates update + refusal of laundered reward); a reward red-team fixture rejecting 8 laundering shapes; a policy/value vocabulary v0 with no actuator; calibration audit with verdict :insufficient-evidence and :degenerate? true (13/15 pairs are censored-fallback where predicted was copied into realised — the evidence base is not measurements but echoes); 0 independent measured pairs toward G-SIM's ~11+ threshold; G-REWARD rejection side functional, positive substance ungrounded (Pudding Prover G1 deferred to M-pudding-peradams)."
+  :psi-sha256
+  "c4b47e63b74ff57d2e252f1a70fc17af7684429dabe414da98df0149e76e3a5d"
+  :pattern-ids
+  ["iching/hexagram-07-shi"]
+  :size 1
+  :truncated false
+  :budget 1
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "47385246a68934e2"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-1"
+  :source "M-futonzero-generative.md HEAD/IDENTIFY/hard-gates/scope + Flight 2 gap report as HAVE (resolver-blind: gap described in the mission's own terms — self-bootstrapping WM learner gated by G-SIM and G-REWARD — without reading the proposer's pattern rationale; authored fresh, not inherited from 012 or 013)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon0-d/mission/futonzero-generative"
+ :proposal/hash "47385246a68934e2"
+ :fold-turn/id "ft-futonzero-generative-014"
+ :turn
+ {:agent "zai-1"
+  :model "zai"
+  :edge "invoke-1783698413202-56-88266954"
+  :at "2026-07-10T16:45:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "coordinated discipline for the multi-component generative loop: unified direction, clear command, sequential restraint"
+     :fits-pattern "iching/hexagram-07-shi"
+     :addresses-however
+     "collective action requires discipline and unified direction — without it the group fragments or overreaches; the generative loop's components must coordinate under a shared objective with the WM guardrails as command structure; the 'perseverance furthers' reading supports the charter's patient gate-blocked stance; PARTIAL: the coordinated-force core transposes, the ant/CA numerics (Pi-o, tau, policy-priors) do not"
+     :produces [:loop-coordination-discipline]}]
+   :hyperedges []
+   :terminals [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "G-SIM (field simulator) is ungrounded and measured UNCLEARED by Flight 2"
+     :why
+     "a single coordinated-discipline pattern cannot ground a field simulator. Flight 2 measured: verdict :insufficient-evidence, :degenerate? true (censored-fallback), 0 independent measured pairs. The gate needs substrate-2/full-C/field-model work; shi provides the patience to wait for it, not the simulator itself."}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "G-REWARD (positive reward substance) is ungrounded and measured UNCLEARED by Flight 2"
+     :why
+     "Flight 2 measured: rejection side functional (8/8 laundering shapes rejected), positive substance ungrounded. shi's discipline says 'do not overreach' — the loop must not train on laundered reward — but the pattern cannot supply what genuine witness discharge IS (the Dokusan/peradam computation, the Pudding Prover G1 binding). That is M-pudding-peradams work."}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the policy/value update rule is ungrounded"
+     :why
+     "the generative loop includes 'update policy/value from play-out outcome' but no pattern in this cascade (there is one) grounds the update math. The charter defers this until gates clear; the pattern provides the sequential discipline (propose→predict→execute→score→update in order) but not the update rule itself."}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the bounded candidate action space for play-outs is ungrounded"
+     :why
+     "shi provides coordinated discipline but not the action-space construction (which missions × which patterns produce candidate play-outs, with what inclusion/exclusion reasons). The charter's §4.3 policy/value vocabulary v0 provides declarative shapes but no live actuator; the action space exists as data but not as a running selector."}
+    {:id :h5
+     :unfolded-pattern "iching/hexagram-07-shi"
+     :free "shi's ant/CA numerics do not transpose to the WM learner"
+     :why
+     "the coordinated-force wisdom-shape ('collective action requires discipline and unified direction; perseverance furthers') transposes to the multi-component loop's orchestration discipline. The ant/CA numerics (Pi-o 0.7, tau 0.4, policy-priors, update-prob 0.35, trail-follow 0.7) are domain-specific calibration for ant-trail foraging. b1 is :satiety :partial: the core transposes, the numerics are inapplicable-by-judgment (satiety convention: needed-part-unavailable, the policy-selection mechanism does not transpose)."}
+    {:id :h6
+     :unfolded-pattern nil
+     :free "a single-pattern cascade cannot reach the want — the holes ARE the story"
+     :why
+     "this is the honest limitation of a 1-pattern cascade for a mission whose want is a full generative loop with two hard gates. shi contributes the coordination discipline (one component of the loop's governance) but cannot reach the simulator, the reward, the update rule, or the action space. The five holes h1-h5 carry the story of what one pattern cannot ground — this is the same single-pattern discipline as fold 012 (chipwitz-corps), where the decision rule was grounded but the threshold, channel, wiring, downstream hook, and sibling mapping could not be. The pattern is not stretched; the holes are first-class."}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The War Machine selecting bounded moves under guardrails; the capability star map; FutonZero-monitor; a static rollout ledger schema; a toy field fixture; a reward red-team fixture rejecting 8 laundering shapes; a policy/value vocabulary v0 with no actuator; calibration audit with verdict :insufficient-evidence and :degenerate? true; 0 independent measured pairs; G-REWARD rejection side functional, positive substance ungrounded."
+  :want
+  "A self-bootstrapping WM learner — the generative loop gated by G-SIM and G-REWARD, converting functionings into capabilities."
+  :via
+  "psi authored by zai-1 from futon0/holes/missions/M-futonzero-generative.md (HEAD/IDENTIFY/hard-gates/scope) + Flight 2 gap report as HAVE, resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from 012 or 013"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

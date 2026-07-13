@@ -1,0 +1,211 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "every choice-point in the warranted-work loop carries its warrant: autonomous picks carry the patterns that decided them (recorded, auditable); NAGs (operator-gated choices) are the dual — the fork the patterns cannot decide, surfaced with {firing-pattern + signed-off rationale + specific undecidable gap + minimal unblock}. The mission's motivating example (cycle-5 A/B fork) is the illegible NAG: the consent gate fired on form (a fork exists) without surfacing WHY it was operator-gated (the warrant for B was findable). pattern-warranted-choice-point supplies the architecture the ChipWitz layer implements: the rule-to-pattern mapping is DATA not code branches, the NAG reuses :fork-warrant, and the warrant cites flexiargs so the operator can read the rationale they signed off on"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via "the core decision rule: when a choice has a findable warrant (standing contract, documented preference, the method, coaching) name it as proto-PSR and proceed; reserve operator escalation for genuinely undetermined forks; over-asking is a discipline failure co-equal with over-reaching. The pattern's canonical instance IS the cycle-5 A/B fork — the charter event. b1 supplies the architecture (warrant every choice-point); b2 supplies the decision test (is THIS fork determined or undetermined?)"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via "the warranted-work layer needs a typed choice-point BEFORE warrant-finding can run: derive-exits-on-a-minted-sorry requires an explicit (have→want) arrow with typed endpoints at the DERIVE→ARGUE transition, and the ChipWitz layer's analogue is the typed choice-point description (what fork, what options, what standing direction applies) — you cannot find a warrant for an unspecified fork. The mission's protocol step 1 ('at a choice point, run the circumstance through the warrant-finder') presupposes the circumstance IS well-typed; this pattern makes that presupposition a gate"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via "warranted-proceed has metabolic cost: mana-gated-work gates action selection on session-level budget, not just warrant presence — a warranted proceed that the session's mana cannot sustain is rejected with :reason :insufficient-budget, preventing the autopen-creep where everything proceeds on warrant until the operator's capacity is exhausted. The mission's autopen-rate guard ('if everything proceeds on warrant, the threshold is too loose') is the same erosion check as mana-gated-work's diagnostic ('selector consistently accepts everything: gate may not be wired'). The session, not the agent, is the budget unit — so the warranted-work layer's gate is session-level"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via "PSR-proceed-PUR is a BHK arrow: PSR is the proof of the domain (warrant found — proven start), proceed is the constructive transformation, PUR is the proof of the codomain (outcome witnessed — proven goal). The warrant must DETERMINE the choice (BHK constructivity), not merely be consistent with it. Gate composition: the warranted-work arrow composes with the WM guardrail arrow — if either produces an artifact not a proof, the composition breaks"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :full
+    :via "choice-point descriptions must pass shape validation before entering the warrant-finder: task-shape-validation (G5) rejects underspecified inputs at the boundary with structured errors. The ChipWitz layer's analogue: a choice-point that lacks mission-binding, option-set, or standing-direction-ref is malformed and must be rejected with :gate/id and :error/key BEFORE the warrant-finder runs — early rejection is cheaper than searching for a warrant for an incoherent fork"
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :full
+    :via "curry-howard-operational grounds WHY the PSR is a proof: the spec (the warrant) mediates future state into present — the agent declares intent (what choice it will make), cites the warrant (the formal claim that the choice is determined), proceeds (constructs the proof), and the PUR verifies (checks the proof valid). This is the PARENT THEORY of b5's arrow semantics: task-as-arrow specifies the arrow structure; curry-howard specifies why arrows ARE proofs. Together they make the warranted-work layer's audit trail a proof path, not documentation"
+    :rule "fold-turn/box"}
+   {:id :b8
+    :role :application
+    :satiety :full
+    :via "the PSR is a binding intent-handshake: the agent restates the warrant and binds to it before proceeding — 'choosing X because pattern P says so, in scope S, with success-criteria C'. Without the binding handshake, intent lives only in the prompt and drifts (the agent proceeds on a different reading of the warrant than it logged). The ChipWitz protocol's step 1 ('log PSR: pattern id, candidates considered, rationale, choice-point ref') IS the intent-handshake; changes to intent or scope require explicit renegotiation (a new PSR), preventing silent warrant-drift mid-proceed"
+    :rule "fold-turn/box"}
+   {:id :b9
+    :role :application
+    :satiety :partial
+    :via "the AIF observation→policy loop (g-observe → perceive → affect/update-tau → policy/choose-action) is structurally the warrant-consult→proceed loop (observe choice-point → search library → score warrants → choose proceed-or-escalate). The observation ABI and predictive-cycle trace provide a narratable pattern for the ChipWitz layer's decision cycle. HOWEVER, the ant-specific content — mode hysteresis, hunger/tau coupling, softmax action selection — does not transpose to a warrant-finder; the AIF loop is about sensorimotor action in a field, not about library-search for warrants. The structural loop shape contributes; the substance does not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b6] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2 :b8] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b7] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b9] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b4] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b5 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a warranted-work control layer for the agent corps where every choice-point carries its warrant — the agent searches the pattern library, and if a determining warrant exists, logs a PSR and proceeds; if the warrant is absent or genuinely undecidable, the fork escalates to the operator WITH the firing pattern, the specific gap, and the minimal unblock. The operator-question rate becomes a measurement of library coverage, and the NAG (operator-gated choice) is precisely the fork the patterns cannot decide. HUNGRY-FOR: the choice-point validation gate (what makes a fork well-typed enough to warrant-search?); the warrant-finding mechanism and threshold; the PSR/PUR evidence channel as a binding intent-handshake; the metabolic cost of proceeding (autopen rate gated by session mana, not just warrant presence); the typed arrow semantics that make PSR-proceed-PUR composable and auditable. HAVE: the WM pilot loop with :fork-warrant frames; the pattern library as warrant source; the cascade lane returning scored pattern sets; the motivating example (cycle-5 A/B fork fired on form not substance); the PSR evidence-store; WM guardrails separating autonomous-envelope from outward/irreversible; the anti-laundering guards (no mid-choice minting, ambiguity defaults to ASK, autopen rate as reviewable signal)."
+  :psi-sha256
+  "59b008fbf04f3d7300e58a7d5921f3f745f627e0ae8936340d8b27ec5a76572b"
+  :pattern-ids
+  ["orchestration/pattern-warranted-choice-point"
+   "collaboration-coherence/determined-fork-proto-psr"
+   "futon-theory/derive-exits-on-a-minted-sorry"
+   "budgeted-action-selection/mana-gated-work"
+   "futon-theory/task-as-arrow"
+   "coordination/task-shape-validation"
+   "futon-theory/curry-howard-operational"
+   "agent/intent-handshake-is-binding"
+   "ants/baseline-cyber-ant"]
+  :size 9
+  :truncated false
+  :budget 9
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "e5bd3c89c552b896"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-1"
+  :source "M-chipwitz-corps.md HEAD/IDENTIFY/protocol/guards/remaining-work (resolver-blind: gap described in the mission's own terms — warranted-work control layer where every choice-point carries its warrant — without reading the proposer's pattern rationale; authored fresh, not inherited from 012 or 013)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3c-d/mission/chipwitz-corps"
+ :proposal/hash "e5bd3c89c552b896"
+ :fold-turn/id "ft-chipwitz-corps-014"
+ :turn
+ {:agent "zai-1"
+  :model "zai"
+  :edge "invoke-1783697749759-40-83c89632"
+  :at "2026-07-10T15:45:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "every choice-point carries its warrant; NAG = fork patterns cannot decide, surfaced with firing-pattern + gap + unblock"
+     :fits-pattern "orchestration/pattern-warranted-choice-point"
+     :addresses-however
+     "a generic 'operator confirmation required' block is illegible — the operator cannot tell whether it is their own rule firing or arbitrary obstruction; the warrant makes the block the operator's OWN rule, so consent is informed and fast"
+     :produces [:warranted-choice-point-architecture]}
+    {:id :b2
+     :role "the decision test: is this fork determined (findable warrant -> proceed) or genuinely undetermined (escalate)?"
+     :fits-pattern "collaboration-coherence/determined-fork-proto-psr"
+     :addresses-however
+     "escalating a determined fork costs an operator round-trip and signals the agent cannot make a judgement it can; the canonical instance is the cycle-5 A/B fork"
+     :produces [:determined-fork-test]}
+    {:id :b3
+     :role "a typed choice-point description (have→want arrow) must exist before warrant-finding can run"
+     :fits-pattern "futon-theory/derive-exits-on-a-minted-sorry"
+     :addresses-however
+     "you cannot argue until you know what you are arguing about — the warrant-finder presupposes a well-typed fork; skip the typing and the search assembles a warrant around an unstated target"
+     :produces [:typed-choice-point-gate]}
+    {:id :b4
+     :role "warranted-proceed gated by session mana, not just warrant presence — autopen-creep prevention"
+     :fits-pattern "budgeted-action-selection/mana-gated-work"
+     :addresses-however
+     "priority-only selection has no metabolic awareness: high-priority warranted actions proceed even when the operator's capacity is depleted; the mana gate composes with the warrant gate"
+     :produces [:mana-gate-on-proceed]}
+    {:id :b5
+     :role "PSR-proceed-PUR as a BHK arrow: proven warrant -> proceed -> witnessed outcome; warrant must DETERMINE not be consistent"
+     :fits-pattern "futon-theory/task-as-arrow"
+     :addresses-however
+     "descriptive tasks ('do X / was X done?') are not constructive; the arrow requires the warrant to be a proof (determining), not a proposition (consistent); gate composition: warrant arrow composes with guardrail arrow"
+     :consumes [:determined-fork-test :binding-intent-handshake :curry-howard-proof-theory :mana-gate-on-proceed]
+     :produces [:warranted-work-arrow-semantics]}
+    {:id :b6
+     :role "choice-point shape validation at the boundary: reject malformed forks before warrant-search"
+     :fits-pattern "coordination/task-shape-validation"
+     :addresses-however
+     "accepting underspecified choice-points makes warrant-search unverifiable and failures ambiguous; early rejection with :gate/id and :error/key is cheaper than running a warrant-finder on nonsense"
+     :produces [:choice-point-shape-validation]}
+    {:id :b7
+     :role "curry-howard grounds WHY the PSR is a proof: the spec (warrant) mediates future state into present"
+     :fits-pattern "futon-theory/curry-howard-operational"
+     :addresses-however
+     "without curry-howard, the PSR is documentation of work, not proof of work; with it, the warrant IS a spec-claim and the proceed IS its proof — the parent theory of b5's arrow semantics"
+     :produces [:curry-howard-proof-theory]}
+    {:id :b8
+     :role "the PSR is a binding intent-handshake: agent restates and binds the warrant before proceeding"
+     :fits-pattern "agent/intent-handshake-is-binding"
+     :addresses-however
+     "if intent lives only in the prompt it drifts: the agent proceeds on a different reading of the warrant than it logged; the handshake makes the PSR binding and requires renegotiation (a new PSR) for intent changes"
+     :produces [:binding-intent-handshake]}
+    {:id :b9
+     :role "the AIF observe→perceive→affect→choose loop as structural shape for the warrant-consult→proceed cycle"
+     :fits-pattern "ants/baseline-cyber-ant"
+     :addresses-however
+     "the AIF loop provides a narratable decision-cycle pattern, but the ant-specific content (mode hysteresis, hunger/tau coupling, softmax action selection) does not transpose to library-search for warrants — PARTIAL satiety: the loop shape contributes, the substance does not"
+     :produces [:decision-cycle-shape]}]
+   :hyperedges
+   [{:from [:b6] :to [:b3] :connective :seq
+     :rationale "shape validation (b6) rejects malformed choice-points before the typed-arrow gate (b3) processes them — order-dependent: validate shape, then check typing"}
+    {:from [:b3] :to [:b1] :connective :seq
+     :rationale "the typed choice-point (b3) is the input to the warranted-choice-point architecture (b1) — a well-typed fork is what the architecture processes; order-dependent"}
+    {:from [:b1] :to [:b2] :connective :copar
+     :rationale "the architecture (b1) and the decision test (b2) co-apply — b1 says 'warrant every choice-point', b2 says 'is this one determined?'; copar because the architecture frames the test without being consumed by it"}
+    {:from [:b2 :b8] :to [:b5] :connective :seq
+     :rationale "the determined-fork test (b2) plus the binding handshake (b8) produce the inputs the arrow semantics (b5) validates — the test decides, the handshake binds, the arrow audits; order-dependent: the decision and binding precede the proof-check"}
+    {:from [:b7] :to [:b5] :connective :copar
+     :rationale "curry-howard (b7) co-applies with the arrow semantics (b5) — b7 is the parent theory explaining WHY arrows are proofs; copar because the theory informs the semantics without being a sequential step"}
+    {:from [:b4] :to [:b5] :connective :copar
+     :rationale "the mana gate (b4) co-applies with the arrow semantics (b5) — the metabolic cost check runs alongside the proof check; copar because both are gates on the same proceed action"}
+    {:from [:b9] :to [:b1] :connective :copar
+     :rationale "the AIF decision-cycle shape (b9) co-applies with the choice-point architecture (b1) — the observe→choose loop is a lens on the same cycle; copar because the shape informs the architecture without being consumed"}
+    {:from [:b5] :to [:b4] :connective :copar
+     :rationale "the arrow semantics (b5) and the mana gate (b4) form a bidirectional copar — the arrow validates the proof of the proceed, the mana gate validates the affordability; both must pass for the proceed to fire"}]
+   :terminals [{:id :b5 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the warrant threshold — what match quality counts as 'determining'"
+     :why
+     "b2 supplies the test (is the warrant findable?), b5 sharpens it (the warrant must DETERMINE, not be consistent), but neither supplies the THRESHOLD. The cascade adds b3 (typed choice-point), b6 (shape validation), and b7 (curry-howard proof theory) — all of which refine the INPUT and the VERIFICATION but not the CALIBRATION. The threshold needs empirical tuning against the PXR stream; Flight 3 showed TF-IDF at 0.15 admits keyword-overlap as warrant."}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the typed PXR channel implementation"
+     :why
+     "b5 gives the arrow semantics, b7 grounds the proof theory, b8 defines the binding handshake — but none grounds the typed-channel DESIGN (the actual data structure for PSR+PUR records with choice-point refs, the :pxr evidence kind in calibration). The cascade supplies what the channel must CARRY but not the channel itself."}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the warrant-finder wiring into the pilot flow"
+     :why
+     "the cascade grounds the decision rule (b2), the architecture (b1), the validation gates (b3, b6), and the proof theory (b5, b7) — but none grounds how the warrant-finder is INTERCEPTED in the pilot loop's execution. The engineering task of wiring the choice-point check into the pilot flow remains."}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the no-warrant -> sorry-mining hook"
+     :why
+     "the cascade addresses the determined-fork case (b1, b2) and the validation/proof pipeline (b3-b8) but not the productive downstream of the genuine escalation: feeding the no-warrant fork into library mining. The mission's diagnostic inversion (asking without a warrant marks a library gap) needs this hook."}
+    {:id :h5
+     :unfolded-pattern "ants/baseline-cyber-ant"
+     :free "the AIF ant's sensorimotor substance does not transpose to warrant-search"
+     :why
+     "the AIF observation→policy loop shape contributes a narratable decision-cycle (b9 at :satiety :partial), but the ant-specific content — mode hysteresis, hunger/tau coupling, softmax action selection — is about sensorimotor action in a simulation field, not about library-search for warrants. The loop shape is structurally analogous; the substance is inapplicable. b9 is :partial because a needed part (the policy-selection mechanism) does not transpose."}
+    {:id :h6
+     :unfolded-pattern "futon-theory/curry-howard-operational"
+     :free "b5 and b7 overlap: task-as-arrow and curry-howard-operational ground the same proof theory at different levels"
+     :why
+     "b5 (task-as-arrow) specifies the BHK arrow structure for tasks; b7 (curry-howard-operational) specifies the parent principle that programs are proofs of specs. In the ChipWitz application, both ground WHY the PSR is a proof — b5 gives the arrow shape, b7 gives the correspondence. The overlap is genuine and productive (b7 is the theory, b5 is the application), but a reader should know they are not independent contributions: b7's proof-theory lens and b5's arrow-semantics lens are two views of the same proof path. Recording as a policy-hole rather than inventing a false independence."}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The WM pilot loop with :fork-warrant frames; the pattern library as warrant source; the cascade lane returning scored pattern sets; the motivating example (cycle-5 A/B fork fired on form not substance); the PSR evidence-store; WM guardrails separating autonomous-envelope from outward/irreversible; the anti-laundering guards."
+  :want
+  "A warranted-work control layer where every choice-point carries its warrant — findable warrant means PSR+proceed+PUR; absent or undecidable warrant means NAG to operator with firing-pattern + gap + unblock."
+  :via
+  "psi authored by zai-1 from futon3c/holes/missions/M-chipwitz-corps.md (HEAD/IDENTIFY/protocol/guards/remaining-work), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from 012 or 013"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

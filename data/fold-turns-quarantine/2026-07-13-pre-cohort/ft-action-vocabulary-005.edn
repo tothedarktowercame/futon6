@@ -1,0 +1,562 @@
+{:wiring
+ {:nodes
+  [{:id :b1,
+    :role :application,
+    :satiety :full,
+    :via
+    "the bounded move-class vocabulary: {advance, close, survey, apply-cascade-with-escrowed-dG} as an explicit candidate action space with stated inclusion reasons per class — the spec prices ALL of what the operator values, not the habitual class",
+    :rule "fold-turn/box"}
+   {:id :b2,
+    :role :application,
+    :satiety :full,
+    :via
+    "the typed input schema: per-mission observation vector {resolvedness, staleness, kappa, W1} read from the substrate ground metric — what every class-intensity formula is a function OF",
+    :rule "fold-turn/box"}
+   {:id :b3,
+    :role :application,
+    :satiety :full,
+    :via
+    "advance-intensity = advance-value x (1 - resolvedness): a NAMED persisted term — advancing a nearly-resolved mission is worth little; advancing an open one is the classic move",
+    :rule "fold-turn/box"}
+   {:id :b4,
+    :role :application,
+    :satiety :full,
+    :via
+    "close-intensity = close-value x resolvedness: the close-out of a saturated mission is a first-class scored move — the operator's gold explicitly contains close-outs; resolvedness is the signal that closing now banks the work",
+    :rule "fold-turn/box"}
+   {:id :b5,
+    :role :application,
+    :satiety :full,
+    :via
+    "survey-intensity for stale-early targets: high staleness x low resolvedness flags missions whose state is least known — survey is the epistemic move; its exact functional form is left to hole h2, the TERM and its inputs are fixed here",
+    :rule "fold-turn/box"}
+   {:id :b6,
+    :role :application,
+    :satiety :full,
+    :via
+    "apply-cascade-intensity reads the escrowed deposit dG for the mission (sha-valid deposits only): the newest move class enters the vocabulary priced by the fold economy's own number, not a proxy — its exchange into the bundle currency is exactly b10's declared question",
+    :rule "fold-turn/box"}
+   {:id :b7,
+    :role :application,
+    :satiety :full,
+    :via
+    "every class-intensity declares its channels: which metric fields, which store snapshot, which escrow deposit it consumed — persisted alongside the term value",
+    :rule "fold-turn/box"}
+   {:id :b8,
+    :role :application,
+    :satiety :full,
+    :via
+    "resolvedness and staleness read LIVING documents (status lines, mission docs): every score persists the content hash + date of the prose it conditioned on — cross-edit comparisons are cross-version comparisons by construction",
+    :rule "fold-turn/box"}
+   {:id :b9,
+    :role :application,
+    :satiety :full,
+    :via
+    "conditioning declared where numbers render: each intensity and each bundle score carries SENSE / SELECTION-SEMANTICS / CONDITIONING (which metric snapshot, which candidate population, which prose versions) at its render site",
+    :rule "fold-turn/box"}
+   {:id :b10,
+    :role :application,
+    :satiety :full,
+    :via
+    "the bundle-merge rule under currency discipline: per-class intensities are DIFFERENT LANES (advance/close/survey in metric units, apply-cascade in coverage-dG nats); the bundle score either establishes a stated exchange rate into one unit or keeps the tuple and declares the selection rule over it — every constant in the arena audited (what does it beat, what beats it)",
+    :rule "fold-turn/box"}
+   {:id :b11,
+    :role :application,
+    :satiety :full,
+    :via
+    "bundle feasibility: aggregate budget conservation across the picks per round (a portfolio must be executable within the round's capacity) plus cheap forward projection per pick (a bundle whose picks predictively exhaust their own missions within K ticks is penalized) — the budget axis of portfolio composition",
+    :rule "fold-turn/box"}
+   {:id :b12,
+    :role :application,
+    :satiety :full,
+    :via
+    "bundle affordability: the portfolio gated by the operator's session mana balance — quick wins are the low-mana class, deeper dives spend more; the gate is the live intersection of what the bundle costs and what the session can sustain",
+    :rule "fold-turn/box"}
+   {:id :b13,
+    :role :application,
+    :satiety :full,
+    :via
+    "placeholder audit for P2's dark implementation: classes not yet priced never enter as bare 0.0 glue; every default is self-describing with provenance; any deletion or addition is replayed against the arena INCLUDING its placeholders before landing — the flag-off regression re-run is stage-named per the ledger lesson",
+    :rule "fold-turn/box"}
+   {:id :b14,
+    :role :application,
+    :satiety :full,
+    :via
+    "P3 as matched-variant comparison: score the sealed golden picks (rounds 1-2) under BOTH the advance-only score and the new vocabulary, matched configuration, named metric = the operator picks' median rank; falsifiable target = top-quartile median under the new vocabulary — the winner is a finding, not a stance; THIS BOX IS THE ACCEPTANCE TERMINAL",
+    :rule "fold-turn/box"}
+   {:id :b15,
+    :role :application,
+    :satiety :full,
+    :via
+    "seal independence: the golden picks were sealed BEFORE this vocabulary existed and stay untouched by it — no tuning on the sealed set (any calibration uses non-sealed rounds or splits); the P3 verdict counts only seal-tagged evidence the vocabulary apparatus cannot have manufactured",
+    :rule "fold-turn/box"}
+   {:id :b16,
+    :role :application,
+    :satiety :full,
+    :via
+    "the negative is a deliverable: if the sealed picks do NOT re-rank top-quartile, that result is recorded as the finding (the portfolio structure is not where we think) — no threshold-softening, no denominator-shopping; the counter must be moveable the wrong way by truth",
+    :rule "fold-turn/box"}
+   {:id :b17,
+    :role :application,
+    :satiety :full,
+    :via
+    "the revision loop is budgeted: kill criterion = two vocabulary revisions with P3 still negative, then STOP — the finding routes to the Joe-HUD / Bayesian-operator-model thread instead of a third revision; commit-or-escalate, never wander",
+    :rule "fold-turn/box"}],
+  :hyperedges
+  [{:kind :composes,
+    :from [:b1 :b2],
+    :to [:b3 :b4 :b5 :b6],
+    :connective :tensor,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b2],
+    :to [:b7 :b8],
+    :connective :tensor,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b3 :b4 :b5 :b6],
+    :to [:b10],
+    :connective :copar,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b7 :b8 :b9],
+    :to [:b10],
+    :connective :copar,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b13],
+    :to [:b10],
+    :connective :copar,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b10],
+    :to [:b11 :b12],
+    :connective :tensor,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b10 :b11 :b12],
+    :to [:b14],
+    :connective :seq,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b15 :b16],
+    :to [:b14],
+    :connective :copar,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b14],
+    :to [:b17],
+    :connective :seq,
+    :rule "fold-turn/wire"}],
+  :terminals [{:id :b14, :discharges :want-signature}]},
+ :pins [:prompt-sha :arming :coverage-score-delta-recompute :clean-0-sorry],
+ :cascade
+ {:psi
+  "WANT: a move-class value spec — per-class intensity formulas over substrate-metric quantities (resolvedness, staleness, kappa/W1): advance x (1-resolvedness); close x resolvedness; survey for stale-early targets — plus a composition-aware bundle score that values a portfolio of picks AS a portfolio, not a sum of solo scores. Falsifiable: the operator's sealed golden picks (rounds 1-2) re-rank to top-quartile median under the new vocabulary.\nHUNGRY-FOR: move-class-conditional intensity; portfolio composition scoring; the value function seeing what winning means to the operator (quick wins + deeper dives + close-outs of saturated missions).\nHAVE: the substrate ground metric (OR/Wasserstein + Fisher-Rao) with resolvedness/staleness/kappa/W1 computable per mission; the sealed golden-round picks + the contest harness (E-cascade-sampler-sampler, parked on this precondition); the ranking lane with its G blend; four independent single-best-holds results all tracing to advance-only pricing; the WM action classes: advance, close, survey, apply-cascade-with-escrowed-dG.\n",
+  :psi-sha256
+  "1a05e912cc1aa1afb458b6e9bd4e17989c2a4f0e30ae7502d0ef5a29cf00131f",
+  :pattern-ids
+  ["aif/declare-the-conditioning"
+   "aif/currency-before-merge"
+   "aif/placeholder-is-load-bearing"
+   "aif/valuation-reads-the-paperwork"
+   "aif/expected-free-energy-scorecard"
+   "aif/structured-observation-vector"
+   "aif/policy-precision-commitment-temperature"
+   "aif/candidate-pattern-action-space"
+   "aif/term-to-channel-traceability"
+   "aif/hierarchical-budget-aware-action-selection"
+   "aif/experimental-comparison-of-EFE-variants"
+   "agent/budget-bounds-exploration"
+   "aif/no-self-certification"
+   "futon-theory/honest-map-over-flattering-counter"
+   "budgeted-action-selection/mana-gated-work"],
+  :size 15,
+  :truncated false,
+  :budget 20,
+  :constructor
+  {:entry "construct_cascade",
+   :epsilon 0.15,
+   :budget 20,
+   :lambda 0.25,
+   :commit "fe8aceab21c48783d0721c4ccb19e3806bb12f45"},
+  :pattern-cites
+  [{:order 0,
+    :ident "aif/declare-the-conditioning",
+    :ref "futon3/library/aif/declare-the-conditioning.flexiarg",
+    :rel 0.514,
+    :mc 0.154,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 1,
+    :ident "aif/currency-before-merge",
+    :ref "futon3/library/aif/currency-before-merge.flexiarg",
+    :rel 0.388,
+    :mc 0.581,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 2,
+    :ident "aif/placeholder-is-load-bearing",
+    :ref "futon3/library/aif/placeholder-is-load-bearing.flexiarg",
+    :rel 0.451,
+    :mc 0.767,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 3,
+    :ident "aif/valuation-reads-the-paperwork",
+    :ref "futon3/library/aif/valuation-reads-the-paperwork.flexiarg",
+    :rel 0.36,
+    :mc 0.684,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 4,
+    :ident "aif/expected-free-energy-scorecard",
+    :ref "futon3/library/aif/expected-free-energy-scorecard.flexiarg",
+    :rel 0.467,
+    :mc 0.514,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 5,
+    :ident "aif/structured-observation-vector",
+    :ref "futon3/library/aif/structured-observation-vector.flexiarg",
+    :rel 0.411,
+    :mc 0.863,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 6,
+    :ident "aif/policy-precision-commitment-temperature",
+    :ref
+    "futon3/library/aif/policy-precision-commitment-temperature.flexiarg",
+    :rel 0.382,
+    :mc 1.186,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 7,
+    :ident "aif/candidate-pattern-action-space",
+    :ref "futon3/library/aif/candidate-pattern-action-space.flexiarg",
+    :rel 0.43,
+    :mc 1.418,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 8,
+    :ident "aif/term-to-channel-traceability",
+    :ref "futon3/library/aif/term-to-channel-traceability.flexiarg",
+    :rel 0.429,
+    :mc 1.76,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 9,
+    :ident "aif/hierarchical-budget-aware-action-selection",
+    :ref
+    "futon3/library/aif/hierarchical-budget-aware-action-selection.flexiarg",
+    :rel 0.426,
+    :mc 1.405,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 10,
+    :ident "aif/experimental-comparison-of-EFE-variants",
+    :ref
+    "futon3/library/aif/experimental-comparison-of-EFE-variants.flexiarg",
+    :rel 0.379,
+    :mc 0.872,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 11,
+    :ident "agent/budget-bounds-exploration",
+    :ref "futon3/library/agent/budget-bounds-exploration.flexiarg",
+    :rel 0.378,
+    :mc 0.642,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 12,
+    :ident "aif/no-self-certification",
+    :ref "futon3/library/aif/no-self-certification.flexiarg",
+    :rel 0.395,
+    :mc 0.514,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 13,
+    :ident "futon-theory/honest-map-over-flattering-counter",
+    :ref
+    "futon3/library/futon-theory/honest-map-over-flattering-counter.flexiarg",
+    :rel 0.404,
+    :mc 0.767,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 14,
+    :ident "budgeted-action-selection/mana-gated-work",
+    :ref
+    "futon3/library/budgeted-action-selection/mana-gated-work.flexiarg",
+    :rel 0.416,
+    :mc 0.291,
+    :via "deposit-005 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}]},
+ :psi-recipe
+ {:version "2-adapted-mission-doc",
+  :author "claude-16",
+  :source
+  "M-action-vocabulary.md HEAD/IDENTIFY/completion-criteria (003 no-seal precedent)",
+  :blind-scoring
+  "NOT POSSIBLE — no seal; NOTE ALSO: dispatcher reported F ~0 for this psi, my re-run measured F +10.662 (same size-15 pattern set) — my pins govern this record, discrepancy flagged for review"},
+ :deposit-contract :v2,
+ :mission "futon2-d/mission/action-vocabulary",
+ :fold-turn/id "ft-action-vocabulary-005",
+ :pin-4
+ {:status :attempted-passes-linearized,
+  :check
+  "clean_to_lean.py --mode standalone over the converted skeleton; lean compile 0 errors, 0 sorry tactics, 0 warnings",
+  :artifacts
+  ["/tmp/ft005_to_clean.py"
+   "/tmp/clean005/action-vocabulary-005.clean.edn"
+   "/tmp/clean005_check.lean"],
+  :fidelity-gap
+  "the CLean spine is seq-only: the v2 connectives (:tensor/:copar) do NOT round-trip — this checked the composition skeleton (type-flow, step typing, hole typing), not the connective structure; connective-faithful bridge = follow-on",
+  :holes
+  "4 of 6 policy-holes attached as typed CLean holes (b10/b5/b2/b14); h4 (tau) and h6 (exchange-rate value) are fold-level, no home box — recorded here"},
+ :turn
+ {:agent "claude-20",
+  :model "claude-fable-5",
+  :edge "invoke-1783281466485-519-875a68b9",
+  :at "2026-07-05T20:06:14Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "the bounded move-class vocabulary: {advance, close, survey, apply-cascade-with-escrowed-dG} as an explicit candidate action space with stated inclusion reasons per class — the spec prices ALL of what the operator values, not the habitual class",
+     :fits-pattern "aif/candidate-pattern-action-space",
+     :addresses-however
+     "selection dominated by recency/habit: the advance-only monoculture IS this pattern's failure mode realized — four independent single-best-holds results trace to it; the bounded explicit vocabulary is the structural fix",
+     :produces [:move-class-vocabulary]}
+    {:id :b2,
+     :role
+     "the typed input schema: per-mission observation vector {resolvedness, staleness, kappa, W1} read from the substrate ground metric — what every class-intensity formula is a function OF",
+     :fits-pattern "aif/structured-observation-vector",
+     :addresses-however
+     "heterogeneous readings collapse into prose interpretation: the typed vector makes class intensities comparable across missions and across scoring runs",
+     :produces [:metric-observation-vector]}
+    {:id :b3,
+     :role
+     "advance-intensity = advance-value x (1 - resolvedness): a NAMED persisted term — advancing a nearly-resolved mission is worth little; advancing an open one is the classic move",
+     :fits-pattern "aif/expected-free-energy-scorecard",
+     :addresses-however
+     "a single opaque score invites post-hoc rationalization: per-class named terms with persisted breakdowns make which-class-won inspectable",
+     :consumes [:move-class-vocabulary :metric-observation-vector],
+     :produces [:advance-intensity]}
+    {:id :b4,
+     :role
+     "close-intensity = close-value x resolvedness: the close-out of a saturated mission is a first-class scored move — the operator's gold explicitly contains close-outs; resolvedness is the signal that closing now banks the work",
+     :fits-pattern "aif/expected-free-energy-scorecard",
+     :addresses-however
+     "same scorecard discipline: close was previously priced at zero implicitly (unscored = invisible); a named term makes the close-out competable",
+     :consumes [:move-class-vocabulary :metric-observation-vector],
+     :produces [:close-intensity]}
+    {:id :b5,
+     :role
+     "survey-intensity for stale-early targets: high staleness x low resolvedness flags missions whose state is least known — survey is the epistemic move; its exact functional form is left to hole h2, the TERM and its inputs are fixed here",
+     :fits-pattern "aif/expected-free-energy-scorecard",
+     :addresses-however
+     "unscored classes never fire: naming the term with its input signature (staleness, resolvedness) reserves the survey move a scored seat even while its form is tuned",
+     :consumes [:move-class-vocabulary :metric-observation-vector],
+     :produces [:survey-intensity]}
+    {:id :b6,
+     :role
+     "apply-cascade-intensity reads the escrowed deposit dG for the mission (sha-valid deposits only): the newest move class enters the vocabulary priced by the fold economy's own number, not a proxy — its exchange into the bundle currency is exactly b10's declared question",
+     :fits-pattern "aif/expected-free-energy-scorecard",
+     :addresses-however
+     "the term breakdown must show the escrow provenance (which deposit, which dG) or the class is an opaque bonus; persisted breakdown per candidate is the pattern's THEN applied to the escrow lane",
+     :consumes [:move-class-vocabulary :metric-observation-vector],
+     :produces [:apply-cascade-intensity]}
+    {:id :b7,
+     :role
+     "every class-intensity declares its channels: which metric fields, which store snapshot, which escrow deposit it consumed — persisted alongside the term value",
+     :fits-pattern "aif/term-to-channel-traceability",
+     :addresses-however
+     "terms silently absorb available signals: explicit channel linkage keeps advance-intensity from quietly becoming a different function between P2 and P3",
+     :consumes [:metric-observation-vector],
+     :produces [:channel-declarations]}
+    {:id :b8,
+     :role
+     "resolvedness and staleness read LIVING documents (status lines, mission docs): every score persists the content hash + date of the prose it conditioned on — cross-edit comparisons are cross-version comparisons by construction",
+     :fits-pattern "aif/valuation-reads-the-paperwork",
+     :addresses-however
+     "a one-line prose edit silently re-values everything downstream: the missing changelog is the defect, so the bookkeeping (hash + date per score) is the fix — not freezing the inputs",
+     :consumes [:metric-observation-vector],
+     :produces [:input-content-hashes]}
+    {:id :b9,
+     :role
+     "conditioning declared where numbers render: each intensity and each bundle score carries SENSE / SELECTION-SEMANTICS / CONDITIONING (which metric snapshot, which candidate population, which prose versions) at its render site",
+     :fits-pattern "aif/declare-the-conditioning",
+     :addresses-however
+     "identical labels naming incomparable objects: a bundle score conditioned on different snapshots must be visibly a different number series — G(candidate) is a lambda; only G(candidate | situation) is a value",
+     :consumes [:channel-declarations :input-content-hashes],
+     :produces [:conditioning-declaration]}
+    {:id :b10,
+     :role
+     "the bundle-merge rule under currency discipline: per-class intensities are DIFFERENT LANES (advance/close/survey in metric units, apply-cascade in coverage-dG nats); the bundle score either establishes a stated exchange rate into one unit or keeps the tuple and declares the selection rule over it — every constant in the arena audited (what does it beat, what beats it)",
+     :fits-pattern "aif/currency-before-merge",
+     :addresses-however
+     "the cheap move — one linear sum at hand-set weights — hides the incommensurability instead of resolving it; the weights would silently absorb the units problem, which is how advance-only monoculture happened the FIRST time",
+     :consumes
+     [:advance-intensity
+      :close-intensity
+      :survey-intensity
+      :apply-cascade-intensity
+      :conditioning-declaration
+      :constant-audit],
+     :produces [:bundle-score-rule]}
+    {:id :b11,
+     :role
+     "bundle feasibility: aggregate budget conservation across the picks per round (a portfolio must be executable within the round's capacity) plus cheap forward projection per pick (a bundle whose picks predictively exhaust their own missions within K ticks is penalized) — the budget axis of portfolio composition",
+     :fits-pattern "aif/hierarchical-budget-aware-action-selection",
+     :addresses-however
+     "naive union-of-best leaves the budget invariant unenforced: hard conservation in the selector, soft forward-projection as a scored subterm — both trace-visible",
+     :consumes [:bundle-score-rule],
+     :produces [:feasibility-gate]}
+    {:id :b12,
+     :role
+     "bundle affordability: the portfolio gated by the operator's session mana balance — quick wins are the low-mana class, deeper dives spend more; the gate is the live intersection of what the bundle costs and what the session can sustain",
+     :fits-pattern "budgeted-action-selection/mana-gated-work",
+     :addresses-however
+     "priority sorting alone recommends everything locally desirable regardless of what the substrate can sustain: the mana gate is where the operator's metabolic reality enters the portfolio",
+     :consumes [:bundle-score-rule],
+     :produces [:mana-gate]}
+    {:id :b13,
+     :role
+     "placeholder audit for P2's dark implementation: classes not yet priced never enter as bare 0.0 glue; every default is self-describing with provenance; any deletion or addition is replayed against the arena INCLUDING its placeholders before landing — the flag-off regression re-run is stage-named per the ledger lesson",
+     :fits-pattern "aif/placeholder-is-load-bearing",
+     :addresses-however
+     "inertness is relative to the current arena: removing or adding a class term shifts every candidate past the glue constants, handing wins to rows that were never scored — the replay-before-delete discipline is P2's safety rail",
+     :produces [:constant-audit]}
+    {:id :b14,
+     :role
+     "P3 as matched-variant comparison: score the sealed golden picks (rounds 1-2) under BOTH the advance-only score and the new vocabulary, matched configuration, named metric = the operator picks' median rank; falsifiable target = top-quartile median under the new vocabulary — the winner is a finding, not a stance; THIS BOX IS THE ACCEPTANCE TERMINAL",
+     :fits-pattern "aif/experimental-comparison-of-EFE-variants",
+     :addresses-however
+     "implement one variant, get plausible outputs, ship: the side-by-side against the sealed picks is the only thing that makes the vocabulary claim falsifiable rather than aesthetic",
+     :consumes
+     [:bundle-score-rule
+      :feasibility-gate
+      :mana-gate
+      :seal-protocol
+      :counter-honesty],
+     :produces [:retest-verdict]}
+    {:id :b15,
+     :role
+     "seal independence: the golden picks were sealed BEFORE this vocabulary existed and stay untouched by it — no tuning on the sealed set (any calibration uses non-sealed rounds or splits); the P3 verdict counts only seal-tagged evidence the vocabulary apparatus cannot have manufactured",
+     :fits-pattern "aif/no-self-certification",
+     :addresses-however
+     "every layer tries to certify itself and each attempt looks rigorous: the seal is the structural tag vigilance cannot substitute for — the verdict is moveable only by evidence the scorer did not stage",
+     :produces [:seal-protocol]}
+    {:id :b16,
+     :role
+     "the negative is a deliverable: if the sealed picks do NOT re-rank top-quartile, that result is recorded as the finding (the portfolio structure is not where we think) — no threshold-softening, no denominator-shopping; the counter must be moveable the wrong way by truth",
+     :fits-pattern "futon-theory/honest-map-over-flattering-counter",
+     :addresses-however
+     "a counter only ever moved downward rewards concealment: pre-registering the target and recording the miss is what keeps P3 a measurement instead of a ritual",
+     :produces [:counter-honesty]}
+    {:id :b17,
+     :role
+     "the revision loop is budgeted: kill criterion = two vocabulary revisions with P3 still negative, then STOP — the finding routes to the Joe-HUD / Bayesian-operator-model thread instead of a third revision; commit-or-escalate, never wander",
+     :fits-pattern "agent/budget-bounds-exploration",
+     :addresses-however
+     "unbounded revision drifts into fitting the operator post hoc: the explicit two-revision budget forces the value-structure question to escalate rather than degrade into curve-fitting",
+     :consumes [:retest-verdict],
+     :produces [:revise-or-stop]}],
+   :wires
+   [{:from [:b1 :b2], :to [:b3 :b4 :b5 :b6], :connective :tensor}
+    {:from [:b2], :to [:b7 :b8], :connective :tensor}
+    {:from [:b3 :b4 :b5 :b6], :to [:b10], :connective :copar}
+    {:from [:b7 :b8 :b9], :to [:b10], :connective :copar}
+    {:from [:b13], :to [:b10], :connective :copar}
+    {:from [:b10], :to [:b11 :b12], :connective :tensor}
+    {:from [:b10 :b11 :b12], :to [:b14], :connective :seq}
+    {:from [:b15 :b16], :to [:b14], :connective :copar}
+    {:from [:b14], :to [:b17], :connective :seq}],
+   :terminals [{:id :b14, :discharges :want-signature}],
+   :policy-holes
+   [{:unfolded-pattern nil,
+     :free "a portfolio-composition pattern — THE structural hole",
+     :why
+     "no pattern in the cascade (or, per two independent constructor runs, the library) grounds why a MIXED portfolio beats a uniform one: b11 covers feasibility, b12 affordability, b10 unit-merging — none covers complementarity/diminishing-returns-per-class, the actual content of quick-wins-plus-deeper-dives-plus-close-outs; AUTHORING RECOMMENDATION: a portfolio-composition pattern family for the doctrine card, folded into a vocabulary revision"}
+    {:unfolded-pattern nil,
+     :free "survey and apply-cascade functional forms",
+     :why
+     "the charter fixes advance x (1-resolvedness) and close x resolvedness; survey's stale-early shape and how escrowed dG scales into apply-cascade intensity are named terms with unset forms"}
+    {:unfolded-pattern nil,
+     :free "resolvedness/staleness operationalization",
+     :why
+     "the metric computes them, but their normalization into intensity ranges and kappa/W1's role (intensity input vs eligibility filter) are not derivable from charter + halo"}
+    {:unfolded-pattern "aif/policy-precision-commitment-temperature",
+     :free "commitment temperature over bundles",
+     :why
+     "retrieved by the cascade but deliberately NOT folded: tau over bundle selection is E1 contest machinery, and the charter scopes sampler work out of this mission — folding it here would be scope creep wearing a pattern; it waits, typed, for the contest"}
+    {:unfolded-pattern nil,
+     :free "the top-quartile denominator",
+     :why
+     "top-quartile median OVER WHICH POPULATION (all WM-pickable missions that round? the contest deck? the golden-round candidate slate?) is unstated in the charter; P3's protocol must fix the denominator BEFORE scoring, per b15/b16"}
+    {:unfolded-pattern nil,
+     :free "the exchange rate values",
+     :why
+     "b10 mandates DECLARING the cross-class exchange rate; what it IS (how many close-nats one advance-nat buys; deposit-003's value-per-nat is the same family) is an operator valuation the fold cannot set"}]}},
+ :arming
+ {:operator "joe",
+  :word
+  "Yes both are fine, lets proceed with 002 & 2g. ... Right now, while we are testing it interactive, it has my blanket consent.",
+  :at "2026-07-05T07:49:04.703597347Z",
+  :scope :blanket-interactive-phase,
+  :via
+  "E-live-loop-2 2g step history (blanket grant for the interactive phase; 005 dispatched under it by reviewer claude-16, M-action-vocabulary end-to-end)",
+  :fold-turn/id "ft-action-vocabulary-005"},
+ :prompt
+ {:sha256
+  "6284c426497d63ac441029ebf7bcbae86e2d0ef9a401ad6793a1415a778386b8",
+  :prose-sha256
+  {"aif/no-self-certification"
+   "93d00b09a76fb487f96a11e76abf0d7805281ef27e10d965365ebc0632561d8f",
+   "aif/currency-before-merge"
+   "441cb8d0bb8f8a271bdfe632daf2010cac0a4dea9ab1be3cb698393b23b64f12",
+   "aif/term-to-channel-traceability"
+   "db8095869c36cbe3f3792c10b4a7695ad427f6bac03ea2b394c412f92273c34a",
+   "aif/declare-the-conditioning"
+   "954b803dd9ebf20a91e0a37704aba630886f0e4e58a7485e2b5ae84a79502131",
+   "aif/hierarchical-budget-aware-action-selection"
+   "260c6fe7b2b30567cb069564700471cb5802bdc59d1fb4753bf6545d0c5e7007",
+   "aif/experimental-comparison-of-EFE-variants"
+   "bc7abd99179a443a0dc809d605816a506fb2223d964c5c52f4e1b8e44cab612b",
+   "budgeted-action-selection/mana-gated-work"
+   "e54b2a1f8904b23dc41724419cc25cfd8c4da843e46f73c0991b94c14aacd01d",
+   "aif/placeholder-is-load-bearing"
+   "1b71274e0caa90aa324d7ef07445a9ea3c3500d882b4944f71ec3f9cb932763a",
+   "aif/policy-precision-commitment-temperature"
+   "69e31dd5b36f190be055e569344dd5d56bc77ce1f6388cb153fa20880e1c2705",
+   "agent/budget-bounds-exploration"
+   "2b7ccc18d3040a3dc3cbc0776fba54fdb048114746b908b2d98e87c2e9407db3",
+   "aif/candidate-pattern-action-space"
+   "0ebcb8b2c595e327ec898c7f7a8aba30fc7ab81da938b797f7eaa680a0d3f87d",
+   "aif/expected-free-energy-scorecard"
+   "b4f582e89eae9b597cb6d91c6309cb1ad5b1ece394604a1c595f7501a2904c50",
+   "futon-theory/honest-map-over-flattering-counter"
+   "766563b29ccd37d2f52c83a0c595490973e8f2800b828f238d0171e5298f7ae4",
+   "aif/valuation-reads-the-paperwork"
+   "017585fe18b8e2c54576fd4626bafa6f5b9b67be99da8ec212af15d20feffbdb",
+   "aif/structured-observation-vector"
+   "f49d7c200c7908d6b2a4b6b4d05e5345625489131aaf2a2386e7c5b4aa52d19b"},
+  :prose-source
+  "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\") — matches enact.clj L3 prose-fn"},
+ :arrow-candidate
+ {:have
+  "the substrate ground metric (OR/Wasserstein + Fisher-Rao) with resolvedness/staleness/kappa/W1 computable per mission; the sealed golden-round picks + the contest harness (E-cascade-sampler-sampler, parked on this precondition); the ranking lane with its G blend; four independent single-best-holds results all tracing to advance-only pricing; the WM action classes: advance, close, survey, apply-cascade-with-escrowed-dG.\n",
+  :want
+  "a move-class value spec — per-class intensity formulas over substrate-metric quantities (resolvedness, staleness, kappa/W1): advance x (1-resolvedness); close x resolvedness; survey for stale-early targets — plus a composition-aware bundle score that values a portfolio of picks AS a portfolio, not a sum of solo scores. Falsifiable: the operator's sealed golden picks (rounds 1-2) re-rank to top-quartile median under the new vocabulary.",
+  :format :sorry,
+  :escrow "do-not-write-meme.db"},
+ :hole
+ {:confidence :authored,
+  :have
+  "the substrate ground metric (OR/Wasserstein + Fisher-Rao) with resolvedness/staleness/kappa/W1 computable per mission; the sealed golden-round picks + the contest harness (E-cascade-sampler-sampler, parked on this precondition); the ranking lane with its G blend; four independent single-best-holds results all tracing to advance-only pricing; the WM action classes: advance, close, survey, apply-cascade-with-escrowed-dG.\n",
+  :want
+  "a move-class value spec — per-class intensity formulas over substrate-metric quantities (resolvedness, staleness, kappa/W1): advance x (1-resolvedness); close x resolvedness; survey for stale-early targets — plus a composition-aware bundle score that values a portfolio of picks AS a portfolio, not a sum of solo scores. Falsifiable: the operator's sealed golden picks (rounds 1-2) re-rank to top-quartile median under the new vocabulary.",
+  :via
+  "psi authored by claude-16 (reviewer) from futon2/holes/M-action-vocabulary.md; re-run by claude-20 for own pins",
+  :rule "fold-turn/hole-from-mission-doc"},
+ :eval {:coverage-score-delta -0.7391304347826086, :score-grain :coverage}}

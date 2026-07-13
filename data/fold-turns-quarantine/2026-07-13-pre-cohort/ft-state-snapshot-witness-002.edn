@@ -1,0 +1,142 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the state-snapshot-witness siblings as protocol-family: the shape (state-snapshot-witness) admits multiple implementations across artifact-classes — state-snapshot-witness/{inventory, registry, repo-refs, hud-render} — and the inventory's existing family-to-invariants schema expresses 'one shape, four instances' through namespace-discriminated IDs without inventing subfamilies or schema migration. The IDENTIFY already named the shape before the instance (shape-first-identify), enumerated the four siblings, and adopted the slash convention. The protocol-family-naming anti-patterns are load-bearing: 'inventing subfamily' is rejected (namespace IDs suffice); 'flattening into one big invariant' is rejected (per-sibling projection-fns and cadences are invisible if flattened); 'splitting into separate families' is rejected (breaks the one-shape-many-instances relationship). The remaining three siblings (registry, repo-refs, hud-render) are handed to Codex, and the protocol-family discipline governs HOW they enter the inventory: each as state-snapshot-witness/<artifact-class> with its own four-component shape (container, projection-fn, cadence, emit-fn), not as a new structural element"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "the :event :inventory-snapshot as a structured event with stable schema: {:event :inventory-snapshot, :container :inventory, :state <flat EDN map>, :emitted-at <timestamp>, :probe-run-id? <id>}. The structured-events-only pattern grounds WHY the snapshot is a dedicated event type with defined keys, not free-text or mixed into :family-fired: downstream consumers (HUD rendering, time-travel queries, inventory diff, the priority queue) parse the stable schema reliably — they can dedupe, audit, and project without re-parsing prose. The IDENTIFY decision (separate :event :inventory-snapshot vs extending :family-fired body) IS the structured-events-only discipline: conflating snapshots with per-event deltas mixes cycle-boundary state with per-family deltas, breaking the parser's ability to distinguish 'the inventory at boot N' from 'family X fired at boot N'. The event shape standardised here (:event :state-snapshot body has :container :state :emitted-at :probe-run-id?) is the stable schema the pattern demands, namespace-discriminated by subtype (:inventory-snapshot, :registry-snapshot, etc. for future siblings)"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via
+    "the snapshot as append-only provenance-bearing state-transition: each :inventory-snapshot IS a state-transition against the inventory container entity — it records 'the inventory state moved to X at boot N' — and the append-only discipline (snapshots are never edited or deleted; mistakes corrected by a new snapshot, not by mutating a prior one) preserves the trail. The state/* lifecycle vocabulary partially transposes: a snapshot IS state/strengthened (the inventory state has gained evidence — a boot happened, the projection was taken); if the inventory structure changed between boots, the snapshot IS state/refined (the framing was sharpened — new families or siblings appeared). HOWEVER the 8-event vocabulary is designed for EoI interest-network entities (essay annotations, institution-objects, basins); the link/asserted event type (cross-essay relation) has no analogue for system-state containers. The append-only + provenance + lifecycle-typing core transposes; the relational-event machinery does not. The payload schema's :evidence/refs and :operator/rationale fields map to the snapshot's :probe-run-id (evidence pointer) and the boot context (rationale = 'the system booted')"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "the snapshot as design-state lineage: each boot-snapshot IS a versioned checkpoint of the system's design state (the structural-law inventory), and the sequence of snapshots IS the lineage that makes past states reconstructible. The design-state-lineage invariant — 'for any point in time, (a) the design state active then, (b) the evidence that produced it, (c) the update-policy clause that authorised the update' — maps directly: (a) = the snapshot's :state map (the full inventory at that boot); (b) = the :probe-run-id linking to the boot's evidence; (c) = the bootstrap.clj wire-in (the construction-path policy that authorised the snapshot). The composition on the versioning axis is DECLARED: boot-time snapshots = coarse-grained versioning (one per boot, citable by boot-id); per-event :family-fired deltas = the fine-grained internal log (individual changes between snapshots). This is the dual-track composition: canonical versions (per-boot snapshots, reconstructible) + internal log (per-event deltas, for fine-grained reconstruction). The failure-mode 'reconstruction-impossible' is exactly what snapshots prevent: without them, past inventory states cannot be recovered from the change log alone, because intermediate states were never recorded. The lineage is the backbone that publication-cadence (canonical versions) and assumptions-commons (evidence provenance) depend on"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b3] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b2 :discharges :want-signature}
+              {:id :b4 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a state-snapshot-witness system that makes every long-lived runtime state container's history directly queryable — one evidence entry per boot containing the full point-in-time projection, so 'what was the inventory at boot N?' is a single-query answer, not a delta-aggregation walk. The inventory-snapshot sibling is in INSTANTIATE (first worked example: projection-fn + boot-wire + evidence-emit); three siblings remain (registry, repo-refs, hud-render — handed to Codex). The remaining want is: the sibling-naming discipline that makes the family parseable without schema changes, the structured-event shape that downstream consumers (HUD, time-travel, diff) can parse reliably, the append-only provenance that makes the snapshot trail trustworthy, and the design-state lineage that makes past system states reconstructible — not just the change log, but the state AT any past boot.\nHUNGRY-FOR: the three remaining siblings written into the inventory with namespace IDs (state-snapshot-witness/{registry,repo-refs,hud-render}) — the protocol-family shape that lets the inventory express 'one shape, four instances' without inventing subfamilies; the structured-event schema that the HUD and time-travel queries depend on (stable keys: :event, :container, :state, :emitted-at); the snapshot diff tooling (separate concern, but the snapshot is queryable, so diffs are operator-driven); the periodic cadence beyond boot-only (hourly canary-coupled snapshots — deferred but named); the lineage query surface ('retrieve the inventory state as of boot N' — currently one snapshot per boot, but no reconstruction view exists).\nHAVE: the state-snapshot-witness shape authored in futon3/library/invariant-coherence/ (the flexiarg defining the four-component sibling shape: container, projection-fn, cadence, emit-fn); the IDENTIFY decision (separate :event :inventory-snapshot shape vs extending :family-fired); the inventory-snapshot implementation in progress (snapshot-inventory! reading structural-law-inventory.sexp, projecting to flat EDN map, emitting through the evidence boundary); bootstrap.clj wire-in point (after registrar block); the tagging convention ([:invariant-queue :state-snapshot :inventory]); the companion family-canary (per-family deltas between cycle-boundary snapshots); reachable-from-boot composition (snapshot creation in the construction path); the tracer track-4-2 (snapshot-as-evidence) closing on this mission.\n"
+  :psi-sha256
+  "a810c300cb1723d589910accd049f1e05d4dad0bea7fc127f5e618786e06fe96"
+  :pattern-ids
+  ["invariant-coherence/protocol-family-naming"
+   "realtime/structured-events-only"
+   "structure/interest-event-vocabulary"
+   "ukrns/design-state-lineage"]
+  :size 4
+  :truncated false
+  :budget 4
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "0649e22fc124bc6d"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-3"
+  :source "M-state-snapshot-witness.md IDENTIFY/scope/completion-criteria (the landed state as HAVE: inventory-snapshot in INSTANTIATE, shape authored; the remaining want: three siblings + structured-event shape + lineage surface), authored fresh from the mission's own terms — resolver-blind to the proposer's pattern rationale"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3c-d/mission/state-snapshot-witness"
+ :proposal/hash "0649e22fc124bc6d"
+ :fold-turn/id "ft-state-snapshot-witness-002"
+ :turn
+ {:agent "zai-3"
+  :model "zai"
+  :edge "invoke-1783704015690-83-4688a38f"
+  :at "2026-07-10T21:10:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the state-snapshot-witness siblings as protocol-family: namespace IDs state-snapshot-witness/{inventory,registry,repo-refs,hud-render} express one shape four instances without schema migration; the three anti-patterns (invent subfamily, flatten, split) are rejected; Codex siblings follow the same naming discipline"
+     :fits-pattern "invariant-coherence/protocol-family-naming"
+     :addresses-however
+     "the instinct when a shape has multiple instances is to introduce a new structural element (subfamily) — but the inventory's schema already has family to invariants; namespace-discriminated IDs carry the relationship without schema changes, parser updates, or ratchet events. The three Codex siblings must follow this discipline when they land, not invent their own naming"
+     :produces [:sibling-namespace-discipline]}
+    {:id :b2
+     :role "the :event :inventory-snapshot as structured event with stable schema {:event :container :state :emitted-at :probe-run-id?} — the dedicated event type that downstream consumers parse reliably, not mixed into :family-fired or emitted as free-text"
+     :fits-pattern "realtime/structured-events-only"
+     :addresses-however
+     "free-text or inconsistent event shapes break realtime matchers, the HUD, and time-travel queries — the IDENTIFY decision to use a separate :event :inventory-snapshot type (vs extending :family-fired body) IS the structured-events-only discipline: stable schema enables accurate parsing, dedupe, and audit trails. Each future sibling's emit-fn must produce the same schema shape, namespace-discriminated by subtype"
+     :consumes [:sibling-namespace-discipline]
+     :produces [:structured-snapshot-event]}
+    {:id :b3
+     :role "the snapshot as append-only provenance-bearing state-transition: each snapshot IS state/strengthened against the inventory container; append-only discipline preserves the trail; :probe-run-id IS the evidence-ref"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "the state/* lifecycle vocabulary partially transposes (state/strengthened for each boot-snapshot, state/refined if the inventory structure changed), but link/asserted (cross-essay relation) has no analogue for system-state containers. PARTIAL: append-only + provenance + lifecycle-typing core transposes; the relational-event machinery designed for EoI interest-network entities does not. The snapshot is a state-transition against a container, not a relation between essays"
+     :produces [:append-only-snapshot-trail]}
+    {:id :b4
+     :role "the snapshot as design-state lineage: each boot-snapshot IS a versioned checkpoint; the sequence reconstructs past inventory states; dual-track composition (boot-snapshots = coarse-grained canonical versions, per-event deltas = fine-grained internal log)"
+     :fits-pattern "ukrns/design-state-lineage"
+     :addresses-however
+     "without lineage, past inventory states are irrecoverable from the change log alone — 'reconstruction-impossible' is the failure-mode snapshots prevent. The lineage invariant (for any time T: design state + evidence + policy clause) maps to snapshot-state + probe-run-id + bootstrap-wire-in. The dual-track composition is declared: boot-snapshots are the citable canonical versions; :family-fired deltas are the internal per-change log. Together they give full reconstructible history"
+     :consumes [:structured-snapshot-event :append-only-snapshot-trail]
+     :produces [:reconstructible-design-state-lineage]}]
+   :hyperedges
+   [{:from :b1 :to :b2 :connective :seq
+     :rationale "the protocol-family naming (b1) defines the sibling structure; the structured event shape (b2) defines the emit schema for each sibling — order-dependent: the namespace discipline must exist before the emit-fn shape is standardised across siblings, so all four emit the same schema discriminated by subtype"}
+    {:from :b2 :to :b4 :connective :seq
+     :rationale "the structured event (b2) defines the per-snapshot record; the lineage (b4) is the sequence of records over time — order-dependent: the event shape must be stable before the lineage can be reconstructed from it, because lineage reconstruction replays the structured events"}
+    {:from :b3 :to :b4 :connective :copar
+     :rationale "the append-only trail (b3) co-applies with the lineage (b4) — the append-only discipline preserves the trail the lineage reconstructs; copar because the discipline governs integrity while the lineage governs reconstructibility, both required for trustworthy history but neither subsumes the other"}
+    {:from :b1 :to :b3 :connective :copar
+     :rationale "the sibling-namespace discipline (b1) co-applies with the append-only trail (b3) — the namespace naming governs how siblings enter the inventory; the append-only discipline governs how their snapshots are recorded; copar because both govern the snapshot system's integrity at different layers (naming vs recording) without sequential dependence"}]
+   :terminals
+   [{:id :b2 :discharges :want-signature}
+    {:id :b4 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the three Codex siblings' projection-fns — what state each container projects"
+     :why
+     "the protocol-family-naming pattern (b1) grounds the NAMING discipline (state-snapshot-witness/<artifact-class>), but the CONTENT of each sibling's projection-fn is container-specific: registry projects (keys @family-check-fns) plus deferred-flags; repo-refs projects git HEAD + branch for each futon repo; hud-render projects the last widget render state. None of the 4 patterns in this cascade ground what state a specific container should project — that is a per-container design decision the patterns cannot supply. The shape is grounded; the content is not"}
+    {:id :h2
+     :unfolded-pattern "structure/interest-event-vocabulary"
+     :free "the link/asserted event type has no snapshot-system analogue"
+     :why
+     "the 8-event vocabulary's link/asserted (cross-essay relation between interest-network entities) presupposes a relational structure between documents — essays link to essays, annotations link to sections. A system-state container (the inventory, the registry) has no such relational surface: a snapshot of the inventory is a self-contained projection, not a relation to another entity. The state/* lifecycle events (spawned/strengthened/refined) transpose because they describe the container's own state; link/asserted does not because it describes inter-entity relations. Recording as policy-hole — the append-only + lifecycle core is load-bearing even without the relational event"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the periodic cadence beyond boot-only — hourly canary-coupled snapshots"
+     :why
+     "the IDENTIFY scopes boot-only as sufficient for the first sibling, with hourly periodic snapshots deferred. The design-state-lineage pattern (b4) grounds WHY lineage matters (reconstructibility), but the cadence decision (how often to snapshot) is a calibration the patterns do not supply. Boot-only is the coarsest useful cadence; hourly is finer; the right cadence depends on how often the inventory changes and how much storage each snapshot costs — an empirical trade-off the cascade cannot ground"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the lineage query surface — no reconstruction view exists"
+     :why
+     "the design-state-lineage pattern grounds the lineage DISCIPLINE (every state versioned, traces to evidence + policy, reconstructible), but the QUERY SURFACE ('retrieve the inventory state as of boot N') does not exist. The snapshots are queryable evidence entries, but there is no view or endpoint that projects 'here is the inventory at time T' from the snapshot trail. The pattern says 'expose the lineage as a queryable history'; the implementation of that query is an engineering task the patterns do not address"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "b2 (structured-events-only) and b3 (interest-event-vocabulary) overlap: both ground the event-shape discipline"
+     :why
+     "b2 grounds the stable-schema discipline (:event, :container, :state, :emitted-at as reliable keys) and b3 grounds the append-only provenance discipline (events are never edited, lifecycle-typed, evidence-bearing). Both address 'the snapshot must be a well-shaped event record' — b2 from the parser-stability angle (downstream consumers need stable keys), b3 from the provenance-angle (the trail must be append-only and lifecycle-typed). The overlap is genuine: they are two patterns whose CORE (the snapshot is a well-shaped, trustworthy event) is the same discipline applied from different concerns. Recording as honest overlap, not false independence"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The state-snapshot-witness shape authored (four-component sibling: container, projection-fn, cadence, emit-fn); the IDENTIFY decision (separate :event :inventory-snapshot); the inventory-snapshot implementation in progress (snapshot-inventory!, bootstrap wire-in, tagging convention); the companion family-canary (per-family deltas); reachable-from-boot composition; tracer track-4-2 closing."
+  :want
+  "A state-snapshot-witness system where every long-lived container's history is directly queryable — namespace-discriminated siblings with stable structured-event schemas, append-only provenance trails, and reconstructible design-state lineage from boot-snapshots."
+  :via
+  "psi authored by zai-3 from futon3c/holes/missions/M-state-snapshot-witness.md (IDENTIFY/scope/completion-criteria), resolver-blind to the proposer's pattern rationale; authored fresh"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

@@ -1,0 +1,114 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via
+    "the mission's Interface Signature is its port contract with the stack: INPUT-PORTS are the three corpora (mission docs, patterns, turns) plus the concept-tag gazetteer and co-embedding retriever; OUTPUT-PORTS are the joint mine's four products — memes (have→want arrows), pattern_apps (PSR), cascades, new_patterns (R17) — each consumed by a named downstream (M-aif-wiring R16/R14, M-wm-policies Track-2, substrate-2 PROOF layer, the pattern library). The composition constraint exposes the gap: the promotion paths (new_patterns→library, cascades→move-set, meme-moves→substrate-2 PROOF) are OUTPUT-PORTS that exist in the spec (§3c, §5) but are not yet implemented or tested — they are chartered next steps, not built. The mission's own §6 completion criteria (ΔG from real provenance at scale; turn-grounded move beats structure-borrowed) ARE the fidelity-contract tripwires: they must fail on pre-implementation state (the CPU stubs) and pass after the box run. However the pattern's full fidelity-contract machinery (donor-mission baseline inventories, preserve/adapt/drop per feature, latent-dependency probes) is designed for port/rebuild scenarios, not for a greenfield mining pipeline — the mission is greenfield, so the baseline is the declared spec, and the tripwire tests are the preregistration's P1–P6 predictions, not a donor's feature inventory. The typed-ports discipline transposes (the mine must declare what it exposes); the donor-fidelity layer does not"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "the pending GPU box run is NOT silent abandonment — it is a subsystem that has reached its integration gate (CPU-validated, stub-validated, script-clean) and is waiting for commissioning (the at-scale run). The pattern's discipline applies directly: record (1) the specific state — pipeline BUILT, 177/177 CPU-validated, joint runner 6/8 recall, linode-meme-mine.sh ready; (2) the lifecycle transition — the mission is at INSTANTIATE, not :active-with-nobody-working; (3) what downstream missions are affected — M-aif-wiring R16/R14 (needs ΔG), M-wm-policies Track-2 (needs forward-model coverage), M-populate-substrate-2 (needs the mine's PROOF-layer output). The preregistration (holes/meme-mine-preregistration.md with P1–P6 and decision rule) IS the exit narrative that prevents the archaeology tax: the next agent can distinguish 'not yet run' from 'tried and failed' without git archaeology. The forward/backward split (sorries held out of the box run, chartered as the sequel M-goals-and-holes) is the explicit :parked-with-rationale transition, not silent abandonment — the §3b audit (143 open sorries, 110 real + 33 boilerplate, trust filter) is the recorded decision. The promotion paths are likewise :parked (chartered post-run step, not built) rather than left in limbo"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "the mission's declared dependencies emit blocker reports that distinguish 'not started' from 'stalled': the GPU box run is blocked-by[GPU-commissioning — the 4-GPU Linode provisioned and vLLM mark4-70b deployed] with evidence[linode-meme-mine.sh written and bash-clean but not yet executed at scale; preregistration.md written with decision rule], status[not-ready]; the R14 γ feed is blocked-by[running-loop — needs accumulated verdict history] with evidence[§6 criterion 4: pending post-box], status[not-ready]; SELECT-PER-MISSION (runtime selection) is blocked-by[running-loop — not buildable as shells now] with evidence[§6 deferred/post-box], status[not-ready]; the backward/sorry half is blocked-by[charter — M-goals-and-holes and M-a-sorry-enterprise are the sequel missions, not yet active] with evidence[§3b audit: 110 real sorries identified but held out of the box run by design], status[not-ready]; the promotion paths (overlay→library/move-set/substrate-2) are blocked-by[box-run-output — promotion is the deliberate post-run step, needs the mine's actual output to promote] with evidence[§5: promotion is post-run step], status[not-ready]. Without these reports the pending state reads as 'nobody cares' — the forward pipeline was built and CPU-validated in one session, and the box run is the next concrete step, not a stalled effort. The blocker reports make the dependency chain legible: GPU commissioning → box run → promotion paths → R14 γ feed → SELECT-PER-MISSION"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b2] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: served/abstaining missions get a non-nil ΔG from REAL provenance at box-run scale — the GPU joint mine (~6.4k turns × retrieved missions × patterns on 4-GPU Linode, vLLM mark4-70b) commissioned and run, so the WM's transition model is populated at scale, not just CPU-stub-validated. Falsifiable per preregistration P1–P6: endpoint-resolution tiers ~59/23/18, bounded op-vocabulary, ≥40/198 missions meme-groundable, provenance beats guess, joint retrieval lifts grounding, new-pattern proposals as the R17 signal. The promotion paths (new_patterns→library, cascades→move-set, meme-moves→substrate-2 PROOF) are the deliberate post-run step that makes the mine's output durably consumed, not a frozen snapshot.\nHUNGRY-FOR: commissioning the box run — the at-scale instantiation that the CPU-validated forward pipeline is BUILT for but has not yet executed; the promotion paths that restore circulation (overlay→library/move-set/substrate-2) so mined output does not stagnate as a one-time snapshot; the backward/sorry half chartered as the sequel (M-goals-and-holes, M-a-sorry-enterprise) but NOT co-embedded into this run; the R14 γ feed (needs accumulated verdict history — pending post-box); runtime SELECT-PER-MISSION (needs a running loop — not buildable as shells now).\nHAVE: the forward mining pipeline BUILT and CPU-validated end-to-end — structure embedding (198 missions, 161-d, 0.79 NN-match), mined-move generator (177/177 abstaining missions flip abstain→non-nil ΔG, median −7.7e-4), meme-mine runner (~10 op-classes vs 3 hand-coded), consume+floor/cert (186 structure-borrowed · 12 island), targeted sampler (82/198 meme-groundable), concept-tag (1307-surface gazetteer, 32/300 turns route), joint runner stub-validated (6/8 candidate recall); linode-meme-mine.sh one-command box-run script bash-clean; preregistration holes/meme-mine-preregistration.md with predictions P1–P6 and decision rule; the evidence landscape ready to RECEIVE. The GPU box run is the pending at-scale step; promotion paths are chartered next steps, not built."
+  :psi-sha256
+  "4b9e4e91310f8536c2bce7844cbc4329aa23038c3b9073c3c141e81663bab30e"
+  :pattern-ids
+  ["futon-theory/mission-interface-signature"
+   "social/explicit-exit-over-abandonment"
+   "stack-coherence/stack-blocker-detection"]
+  :size 3
+  :truncated false
+  :budget 3
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "c7bcfcf8ee6674e9"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-4"
+  :source "M-operational-vocabulary.md sections 1-6 (IDENTIFY/MAP-DERIVE/ARGUE/VERIFY/INSTANTIATE/completion-criteria) authored fresh from the mission's own terms — resolver-blind to the proposer's pattern rationale; not inherited from ft-operational-vocabulary-001 (first-contact discipline between own deposits)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon2-d/mission/operational-vocabulary"
+ :proposal/hash "c7bcfcf8ee6674e9"
+ :fold-turn/id "ft-operational-vocabulary-002"
+ :turn
+ {:agent "zai-4"
+  :model "zai"
+  :edge "invoke-1783708621057-101-a3fe35dd"
+  :at "2026-07-10T20:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the mission's Interface Signature: INPUT-PORTS = three corpora + concept-tag gazetteer + co-embedding retriever; OUTPUT-PORTS = memes, pattern_apps (PSR), cascades, new_patterns (R17) — but the promotion paths are spec-declared output ports not yet implemented, and the §6 completion criteria are the fidelity-contract tripwires (fail on CPU stubs, pass after box run)"
+     :fits-pattern "futon-theory/mission-interface-signature"
+     :addresses-however
+     "not all output ports are known at mission start — the promotion paths (overlay→library/move-set/substrate-2) were discovered during implementation as necessary circulation-restoring outputs, and the mission doc updates to declare them (§3c, §5), but they remain unimplemented: the signature names them but the composition constraint (implemented in code, tested) is not yet satisfied. The donor-fidelity layer does not transpose (greenfield mission, not a port); the preregistration P1–P6 predictions serve as the tripwire tests instead"
+     :produces [:typed-port-contract]}
+    {:id :b2
+     :role "the pending GPU box run is a subsystem at its integration gate, not silently abandoned: the pipeline is BUILT and CPU-validated, the box-run script is bash-clean, the preregistration is written — the mission is at INSTANTIATE with a clear next step and recorded downstream effects"
+     :fits-pattern "social/explicit-exit-over-abandonment"
+     :addresses-however
+     "silent abandonment would leave the codebase in the zombie-mission failure mode: mission says INSTANTIATE but no commits for weeks looks like 'nobody cares'. The preregistration (P1–P6 + decision rule) IS the exit narrative; the forward/backward split (sorries held out, chartered as sequel) IS the :parked-with-rationale transition; the promotion paths are :parked (post-run step), not left in limbo. The pattern's evidence (forum abandoned with no status update, PAR session with 1/8 checkboxes) is the anti-pattern this mission avoids by recording its state transitions explicitly"
+     :produces [:legible-lifecycle-state]}
+    {:id :b3
+     :role "blocker reports for each declared dependency: GPU box run blocked-by[GPU-commissioning], R14 γ feed blocked-by[running-loop], SELECT-PER-MISSION blocked-by[running-loop], backward half blocked-by[charter], promotion paths blocked-by[box-run-output] — each with evidence links and ready/not-ready status"
+     :fits-pattern "stack-coherence/stack-blocker-detection"
+     :addresses-however
+     "without explicit blocker reports the pending state reads as 'nobody cares' instead of 'waiting on GPU commissioning'. The blocker reports make the dependency chain legible: GPU commissioning → box run → promotion paths → R14 γ feed → SELECT-PER-MISSION. The forward pipeline's one-session build (177/177 CPU-validated) proves this is not stalled — the blockers are genuine prerequisites, not neglect. The weekly-review cadence the pattern prescribes maps to the mission's preregistration decision rule (run the box run, evaluate P1–P6, promote what passes)"
+     :consumes [:typed-port-contract :legible-lifecycle-state]
+     :produces [:dependency-chain-legibility]}]
+   :wires
+   [{:from :b1 :to :b3 :connective :seq}
+    {:from :b2 :to :b3 :connective :copar}
+    {:from :b1 :to :b2 :connective :copar}]
+   :terminals [{:id :b3 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "futon-theory/mission-interface-signature"
+     :free "the donor-fidelity contract layer (baseline inventories, preserve/adapt/drop, latent-dependency probes) does not transpose"
+     :why
+     "the fidelity-contract machinery is designed for port/rebuild scenarios (the futon1a rebuild evidence: 82 tests, 5 invariants, but API contract never specified). M-operational-vocabulary is greenfield — there is no donor mission whose feature inventory must be preserved or dropped. The mission's baseline is its declared spec (§1-6), and the tripwire tests are the preregistration's P1–P6 predictions, not a donor's tripwires. The typed-ports discipline transposes (declare what you expose); the donor-fidelity layer does not. Recording as policy-hole rather than forcing a false donor-inventory or dropping the pattern — the port-contract discipline is load-bearing even without the fidelity layer"}
+    {:id :h2
+     :unfolded-pattern "futon-theory/mission-interface-signature"
+     :free "the mission-diagram (mermaid + EDN) requirement is not satisfiable — futon5.ct.mission/validate machinery is not part of this mission's build"
+     :why
+     "the pattern requires a mermaid wiring diagram validated by futon5.ct.mission at every prototype gate. The mission doc carries no mermaid diagram, and the futon5.ct.mission validation tooling is not in scope for this mining pipeline. The diagram-discipline (draw output ports first, check for orphan outputs) transposes conceptually — the mission's four output products (memes, pattern_apps, cascades, new_patterns) each have named consumers — but the machine-validation layer does not. The port-naming discipline applies; the diagram-validation tooling does not"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "b1 and b2 overlap: both contribute a 'make the mission's state legible to the stack' lens"
+     :why
+     "b1 (mission-interface-signature) and b2 (explicit-exit-over-abandonment) both address 'how does the stack know what state this mission is in and what it exposes'. b1 grounds the port contract (what the mine produces and who consumes it); b2 grounds the lifecycle state (the mission is at INSTANTIATE, not abandoned). The overlap is genuine: they are two patterns whose CORE (legible mission state) is the same move applied to this mission. b1 names the ports; b2 names the lifecycle transition; both are needed but they are not independent contributions to the same want. Recording as honest overlap, not false independence"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the GPU commissioning procedure itself (provisioning the 4-GPU Linode, deploying vLLM mark4-70b) is not grounded by any of the three patterns"
+     :why
+     "the three patterns address mission state legibility (interface signature, lifecycle transitions, blocker reports), not infrastructure commissioning. HOW the Linode is provisioned, HOW vLLM is deployed, HOW tunnel-mode keeps transcripts on dev — these are operational procedures grounded in the linode-meme-mine.sh script and the Linode platform, not in mission-interface-signature, explicit-exit-over-abandonment, or stack-blocker-detection. The patterns name the blocker (GPU commissioning); they do not supply the commissioning procedure. The dependency chain is decidable from the patterns; the commissioning steps are not"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "the forward mining pipeline BUILT and CPU-validated end-to-end — structure embedding (198 missions, 161-d, 0.79 NN-match), mined-move generator (177/177 flip), meme-mine runner (~10 op-classes), consume+floor/cert (186 borrowed · 12 island), targeted sampler (82/198 meme-groundable), concept-tag (1307 surfaces, 32/300 route), joint runner stub-validated (6/8 recall); linode-meme-mine.sh bash-clean; preregistration with P1–P6 + decision rule."
+  :want
+  "the GPU box run commissioned and executed at scale (~6.4k turns), with promotion paths built so mined output is durably consumed, and the backward/sorry half chartered as the sequel — all pending blockers made legible rather than silently abandoned."
+  :via
+  "psi authored by zai-4 from futon2/holes/M-operational-vocabulary.md (sections 1-6, INSTANTIATE state, fold against what REMAINS wanted), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-operational-vocabulary-001"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

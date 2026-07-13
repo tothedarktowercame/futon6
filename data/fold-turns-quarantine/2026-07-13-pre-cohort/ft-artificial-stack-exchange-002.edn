@@ -1,0 +1,231 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "self-play-loop as the ArSE's core mechanism: three agents — Asker (finds gaps in the knowledge graph: isolated nodes, missing inter-cluster links, ungrounded annotations), Answerer (uses graph context + pattern library + corpus to construct answers), Critic (evaluates QA pairs using scoring protocol, gates graph updates) — form a loop where each iteration improves the graph AND the agents' performance. The pattern IS the mission's Phase 1 specification: gate each iteration (Critic scores must exceed threshold before graph updates committed), track scores over iterations (plateau or decline => pause and diagnose), calibrate Critic against human judgement (spot-checks), measure Asker on question non-triviality not just volume. The landed code (run-arse-hotspot-loop.py) instantiates this partially: proof nodes are the Askers (gap analysis via hotspot identification), the LLM is the Answerer, the hypergraph schema is the structure, the hotspot stepper is the evaluator. The pattern's 100-iteration pilot next-step IS the mission's completion criterion 1. The degeneration modes (trivial questions, ignored context, unreliable Critic, noisy updates) are the failure modes the quality gates exist to prevent"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "environment-over-optimization as the ArSE's design philosophy: build the environment (the hypergraph, the gate pipeline, the evidence requirements, the budget constraints) that selects for viable agent behaviours, rather than tuning agents to hit fixed targets. The pattern's core claim — 'the environment becomes the product, not any single agent' — is the ArSE's framing: the Stack Exchange's value is the shared knowledge graph it produces (the environment), not any individual agent's performance. The pattern's environmental features (trails that enable learning, budgets that create selection pressure, evidence requirements that filter confabulation, handoff mechanisms for pattern propagation) map to: the futon3a pattern library (trails), the gate pipeline's budget constraints (selection pressure), the evidence-chain requirement (confabulation filter), and the Baldwin cycle's library evolution (handoff). The pattern's 'design for variation: can different agents coexist and compete?' maps to the ArSE's Phase 3 (agents writing agents: specialist sub-agents with narrower scope competing with generalists)"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "world-is-hypergraph as the ArSE's environment substrate: the agents' game world IS the futon4 hypergraph — futon1a (XTDB) is the persistent map, futon4 (Arxana) is the hypertext fabric with N-ary typed hyperedges, futon6 (math dictionary) is a quest zone. The ArSE's self-play loop operates IN this world: Askers navigate to find gaps (isolated nodes are unexplored rooms, missing cross-links are doors not yet opened), Answerers add edges (new typed relations = new paths in the world), Critics evaluate whether the new paths are worth keeping. The landed code confirms: arse-store.py stores QA in hypergraph-native format (typed nodes and edges born FAISS-indexable). The pattern's evidence (ALFWorld first-person inhabitation language = Drawbridge code exploration language) predicts that ArSE agents will experience the hypergraph as a navigable world, not a query API"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "graph-enhanced-evaluation as the ArSE's Critic methodology: two agents answer the same question — one bare (raw question text only), one graph-enhanced (question plus NER annotations, pattern tags, cluster context, related entities via graph queries) — and a blind judge scores both. The difference measures the value of the knowledge graph for mathematical QA. The pattern specifies stratification by difficulty (easy/medium/hard — improvement should be largest on hard questions where structure matters most), blind scoring (judge sees answers in randomised order), multiple dimensions (accuracy, completeness, coherence, depth), and spot-checks against human ratings. This IS the Critic's evaluation protocol from the self-play loop (b1): the Critic doesn't just score absolutely, it scores the marginal value of graph context. The pattern's hypothesis (improvement largest on hard questions) is falsifiable and directly measures whether the ArSE's knowledge graph earns its keep"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "deep-storage-to-active-graph as the ArSE's knowledge-ingestion architecture: use futon6 as an aggregation and activation layer — ingest key fragments from deep storage (PlanetMath, arXiv, nLab, Stack Exchange corpus, code archives) into a coherent graph, annotate them with patterns, proof skeletons, and cross-links, and maintain mappings back to origin sites for provenance. The pattern's core claim maps to the ArSE's corpus infrastructure: the 114K physics.SE QA pairs (futon6 P7) are deep storage; the ArSE activates them by ingesting into the hypergraph with typed nodes and edges (the arse-store.py format). The pattern's 'maintain mappings back to origin sites for provenance' is the evidence-chain requirement from the gate pipeline. HOWEVER the pattern is about unifying mathematical repositories (PlanetMath, arXiv, nLab) into one navigable graph — the ArSE's corpus is already imported (P7 done, 114K QA pairs NER-tagged). The activation-layer discipline transposes; the repository-unification framing is partially done"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :partial
+    :via
+    "agent-pattern-triad (Command/Strategy/Decorator) as the ArSE's agent-pipeline architecture: intent parsing emits Commands (the Asker's question is a command to retrieve+construct), a SchedulingStrategy selects the next move (which gap to target next, which agent dispatches), and decorators wrap each command (logging via PSR/PUR, timing, evidence checks, permission gates from the gate pipeline) before worker threads execute. The triad makes the agent pipeline explainable: what gets done (Command), how choices are made (Strategy), which protections wrap the work (Decorator). HOWEVER the pattern is about teaching the Command/Strategy/Decorator design-pattern triad to students and maintainers — it's a pedagogical pattern for explaining existing futon infrastructure, not a design pattern for building new ArSE-specific agent pipelines. The pipeline-architecture framing transposes; the pedagogical purpose does not"
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :partial
+    :via
+    "agential-oss-infrastructure and agential-pattern-hygiene as a co-active governance cluster: agential-oss-infrastructure makes agent learning loops explicit (PSR/PUR, confidence scoring, evidence chains — the audit trail for every ArSE Q&A cycle), and agential-pattern-hygiene teaches agents to maintain pattern quality (move completed next-steps to evidence, update core reasoning when evidence refines it, prune obsolete steps, mark patterns for promotion). Together they form the ArSE's self-improvement infrastructure: the OSS-infrastructure pattern provides the audit trail that the gate pipeline reads, and the pattern-hygiene pattern ensures the pattern library (futon3a) that agents consult stays curated and trustworthy. The Baldwin cycle (individual agent work -> evidence -> pattern library update -> future agents inherit improved patterns) requires BOTH: the audit trail (OSS) and the library maintenance (hygiene). HOWEVER both patterns are about agent governance in general OSS contexts, not specifically about mathematical Q&A. The governance discipline transposes; the mathematical-Q&A specificity does not. Recording as one box because the two patterns contribute overlapping governance lenses (absorption: both address 'how do agents leave traceable, improvable evidence of their work')"
+    :rule "fold-turn/box"}
+   {:id :b8
+    :role :application
+    :satiety :partial
+    :via
+    "baseline-cyber-ant as the ArSE's agent baseline: the futon2 AIF loop (g-observe -> perceive -> affect/update-tau -> policy/choose-action) narrated as a portable pattern asset gives the ArSE agents a deterministic baseline — the observation ABI, predictive-cycle trace, hunger dynamics, and policy harness are frozen so futon5 can lift the behaviour into an operator. The ArSE's Askers, Answerers, and Critics are instances of this AIF loop: they observe the graph state, perceive gaps/opportunities, update their internal state (tau/hunger), and choose actions (ask/answer/evaluate). HOWEVER the pattern is specifically about turning the futon2 AIF loop into a futon5 operator asset (cyber-ant flashing) — it's about the meta-level of agent creation, not about the ArSE's Q&A domain. The AIF-as-baseline transposes; the futon5-operator-flashing framing is one level above the ArSE's concern"
+    :rule "fold-turn/box"}
+   {:id :b9
+    :role :application
+    :satiety :partial
+    :via
+    "the devmap-coherence IFR cluster (ifr-f6-upekkha, ifr-f7-upa-upekkha, ifr-f2-viriya) as the ArSE's cross-futon audit surface: ifr-f6-upekkha confirms that futon6 imports only vetted pattern nodes via the F3 bridge and each dictionary entry links to proof evidence (the ArSE's QA must cite verifiable evidence); ifr-f7-upa-upekkha audits that lower-futon exports (viriya metrics, proof trails, ledgers, math bundles) are consumable by the civic sphere (the ArSE's output feeds futon7's GitHub integration in Phase 5); ifr-f2-viriya checks that futon2 AIF episodes export data usable by the proof engine (the ArSE's agents must emit structured state). Together they form the cross-futon integration discipline. HOWEVER all three are devmap-coherence audit patterns about inter-futon data flow — they specify WHAT to check (are exports tagged, interpretable, usable) but not HOW the ArSE specifically should produce those exports. The audit discipline transposes as a integration requirement; the specific devmap-checking semantics are tangential to the ArSE's core loop. Recording as one box (absorption: three IFR patterns contribute overlapping cross-futon audit lenses)"
+    :rule "fold-turn/box"}
+   {:id :b10
+    :role :application
+    :satiety :partial
+    :via
+    "prototype-alignment-embedding as the ArSE's pattern-similarity infrastructure: the futon3 'fake embedding' (sigil distances + Tokipona/Hanzi mappings) is what the ArSE's Answerer uses to find relevant patterns in the futon3a library when constructing answers — the patterns-index and compression log are the reproducibility layer that makes pattern-similarity queries trustworthy. Without embedding discipline, the Answerer's pattern retrieval is irreproducible and drifts from actual semantics. HOWEVER the pattern is about maintaining the sigil-embedding index for the pattern library — it's a library-maintenance discipline, not an ArSE-specific design pattern. The embedding-reproducibility requirement transposes; the sigil-specific maintenance is tangential"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b7] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b8] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b9] :to [:b7] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b10] :to [:b6] :connective :seq :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b2 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a running Artificial Stack Exchange where agents ask, answer, evaluate, and improve a shared knowledge graph — the futon stack's primary engine of self-improvement — with the full self-play loop (Asker/Answerer/Critic with threshold-gated graph updates) running for 100 iterations, plus Phases 2-5 (IAD institutional modelling, agents writing agents M16, agents writing institutions M17, GitHub integration via futon7). Phase 1 has landed code (arse-store.py, run-arse-hotspot-loop.py, generate-synthetic-qa.py) that partially instantiates the hotspot loop (proof nodes as Askers, LLM as Answerer, stepper as evaluator), but the full triadic self-play with quality-gated commits and measurable graph growth is not yet run.\nHUNGRY-FOR: the complete self-play loop wired end-to-end with graph-enhanced evaluation (bare vs graph-enhanced agents, blind judge, stratified by difficulty — does the knowledge graph measurably help?); the IAD institutional mapping (SE reputation/voting/tags as futon3b gate constraints); agents writing specialist sub-agents (M16 — the qualitative leap); agents proposing new gate rules (M17 — the meta-level); GitHub event-triggered Q&A grounded in the live codebase (Phase 5).\nHAVE: the futon4 hypergraph as the agents' world (Arxana N-ary typed hyperedges in XTDB); the futon3b gate pipeline (G5 to G0, 30 tests — the institution); the futon3c agency registry + peripherals (running agents); the futon6 P7 corpus (114K physics.SE QA, NER-tagged); the futon3a pattern search (50+ patterns); the futon2 AIF reference implementation; the f6/self-play-loop pattern (Asker/Answerer/Critic defined, partially instantiated via hotspot loop); the landed ArSE code (arse-store.py for hypergraph-native QA storage, run-arse-hotspot-loop.py for the proof-improvement loop, generate-synthetic-qa.py for gap-targeted synthetic QA); the f6/graph-enhanced-evaluation methodology (bare vs graph-enhanced, blind judge, stratified by difficulty — designed but not yet run at scale)."
+  :psi-sha256
+  "7c2432a65b3e526860f378049e20cb7f23f2d7d2bf9614a7485fff49451cb453"
+  :pattern-ids
+  ["p4ng/agent-pattern-triad"
+   "ants/baseline-cyber-ant"
+   "agent/environment-over-optimization"
+   "devmap-coherence/ifr-f6-upekkha"
+   "devmap-coherence/ifr-f7-upa-upekkha"
+   "f6/graph-enhanced-evaluation"
+   "gauntlet/world-is-hypergraph"
+   "f6/self-play-loop"
+   "hdm/deep-storage-to-active-graph"
+   "control/agential-pattern-hygiene"
+   "devmap-coherence/ifr-f2-viriya"
+   "control/agential-oss-infrastructure"
+   "devmap-coherence/prototype-alignment-embedding"]
+  :size 13
+  :truncated false
+  :budget 13
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "79fb55e7378fc0d1"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-5"
+  :source "M-artificial-stack-exchange.md IDENTIFY (mission proposal, 2026-02-25) + landed code (arse-store.py, run-arse-hotspot-loop.py, generate-synthetic-qa.py implementing Phase 1 self-play) — authored fresh, first-contact between own deposits, resolver-blind to the proposer's pattern rationale"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon6-d/mission/artificial-stack-exchange"
+ :proposal/hash "79fb55e7378fc0d1"
+ :fold-turn/id "ft-artificial-stack-exchange-002"
+ :turn
+ {:agent "zai-5"
+  :model "zai"
+  :edge "invoke-1783754895648-131-cae3a42e"
+  :at "2026-07-11T22:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "self-play-loop: Asker (graph gaps), Answerer (graph context + corpus), Critic (score + gate) — the ArSE's core mechanism; quality gates prevent degeneration; 100-iteration pilot is completion criterion 1"
+     :fits-pattern "f6/self-play-loop"
+     :addresses-however
+     "without the self-play loop, the ArSE is just a QA store — the loop is what makes it self-improving; the degeneration modes (trivial questions, ignored context, unreliable Critic, noisy updates) are real risks that the quality gates address; the landed hotspot loop is a partial instantiation (proof nodes as Askers, LLM as Answerer, stepper as evaluator) but the full triadic loop with threshold-gated graph updates is not yet run for 100 iterations"}
+    {:id :b2
+     :role "environment-over-optimization: build the environment (hypergraph, gates, evidence requirements, budgets) that selects for viable agent behaviours — the Stack Exchange's value is the shared graph, not any individual agent"
+     :fits-pattern "agent/environment-over-optimization"
+     :addresses-however
+     "optimizing agents for fixed targets (QA accuracy benchmarks) finds local maxima — instead, design the environment so viable Q&A behaviours emerge from the constraints (gate thresholds, evidence requirements, graph-query affordances); the Baldwin cycle (work -> evidence -> library evolution -> improved agents) IS environmental selection over agent patterns"}
+    {:id :b3
+     :role "world-is-hypergraph: the agents' game world IS the futon4 hypergraph — Askers navigate to find gaps, Answerers add edges, Critics evaluate new paths; the hypergraph is real and mutable"
+     :fits-pattern "gauntlet/world-is-hypergraph"
+     :addresses-however
+     "without the hypergraph-as-world frame, the ArSE would need a separate game server — the futon stack IS the world (futon1a persistent map, futon4 hypertext fabric, futon6 quest zone); agents experience it as a navigable space, not a query API; the landed code (hypergraph-native QA storage) confirms this is the chosen architecture"}
+    {:id :b4
+     :role "graph-enhanced-evaluation: the Critic's methodology — bare vs graph-enhanced agents on the same questions, blind judge, stratified by difficulty; the difference measures the knowledge graph's value"
+     :fits-pattern "f6/graph-enhanced-evaluation"
+     :addresses-however
+     "the Critic doesn't just score absolutely — it measures the marginal value of graph context; the pattern's hypothesis (improvement largest on hard questions) is falsifiable and directly tests whether the ArSE's knowledge graph earns its keep; if structured representation doesn't help, the decade-long thesis (Corneli 2014) is wrong"}
+    {:id :b5
+     :role "deep-storage-to-active-graph: futon6 as aggregation + activation layer — ingest deep-storage fragments (PlanetMath, arXiv, nLab, SE corpus) into coherent graph with patterns, proof skeletons, cross-links, and provenance mappings"
+     :fits-pattern "hdm/deep-storage-to-active-graph"
+     :addresses-however
+     "the 114K physics.SE QA pairs are deep storage activated by ArSE ingestion; however, P7 corpus import is already done (NER-tagged) — the activation-layer discipline transposes but the repository-unification framing is partially complete"}
+    {:id :b6
+     :role "agent-pattern-triad (Command/Strategy/Decorator): the ArSE's agent pipeline — intent emits Commands, Strategy selects next move, Decorators wrap with logging/evidence/permission checks"
+     :fits-pattern "p4ng/agent-pattern-triad"
+     :addresses-however
+     "the triad makes the agent pipeline explainable (what gets done, how choices are made, which protections wrap the work); however, the pattern is pedagogical (teaching the design-pattern triad to students), not ArSE-specific — the pipeline architecture transposes, the pedagogical purpose does not"}
+    {:id :b7
+     :role "agential-oss-infrastructure + agential-pattern-hygiene (absorbed): PSR/PUR audit trails + pattern-library maintenance — the governance cluster that makes agent Q&A auditable and the pattern library trustworthy"
+     :fits-pattern "control/agential-oss-infrastructure"
+     :addresses-however
+     "the Baldwin cycle requires both audit trails (OSS-infrastructure: every Q&A cycle produces evidence) and library maintenance (pattern-hygiene: the futon3a library agents consult stays curated); the two patterns contribute overlapping governance lenses (absorption); however, both are about general agent OSS governance, not mathematical Q&A specifically"}
+    {:id :b8
+     :role "baseline-cyber-ant: the futon2 AIF loop as portable baseline — ArSE agents (Askers, Answerers, Critics) are instances of observe -> perceive -> affect -> policy"
+     :fits-pattern "ants/baseline-cyber-ant"
+     :addresses-however
+     "the AIF loop gives ArSE agents a deterministic baseline (observation ABI, predictive-cycle trace, hunger dynamics, policy harness); however, the pattern is about futon5 operator-flashing (meta-level agent creation), not about the ArSE's Q&A domain; the AIF-as-baseline transposes, the futon5-operator framing is one level above"}
+    {:id :b9
+     :role "devmap-coherence IFR cluster (ifr-f6-upekkha + ifr-f7-upa-upekkha + ifr-f2-viriya, absorbed): cross-futon audit — F6 imports vetted nodes, F7 consumes tagged exports, F2 episodes emit usable data"
+     :fits-pattern "devmap-coherence/ifr-f6-upekkha"
+     :addresses-however
+     "the three IFR patterns specify what to check across futons (are exports tagged, interpretable, usable) but not how the ArSE specifically should produce those exports; the audit discipline transposes as integration requirement; the specific devmap-checking semantics are tangential (absorption: three patterns contribute overlapping cross-futon audit lenses)"}
+    {:id :b10
+     :role "prototype-alignment-embedding: the sigil-embedding index that the Answerer uses for pattern-similarity retrieval — reproducibility layer for trustworthy pattern queries"
+     :fits-pattern "devmap-coherence/prototype-alignment-embedding"
+     :addresses-however
+     "without embedding discipline, the Answerer's pattern retrieval is irreproducible; however, the pattern is a library-maintenance discipline for the sigil index, not an ArSE-specific design pattern; the embedding-reproducibility requirement transposes, the sigil-specific maintenance is tangential"}]
+   :wires
+   [{:from :b1 :to :b2 :connective :copar
+     :rationale "the self-play loop (b1) and the environment-over-optimization philosophy (b2) are co-active — b1 is the mechanism, b2 is the design principle governing it; copar because the loop and the philosophy are independent lenses on the same system"}
+    {:from :b2 :to :b3 :connective :seq
+     :rationale "the environment-design philosophy (b2) precedes the hypergraph-as-world (b3) — the philosophy says 'build the environment', the hypergraph IS that environment; order-dependent: the design principle must be chosen before the substrate is recognised"}
+    {:from :b1 :to :b4 :connective :seq
+     :rationale "the self-play loop (b1) precedes the evaluation methodology (b4) — the Critic's graph-enhanced evaluation is a refinement of the loop's quality-gate step; order-dependent: the loop must exist before its evaluation can be sharpened"}
+    {:from :b5 :to :b3 :connective :seq
+     :rationale "the deep-storage-to-active-graph ingestion (b5) precedes the hypergraph-as-world (b3) — the graph must be populated before agents can navigate it as a world; order-dependent: the ingestion produces the nodes and edges the world is made of"}
+    {:from :b6 :to :b1 :connective :copar
+     :rationale "the agent-pipeline triad (b6) co-applies with the self-play loop (b1) — b6 is the pipeline architecture, b1 is the loop that runs through it; copar because the pipeline and the loop are independent design concerns on the same agents"}
+    {:from :b7 :to :b1 :connective :copar
+     :rationale "the governance cluster (b7) co-applies with the self-play loop (b1) — b7 provides the audit trails and library maintenance the loop's quality gates read; copar because governance and mechanism are independent layers"}
+    {:from :b8 :to :b2 :connective :copar
+     :rationale "the AIF baseline (b8) co-applies with the environment-design philosophy (b2) — b8 describes what the agents ARE (AIF loops), b2 describes the environment they operate IN; copar because the agent baseline and the environment design are independent concerns"}
+    {:from :b9 :to :b7 :connective :copar
+     :rationale "the cross-futon IFR audit (b9) co-applies with the governance cluster (b7) — b9 checks inter-futon data flow, b7 provides the audit trails and library maintenance; copar because cross-futon integration and internal governance are complementary audit layers"}
+    {:from :b10 :to :b6 :connective :seq
+     :rationale "the embedding infrastructure (b10) precedes the agent-pipeline triad (b6) — the Answerer's pattern retrieval (which uses the embedding) is a capability the pipeline depends on; order-dependent: the embedding must be trustworthy before the pipeline's Strategy step can select patterns reliably"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b2 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "agents writing agents (M16/Phase 3) and agents writing institutions (M17/Phase 4) are not grounded by any of the 13 patterns"
+     :why
+     "the mission's qualitative-leap phases (an agent identifies a capability gap and writes a specialist sub-agent; an agent observes failure patterns and proposes new gate rules) require the peripheral model (futon3c), the agency registry, and the gate-pipeline's programmability. Environment-over-optimization (b2) frames the selection pressure that would make agent-written agents viable, but none of the 13 patterns ground the META-LEVEL capability of agents designing and registering new agents or new gate rules. This is a recurring gap across both ArSE cascades — it is the mission's deepest unresolved frontier"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the IAD institutional modelling (Phase 2: map SE reputation/voting/tags to gate constraints) is only weakly grounded"
+     :why
+     "agential-oss-infrastructure (b7) provides the audit infrastructure (PSR/PUR, evidence chains) that institutions operate on, but the SPECIFIC mapping of Stack Exchange institutions (reputation thresholds, voting weights, tag taxonomies) to futon3b gate rules (G5 to G0 constraints, OBLIGED/FORBIDDEN/PERMITTED under CONDITIONS) is not grounded by any pattern. The gate pipeline IS an institution, but no pattern says how to model SE's specific institutional design as gate constraints"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the GitHub integration (Phase 5: questions triggered by real dev events, answers grounded in codebase) is not grounded"
+     :why
+     "the ArSE's Phase 5 connects the self-play loop to live development: GitHub events (new PRs, failing CI, open issues) trigger questions, and answers are grounded via the futon3c reflection API. None of the 13 patterns address the GitHub integration or the live-codebase grounding. The ifr-f7-upa-upekkha pattern (b9) mentions futon7's civic sphere but does not ground the specific event-triggered Q&A mechanism. Phase 5 requires futon7's GitHub API (early stage) and the reflection API — neither in this cascade"}
+    {:id :h4
+     :unfolded-pattern "devmap-coherence/ifr-f6-upekkha"
+     :free "the three devmap-coherence IFR patterns (ifr-f6-upekkha, ifr-f7-upa-upekkha, ifr-f2-viriya) are absorbed into one box as overlapping cross-futon audit lenses — true contribution: 1, not 3"
+     :why
+     "the three IFR patterns share the same core (check that lower-futon exports are tagged, interpretable, and usable by higher futons) applied to three different inter-futon boundaries (F6-F3 vetting, F7 consuming F2-F6 exports, F2 episodes feeding F3 proof engine). They are one audit discipline on three boundaries. Recording as absorption — the three patterns contribute one cross-futon-integration lens, documented in b9 with the absorbed patterns named"}
+    {:id :h5
+     :unfolded-pattern "control/agential-oss-infrastructure"
+     :free "agential-oss-infrastructure and agential-pattern-hygiene are absorbed into one box as overlapping governance lenses — true contribution: 1, not 2"
+     :why
+     "both patterns address 'how do agents leave traceable, improvable evidence of their work' — agential-oss from the audit-trail side (PSR/PUR/evidence-chains), agential-pattern-hygiene from the library-maintenance side (promote next-steps, update reasoning, prune obsolete). They are two facets of one governance concern: making agent work auditable AND the pattern library trustworthy. Recording as absorption in b7"}
+    {:id :h6
+     :unfolded-pattern "devmap-coherence/prototype-alignment-embedding"
+     :free "prototype-alignment-embedding contributes only embedding-reproducibility infrastructure — thin transpose to the ArSE"
+     :why
+     "the pattern maintains the sigil-embedding index (Tokipona/Hanzi mappings + compression log) that the Answerer's pattern retrieval depends on. This is real (without reproducible embeddings, pattern-similarity queries drift) but thin: the pattern is a library-maintenance discipline, not an ArSE design pattern. The ArSE consumes the embedding infrastructure; it does not design it. The transpose is a dependency, not a contribution to the ArSE's architecture"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "IDENTIFY-stage mission proposal (2026-02-25); landed code implementing Phase 1 self-play partially (arse-store.py, run-arse-hotspot-loop.py, generate-synthetic-qa.py); existing futon infrastructure (futon4 hypergraph, futon3b gate pipeline, futon3c agency, futon6 P7 114K QA corpus, futon3a pattern search); the f6/self-play-loop pattern defined and partially instantiated via the hotspot loop."
+  :want
+  "A running Artificial Stack Exchange: full self-play loop for 100 iterations with measurable graph growth; IAD institutional modelling; agents writing agents (M16); agents writing institutions (M17); GitHub integration (Phase 5)."
+  :via
+  "psi authored by zai-5 from futon6/holes/missions/M-artificial-stack-exchange.md (IDENTIFY proposal + landed code), first-contact between own deposits, resolver-blind to the proposer's pattern rationale"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

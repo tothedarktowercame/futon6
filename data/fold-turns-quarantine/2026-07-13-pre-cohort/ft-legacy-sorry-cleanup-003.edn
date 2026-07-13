@@ -1,0 +1,86 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via
+    "the five-field hinge-entry-slots structure templates the REVIEW RECORD for each of the 23 legacy sorry entries: slot 1 (rūpa/entry-state) records what the sorry was when minted — its :sorry/kind (prototyping-forward, n-a-by-design, nil, meta, external-dependency) and :sorry/status (addressed, open, constructed, acknowledged-v1-in-force); slot 2 (saññā/dominant-tension) records what the entry's content signals against the new interface-sorry schema — does it name a have→want over real substrate-2 nodes, or is it a genuine issue-ledger note?; slot 3 (saṅkhāra/shift) records the disposition itself — improve to interface, keep as logged, or evict — because the classification IS the fabrication (the operator synthesises a judgment from the entry's content + code/git context); slot 4 (viññāṇa/residual-unknowns) records what the A-next endpoint recovery could not determine — entries where the forensic method (doc+code+git+XTDB) yields ambiguity about whether real interface endpoints exist; slot 5 (vedanā/energy-signature) records the quality of the judgment call — a clear evict (n-a-by-design, low vedanā load) vs a difficult improve (the 4 :open entries where an interface may be hiding). HOWEVER the pattern is a PHENOMENOLOGICAL journaling structure (operator's lived experience at a hinge), not a classification tool. The 23 entries are substrate-2 DATA, not lived hinge-crossings. The record-structure transposes (each disposition gets a textured log entry); the classification LOGIC does not (improve/keep/evict criteria come from the mission's review protocol + the A-next schema, not from the five aggregates). The anti-pattern 'using the slots as a template for generating synthetic content where no phenomenology was actually present' is the precise danger: fabricating phenomenological texture for entries that are simply data would be worse than a flat disposition table"
+    :rule "fold-turn/box"}]
+  :hyperedges []
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: the 23 legacy code/v05/sorry entries each reviewed at the hinge where the sorry type bifurcates — logged-issue (the historical sense) vs interface-sorry (the new, load-bearing sense). Each entry's disposition (improve to interface / keep as logged / evict) IS a hinge-crossing: the operator reads the entry's original framing and decides whether it names a real interface or is a genuine issue-ledger note. The hinge-entry-slots structure templates the REVIEW as phenomenological record: what was the entry's state when minted (rūpa), what tension does its content surface against the new interface-sorry schema (saññā), what shift does the disposition represent (saṅkhāra — the classification IS the fabrication), what remains unknown about the entry's endpoints or status (viññāṇa — the open sorry), and the quality of the judgment call (vedanā — was this a clear evict or a difficult improve call?). The mission IS a sequence of 23 hinge-crossings, each recorded with a one-line rationale that carries the phenomenology of the decision.\nHUNGRY-FOR: the hinge-entry-slots discipline applied per entry — not as a checklist (the anti-pattern: 'filling all five fields performatively') but as scaffolding for inhabited articulation of each disposition. The entry-state slot (rūpa) records what the sorry was when minted (prototyping-forward? n-a-by-design? meta?); the tension slot (saññā) records what the entry's content signals against the interface-sorry schema (does it name a have→want over real nodes?); the shift slot (saṅkhāra) records the disposition itself (the classification IS the synthesis); the residual-unknowns slot (viññāṇa) records what the A-next endpoint recovery could not determine (the entries where the forensic method yields ambiguity); the energy slot (vedanā) records whether the disposition was clear-cut or contested. Empty fields are valid — not every entry carries load on all five aggregates.\nHAVE: the 23 legacy entries (snapshot sha256 d242066d, 2026-07-02); the per-item shape (all single self-endpoint, prose title, zero have/want orientation); the kind/status distributions; the review protocol (read title + related-missions + resolution + code/git, then classify); the exit criteria (recorded disposition per entry); the A-next sorry hyperedge schema; the gated erase path."
+  :psi-sha256
+  "d8e73b2dc672ba6961628dc53aba43cf67f1f4cf15b70a1c60ac61ba9e41af49"
+  :pattern-ids
+  ["structure/hinge-entry-slots"]
+  :size 1
+  :truncated false
+  :budget 1
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "835f1303ba31b9e5"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-4"
+  :source "M-legacy-sorry-cleanup.md (HEAD/IDENTIFY/MAP/review-protocol/exit-criteria) authored fresh from the mission's own terms through the hinge-entry-slots lens — resolver-blind to the proposer's pattern rationale; not inherited from ft-legacy-sorry-cleanup-002 (first-contact discipline between own deposits)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon2-d/mission/legacy-sorry-cleanup"
+ :proposal/hash "835f1303ba31b9e5"
+ :fold-turn/id "ft-legacy-sorry-cleanup-003"
+ :turn
+ {:agent "zai-4"
+  :model "zai"
+  :edge "invoke-1783709948121-113-49cae45b"
+  :at "2026-07-10T23:15:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "five-field hinge-entry-slots templating the review record per entry: rūpa (entry-state: kind/status when minted), saññā (tension: does it signal interface or logged?), saṅkhāra (shift: the disposition IS the fabrication), viññāṇa (residual: endpoint-recovery ambiguity), vedanā (energy: clear-cut vs contested); empty fields valid — not every entry carries load on all five"
+     :fits-pattern "structure/hinge-entry-slots"
+     :addresses-however
+     "the pattern is phenomenological journaling (operator's lived experience), not a classification tool; the 23 entries are substrate-2 data, not lived hinge-crossings. The record-structure transposes; the classification logic does not. The anti-pattern 'using slots to generate synthetic content where no phenomenology was present' is the precise danger — fabricating phenomenological texture for entries that are simply data would be worse than a flat disposition table. The :partial satiety names this: the record shape applies, the classification substance comes from the mission's own review protocol + the A-next schema"
+     :produces [:textured-disposition-records]}]
+   :hyperedges []
+   :terminals [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "structure/hinge-entry-slots"
+     :free "the classification logic (improve/keep/evict criteria) is not grounded by the five-field phenomenological structure"
+     :why
+     "the hinge-entry-slots pattern templates HOW to record a hinge-crossing (which aggregates carried load), not HOW to decide the disposition. The improve/keep/evict criteria come from the mission's review protocol (read title + related-missions + resolution + code/git) and the A-next interface-sorry schema (have→want orientation over real substrate-2 nodes). The pattern says 'record the shift in slot 3'; it does not say 'here is how to determine whether the shift is improve or evict'. The record-structure transposes; the decision-logic does not. Recording as policy-hole at :partial rather than forcing a false classification-rule mapping"
+    :id :h2
+     :unfolded-pattern nil
+     :free "the A-next endpoint recovery method (doc+code+git+XTDB) is not grounded by the hinge-entry-slots pattern"
+     :why
+     "for entries classified improve-to-interface, the mission must recover real substrate-2 endpoints via the A-next forensic method. The hinge-entry-slots pattern records the residual unknowns (slot 4: what the recovery could not determine) but does not supply the recovery procedure itself. The recovery is the mission's own forensic work — reading mission docs, inspecting code, tracing git history, querying XTDB for real ns-vars. The pattern scaffolds the recording of recovery outcomes; it does not ground the recovery method. (Same gap as run-20 h3 on this mission — the endpoint recovery is ungrounded across both cascades)"
+    :id :h3
+     :unfolded-pattern nil
+     :free "the snapshot-vs-live drift risk (23 entries pulled 2026-07-02, XTDB originals untouched) is not grounded by the hinge-entry-slots pattern"
+     :why
+     "run-20 on this mission (proposal 94bf96d06a24e008) grounded the drift-detection via stack-coherence/commit-intent-alignment — correlating the snapshot with live XTDB state before classifying. The hinge-entry-slots pattern has no mechanism for drift-detection: it templates the review record at a hinge, assuming the data being reviewed is current. If the XTDB state has changed since the snapshot, dispositions recorded in the five-field structure could be stale. This pattern grounds the recording; the drift-check is a separate concern (run-20 b4) not present in this single-pattern cascade"
+    :id :h4
+     :unfolded-pattern nil
+     :free "the batch-review discipline (check every item, log proof state, emit follow-ons) is not grounded by the hinge-entry-slots pattern"
+     :why
+     "the pattern is per-hinge (one entry at a time), not batch. The mission must review all 23 entries systematically — the batch-check discipline that run-20 grounded via devmap-coherence/ifr-f3-piti (b2) ensures no entry is skipped or rubber-stamped. The hinge-entry-slots pattern templates each individual review record; it does not supply the batch discipline that ensures all 23 are checked. The per-entry structure transposes; the batch-completeness guarantee does not"
+    :id :h5
+     :unfolded-pattern nil
+     :free "the artifact-tagging audit (discriminating :sorry/facet :interface vs :logged for downstream consumers) is not grounded by the hinge-entry-slots pattern"
+     :why
+     "the mission's exit criterion 3 requires the keep-loggeds to be discriminated so code/v05/sorry is unambiguous. Run-20 grounded this via devmap-coherence/ifr-f7-upa-upekkha (b3) — the artifact-tagging discipline. The hinge-entry-slots pattern records the phenomenology of each disposition but does not address the downstream tagging that makes the dispositions actionable for consumers (the fold's phase-2 target, the gold corpus). The pattern grounds the review; the tagging-for-downstream is a separate concern not present in this single-pattern cascade"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "the 23 legacy entries (snapshot sha256 d242066d); the per-item shape (single self-endpoint, prose title, zero have/want orientation); the kind/status distributions; the review protocol; the exit criteria; the A-next sorry hyperedge schema; the gated erase path."
+  :want
+  "each of the 23 entries reviewed at the bifurcation hinge with a textured disposition record — but the classification logic, endpoint recovery, drift-check, batch discipline, and artifact-tagging are all grounded by other patterns (run-20) or the mission's own protocol, not by this single pattern."
+  :via
+  "psi authored by zai-4 from futon2/holes/M-legacy-sorry-cleanup.md (HEAD/IDENTIFY/MAP/review-protocol/exit-criteria) through the hinge-entry-slots lens, resolver-blind to the proposer's pattern rationale; not inherited from ft-legacy-sorry-cleanup-002"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

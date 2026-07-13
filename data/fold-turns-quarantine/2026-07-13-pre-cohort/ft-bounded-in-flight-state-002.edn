@@ -1,0 +1,156 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the proof-path as the block's auditable event chain: every block (an operator-attestable transactional unit per MAP-1) follows a proof path — CLOCK_IN (session begins, operator declares intent) → OBSERVE (read substrate state, gather evidence) → PROPOSE_CLAIM (the block specification: what will change) → APPLY_CHANGE (the passion phase: actual file-system mutation) → VERIFY (confirm the change matches the claim) → INVARIANT_CHECK (all invariants pass, including the metabolic-balance pressure reading dropping post-cleanup) → PROOF_COMMIT (the git commit with Block: footer, durable evidence chain) → CLOCK_OUT (session/block ends). This IS the five-phase block lifecycle (identification → specification → elaboration → passion → closure) from block-as-futonic-revolution, restated in proof-path terms: the block's identification=OBSERVE, specification=PROPOSE_CLAIM, elaboration=the pre-flight checklist, passion=APPLY_CHANGE, closure=PROOF_COMMIT. The proof-path's append-only invariant (errors spawn new paths, not mutations) maps directly to the block schema's append-only phase map. The CONCURRENCY-AND-PARTIAL-FAILURE tension (V-5 Gap 1: cross-repo blocks where one side commits and the other fails) is the proof-path's named open constraint about concurrent writers and partial apply. The pattern's own next-steps (concurrency protocol for multi-writer, partial-apply handling, domain grounding) name exactly the deferred gaps the mission tracks"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via
+    "rapid-debugging (I4: any bug diagnosable in under 10 minutes) as the pressure function's diagnosability requirement: the metabolic-balance check-fn must surface errors that name their source (which repo, which channel-dimension, which threshold crossed) so the operator can diagnose WHY pressure is high in under 10 minutes — not just THAT it is high. The pressure function's tier system (silent/advisory/high/stop-the-line) is the structured error format: each tier crossing names the dimension (count/N, age/D, bytes/B) that triggered it, the repo, and the expected-vs-actual values. The single-write-chokepoint maps to the single pressure function (one max-over-normalised-channels computation, not six different checks). HOWEVER rapid-debugging's domain is runtime bugs and error messages, not invariant-monitoring signals. The pressure function's output is an evidence entry (:family-fired), not an error — it's informational, not a failure. The structured-error discipline (layer, operation, entity ID, expected vs actual) transposes to the pressure signal (repo, dimension, threshold, value), but the debugging context (finding a BUG, tracing a failure) does not map cleanly to invariant-monitoring (surfacing accumulating state)"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "the coordination/ARGUMENT six-gate pipeline as the block-lifecycle governance: the gates (G5 TaskSpec→G4 Assignment→G3 PSR→G2 Artifact→G1 PUR→G0 PAR+durability) map to the block's five-phase lifecycle with typed-evidence records at each transition. G5 (TaskSpec binds intent to mission + success criteria) = block identification/specification; G4 (Assignment authorizes agent) = the operator-attestation that this is one coherent block; G3 (PSR records candidates) = the pre-flight checklist (the elaboration phase); G2 (Artifact registered) = the passion-phase file-system changes; G1 (PUR evaluates criteria against artifacts) = VERIFY (the change matches the claim); G0 (durability + PAR) = PROOF_COMMIT with Block: footer + the block's closure record. The 'first failing gate wins' invariant maps to the block's failure modes: Block B (WS-bridge fix) was rejected at G2 (the pre-commit hook fired) — the gate pipeline correctly stopped the half-closed block from committing contaminated WIP. The typed-evidence-record structure is what the block schema's :block/witness field captures (pointers to substrate records)"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "ifr-f3-piti (batch-run check! against devmap obligations, log proof states, surface joy metrics) as the metabolic-balance monitoring rhythm: the check-fn runs at boot-time and on each probe-tap fire, logging per-repo pressure readings as proof states (the tier — silent/advisory/high/stop-the-line — IS a proof state), and the joy metric (obligations cleared, time-to-proof) maps to block-closures-per-session (blocks closed = obligations cleared, mana awarded = joy). The 'without regular audits, proof trails drift from devmaps and joy devolves into aimless play' transposes directly: without regular pressure checks, the substrate drifts into dirty state and the block-closure rhythm breaks down. HOWEVER piti's domain is the FUTON3 devmap-checking DSL (check! against pattern-canon entries to certify workday submissions), not invariant-monitoring. The joy-metric surface (time-to-proof, obligations cleared) is about WORK CERTIFICATION, not about SUBSTRATE STATE. The batch-audit rhythm transposes; the devmap-obligation checking and the joy-metric semantics do not"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "readme-devmap-sync (diff README sections vs devmap clauses, emit mismatch reports) as the disposition-surface drift detector: the .futon-disposition.edn file IS a devmap-like planning artefact (it declares in-progress work with reasoning), and the :review-by self-decay mechanism is the sync check — entries past their review-by date re-enter the eligible-for-pressure set, surfacing as mismatches between the declared state (in-progress with reason) and the actual state (overstayed, should have been closed). The 'someone refreshes whichever side is lying' maps to: the operator must either close the block (commit) or update the disposition entry with a new review-by date. HOWEVER readme-devmap-sync is specifically about README↔devmap document divergence (narrative layer vs planning layer), not about disposition-file↔working-tree state divergence. The mismatch-detection discipline transposes; the specific README-vs-devmap comparison and the release-cycle scheduling do not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b5] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: the remaining gaps after INSTANTIATE substantially landed — the guidance note on hinge-vs-Block relationship and in-flight Block identification (Q-21, the open item the 2026-05-04 reopen names), plus the mana-economy coupling deferred to M-mana-economy (Q-22, explicitly out-of-scope but tracked). The core invariant (bounded in-flight state via transactional memory on the file-system substrate, with the pressure function, the .futon-disposition.edn surface, the Block: footer mechanism, and the metabolic-balance/working-tree check-fn) IS shipped: metabolic_balance.clj implements the max(count/N, age/D, bytes/B) pressure function with V-1 calibration anchors, disposition_edn.clj parses the disposition surface with :review-by self-decay, mana_session.clj binds to nonstarter_mana.clj, commit_ingest.clj detects Block: footers, operational_readiness.clj gates the family, the street-sweeper backend wires the per-repo drain readings, and bootstrap.clj registers the probe-taps. What REMAINS is the conceptual guidance note (Q-21: clarifying that Blocks are work-units revolving through the futonic loop while hinges are cognitive pivot points where problem-structure changes; and that the current Block-detection pipeline cannot see in-flight Blocks that are identified but uncommitted), and the broader mana-economy drain-award coupling (Q-22).\nHUNGRY-FOR: the Q-21 guidance note (the hinge-vs-Block calibration that lets operators distinguish cognitive pivot-points from work-units, and the in-flight-Block status that commit-footers cannot detect); the War Machine + HUD three views (open-blocks, closure-feed, trajectory) that INSTANTIATE head-amendment (I) requires but may not be fully wired; the counterfeit-closure detection (V-5 Gap 2, declared out-of-scope for first INSTANTIATE but a known vulnerability); the cross-repo block-id propagation (V-5 Gap 1, deferred); the drain-award coupling loop (Q-22 / M-mana-economy: automatic mana deduction for advisory-tier drain, per-turn/per-session decay).\nHAVE: the full INSTANTIATE head — metabolic_balance.clj (pressure function with calibration: futon6 pre-cleanup P=25.35, post=0.15), disposition_edn.clj (parser + :review-by self-decay), mana_session.clj (read-side binding to nonstarter_mana.clj's session-attributed store), operational_readiness.clj (:operational-when-enabled gating), commit_ingest.clj (Block: footer extraction feeding the mana economy), street_sweeper_backend.clj (per-repo metabolic-balance drain readings), bootstrap.clj (probe-tap registration + load-time check); the three DERIVE patterns (block-as-futonic-revolution, mana-allostasis, drain-channel-shape); the ARGUE-1 through ARGUE-5 decisions ratified (10th faculty shape metabolic-balance, .futon-disposition.edn surface, max-over-normalised-channels pressure, Block: footer mechanism, reactive substrate widening); VERIFY V-1 through V-6 (pressure calibration, five-phase block lifecycle, harmolodic reread, disposition schema, spec gaps, machine-side contract); the 2026-05-04 G-1/G-2 fix (mana-earning wired: Block: footers detected, session-attributed, record-mana! called, mana visibly ticks per Block); the Q-21/Q-22 conceptual gaps named but Q-21's guidance note not yet written."
+  :psi-sha256
+  "bc370865d4cd5029da883002f4845cf475ac98aa908731c25c5e6ac20608f4f1"
+  :pattern-ids
+  ["coordination/ARGUMENT"
+   "devmap-coherence/ifr-f3-piti"
+   "futon-theory/proof-path"
+   "futon-theory/rapid-debugging"
+   "stack-coherence/readme-devmap-sync"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "4ccaa1db5a58b78a"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-5"
+  :source "M-bounded-in-flight-state.md IDENTIFY through INSTANTIATE + 2026-05-04 reopen (G-1/G-2 fix, Q-21/Q-22 open) + landed code (metabolic_balance.clj, disposition_edn.clj, mana_session.clj, operational_readiness.clj, commit_ingest.clj, street_sweeper_backend.clj, bootstrap.clj) — authored fresh, resolver-blind to the proposer's pattern rationale"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3c-d/mission/bounded-in-flight-state"
+ :proposal/hash "4ccaa1db5a58b78a"
+ :fold-turn/id "ft-bounded-in-flight-state-002"
+ :turn
+ {:agent "zai-5"
+  :model "zai"
+  :edge "invoke-1783754895648-131-cae3a42e"
+  :at "2026-07-11T21:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "proof-path as the block's auditable event chain: CLOCK_IN→OBSERVE→PROPOSE_CLAIM→APPLY_CHANGE→VERIFY→INVARIANT_CHECK→PROOF_COMMIT→CLOCK_OUT maps to the five-phase block lifecycle, with the append-only invariant matching the block schema's append-only phase map"
+     :fits-pattern "futon-theory/proof-path"
+     :addresses-however
+     "the block IS a proof path — the git commit with Block: footer IS the PROOF_COMMIT with durable evidence chain; the five-phase lifecycle (identification→specification→elaboration→passion→closure) restated in proof-path terms; the CONCURRENCY-AND-PARTIAL-FAILURE tension names exactly V-5 Gap 1 (cross-repo blocks where one side commits and the other fails); but the proof-path assumes a single-writer linear chain, while the block may span multiple repos with non-atomic commits — the concurrency-protocol pattern the proof-path names as a future next-step is the same gap V-5 Gap 1 defers"}
+    {:id :b2
+     :role "rapid-debugging (I4) as the pressure function's diagnosability: tier-crossing signals must name source repo, dimension, threshold, and value so the operator can diagnose WHY pressure is high in under 10 minutes"
+     :fits-pattern "futon-theory/rapid-debugging"
+     :addresses-however
+     "the pressure function's tier system (silent/advisory/high/stop-the-line) is a structured signal, but rapid-debugging's domain is runtime bugs and error messages, not invariant-monitoring; the pressure output is informational (:family-fired evidence), not a failure; the structured-error discipline transposes (repo, dimension, threshold, value) but the debugging context (tracing a bug) does not map to invariant-monitoring (surfacing accumulating state)"}
+    {:id :b3
+     :role "coordination/ARGUMENT six-gate pipeline as block-lifecycle governance: G5→G0 gates map to the five-phase block lifecycle with typed-evidence records at each transition; 'first failing gate wins' correctly stopped Block B (WS-bridge fix rejected at pre-commit hook)"
+     :fits-pattern "coordination/ARGUMENT"
+     :addresses-however
+     "the gate pipeline's typed evidence records (TaskSpec, Assignment, PSR, Artifact, PUR, PAR) map to block phases by structural analogy — the gate types are task-timescale work records for agents executing missions, not block-transaction records; the proof-path discipline (b1) already provides the auditable chain; coordination/ARGUMENT adds the gate-ORDERING invariant (first failing gate wins) which is the structural check that half-closed blocks don't commit"}
+    {:id :b4
+     :role "ifr-f3-piti (batch check! + joy metrics) as the metabolic-balance monitoring rhythm: check-fn runs at boot and on probe-tap, logging pressure readings as proof states; block-closures = obligations cleared; mana awarded = joy"
+     :fits-pattern "devmap-coherence/ifr-f3-piti"
+     :addresses-however
+     "without regular audits, proof trails drift from devmaps and joy devolves into aimless play — transposes to: without regular pressure checks, the substrate drifts into dirty state; but piti's domain is the FUTON3 devmap-checking DSL (check! against pattern-canon to certify workday submissions), not invariant-monitoring; the joy-metric (time-to-proof, obligations cleared) is about work certification, not substrate state; the batch-audit rhythm transposes, the devmap-obligation semantics do not"}
+    {:id :b5
+     :role "readme-devmap-sync (diff README vs devmap, emit mismatch reports) as the disposition-surface drift detector: .futon-disposition.edn entries past :review-by re-enter the pressure set, surfacing mismatches between declared state and actual state"
+     :fits-pattern "stack-coherence/readme-devmap-sync"
+     :addresses-however
+     "the :review-by self-decay is the sync check — entries that overstayed their welcome are mismatches the operator must resolve (close the block or update the review-by date); but readme-devmap-sync is specifically about README↔devmap document divergence (narrative vs planning layer), not about disposition-file↔working-tree divergence; the mismatch-detection discipline transposes, the specific document comparison does not"}]
+   :wires
+   [{:from :b1 :to :b3 :connective :seq
+     :rationale "the proof-path (b1) provides the auditable chain; the coordination gate pipeline (b3) governs the chain's transitions — order-dependent: the proof-path phases must exist before the gates can check them"}
+    {:from :b3 :to :b2 :connective :copar
+     :rationale "the gate pipeline (b3) and the rapid-debugging diagnosability (b2) are co-active lenses on the block-lifecycle governance — b3 governs phase transitions, b2 governs signal quality; copar because both are needed for trustworthy block governance but neither subsumes the other"}
+    {:from :b1 :to :b4 :connective :copar
+     :rationale "the proof-path (b1) and the piti monitoring rhythm (b4) are co-active — b1 provides the chain structure, b4 provides the monitoring cadence; copar because the chain and the cadence are independent concerns operating on the same block lifecycle"}
+    {:from :b4 :to :b5 :connective :seq
+     :rationale "the monitoring rhythm (b4) precedes the drift detection (b5) — order-dependent: the pressure check (b4) must run before it can surface disposition entries that have overstayed their :review-by (b5)"}
+    {:from :b2 :to :b5 :connective :copar
+     :rationale "the diagnosability discipline (b2) co-applies with the drift detector (b5) — b2 ensures pressure signals are diagnosable, b5 ensures disposition entries are checked for staleness; copar because both are quality-of-signal concerns on the monitoring layer"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b3 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the Q-21 guidance note (hinge-vs-Block relationship and in-flight Block identification) is not grounded by any of these 5 patterns"
+     :why
+     "the open item the 2026-05-04 reopen names — a guidance note clarifying that Blocks are work-units revolving through the futonic loop while hinges are cognitive pivot points, and that in-flight Blocks (identified but uncommitted) are invisible to the current Block-detection pipeline — is a conceptual calibration task. None of the proof-path, rapid-debugging, coordination-gate, piti-monitoring, or readme-devmap-sync patterns address the hinge-vs-Block distinction or the in-flight-Block identification gap. This is a futonic-theory clarification (structure/cook-ting and structure/hinge-point already articulate it), not a pattern the cascade supplies"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the Q-22 mana-economy drain-award coupling (deferred to M-mana-economy) is not grounded"
+     :why
+     "the automatic mana deduction for advisory-tier drain, per-turn/per-session decay, and the drain-channel↔mana-ledger coupling loop are explicitly deferred to a separate mission (M-mana-economy). None of the 5 patterns address the metabolic-balance coupling between drain channels and the mana ledger. The mana-allostasis pattern (DERIVE Pattern 2) frames the concept; the coupling mechanism is unbuilt and out-of-scope for this mission"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the War Machine + HUD three views (open-blocks, closure-feed, trajectory) required by INSTANTIATE head-amendment (I) are not grounded by these patterns"
+     :why
+     "the three required UI views (what blocks are open per session with cadence context; recent block-closures with awards; net mana balance trajectory over N hours) are a UI/surface concern. The patterns address the block lifecycle, governance gates, monitoring rhythm, and drift detection — but none ground the visualisation surface. The street_sweeper_backend.clj already wires per-repo drain readings, but the three canonical views (open-blocks, closure-feed, trajectory) may not be fully implemented in the War Machine/HUD"}
+    {:id :h4
+     :unfolded-pattern "futon-theory/rapid-debugging"
+     :free "rapid-debugging's domain is runtime bugs, not invariant-monitoring signals"
+     :why
+     "I4 (any bug diagnosable in under 10 minutes) addresses error messages and debugging traces — structured errors with layer, operation, entity ID, expected vs actual. The pressure function's output is an evidence entry (:family-fired), not an error. The tier-crossing signal (stop-the-line when count/N exceeds 4.0) is informational, not a failure trace. The structured-signal discipline transposes (the pressure reading names repo, dimension, threshold, value), but the debugging context (tracing a BUG through the system) does not map to invariant-monitoring (surfacing ACCUMULATING STATE that is not yet a failure)"}
+    {:id :h5
+     :unfolded-pattern "devmap-coherence/ifr-f3-piti"
+     :free "piti's check! DSL and joy metrics are for devmap obligation certification, not substrate-state monitoring"
+     :why
+     "ifr-f3-piti specifies batch-running check! against devmap obligations (pattern-canon entries that certify workday submissions), with joy metrics (time-to-proof, obligations cleared). The metabolic-balance check-fn runs check!-style probes against working-tree state, but the targets are different: devmap obligations are planning artefacts; working-tree dirty files are substrate state. The batch-audit rhythm transposes; the obligation-certification semantics and the joy-metric meaning (pleasure of effective action on devmap tasks vs mana-award for block closure at a hinge) do not map cleanly"}
+    {:id :h6
+     :unfolded-pattern nil
+     :free "b2 and b4 overlap: both contribute a monitoring/diagnosability lens on the pressure signal"
+     :why
+     "rapid-debugging (b2) and piti (b4) both address the QUALITY of the monitoring signal — b2 ensures the signal is diagnosable (names source, expected vs actual), b4 ensures the signal is audited on a regular rhythm. Both are concerned with 'is the pressure reading trustworthy and actionable' but from different angles (error-quality vs audit-cadence). Recording as honest overlap, not false independence — the two patterns share a monitoring-quality concern without being independent contributions to it"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The full INSTANTIATE: metabolic_balance.clj, disposition_edn.clj, mana_session.clj, operational_readiness.clj, commit_ingest.clj Block-footer parsing, street_sweeper_backend.clj drain readings, bootstrap.clj probe-taps; three DERIVE patterns; five ARGUE decisions; six VERIFY threads; the G-1/G-2 mana-earning fix verified per Block."
+  :want
+  "The Q-21 guidance note (hinge-vs-Block calibration, in-flight Block identification), the War Machine three views, the deferred Q-22 mana-economy coupling, and the remaining spec gaps (counterfeit-closure detection, cross-repo block-id propagation)."
+  :via
+  "psi authored by zai-5 from futon3c/holes/missions/M-bounded-in-flight-state.md (IDENTIFY through INSTANTIATE + 2026-05-04 reopen), including landed code discovered via grep, resolver-blind to the proposer's pattern rationale"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

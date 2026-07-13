@@ -1,0 +1,159 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "auto-clock as scheduled observer entrypoint: the REPL turn / after-save-hook IS the scheduler firing ticks, and each tick is honest only when it produces observable substrate state-delta — the explicit-resolved-target rule fires only when a real token resolves against the filesystem (not a fuzzy mention); the edit-activity rule requires N repeated saves (state-delta accumulation), not a single stray edit; the creation-clock fires only after M-<slug>.md lands on disk. The no-op trap is the core anti-pattern: a scheduled auto-clock that fires on every turn but never moves the clock because nothing resolves (the loop is sealed) would manufacture green 'it ran' rows in the evidence — the trace would show false liveness. The pattern's liveness assertion (N consecutive scheduled runs with zero state-delta FLAGS, does not PASS) maps directly: the dominance/hysteresis test in INSTANTIATE-3 IS the zero-delta flag — alternating edits that don't reach threshold do not switch the clock, preventing the no-op-trap appearance of operation. The distinction :tick/fired? (scheduler ran) vs :tick/moved-substrate? (a clock changed) IS the audit witness shape: (rule, source, old-target, new-target) records whether the substrate moved, not just whether the entrypoint fired"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "the event-protocol CLOCK_IN phase automated and witnessed: auto-clock-in IS the CLOCK_IN event — session begins, agent declares identity and intent (the target token IS the intent declaration), timestamp recorded, session-ID assigned. The witnessed-promotion rule maps onto the protocol's preconditions and postconditions: CLOCK_IN precondition (no active clock for floor-only rules, or explicit creation intent for switch rules) -> detect token -> resolve against candidates (OBSERVE: read state, gather evidence) -> confirm/switch (APPLY_CHANGE) -> audit witness recorded (POSTCONDITION: clock changed, witness attached). The protocol's minimum-viable subset applies: a read-only session (CLOCK_IN -> OBSERVE -> CLOCK_OUT) is the no-auto-clock case (mention captured for the mention-graph, no clock change). The remaining INSTANTIATE-4 work (agent invoke-evidence carrying the session clock) IS the event-protocol requirement that CLOCK_IN metadata propagates through every subsequent event in the session — without it, agent turns are CLOCK_OUT events with no CLOCK_IN, unattributable"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "Following (隨) with discernment: the auto-clock follows the operator's explicit signal (the turn token, the file edit, the creation command) — alignment with a moving leader, where the leader is the operator's demonstrated focus. Blind following — auto-clocking on any mission mention in prose — leads into traps (mis-clocks, false attribution, the exact anti-pattern principle #8 warns about). The discernment IS the rule stack: the floor-only guard (Rule 0: follow only when at no-target floor, never switch off active work), the exact-ID-only resolution (follow only when the signal is unambiguous), the single-target constraint (at most one C/M/E per level — multiple named means don't follow). The pattern's adapt-trigger (mislead -> switch to hexagram-18-gu, decay work) names the failure mode: if following leads to mis-clocks, the accumulated turn-to-mission dataset rots. The retention of disengagement IS the hydra override surface — the operator can always disengage from the auto-clock's choice"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "Breakthrough (夬) as decisive switch: the creation-clock and edit-activity rules are breakthrough moves — they remove the obstruction of a stale clock blocking accurate attribution. When the operator creates a mission (eoi-new head X) or sustains repeated edits to M-foo.md, the signal is unambiguous explicit intent, and the clock must SWITCH (not floor-gate) to capture it. The decisive action clears the stale clock. HOWEVER the pattern's warning — excess force can overshoot and destabilize — is the thrash risk: too-aggressive switching (N=1, no dominance test) would oscillate the clock between alternately-edited missions, destabilizing the attribution. The restraint IS the threshold + dominance test: N=3 saves within W=600s, and the target must beat the next recent target by a margin. The pattern's adapt-trigger (overreach -> instability, scatter) names this: if breakthrough overshoots into thrash, switch to hexagram-44-gou (encounter management). The INSTANTIATE-4 agent-side mirror extends this: agent tool-edits to mission docs are the same decisive breakthrough — sustained agent editing IS 'this agent is working on X now,' switch-not-floor"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "Gentle Wind (巽) as gradual convergence: the edit-activity reclock IS gentle repeated influence — N saves within a window (repeated, low-amplitude) rather than a single forceful switch. The clock converges gradually to where the operator is actually working, shaped by persistence (wind shapes by persistence, gradual pressure redirects flows). The threshold (N=3, W=600s) IS the 'small repeatable influence' — steady low-amplitude edits accumulate until alignment appears (the clock switches). The pattern's failure-mode — excess gentleness becomes indecision or drift — is the calibration risk: if N/W are too conservative, the clock lags too far behind real focus, and the attribution is stale (the operator has been working on M-foo for an hour but the clock still says M-bar). The adapt-trigger (no-progress -> stasis, drift -> switch to hexagram-51-zhen, momentum) names this: if gentle influence stalls (the clock never converges because the threshold is too high), a more forceful rule may be needed. The INSTANTIATE-4 N/W calibration question (reuse 3/600s as a start, calibrate to agent edit cadence) IS the gentleness-amplitude tuning the pattern demands"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b1] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b2 :discharges :want-signature}
+              {:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: an autoclock-in system that captures BOTH operator AND agent mission-attribution automatically, so the turn-to-mission dataset is complete without manual clock-in friction. Three rules landed (explicit-resolved-target, creation-clock, edit-activity reclock) but ALL key off operator signals only — agent tool-edits and agent invoke turns are invisible to the clock, so agent work on M-foo shows up in the history as unattributed or worse, mis-clocked. The remaining want is the agent-side mirror: reclock the per-agent-session clock from agent-native signals (tool-edits to mission docs, dispatch/invoke mission-id), record the witness, and surface a session-to-mission timeline view. The central risk throughout is false attribution — a wrong auto-clock is worse than no mission — so every rule must be explicit-not-fuzzy (exact ID resolution, no prose matching as truth) and witnessed (audit trail with rule name, source, tokens, old/new target).\nHUNGRY-FOR: the agent-side edit-activity signal (agent tool-edits to C/M/E docs resolved by exact basename — the signal that captures the claude-2/typed-holes case where agent work was invisible); the per-agent-session clock store (durable, survives per-turn cold-resume, not RAM-only); the dispatch/invoke mission-id as secondary signal (set session clock on receipt when the dispatcher names the mission); the session-to-mission timeline view (git-history for mission-session interactions, querying clock-tagged evidence); the XTDB-backed target existence witness (filesystem is the first witness; XTDB is the stable-entity witness).\nHAVE: INSTANTIATE-1 explicit-resolved-target (floor-only guard, exact-ID resolution, audit witness in agent-chat.el, smoke-tested); INSTANTIATE-2 creation-clock (post-creation switch, eoi-new launcher hook, filesystem-resolution after write); INSTANTIATE-3 edit-activity reclock (after-save-hook, N=3/W=600s threshold, dominance test, switch-not-floor, smoke-tested); the manual clock-in hydra as override surface; agent-chat-set-clock! single-active path; agent-chat--clock-target-candidates filesystem-backed completion; emit-invoke-evidence! already recording mission-id on dispatch; the invoke :on-event tool_use stream linking session to file paths; the audit-witness shape (rule, source, tokens/file, old-target, new-target).\n"
+  :psi-sha256
+  "6f61d9eb1f6e4f5e0cd1863c216bc079012e40f3bd0975a96ca2596f882bebf5"
+  :pattern-ids
+  ["aif/scheduled-observer-entrypoint"
+   "futon-theory/event-protocol"
+   "iching/hexagram-17-sui"
+   "iching/hexagram-43-guai"
+   "iching/hexagram-57-xun"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "6a5d81ccab989066"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-3"
+  :source "M-autoclock-in.md HEAD/IDENTIFY/MAP/DERIVE/INSTANTIATE-1-through-4 (the landed state as HAVE: three operator-side rules; the remaining want: agent-side reclock mirror + timeline view + XTDB witness), authored fresh from the mission's own terms — resolver-blind to the proposer's pattern rationale"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3c-d/mission/autoclock-in"
+ :proposal/hash "6a5d81ccab989066"
+ :fold-turn/id "ft-autoclock-in-002"
+ :turn
+ {:agent "zai-3"
+  :model "zai"
+  :edge "invoke-1783703679608-79-14634464"
+  :at "2026-07-10T19:50:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "auto-clock as scheduled observer: REPL turn / save-hook IS the scheduler; honest only when substrate state-delta occurs (resolved token, N repeated saves, file on disk); the no-op trap (firing without moving the clock) is the core anti-pattern; liveness assertion = dominance/hysteresis test"
+     :fits-pattern "aif/scheduled-observer-entrypoint"
+     :addresses-however
+     "a scheduled auto-clock that fires on every turn but never resolves a target (the loop is sealed) would manufacture green 'it ran' evidence rows — false liveness. The pattern's :tick/fired? vs :tick/moved-substrate? distinction IS the audit witness shape: it records whether the clock actually changed, not just whether the entrypoint fired. The INSTANTIATE-3 dominance test IS the zero-delta flag (alternating edits that don't reach threshold do not switch, preventing no-op-trap appearance)"
+     :produces [:liveness-gated-auto-clock]}
+    {:id :b2
+     :role "the event-protocol CLOCK_IN phase automated and witnessed: auto-clock IS CLOCK_IN (declare identity and intent), the witnessed-promotion rule maps onto preconditions/postconditions, and agent invoke-evidence must carry session clock metadata (INSTANTIATE-4)"
+     :fits-pattern "futon-theory/event-protocol"
+     :addresses-however
+     "without CLOCK_IN metadata propagating through the session, agent turns are unattributable — they have CLOCK_OUT (work done) with no CLOCK_IN (which mission). The protocol's minimum-viable subset applies: a read-only session (mention without clock change) is the CLOCK_IN -> OBSERVE -> CLOCK_OUT no-op. The remaining INSTANTIATE-4 work (emit-invoke-evidence! carrying session clock) IS the event-protocol requirement that every event after CLOCK_IN inherits the clock context"
+     :consumes [:liveness-gated-auto-clock]
+     :produces [:witnessed-clock-in-event]}
+    {:id :b3
+     :role "Following (隨) with discernment: follow the operator's explicit signal but never blindly — the floor-only guard + exact-ID-only resolution + single-target constraint IS the discernment; the hydra override IS the ability to disengage"
+     :fits-pattern "iching/hexagram-17-sui"
+     :addresses-however
+     "blind following — auto-clocking on any mention — leads into traps (mis-clocks, false attribution). The rule stack IS the discernment: follow only at no-target floor (Rule 0), follow only exact resolved tokens (Rule 2), follow only one per level (Rule 3). The pattern's adapt-trigger (mislead -> switch to gu/decay) warns that following false signals rots the dataset. The retention of disengagement IS the hydra override surface"
+     :consumes [:witnessed-clock-in-event]
+     :produces [:discerning-follow-discipline]}
+    {:id :b4
+     :role "Breakthrough (夬) as decisive switch: creation-clock and edit-activity are breakthroughs that remove stale-clock obstruction; the threshold + dominance test IS the restraint against overshoot/thrash; the agent-side mirror extends this to agent tool-edits"
+     :fits-pattern "iching/hexagram-43-guai"
+     :addresses-however
+     "the stale clock IS the obstruction blocking accurate attribution; creation and sustained editing are unambiguous explicit intent requiring decisive switch. But the pattern warns excess force destabilizes — without restraint, aggressive switching thrashes between alternately-edited missions. The N=3/W=600s threshold + dominance margin IS the restraint. The INSTANTIATE-4 agent-side mirror extends the breakthrough: agent tool-edits to mission docs are the same decisive signal"
+     :consumes [:discerning-follow-discipline]
+     :produces [:decisive-switch-rule]}
+    {:id :b5
+     :role "Gentle Wind (巽) as gradual convergence: edit-activity reclock IS gentle repeated influence — N saves within W (low-amplitude, repeated) gradually align the clock to real focus; the N/W calibration IS the gentleness-amplitude tuning"
+     :fits-pattern "iching/hexagram-57-xun"
+     :addresses-however
+     "wind shapes by persistence — the clock converges to where work actually happens through accumulated small edits, not a single forceful switch. But the pattern warns excess gentleness becomes drift: if N/W are too conservative, the clock lags behind real focus and attribution is stale. The adapt-trigger (no-progress -> stasis -> switch to zhen/momentum) warns that if the gentle rule never fires, a more forceful rule is needed. The N/W calibration question (reuse 3/600s, calibrate to agent cadence) IS the amplitude tuning"
+     :produces [:gradual-convergence-rule]}]
+   :hyperedges
+   [{:from :b1 :to :b2 :connective :seq
+     :rationale "the scheduled observer (b1) defines when a tick is honest; the event protocol (b2) defines the canonical event shape the honest tick produces — order-dependent: the liveness gate must exist before CLOCK_IN is emitted, so a no-op tick never generates a false CLOCK_IN"}
+    {:from :b2 :to :b3 :connective :seq
+     :rationale "the event protocol (b2) defines the CLOCK_IN sequence; the following discipline (b3) defines the discernment within that sequence — order-dependent: CLOCK_IN must be declared before the follow-decision (which target to follow) is made"}
+    {:from :b3 :to :b4 :connective :copar
+     :rationale "the discerning-follow discipline (b3) co-applies with the breakthrough switch rule (b4) — both govern when to switch the clock: b3 says follow only with discernment at the floor; b4 says switch decisively when the signal is unambiguous (creation/sustained editing); copar because they address complementary cases (mention-follow vs intent-switch) without either subsuming the other"}
+    {:from :b3 :to :b5 :connective :copar
+     :rationale "the discerning-follow discipline (b3) co-applies with the gradual convergence rule (b5) — b3 governs the follow-decision; b5 governs the convergence dynamics (how gradually the clock aligns); copar because the discernment frames what to follow while the gentleness frames how fast to converge"}
+    {:from :b4 :to :b1 :connective :copar
+     :rationale "the decisive switch rule (b4) co-applies with the liveness gate (b1) — b4 says when to switch decisively; b1 says the switch must be backed by real substrate-delta; copar because the breakthrough defines the decision and the liveness gate validates its honesty"}]
+   :terminals
+   [{:id :b2 :discharges :want-signature}
+    {:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the per-agent-session clock store — where it lives, how it survives per-turn cold-resume"
+     :why
+     "INSTANTIATE-4 names this as an open design question: the agent-side clock store could be in registry metadata or a dedicated clock-store atom, and it must be durable so it survives the per-turn cold-resume. None of the 5 patterns in this cascade ground the storage-medium decision — the scheduled-observer grounds the liveness gate, the event-protocol grounds the CLOCK_IN shape, the hexagrams ground the switch/convergence dynamics, but the persistence substrate for the agent-session clock is an engineering choice the patterns do not address"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the N/W threshold calibration for agent edit cadence"
+     :why
+     "INSTANTIATE-3 uses N=3/W=600s for operator Emacs saves; INSTANTIATE-4 proposes reusing these for agent tool-edits but explicitly flags calibration as an open question. The gentle-wind pattern (b5) says 'calibrate the amplitude' but does not supply the calibration method — what agent edit cadence looks like (agents edit in bursts during invoke, not steady Emacs saves) is an empirical question the patterns cannot resolve. The threshold is the one knob, and its calibration is ungrounded by the cascade"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the session-to-mission timeline VIEW (the history surface)"
+     :why
+     "INSTANTIATE-4 names a companion view: query clock-tagged evidence to render a session-to-mission timeline ('git history for mission-session interactions'). The event-protocol grounds the CLOCK_IN metadata that makes the data queryable, but none of the 5 patterns ground the VIEW design — the projection from evidence-store query to a navigable timeline surface is a UI/projection design the cascade does not cover. The data exists once agent turns are clock-tagged; the surface does not"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the XTDB-backed target existence witness"
+     :why
+     "all three landed rules resolve targets against the filesystem (agent-chat--clock-target-candidates). The mission's remaining-work names XTDB as the stable-entity witness when mission/campaign/excursion entities are stable enough for this surface. None of the 5 patterns ground the XTDB integration — the event-protocol grounds the event shape, the scheduled-observer grounds the liveness gate, but the existence-witness upgrade from filesystem to XTDB is an infrastructure decision the patterns do not address"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "b3 (sui/following) and b4 (guai/breakthrough) overlap: both govern the switch-decision"
+     :why
+     "b3's discerning-follow discipline and b4's decisive-switch rule both address 'when should the clock switch' — b3 says follow with discernment (floor-only for mentions), b4 says switch decisively (for unambiguous intent). The overlap is genuine: they are two hexagrams whose CORE (the switch-decision under different signal grades) is the same control-flow question, differentiated by signal strength (weak mention -> follow-with-discernment; strong intent -> decisive-breakthrough). Recording as honest overlap, not false independence. b5 (xun/gentle) further overlaps with b4 on the convergence dynamics — both address how the clock reaches the target, differentiated by speed (decisive vs gradual)"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "INSTANTIATE-1 explicit-resolved-target (floor-only, exact-ID, audit witness); INSTANTIATE-2 creation-clock (post-creation switch, eoi-new hook); INSTANTIATE-3 edit-activity reclock (after-save-hook, N=3/W=600s, dominance, switch-not-floor); the manual clock-in hydra as override; agent-chat-set-clock! single-active path; filesystem-backed completion candidates; emit-invoke-evidence! recording mission-id; the invoke :on-event tool_use stream; the audit-witness shape."
+  :want
+  "An autoclock-in system that captures both operator AND agent mission-attribution — the agent-side mirror (tool-edit reclock, dispatch mission-id), the per-agent-session clock store, the session-to-mission timeline view, and the XTDB-backed witness — all explicit-not-fuzzy and witnessed."
+  :via
+  "psi authored by zai-3 from futon3c/holes/missions/M-autoclock-in.md (HEAD/IDENTIFY/MAP/DERIVE/INSTANTIATE-1-through-4), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

@@ -1,0 +1,437 @@
+{:wiring
+ {:nodes
+  [{:id :b1,
+    :role :application,
+    :satiety :full,
+    :via
+    "the certificate's core invariant, structural: the peradam record binds {deposit-sha, seal-ref, blind-score, scorer-not-author proof, arming-or-mana ref} as tags the apparatus CANNOT fake — scorer and author are identity records compared mechanically, the seal ref is a content hash of a file the author provably never read, the verdict counts only these tags; never vigilance",
+    :rule "fold-turn/box"}
+   {:id :b2,
+    :role :application,
+    :satiety :full,
+    :via
+    "every witness field points at evidence: deposit-sha to the escrow file, seal-ref to the A-next content hash, blind-score to a STRUCTURED score record (scorer id, verdict, timestamp), arming to the step-history entry — and the census fact faced squarely: scorer/author identities and blind-score results currently live as PROSE in excursion logs, which a loader cannot read; the schema REQUIRES structured witness records, making prose-era evidence visible as unfinished work",
+    :rule "fold-turn/box"}
+   {:id :b3,
+    :role :application,
+    :satiety :full,
+    :via
+    "the loader as checks: reject-loudly on ANY missing witness, per the fold_escrow.clj three-pin precedent extended to the five peradam witnesses — each witness has a machine check (sha resolves, seal hash matches a sealed file, score record parses and its scorer id differs from the author id, arming/mana ref resolves to a recorded grant or spend); a certificate that cannot be checked is refused, with the failing witness named",
+    :rule "fold-turn/box"}
+   {:id :b4,
+    :role :application,
+    :satiety :full,
+    :via
+    "certificate store and mana balances are long-lived state: file-first beside the fold-turns (futon6/data/, per scope), loaded fresh per read like deposits — no authoritative in-JVM atom to reset!, construction path reachable from boot, mutations only through the award/consume/issue functions",
+    :rule "fold-turn/box"}
+   {:id :b5,
+    :role :application,
+    :satiety :full,
+    :via
+    "STEP-0 CENSUS as the validation corpus: run the certificate loader over the five existing deposits BEFORE any synthetic case — 001 (sealed key + blind score + tamper demo + arming word) should CERTIFY once its witnesses are structured; 003, 004, 005 (explicitly no-seal) must be REFUSED for the missing fruit witness; these are P3's REAL refusal cases, free, before anything is manufactured",
+    :rule "fold-turn/box"}
+   {:id :b6,
+    :role :application,
+    :satiety :full,
+    :via
+    "the census's honest edge: 002 is scored-against-seal in reviewer PROSE — if its witnesses are not structurally recoverable it is REFUSED like the others (refusing an unearned close), and 001's certificate backfill is counted as WORK TO DO (its evidence exists; its form does not) — the map shows more holes, truthfully, before it shows certificates",
+    :rule "fold-turn/box"}
+   {:id :b7,
+    :role :application,
+    :satiety :full,
+    :via
+    "the mana gate on the fold-authoring gate: award (operator top-up, recorded with word + timestamp exactly as arming records are today), consume (one fold-authoring dispatch = one spend), balance (queryable), replacing blanket consent when the interactive phase ends — the consent that is currently a standing sentence becomes a depletable, auditable budget; mana-snapshot machinery live is the HAVE",
+    :rule "fold-turn/box"}
+   {:id :b8,
+    :role :application,
+    :satiety :full,
+    :via
+    "every award and every spend is durably logged BEFORE the gated action is acknowledged: no durable spend record, no authorization — the G0 discipline applied to consent itself, so the mana ledger can be replayed after any session ends and never disagrees with what actually ran",
+    :rule "fold-turn/box"}
+   {:id :b9,
+    :role :application,
+    :satiety :full,
+    :via
+    "machine refusal for cause, with quarantine semantics: refusal cases — scorer=author, unsealed key, tampered score (synthetic), PLUS the three census-natural no-seal refusals — produce a BOUNDARIED record: the refused certificate is kept, inspectable, tagged with its failing witness, and cannot produce reward; it is not erased. Over-rejection is the named kill criterion: false-positive refusals that make the gate unusable in <=2 design rounds stop the mission with the undecidable witness reported",
+    :rule "fold-turn/box"}
+   {:id :b10,
+    :role :application,
+    :satiety :full,
+    :via
+    "the refusal cases form a LADDER of scarcer witnesses, and the schema is extensible by rung: self-graded score (cheapest forgery, already forbidden) -> unsealed key -> scorer=author -> tampered score -> forged multi-witness certificate; each closed rung relocates the crime upward at higher cost, and the peradam's three-witness design is the intended terminus where forging costs more than earning; every future refusal cause is registered as a NAMED rung, not an ad-hoc patch",
+    :rule "fold-turn/box"}
+   {:id :b11,
+    :role :application,
+    :satiety :full,
+    :via
+    "the reward seam, type-level: a CERTIFIED peradam is a distinct type carrying replay-sufficient evidence (the certificate record itself allows a deterministic harness to re-run every witness check); M-fold-self-play P2 and the 3-series gamma consume that type as the outcome signal; an uncertified score is not a weaker value of the same type — it does not typecheck as reward at all",
+    :rule "fold-turn/box"}],
+  :hyperedges
+  [{:kind :composes,
+    :from [:b1 :b2],
+    :to [:b3],
+    :connective :copar,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b4],
+    :to [:b3],
+    :connective :tensor,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b3],
+    :to [:b5],
+    :connective :seq,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b6],
+    :to [:b5],
+    :connective :copar,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b10],
+    :to [:b9],
+    :connective :copar,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b5],
+    :to [:b9],
+    :connective :seq,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b7],
+    :to [:b8],
+    :connective :copar,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b3 :b9],
+    :to [:b11],
+    :connective :seq,
+    :rule "fold-turn/wire"}
+   {:kind :composes,
+    :from [:b7],
+    :to [:b11],
+    :connective :tensor,
+    :rule "fold-turn/wire"}],
+  :terminals
+  [{:id :b9, :discharges :want-signature}
+   {:id :b11, :discharges :want-signature}]},
+ :pins [:prompt-sha :arming :coverage-score-delta-recompute :clean-0-sorry],
+ :cascade
+ {:psi
+  "WANT: the peradam certificate mechanized without corrupting it — a record binding {deposit sha, seal ref, blind-score, scorer-not-author proof, arming/mana ref} whose loader REJECTS on any missing witness; a mana gate (award/consume/balance, operator-topped-up, every spend logged) replacing blanket consent; and one certificate REFUSED by machinery for cause — the Pudding-Prover stance, evidenced by rejection, mechanically. Falsifiable: refusal without false-positives that make the gate unusable.\nHUNGRY-FOR: incorruptible reward (labor + arrow + fruit witnesses); anti-laundering (self-graded scores must not become reward); consent as economy (spend, not ceremony); trust moved from social separation into machinery so one agent can run the loop while certification stays external to its judgment.\nHAVE: the ritual RAN 2026-07-05 — deposit ft-autoclock-in-001 blind-scored against the sealed A-next key the author provably never opened, tamper-rejection demonstrated live (coverage-score-delta-mismatch), act-gate pass with :fold-escrow provenance on a cron tick; five deposits in escrow as a natural test corpus (001 certifiable; 003/004/005 no-seal = correctly refusable); the reject-loudly loader precedent (fold_escrow.clj three pins); mana-snapshot machinery live; arming records with operator word + timestamps in step histories; scorer/author identities in the excursion logs as prose (NOT yet structured).\n",
+  :psi-sha256
+  "97b9de2923aaafd669f96577574629a917f7fdcc2139bedc737a8832a39dfb6f",
+  :pattern-ids
+  ["aif/no-self-certification"
+   "futon-theory/honest-map-over-flattering-counter"
+   "futon-theory/crime-relocates-to-a-scarcer-witness"
+   "system-coherence/turn-design-into-checks"
+   "agent/evidence-over-assertion"
+   "invariant-coherence/reachable-from-boot"
+   "war-machine/operational-not-decorative"
+   "budgeted-action-selection/mana-gated-work"
+   "coordination/session-durability-check"
+   "coordination/cross-validation-protocol"
+   "eight-gates/ward-off-boundary"],
+  :size 15,
+  :truncated false,
+  :budget 20,
+  :constructor
+  {:entry "construct_cascade",
+   :epsilon 0.15,
+   :budget 20,
+   :lambda 0.25,
+   :commit "fe8aceab21c48783d0721c4ccb19e3806bb12f45"},
+  :pattern-cites
+  [{:order 0,
+    :ident "aif/no-self-certification",
+    :ref "futon3/library/aif/no-self-certification.flexiarg",
+    :rel 0.521,
+    :mc 0.156,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 1,
+    :ident "futon-theory/honest-map-over-flattering-counter",
+    :ref
+    "futon3/library/futon-theory/honest-map-over-flattering-counter.flexiarg",
+    :rel 0.443,
+    :mc 0.754,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 2,
+    :ident "futon-theory/crime-relocates-to-a-scarcer-witness",
+    :ref
+    "futon3/library/futon-theory/crime-relocates-to-a-scarcer-witness.flexiarg",
+    :rel 0.466,
+    :mc 0.792,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 3,
+    :ident "system-coherence/turn-design-into-checks",
+    :ref
+    "futon3/library/system-coherence/turn-design-into-checks.flexiarg",
+    :rel 0.429,
+    :mc 0.3,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 4,
+    :ident "agent/evidence-over-assertion",
+    :ref "futon3/library/agent/evidence-over-assertion.flexiarg",
+    :rel 0.468,
+    :mc 0.327,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 5,
+    :ident "invariant-coherence/reachable-from-boot",
+    :ref
+    "futon3/library/invariant-coherence/reachable-from-boot.flexiarg",
+    :rel 0.437,
+    :mc 0.393,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 6,
+    :ident "war-machine/operational-not-decorative",
+    :ref
+    "futon3/library/war-machine/operational-not-decorative.flexiarg",
+    :rel 0.411,
+    :mc 0.37,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 7,
+    :ident "budgeted-action-selection/mana-gated-work",
+    :ref
+    "futon3/library/budgeted-action-selection/mana-gated-work.flexiarg",
+    :rel 0.427,
+    :mc 0.299,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 8,
+    :ident "coordination/session-durability-check",
+    :ref
+    "futon3/library/coordination/session-durability-check.flexiarg",
+    :rel 0.496,
+    :mc 0.248,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 9,
+    :ident "coordination/cross-validation-protocol",
+    :ref
+    "futon3/library/coordination/cross-validation-protocol.flexiarg",
+    :rel 0.43,
+    :mc 0.301,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}
+   {:order 10,
+    :ident "eight-gates/ward-off-boundary",
+    :ref "futon3/library/eight-gates/ward-off-boundary.flexiarg",
+    :rel 0.508,
+    :mc 0.152,
+    :via "deposit-006 cascade, budget-20 window (untruncated)",
+    :rule "fold-turn/pattern-cite"}]},
+ :psi-recipe
+ {:version "2-adapted-mission-doc",
+  :author "claude-16",
+  :source
+  "M-peradam-mechanization.md HEAD/IDENTIFY/completion/unification-ruling (003 no-seal precedent)",
+  :blind-scoring
+  "NOT POSSIBLE — no seal; NOTE ALSO: dispatcher and my re-run AGREE this time: size 11, F +2.227 (the 005 instrument error is fixed)"},
+ :deposit-contract :v2,
+ :mission "futon2-d/mission/peradam-mechanization",
+ :fold-turn/id "ft-peradam-mechanization-006",
+ :pin-4
+ {:status :attempted-passes-linearized,
+  :check
+  "clean_to_lean.py --mode standalone over the converted skeleton; lean compile 0 errors, 0 sorry tactics, 0 warnings",
+  :artifacts
+  ["/tmp/ft006_to_clean.py"
+   "/tmp/clean006/peradam-mechanization-006.clean.edn"
+   "/tmp/clean006_check.lean"],
+  :fidelity-gap
+  "the CLean spine is seq-only: the v2 connectives (:tensor/:copar) do NOT round-trip — this checked the composition skeleton (type-flow, step typing, hole typing), not the connective structure; connective-faithful bridge = follow-on",
+  :holes
+  "ALL 6 policy-holes attached as typed CLean holes (b7/b1/b6/b2/b9/b5) — improvement over 005; converter banner line is stale 005 text, this field is authoritative"},
+ :turn
+ {:agent "claude-20",
+  :model "claude-fable-5",
+  :edge "invoke-1783287566413-545-f62625f0",
+  :at "2026-07-05T21:43:28Z",
+  :answer
+  {:boxes
+   [{:id :b1,
+     :role
+     "the certificate's core invariant, structural: the peradam record binds {deposit-sha, seal-ref, blind-score, scorer-not-author proof, arming-or-mana ref} as tags the apparatus CANNOT fake — scorer and author are identity records compared mechanically, the seal ref is a content hash of a file the author provably never read, the verdict counts only these tags; never vigilance",
+     :fits-pattern "aif/no-self-certification",
+     :addresses-however
+     "every layer tries to certify itself and each attempt looks rigorous: the five witnesses are exactly the independence/measured-vs-fallback/settled-vs-transient tags of this pattern, instantiated for the fold ritual",
+     :produces [:witness-tag-invariant]}
+    {:id :b2,
+     :role
+     "every witness field points at evidence: deposit-sha to the escrow file, seal-ref to the A-next content hash, blind-score to a STRUCTURED score record (scorer id, verdict, timestamp), arming to the step-history entry — and the census fact faced squarely: scorer/author identities and blind-score results currently live as PROSE in excursion logs, which a loader cannot read; the schema REQUIRES structured witness records, making prose-era evidence visible as unfinished work",
+     :fits-pattern "agent/evidence-over-assertion",
+     :addresses-however
+     "assertions without anchors are indistinguishable from confabulation: a certificate whose fruit witness is a prose sentence is an unsupported claim — detectably, not stylistically",
+     :consumes [:witness-tag-invariant],
+     :produces [:evidence-anchoring]}
+    {:id :b3,
+     :role
+     "the loader as checks: reject-loudly on ANY missing witness, per the fold_escrow.clj three-pin precedent extended to the five peradam witnesses — each witness has a machine check (sha resolves, seal hash matches a sealed file, score record parses and its scorer id differs from the author id, arming/mana ref resolves to a recorded grant or spend); a certificate that cannot be checked is refused, with the failing witness named",
+     :fits-pattern "system-coherence/turn-design-into-checks",
+     :addresses-however
+     "principle without witness / threshold avoidance: the schema is operational only when every clause of it is a check that can tell upheld from drifting from failed",
+     :consumes
+     [:witness-tag-invariant
+      :evidence-anchoring
+      :boot-reachable-store],
+     :produces [:certificate-loader]}
+    {:id :b4,
+     :role
+     "certificate store and mana balances are long-lived state: file-first beside the fold-turns (futon6/data/, per scope), loaded fresh per read like deposits — no authoritative in-JVM atom to reset!, construction path reachable from boot, mutations only through the award/consume/issue functions",
+     :fits-pattern "invariant-coherence/reachable-from-boot",
+     :addresses-however
+     "state in an atom with no boot-replay path is a loaded gun: the escrow's file-first design is the proven shape; certificates and balances inherit it structurally",
+     :produces [:boot-reachable-store]}
+    {:id :b5,
+     :role
+     "STEP-0 CENSUS as the validation corpus: run the certificate loader over the five existing deposits BEFORE any synthetic case — 001 (sealed key + blind score + tamper demo + arming word) should CERTIFY once its witnesses are structured; 003, 004, 005 (explicitly no-seal) must be REFUSED for the missing fruit witness; these are P3's REAL refusal cases, free, before anything is manufactured",
+     :fits-pattern "war-machine/operational-not-decorative",
+     :addresses-however
+     "decorative infrastructure is trusted as if operational: the loader earns operational status exactly when its refusals on real records force behavior (no certificate, no reward) rather than documenting intent",
+     :consumes [:certificate-loader :census-honesty],
+     :produces [:corpus-census]}
+    {:id :b6,
+     :role
+     "the census's honest edge: 002 is scored-against-seal in reviewer PROSE — if its witnesses are not structurally recoverable it is REFUSED like the others (refusing an unearned close), and 001's certificate backfill is counted as WORK TO DO (its evidence exists; its form does not) — the map shows more holes, truthfully, before it shows certificates",
+     :fits-pattern "futon-theory/honest-map-over-flattering-counter",
+     :addresses-however
+     "a counter only moved downward rewards concealment: the census must be able to RAISE the uncertified count when truth requires, or the certificate count measures compliance, not integrity",
+     :produces [:census-honesty]}
+    {:id :b7,
+     :role
+     "the mana gate on the fold-authoring gate: award (operator top-up, recorded with word + timestamp exactly as arming records are today), consume (one fold-authoring dispatch = one spend), balance (queryable), replacing blanket consent when the interactive phase ends — the consent that is currently a standing sentence becomes a depletable, auditable budget; mana-snapshot machinery live is the HAVE",
+     :fits-pattern "budgeted-action-selection/mana-gated-work",
+     :addresses-however
+     "priority alone recommends everything locally desirable: the gate is the live intersection of what the dispatch costs and what the operator's granted budget can sustain — consent as economy, not ceremony",
+     :produces [:mana-ledger]}
+    {:id :b8,
+     :role
+     "every award and every spend is durably logged BEFORE the gated action is acknowledged: no durable spend record, no authorization — the G0 discipline applied to consent itself, so the mana ledger can be replayed after any session ends and never disagrees with what actually ran",
+     :fits-pattern "coordination/session-durability-check",
+     :addresses-however
+     "acknowledging success before persistence creates accepted-but-not-stored: for a CONSENT ledger that silent loss mode is not data loss but authorization forgery by accident — the coupling is mandatory",
+     :consumes [:mana-ledger],
+     :produces [:durable-spend-log]}
+    {:id :b9,
+     :role
+     "machine refusal for cause, with quarantine semantics: refusal cases — scorer=author, unsealed key, tampered score (synthetic), PLUS the three census-natural no-seal refusals — produce a BOUNDARIED record: the refused certificate is kept, inspectable, tagged with its failing witness, and cannot produce reward; it is not erased. Over-rejection is the named kill criterion: false-positive refusals that make the gate unusable in <=2 design rounds stop the mission with the undecidable witness reported",
+     :fits-pattern "eight-gates/ward-off-boundary",
+     :addresses-however
+     "immediate rejection destroys information and over-reaction damages trust in the security layer itself: the boundary creates space for investigation (and for h5's review path) without letting the suspect record spend",
+     :consumes [:corpus-census :witness-ladder],
+     :produces [:machine-refusal]}
+    {:id :b10,
+     :role
+     "the refusal cases form a LADDER of scarcer witnesses, and the schema is extensible by rung: self-graded score (cheapest forgery, already forbidden) -> unsealed key -> scorer=author -> tampered score -> forged multi-witness certificate; each closed rung relocates the crime upward at higher cost, and the peradam's three-witness design is the intended terminus where forging costs more than earning; every future refusal cause is registered as a NAMED rung, not an ad-hoc patch",
+     :fits-pattern "futon-theory/crime-relocates-to-a-scarcer-witness",
+     :addresses-however
+     "treating any single fix as now-it-is-honest reopens the crime one level up: P3's case list is read as the current rungs, with where-did-the-crime-go a standing review question on every certificate incident",
+     :produces [:witness-ladder]}
+    {:id :b11,
+     :role
+     "the reward seam, type-level: a CERTIFIED peradam is a distinct type carrying replay-sufficient evidence (the certificate record itself allows a deterministic harness to re-run every witness check); M-fold-self-play P2 and the 3-series gamma consume that type as the outcome signal; an uncertified score is not a weaker value of the same type — it does not typecheck as reward at all",
+     :fits-pattern "coordination/cross-validation-protocol",
+     :addresses-however
+     "a single agent validating its own work silently lowers standards: consumability requires the validation be re-runnable by someone other than the executor, which is exactly what makes one-agent-runs-the-loop safe (the unification ruling made mechanical)",
+     :consumes [:certificate-loader :machine-refusal :mana-ledger],
+     :produces [:typed-reward-seam]}],
+   :wires
+   [{:from [:b1 :b2], :to [:b3], :connective :copar}
+    {:from [:b4], :to [:b3], :connective :tensor}
+    {:from [:b3], :to [:b5], :connective :seq}
+    {:from [:b6], :to [:b5], :connective :copar}
+    {:from [:b10], :to [:b9], :connective :copar}
+    {:from [:b5], :to [:b9], :connective :seq}
+    {:from [:b7], :to [:b8], :connective :copar}
+    {:from [:b3 :b9], :to [:b11], :connective :seq}
+    {:from [:b7], :to [:b11], :connective :tensor}],
+   :terminals
+   [{:id :b9, :discharges :want-signature}
+    {:id :b11, :discharges :want-signature}],
+   :policy-holes
+   [{:unfolded-pattern nil,
+     :free "mana replenishment rate and award sizing",
+     :why
+     "how much mana a top-up grants, what one fold-authoring dispatch costs, and the replenishment cadence are operator economics — the value-per-nat / exchange-rate family again; the fold fixes the LEDGER MECHANICS, the operator prices them"}
+    {:unfolded-pattern nil,
+     :free "the scorer pool — THE unification hole",
+     :why
+     "when one agent runs the whole loop, WHO may produce the fruit witness? candidates (a deterministic seal-compare harness; a second model held blind; a standing scorer roster) have different forgery costs and none is derivable from charter + halo; the unification ruling requires certification external to the runner's judgment, and this hole is where that externality must be designed"}
+    {:unfolded-pattern nil,
+     :free "retroactive-certificate legitimacy",
+     :why
+     "001's ritual ran before the machinery existed: its evidence (shas, trace ids, arming words, scoring logs) is real, but no loader witnessed it live — whether a backfilled certificate carries a :retroactive tag with full or reduced spendability is an operator ruling the fold cannot make"}
+    {:unfolded-pattern nil,
+     :free "the prose-to-witness structuring protocol",
+     :why
+     "002's blind score and all scorer/author identities live in excursion-log prose; converting them to structured witnesses requires someone to attest the conversion — who attests, and whether the original scorer must re-attest, is not derivable (and interacts with the scorer-pool hole)"}
+    {:unfolded-pattern "eight-gates/ward-off-boundary",
+     :free "the quarantine review path",
+     :why
+     "the pattern establishes the boundary but not who or what reviews a quarantined certificate, on what timescale, or the un-quarantine protocol — left free rather than invented"}
+    {:unfolded-pattern nil,
+     :free "false-positive calibration population",
+     :why
+     "the kill criterion needs a false-positive RATE, but the natural corpus holds ~2 certifiable records; what population the <=2-design-rounds usability test runs over (synthetic legitimate certificates? future deposits as they accrue?) is unset"}]}},
+ :arming
+ {:operator "joe",
+  :word
+  "Yes both are fine, lets proceed with 002 & 2g. ... Right now, while we are testing it interactive, it has my blanket consent.",
+  :at "2026-07-05T07:49:04.703597347Z",
+  :scope :blanket-interactive-phase,
+  :via
+  "E-live-loop-2 2g step history (blanket grant for the interactive phase; 006 dispatched under it by reviewer claude-16, M-peradam-mechanization end-to-end — the fold that plans this grant's own replacement by mana)",
+  :fold-turn/id "ft-peradam-mechanization-006"},
+ :prompt
+ {:sha256
+  "053b32f33767a18bcc80c50f887ab6ab5f2092447fab8e1c67b0719aaa50da21",
+  :prose-sha256
+  {"aif/no-self-certification"
+   "93d00b09a76fb487f96a11e76abf0d7805281ef27e10d965365ebc0632561d8f",
+   "eight-gates/ward-off-boundary"
+   "2130e67d723d16f4910a70dbd8b8105c37babb59309e254735084eafbcf4805a",
+   "coordination/cross-validation-protocol"
+   "dfddc39743a68f62ee1c7d1f1d0295771542ce5994e0b3b01a10d3040e932511",
+   "war-machine/operational-not-decorative"
+   "f395d5b7fa939c379bd9eb83f666a1cd60c79c92606b5afeed33621f08ed437e",
+   "budgeted-action-selection/mana-gated-work"
+   "e54b2a1f8904b23dc41724419cc25cfd8c4da843e46f73c0991b94c14aacd01d",
+   "invariant-coherence/reachable-from-boot"
+   "7866b547d9e2aa912ce3cd68532ffc09c9bd6fd6c421c315b18c4ea004afd0f7",
+   "system-coherence/turn-design-into-checks"
+   "f374859ba56ef2f19b98b4cdb8b01d08ca87eca11543b21adc5d306a956dacd8",
+   "futon-theory/crime-relocates-to-a-scarcer-witness"
+   "aaf29201c727c49aea0564a22a133247be5563506aa51faa6ac74b57edac3ad3",
+   "futon-theory/honest-map-over-flattering-counter"
+   "766563b29ccd37d2f52c83a0c595490973e8f2800b828f238d0171e5298f7ae4",
+   "agent/evidence-over-assertion"
+   "12db55d3b65f6580072ab033ff91c60e5574ebd3302c4595d9417a55e775e494",
+   "coordination/session-durability-check"
+   "94ec03f3fe051f99e9d4dac39df9f3ac08140903ef17cf56372466000b294e88"},
+  :prose-source
+  "verbatim (slurp \"/home/joe/code/futon3/library/<pattern-id>.flexiarg\") — matches enact.clj L3 prose-fn"},
+ :arrow-candidate
+ {:have
+  "the ritual RAN 2026-07-05 — deposit ft-autoclock-in-001 blind-scored against the sealed A-next key the author provably never opened, tamper-rejection demonstrated live (coverage-score-delta-mismatch), act-gate pass with :fold-escrow provenance on a cron tick; five deposits in escrow as a natural test corpus (001 certifiable; 003/004/005 no-seal = correctly refusable); the reject-loudly loader precedent (fold_escrow.clj three pins); mana-snapshot machinery live; arming records with operator word + timestamps in step histories; scorer/author identities in the excursion logs as prose (NOT yet structured).\n",
+  :want
+  "the peradam certificate mechanized without corrupting it — a record binding {deposit sha, seal ref, blind-score, scorer-not-author proof, arming/mana ref} whose loader REJECTS on any missing witness; a mana gate (award/consume/balance, operator-topped-up, every spend logged) replacing blanket consent; and one certificate REFUSED by machinery for cause — the Pudding-Prover stance, evidenced by rejection, mechanically. Falsifiable: refusal without false-positives that make the gate unusable.",
+  :format :sorry,
+  :escrow "do-not-write-meme.db"},
+ :hole
+ {:confidence :authored,
+  :have
+  "the ritual RAN 2026-07-05 — deposit ft-autoclock-in-001 blind-scored against the sealed A-next key the author provably never opened, tamper-rejection demonstrated live (coverage-score-delta-mismatch), act-gate pass with :fold-escrow provenance on a cron tick; five deposits in escrow as a natural test corpus (001 certifiable; 003/004/005 no-seal = correctly refusable); the reject-loudly loader precedent (fold_escrow.clj three pins); mana-snapshot machinery live; arming records with operator word + timestamps in step histories; scorer/author identities in the excursion logs as prose (NOT yet structured).\n",
+  :want
+  "the peradam certificate mechanized without corrupting it — a record binding {deposit sha, seal ref, blind-score, scorer-not-author proof, arming/mana ref} whose loader REJECTS on any missing witness; a mana gate (award/consume/balance, operator-topped-up, every spend logged) replacing blanket consent; and one certificate REFUSED by machinery for cause — the Pudding-Prover stance, evidenced by rejection, mechanically. Falsifiable: refusal without false-positives that make the gate unusable.",
+  :via
+  "psi authored by claude-16 (reviewer) from futon2/holes/M-action-vocabulary.md; re-run by claude-20 for own pins",
+  :rule "fold-turn/hole-from-mission-doc"},
+ :eval {:coverage-score-delta -0.6470588235294118, :score-grain :coverage}}

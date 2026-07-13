@@ -1,0 +1,115 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via
+    "the baseline-cyber-ant as behavioral template for the sorry enterprise: the sorry-driven organisation IS a cyberant operation — the ant forages (retrieves patterns per turn), carries cargo (undeposited artifacts: Working Paper, prospectus), deposits (closes sorries), lays pheromone trail (records evidence trajectory in the context-retrieval certificates). The sorry registry (sorrys.edn, schema v2) IS the pheromone trail — each sorry is a typed trail-marker the ant navigates toward. The auto-miner in loop_learning.clj IS foraging behavior (mining candidate sorries from the environment). HOWEVER the sorry-enterprise instantiation of the cyberant template is not wired: the ant's forage→carry→deposit→trail-lay cycle is not connected to the sorry registry's lifecycle. The template transposes (the mapping is direct: forage=pattern retrieval, carry=cargo inventory, deposit=sorry closure, trail=evidence); the behavioral CIRCUIT — where the ant actually forages, recognizes cargo, decides to deposit, and lays trail into the registry — is unbuilt. The cyber-ant pattern concerns making 'pattern-flashed twins' of futon2's species; the sorry-enterprise ant needs the same flash but bound to the sorry lifecycle"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "upekkhā (F6) as the sorry enterprise's equanimity discipline: the Bayesian closure-probability models must be calm curators, not panic engines. Upekkhā means balanced reasoning — the model tracks P(closure | patterns activated) without emotional urgency, without inflating a sorry's severity because it feels urgent. F6 = futon6 = the hyperreal argumentarium: the sorry enterprise IS an argumentation layer (each sorry is an argument: 'this gap exists because X, it closes when Y'), and the argumentarium must curate these arguments calmly, not treat every sorry as a fire. The sorrys.edn schema v2 :kind field (meta/prototyping-forward/technical-debt/decision-debt/external-dependency) IS upekkhā in practice: typing sorries by kind prevents the flat-urgency failure where every sorry screams equally. The auto-miner's candidate emission must respect this discipline — mined candidates are not sorries until promoted, and promotion requires calm evaluation, not reactive grab. The enterprise model scales only if it stays calm: every client engagement is a sorry, but a calm sorry, assessed for closure probability without drama"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "ambient pattern retrieval as the sorry-proximity signal: the per-turn context-retrieval pipeline IS ambient retrieval — the system maintains background awareness of its 853+ pattern library and surfaces relevant patterns as the work evolves, without the agent deliberately recalling them. The mission's core insight — that retrieved patterns reflect the semantic content of the work, and overlap with a sorry's affinity set means the turn moves toward closure — IS the ambient-retrieval principle applied to sorry tracking. Expert practitioners surface relevant knowledge without deliberate recall; the sorry enterprise externalises this: the system surfaces sorry-relevant patterns ambiently, and the proximity score emerges from the overlap, not from a query. The context-retrieval certificates logged as evidence ARE the ambient signal stream — each certificate carries the turn's pattern-activation fingerprint, which can be compared against each sorry's affinity set. The retrieval pipeline is LIVE (futon3c context-retrieval!); the sorry-proximity SCORING on top of it is the unbuilt layer"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "pattern priming as the sorry-pattern affinity mechanism: when a turn's retrieved patterns overlap with a sorry's affinity set, those patterns PRIME the closure trajectory — activating patterns near a sorry makes the sorry more likely to close (the spreading-activation model). Pattern priming enables double-loop learning: the system learns not just which patterns close which sorries (single-loop: adjust affinity weights from observed closure events) but whether the affinity SETS themselves are correct (double-loop: are the bootstrap affinity patterns — pacspine/channel-upgrade for SORRY-market-interface, f1/p12 for prospectus — actually the right patterns to track?). The priming surface is what the mission's Test 1-3 predictions depend on: 'if evidence turns increasingly activate affinity patterns, the model should show increasing P(closure)'. The affinity sets are BOOTSTRAPPED (hand-specified in stack-logic-model.edn); priming is how they graduate from bootstrap to learned — the system observes which pattern activations actually precede closure events and revises the affinity sets accordingly"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "social/ARGUMENT as the coordination layer for sorry-driven multi-agent work: the sorry enterprise is not a solo productivity tool — it's a model for how Hyperreal Enterprises operates, which means multiple agents address the same sorry topology. The social coordination layer makes sorries flexiformal arguments: each sorry is not just a data record but an ARGUMENT (this typed hole exists because of a structural gap, it closes when a specific condition is met, the evidence trajectory demonstrates progress). The ARGUMENT pattern says this needs a third AIF loop — a social-timescale loop where agents sense each other's sorry-addressing work, deliberate about which sorry to address next, and act in coordinated fashion. The sorrys.edn registry is currently hand-curated (single-operator); the auto-miner is single-source (WM gap-signals only). The social layer — where multiple agents can address, claim, and close sorries — is unbuilt. HOWEVER the pattern's own description notes 'No rationale clause supplied' — the argument FOR the coordination layer is the sorry enterprise itself (every client engagement is a sorry, every artifact is cargo, every meeting is a closure event), but the concrete coordination mechanism (agent-to-agent sorry-addressing protocol) is not yet designed. The pattern grounds the requirement; the mechanism is spec"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b1] :connective :seq :rule "fold-turn/wire"}]
+  :terminals [{:id :b3 :discharges :want-signature}
+              {:id :b4 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a sorry-driven enterprise where typed holes (sorries) are the organisational backlog, per-turn pattern retrieval is the work signal, and Bayesian models track closure probability — but GROUNDED in the landed state: futon2's sorry-registry (schema v2, hand-curated, the v1 substrate adapter) and the auto-miner in loop_learning.clj (v0, mines from WM gap-signals) are LIVE; what remains is the deeper transcript-mining (Test 1-3 enterprise model: UKRN Working Paper → Bristol closure trajectory, prospectus as missing artifact, policy transition π-scholar → π-free-solo), the promotion/dedup/witness pipeline for mined candidates, and emission into substrate-2 as typed :sorry entities (gated on E-substrate-2-sorry-typing shipping ingestion, currently at INSTANTIATE awaiting operator VERIFY). The ambient pattern-retrieval pipeline (context-retrieval certificates logged as evidence) IS the sorry-proximity signal — but the sorry-pattern affinity scoring that connects retrieved patterns to sorry closure trajectories is still spec, not circuit.\nHUNGRY-FOR:\n1. Transcript-level sorry-mining beyond WM gap-signals (the auto-miner mines from WM judgement gaps — missing-head priorities + channel-gaps — but the deeper source is the session transcript / agent interactions / Test 1-3 enterprise-model signals: evidence turns mentioning Bristol, file existence for prospectus, commit-ratio shifts for policy transition)\n2. Sorry-pattern affinity scoring wired into the per-turn pipeline (the IDENTIFY spec says: compare retrieved patterns against each sorry's affinity set per turn; this proximity score visible in notification and/or HUD — spec exists in stack-logic-model.edn, not yet implemented)\n3. Promotion/dedup/witness pipeline for mined sorry candidates (the auto-miner emits candidates only; no quality scoring, no dedup against open-sorrys beyond the initial minus-set, no witness/evidence trail for why a candidate was promoted)\n4. Substrate-2 emission as typed :sorry events (gated on E-substrate-2-sorry-typing at INSTANTIATE; the interest-event-vocabulary.flexiarg exists as the emission format, but the :sorry entity-type ingestion path is not yet shipped)\n5. The cyberant behavioral template instantiated for the sorry enterprise (the ant forages=pattern retrieval, carries cargo=undeposited artifacts, deposits=sorry closure, lays trail=evidence trajectory — the template exists in the terminal vocabulary but the sorry-enterprise instantiation is not wired)\nHAVE: futon2/src/futon2/aif/sorry_registry.clj (live, schema v2 with :kind field, hand-curated, IS the v1 substrate adapter for can-propose? :address-sorry); futon3c/src/futon3c/aif/loop_learning.clj (auto-miner v0, mines sorries from WM gap-signals, 10 candidate sorries verified live); futon3/library/structure/interest-event-vocabulary.flexiarg (8 event types + payload schema, the emission format); futon5a/data/alignment.edn (sorry topology with 8 typed holes: SORRY-market-interface, SORRY-vsat-revenue, SORRY-peer-eval-artifact, SORRY-governance-interface, SORRY-paragogy-revenue); futon5a/data/stack-logic-model.edn (logic model with sorry-pattern affinity spec); futon3c context-retrieval pipeline (per-turn pattern retrieval, certificates logged as evidence); futon2/data/sorrys.edn (canonical sorry registry, schema v2 with :kind distinctions: meta/prototyping-forward/technical-debt/decision-debt/external-dependency); futon5a/holes/stories/strategic-sorry-topology.md (War Machine companion story for the sorry family); E-substrate-2-sorry-typing at INSTANTIATE (the geometry-track sibling whose ingestion path mining shares)."
+  :psi-sha256
+  "76f8e0c94dafb2bd0b4571f52f79f171a4f105f95ffc953ee8570c2707e8b066"
+  :pattern-ids
+  ["ants/baseline-cyber-ant"
+   "devmap-coherence/ifr-f6-upekkha"
+   "p4ng/pattern-priming"
+   "social/ARGUMENT"
+   "war-machine/ambient-pattern-retrieval"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "3522bb2b3fd90f4b"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-10"
+  :source "M-a-sorry-enterprise.md (IDENTIFY + MAP + VSAT excursion + downstream finding 2026-05-26 + checkpoint 2026-05-29) authored fresh from landed state — staleness probe found substantial landed work beyond IDENTIFY (sorry_registry.clj live, loop_learning.clj auto-miner v0 live, E-substrate-2-sorry-typing at INSTANTIATE); psi targets what REMAINS (transcript-mining, affinity scoring, promotion pipeline, substrate emission)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a/mission/a-sorry-enterprise"
+ :proposal/hash "3522bb2b3fd90f4b"
+ :fold-turn/id "ft-a-sorry-enterprise-001"
+ :turn
+ {:agent "zai-10"
+  :model "zai"
+  :edge "invoke-1783802284206-219-7389490c"
+  :at "2026-07-11T21:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the cyberant behavioral template for sorry enterprise: forage=pattern retrieval, carry=cargo (Working Paper, prospectus), deposit=sorry closure, trail=evidence trajectory — the template transposes, the behavioral circuit is unbuilt"
+     :fits-pattern "ants/baseline-cyber-ant"
+     :addresses-however
+     "without the cyberant circuit wired to the sorry lifecycle, the sorry enterprise is a model without behavior — the auto-miner forages but doesn't carry/deposit/trail-lay. The pattern-flashed twin needs binding to the sorry registry's open→addressed→closed lifecycle"
+     :produces [:sorry-cyberant-circuit]}
+    {:id :b2
+     :role "upekkhā as the sorry enterprise's calm-curator discipline: Bayesian closure models track probability without panic; sorrys.edn schema v2 :kind field prevents flat-urgency; mined candidates need calm promotion, not reactive grab"
+     :fits-pattern "devmap-coherence/ifr-f6-upekkha"
+     :addresses-however
+     "without equanimity discipline, every sorry screams equally and the model degenerates into a panic engine — upekkhā says type by kind, assess by probability, promote by evidence, not by urgency. F6 = futon6 = the argumentarium that curates sorry-arguments calmly"
+     :produces [:sorry-equanimity-discipline]}
+    {:id :b3
+     :role "ambient pattern retrieval as the sorry-proximity signal: the live context-retrieval pipeline surfaces relevant patterns without deliberate recall; proximity to a sorry's affinity set emerges from the overlap"
+     :fits-pattern "war-machine/ambient-pattern-retrieval"
+     :addresses-however
+     "the retrieval pipeline is LIVE but the sorry-proximity SCORING on top of it is unbuilt — without ambient retrieval, sorry tracking would require deliberate query; with it, the proximity signal emerges naturally from the per-turn certificate stream"
+     :consumes [:sorry-cyberant-circuit]
+     :produces [:sorry-proximity-signal]}
+    {:id :b4
+     :role "pattern priming as the sorry-affinity learning mechanism: patterns near a sorry prime its closure trajectory; double-loop learning revises the affinity sets from observed closure events"
+     :fits-pattern "p4ng/pattern-priming"
+     :addresses-however
+     "without priming, the affinity sets are frozen bootstraps — priming is how they graduate to learned: the system observes which pattern activations actually precede closure and revises the affinity sets. Double-loop: are pacspine/channel-upgrade and f1/p12 actually the right patterns to track for SORRY-market-interface?"
+     :consumes [:sorry-proximity-signal]
+     :produces [:sorry-affinity-learning]}
+    {:id :b5
+     :role "social/ARGUMENT as the multi-agent sorry coordination layer: sorries as flexiformal arguments (this gap exists because X, closes when Y); a social-timescale AIF loop for coordinated sorry-addressing"
+     :fits-pattern "social/ARGUMENT"
+     :addresses-however
+     "the sorry enterprise is currently single-operator (hand-curated registry, single-source miner); the enterprise model requires multi-agent coordination — agents sense each other's sorry work, deliberate about priority, act in concert. The pattern's own rationale is unsupplied; the sorry enterprise IS the rationale"
+     :produces [:sorry-coordination-argument]}]
+   :policy-holes
+   [{:hole :b3-b4-retrieval-vs-priming
+     :note "war-machine/ambient-pattern-retrieval (the retrieval mechanism that surfaces patterns without deliberate recall) and p4ng/pattern-priming (the learning mechanism that revises affinity sets from observed activations) both concern the pattern-activation-to-sorry pipeline. Assessed as DISTINCT contributions: ambient-retrieval grounds the SENSING layer (patterns surface, proximity emerges), pattern-priming grounds the LEARNING layer (affinity sets revise from closure events). Same signal stream, different move (perception vs adaptation). The mission's Test 1 prediction — 'if turns activate affinity patterns, P(closure) increases' — requires BOTH: ambient retrieval produces the activation signal, priming learns from the closure outcome"
+     :nominal-contribution 5
+     :true-contribution 5}]
+   :prediction-errors
+   "EXPECTED: a mission at status IDENTIFY would be a stub with minimal landed work. ACTUAL: this mission has SUBSTANTIAL landed work hidden behind the IDENTIFY status — the sorry_registry.clj (live, schema v2), the loop_learning.clj auto-miner (v0, verified with 10 candidates), the interest-event-vocabulary.flexiarg (the emission format), and a 2026-05-29 checkpoint documenting the partial lift. The staleness probe's value was disproportionate: the doc's IDENTIFY status is the LEAST informative field — the downstream finding (2026-05-26) and checkpoint (2026-05-29) are where the current state lives. The psi had to account for 5 separate landed artifacts the IDENTIFY section doesn't mention. Prediction: the 19-pattern D4 fold on this same mission will need to reconcile an even larger landed surface against an even larger pattern set — the staleness probe will be the longest step."}}}

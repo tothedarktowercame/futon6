@@ -1,0 +1,143 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "sati (mindfulness/attention-to-what-is) as the scan apparatus's honest self-observation discipline: the day-by-day ledger IS sati applied to the scan practice — it records not just what was found (Day 1 XTDB-ecosystem hypothesis, Day 3 AIQA scoring-blindspot) but the GAP-DAYS between scans (45 cumulative), the streak that didn't hold, the methodology that was wrong (fishing-expedition named and replaced Day 5), and the standing-tasks that crossed threshold. This is attention to what IS, not what should be: the 2026-05-27 cadence note ('Streak is the wrong word') is sati refusing to lie about the rhythm. The scoring-blindspot-for-pre-commercial tracking (4 data points across Days 3-6) is sustained mindful observation of a recurring pattern in the apparatus itself. What REMAINS: this honest-accounting capacity must be sustained as the mission pushes toward scan-day 20 — the pressure to show progress will tempt replacing the honest ledger with a flattering one, and sati is the guard against that drift"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "piti (investigative joy/rapture from discovery) as the energy-source that keeps the scan alive across gap-days: the methodology re-build at Day 5 (fishing-expedition to hypothesis-tested deps-grounded contract-shaped probe with three replication points) was a piti event — the rapture of finding that the apparatus could be made truthful, that control-shape discrimination (Sirix-as-no-ecosystem, VERSES-as-no-presence, OpenHands-as-different-substrate) could distinguish real signal from noise. Day 6's confirming-negative ('nobody here owns learning-efficiency; gap validated as Joe's own') is piti-shaped: the joy of a negative result that confirms a hypothesis. The scan-coherence/mission-anchored-scan pattern extraction (Day 6 good-frame exemplar promoted to pattern) is piti's residue — the durable form left after the rapture of a good scan. What REMAINS: the publication surface (futon7a blog) and the 3-workups-with-targeted-responses criterion (7) are where piti must convert from investigation-rapture to capacity-demonstration — the brief published as 'here's what I found interesting' is piti's public expression, and it has not landed"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "upekkha (equanimity: non-reactive steadiness) as the stance that lets the mission continue despite the cadence failure: 45 cumulative gap-days across 6 scan-days, a 38-day gap between Day 4 and Day 5, a 20-day target that becomes '20 scan-days at some cadence' rather than '20 consecutive weekdays.' Upekkha is NOT resignation — it is the steady recognition that the rhythm didn't hold AND the apparatus improved anyway (methodology re-built, code-search probe-type landed, fresh-probes discipline minted during those gap-day intervals). The mission's re-evaluation of completion criteria (criterion 5 'not held', criterion 6 'pending', criterion 7 'Day 5 produced 3 blog-post candidates') is upekkha: adjusting the frame without abandoning the practice. The discipline-drift standing-task (action-tracking masks un-probed hypotheses) is what upekkha guards against: the temptation to count busy-work as progress. What REMAINS: the 14 scan-days still owed require equanimity — not the forced daily streak that already broke, but the sustained willingness to scan-and-workup without the excitement of a new apparatus or the despair of the gap-days"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "rapid-debugging as the apparatus-self-correction discipline already proven across 6 scan-days: each standing-task promotion IS a rapid-debugging cycle on the scan apparatus itself. The scoring-blindspot-for-pre-commercial (4 data points, standing-task since Day 4) was found by rapid-debugging — the scan kept missing direct-target repos, the diagnosis was 'scoring function bypasses pre-commercial signals,' and the fix propagated as a tracked task. The static-probe-misalignment (xtdb-ecosystem query pulling adjacent-DBs) was found, diagnosed (named-vs-queried gap), and fixed (language-filter rewrite + code-search probe-type extension). The surface-render-shallowness (brief render misleads judgement) was found, promoted, and partially addressed (day-counter fixed; README excerpts still owed). The fresh-probes discipline (pattern-rule-systems resolution: neither arm, dissolve the static-probe model) is rapid-debugging at the architectural level — the entire static-probe frame was the bug, and the fix was to make probes fresh each day. What REMAINS: the surface-render fix is incomplete (README excerpt / paper-link-presence not implemented), and the discipline-drift-as-apparatus-cause (flagged, not yet at threshold) needs its own debugging cycle"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "weekly-rhythm as the cadence frame for the remaining 14 scan-days: the IDENTIFY proposal's '1 hour/day, each weekday, for 20 working days' assumed a daily streak that didn't hold. The 2026-05-27 reframe ('20 scan-days at some cadence') is the weekly-rhythm pattern asserting itself over the daily-streak assumption — a weekly cadence (scan + workup as a weekly practice, not a daily obligation) fits the observed reality (gap-days cluster, methodology improvements happen between scans, the 38-day gap produced the most significant apparatus restructure). The Clojurists Together finding (Day 5: a free-solo-rule-compatible funding ecosystem channel) is a weekly-rhythm data point: income-relevant opportunities surface on weekly-to-monthly cycles, not daily. HOWEVER the weekly-rhythm pattern's full machinery (the structured weekly review, the rhythm-as-governance discipline, the weekly-cadence accountability structures) has not been adopted — the mission has a LANDING cadence (scan-days happen irregularly) but not a HELD cadence (a committed weekly slot). The pattern names what the mission needs; the mission has not yet picked up the practice. PARTIAL: the cadence-reframe (daily to weekly-ish) is grounded; the held-weekly-rhythm discipline is not yet adopted"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b1] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b4 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a daily GitHub scan that produces a 5-minute consulting brief each scan-day, progressing toward 20 scan-days (at some cadence, not necessarily consecutive) to test the 20h/month consulting hypothesis — with the brief surfaced readably, published as a consulting-adjacent blog post, emitted as futon1a evidence, and the War Machine frame showing measurably non-zero :depositing. The scan must surface time-sensitive opportunities, provide a heartbeat signal, and move the consulting pipeline from dormant to active. At scan-day 20: did 20h of scan+workup produce at least one concrete consulting conversation?\nHUNGRY-FOR: cadence that holds (the discipline to scan regularly — 45 cumulative gap-days across 6 scan-days shows the apparatus runs but the rhythm doesn't); surface-render depth (the brief render misleads judgement — standing-task since Day 5, README excerpts and paper-link-presence still missing); publication surface (futon7a blog directory never created — briefs stay as EDN, invisible to prospects and search engines); evidence emission (POST to futon1a never wired — briefs don't become :github-scan-brief derivative events the War Machine can read); honest accounting sustained (the day-by-day ledger's gap-day honesty is itself a capacity that must not erode under pressure to show progress); at least 3 workups with targeted responses (Bayesian model, flexiarg, capability demo) sent or prepared.\nHAVE: 6 scan-days completed (frame-daily-scan-001 through 006); probe infrastructure fully operational (f7/probes.clj, f7/gh.clj, f7/signals.clj, f7/report.clj, f7/core.clj); methodology re-built Day 5 (fishing-expedition to hypothesis-tested deps-grounded contract-shaped probe); code-search probe-type landed (f7.gh/search-code, :probe-type :code-search); fresh-probes discipline minted (Day 6+: every term carries term-source-warrant, f7.probe-gen seam exists); scan-coherence/mission-anchored-scan pattern extracted from Day 6 good-frame exemplar; day-counter fixed; 4 standing-tasks tracked (scoring-blindspot-for-pre-commercial at 4 data points, surface-render-shallowness at 2, static-probe-misalignment, discipline-drift); xtdb-ecosystem probe rewritten; stale fellowship probes removed.\n"
+  :psi-sha256
+  "b299893b0db3fcf823da793fd20961f5e12fc2e64227b9ed5ab38a0f042b3d59"
+  :pattern-ids
+  ["devmap-coherence/ifr-f0-sati"
+   "devmap-coherence/ifr-f3-piti"
+   "devmap-coherence/ifr-f7-upa-upekkha"
+   "storage/rapid-debugging"
+   "workflow-coherence/weekly-rhythm"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "87cd07aecff2035e"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-7"
+  :source "M-daily-scan.md full document (IDENTIFY + MAP Q1-Q7 + Day-by-day ledger through Day 6 + standing-tasks + apparatus-cleanup + completion-criteria re-evaluation) authored fresh from the mission's CURRENT state — the status banner says IDENTIFY but the doc body shows 6 landed scan-days, methodology re-build, code-search probe-type shipped, fresh-probes discipline minted. Psi covers what REMAINS per the staleness guard: the landed work is HAVE. Resolver-blind to the proposer's pattern rationale."
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon7/mission/daily-scan"
+ :proposal/hash "87cd07aecff2035e"
+ :fold-turn/id "ft-daily-scan-001"
+ :turn
+ {:agent "zai-7"
+  :model "zai"
+  :edge "invoke-1783774142003-169-6d636e92"
+  :at "2026-07-11T13:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "sati as the scan apparatus's honest self-observation: the day-by-day ledger records gap-days (45 cumulative), streak-failure, methodology errors, and standing-task promotions — attention to what IS, not what should be"
+     :fits-pattern "devmap-coherence/ifr-f0-sati"
+     :addresses-however
+     "without sati, the scan practice would either inflate its progress (claiming the streak held when it didn't) or abandon honest tracking under pressure — the 2026-05-27 cadence reframe ('Streak is the wrong word') is sati refusing to lie. The HAVE (6 scan-days with full honest ledger) is itself a sati achievement; the REMAINS (sustaining this honesty through 14 more scan-days under progress-pressure) is where sati is load-bearing"
+     :produces [:honest-self-accounting]}
+    {:id :b2
+     :role "piti as the investigative joy that keeps the scan alive across gap-days: Day 5's methodology re-build (fishing-expedition replaced), Day 6's confirming-negative (learning-efficiency gap validated), the scan-coherence/mission-anchored-scan pattern extraction"
+     :fits-pattern "devmap-coherence/ifr-f3-piti"
+     :addresses-however
+     "without piti, the gap-days would kill the practice — 45 cumulative gap-days is discouraging, but the rapture of finding the apparatus truthful again (Day 5) and confirming a hypothesis via negative result (Day 6) is the renewable energy source. REMAINS: piti must convert to public expression (the futon7a blog, the 3 targeted workups) — the investigation-rapture has landed but its publication hasn't"
+     :produces [:investigative-energy]}
+    {:id :b3
+     :role "upekkha as non-reactive steadiness under cadence failure: 45 gap-days, a 38-day gap, a 20-day target reframed to '20 scan-days at some cadence' — equanimity that continues the practice without forcing the broken streak or abandoning it"
+     :fits-pattern "devmap-coherence/ifr-f7-upa-upekkha"
+     :addresses-however
+     "without upekkha, the cadence failure produces either false optimism (pretending the streak will restart) or despair (abandoning the mission). The re-evaluation of completion criteria (5: not held, 6: pending, 7: Day 5 produced candidates) is equanimity adjusting the frame. REMAINS: the 14 scan-days owed require equanimity — not forced daily discipline, not resignation, but steady willingness to scan-and-workup"
+     :consumes [:honest-self-accounting]
+     :produces [:cadence-equanimity]}
+    {:id :b4
+     :role "rapid-debugging as the apparatus-self-correction discipline proven across 6 scan-days: scoring-blindspot (4 data points, standing-task), static-probe-misalignment (found, diagnosed, fixed with code-search probe-type), surface-render-shallowness (found, promoted, day-counter fixed), fresh-probes discipline (architectural-level fix dissolving the static-probe model)"
+     :fits-pattern "storage/rapid-debugging"
+     :addresses-however
+     "without rapid-debugging, the apparatus would accumulate silent errors — the scoring function would keep missing pre-commercial signals, the probes would keep pulling noise, the brief render would keep misleading. Each standing-task is a debugging cycle that found a real bug, diagnosed it, and shipped a fix. REMAINS: surface-render fix incomplete (README excerpts owed), discipline-drift not yet at threshold"
+     :consumes [:honest-self-accounting :investigative-energy]
+     :produces [:apparatus-self-correction]}
+    {:id :b5
+     :role "weekly-rhythm as the cadence frame for the remaining 14 scan-days: the daily-streak assumption broke (45 gap-days), the reframe to '20 scan-days at some cadence' is the weekly-rhythm pattern asserting itself — scan as a weekly practice, not a daily obligation"
+     :fits-pattern "workflow-coherence/weekly-rhythm"
+     :addresses-however
+     "without a rhythm frame, the mission oscillates between forced-daily (which breaks) and no-cadence (which drifts). The observed landing pattern (gap-days cluster, improvements happen between scans) argues for weekly-ish cadence. PARTIAL: the cadence-reframe is grounded by the pattern; the held-weekly-rhythm discipline (a committed weekly slot) has not been adopted — the mission has a landing cadence but not a held one"
+     :produces [:cadence-frame]}]
+   :wires
+   [{:from :b1 :to :b4 :connective :seq
+     :rationale "honest self-accounting (b1 sati) feeds the debugging cycles (b4 rapid-debugging) — order-dependent: you must observe the gap honestly before you can debug what caused it. The scoring-blindspot was found because the ledger was honest about missing repos; the static-probe-misalignment was found because the methodology was honestly named as fishing-expedition"}
+    {:from :b4 :to :b3 :connective :seq
+     :rationale "apparatus self-correction (b4 rapid-debugging) precedes cadence-equanimity (b3 upekkha) — order-dependent: the apparatus must be debugged into trustworthiness before equanimity about cadence is warranted. Equanimity over a broken apparatus is resignation; equanimity over a debugged-but-irregular apparatus is steadiness"}
+    {:from :b2 :to :b4 :connective :copar
+     :rationale "investigative joy (b2 piti) co-applies with debugging (b4 rapid-debugging) — the rapture of finding the apparatus-truth is the energy that drives each debugging cycle. Copar because piti motivates the debugging without being a sequential step: the joy IS the fuel, not a predecessor"}
+    {:from :b5 :to :b1 :connective :copar
+     :rationale "weekly-rhythm (b5) co-applies with honest-accounting (b1 sati) — the cadence frame shapes what the ledger records (weekly scan-day vs daily streak). Copar because the rhythm-frame contextualises the self-observation without being consumed sequentially"}
+    {:from :b2 :to :b1 :connective :copar
+     :rationale "investigative joy (b2 piti) co-applies with honest-accounting (b1 sati) — piti makes the honest ledger bearable: recording 45 gap-days is discouraging unless the investigative rapture of each actual scan-day redeems it. Copar because both co-activate in each scan-day's practice"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b4 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "workflow-coherence/weekly-rhythm"
+     :free "the held-weekly-rhythm discipline has not been adopted — the mission has a landing cadence but not a committed rhythm"
+     :why
+     "the weekly-rhythm pattern's full machinery (structured weekly review, rhythm-as-governance, weekly-cadence accountability) goes beyond the cadence-reframe the mission has actually adopted. The mission recognised that daily-streak is wrong (sati) and that some-cadence is the reframe (partial weekly-rhythm), but it has not committed to a specific weekly slot or review structure. The pattern names what's needed; the practice hasn't been picked up. b5 is :partial for this reason — the cadence-reframe transposes; the held-rhythm discipline does not yet"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the three devmap-coherence patterns (ifr-f0-sati, ifr-f3-piti, ifr-f7-upa-upekkha) form a developmental sequence that the proposal treats as three independent contributions"
+     :why
+     "sati (b1), piti (b2), and upekkha (b3) are factors of the same seven-factor awakening sequence (bojjhanga): sati is the foundation, piti arises FROM sustained sati, upekkha is the maturation of piti. They are not three independent contributions to the scan mission — they are one developmental arc applied to the consulting-cadence practice. Each box grounds a DISTINCT phase of that arc honestly (b1 the observation, b2 the energy, b3 the steadiness), and each has its own :addresses-however that is NOT reducible to the others, but the proposal's framing of them as three parallel patterns slightly overstates their independence. Recording as honest overlap, not false independence — the arc is real and each factor does distinct work, but the proposal counts them as three where a developmental-sequence framing would count them as one-with-phases"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "6 scan-days completed (frame-daily-scan-001 through 006); probe infrastructure fully operational (f7/probes.clj, f7/gh.clj, f7/signals.clj, f7/report.clj, f7/core.clj); methodology re-built Day 5 (fishing-expedition to hypothesis-tested deps-grounded contract-shaped probe with three replication points); code-search probe-type landed (f7.gh/search-code, :probe-type :code-search); fresh-probes discipline minted (Day 6+: every term carries term-source-warrant, f7.probe-gen seam exists); scan-coherence/mission-anchored-scan pattern extracted from Day 6 good-frame exemplar; day-counter fixed; 4 standing-tasks tracked (scoring-blindspot-for-pre-commercial 4 data points, surface-render-shallowness 2, static-probe-misalignment, discipline-drift); xtdb-ecosystem probe rewritten; stale fellowship probes removed."
+  :want
+  "14 more scan-days at some cadence to reach 20 and test the 20h/month hypothesis; publication surface (futon7a blog) created; evidence emission to futon1a wired; surface-render depth (README excerpts, paper-link-presence); at least 3 workups with targeted responses (Bayesian model, flexiarg, capability demo); at least one concrete consulting conversation produced."
+  :via
+  "psi authored by zai-7 from futon7/holes/missions/M-daily-scan.md (full document: IDENTIFY + MAP Q1-Q7 + day-by-day ledger through Day 6 + standing-tasks + apparatus-cleanup + completion-criteria re-evaluation), resolver-blind to the proposer's pattern rationale; authored fresh from the mission's CURRENT state per the staleness guard (status banner says IDENTIFY but 6 scan-days have landed)"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

@@ -268,5 +268,5 @@
   :via
   "HAVE quote: > In the Operator's Foreword it says: *\"In one tantalisingly-close possible > realisation of these ideas, the software system can be largely > self-guiding, noticing its own points of tension, and repairing them.\"* > > I would like to put this to the test. We have all the right ingredients > now: a full AIF workup, a sorry registry, a list of warnings, and an > established way of working with peripherals > (`README-peripherals.md`). We have the ability to set up long-running > loops via a \"conductor\" so that agents can run without stopping; we > also have bells and whistles they can use for inter-agent > communication. Therefore, I believe it is straightforwardly possible > to build a War Ma WANT quote: Per mission-lifecycle.md: *\"Every MAP question has a concrete answer. The 'ready vs missing' table is complete.\"* Q1–Q8 above all have concrete factual answers; ready-vs-missing table is complete; surprises documented. **PASSED** — Joe greenlit DERIVE drafting (emacs-repl 2026-05-24, \"Go\").",
   :rule "fold-turn/hole-from-mission-triple"},
- :eval {:delta-g -0.6666666666666666, :g-grain :coverage}}
+ :eval {:coverage-score-delta -0.6666666666666666, :score-grain :coverage}}
 

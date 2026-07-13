@@ -1,0 +1,143 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "the generative loop IS a self-play loop — propose play-out (Asker finding capability-graph gaps), predict field effect + answer (Answerer using graph/substrate context), score outcome (Critic with witness logic), update policy/value — and self-play-loop's HOWEVER is load-bearing here: self-play degenerates without quality control (trivial questions, ignored context, unreliable Critic, noisy graph updates), so each iteration must be gated (Critic/witness score exceeds threshold before policy update commits), the Critic calibrated against operator judgement, and the Asker measured on non-triviality not volume; the charter's G-REWARD anti-laundering discipline (operator approval is gate not proof, rejected outcomes recorded not only wins) IS the self-play-loop quality gate transposed to the WM learner"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via "the charter state IS meng (youthful folly / envelopment): the system is active but naive, signals are noisy and actions are misaligned (only logic models, fixtures, read-only evaluation allowed), and meng prescribes clear constraints + iterative learning without excess correction — the charter's scope-out (no autonomous runner, no reward-trained update, no hidden scheduler) IS the clear-constraint discipline, and the safe-first-work-products (rollout ledger, toy fixture, vocabulary, calibration audit, reward red-team) ARE the iterative-learning-without-harsh-punishment that meng names; excess correction would be building the autonomous learner before the gates clear, which the charter forbids"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via "the mission's §1.3 Sen objective IS this pattern: functioning (one play-out lands a fruit) vs capability (repeatable policy that clears a class under the right conditions), and the learner's job is conversion — t3/capability-not-functioning's core claim that training produces capabilities only when conversion factors are institutional not individual transposes directly: a one-off play-out that proves a functioning does not survive as a capability unless the conversion factors (G-SIM: field simulator adequate for checkable predictions; G-REWARD: anti-laundered reward discipline) are present; the charter's scope-out line 'no claim that a bounded play-out proving one functioning is already a capability' is exactly the t3 counterfactual warning"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via "the calibration audit and rollout ledger must render as trajectory not snapshot: dynamic-over-static's claim that temporal patterns (trends, rhythms, decay, momentum) are perceptible in animation but invisible in a single frame applies directly to the G-SIM calibration state — the verdict :insufficient-evidence with ~11+ measured pairs accruing is a TRAJECTORY distinction (pairs accumulating toward :calibratable) that a static count of measured pairs hides; the §4.4 calibration report should show the accrual curve of measured vs fallback pairs over WM-pilot cycles, not just the current pair count, so the operator sees the gate closing (or stalling) as motion"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via "the two hard gates ARE ideal/actual gaps: G-SIM's minimum-admissible-simulator spec (reads same substrate, predicts one/two-step consequences as hypotheses, records confidence, calibrated, refuses fabricated dynamics) is the IDEAL; the current substrate-2/field-model state is the ACTUAL; ideal-actual-gap requires computing the discrepancy as a first-class report rather than Joe synthesizing it in head — and the G-REWARD gate (minimum-admissible-reward: distinguishes build/witness discharge, peradam discipline, G1 arrow-witness false until bound, records rejections, operator-approval-as-gate) is the same shape for the reward channel; the charter needs machine-detectable gap reports for both gates before IDENTIFY exits"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b3] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b3] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a self-bootstrapping WM learner that converts one-off warranted functionings into repeatable capabilities — the generative loop of propose play-out, predict field effect, execute under guardrail, score with anti-laundered witness logic, update policy/value, and distinguish functioning from capability — so the stack has a learner, not just strategic selection and post-hoc monitoring. HUNGRY-FOR: a field simulator adequate for bounded checkable predictions over play-out consequences (G-SIM); an anti-laundered reward signal that distinguishes build discharge from witness discharge and treats operator approval as gate not proof (G-REWARD); the conversion of attested play-out outcomes into durable freedoms-to-achieve rather than maximum activity; quality-controlled self-play that does not degenerate into amplifying its own errors. HAVE: the War Machine ranking and executing bounded next moves under guardrails; the capability star map naming held/satisfied capability state; FutonZero-monitor reading capability trajectories after the fact; a static rollout ledger schema (futon0/data/futonzero-rollout-ledger.edn); a toy field fixture demonstrating successful update + refusal to learn from laundered reward; a reward red-team fixture rejecting 8 laundering shapes; a policy/value vocabulary with no live actuator; calibration audit with first measured (non-fallback) pairs accruing toward G-SIM but verdict still :insufficient-evidence; ~11+ independent measured pairs needed for :calibratable."
+  :psi-sha256
+  "074c97238b78f3ee96437fd77e9cb6d655313b03d42cc6d00b21b9fb6d5ac49c"
+  :pattern-ids
+  ["f6/self-play-loop"
+   "iching/hexagram-04-meng"
+   "t3/capability-not-functioning"
+   "war-machine/dynamic-over-static"
+   "war-machine/ideal-actual-gap"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "ae8d0daea7bd3897"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-1"
+  :source "M-futonzero-generative.md HEAD/IDENTIFY/hard-gates/scope (resolver-blind: gap described in the mission's own terms — self-bootstrapping WM learner converting functionings to capabilities, gated by G-SIM and G-REWARD — without reading the proposer's pattern rationale)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author. The proposal brought its own 5-pattern cascade; the psi was authored from the mission doc alone."}
+ :deposit-contract :v2
+ :mission "futon0-d/mission/futonzero-generative"
+ :proposal/hash "ae8d0daea7bd3897"
+ :fold-turn/id "ft-futonzero-generative-012"
+ :turn
+ {:agent "zai-1"
+  :model "zai"
+  :edge "invoke-1783691931603-15-5a9c0445"
+  :at "2026-07-10T14:10:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the generative loop as self-play with quality gates: propose/predict/execute/score/update, gated against degeneration"
+     :fits-pattern "f6/self-play-loop"
+     :addresses-however
+     "self-play degenerates without quality control: the Asker generates trivial questions, the Answerer ignores context, the Critic is unreliable, graph updates introduce noise — the WM learner's analogue is a play-out that looks like learning but launders reward (operator-gate-as-fruit, censored-fallback, prior-value-tautology); the self-play-loop quality gate (Critic score exceeds threshold before commit, calibrate Critic against human/operator judgement, measure Asker non-triviality not volume) is structurally the G-REWARD anti-laundering discipline"
+     :produces [:gated-generative-loop]}
+    {:id :b2
+     :role "the charter state as meng: active but naive system needing clear constraints and iterative learning without excess correction"
+     :fits-pattern "iching/hexagram-04-meng"
+     :addresses-however
+     "a system is active but naive and prone to error; excess correction discourages growth — the charter's scope-out (no autonomous runner, no reward-trained update, no hidden scheduler) is the clear-constraint discipline, and the safe-first-work-products are the iterative learning; excess correction would be prematurely building the autonomous learner before G-SIM and G-REWARD clear, which is exactly what the charter forbids; meng prescribes discipline and patience, not force"
+     :produces [:charter-discipline-shape]}
+    {:id :b3
+     :role "functioning-to-capability conversion requires structural conversion factors, not just individual play-out successes"
+     :fits-pattern "t3/capability-not-functioning"
+     :addresses-however
+     "training produces capabilities only when conversion factors are institutional not individual — a one-off functioning (play-out lands a fruit) does not survive as a capability unless the structural conditions exist (G-SIM simulator adequacy, G-REWARD anti-laundered reward); the charter's explicit Sen objective (§1.3) and its scope-out line 'no claim that a bounded play-out proving one functioning is already a capability' are the t3 counterfactual warning applied to the WM learner"
+     :produces [:conversion-factor-requirement]}
+    {:id :b4
+     :role "calibration and rollout evidence must render as trajectory (accrual over cycles) not static snapshot"
+     :fits-pattern "war-machine/dynamic-over-static"
+     :addresses-however
+     "a static report shows position but not momentum — the G-SIM calibration state (:insufficient-evidence with measured pairs accruing toward :calibratable) is a trajectory distinction; a static pair count hides whether the gate is closing or stalling; the §4.4 calibration report should animate the accrual curve of measured vs fallback pairs over WM-pilot cycles so the operator sees the gate's motion"
+     :produces [:calibration-trajectory-view]}
+    {:id :b5
+     :role "the two hard gates as ideal/actual gaps requiring machine-detectable discrepancy reports"
+     :fits-pattern "war-machine/ideal-actual-gap"
+     :addresses-however
+     "self-representation without self-comparison is portraiture not correction — the charter maintains ideal self-images (G-SIM minimum-admissible-simulator, G-REWARD minimum-admissible-reward) and actual state (current substrate-2, current reward channel) but the comparison is manual; ideal-actual-gap requires computing the discrepancy as a first-class report, pairing each minimum-admissible criterion against current evidence, so Joe does not synthesize the gap in his head"
+     :produces [:gate-discrepancy-reports]}]
+   :hyperedges
+   [{:from [:b3] :to [:b1] :connective :seq
+     :rationale "the conversion-factor requirement (b3) names WHAT must be true for the loop to produce capability not functioning; the self-play loop (b1) is the mechanism that runs under that requirement — order-dependent: the requirement constrains the loop's design before the loop runs"}
+    {:from [:b2] :to [:b1] :connective :copar
+     :rationale "the charter-discipline shape (b2) co-applies with the self-play loop (b1) — meng's clear-constraints-and-iterative-learning runs alongside the loop as a governance lens, not as a sequential step; copar because the discipline shapes the loop without being consumed by it"}
+    {:from [:b1] :to [:b5] :connective :seq
+     :rationale "the gated loop (b1) produces play-out outcomes that are evidence FOR the gate discrepancy reports (b5) — the loop generates the actual-state readings that the ideal/actual gap report compares against the gate criteria; order-dependent: the loop runs, then its outcomes feed the gap computation"}
+    {:from [:b4] :to [:b5] :connective :copar
+     :rationale "the calibration-trajectory view (b4) and the gate-discrepancy reports (b5) co-apply — the trajectory view is the temporal rendering of the same evidence the gap report structures spatially; copar because they are two views of the same calibration evidence, not sequential"}
+    {:from [:b5] :to [:b3] :connective :copar
+     :rationale "the gate-discrepancy reports (b5) and the conversion-factor requirement (b3) co-apply — the gap reports measure whether the conversion factors (simulator, reward) are adequate; b3 names the requirement, b5 measures it; copar because the requirement and its measurement are co-active, neither subsumes the other"}]
+   :terminals [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the field simulator itself (G-SIM) is ungrounded"
+     :why
+     "the cascade provides the self-play loop shape (b1), the discipline to wait (b2), the conversion-factor requirement (b3), the trajectory view (b4), and the gap report (b5) — none of these grounds the ACTUAL field simulator. G-SIM (a learned field simulator over mission/capability dynamics that reads the same substrate as WM, predicts one/two-step consequences as hypotheses, records confidence, is calibrated, refuses fabricated dynamics) is the mission's hard gate and is explicitly deferred to substrate-2 / full-C / field-model work. The cascade treats the simulator as a precondition (b5 measures its gap) but cannot supply its substance. This is the structural hole: the generative loop cannot run until G-SIM clears, and the cascade does not clear it."}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the anti-laundered reward signal (G-REWARD) substance is ungrounded"
+     :why
+     "b1 maps the self-play quality gate to the G-REWARD discipline, and the reward red-team fixture (§4.5) rejects 8 laundering shapes — but the cascade provides no pattern grounding the POSITIVE reward signal (what counts as a genuine witness discharge, how Dokusan/peradam reward is computed, how the Pudding Prover G1 arrow-witness binds to live affect). The charter scopes this to M-pudding-peradams; this fold cannot shortcut that binding. The cascade names the gate; it does not supply the fuel."}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the policy/value update rule (how play-out outcomes update future estimates) is ungrounded"
+     :why
+     "b1 names the self-play loop including 'update policy/value from play-out outcome' as a step, but the cascade provides no pattern for the update RULE — how a witnessed play-out outcome modifies the policy network (pattern library) or value network (EFE/forward model). The charter treats this as out-of-scope until gates clear; the cascade correctly does not invent it, but the hole is first-class: the loop shape exists, the update math does not."}
+    {:id :h4
+     :unfolded-pattern "iching/hexagram-04-meng"
+     :free "meng's prescriptive numerics (Pi-o 0.7, tau 0.5, policy-priors) do not transpose"
+     :why
+     "meng's ant-interpretation and mmca-interpretation specify precision values, policy-prior weights, and update probabilities; these are domain-specific calibration numbers for ant/CA models and do not transpose to the WM learner. The CORE meng move (clear constraints + iterative learning without excess correction) transposes cleanly and is folded in b2 at :satiety :full; the numeric interpretations are not folded and would be spurious precision if applied. This hole records that the pattern contributes the wisdom-shape, not the parameter-shape."}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "the War Machine ranking and executing bounded next moves under guardrails; the capability star map naming held/satisfied capability state; FutonZero-monitor reading capability trajectories after the fact; a static rollout ledger schema; a toy field fixture demonstrating successful update + refusal to learn from laundered reward; a reward red-team fixture rejecting 8 laundering shapes; a policy/value vocabulary with no live actuator; calibration audit with first measured pairs accruing toward G-SIM but verdict still :insufficient-evidence."
+  :want
+  "A self-bootstrapping WM learner that converts one-off warranted functionings into repeatable capabilities — the generative loop of propose play-out, predict field effect, execute under guardrail, score with anti-laundered witness logic, update policy/value, and distinguish functioning from capability."
+  :via
+  "psi authored by zai-1 from futon0/holes/missions/M-futonzero-generative.md (HEAD/IDENTIFY/hard-gates/scope), resolver-blind to the proposer's pattern rationale"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

@@ -1,0 +1,85 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :partial
+    :via
+    "the check! discipline as the fold's deterministic verification layer: run the FUTON3 check! DSL against the embedding fold's output, verifying that each predicted endpoint (cascade→sorry) and each generated wiring (cascade→CT-structure) has a reproducible twin in the real substrate-2 code-graph — failing loudly when the prediction doesn't match. The 0-sorry gate (clean_to_lean compile) IS the check! for wiring type-safety: it certifies that the generated CLean method-spine is well-typed against the DarkTower CT schema, deterministically and reproducibly. For endpoint prediction (f1), the check! transposes to: each predicted (cascade→substrate-2 endpoint) must have a real counterpart in the code-graph, verified by deterministic graph lookup (not embedding-similarity threshold). The anti-pattern is direct: the f1-v1 correction showed the n=1 autoclock-in 'top-20 hit-rate 1.00' was unrepresentative because popular endpoints dominated — without a deterministic check that the predicted endpoints have real graph-twins, embedding results look good but are popularity-flattered phantoms. The dhammavicaya discipline ('without codified investigation, higher futons cannot inspect the system model with confidence') transposes exactly: without codified check! gates, the mission cannot inspect embedding-fold outputs with confidence. HOWEVER the pattern is specifically about CLI/ingest TRANSCRIPTS matching futon1 GRAPH snapshots — a deterministic graph-memory baseline for transport invariants. The fold's outputs are not transcripts; they are predicted wiring structures and endpoint rankings. The check! DSL (FUTON3 check syntax against Pattern Canon entries) is designed for MUSN transport baseline certification, not for ML-output verification. The verification-and-reproducibility discipline transposes; the specific check! DSL syntax and the transcript-to-graph twin machinery do not"
+    :rule "fold-turn/box"}]
+  :hyperedges []
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a deterministic verification check that the embedding-fold ansatz's claims are reproducible against the substrate-2 graph — a check!-style gate that certifies each fold output (cascade→sorry endpoint prediction, cascade→wiring CT structure) has a reproducible twin in the real code-graph, failing loudly when the fold's prediction doesn't match the graph's structure. The mission's through-line is that the fold's difficulty is reward/signal steepness, not representation or compute; the check discipline verifies whether a given embedding-space result actually corresponds to substrate-2 reality, or is a popularity-flattered phantom (the f1-v1 correction: the n=1 autoclock-in \"top-20 hit-rate 1.00\" was unrepresentative because popular endpoints dominated). Without this check, the fold's outputs are lore — exactly the dhammavicaya anti-pattern: \"a canon without an evidence ledger collapses into lore\" transposes to \"a fold output without a graph-twin check collapses into a popularity-flattered claim.\"\nHUNGRY-FOR: the deterministic baseline-freeze (run the check! against a frozen graph snapshot so results are reproducible across runs and seeds); the transcript-to-graph-match discipline (every predicted endpoint must have a real counterpart in the substrate-2 code-graph, verified by deterministic lookup not embedding similarity); the drift-detection check (the ingest-script-drift warning transposes to: if the code-graph changes between batches, prior fold-outputs may no longer have graph-twins — a check that flags this); the report of missing matches (the pattern's \"publish a short report listing any missing transcript-to-graph matches\" transposes to: report which predicted endpoints have no real substrate-2 counterpart — the honest gap between the fold's output and reality).\nHAVE: impl #2 (the LLM-turn fold) already realizes the interface (so #3 is efficiency, not possibility); DarkTower CT is production Lean with 0-sorry worked examples (TypedHole/Fill/Comb/Discharge/BV — the check! target schema for wiring type-safety); the A-next gold corpus (10 real (cascade, sorry, wiring) triples with empirical sorries recovered post-hoc from doc+code+git+XTDB — the ground truth the check! runs against); the substrate-2 code-graph (125,730 vars, 89,304 call edges, 73,628 containment edges — the real graph the fold's predictions must match); the 0-sorry gate (clean_to_lean compile = deterministic check that the wiring type-checks); the three shallow-embedding results that ALL lost to popularity/degree (the cautionary baseline: without a graph-twin check, embedding results look good but are popularity-flattered); the fold-GFN positive (F1 0.69, laptop) and G.1 seed negative (flat reward on featureless pools); E-fold-embed-pipeline Stages A+B built (the typed graph + pairs are there), C+D authored (the trained-embedding ablation runs on the commissioned Linode). BUT: no deterministic check! has been run that certifies the fold's endpoint predictions against the code-graph (the f1 results used link-prediction AUC, not graph-twin verification); the drift-detection check (does the graph change between batches invalidate prior predictions?) is unbuilt."
+  :psi-sha256
+  "8069dcd02458b6a47e78fbf5b2483566b83958a1b842c9c559ba6f95c5480fb7"
+  :pattern-ids
+  ["devmap-coherence/ifr-f1-dhammavicaya"]
+  :size 1
+  :truncated false
+  :budget 1
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "00581e6ed2196867"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-5"
+  :source "M-fold-ansatz.md HEAD/MAP M1-M4 + ARGUE + A-small/A-next/f1/GFN/E-fold-embed-pipeline results (through 2026-07-02), authored fresh through the dhammavicaya (verification/check!) lens — resolver-blind to the proposer's pattern rationale; first-contact between own deposits (not inherited from ft-fold-ansatz-002)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon2-d/mission/fold-ansatz"
+ :proposal/hash "00581e6ed2196867"
+ :fold-turn/id "ft-fold-ansatz-003"
+ :turn
+ {:agent "zai-5"
+  :model "zai"
+  :edge "invoke-1783754895648-131-cae3a42e"
+  :at "2026-07-11T20:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the check! discipline as the fold's deterministic verification layer: run a check!-style gate certifying that each predicted endpoint has a reproducible twin in the real substrate-2 code-graph, and each generated wiring is 0-sorry-gated against DarkTower CT — failing loudly when predictions don't match reality"
+     :fits-pattern "devmap-coherence/ifr-f1-dhammavicaya"
+     :addresses-however
+     "without codified dhammavicaya, the mission cannot inspect embedding-fold outputs with confidence: the f1-v1 correction (n=1 autoclock-in top-20 1.00 was popularity-flattered) is exactly the failure mode the check! prevents — an embedding result that looks good but has no deterministic graph-twin verification is a phantom claim; the 0-sorry gate already provides the check for wiring type-safety (clean_to_lean compile is deterministic and reproducible), but no equivalent check! exists for endpoint predictions (f1 used link-prediction AUC, not graph-twin certification); the pattern's anti-pattern — ingest scripts and CLI demos drift unless transport invariants are checked — transposes directly to: embedding-fold predictions drift toward popularity unless graph-twin invariants are checked and documented"}]
+   :wires []
+   :terminals [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "devmap-coherence/ifr-f1-dhammavicaya"
+     :free "the check! DSL is for MUSN transport-baseline transcript-to-graph matching, not for ML-output verification"
+     :why
+     "the pattern specifies running FUTON3's check! DSL against Pattern Canon entries that certify the MUSN transport baseline — verifying CLI/ingest TRANSCRIPTS have reproducible twins in futon1 graphs. The embedding fold's outputs are not transcripts; they are predicted endpoint rankings and generated wiring structures. The check! DSL syntax (check against Pattern Canon entries) is designed for transport-invariant certification, not for ML-prediction verification. The verification-and-reproducibility discipline transposes; the specific check! DSL, the Pattern Canon entry format, and the transcript-to-graph twin machinery do not. Recording as policy-hole rather than forcing a false mapping — the deterministic-verification frame is load-bearing even without the specific DSL syntax"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the core representation bet — whether embedding space provides steeper signal than symbol-level scores — is not grounded by verification discipline"
+     :why
+     "dhammavicaya (keen investigation / check!) verifies that outputs match reality, but it does not address WHETHER the embedding representation itself carries relational signal steeper than popularity/degree. The check! can tell you 'this predicted endpoint has no graph-twin' (catching popularity-flattery), but it cannot tell you 'the embedding space is the right substrate for this fold'. The representation question is the mission's central open bet (three shallow embeddings lost to degree; the fair test needs a trained GNN on the Linode), and no verification pattern can settle it — verification discipline is necessary but not sufficient for the ansatz verdict"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the reward/signal-steepness question (the mission's through-line) is not grounded by verification"
+     :why
+     "the mission's consistent finding across five/six experiments is that the fold's difficulty is reward/signal STEEPNESS, not representation or compute: the GFN sampler stays near-uniform on flat rewards; the G.1 seed failed on featureless disjoint pools; fold-GFN succeeds (F1 0.69) only with steep reward where gold is dense. The check! discipline can verify that outputs match the graph, but it cannot address whether the reward landscape is steep enough to concentrate a policy. The steepness question requires a different pattern family (reward shaping, curriculum design, feature engineering) — verification alone cannot supply signal where none exists"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the trained-embedding experiment (the Linode run) — the actual test of the ansatz — is not grounded by verification"
+     :why
+     "the check! can certify results AFTER the embedding pipeline runs, but the pattern provides no guidance on HOW to run the fair test itself: the R-GCN/SAGE training with BGE text features, hard negatives, and degree-correction over the 125k-node code-graph. The E-fold-embed-pipeline Stages C+D are authored but unexecuted (awaiting the commissioned Linode). The verification pattern is a post-hoc discipline; it does not ground the experiment design, the ablation arms (text vs struct vs hybrid), or the training procedure. A single verification pattern cannot ground the experiment that would produce the outputs to verify"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the generative wiring half (f2: sorry→CT-wiring) is not grounded by verification"
+     :why
+     "the check! (specifically the 0-sorry gate) can verify that a GENERATED wiring type-checks, but it cannot ground the generation mechanism itself — how to produce novel CLean/DarkTower wiring structures from (cascade, sorry) input using GFlowNet or GAE structure generation. The 0-sorry gate is the verifier; the generator is a separate concern. f2 (phase-3 generative wiring) needs generative-model patterns (the GFN config/proxy/TB machinery, the exotype kernel-transformers), not verification patterns. A single verification pattern cannot ground the generative half of the fold"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "impl #2 already realizes the fold; DarkTower CT is production Lean with 0-sorry gate; A-next gold corpus (10 triples with empirical sorries); the substrate-2 code-graph (125k vars, 89k call edges); three shallow-embedding negatives (lost to degree); fold-GFN positive (F1 0.69); G.1 seed negative; E-fold-embed-pipeline A+B built, C+D authored."
+  :want
+  "A deterministic check! that certifies embedding-fold outputs have reproducible twins in the real code-graph, catching popularity-flattered phantoms before they are trusted — plus the trained-embedding experiment (Linode), the generative wiring half (f2), and the reward-steepness resolution that the verification discipline cannot itself supply."
+  :via
+  "psi authored by zai-5 from futon2/holes/M-fold-ansatz.md (HEAD/MAP + ARGUE + A-small/A-next/f1/GFN/E-fold-embed-pipeline, through 2026-07-02), through the dhammavicaya (check!/verification) lens, resolver-blind to the proposer's pattern rationale; authored fresh, first-contact between own deposits"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

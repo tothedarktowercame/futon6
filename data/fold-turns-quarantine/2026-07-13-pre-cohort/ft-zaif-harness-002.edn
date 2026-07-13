@@ -164,4 +164,4 @@
   :via
   "psi authored by zai-11 from futon2/holes/M-zaif-harness.md (full doc), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-zaif-harness-001"
   :rule "fold-turn/hole-from-mission-doc"}
- :eval {:delta-g "not-computed — blinded proposal fold, no cascade_serve.py run" :g-grain :coverage}}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

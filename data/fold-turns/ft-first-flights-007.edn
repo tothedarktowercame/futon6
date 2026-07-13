@@ -53,7 +53,7 @@
    :T-intensity 0.511
    :accuracy 0.153
    :complexity 2.398
-   :F-free-energy -0.446
+   :cascade-score -0.446
    :truncated false}
   :pattern-cites
   [{:order 0
@@ -102,10 +102,10 @@
               :spend-at "2026-07-06T03:45:33.410364924Z"
               :balance-after 3}}
  :eval
- {:delta-g -1.0
-  :delta-g-derivation "recomputed by fe/coverage-delta-g from the wiring (3 boxes, 4 holes); the conservative -0.6 hand-derivation was overridden to match the loader's pin-3 recomputation — honesty: the thin cascade (1 pattern, F=-0.446) and the pattern-gap hole h4 reduce confidence, but the coverage formula is what the loader enforces"
+ {:coverage-score-delta -1.0
+  :coverage-score-delta-derivation "recomputed by fe/coverage-coverage-score-delta from the wiring (3 boxes, 4 holes); the conservative -0.6 hand-derivation was overridden to match the loader's pin-3 recomputation — honesty: the thin cascade (1 pattern, F=-0.446) and the pattern-gap hole h4 reduce confidence, but the coverage formula is what the loader enforces"
   :coverage "3/7"
-  :cascade-f -0.446}
+  :cascade-score -0.446}
  :psi-recipe
  {:source "mission doc M-first-flights.md HEAD + §3.2 requirements register"
   :recipe "L2: no held-work items for first-flights; psi from the mission doc's actual tension (flight records as numbers-without-derivations)"

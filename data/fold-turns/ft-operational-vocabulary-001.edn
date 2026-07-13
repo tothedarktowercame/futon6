@@ -53,7 +53,7 @@
   :size 4,
   :truncated false,
   :budget 20,
-  :F-free-energy -0.863,
+  :cascade-score -0.863,
   :constructor
   {:entry "construct_cascade",
    :epsilon 0.15,
@@ -179,4 +179,4 @@
   :via
   "ground-control test 2026-07-06 psi recipe (hand-authored sorry-grain from M-operational-vocabulary mission doc tension, WANT/HUNGRY-FOR/HAVE)",
   :rule "fold-turn/hole-from-sorry-psi"},
- :eval {:delta-g -0.5, :g-grain :coverage}}
+ :eval {:coverage-score-delta -0.5, :score-grain :coverage}}

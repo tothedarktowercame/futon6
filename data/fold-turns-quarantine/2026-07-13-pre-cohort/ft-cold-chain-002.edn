@@ -1,0 +1,174 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "shape-first IDENTIFY: the four cold-* star-map nodes (cold-eoi-authored-outbox, cold-eoi-sent, cold-send-response, cold-response-conversion) were correctly identified as instances of ONE shape — a typed-evidence ladder — during IDENTIFY, not four separate missions. The mission doc's opening line ('Four stars, one ladder, one gate') IS the shape-first move: 'what shape is this one instance of?' was asked at seeding time, and the answer (a ladder of n=0 counters with typed records per rung) produced the mission rather than four narrow one-off missions. The shape generalises beyond the Hyatt instance: future cold leads follow the same ladder (daily-scan to interest-network to eoi-new to staged outbox to operator gate to intake to observables). The rung table (rung/star/moves-when/typed-record) IS the shape's protocol signature — each rung is an artifact-class with its own discharge condition. If only the Hyatt instance ever surfaces (one cold lead walked once), that absence of generalisation is itself a finding the pattern requires recording as :special-case true"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via
+    "the cold chain's state IS reconstructible from disk: the pudding-prover-registry.edn and pudding-prover-evidence.edn are files that survive JVM restart. The T2.3 n=1 witness (Hyatt send-witness) is in the evidence log on disk — a fresh restart reads the same registry and sees the same :satisfied n=1 status. HOWEVER the pattern's full discipline is designed for futon3c's runtime state containers (defonce atoms, registries, caches) where mutation is unbounded (any namespace can reset! the container). The cold chain's state containers are EDN files on disk, not runtime atoms — their 'construction path' is the pudding-prover.bb script that reads and writes them, not a bootstrap.clj entry point. The pattern's structural enforcement (grep-verifiable mutation audit, pre-commit hooks, ^:durable metadata) is tied to the futon3c runtime; the cold chain's state-durability is file-system-level (files persist; the question is whether the script that reads them is correct, not whether mutation is bounded). The reconstructibility principle transposes; the boot-path-enforcement discipline does not"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "the registry IS a state-snapshot-witness: each T2.* entry is a point-in-time projection of that rung's full state — {:id :T2.3 :status :satisfied :n 1 :witness {send-witness, event-type, lead-class}} IS the snapshot. Querying 'what was the cold chain's state when the Hyatt send landed?' returns one registry read, not a walk through every evidence-log event. The evidence log (pudding-prover-evidence.edn) records deltas (individual :outreach-sent events); the registry aggregates them into per-rung state (n, status, witness). Together, registry-snapshots + evidence-deltas give reconstructible full history — exactly the pattern's cadence: snapshots at cycle boundaries (the registry IS the current projection), deltas in between (the evidence log IS the event stream). The projection drops noisy per-event detail (message-id, intake-timestamp precision) in favour of semantically-meaningful state (n, status, witness presence). The snapshot is queryable after the fact without aggregation gymnastics"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "honest map over flattering counter: the n_outreach counter moves only on typed records. The registry's :satisfied status for T2.3 is earned by a real send-witness (message-id <87bjcl8818.fsf@hyperreal.enterprises>), not by apparatus-existence (kit-intake being built does not satisfy T2.3 — only a real send does). T2.2's initial :held ('demo is a fixture') was the honest refusal to discharge on a staged-but-not-real draft; when the real Hyatt send happened, T2.2 flipped retroactively ('T2.3 acceptance entails T2.2') — the counter moved the wrong way by truth (raising T2.2 from held to satisfied when the witness was recognised). Exit condition 5 IS the honest-map discipline: n=0 with apparatus standing is valid; claimed star without typed record is not. The star-map annotations encode the anti-gaming discipline structurally (operator-witnessed, gated-by :consent-gate, author-ne-send)"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "operational not decorative: the registry, evidence log, and status surface must change behavior when they fail. The registry's :held/:satisfied distinction IS operational — kit-cadence's :held status names its failure condition (n_conversion>0 needed before wiring) and forces correction (don't wire the pricing model without conversion data). A :held that never triggers correction would be decorative; the cold chain's :held entries are operational because each carries a note explaining what would need to change. The evidence log's intake-result {:accepted true, :route :sorry, :sorry :T2.3} is operational — it routed the Hyatt send to the correct proof-state and changed the registry dial. The pattern's test ('name the failure condition that would force correction') applies to each cold-chain artifact: the send-gate surface fails if Joe cannot see the staged EOI in one look; the observe! lane fails if the P14D window closes without recording the outcome; the registry fails if a :satisfied entry lacks its witness. Each failure condition forces correction rather than silently going stale"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :partial
+    :via
+    "typed event vocabulary with append-only provenance: the evidence log's :outreach-sent event IS a state-transition event against a cold-chain entity. It carries provenance (send-witness, lead-class, outcome-window, intake-timestamp), and the log is append-only (the Hyatt intake is the first event; future events accrete, never edit). The posterior state (registry) is derived by replaying the event log. The vocabulary's state/* events partially transpose: state/spawned (first cold lead entered the ladder), state/strengthened (T2.3 n went 0 to 1), state/addressed (a rung discharged). HOWEVER the vocabulary's 8-event types are designed for interest-network entities (essays, institution-objects, basins, composite-arrow edges) at annotation/section/essay granularity. The cold chain's entities are proof-state rungs and kit builds — different entity-class, different granularity. The link/asserted event (cross-essay relation) has no cold-chain analogue (rungs are ladder-sequential, not relationally linked). The append-only + provenance + posterior-by-replay core transposes; the interest-network-specific event types and granularity enums do not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b5] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b3 :discharges :want-signature}
+              {:id :b4 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: to ground the cold chain's STATE as durable, reconstructible, and operationally honest — where the registry (pudding-prover-registry.edn) and evidence log (pudding-prover-evidence.edn) are boot-reconstructible projections of the ladder's typed state, each rung's status is a queryable snapshot not a delta-aggregation, the four cold-* nodes were correctly identified as one shape (a typed-evidence ladder, not four missions), the n_outreach counter moves only on truth, and every artifact that steers work changes behavior when it fails (operational, not decorative). The chain's state has ADVANCED: T2.2 and T2.3 are :satisfied with n=1 (Hyatt cold send, 2026-07-05); the evidence log carries one :outreach-sent intake event with provenance (send-witness, lead-class, outcome-window). What remains: the state must DURABLY record rungs 3-4 as they move (T2.4 response, T2.5 conversion — both :held at n=0, P14D outcome window open); the registry's status entries must remain operational (a :held that never moves while apparatus proliferates is a decorative status, not an operational one); the evidence log's append-only discipline must hold as events accrete (the Hyatt intake is the first real event — the vocabulary and emission discipline are tested by the second, not the first).\nHUNGRY-FOR: 1) boot-reconstructible state — the registry and evidence log must survive JVM restart without losing the T2.3 n=1 witness; the construction path that produces the authoritative state is reachable from boot; no code outside that path may mutate the registry into a state a fresh restart wouldn't produce (the Hyatt send-witness must not become unreconstructible); 2) state-snapshot-witness — the registry IS the point-in-time projection of the cold chain's full state, queryable after the fact without walking every evidence-log event; each T2.* entry carries status + n + witness + note, which IS the projection that lets you ask \"what was the cold chain's state at date X?\"; 3) shape-first discipline — the four cold-* stars were correctly identified as instances of one shape (typed-evidence ladder) during IDENTIFY, not four separate missions; the shape generalises beyond the Hyatt instance (future cold leads follow the same ladder); if only one instance ever surfaces (Hyatt and nothing else), that absence of generalisation is itself a finding; 4) honest map over flattering counter — n_outreach moves only on typed records; the registry's :satisfied status is earned by a witness, not by apparatus-existence; truth can raise the count or refuse a discharge; 5) operational not decorative — the registry, evidence log, and status surface must change behavior when they fail; a :held that never triggers correction is decorative; the kit-cadence :held status is operational because it names what would need to change (n_conversion>0) before the kit can be wired; 6) typed event vocabulary with append-only provenance — the evidence log's :outreach-sent event IS a state-transition event against a cold-chain entity, carrying provenance (send-witness, lead-class, outcome-window); the log is append-only; the posterior state (registry) is derived by replay; mistakes are corrected by new events, not edits.\nHAVE: T2.2/T2.3 :satisfied (n=1, Hyatt send 2026-07-05); T2.4/T2.5 :held (n=0, P14D window open); kit-intake/kit-outbox/kit-observables :satisfied; kit-cadence :held; pudding-prover-evidence.edn with one real intake event (append-only, provenance-bearing); pudding-prover-registry.edn with full T2.* status + kit status + witness fields; the four cold-* star-map nodes with operator-disposition annotations; M-cold-chain identified as one ladder (shape-first, not four missions); the send-gate ritual designed; the cadence-consumption design (Beta posterior, 3-state machine).\n"
+  :psi-sha256
+  "780d2cd9f29f69232d65cc578a0c4445a14abaa99d3c0a5b4e8e918b6d7ef65f"
+  :pattern-ids
+  ["invariant-coherence/reachable-from-boot"
+   "invariant-coherence/state-snapshot-witness"
+   "invariant-coherence/shape-first-identify"
+   "futon-theory/honest-map-over-flattering-counter"
+   "war-machine/operational-not-decorative"
+   "structure/interest-event-vocabulary"]
+  :size 6
+  :truncated false
+  :budget 6
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "9736922c69790f59"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-9"
+  :source "M-cold-chain.md (full doc + staleness-probe: pudding-prover-evidence.edn, pudding-prover-registry.edn) authored fresh through the state-durability/infrastructure-coherence lens — resolver-blind to the proposer's pattern rationale; not inherited from ft-cold-chain-001 (first-contact discipline between own deposits; C3 asked how the chain ACTS honestly, C4 asks how the chain's STATE PERSISTS honestly)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon7/holes/M-cold-chain"
+ :proposal/hash "9736922c69790f59"
+ :fold-turn/id "ft-cold-chain-002"
+ :turn
+ {:agent "zai-9"
+  :model "zai"
+  :edge "invoke-1783801334156-211-62cf4e66"
+  :at "2026-07-11T23:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "shape-first IDENTIFY: four cold-* stars correctly identified as one shape (typed-evidence ladder) during IDENTIFY, not four missions; the shape generalises beyond the Hyatt instance"
+     :fits-pattern "invariant-coherence/shape-first-identify"
+     :addresses-however
+     "the mission's opening line ('Four stars, one ladder, one gate') IS the shape-first question ('what shape is this one instance of?') asked at seeding time. The rung table is the shape's protocol signature. If only Hyatt ever surfaces, that absence of generalisation is a finding the pattern requires recording as :special-case true — but the shape (daily-scan to observables) is designed for reuse"
+     :produces [:identified-ladder-shape]}
+    {:id :b2
+     :role "boot-reconstructible state: the registry and evidence log are EDN files on disk that survive JVM restart; the T2.3 n=1 witness is durable"
+     :fits-pattern "invariant-coherence/reachable-from-boot"
+     :addresses-however
+     "PARTIAL: the reconstructibility PRINCIPLE transposes (state on disk, not in volatile atoms; fresh restart reads the same files). BUT the pattern's enforcement DISCIPLINE (grep-verifiable mutation audit, pre-commit hooks, ^:durable metadata, bootstrap.clj construction path) is designed for futon3c runtime state containers, not EDN files. The cold chain's state-durability is file-system-level; its mutation boundary is the pudding-prover.bb script, not a structural invariant. The principle transposes; the boot-path-enforcement does not"
+     :produces [:disk-reconstructible-state]}
+    {:id :b3
+     :role "the registry IS a state-snapshot-witness: each T2.* entry is a point-in-time projection of that rung's full state (status + n + witness + note), queryable without walking every evidence-log event"
+     :fits-pattern "invariant-coherence/state-snapshot-witness"
+     :addresses-however
+     "the registry-snapshots + evidence-deltas together give reconstructible full history — exactly the pattern's cadence. The projection drops noisy per-event detail in favour of semantically-meaningful state. The snapshot is queryable after the fact: 'what was the cold chain's state when the Hyatt send landed?' returns one registry read"
+     :consumes [:identified-ladder-shape :disk-reconstructible-state]
+     :produces [:queryable-state-snapshot]}
+    {:id :b4
+     :role "honest map over flattering counter: n_outreach moves only on typed records; :satisfied earned by witness not by apparatus-existence; truth moved T2.2 the wrong way (held to satisfied when witness was recognised)"
+     :fits-pattern "futon-theory/honest-map-over-flattering-counter"
+     :addresses-however
+     "exit condition 5 IS the honest-map discipline: n=0 with apparatus standing is valid; claimed star without typed record is not. The registry's witness fields make the honesty checkable: a :satisfied entry without a :witness is the flattering counter; a :satisfied entry with a real send-witness message-id is the honest map. T2.2's retroactive flip ('T2.3 acceptance entails T2.2') is truth moving the counter"
+     :produces [:honest-counter-discipline]}
+    {:id :b5
+     :role "operational not decorative: registry and evidence log change behavior when they fail; kit-cadence :held names its failure condition (n_conversion>0); each artifact's failure forces correction"
+     :fits-pattern "war-machine/operational-not-decorative"
+     :addresses-however
+     "the pattern's test ('name the failure condition that would force correction; if none exists, treat as decorative') applies to each cold-chain artifact. The send-gate surface fails if Joe cannot see the staged EOI in one look. The observe! lane fails if P14D closes without recording. The registry fails if a :satisfied lacks its witness. Each failure condition is operational — it forces correction rather than silently drifting. A :held entry that carried no note about what would change it would be decorative; the cold chain's :held entries all carry notes"
+     :consumes [:honest-counter-discipline]
+     :produces [:operational-status-surface]}
+    {:id :b6
+     :role "typed event vocabulary with append-only provenance: the evidence log's :outreach-sent event is a state-transition event against a cold-chain entity; the log is append-only; the posterior (registry) is derived by replay"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "PARTIAL: the append-only + provenance + posterior-by-replay core transposes cleanly. The state/* events partially map (spawned=first lead entered, strengthened=n increased, addressed=rung discharged). BUT the vocabulary's 8-event types are designed for interest-network entities at essay/annotation granularity — the cold chain's entities are proof-state rungs and kit builds. link/asserted (cross-essay relation) has no cold-chain analogue. The emission discipline transposes; the entity-class-specific event types do not"
+     :produces [:typed-evidence-events]}]
+   :wires
+   [{:from :b1 :to :b3 :connective :seq
+     :rationale "the ladder shape (b1) must be identified before the state-snapshot-witness (b3) can project it — order-dependent: the snapshot's structure (per-rung entries) follows from the shape's structure (the rung table); without shape-first identification, the snapshot would project four unrelated counters instead of one ladder's state"}
+    {:from :b3 :to :b4 :connective :seq
+     :rationale "the state snapshot (b3) must exist before the honest-counter discipline (b4) can operate on it — order-dependent: the counter tracks movements in the snapshot; without a queryable projection, the counter would aggregate deltas with no authoritative state to check against"}
+    {:from :b2 :to :b3 :connective :copar
+     :rationale "the boot-reconstructibility (b2) co-applies with the snapshot witness (b3) — the snapshot must survive restart to be a durable witness; copar because reconstructibility frames the snapshot's persistence without being a sequential step in producing it"}
+    {:from :b5 :to :b4 :connective :copar
+     :rationale "the operational-not-decorative test (b5) co-applies with the honest counter (b4) — a counter that doesn't force correction when wrong is decorative, not operational; copar because the operational test frames the counter's trustworthiness without being consumed sequentially"}
+    {:from :b6 :to :b3 :connective :copar
+     :rationale "the typed event vocabulary (b6) co-applies with the snapshot witness (b3) — events are the deltas the snapshot aggregates; copar because the vocabulary shapes the event log that the snapshot projects, without being a sequential input to the snapshot itself"}
+    {:from :b6 :to :b5 :connective :copar
+     :rationale "the typed event vocabulary (b6) co-applies with the operational test (b5) — typed events with provenance make the status surface operational (a mistyped or unprovenanced event would be decorative noise); copar because the vocabulary's discipline enables the operational test without being consumed by it"}]
+   :terminals
+   [{:id :b3 :discharges :want-signature}
+    {:id :b4 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "invariant-coherence/reachable-from-boot"
+     :free "the grep-verifiable mutation audit and pre-commit enforcement discipline is futon3c-specific, not transposable to EDN files on disk"
+     :why
+     "the pattern's binding mode is a pre-commit hook that refuses commits introducing reset!/swap! on ^:durable containers outside bootstrap.clj. The cold chain's state containers (registry.edn, evidence.edn) are plain files; their mutation boundary is the pudding-prover.bb script, not a Clojure atom. You cannot grep for reset! against a file. The reconstructibility principle (state survives restart) transposes; the structural enforcement discipline (grep + pre-commit + metadata markers) does not. File-level state needs a different enforcement mechanism (file permissions, commit-review, or a schema validator) — none of which this pattern specifies"}
+    {:id :h2
+     :unfolded-pattern "structure/interest-event-vocabulary"
+     :free "the 8-event vocabulary's interest-network-specific event types and granularity enums do not transpose to proof-state rungs"
+     :why
+     "the vocabulary's link/asserted event (cross-essay relation between interest-network entities) has no cold-chain analogue — rungs are ladder-sequential (rung 1 precedes rung 2), not relationally linked. The granularity enum (essay/section/annotation/institution-object/basin/composite-arrow) has no proof-state or kit-build entry. The state/* events (spawned/strengthened/refined/addressed/falsified/foreclosed/reopened) partially map to rung lifecycle, but the vocabulary's design center is interest-network entity management, not proof-state tracking. The append-only + provenance + replay core transposes; the entity-class vocabulary does not"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "b2 and b3 overlap: both contribute a 'durable-state-projection' lens — b2 grounds reconstructibility, b3 grounds queryability"
+     :why
+     "b2 (reachable-from-boot) and b3 (state-snapshot-witness) both address how the cold chain's state persists across time. b2 grounds that the state SURVIVES restart (reconstructibility from disk); b3 grounds that the state is QUERYABLE after the fact (snapshot projection). The overlap is genuine: both are state-durability patterns whose CORE (the state on disk is the authoritative source, not a volatile runtime derivative) is the same move. b2 carries the survival guarantee; b3 carries the query interface. Both are needed but they are not independent contributions to the same want. Recording as honest overlap, not false independence"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the shared pattern (honest-map-over-flattering-counter) between C3 and C4 cascades grounds the same counter from two different lenses"
+     :why
+     "this deposit and ft-cold-chain-001 both ground futon-theory/honest-map-over-flattering-counter. C3's b2 grounded it through the actuation lens (the counter tracks typed witnesses from grounded acts); C4's b4 grounds it through the state-durability lens (the counter's honesty is checkable against the registry's witness fields). The two groundings are complementary, not redundant: C3 asks 'does the counter move on real acts?'; C4 asks 'is the counter's movement durably recorded?'. The shared pattern is a genuine convergence — both cascades independently recognise the counter's honesty as load-bearing, from different angles. This is cross-deposit confirmation, not contamination"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the outcome-window observation apparatus (P14D for the Hyatt send) is not grounded by any of the 6 patterns"
+     :why
+     "same finding as ft-cold-chain-001 h4: the P14D outcome window (when to check for a response, how long to wait, how to record silence as data) falls between all 6 patterns. reachable-from-boot grounds state persistence, not observation scheduling. state-snapshot-witness grounds state projection, not when to project. shape-first grounds the ladder shape, not the waiting discipline. honest-map grounds the counter, not the window. operational-not-decorative grounds failure conditions, not observation timing. interest-event-vocabulary grounds event types, not observation cadence. The P14D window is a pudding-prover-specific scheduling decision — no library pattern haloes it"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "T2.2/T2.3 :satisfied (n=1, Hyatt send); T2.4/T2.5 :held (n=0, P14D open); kit-intake/kit-outbox/kit-observables :satisfied; kit-cadence :held; evidence log with one :outreach-sent event; registry with full T2.* + kit status; four cold-* star-map nodes; M-cold-chain identified as one ladder; send-gate ritual designed; cadence-consumption design."
+  :want
+  "to ground the cold chain's state as durable, reconstructible, and operationally honest — boot-reconstructible registry and evidence log, queryable per-rung snapshots, shape-first ladder identification, honest counter movement, operational status surface, and typed append-only event vocabulary."
+  :via
+  "psi authored by zai-9 from futon7/holes/M-cold-chain.md (full doc + staleness-probe), resolver-blind to the proposer's pattern rationale; authored fresh through the state-durability lens, not inherited from ft-cold-chain-001"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

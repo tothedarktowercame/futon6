@@ -1,0 +1,261 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "stop-the-line as the pressure function's highest tier: when the metabolic-balance pressure S >= 4.0 (stop-the-line), the system blocks APPLY_CHANGE (new file-system mutations) while continuing to allow OBSERVE (reading current dirty state) and VERIFY (testing whether a proposed cleanup resolves the pressure). This is exactly the stop-the-line protocol: the line stops for production (new commits), not for diagnosis (reading dirty files, checking disposition entries). The protocol's 7-step sequence (INVARIANT_CHECK fails -> STOPPED state -> APPLY_CHANGE blocked -> OBSERVE allowed -> VERIFY allowed -> PROOF_COMMIT blocked -> on fix, line resumes) maps directly to the pressure function's tier system. The mission's Block B (WS-bridge fix rejected at pre-commit hook) IS a stop-the-line event: the contaminated WIP triggered the block, APPLY_CHANGE was rejected, and the block persisted in half-closed state until the surrounding WIP closed. The anti-patterns (force-pushing despite violations, disabling checks, logging but continuing) are exactly the counterfeit-closure failure modes V-5 Gap 2 names"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "all-or-nothing (I2: startup succeeds completely or fails loudly) as the block's atomicity discipline: a block completes (all five phases: identification -> specification -> elaboration -> passion -> closure) or rolls back (git restore / git stash) — no half-states persist on the durable substrate. The block schema's :block/disposition values encode this: :closed (all-or-nothing succeeded), :half-closed (closure recorded but commits lag — Process C engaged), :rolled-back (closure failed, block dissolves). The anti-patterns (loading what we can, creating stub entities for missing references, 'recovering' by skipping corrupt data) map to: accepting a block that wrote half its intended changes, creating placeholder commits for work not yet done, skipping the passion phase. Block B (WS-bridge) is the half-closed state: the in-memory JVM has the change, but the on-disk record is incomplete — all-or-nothing correctly identifies this as not-yet-atomic"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "invariants-vs-repair as the disposition-surface design principle: enforce the pressure invariant strictly (the check-fn fires :family-fired evidence at every tier crossing) AND maintain a documented repair pathway (the .futon-disposition.edn file IS the repair pathway — it declares in-progress work with reasoning, :since date, and :review-by deadline). The pattern's core claim — 'if you want strict invariants but also operational resilience, pair enforcement with explicit repair and backfill pathways' — is the exact design decision behind the disposition surface: the pressure function is the strict enforcement (it fires at S>=1.0), the disposition entry is the repair pathway (it declares 'this dirty state is legitimate, here is why, here is when it closes'). The :review-by self-decay (entries past their deadline re-enter the eligible-for-pressure set) is the pattern's 'tests that validate repairs restore invariant compliance' — the disposition entry's expiry IS the test that the repair (declared in-progress work) hasn't overstayed"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "churn-as-signal as the pressure function's behavioral substrate: the metabolic-balance check-fn's three dimensions (count_eligible, age_eligible, bytes_eligible) ARE git-churn signals — count_eligible is commits-all-time per dirty file, age_eligible is last-touch (time since last commit), bytes_eligible is the diff size. The pattern's 'store behavioral and structural signals separately so downstream analysis can compose them' maps to: the pressure function composes count, age, and bytes via max() over normalised channels, keeping each signal independent. The hotspot concept (high churn AND high complexity) maps to: a file that is both dirty (count_eligible > 0) AND old (age_eligible > D_NOMINAL) is a hotspot — the max() function ensures either dimension alone can trigger a tier crossing. The noise filters (exclude merge commits, exclude mass renames) map to the channel-eligibility filter (exclude-noise, exclude-disposition-opted-out, exclude-volatile)"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "commit-intent-alignment as the Block: footer drift detector: the Block: commit footer correlates commits with block intent (the block-id), and when a block is declared (footer written) but never closed (no closure commit), the drift detector flags it. The pattern's 'if a clause stays marked planned despite recent commits, flag it as drift' maps to: if a Block: footer references a block-id but the block has no closure record, the block is half-open — drift. The pattern's 'correlate commit messages/PRs with devmap IDs; for each match, update the clause status + evidence ledger' maps to: commit_ingest.clj parses Block: footers, attributes them to sessions, and calls record-mana! — the evidence ledger update IS the mana credit. The nightly-scan next-step (correlate commits/PRs with devmap IDs) is the same machinery as git log --grep='^Block:'"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :partial
+    :via
+    "tension-before-code (specify invariants before writing the code they constrain) as the INSTANTIATE's calibration discipline: the V-1 pressure-function calibration tests (pre-cleanup futon6 P=25.35, post=0.15) ARE invariant proof tests written before the implementation — they define the boundary conditions the pressure function must satisfy. The pattern's 'write invariant proof tests first, as failing tests that define the boundary conditions' maps to: the metabolic_balance_test.clj tests were authored against V-1's empirical anchors before the check-fn went operational. The anti-pattern (building features then discovering violations retroactively) is the mission's own caution: the 2026-05-04 reopen happened because the mana-earning was declared done before the wiring was real — a false-completion that the invariant proof test (does mana visibly tick per Block?) would have caught. HOWEVER tension-before-code is specifically about coordination-layer invariants (A0-A5: delivery receipts, single routing, atomic state, loud failure, bounded lifecycle) discovered through the Agency rebuild cycle. The metabolic-balance invariant is a substrate invariant, not a coordination invariant. The tests-first discipline transposes; the specific coordination-layer invariant vocabulary does not"
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :partial
+    :via
+    "state-in-substrate-deltas-in-messages as the block-state architecture: the block's full state (identification, specification, elaboration, passion, closure — five phases with timestamps and notes) lives in the shared substrate (futon1a evidence + git commit footers), and the Block: footer IS the delta (a small message that references the block-id without carrying the full block record). The pattern's 'lift state into a shared substrate, keep messages as deltas' maps exactly: the git commit message carries only the block-id delta, while the full block record (the operational schema from INSTANTIATE) lives in futon1a evidence. The pattern's 'close with an explicit marker (DONE: <sha>)' maps to the block's closure phase recording :block/closed-at. HOWEVER the pattern is about bounded multi-turn coordination between two components (agents, services) via message-passing — the block is a single-operator transactional unit, not a two-party coordination. The substrate-lift discipline transposes; the two-party-cadence semantics (turns to closure, message-bytes vs substrate-bytes) do not map cleanly to single-operator block closure"
+    :rule "fold-turn/box"}
+   {:id :b8
+    :role :application
+    :satiety :partial
+    :via
+    "interest-event-vocabulary as the block-disposition state machine: the block schema's :block/disposition values (:open, :closed, :half-closed, :rolled-back, :counterfeit-suspected) form a state-transition vocabulary analogous to the 8-event EoI vocabulary. The mapping: state/spawned = block identification (new block opened), state/strengthened = elaboration phase (block gains detail), state/addressed = closure (block completed), state/falsified = rolled-back (closure failed), state/reopened = a half-closed block re-entering :open. The append-only discipline (events never edited or deleted; mistakes corrected by emitting new events) maps to the block schema's append-only phase map (phases record once, re-opening requires a new block-id). HOWEVER the interest-event-vocabulary is specifically for EoI interest-network entities (essay annotations, institution-objects, basins) at checkpoint boundaries. Blocks are substrate-level transactional units, not interest-network entities. The state-machine vocabulary transposes; the EoI-entity semantics and the checkpoint-boundary emission discipline do not"
+    :rule "fold-turn/box"}
+   {:id :b9
+    :role :application
+    :satiety :partial
+    :via
+    "readme-devmap-sync and library-staleness-scan and stack-blocker-detection as a co-active drift-detection cluster: readme-devmap-sync diffs the disposition surface against actual state (entries past :review-by are mismatches), library-staleness-scan provides the mtime-comparison machinery (compare file mtimes vs last ledger update = compare disposition :since dates vs current date), and stack-blocker-detection provides the blocker-report shape (a half-open block with no closure is a blocker: blocked-by[the surrounding WIP]). Together they form the disposition-surface audit layer. HOWEVER all three are specifically about README-vs-devmap, library-canon, and devmap-dependency drift respectively — document-level coherence, not substrate-state drift. The drift-detection discipline transposes; the specific document-comparison targets do not. Recording as one box because the three patterns contribute overlapping drift-detection lenses (honest overlap, not three independent contributions)"
+    :rule "fold-turn/box"}
+   {:id :b10
+    :role :application
+    :satiety :partial
+    :via
+    "dead-code-hygiene and loop-recovery-actions as the pressure-response toolkit: dead-code-hygiene names unreferenced namespaces and orphaned code as a drain symptom (dead code IS in-flight scope that has overstayed — it should have been pruned at a block boundary), and loop-recovery-actions names the controlled-degradation response (when pressure is high, raise thresholds, reduce input sources, disable expensive scans until stable — the advisory tier's graduated drive IS this controlled degradation). HOWEVER dead-code-hygiene is about code-path-vs-devmap alignment (prune experiments before they are mistaken for features), not about working-tree dirtiness; and loop-recovery-actions is about realtime-loop overload (batch latency), not about file-system substrate pressure. The drain-symptom identification (b10-dead-code) and the graduated-response (b10-loop-recovery) transpose; the specific codebase-hygiene and realtime-loop domains do not"
+    :rule "fold-turn/box"}
+   {:id :b11
+    :role :application
+    :satiety :partial
+    :via
+    "stack-scan-logging-protocol and read-existing-seam-before-implementing as the INSTANTIATE's meta-discipline: stack-scan-logging-protocol provides the scan-session logging discipline (declare scope, record patterns applied, note diffs/fixes, append next-scan note) that the metabolic-balance check-fn's evidence entries follow, and read-existing-seam-before-implementing is the discipline the INSTANTIATE already followed (it read the existing seams: nonstarter_mana.clj's session-attributed mana store, the probe-tap registration pattern, the structural-law-inventory format) before building the check-fn. The V-6 verification (unify with existing infrastructure, do not parallel it) IS read-existing-seam-before-implementing applied at the mission level. HOWEVER stack-scan-logging-protocol is about stack-coherence scan sessions (pattern/devmap reviews), not about invariant-monitoring evidence entries; and read-existing-seam is about peripheral-mission seam-reading, not about invariant-check-fn implementation. The logging discipline and the seam-read discipline transpose; the specific scan-session and peripheral-mission contexts do not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b7] :to [:b8] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b9] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b10] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b11] :to [:b6] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: the remaining gaps after INSTANTIATE substantially landed — the Q-21 guidance note (hinge-vs-Block relationship and in-flight Block identification, the open item the 2026-05-04 reopen names), the War Machine three views (open-blocks, closure-feed, trajectory), the Q-22 mana-economy drain-award coupling (deferred to M-mana-economy), counterfeit-closure detection (V-5 Gap 2), and cross-repo block-id propagation (V-5 Gap 1) — given that the core invariant IS shipped across 7 source files with the pressure function (max over normalised channels, V-1 calibration), the .futon-disposition.edn surface with :review-by self-decay, the Block: footer mechanism detected by commit_ingest.clj, the metabolic-balance/working-tree check-fn registered in bootstrap.clj, and the mana-earning wiring verified per Block (mana visibly ticks).\nHUNGRY-FOR: the Q-21 guidance note (the hinge-vs-Block calibration from cook-ting and hinge-point, and the in-flight-Block status that commit-footers cannot detect); the War Machine + HUD three views required by INSTANTIATE head-amendment (I); the counterfeit-closure detection heuristic (V-5 Gap 2: empty-diff commits, formatter-only diffs, merge commits with zero conflict-resolution); the cross-repo block-id propagation and orphaned-half-block detection (V-5 Gap 1); the drain-award coupling loop (Q-22 / M-mana-economy: automatic mana deduction for advisory-tier drain, per-turn/per-session decay).\nHAVE: the full INSTANTIATE head — metabolic_balance.clj (pressure function with calibration: futon6 pre-cleanup P=25.35, post=0.15), disposition_edn.clj (parser + :review-by self-decay), mana_session.clj (read-side binding to nonstarter_mana.clj's session-attributed store), operational_readiness.clj (:operational-when-enabled gating), commit_ingest.clj (Block: footer extraction feeding the mana economy), street_sweeper_backend.clj (per-repo metabolic-balance drain readings), bootstrap.clj (probe-tap registration + load-time check); the three DERIVE patterns (block-as-futonic-revolution, mana-allostasis, drain-channel-shape); the ARGUE-1 through ARGUE-5 decisions ratified (10th faculty shape metabolic-balance, .futon-disposition.edn surface, max-over-normalised-channels pressure, Block: footer mechanism, reactive substrate widening); VERIFY V-1 through V-6 (pressure calibration, five-phase block lifecycle, harmolodic reread, disposition schema, spec gaps, machine-side contract); the 2026-05-04 G-1/G-2 fix (mana-earning wired: Block: footers detected, session-attributed, record-mana! called, mana visibly ticks per Block); the Q-21/Q-22 conceptual gaps named but Q-21's guidance note not yet written."
+  :psi-sha256
+  "611554e8b5240b24a03d20dc3dd590dd50bbfe1b5d2e0c0ac4c8d0d4e4b17cfd"
+  :pattern-ids
+  ["enrichment/churn-as-signal"
+   "contributing/stack-scan-logging-protocol"
+   "stack-coherence/commit-intent-alignment"
+   "code-coherence/dead-code-hygiene"
+   "realtime/loop-recovery-actions"
+   "musn/use-requires-evidence"
+   "orchestration/state-in-substrate-deltas-in-messages"
+   "futon-theory/all-or-nothing"
+   "storage/invariants-vs-repair"
+   "futon-theory/stop-the-line"
+   "peripherals/read-existing-seam-before-implementing"
+   "social/tension-before-code"
+   "structure/interest-event-vocabulary"
+   "library-coherence/library-staleness-scan"
+   "stack-coherence/readme-devmap-sync"
+   "stack-coherence/stack-blocker-detection"
+   "musn/plan-before-tool"]
+  :size 17
+  :truncated false
+  :budget 17
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "918d4fcfc34c7d4a"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-5"
+  :source "M-bounded-in-flight-state.md IDENTIFY through INSTANTIATE + 2026-05-04 reopen + landed code (metabolic_balance.clj, disposition_edn.clj, mana_session.clj, operational_readiness.clj, commit_ingest.clj, street_sweeper_backend.clj, bootstrap.clj) — authored fresh, first-contact between own deposits, resolver-blind to the proposer's pattern rationale"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3c-d/mission/bounded-in-flight-state"
+ :proposal/hash "918d4fcfc34c7d4a"
+ :fold-turn/id "ft-bounded-in-flight-state-003"
+ :turn
+ {:agent "zai-5"
+  :model "zai"
+  :edge "invoke-1783754895648-131-cae3a42e"
+  :at "2026-07-11T21:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "stop-the-line as the pressure function's stop-the-line tier (S>=4.0): blocks APPLY_CHANGE while allowing OBSERVE and VERIFY; Block B's pre-commit-hook rejection IS a stop-the-line event"
+     :fits-pattern "futon-theory/stop-the-line"
+     :addresses-however
+     "without stop-the-line discipline, the operator continues committing on a contaminated substrate — Block B proved this: the pre-commit hook fired correctly (WIP entanglement detected), and continuing past it would have committed contaminated code; the stop-the-line tier (S>=4.0) is the pressure function's implementation of this discipline, surfacing when a hinge has been clearly missed"}
+    {:id :b2
+     :role "all-or-nothing (I2) as the block's atomicity: a block completes all five phases or rolls back; half-closed state is explicitly tracked (:block/disposition), not silently accepted"
+     :fits-pattern "futon-theory/all-or-nothing"
+     :addresses-however
+     "without atomicity, the substrate accumulates half-finished transactions — exactly the mess the mission was opened to fix (eight repos simultaneously dirty); the block schema's :half-closed disposition is the honest acknowledgment that all-or-nothing is not always achievable (Block B), but the PERSISTENCE of half-closed state (rather than silent acceptance) is the all-or-nothing discipline applied"}
+    {:id :b3
+     :role "invariants-vs-repair as the disposition-surface design: strict enforcement (pressure function fires at every tier crossing) paired with explicit repair pathway (.futon-disposition.edn declares in-progress work with reasoning and review-by deadline)"
+     :fits-pattern "storage/invariants-vs-repair"
+     :addresses-however
+     "invariants without repair pathways stall operations — the disposition surface prevents this: the operator can declare legitimate in-flight state without losing the relief valve; the :review-by self-decay ensures the repair pathway doesn't become a drain-hiding mechanism (entries past deadline re-enter the pressure set)"}
+    {:id :b4
+     :role "churn-as-signal as the pressure function's behavioral substrate: count_eligible, age_eligible, bytes_eligible ARE git-churn signals; the max() over normalised channels composes them independently"
+     :fits-pattern "enrichment/churn-as-signal"
+     :addresses-however
+     "without behavioral signals, the pressure function would measure only structural state (file existence) not behavioral state (how long dirty, how many commits, how large the diff) — the churn signals give the pressure function its three dimensions; the noise filters (exclude merge commits, mass renames) map to the channel-eligibility filter"}
+    {:id :b5
+     :role "commit-intent-alignment as the Block: footer drift detector: correlates commits with block intent via footer; flags half-open blocks as drift; commit_ingest.clud parses footers, attributes to sessions, calls record-mana!"
+     :fits-pattern "stack-coherence/commit-intent-alignment"
+     :addresses-however
+     "without commit-intent alignment, the 2026-05-04 G-1 gap recurs: Block: footers get written but no code detects them, no code maps to session, no code calls record-mana! — the mana economy breaks at step 2; the commit-intent-alignment pattern names exactly this failure mode (clause stays marked planned despite recent commits = block footer exists but mana not credited)"}
+    {:id :b6
+     :role "tension-before-code as the V-1 calibration discipline: pressure-function tests authored against empirical anchors before the check-fn went operational; the 2026-05-04 reopen was a false-completion that tests-first would have caught"
+     :fits-pattern "social/tension-before-code"
+     :addresses-however
+     "the mission's own history validates the pattern: the G-1 mana-earning gap was a false completion (declared done, wiring didn't exist) that the proof test (does mana visibly tick per Block?) would have caught; however, tension-before-code is about coordination-layer invariants (A0-A5), not substrate invariants — the tests-first discipline transposes, the specific invariant vocabulary does not"}
+    {:id :b7
+     :role "state-in-substrate-deltas-in-messages as the block-state architecture: full block record in futon1a evidence (substrate), Block: footer as delta in commit message"
+     :fits-pattern "orchestration/state-in-substrate-deltas-in-messages"
+     :addresses-however
+     "without substrate-lift, the full block record would live in commit messages (growing with each phase), making git log unreadable; the footer-as-delta keeps messages small while the substrate carries the full state; however, the pattern is about two-party coordination cadence, not single-operator block closure — the substrate-lift transposes, the cadence semantics do not"}
+    {:id :b8
+     :role "interest-event-vocabulary as the block-disposition state machine: :open/:closed/:half-closed/:rolled-back/:counterfeit-suspected map to state/spawned, state/addressed, state/falsified; append-only phase map matches append-only event log"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "without a state-transition vocabulary, block disposition is free-form prose — the typed disposition values make the block's lifecycle queryable and projectable; however, the vocabulary is for EoI interest-network entities at checkpoint boundaries, not for substrate-level transactional units — the state-machine shape transposes, the EoI-entity semantics do not"}
+    {:id :b9
+     :role "co-active drift-detection cluster: readme-devmap-sync (disposition vs actual state), library-staleness-scan (mtime comparison), stack-blocker-detection (blocker reports) — three overlapping lenses on disposition-surface drift"
+     :fits-pattern "stack-coherence/readme-devmap-sync"
+     :addresses-however
+     "without drift detection, the disposition surface becomes a drain-hiding mechanism — entries declared in-progress never get checked for staleness; the three patterns contribute overlapping drift-detection lenses (honest overlap, not three independent contributions); however, all three are about document-level coherence (README vs devmap, library canon, devmap dependencies), not substrate-state drift — the drift-detection discipline transposes, the specific targets do not"}
+    {:id :b10
+     :role "pressure-response toolkit: dead-code-hygiene (unreferenced code as drain symptom), loop-recovery-actions (controlled degradation when pressure is high: raise thresholds, reduce sources)"
+     :fits-pattern "code-coherence/dead-code-hygiene"
+     :addresses-however
+     "dead code IS in-flight scope that has overstayed — it should have been pruned at a block boundary; and the advisory tier's graduated drive IS loop-recovery's controlled degradation; however, dead-code-hygiene is about code-path-vs-devmap alignment and loop-recovery is about realtime-loop overload — the drain-symptom and graduated-response transpose, the specific domains do not"}
+    {:id :b11
+     :role "meta-discipline: stack-scan-logging-protocol (scan-session logging) and read-existing-seam-before-implementing (INSTANTIATE already followed: read nonstarter_mana.clj, probe-tap pattern, inventory format before building)"
+     :fits-pattern "peripherals/read-existing-seam-before-implementing"
+     :addresses-however
+     "the V-6 verification (unify with existing infrastructure, do not parallel it) IS read-existing-seam-before-implementing applied at the mission level — the INSTANTIATE bound to nonstarter_mana.clj rather than building a parallel mana store; however, the pattern is about peripheral-mission seam-reading, not invariant-check-fn implementation — the seam-read discipline transposes, the peripheral-mission context does not"}]
+   :wires
+   [{:from :b1 :to :b2 :connective :copar
+     :rationale "stop-the-line (b1) and all-or-nothing (b2) are co-active lenses on block atomicity — b1 says 'stop when invariants fail', b2 says 'complete fully or roll back'; copar because both are needed for trustworthy block closure but neither subsumes the other"}
+    {:from :b3 :to :b1 :connective :seq
+     :rationale "invariants-vs-repair (b3) precedes stop-the-line (b1) — the repair pathway (disposition surface) must exist before stop-the-line can offer relief; order-dependent: without the repair pathway, stop-the-line is a dead end (the operator is stopped with no recourse)"}
+    {:from :b4 :to :b3 :connective :seq
+     :rationale "churn-as-signal (b4) precedes invariants-vs-repair (b3) — the behavioral signals (count, age, bytes) must be measured before the pressure function can fire and the repair pathway can engage; order-dependent: the signals feed the invariant"}
+    {:from :b5 :to :b3 :connective :copar
+     :rationale "commit-intent-alignment (b5) co-applies with invariants-vs-repair (b3) — b5 detects block drift via footers, b3 provides the repair pathway; copar because drift detection and repair are independent concerns operating on the same block lifecycle"}
+    {:from :b6 :to :b1 :connective :seq
+     :rationale "tension-before-code (b6) precedes stop-the-line (b1) — invariant proof tests must be written before the stop-the-line tier can be trusted; order-dependent: stop-the-line without calibrated tests is an arbitrary threshold"}
+    {:from :b7 :to :b8 :connective :seq
+     :rationale "state-in-substrate (b7) precedes interest-event-vocabulary (b8) — the substrate architecture must be in place before the state-transition vocabulary can operate on it; order-dependent: the vocabulary needs the substrate to store events"}
+    {:from :b9 :to :b5 :connective :copar
+     :rationale "drift-detection cluster (b9) co-applies with commit-intent-alignment (b5) — b9 checks disposition staleness, b5 checks block-intent drift; copar because both are drift-detection lenses on different surfaces of the same system"}
+    {:from :b10 :to :b1 :connective :copar
+     :rationale "pressure-response toolkit (b10) co-applies with stop-the-line (b1) — b10 names the graduated response before stop-the-line, b1 names the stop; copar because controlled degradation and hard stops are complementary pressure responses"}
+    {:from :b11 :to :b6 :connective :copar
+     :rationale "meta-discipline (b11) co-applies with tension-before-code (b6) — b11 provides the logging and seam-read discipline, b6 provides the tests-first discipline; copar because both are meta-disciplines governing how the invariant work is done"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b3 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "stack-coherence/readme-devmap-sync"
+     :free "b9 conflates three drift-detection patterns that are not independent contributions"
+     :why
+     "readme-devmap-sync, library-staleness-scan, and stack-blocker-detection all contribute drift-detection lenses to the disposition-surface audit layer. Their CORE contribution (detect when declared state diverges from actual state, emit a mismatch report) is the same move applied to three different document types (README vs devmap, library canon, devmap dependencies). Recording as honest overlap — the three patterns ARE the drift-detection cluster, but they share the same mismatch-reporting mechanism. The true contribution count for the drift-detection function is 1, not 3"}
+    {:id :h2
+     :unfolded-pattern "stack-coherence/stack-blocker-detection"
+     :free "stack-blocker-detection is absorbed into b9's drift-detection cluster — its blocker-report shape overlaps with commit-intent-alignment's drift flagging"
+     :why
+     "the blocker-report (:blocked-by, :evidence, :status) and the commit-intent drift flag (clause stays marked planned despite commits) both detect the same condition: declared intent not matching actual progress. A half-open block (footer written, no closure) is both a drift (commit-intent) and a blocker (the surrounding WIP blocks closure). These are two patterns whose CORE (named-impediment detection) is the same move. Recording as honest overlap, not false independence"}
+    {:id :h3
+     :unfolded-pattern "library-coherence/library-staleness-scan"
+     :free "library-staleness-scan is absorbed into b9 — its mtime-comparison is the same staleness check as the :review-by self-decay"
+     :why
+     "the staleness scan (compare file mtimes vs last ledger update, record as :drifting) and the :review-by self-decay (entries past deadline re-enter pressure set) both detect the same condition: declared state has overstayed its currency. The mtime comparison is the mechanism; the :review-by deadline is the threshold. Recording as honest overlap — staleness detection is one contribution, not two"}
+    {:id :h4
+     :unfolded-pattern "contributing/stack-scan-logging-protocol"
+     :free "stack-scan-logging-protocol contributes only logging discipline — it is absorbed into b11's meta-discipline and does not independently ground any mission-specific function"
+     :why
+     "the logging protocol (declare scope, record patterns applied, note diffs, append next-scan note) is a generic scan-session discipline. It applies to any scan, not specifically to the metabolic-balance check-fn's evidence entries. The check-fn already emits :family-fired evidence entries with structured content — the logging protocol adds nothing beyond what the evidence store's append-only discipline already provides. The logging-discipline transposition is real but thin; the pattern is a non-contributor at the mission-specific level"}
+    {:id :h5
+     :unfolded-pattern "musn/use-requires-evidence"
+     :free "musn/use-requires-evidence is a MUSN turn-level evidence gate that does not transpose to block-level transactional discipline"
+     :why
+     "the pattern requires that a use-mode pattern selection produce a PUR and at least one evidence record before turn end. This is about agent turns in the MUSN server, not about operator-attestable blocks. A block is not a turn; a block is a transactional unit that may span multiple turns. The evidence requirement (every block produces a commit with Block: footer = evidence record) is already grounded by the proof-path discipline (b1/b2), not by the MUSN turn-level gate. The evidence-before-turn-end discipline does not transpose to block-before-substrate-commit"}
+    {:id :h6
+     :unfolded-pattern "musn/plan-before-tool"
+     :free "musn/plan-before-tool is a MUSN agent-planning gate that does not transpose to block identification"
+     :why
+     "the pattern requires an explicit plan line before any tool use, to keep the run on-map. This is about agent tool-use discipline in the MUSN server, not about operator block identification. A block's identification phase (the operator perceives a hinge and names the block) is a cognitive act, not a tool-use gate. The plan-before-tool discipline (state intent before acting) weakly transposes to the block's specification phase (name the block before committing), but the block schema already requires this (:block/kind, :block/articulation). The pattern is a non-contributor at the mission-specific level"}
+    {:id :h7
+     :unfolded-pattern nil
+     :free "the Q-21 guidance note (hinge-vs-Block relationship, in-flight Block identification) is not grounded by any of the 17 patterns"
+     :why
+     "the open item the 2026-05-04 reopen names — clarifying that Blocks are work-units revolving through the futonic loop while hinges are cognitive pivot points, and that in-flight Blocks (identified but uncommitted) are invisible to commit-footer detection — is a futonic-theory conceptual task. None of the 17 patterns (which are largely stack-coherence, code-hygiene, and invariant-discipline patterns) address the hinge-vs-Block distinction. This is grounded by structure/cook-ting and structure/hinge-point (not in this cascade), not by any retrieved pattern"}
+    {:id :h8
+     :unfolded-pattern nil
+     :free "the Q-22 mana-economy drain-award coupling is not grounded by any of the 17 patterns"
+     :why
+     "the automatic mana deduction for advisory-tier drain and per-turn/per-session decay (deferred to M-mana-economy) is a metabolic-loop concern. The 17 patterns address the detection, governance, and discipline of substrate state — they do not address the coupling between drain channels and the mana ledger. The mana-allostasis pattern (DERIVE Pattern 2, not in this cascade) frames the concept; the coupling mechanism is unbuilt"}
+    {:id :h9
+     :unfolded-pattern nil
+     :free "b10 conflates two patterns (dead-code-hygiene and loop-recovery-actions) whose domains do not cleanly match the mission"
+     :why
+     "dead-code-hygiene (code-path-vs-devmap alignment) and loop-recovery-actions (realtime-loop overload) are grouped because both weakly transpose (dead code as drain symptom, controlled degradation as pressure response), but neither is a strong match. The dead-code-as-drain-symptom insight is real (unreferenced namespaces ARE in-flight scope) but thin; the loop-recovery controlled-degradation is already captured by the pressure function's graduated tiers (silent/advisory/high/stop-the-line). Recording the conflation honestly — these two patterns are grouped because neither independently grounds a mission-specific function"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The full INSTANTIATE: metabolic_balance.clj, disposition_edn.clj, mana_session.clj, operational_readiness.clj, commit_ingest.clj Block-footer parsing, street_sweeper_backend.clj, bootstrap.clj; three DERIVE patterns; five ARGUE decisions; six VERIFY threads; the G-1/G-2 mana-earning fix."
+  :want
+  "The Q-21 guidance note (hinge-vs-Block calibration), the War Machine three views, the Q-22 mana-economy coupling (deferred), counterfeit-closure detection, and cross-repo block-id propagation."
+  :via
+  "psi authored by zai-5 from futon3c/holes/missions/M-bounded-in-flight-state.md (IDENTIFY through INSTANTIATE + 2026-05-04 reopen + landed code), first-contact between own deposits, resolver-blind to the proposer's pattern rationale"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

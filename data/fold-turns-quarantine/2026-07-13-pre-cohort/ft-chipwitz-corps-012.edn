@@ -1,0 +1,85 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "the pattern IS the mission's core protocol distilled: when a choice has a findable warrant (standing contract, documented preference, the method, prior coaching) name it as a proto-PSR and proceed; reserve operator escalations for genuinely undetermined forks (competing legitimate values, irreversible, operator-life-decision); the pattern's canonical instance is the WM-pilot cycle-5 A/B fork — the exact motivating example the mission chartered from — where the standing contract already preferred the measured-pair path and the consent gate should have been proto-PSR'd and flown rather than put to the operator; applied at the control-layer scale, the pattern supplies the test (is the warrant findable?), the proceed discipline (name the warrant, log PSR, proceed, log PUR at cycle close), and the escalation criterion (genuinely undetermined only), with over-asking named as a discipline failure co-equal with over-reaching"
+    :rule "fold-turn/box"}]
+  :hyperedges []
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a control layer for the agent corps in which choice points are resolved by finding warrants (the pattern library), not by asking the operator — an agent that finds a warrant logs a PSR and proceeds, logging the outcome as a PUR; an agent that finds no warrant has located a genuine operator question AND a library gap worth mining. The operator-question rate becomes a measurement of library coverage, not friction. HUNGRY-FOR: the warrant threshold (what cascade C-score / match quality counts as found — the one knob: too loose re-creates autopen-creep, too tight re-creates rubber-stamp asks); a typed PXR channel for PSR+PUR records with choice-point refs; the warrant-finder wired into the pilot flow before surfacing operator questions; the diagnostic inversion (asking despite a findable warrant is the smell; asking without one is legitimate). HAVE: the motivating example (WM-pilot cycle-5 A/B fork where the consent gate fired on form not substance — the warrant for B existed and was findable); the pattern library as the warrant source; the cascade lane (cascade-policy-for returns scored coherence-greedy pattern sets); the PSR evidence-store already feeding WM activations; FutonZero as the PXR evaluator; the anti-laundering guards (no mid-choice warrant minting, ambiguity defaults to ASK, autopen rate as reviewable signal)."
+  :psi-sha256
+  "261a6475f8485d5e858bd7da8b0ecb054ae4d63bb58e2787ff23c23c96061faf"
+  :pattern-ids
+  ["collaboration-coherence/determined-fork-proto-psr"]
+  :size 1
+  :truncated false
+  :budget 1
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "0ad620d68d3a9b35"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-1"
+  :source "M-chipwitz-corps.md HEAD/IDENTIFY/protocol/guards/remaining-work (resolver-blind: gap described in the mission's own terms — warranted-work control layer where choice points resolve by finding warrants not asking the operator — without reading the proposer's pattern rationale)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author. The proposal brought its own 1-pattern cascade; the psi was authored from the mission doc alone."}
+ :deposit-contract :v2
+ :mission "futon3c-d/mission/chipwitz-corps"
+ :proposal/hash "0ad620d68d3a9b35"
+ :fold-turn/id "ft-chipwitz-corps-012"
+ :turn
+ {:agent "zai-1"
+  :model "zai"
+  :edge "invoke-1783692173575-19-d108c72f"
+  :at "2026-07-10T14:25:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the warranted-work protocol: findable warrant -> proto-PSR -> proceed -> PUR; genuinely undetermined -> escalate; over-asking named as discipline failure co-equal with over-reaching"
+     :fits-pattern "collaboration-coherence/determined-fork-proto-psr"
+     :addresses-however
+     "most forks are determined — the warrant exists and is findable (standing contract, doc, method, coaching) — but escalating them anyway costs an operator round-trip and signals the agent cannot make a judgement it is equipped to make; the mission's motivating example (WM-pilot cycle-5 A/B fork) is the pattern's own canonical instance, and the pattern explicitly names M-chipwitz-corps as its institutional form — the alignment is not analogical but genealogical: the pattern was distilled from this mission's charter event"
+     :produces [:warranted-work-protocol]}]
+   :hyperedges []
+   :terminals [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the warrant threshold — what cascade C-score / match quality counts as 'found'"
+     :why
+     "the mission names this as THE one knob (DERIVE remaining-work item 1): too loose re-creates autopen-creep (everything proceeds on warrant, the threshold is too loose — same erosion check as calibration's independent-pairs rule); too tight re-creates rubber-stamp asks. The pattern supplies the TEST (is the warrant findable?) but not the THRESHOLD (what score / match quality satisfies 'findable'). A single-pattern cascade cannot ground this — it is the calibration problem at the warrant layer, and it requires either empirical tuning against the PXR stream or a principled prior. This is the structural hole: the protocol's proceed/ask boundary is ungrounded by the pattern alone."}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the typed PXR channel (PSR + PUR records with choice-point refs)"
+     :why
+     "the protocol requires logging PSR (pattern id, candidates considered, rationale, choice-point ref) at the choice point and PUR (outcome, prediction-error) at cycle close, with FutonZero evaluating the PXR stream — but the pattern supplies the protocol shape, not the implementation channel. The mission's remaining-work names this as a sibling of futon3c.aif.discipline-events and a new :pxr evidence kind in futon3c.aif.calibration. No pattern in this cascade (there is only one) grounds the typed-channel design."}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the warrant-finder wiring into the pilot flow"
+     :why
+     "the protocol requires that the warrant-finder (cascade lane or direct library search) is consulted BEFORE surfacing operator questions — but the pattern describes the decision rule at the choice point, not the integration into the pilot loop's control flow. The remaining-work item 'wire the choice-point check into the pilot flow' is an engineering task the pattern does not address. The pattern says what to do at the fork; it does not say how to intercept the fork in the pilot's execution."}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the no-warrant -> sorry-mining hook"
+     :why
+     "the mission's diagnostic inversion (asking without a warrant is legitimate AND marks a library gap) requires a hook from no-warrant asks to the sorry-mining chain (library gap -> registry candidate) — but the pattern addresses the determined-fork case (warrant found -> proceed), not the undetermined-fork case's productive downstream. The pattern correctly says 'escalate the genuinely undetermined fork'; it does not say 'and feed the escalation into library mining'. This is a composition the single pattern cannot supply alone."}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "relation to library/corps/ patterns — which corps disciplines does the layer operationalize?"
+     :why
+     "the mission's remaining-work asks to name which corps disciplines the ChipWitz layer operationalizes; the pattern is in collaboration-coherence/, not corps/, and while it names M-chipwitz-corps as its institutional form it does not map itself against the existing library/corps/ pattern family. A single-pattern cascade cannot triangulate its relationship to a sibling pattern family it does not include. The fold records this as an honest gap rather than inventing the mapping."}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The motivating example (WM-pilot cycle-5 A/B fork where the consent gate fired on form not substance); the pattern library as the warrant source; the cascade lane returning scored coherence-greedy pattern sets; the PSR evidence-store feeding WM activations; FutonZero as the PXR evaluator; the anti-laundering guards (no mid-choice warrant minting, ambiguity defaults to ASK, autopen rate as reviewable signal)."
+  :want
+  "A control layer for the agent corps in which choice points are resolved by finding warrants (the pattern library), not by asking the operator — findable warrant -> PSR -> proceed -> PUR; no warrant -> genuine operator question AND library gap."
+  :via
+  "psi authored by zai-1 from futon3c/holes/missions/M-chipwitz-corps.md (HEAD/IDENTIFY/protocol/guards/remaining-work), resolver-blind to the proposer's pattern rationale"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

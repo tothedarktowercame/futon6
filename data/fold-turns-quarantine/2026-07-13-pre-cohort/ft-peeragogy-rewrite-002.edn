@@ -1,0 +1,137 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "creating-a-guide as the mission's organizing discipline: build the guide while you build the practice. The essay, flexiargs, mini-handbook ARE guides — but they must be produced BY the practice they describe (coauthored, not solo-written). The INSTANTIATE-as-invitation IS the practice; the artifacts ARE the guide being built simultaneously. The prior IDENTIFY's failure mode was treating the rewrite as a guide-first-then-practice sequence (write the Handbook, then people will use it); the IDENTIFY-redux inverts this: practice-first-then-guide-emerges (invite coauthors, the guide crystallizes from the practice). The carrier-shape decision (b+e: essay + practice-infrastructure) IS creating-a-guide — carrier (e) IS practice-supporting infrastructure (retreats, gatherings, regular returns) rather than a canonical text. The peeragogy-applied-to-self move ('if it's only me doing the work then it isn't really peeragogy') is the pattern's own absence-signal: a guide built without the practice is the thing the pattern names as failure. The mission's entire INSTANTIATE shape — invitation packages with smallest-viable-contribution, technical-editor role, named coauthor candidates — IS the guide-and-practice built together"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "discerning-a-pattern as the mission's mining discipline: notice the repetition first, name it carefully second. The posterior synthesis's 13 cross-corpus promotions ARE discerning-a-pattern in action — patterns surfaced from per-source noise by noticing what recurs across podcast episodes. The original 12 peeragogy flexiargs were mined by discerning repetitions in the Handbook's chapter 21. The 7 collaboration-coherence antipatterns were mined by discerning repetitions in chapter 22. The next-wave flexiargs (calling-in from ep 10, check-in from ep 11, brave-safe-space from ep 10, listening-as-discipline from ep 7, CLA from ep 13, register-moderation from ep 11) need the same discipline: each must be noticed as a repetition BEFORE it is named as a pattern. The mission's pattern-mining methodology (one substantive promotion per source, the living-rubric discipline) IS discerning-a-pattern codified — it prevents rubric-balloon (naming aspirations as patterns) by requiring observed recurrence as the naming precondition"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "curating-not-experting as the mission's stance toward the Handbook's self-understanding: the rubric-from-inside bootstrap IS curating — read what the Handbook says about ITSELF (preface, foreword, how-to-use, peeragogical assessment, antipatterns, peeragogy-in-action) before evaluating other surfaces. The MAP sequencing (handbook-self-claims → podcasts → outward survey) IS the curatorial stance: convene a conversation between the 2016 prior and the 2026 posterior without imposing expert judgment on either. The four-axis annotation system IS a curatorial instrument — each axis notices a different kind of failure without pronouncing on the book's substantive claims (scope out: 'content-level critique on the book's claims' is explicitly excluded). The IDENTIFY-redux's candidate articulations of 'what peeragogy is' (genealogy, pattern-language, bridge, operational, critical) are held as hypotheses for MAP to test, not as expert pronouncements — each has a test ('is the genealogy doing live work?') rather than a verdict. The reviewer report (452 lines) curates the queue's findings into a navigable narrative without adjudicating the book's truth"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "weak-tie-conflation as the coauthor-invitation discipline: be honest about tie strength; match asks to tie type. The INSTANTIATE handoff packages ARE tiered by coordination cost — 'pick up without coordination' (weak ties: link-rot audit, affiliation fill-in, pattern cross-reference per chapter — 5-60 min tasks anyone can do) / 'pick up with light coordination' (medium ties: policy decisions, sentence-level sweeps — need a one-line decision first) / 'pick up as named co-owner' (strong ties: chapter rewrite, pattern mining extension, co-authorship — multi-session commitment). The mailing-list-vs-direct-invitation distinction IS tie-strength matching: the prior INSTANTIATE's instinct ('blast the dormant Google Group') conflated all tie types into one weak-tie channel; the redux's per-artifact handoff packages match the ask to the specific person-tie (Sohail for CLA worldview section, Charlotte for project-material expertise, Charlie for paragogy lineage, Pete for OGM infrastructure). The weak-tie-conflation antipattern's absence-signal — asking too much of a weak tie, or too little of a strong one — is what the tiering prevents"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "polling-for-ideas as the Pragmatist inquiry order: surface open questions before committing to answers. The IDENTIFY-redux IS polling-for-ideas at mission scale — the prior IDENTIFY committed to 'near-complete rewrite' as the answer before surfacing the question 'what is the right thing to build?'. The redux's inquiry chain (why does peeragogy → what is peeragogy → why do these patterns matter-together) IS the polling: each link surfaces open questions (is peeragogy a genealogy? a pattern-language? a bridge? operational? critical?) before committing to a single articulation. The carrier-shape decision held all five options (a/b/c/d/e) open through MAP before DERIVE settled b+e — the settling was evidence-driven (the 6-year stall mechanism is structural, not stylistic), not premature commitment. The essay (Artifact 1) IS a polling-for-ideas artifact: it names the worldview/metaphor-shift spine AND holds the candidate articulations in tension, letting the reader surface their own question before receiving the essay's answer"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :full
+    :via
+    "collective-intelligence-framing as the mission's artifact discipline: collective intelligence depends on inspectable, cross-referenced intermediate artifacts; without them, seminars slide back into folklore and private interpretations. The semilattice queue v5 IS the inspectable, cross-referenced intermediate artifact — 88 annotations across 4 axes, 32 clusters, 11 concerns, queryable by chapter/concern/cluster/axis/severity, with lattice integrity verified. The posterior synthesis IS the shared reasoning layer — 13 promotions cross-referenced to specific podcast episodes and Handbook chapters. The four-axis annotation system with cross-axis joins IS the cross-referencing infrastructure: 'chapters with both peeragogy and collaboration-coherence annotations' is a computable join, not a private interpretation. The reviewer report IS the inspectable artifact that lets a contributor walk into any chapter and know what to do without re-reading the lattice. Without these artifacts, coauthor contributions can't integrate — each contributor's work would be a private interpretation. The mission's entire infrastructure investment (queue, annotations, transcripts, rubric, report) exists to prevent the collective-intelligence failure mode: without inspectable intermediates, the Handbook revision slides into folklore"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b6] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b6] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b2] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b6 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a peeragogy rewrite whose collaborative-authorship practice IS the pattern application — not a mission that produces artifacts about peeragogy, but a mission that enacts peeragogy while producing them. The 6-pattern cascade grounds the practice moves: building the guide while building the practice (creating-a-guide), noticing repetition before naming (discerning-a-pattern), curating rather than experting (curating-not-experting), matching asks to tie strength (weak-tie-conflation), surfacing questions before committing to answers (polling-for-ideas), and depending on inspectable cross-referenced intermediate artifacts (collective-intelligence-framing). The mission is at the INSTANTIATE-ready boundary with carrier shape (b+e) settled, four artifacts scoped, and the richest landed infrastructure in the lane — but the writing hasn't started because it must start as invitation (solo-driving = isolation antipattern). This cascade's lens is the PRACTICE LAYER: how the peeragogy patterns the mission has mined are themselves the moves the mission must make to produce its artifacts.\nHUNGRY-FOR:\n1. The guide built while the practice is built (creating-a-guide): the essay and mini-handbook are guides, but they must be produced by the practice they describe — coauthored, not solo-written; the guide-practice simultaneity is the discipline that prevents the 6-year stall\n2. Pattern discernment from the podcast corpus continued (discerning-a-pattern): 13 cross-corpus promotions landed in the posterior synthesis; the next-wave flexiargs (calling-in, check-in, brave-safe-space, listening-as-discipline, CLA, register-moderation) need the same notice-repetition-first-name-carefully-second discipline — mine from observed recurrence, not from aspiration\n3. Curatorial stance toward the Handbook's self-understanding sustained (curating-not-experting): the rubric-from-inside bootstrap (read what the Handbook says about ITSELF first) must hold through the outward survey — the mission convenes a conversation between the 2016 prior and the 2026 posterior without imposing expert judgment on either\n4. Coauthor asks matched to tie strength (weak-tie-conflation): the INSTANTIATE handoff packages ARE tiered (pick-up-without-coordination / light-coordination / named-co-owner) — but the invites haven't been sent, and the tiering must be honest about which coauthor is which tie type (Charlotte=strong, Charlie=strong, Sohail=medium, mailing-list=weak)\n5. Open questions surfaced before carrier commitment (polling-for-ideas): the Pragmatist inquiry order (why→what→why-matter-together) IS polling-for-ideas — the carrier shape is settled (b+e) but the essay's content must surface the open questions (is peeragogy a worldview? a method? a bridge?) before committing to answers\n6. Inspectable, cross-referenced intermediate artifacts sustained as the shared reasoning layer (collective-intelligence-framing): the semilattice queue v5, the four-axis annotation system, the posterior synthesis — these ARE the inspectable artifacts that prevent the mission from sliding into private interpretations; without them, coauthor contributions can't integrate\nHAVE: 88 annotations across 4 axes covering 31/31 sections; 4 pattern libraries (42 flexiargs total: peeragogy 16, collaboration-coherence 7, writing-coherence 13, pattern-coherence 6); semilattice queue v5 (32 clusters, 11 concerns, 3-tier priority, contributor-handoff block); canonical .mw source-of-truth (31 chapters); surgical-edit bot (6 live Wikibooks edits); 13 podcast transcripts (~75,500 words); 2016-prior rubric; posterior synthesis (13 promotions); reviewer report (452 lines); DERIVE carrier-shape decision (b+e); INSTANTIATE handoff packages scoped (4 artifacts, per-artifact coauthor candidates); IDENTIFY-redux Pragmatist inquiry order committed; practice-supporting-doctrine analogy (sangha/consciousness-raising); 2026 contingent-timing argument."
+  :psi-sha256
+  "d1ca1eaf326c26db16820f30b81a3e614e8b18d36c2597e30fe8949a9c8ac888"
+  :pattern-ids
+  ["peeragogy/creating-a-guide"
+   "peeragogy/discerning-a-pattern"
+   "peeragogy/curating-not-experting"
+   "collaboration-coherence/weak-tie-conflation"
+   "peeragogy/polling-for-ideas"
+   "ai4ci/collective-intelligence-framing"]
+  :size 6
+  :truncated false
+  :budget 6
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "017cd4b768c8d37d"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-10"
+  :source "M-peeragogy-rewrite.md (IDENTIFY-redux + full phase trail through 2026-05-02) authored fresh through the 6-pattern cascade's practice-layer lens — distinct from D5's infrastructure-and-framing lens; same two-layer staleness reading (pre-redux preserved, redux re-scoped carrier shape)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon4/mission/peeragogy-rewrite"
+ :proposal/hash "017cd4b768c8d37d"
+ :fold-turn/id "ft-peeragogy-rewrite-002"
+ :turn
+ {:agent "zai-10"
+  :model "zai"
+  :edge "invoke-1783802284206-219-7389490c"
+  :at "2026-07-11T22:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "build the guide while building the practice: the essay, flexiargs, mini-handbook are guides produced BY the practice they describe — INSTANTIATE-as-invitation IS the practice; carrier (e) IS practice-supporting infrastructure, not a canonical text"
+     :fits-pattern "peeragogy/creating-a-guide"
+     :addresses-however
+     "the prior IDENTIFY's failure was treating rewrite as guide-first-then-practice; the redux inverts: practice-first-then-guide-emerges. The 6-year stall IS the absence-signal of creating-a-guide — a guide built without the practice"
+     :consumes [:curatorial-stance :inspectable-artifacts]
+     :produces [:guide-practice-simultaneity]}
+    {:id :b2
+     :role "pattern discernment discipline: notice repetition first, name carefully second — the posterior synthesis's 13 promotions, the original 12+7 flexiargs, and the next-wave candidates all follow this discipline; one-substantive-promotion-per-source prevents rubric-balloon"
+     :fits-pattern "peeragogy/discerning-a-pattern"
+     :addresses-however
+     "without discernment discipline, next-wave flexiargs are named aspirations, not observed patterns — the notice-repetition-first precondition prevents mining from aspiration rather than recurrence"
+     :consumes [:tie-strength-matching]
+     :produces [:pattern-discernment-discipline]}
+    {:id :b3
+     :role "curatorial stance toward the Handbook: rubric-from-inside bootstrap (read self-claims first), MAP sequencing (handbook→podcasts→outward), four-axis annotation (notices without adjudicating), candidate articulations held as testable hypotheses not verdicts"
+     :fits-pattern "peeragogy/curating-not-experting"
+     :addresses-however
+     "without curatorial stance, the outward survey smuggles in expert judgment — the pattern says hold a curatorial stance toward the conversation you convene. The mission convenes a 2016-prior-vs-2026-posterior conversation without pronouncing on either side's truth"
+     :consumes [:inspectable-artifacts]
+     :produces [:curatorial-stance]}
+    {:id :b4
+     :role "coauthor asks matched to tie strength: INSTANTIATE handoff packages tiered (weak/medium/strong); per-artifact candidates matched to person-tie; mailing-list-blast instinct replaced by per-person invitation"
+     :fits-pattern "collaboration-coherence/weak-tie-conflation"
+     :addresses-however
+     "without tie-strength honesty, the mission either asks too much of weak ties (mailing-list chapter-rewrite request) or too little of strong ones (Charlotte/Charlie not directly invited). The tiering matches the ask to the tie: 5-min affiliation fill-in for weak ties, section co-authorship for strong ties"
+     :consumes [:open-questions-surfaced]
+     :produces [:tie-strength-matching]}
+    {:id :b5
+     :role "polling-for-ideas as Pragmatist inquiry order: surface open questions before committing — the prior IDENTIFY committed to 'rewrite' before asking 'what to build?'; the redux's inquiry chain (why→what→why-matter) IS the polling; carrier options held open through MAP"
+     :fits-pattern "peeragogy/polling-for-ideas"
+     :addresses-however
+     "without polling discipline, the mission commits to a carrier before surveying what the corpus says — the 6-year stall IS premature commitment to carrier (a). The essay must surface open questions (worldview? method? bridge?) before answering them"
+     :consumes [:guide-practice-simultaneity]
+     :produces [:open-questions-surfaced]}
+    {:id :b6
+     :role "collective-intelligence framing: inspectable cross-referenced intermediate artifacts (queue v5, four-axis annotations, posterior synthesis, reviewer report) ARE the shared reasoning layer that prevents slide into folklore and private interpretations"
+     :fits-pattern "ai4ci/collective-intelligence-framing"
+     :addresses-however
+     "without inspectable intermediates, coauthor contributions can't integrate — each becomes a private interpretation. The entire infrastructure investment (88 annotations, 42 flexiargs, 32-cluster queue, 13 transcripts, posterior synthesis) exists to prevent the collective-intelligence failure mode"
+     :consumes [:pattern-discernment-discipline]
+     :produces [:inspectable-artifacts]}]
+   :policy-holes
+   [{:hole :b1-b5-practice-vs-inquiry-proximity
+     :note "peeragogy/creating-a-guide (build guide while building practice — simultaneity discipline) and peeragogy/polling-for-ideas (surface open questions before committing — inquiry discipline) both govern the mission's process shape. Assessed as DISTINCT contributions: creating-a-guide grounds the PRODUCTION discipline (how artifacts are made: by the practice, not before it), polling-for-ideas grounds the DECISION discipline (how commitments are made: after surfacing questions, not before). Same process, different move (production vs decision). The mission needs both: the essay is produced by practice (creating-a-guide) and its content surfaces questions before answering (polling-for-ideas)"
+     :nominal-contribution 6
+     :true-contribution 6}
+    {:hole :b2-b6-mining-vs-infrastructure-proximity
+     :note "peeragogy/discerning-a-pattern (notice repetition, name carefully — the MINING move) and ai4ci/collective-intelligence-framing (inspectable cross-referenced artifacts — the INFRASTRUCTURE move) both concern the pattern-library's relationship to the mission. Assessed as DISTINCT: discerning-a-pattern grounds how patterns are FOUND (from observed recurrence), collective-intelligence-framing grounds how patterns are SHARED (via inspectable artifacts). Same library, different move (discovery vs communication). Without discernment, the library is aspiration; without infrastructure, the library is private interpretation"
+     :nominal-contribution 6
+     :true-contribution 6}]
+   :prediction-errors
+   "EXPECTED: the second 6-pattern cascade on M-peeragogy-rewrite would overlap heavily with D5's 5-pattern cascade (same mission, adjacent pattern sets from the same peeragogy library). ACTUAL: the two cascades ground genuinely disjoint surfaces — D5 (newcomer/roadmap/lexicon-minting/t4r/askew-layer) grounded the mission's INFRASTRUCTURE AND FRAMING (roadmap, theoretical anchoring, interpretive overlay); D6 (creating-a-guide/discerning-a-pattern/curating-not-experting/weak-tie-conflation/polling-for-ideas/collective-intelligence-framing) grounds the mission's PRACTICE LAYER (how the patterns are the moves the mission makes). The psi factorization held: D5's psi targets the mission's shape (carrier, framing, infrastructure); D6's psi targets the mission's practice (mining discipline, coauthor matching, guide-practice simultaneity). The surprise: D6's cascade is MORE self-referential than D5's — every pattern is a move the mission has already made or must make (it discerned patterns, it curated not experted, it polled before committing, it built inspectable artifacts). The mission IS peeragogy applied to itself, and this cascade makes that visible in a way D5's infrastructure lens didn't. The same-mission psi factorization (D5=shape, D6=practice) mirrors the D3/D4 factorization on M-a-sorry-enterprise (D3=mechanism, D4=scaffolding) — the two-cascade same-mission structure reliably surfaces disjoint psi surfaces when the cascades are genuinely different pattern sets."}}}

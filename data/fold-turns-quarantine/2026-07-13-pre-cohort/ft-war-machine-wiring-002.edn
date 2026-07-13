@@ -1,0 +1,205 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "structural-tension-as-observation IS the core theoretical specification for the WM wiring: the coordination system operates as two nested AIF loops sharing the same boundary (the gate pipeline / consent gate). The fast loop is the WM head's per-tick observation-action cycle (observe substrate-2 field → perceive via EFE ranking → act via 5-action repertoire). The glacial loop is the pattern-library evolution the stepper trial surfaced (commits 1-4 were queue-self-extending within the catalog; commit 5 was queue-reaching-outside-itself — that phase transition IS the glacial loop's observation that the current catalog is insufficient). Structural tension (the gap between what the library/manifold can express and what the head needs) is the observation vector: T/|nabla-T|/delta-T/drift ARE the free-energy decomposition of structural irritation. The V-2.4 methodology (before/after differential: does T drop when a fix lands? does what's-next shift?) IS the free-energy-decrease check — the canonicalization event (invariant promoted) should reduce the irritation that prompted it. The kowtow defense (D-2.5 cross-check) maps to I4 exogeneity: fast-loop tensions cannot force canonicalization without the deliberate naming-selection-canalization process; the operator's stated priority cannot bypass the cross-check. What REMAINS: the vocabulary's three tension components (structural irritation, pre-symbolic pressure, trans-situational reappearance) are identified but D-7.5 v1 hasn't formalized them; mechanical-mode V-2.4 blocked on substrate-2 commit-vertex coverage."
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "the baseline-cyber-ant as the narratable reference instance for the WM head's AIF loop: the futon2 ant's frozen observation ABI (g-observe → perceive/perceive → affect/update-tau → policy/choose-action) IS the shape the portfolio-inference scheduler already instantiates. The ant reads its environment (foraging arena); the WM head reads the manifold (substrate-2 field at its position). The ant's hunger/tau coupling (mode hysteresis, softmax tilts) IS the EFE ranking over the 16-channel portfolio. The ant's policy harness goldens (doc/trace/single_tick.edn, policy_harness.edn) are the deterministic source material for what the WM head's per-tick trace should look like — the forward-going piano roll (trace-emit contract) is the WM equivalent of the ant's single_tick trace, emitted live rather than post-hoc. The AIF-delta (baseline uses futon2 core defaults, no overrides) tells us the WM head's v1 should also start with defaults — the D-1 decision (scheduler-as-head, option 3) IS this move: name the existing loop rather than building a new actor. The mission's speculative destination (a WM that forages autonomously on the manifold, reading nabla to find steepest pressure) is literally the cyber-ant's foraging policy transposed from continuous arena to discrete-mission manifold. What REMAINS: the ant-to-WM transcription is identified (MAP cross-ref item 6-9) but not formalized; the single_tick trace format hasn't been lifted into the trace-emit contract's row shape."
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "mission-interface-signature as the port discipline for the wiring boundary: the three contracts ARE typed ports. INPUT: manifold-read (source = substrate-2 XTDB query at (vertex-id, commit-id), type = {T, nabla-T, delta-T, drift} field values, consumer = the scheduler's EFE ranking). OUTPUT: head-write (type = :head/proposed-action evidence record with :corroboration field, consumer = substrate-2 via consent gate). OUTPUT: trace-emit (type = piano-roll row, consumer = forward-extending trace + operator display). The composition constraint applies directly: each output port must be specified, implemented, tested, and documented — and the mission is currently at 'specified' (D-6, D-7, I1 sketches) but NOT 'implemented' (INSTANTIATE deferred). The fidelity contract is relevant: the wiring's baseline is the existing scheduler + substrate-2 (both operational); the 'preserve' features are the autonomous 24h tick, the 16-channel observation, the 5-action repertoire; the 'adapt' feature is adding manifold-read as a new input channel; the 'drop' is nothing — the wiring extends, it doesn't replace. The mission diagram (mermaid) should show manifold-read entering from substrate-2, flowing through EFE policy, branching to head-write (through consent gate) and trace-emit. What REMAINS: the interface signature section hasn't been formally added to the mission doc; the port types are sketched in DERIVE but not in the signature template's input/output port tables."
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "theory-as-exotype as the constraint that the wiring's contracts must type-check against futon-theory's axioms: the three contracts are domain patterns emerging within theory constraints. proof-path constrains: all manifold-reads and head-writes must be auditable (the stepper trial's replay IS proof-path verification). durability-first constrains: the trace-emit piano-roll rows must confirm-before-success (the forward-going emitter must be durable, not ephemeral). error-hierarchy constrains: manifold-read failures (stale commit-vertex, query timeout) must surface at the head's observation layer, not be silently swallowed. The recursive structure applies: Level 0 (meta-theory) = futon-theory patterns; Level 1 (domain patterns) = the WM-wiring contracts; Level 2 (implementations) = the scheduler code, substrate-2 query functions, piano-roll emitter. A proposed contract that violates these constraints doesn't type-check: e.g., a head-write that bypasses the consent gate violates proof-path (no auditable PROPOSE_CLAIM → APPLY_CHANGE chain) and single-source-of-truth (two writers: scheduler direct + consent-gated). The type-checking criterion is checkable: does the consent gate appear in the proof-path? does the trace survive JVM restart? do observation errors surface? What REMAINS: the exotype check hasn't been run against the contract sketches; INSTANTIATE is where type-checking happens mechanically."
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "the-woven-form (absorbing world-is-hypergraph) as the substrate-gathering discipline for the wiring: the manifold IS the woven form — substrate-2's vertices and hyperedges are the scattered fibres (documents, code, missions, commits) gathered and spun into continuous threads (the head's trajectory, the structural neighbourhoods, the move-threads). The 蒲/布 test applies directly to the wiring's current state: is the head-manifold coupling actively GATHERING (the head reads the field, the field moves in response to the head's writes — composition as spinning) or merely PADDED (the piano roll renders post-hoc, the scheduler runs blind to the manifold — composition as concatenation)? The piano roll built in M-stack-stereolithography is the evidence: cluster fans are the head dwelling (gathering), silences are the head elsewhere. The TM-on-manifold framing ('the head's tape is always-already coupled to its substrate') IS the woven-form claim — a futon is a concentrated form that supports concentration. world-is-hypergraph is absorbed here because it makes the same move at the substrate level: the futon stack IS the game world the WM head inhabits (futon1 XTDB = persistent map, futon2 ant hill = ecology, futon4 Arxana = hypertext fabric with typed hyperedges), not a separate artifact to build. The manifold being 'already there' (MAP discovery: all four fields operational) IS the woven-form's precondition — the fibres exist; the question is whether the spindle is turning. What REMAINS: the spindle is NOT turning mechanically — the head runs blind to the manifold (the scheduler doesn't consume substrate-2 field values in its EFE ranking); the coupling is designed (D-6 sketch) but not woven (INSTANTIATE deferred)."
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :full
+    :via
+    "mana-gated-work as the consent gate's budget discipline: the D-1 addendum's consent gate IS a mana gate. The scheduler PROPOSES (priority-sorted action selection); the operator/autopen AUTHORIZES (budget-gated: can the session afford this action's cost?). The mana-gated-work pattern's two-step selection (priority sort → walk the list asking 'can the session afford this?') maps exactly to the proposal queue's design: the scheduler emits :head/proposed-action (priority-ranked), the consent gate checks whether the operator's session-level mana balance can sustain the action's expected cost (working-tree pressure, mission-proliferation, untriaged-evidence increments). Reject with :reason :insufficient-budget rather than execute. The autopen (deterministic auto-approval when EFE confidence > 0.8) IS the mana gate automated — it replaces the operator at the consent gate with a policy that consults the same balance. The sospeso/dana pattern (confidence-discounted cost: (1-p)*C given to the pool) grounds the cost-quantum: a high-confidence proposed action costs less budget than a low-confidence one, because low-confidence actions burn more closure-cost proportionally. The anti-pattern 'priority-only selection' is exactly the WM without a consent gate — the scheduler acts unilaterally, violating WM-I4. What REMAINS: the consent gate is specified (D-1 addendum) but not implemented; the mana balance dynamic (mana-allostasis) is not wired to the proposal queue; the autopen is named but unbuilt."
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :full
+    :via
+    "block-as-futonic-revolution as the unit-of-work discipline for WM cycles: each WM scheduler tick IS one block of the futonic loop. The five phases map: (1) Identification = the scheduler perceives a hinge (EFE ranking surfaces a candidate action); (2) Specification = the proposed action is nameable (:advance-mission on mission X, :evidence-deposit for invariant Y); (3) Elaboration = the :head/proposed-action evidence record (the block header); (4) Passion = the work is done (the scheduler runs, or the operator authorizes and substrate-2 writes); (5) Closure = the trace-emit piano-roll row lands (the durable 鹽). Block boundaries are recognised at hinges, not scheduled — but the scheduler's 24h tick IS a regularly-recurring hinge (the portfolio observation stabilises per tick). The anti-pattern 'closure without passion' (rubber-stamp commits, counterfeit mana) maps to the autopen authorizing without real operator engagement — the consent gate must award real mana, not counterfeit. The application-to-agent-evidence (each agent chat turn is automatically one block) composes with the WM cycle: the scheduler's per-tick evidence emission (:portfolio/observation, :portfolio/belief, :portfolio/policy, :portfolio/step) IS the block's automatic recording cadence. What REMAINS: the block discipline is implicit in the scheduler's existing tick structure but not named; the trace-emit row (closure phase) is not built."
+    :rule "fold-turn/box"}
+   {:id :b8
+    :role :application
+    :satiety :partial
+    :via
+    "read-existing-seam-before-implementing as the MAP phase's discipline: the WM-wiring MAP IS a seam-read. The five seams map: (1) Transport seam = substrate-2's HTTP route (GET /api/alpha/hyperedges) and XTDB query functions — the canonical path for manifold-read; extend, don't fork. (2) Event seam = the :portfolio/* evidence types (observation, belief, policy, step) — the head-write contract extends this taxonomy with :head/proposed-action. (3) Registration seam = the scheduler's existing tick structure and the cljs UI's next-move tile — the consent gate extends these, not replaces. (4) Consent seam = the proposal queue IS the consent seam (D-1 addendum) — the canonical write-ownership boundary between 'observing' and 'writing'. (5) Prior-art seam = the futon2 AIF ants (the closest autonomous-foraging analog) and futon5's chapter-0 wiring-diagram exposition. The MAP gaps document's four-way classification (a: works today; b: needs from substrate-2; c: needs from head; d: unsolved) IS the seam-read's output. HOWEVER this pattern is about peripheral implementation discipline — it governs the INSTANTIATE phase, which is deferred. The seam-read has been DONE (MAP Checkpoint 1 landed); the pattern's remaining force is 'when INSTANTIATE begins, don't fork these seams.' Partial satiety: the seam-read is complete; the pattern's implementation-phase discipline hasn't been exercised because INSTANTIATE hasn't started."
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b7] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b6] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b7] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b8] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b1] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b7 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a war-machine wiring treated as a full AIF wiring-diagram specification — the WM head (portfolio-inference scheduler) and the live geometric manifold (substrate-2) are two loops in one diagram, sharing the boundary that the three contracts (manifold-read, head-write, trace-emit) define. Structural tension (T, nabla-T, delta-T, drift) IS the free-energy observation vector the head reads; the head's action selection (5-action EFE repertoire) IS policy inference; canonicalization of invariant candidates IS the glacial loop's action. The futon2 cyber-ant is the narratable reference instance. The manifold is the woven hypergraph world the head inhabits — not a separate game-board to build but the substrate already there, gathered (not merely padded) into continuous trajectory-threads.\nHUNGRY-FOR: the consent gate (D-1 addendum: scheduler PROPOSES, operator/autopen AUTHORIZES, substrate-2 WRITES) as a first-class budget-gated artifact — WM-I4 upgraded from architectural fiat to observable, configurable consent; the interpretive vocabulary (D-7.5 v1: catalog-coverage, generalization-vs-addition, implicit-to-typed-lift, epistemic-humility) that names structural moves and carries epistemic humility so the system can flag when it is operating within its catalog and external incidents may correct; mechanical-mode V-2.4 (before/after differential computing whether T drops and what's-next shifts); the three contracts typed as interface-signature ports (manifold-read = input, head-write = output through consent, trace-emit = output as durable piano-roll row); each WM cycle as one block of the futonic loop (observe-propose-consent-write-trace = one revolution).\nHAVE: VERIFY Checkpoint 1 landed (2026-05-01) — by-hand stepper trial against M-reachable-from-boot 5-commit trajectory PASSED on vocabulary-captures-local-state, vocabulary-distinguishes-structurally-different-commits (commit 5 STOP-THE-LINE qualitatively different from commits 1-4), and differential-narrative-operator-meaningful; D-1 decision (scheduler-as-head, option 3) with consent-gate addendum; D-2.5 multi-substrate hybrid model; MAP gaps document with four-way (a/b/c/d) classification across three contracts; substrate-2 four fields ALL operational as XTDB query functions over (vertex-id, commit-id); piano roll prototype as evidence the TM-on-manifold framing is load-bearing; single-head architecture confirmed; five-action EFE repertoire already in the scheduler; the futon2 AIF ants as closest autonomous-foraging analog with frozen observation ABI and policy harness goldens.\nREMAINS: D-7.5 vocabulary v1 NOT landed (four primitives identified but not folded in); V-1 pre-condition NOT satisfied (substrate-2 commit-vertex coverage stale ~6 days, blocking V-2.4 mechanical mode); VERIFY Checkpoint 2 NOT run; V-2.1/V-2.2/V-2.3 corpora trials NOT run; V-3 cross-substrate corroboration NOT run; V-4 trace-emit smoke test NOT run (I1 forward-going emitter not built); INSTANTIATE entirely deferred — three contracts at function-signature sketch level but none implemented; autopen not built; per-mission wiring-diagram emitter explicitly out of scope."
+  :psi-sha256
+  "f90d54654748e0e53342750da14177dc2e3322bd436338ee24e05ff8873dfc7f"
+  :pattern-ids
+  ["futon-theory/theory-as-exotype"
+   "futon-theory/the-woven-form"
+   "futon-theory/mission-interface-signature"
+   "stack-coherence/futon-bridge-health"
+   "devmap-coherence/ifr-f1-dhammavicaya"
+   "devmap-coherence/ifr-state-convergence"
+   "futon-theory/structural-tension-as-observation"
+   "ants/baseline-cyber-ant"
+   "budgeted-action-selection/mana-gated-work"
+   "gauntlet/world-is-hypergraph"
+   "structure/block-as-futonic-revolution"
+   "peripherals/read-existing-seam-before-implementing"
+   "peripherals/hot-reload-as-default-fix-path"]
+  :size 13
+  :truncated false
+  :budget 13
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "59f11f159546142b"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-8"
+  :source "M-war-machine-wiring.md sections 1-6 (IDENTIFY/MAP/DERIVE/ARGUE/VERIFY/INSTANTIATE) authored fresh from the mission's current VERIFY-Checkpoint-1 state — resolver-blind to the proposer's pattern rationale; psi is FRESH vs ft-war-machine-wiring-001 (same mission, different proposal, first-contact between my own deposits). This psi emphasizes the AIF-loop specification and the futonic-loop discipline the 13-pattern cascade brings; the 001 deposit emphasized the proof-path audit spine and sati observability. Both author against the same REMAINS surface but from different pattern-grounded angles."
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a/mission/war-machine-wiring"
+ :proposal/hash "59f11f159546142b"
+ :fold-turn/id "ft-war-machine-wiring-002"
+ :turn
+ {:agent "zai-8"
+  :model "zai"
+  :edge "invoke-1783774158491-170-4cc0ee7d"
+  :at "2026-07-11T20:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "structural-tension-as-observation IS the AIF specification: two nested loops (fast = WM head per-tick, glacial = pattern-library evolution) sharing the consent-gate boundary; T/nabla-T/delta-T/drift ARE the free-energy decomposition of structural irritation; V-2.4 IS the free-energy-decrease check; kowtow defense = I4 exogeneity"
+     :fits-pattern "futon-theory/structural-tension-as-observation"
+     :addresses-however
+     "without the two-loop AIF specification, the wiring is an engineering sketch without theoretical grounding — the head reads the field but there's no account of WHY tension is the observation vector or what the glacial loop observes; structural-tension-as-observation makes the WM head and the library-evolution process two timescales of one diagram"
+     :produces [:aif-loop-specification]}
+    {:id :b2
+     :role "baseline-cyber-ant as narratable reference instance: the futon2 ant's frozen observation ABI (g-observe → perceive → update-tau → choose-action) IS the scheduler's loop shape; the ant's single_tick trace IS what the trace-emit piano-roll row should look like; the AIF-delta (defaults, no overrides) grounds D-1's scheduler-as-head decision"
+     :fits-pattern "ants/baseline-cyber-ant"
+     :addresses-however
+     "without a reference instance, the WM head's AIF loop is theoretical — the cyber-ant provides deterministic source material (observation ABI, policy harness goldens, single-tick trace) that the trace-emit contract can lift into its row shape; the mission's speculative destination (autonomous foraging on the manifold) IS the cyber-ant transposed from continuous arena to discrete-mission manifold"
+     :consumes [:aif-loop-specification]
+     :produces [:reference-behavior-model]}
+    {:id :b3
+     :role "mission-interface-signature as port discipline: three contracts = typed ports (manifold-read = input from substrate-2, head-write = output through consent gate, trace-emit = output as piano-roll row); fidelity contract: preserve = existing scheduler tick + 16-channel observation + 5-action repertoire; adapt = add manifold-read input channel; drop = nothing"
+     :fits-pattern "futon-theory/mission-interface-signature"
+     :addresses-however
+     "without typed ports, the wiring produces systems that work internally but can't compose — the MAP gaps document sketched the contracts but never formalized them as interface-signature port tables; the composition constraint (specified + implemented + tested + documented) exposes that the contracts are at 'specified' only, not 'implemented'"
+     :consumes [:aif-loop-specification]
+     :produces [:typed-port-discipline]}
+    {:id :b4
+     :role "theory-as-exotype as constraint-checking: the three contracts must type-check against futon-theory axioms — proof-path constrains (auditable reads/writes), durability-first constrains (durable trace rows), error-hierarchy constrains (observation errors surface at head layer); a head-write bypassing consent gate violates proof-path and single-source-of-truth"
+     :fits-pattern "futon-theory/theory-as-exotype"
+     :addresses-however
+     "without the exotype constraint, each contract could be designed ad-hoc — the consent gate might be an afterthought rather than a proof-path requirement; theory-as-exotype makes the axiom-checkability a design constraint: does the consent gate appear in the proof-path? does the trace survive restart? do errors surface?"
+     :produces [:exotype-constraint-checking]}
+    {:id :b5
+     :role "the-woven-form (absorbing world-is-hypergraph) as substrate-gathering discipline: the manifold IS the woven form — vertices/edges gathered into trajectory-threads; the 蒲/布 test asks whether the head-manifold coupling is actively gathering (head reads field, field moves in response) or merely padded (piano roll renders post-hoc, scheduler runs blind); world-is-hypergraph absorbed: the stack IS the game world, not a separate artifact"
+     :fits-pattern "futon-theory/the-woven-form"
+     :addresses-however
+     "without the woven-form discipline, the coupling between head and manifold could be mere concatenation (piano roll as decoration) rather than composition (piano roll as live trajectory); the 蒲/布 test exposes the current state: the spindle is NOT turning mechanically — the scheduler doesn't consume substrate-2 field values"
+     :produces [:substrate-gathering-discipline]}
+    {:id :b6
+     :role "mana-gated-work as consent gate's budget discipline: D-1 addendum's consent gate IS a mana gate — scheduler PROPOSES (priority-sorted), operator/autopen AUTHORIZES (budget-gated: can session afford the cost?); sospeso/dana pattern grounds cost-quantum: (1-p)*C confidence-discounted; anti-pattern 'priority-only selection' = WM without consent gate = WM-I4 violation"
+     :fits-pattern "budgeted-action-selection/mana-gated-work"
+     :addresses-however
+     "without budget-aware gating, the consent gate is binary (authorize/reject) rather than metabolic — the operator's session-level capacity (working-tree pressure, mission-proliferation, untriaged-evidence) has no path into the action-selection loop; mana-gated-work makes the consent gate consult the operator's felt fatigue, not just their judgment"
+     :consumes [:typed-port-discipline]
+     :produces [:budget-aware-consent-gate]}
+    {:id :b7
+     :role "block-as-futonic-revolution as unit-of-work for WM cycles: each scheduler tick IS one block — (1) Identification = EFE surfaces candidate, (2) Specification = :head/proposed-action, (3) Elaboration = evidence record, (4) Passion = scheduler runs / operator authorizes, (5) Closure = trace-emit row lands; anti-pattern 'closure without passion' = autopen authorizing without real engagement = counterfeit mana"
+     :fits-pattern "structure/block-as-futonic-revolution"
+     :addresses-however
+     "without block discipline, WM cycles are undifferentiated ticks — no hinge-recognition, no articulation phase, no closure criterion; the block names the five-phase revolution that makes each tick an attestable unit rather than an automatic heartbeat; the trace-emit row IS the block's closure (the durable 鹽)"
+     :consumes [:reference-behavior-model :budget-aware-consent-gate]
+     :produces [:wm-cycle-as-block]}
+    {:id :b8
+     :role "read-existing-seam-before-implementing as MAP's seam-read discipline: five seams mapped (transport = substrate-2 HTTP route, event = :portfolio/* taxonomy extended by :head/proposed-action, registration = scheduler tick + cljs next-move tile, consent = proposal queue, prior-art = futon2 AIF ants + chapter-0); MAP's four-way (a/b/c/d) classification IS the seam-read output"
+     :fits-pattern "peripherals/read-existing-seam-before-implementing"
+     :addresses-however
+     "without seam-reading, INSTANTIATE would fork canonical infra — build a second transport channel, invent a parallel event schema; the MAP phase already did the seam-read (Checkpoint 1 landed), so the pattern's remaining force is governing INSTANTIATE when it begins: extend, don't fork"
+     :produces [:seam-read-discipline]}]
+   :policy-holes
+   [{:id :ph1
+     :kind :absorption
+     :affects :b5
+     :pattern "gauntlet/world-is-hypergraph"
+     :description
+     "world-is-hypergraph is ABSORBED into b5 (the-woven-form). Both patterns frame the substrate: world-is-hypergraph says 'the futon stack IS the game world — nodes, hyperedges, traversal as navigation'; the-woven-form says 'keep the substrate gathered (蒲) not padded (布).' Their core is ONE move on the same substrate — the manifold is the world the head inhabits, and the question is whether it's actively gathered or merely accumulated. Folded as one box (fits-pattern = the-woven-form, the deeper etymological grounding with the 蒲/布 test) with world-is-hypergraph documented here as absorbed."
+     :absorbed-patterns ["gauntlet/world-is-hypergraph"]}
+    {:id :ph2
+     :kind :non-contributor
+     :pattern "devmap-coherence/ifr-f1-dhammavicaya"
+     :description
+     "ifr-f1-dhammavicaya runs the check! DSL against Pattern Canon entries to verify CLI/ingest transcripts have reproducible twins in futon1 graphs. For WM-wiring, this pattern's concrete machinery (MUSN transport baseline certification, CLI transcript-to-graph matching) is about futon1's graph-memory seed — a different layer's verification discipline. The WM-wiring's verification framework is self-grounded by structural-tension-as-observation (b1: tension = free energy = observation vector) and the stepper trial's V-2.4 methodology. dhammavicaya adds no independent contribution: the VERIFY discipline it would ground (check that what's claimed matches what's real) is already grounded more precisely by the mission's own V-2.4 before/after differential."
+     :absorbed-patterns []}
+    {:id :ph3
+     :kind :non-contributor
+     :pattern "devmap-coherence/ifr-state-convergence"
+     :description
+     "ifr-state-convergence compares each IFR (Ideal Final Result) against README truths, prototypes, and evidence — cosmetic gaps get closed, structural gaps get flagged as blockers. For WM-wiring, this is the generic 'compare ideal vs reality' discipline. The mission already HAS this: the VERIFY section's V-5 pass/fail summary IS the convergence check (VERIFY passes when V-2.4 demonstrates vocabulary outputs move with substrate values; VERIFY fails when vocabulary produces hand-wavy generic readings). state-convergence would add a layer of devmap-specific triage (cosmetic vs structural gap routing) that doesn't transpose — the WM-wiring's gaps are all structural (vocabulary not landed, coverage stale, INSTANTIATE deferred) and the mission's own VERIFY taxonomy handles them. No independent contribution beyond what b1 (structural-tension-as-observation) and the mission's own V-5 already ground."
+     :absorbed-patterns []}
+    {:id :ph4
+     :kind :non-contributor
+     :pattern "stack-coherence/futon-bridge-health"
+     :description
+     "futon-bridge-health checks that cross-futon bridges (f1→f2, f2→f3, etc.) are callable and return expected data, emitting health reports with status/latency/last-verified. For WM-wiring, the head-to-manifold bridge (futon3c scheduler → substrate-2 XTDB) IS a cross-futon bridge that needs health monitoring. However, this contribution is purely operational — it's about monitoring an EXISTING bridge, not about designing or wiring the three contracts. The MAP discovery already confirmed the bridge works (substrate-2's HTTP route at localhost:7071, all four fields queryable). Bridge-health adds a monitoring discipline that belongs in INSTANTIATE (when the wiring is deployed and needs uptime checks), not in the current VERIFY-era mission where the contracts aren't implemented yet. Thin operational contribution; doesn't shape the design."
+     :absorbed-patterns []}
+    {:id :ph5
+     :kind :non-contributor
+     :pattern "peripherals/hot-reload-as-default-fix-path"
+     :description
+     "hot-reload-as-default-fix-path says that when fixing code in the serving JVM, hot-reload via Drawbridge nREPL is the default, restart is the exception. For WM-wiring, this pattern governs how WM peripheral code changes are deployed to the running futon3c JVM — a purely operational discipline for the INSTANTIATE phase. The WM-wiring's current REMAINS (D-7.5 vocabulary, V-1 coverage, V-2.4 mechanical mode, deferred INSTANTIATE) are all design and verification work, not peripheral-deployment work. hot-reload discipline will matter when WM peripherals are built and need fixing inside the JVM — but that's downstream of the entire VERIFY phase and INSTANTIATE kickoff. No contribution to the current mission state."
+     :absorbed-patterns []}
+    {:id :ph6
+     :kind :honest-overlap
+     :affects [:b1 :b2]
+     :description
+     "structural-tension-as-observation (b1) and baseline-cyber-ant (b2) both ground the SAME contribution: the WM head's AIF observation-action loop. b1 is the theory (tension = free energy = observation vector; two nested loops); b2 is the reference instance (the futon2 ant's frozen ABI as the narratable shape). These are theory+instance, not independent contributions — the cyber-ant IS the structural-tension pattern's canonical instantiation. Recorded as overlap: b1 provides the specification, b2 provides the deterministic source material. Two lenses on one loop, not two loops."
+     :absorbed-patterns []}
+    {:id :ph7
+     :kind :honest-overlap
+     :affects [:b3 :b4]
+     :description
+     "mission-interface-signature (b3) and theory-as-exotype (b4) both ground the SAME contribution: the boundary-type discipline for the wiring. b4 is the meta-level constraint (contracts must type-check against theory axioms); b3 is the port specification (typed input/output ports with composition constraints). These are meta/instance levels of the same discipline — exotype says what shapes are ALLOWED, signature says what ports are EXPOSED. Recorded as overlap: b4 constrains, b3 specifies. Two levels of one boundary discipline, not two independent disciplines."
+     :absorbed-patterns []}]
+   :library-alternatives
+   [{:for :b6
+     :suggest "invariant-coherence/bounded-disposition"
+     :why "the consent gate's budget discipline (mana-gated-work) governs how many proposed actions can be in-flight; bounded-disposition is the structural shape that bounds concurrent uncommitted state — the proposal queue's :pending proposals ARE uncommitted state that must be bounded. The mission's own D-1 addendum doesn't name this bound; bounded-disposition would."}]}}}

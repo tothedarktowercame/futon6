@@ -55,7 +55,7 @@
   :size 3,
   :truncated false,
   :budget 20,
-  :F-free-energy -0.409,
+  :cascade-score -0.409,
   :constructor
   {:entry "construct_cascade",
    :epsilon 0.15,
@@ -162,4 +162,4 @@
   :via
   "operator-directed engineering handoff psi recipe (hand-authored sorry-grain from M-chipwitz-corps mission doc tension, WANT/HUNGRY-FOR/HAVE)",
   :rule "fold-turn/hole-from-sorry-psi"},
- :eval {:delta-g -0.42857142857142855, :g-grain :coverage}}
+ :eval {:coverage-score-delta -0.42857142857142855, :score-grain :coverage}}

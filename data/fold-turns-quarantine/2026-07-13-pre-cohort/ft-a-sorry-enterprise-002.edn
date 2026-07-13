@@ -1,0 +1,234 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the IFR memory/audit cluster (absorbing F1-dhammavicaya + state-convergence): the sorry registry IS a graph memory (F1 — without codified dhammavicaya, higher futons cannot inspect 'the system model of me' with confidence), and it must prove its active state through evidence (state-convergence — dhammavicaya requires evidence for keeping a layer active). For the sorry enterprise, this means: a sorry stays open only if the evidence trajectory supports it — state-convergence is the check that auto-closes stale sorries whose activation signal has gone quiet. F3a (piti-audit) extends this to the audit layer: futon3a's pattern retrieval must PROVE it coordinates the stack (the sorry-proximity score must be auditable — why was this pattern surfaced for this sorry?), not just log retrieval events. The three patterns are same-move-different-abstraction (each is a different futon layer's evidence/audit requirement); they absorb to one :full box because the core move — the knowledge layer must earn its active state through auditable evidence — transposes fully to the sorry enterprise"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "the IFR energy/equanimity cluster (absorbing F4-passaddhi + F5-samadhi + F7-upa-upekkha): the sorry enterprise's emotional discipline across layers. Passaddhi (F4) keeps the system from running hot — settle the energy from F3/F2; for the sorry enterprise, the auto-miner must not flood the candidate pool. Samadhi (F5) gathers power — concentrated practice linked to proofwork; for the sorry enterprise, sorry-closing effort must be concentrated, not dispersed. Upekkhā (F6) is the calm curator — Bayesian models without panic, typed by :kind, promoted by evidence. Upa-upekkhā (F7) is balance beyond balance — distributed practice shapes institutions; for the sorry enterprise, the model must prove that sorry-driven practice actually shapes the organisation (Hyperreal Enterprises), not just Joe's personal backlog. The four patterns are same-move-different-abstraction (each layer's energy discipline); absorbed to one :full box. The :kind field in sorrys.edn IS the upekkhā discipline in practice — typing prevents flat-urgency"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "the pattern-library quality cluster (absorbing agential-pattern-hygiene): patterns-as-categorical-objects says the library is more than a flat list — patterns COMPOSE via morphisms, and an agent following pattern A is guided into pattern B because the morphism is computed. For the sorry enterprise, the sorry-affinity sets should be composable: if pattern A primes sorry S1 and pattern B chains from A via a morphism, then B also bears affinity to S1 (transitively). Agential-pattern-hygiene says patterns increase in quality through use — the sorry enterprise's per-turn retrieval stream IS the hygiene input: each activation either strengthens or weakens a pattern's sorry-affinity claim. Same move (library quality), different aspect (compositionality vs maintenance); absorbed to :full because the categorical framing provides the structural guarantee that hygiene maintains"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "ambient pattern retrieval as the sorry-proximity signal: the per-turn context-retrieval pipeline IS ambient retrieval — background awareness of the 853+ pattern library, surfacing relevant patterns without deliberate recall. The sorry enterprise externalises expert intuition: the system surfaces sorry-relevant patterns and proximity emerges from overlap with affinity sets. The retrieval pipeline is LIVE; the sorry-proximity scoring is the unbuilt layer. This pattern grounds the SENSING layer of the sorry enterprise — without ambient retrieval, sorry tracking would require deliberate query; with it, the proximity signal emerges naturally from the certificate stream"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "candidate-pattern action-space constraint: constraining which patterns can address which sorries makes the closure-probability scoring meaningful, not performative. Without the action-space constraint, every pattern is a candidate for every sorry — the scoring becomes noise. With it, the sorry-addressing action space is bounded: only patterns with established affinity (bootstrap or learned) count toward the closure trajectory. This is the GATING layer of the sorry enterprise — ambient retrieval (b4) surfaces patterns broadly; the action-space constraint (b5) filters to the sorry-relevant subset. The constraint makes the Bayesian posterior computable: P(closure | patterns activated WITHIN the action space) is a meaningful quantity; P(closure | ALL patterns activated) is not"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :partial
+    :via
+    "the baseline-cyber-ant as behavioral template: the sorry enterprise IS a cyberant operation — forage (pattern retrieval), carry (cargo artifacts), deposit (sorry closure), trail-lay (evidence trajectory). The sorry registry IS the pheromone trail; the auto-miner IS foraging behavior. HOWEVER the behavioral CIRCUIT — where the ant actually forages, recognizes cargo, decides to deposit, and lays trail into the registry — is not wired. The template transposes (mapping is direct); the instantiation binding it to the sorry lifecycle is unbuilt. The auto-miner forages but doesn't carry/deposit/trail-lay in the cyberant sense"
+    :rule "fold-turn/box"}
+   {:id :b7
+    :role :application
+    :satiety :full
+    :via
+    "structural tension as the observation vector for pattern-library evolution: the sorry topology's typed holes ARE structural tension — and crucially, a persistent sorry that won't close despite high-affinity activation is a signal that the PATTERN LIBRARY needs to evolve, not that the sorry is intractable. This is the inversion the sorry enterprise needs: the sorry is not a bug to fix but a probe that reveals library gaps. When Test 1 (UKRN Working Paper → Bristol) shows affinity-pattern activation but no closure progress, the structural-tension reading says: the library is missing a pattern between the activation and the closure action. The alignment.edn adapter chain is the wiring diagram; the sorry annotations are the structural-tension criteria. This connects the AIF loop and the sorry topology into one system"
+    :rule "fold-turn/box"}
+   {:id :b8
+    :role :application
+    :satiety :partial
+    :via
+    "the interest-event vocabulary as sorry state-transition discipline: the sorry lifecycle (open → addressed → promoted → closed) maps to state-transitions against sorry entities. The 8-event vocabulary provides the discrimination-shape (state/spawned = first identification, state/strengthened = new evidence, state/refined = scope sharpened, state/closed = closure condition met). The append-only discipline preserves the trail — without provenance, the operator cannot tell whether sorry progress is real (evidence-attested) or confabulation. HOWEVER the full relational-event layer (link/asserted between essays) is specific to the interest-network domain and does not map to sorry entities (a sorry is a typed hole, not a cross-entity relation). The core transposes; the relational layer does not"
+    :rule "fold-turn/box"}
+   {:id :b9
+    :role :application
+    :satiety :full
+    :via
+    "shape-first IDENTIFY applied to sorry typing: find the sorry FAMILY before the instance. The sorrys.edn :kind field (meta/prototyping-forward/technical-debt/decision-debt/external-dependency) IS the family; each sorry is an instance. Shape-first says this is descriptive of what well-formed invariants look like — the family shape governs admission of new sorries. A new candidate sorry from the auto-miner must fit a family shape before promotion: is it technical-debt or decision-debt? Is it prototyping-forward (knowingly shipped incomplete) or external-dependency? The family shape catches miscategorisation — a sorry about a missing artifact (prospectus) is not technical-debt, it's a missing-capability sorry. Shape-first also surfaces the discovery case: when only one instance of a family exists, that's worth recording, not papering over"
+    :rule "fold-turn/box"}
+   {:id :b10
+    :role :application
+    :satiety :full
+    :via
+    "the exotic source-of-truth cluster (absorbing full-lift-registry): live-sync-source-truth says version logging enables reproducibility (you know which patterns were active when a sorry was addressed), bidirectional flow closes the loop (sorry-closing improves the pattern library), and immutable source prevents drift. For the sorry registry, this means: sorrys.edn must be live-synced from its source (the evidence landscape + auto-miner output), not hand-edited drift. Full-lift-registry provides the registry mechanism: Lisp homoiconicity means the registry templates are manipulable by the same system that uses them, and evidence metadata supports the contemplative layer (the sorry's evidence trail is queryable). Same move (source-of-truth discipline), different aspect (sync vs registry); absorbed to :full because the live-sync is the active requirement and the registry is its substrate"
+    :rule "fold-turn/box"}
+   {:id :b11
+    :role :application
+    :satiety :full
+    :via
+    "pattern-becomes-peripheral as the institutional-creation test: the deepest question for the sorry enterprise is not 'did the agent address the sorry?' but 'did the agent's power to act increase?' (Spinozan frame). Sorry-addressing patterns must become peripherals — absorbed input produces output without producing capability (the Stack Overflow failure mode: you get a working function but no understanding). For the sorry enterprise: if closing SORRY-market-interface (UKRN Working Paper → Bristol conversation) produces a closed ticket but no institutional learning (no new pattern, no improved affinity set, no evolved peripheral), the closure was ABSORBED, not INSTITUTIONALISED. Each sorry-closing event must leave institutional memory — the pattern-to-peripheral bridge converts absorbed sorry-closures into generative organisational learning. This is the success criterion the enterprise model demands: 'the same model applies to every future client engagement' only if each engagement leaves capability, not just output"
+    :rule "fold-turn/box"}
+   {:id :b12
+    :role :application
+    :satiety :full
+    :via
+    "theory-as-exotype as the shared-constraint guarantee: without theory-as-exotype, each domain reinvents constraints ad-hoc. With it, all domains share the same foundational guarantees while developing domain-specific structure. For the sorry enterprise, this means: the sorry-driven-development model (typed holes as backlog, pattern activation as work signal, Bayesian closure tracking) is a THEORY that applies across domains — UKRN engagement, consulting, math research, stack-building. Each domain instantiates the same theory (sorry → affinity → activation → closure) with domain-specific sorry types and affinity sets. The theory is the common interface that makes the sorry enterprise coherent across workstreams. Without it, each workstream invents its own gap-tracking; with it, the sorry topology is unified"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b12] :to [:b9] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b9] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b11] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b7] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b7] :to [:b8] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b8] :to [:b10] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b10] :to [:b6] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b5 :discharges :want-signature}
+              {:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a sorry-driven enterprise whose pattern library is a living, composing, audited knowledge structure — not just a flat retrieval index but a categorical object system where patterns chain via morphisms, increase in quality through use, and are constrained to an actionable sorry-addressing space. The 19-pattern cascade spans the full IFR layer stack (F1 graph-memory through F7 civic-field), pattern-discipline machinery (hygiene, categorical composition, action-space constraint), the exotic source-of-truth layer (registry with version sync), and the theory-peripheral bridge (absorbed input vs institutional creation). GROUNDED in the same landed state as the 5-pattern sibling (sorry_registry.clj schema v2 live, loop_learning.clj auto-miner v0 live, interest-event-vocabulary.flexiarg shipped, E-substrate-2-sorry-typing at INSTANTIATE): this cascade's lens is the SCAFFOLDING — the structural, disciplinary, and institutional framework that makes the sorry enterprise a trustworthy organisational knowledge system, not just a sorry-tracking tool.\nHUNGRY-FOR:\n1. Pattern library as categorical composing object (patterns chain via morphisms — an agent following pattern A is guided into pattern B because the morphism is computed, not asserted; the sorry-affinity sets become composable rather than hand-bootstrapped)\n2. Agential pattern hygiene (patterns increase in quality through use — the sorry enterprise's pattern-activation stream IS the hygiene input; each turn's retrieval either strengthens or weakens a pattern's sorry-affinity claim)\n3. Evidence-backed graph memory with convergence checks (the sorry registry must prove its active state through evidence — state-convergence means a sorry stays open only if the evidence trajectory supports it, not by default)\n4. Auditable pattern-coordination proof (futon3a must prove it coordinates the stack via pattern retrieval, not just logs events — the sorry-proximity score must be auditable: why was this pattern surfaced for this sorry?)\n5. Energy discipline across layers (the sorry enterprise must not run hot — passaddhi settles, samadhi concentrates, upekkha curates calmly; Bayesian models without panic, candidate promotion without reactive grab)\n6. Action-space constraint on sorry-addressing patterns (constraining which patterns can address which sorries makes the closure-probability scoring meaningful, not performative — without the constraint, every pattern is a candidate for every sorry)\n7. Shape-first sorry typing (find the sorry FAMILY before the instance — the sorrys.edn :kind field is the family; each sorry is an instance; the family shape governs admission of new sorries)\n8. Structural tension as evolution pressure on the pattern library (persistent sorries tell the library WHEN to evolve — a sorry that won't close despite high-affinity activation is a signal that the library is missing a pattern, not that the sorry is intractable)\n9. Provenance-bearing sorry state-transitions (the interest-event vocabulary's append-only discipline applied to sorry lifecycle: spawned/strengthened/refined/closed, each with evidence trail)\n10. Source-of-truth discipline for the sorry registry (version logging, bidirectional flow, immutable source — the registry must be live-synced from its source, not hand-edited drift)\n11. Pattern-to-peripheral bridge (sorry-addressing patterns must become peripherals that increase the agent's power to act — not absorbed inputs that produce output without producing capability; each sorry-closing event must leave institutional learning, not just a closed ticket)\nHAVE: sorry_registry.clj (live, schema v2, v1 substrate adapter); loop_learning.clj auto-miner (v0, WM gap-signals); interest-event-vocabulary.flexiarg (8 event types); alignment.edn (8 typed sorry holes); stack-logic-model.edn (affinity spec); context-retrieval pipeline (per-turn certificates); sorrys.edn (schema v2 :kind field); E-substrate-2-sorry-typing at INSTANTIATE; futon3a pattern library (853+ patterns); strategic-sorry-topology.md (War Machine companion story)."
+  :psi-sha256
+  "982be9966e62bc9f6a2c73d7fb689618f0066f1bdfd239a2401507a84d8a6830"
+  :pattern-ids
+  ["war-machine/ambient-pattern-retrieval"
+   "control/agential-pattern-hygiene"
+   "devmap-coherence/ifr-f3a-piti-audit"
+   "pattern-discipline/patterns-as-categorical-objects"
+   "ants/baseline-cyber-ant"
+   "futon-theory/structural-tension-as-observation"
+   "aif/candidate-pattern-action-space"
+   "invariant-coherence/shape-first-identify"
+   "futon-theory/theory-as-exotype"
+   "exotic/full-lift-registry"
+   "structure/interest-event-vocabulary"
+   "devmap-coherence/ifr-f1-dhammavicaya"
+   "devmap-coherence/ifr-state-convergence"
+   "devmap-coherence/ifr-f6-upekkha"
+   "devmap-coherence/ifr-f7-upa-upekkha"
+   "devmap-coherence/ifr-f5-samadhi"
+   "devmap-coherence/ifr-f4-passaddhi"
+   "peripherals/pattern-becomes-peripheral"
+   "exotic/live-sync-source-truth"]
+  :size 19
+  :truncated false
+  :budget 19
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "c4937fe6ad61e2b7"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-10"
+  :source "M-a-sorry-enterprise.md (IDENTIFY + MAP + downstream 2026-05-26 + checkpoint 2026-05-29) authored fresh through the 19-pattern cascade's lens: the structural/disciplinary/institutional SCAFFOLDING — distinct from D3's 5-pattern sorry-mechanism lens"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a/mission/a-sorry-enterprise"
+ :proposal/hash "c4937fe6ad61e2b7"
+ :fold-turn/id "ft-a-sorry-enterprise-002"
+ :turn
+ {:agent "zai-10"
+  :model "zai"
+  :edge "invoke-1783802284206-219-7389490c"
+  :at "2026-07-11T21:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "IFR memory/audit cluster: sorry registry as evidence-backed graph memory (F1 dhammavicaya) with convergence checks (state-convergence) and auditable pattern-coordination proof (F3a piti-audit) — a sorry stays open only if evidence supports it"
+     :fits-pattern "devmap-coherence/ifr-f3a-piti-audit"
+     :addresses-however
+     "without evidence-backed convergence, the registry accumulates stale sorries that never close; without auditable retrieval, the sorry-proximity score is an unexplained black box. F3a's piti-audit extends the joy-of-effective-action to the audit layer itself — the sorry enterprise must prove pattern retrieval coordinates the stack"
+     :absorbs ["devmap-coherence/ifr-f1-dhammavicaya" "devmap-coherence/ifr-state-convergence"]
+     :produces [:evidence-backed-sorry-memory]}
+    {:id :b2
+     :role "IFR energy/equanimity cluster: sorry enterprise emotional discipline — passaddhi settles (don't flood candidates), samadhi concentrates (focused sorry-closing), upekkha curates calmly (Bayesian without panic), upa-upekkha proves distributed practice shapes the organisation"
+     :fits-pattern "devmap-coherence/ifr-f6-upekkha"
+     :addresses-however
+     "without energy discipline, the sorry enterprise degenerates into a panic engine — every sorry screams equally. The sorrys.edn :kind field IS the upekkha discipline: typing prevents flat-urgency, candidates need calm promotion"
+     :absorbs ["devmap-coherence/ifr-f4-passaddhi" "devmap-coherence/ifr-f5-samadhi" "devmap-coherence/ifr-f7-upa-upekkha"]
+     :produces [:sorry-energy-discipline]}
+    {:id :b3
+     :role "pattern-library quality cluster: patterns as categorical composing objects (morphisms chain) with agential hygiene (quality increases through use) — sorry-affinity sets become composable and self-improving"
+     :fits-pattern "pattern-discipline/patterns-as-categorical-objects"
+     :addresses-however
+     "without compositionality, affinity sets are frozen bootstraps; without hygiene, patterns degrade into unmaintained entries. The categorical framing provides the structural guarantee (morphisms chain) that hygiene maintains (living documents reflect learned experience)"
+     :absorbs ["control/agential-pattern-hygiene"]
+     :consumes [:actionable-sorry-space :institutional-creation-test]
+     :produces [:composable-sorry-affinity]}
+    {:id :b4
+     :role "ambient pattern retrieval as sorry-proximity signal: per-turn context-retrieval pipeline surfaces relevant patterns without deliberate recall; proximity emerges from overlap with affinity sets"
+     :fits-pattern "war-machine/ambient-pattern-retrieval"
+     :addresses-however
+     "the retrieval pipeline is LIVE but sorry-proximity scoring is unbuilt — without ambient retrieval, sorry tracking needs deliberate query; with it, proximity emerges naturally from the certificate stream"
+     :consumes [:evidence-backed-sorry-memory :sorry-cyberant-circuit]
+     :produces [:sorry-proximity-signal]}
+    {:id :b5
+     :role "candidate-pattern action-space constraint: bounding which patterns can address which sorries makes closure-probability scoring meaningful — P(closure | action-space patterns) vs P(closure | all patterns)"
+     :fits-pattern "aif/candidate-pattern-action-space"
+     :addresses-however
+     "without the action-space constraint, every pattern is a candidate for every sorry and the Bayesian posterior is noise. The constraint makes scoring meaningful by restricting to patterns with established affinity (bootstrap or learned)"
+     :consumes [:sorry-proximity-signal :sorry-energy-discipline]
+     :produces [:actionable-sorry-space]}
+    {:id :b6
+     :role "the cyberant behavioral template: forage/carry/deposit/trail-lay mapped to sorry lifecycle — template transposes, behavioral CIRCUIT is unbuilt"
+     :fits-pattern "ants/baseline-cyber-ant"
+     :addresses-however
+     "the auto-miner forages but doesn't carry/deposit/trail-lay in the cyberant sense — the pattern-flashed twin needs binding to the sorry registry's open→addressed→closed lifecycle"
+     :consumes [:source-of-truth-sync]
+     :produces [:sorry-cyberant-circuit]}
+    {:id :b7
+     :role "structural tension as library-evolution pressure: a persistent sorry that won't close despite high-affinity activation signals the library is MISSING a pattern — the sorry is a probe, not a bug"
+     :fits-pattern "futon-theory/structural-tension-as-observation"
+     :addresses-however
+     "without the structural-tension reading, unclosable sorries look like intractable problems; with it, they look like library gaps. The inversion — sorry as probe, not bug — is the sorry enterprise's evolution mechanism"
+     :consumes [:composable-sorry-affinity]
+     :produces [:library-evolution-pressure]}
+    {:id :b8
+     :role "interest-event vocabulary for sorry state-transitions: spawned/strengthened/refined/closed with append-only provenance trail — core transposes, relational-event layer does not"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "without provenance on sorry lifecycle transitions, the operator cannot distinguish real progress from confabulation — the 8-event vocabulary's append-only discipline keeps the trail honest; the relational-event layer (link/asserted between essays) does not map to sorry entities"
+     :consumes [:library-evolution-pressure]
+     :produces [:sorry-state-provenance]}
+    {:id :b9
+     :role "shape-first IDENTIFY for sorry typing: find the FAMILY (:kind field: meta/prototyping-forward/technical-debt/decision-debt/external-dependency) before the INSTANCE; family shape governs admission of new sorries"
+     :fits-pattern "invariant-coherence/shape-first-identify"
+     :addresses-however
+     "without shape-first discipline, auto-mined candidates enter the registry uncategorised — the family shape catches miscategorisation (a missing-artifact sorry is not technical-debt) and surfaces single-instance discoveries"
+     :consumes [:shared-sorry-theory]
+     :produces [:sorry-family-typing]}
+    {:id :b10
+     :role "exotic source-of-truth cluster: live-sync from source (version logging, bidirectional flow, immutable source) + full-lift registry (homoiconic templates, evidence metadata) — the sorry registry must be synced, not drift"
+     :fits-pattern "exotic/live-sync-source-truth"
+     :addresses-however
+     "without source-of-truth discipline, sorrys.edn is hand-edited drift — the registry must be live-synced from the evidence landscape + auto-miner output, with version logging for reproducibility"
+     :absorbs ["exotic/full-lift-registry"]
+     :consumes [:sorry-state-provenance]
+     :produces [:source-of-truth-sync]}
+    {:id :b11
+     :role "pattern-becomes-peripheral as the institutional-creation test: sorry-closing must leave institutional learning, not just a closed ticket — the Spinozan question: did the agent's power to act increase?"
+     :fits-pattern "peripherals/pattern-becomes-peripheral"
+     :addresses-however
+     "without the peripheral bridge, sorry closures are absorbed inputs — output without capability, the Stack Overflow failure mode applied to organisational learning. Each sorry-closing event must create an institution (new pattern, improved peripheral, evolved affinity set), not just close a ticket"
+     :produces [:institutional-creation-test]}
+    {:id :b12
+     :role "theory-as-exotype: the sorry-driven-development model is a THEORY applying across domains (UKRN, consulting, math, stack) — each domain instantiates the same theory with domain-specific sorry types and affinity sets"
+     :fits-pattern "futon-theory/theory-as-exotype"
+     :addresses-however
+     "without shared theory, each workstream reinvents gap-tracking ad hoc; with it, the sorry topology is unified across workstreams. The theory is the common interface that makes the enterprise coherent"
+     :produces [:shared-sorry-theory]}]
+   :policy-holes
+   [{:hole :b9-b12-meta-discipline-proximity
+     :note "invariant-coherence/shape-first-identify (find the family before the instance — a METHOD) and futon-theory/theory-as-exotype (shared constraints across domains — a THEORY) are both meta-level structural-discipline patterns. Assessed as DISTINCT contributions: shape-first grounds the TYPING methodology (how new sorries are categorised), theory-as-exotype grounds the CROSS-DOMAIN guarantee (why the same sorry model works for UKRN and consulting). Same altitude, different move (method vs theory). If the reviewer judges these as same-move-different-aspect, they absorb to one :full box; I kept them separate because the sorry enterprise needs both the typing discipline and the domain-unification guarantee"
+     :nominal-contribution 19
+     :true-contribution 12}
+    {:hole :b4-b5-sensing-vs-gating-proximity
+     :note "war-machine/ambient-pattern-retrieval (sensing: patterns surface without deliberate recall) and aif/candidate-pattern-action-space (gating: which surfaced patterns are actionable for which sorries) operate at different layers of the same pipeline. Assessed as DISTINCT: ambient-retrieval is the perception layer (patterns surface), action-space is the constraint layer (scoring becomes meaningful only within the bounded space). The D3 sibling (5-pattern fold) also kept these distinct, and the same reasoning holds: Test 1's prediction requires both the signal (b4) and the constraint (b5)"
+     :nominal-contribution 19
+     :true-contribution 12}]
+   :prediction-errors
+   "EXPECTED: the 19→N compression curve from prior giants (17→~8, 16→~7) would predict 19→~8-9 true boxes. ACTUAL: 19→12 (7 absorbed into 3 cluster-boxes, 0 non-contributors). The curve broke UPWARD because this cascade has an unusually coherent structure: the 7 IFR patterns are genuinely same-move-different-abstraction (absorbing cleanly into 2 clusters), but the remaining 12 patterns each ground a distinct surface of the sorry enterprise's scaffolding (retrieval, action-space, cyberant, structural tension, event vocabulary, shape-first, source-of-truth, peripheral bridge, categorical composition, meta-method, meta-theory, audit). The surprise: the IFR stack, which looked like the bulk of the cascade (7 of 19), compressed to 2 boxes — while the 'long tail' of 12 one-per-box patterns was where the true contribution density lived. The non-contributor count was 0: every pattern transposed to the sorry enterprise, which is itself evidence that the mission's theoretical anchoring (AIF, spreading activation, Beta-binomial, pattern-as-neural-substrate) genuinely spans the full futon layer stack."}}}

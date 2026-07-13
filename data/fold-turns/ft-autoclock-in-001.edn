@@ -192,4 +192,4 @@
   :via
   "E-live-loop-1 S1 psi recipe (A-next EMPIRICAL sorry, mechanical)",
   :rule "fold-turn/hole-from-sorry-psi"},
- :eval {:delta-g -0.4444444444444444, :g-grain :coverage}}
+ :eval {:coverage-score-delta -0.4444444444444444, :score-grain :coverage}}

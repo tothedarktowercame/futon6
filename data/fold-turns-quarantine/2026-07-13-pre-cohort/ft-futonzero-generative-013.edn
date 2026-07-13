@@ -1,0 +1,147 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "the generative loop's play-out proposals are pattern-as-policy actions, and candidate-pattern-action-space requires a bounded candidate set with explicit inclusion/exclusion reasons — not any pattern at any time. Applied to FutonZero: the play-out action space is a constructed candidate set of mission × pattern pairs produced by retrieval plus the WM guardrail gating rules, with bounded size and stated reasons. This prevents collapse into one habitual play-out type (the advance-only monoculture's analogue at the generative scale). HOWEVER, this pattern grounds the ACTION SPACE, not the gates — a bounded candidate set of play-outs is meaningless if G-SIM cannot predict their consequences and G-REWARD cannot score their outcomes"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via "the FutonZero-generative mission's status is precisely classifiable: it has next-steps (the §4 safe work products + G-SIM/G-REWARD clearance criteria) and evidence (the rollout ledger, toy fixture, red-team fixture, calibration report) → :active per the mapping table (precision prior 0.8). BUT the calibration evidence is :degenerate? true (censored-fallback copies), so the evidence is present-but-contaminated — the status keyword catches the activity but not the evidence quality. This pattern supplies the TRIAGE language (the mission is not :greenfield, not :settled, not :stub — it is :active with measured blockers) that makes the blocked state legible to the WM's advanceability gate"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via "the FutonZero-generative mission is at :blocked in the mission-lifecycle state machine, waiting on two dependencies: G-SIM (field-simulator adequacy, home: substrate-2/full-C) and G-REWARD (anti-laundered reward, home: M-pudding-peradams). The lifecycle's transition requirement for :active→:blocked ('blocker cited with link to blocking mission') makes these dependencies auditable rather than drifting — the mission cannot silently regress from chartered to abandoned. The :blocked→:active transition requires the blockers to clear, which is exactly G-SIM and G-REWARD clearance. This pattern grounds the GOVERNANCE of the gate-blocked state, not the gates themselves"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via "the generative loop's components (play-out proposer, field simulator, reward certifier, policy updater) must act with coordinated discipline under a shared objective — shi (The Army) names this: collective action requires discipline and unified direction, without which the group fragments or overreaches. The 'coordinate actions under clear command' core applies to the loop's multi-component orchestration. HOWEVER, the ant/CA numerics (Pi-o 0.7, tau 0.4, policy-priors, update-prob 0.35) are domain-specific calibration numbers that do not transpose to a WM learner; the coordinated-force wisdom-shape contributes, the parameter substance does not. Same partial-satiety shape as meng in fold 012: the pattern's core transposes, the numerics are inapplicable-by-judgment"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via "advanceability is the gate that correctly identifies what CAN and CANNOT be advanced this cycle: the FutonZero-generative mission has concrete open holes (G-SIM, G-REWARD) but they are BLOCKERS — dependencies on other missions' work, not advanceable increments. The §4 safe work products (rollout ledger, toy fixture, red-team fixture, policy/value vocabulary, calibration audit) are the advanceable holes; the gates themselves are 0-cycle-leaf blockers. A WM that picks 'advance FutonZero-generative' without the advanceability gate would flail or fake-finish (engaging the mission without a bounded next step that actually moves the generative loop). The gate's NAG ('nothing concrete to advance here; articulate the next hole') is the honest signal that the gates are not clearable by pattern-prose or by engagement — they need substrate-2 and M-pudding-peradams work"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b2] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b1] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b5 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a self-bootstrapping WM learner — the generative loop that turns one-off warranted functionings into repeatable capabilities by proposing bounded play-outs, predicting field effects, executing under guardrail, scoring with anti-laundered witness logic, and updating policy/value estimates — so the stack has a learner, not just strategic selection and post-hoc monitoring. The two hard gates (G-SIM: field-simulator adequacy; G-REWARD: anti-laundered reward) must clear before the loop may run. HUNGRY-FOR: a field simulator that makes bounded checkable predictions with confidence and uncertainty; an anti-laundered reward signal that distinguishes build discharge from witness discharge; the policy/value update rule that converts witnessed outcomes into durable freedoms-to-achieve; the bounded candidate action space for play-out proposals. HAVE: the War Machine ranking and executing bounded moves under guardrails; the capability star map; FutonZero-monitor; a static rollout ledger; a toy field fixture demonstrating successful update + refusal of laundered reward; a reward red-team fixture rejecting 8 laundering shapes; a policy/value vocabulary v0 with no actuator; a calibration audit with verdict :insufficient-evidence and :degenerate? true (13/15 pairs are censored-fallback copies where predicted was written into realised, not measured); 0 independent measured pairs toward G-SIM's ~11+ threshold; the mission chartered at :blocked, awaiting G-SIM and G-REWARD clearance."
+  :psi-sha256
+  "fe572529ffd1fcfff7995fde1e0ea7fb936f4782e97b30c0f10bb4e071d30aa0"
+  :pattern-ids
+  ["aif/candidate-pattern-action-space"
+   "devmap-coherence/status-keywords"
+   "futon-theory/mission-lifecycle"
+   "iching/hexagram-07-shi"
+   "war-machine/advanceability"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "cdf7857d2ee36c99"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-1"
+  :source "M-futonzero-generative.md HEAD/IDENTIFY/hard-gates/scope + Flight 2 gap report as HAVE (resolver-blind: gap described in the mission's own terms — self-bootstrapping WM learner gated by G-SIM and G-REWARD — without reading the proposer's pattern rationale; authored fresh, not inherited from ft-futonzero-generative-012)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon0-d/mission/futonzero-generative"
+ :proposal/hash "cdf7857d2ee36c99"
+ :fold-turn/id "ft-futonzero-generative-013"
+ :turn
+ {:agent "zai-1"
+  :model "zai"
+  :edge "invoke-1783698249375-52-2e1c204e"
+  :at "2026-07-10T16:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the bounded candidate play-out action space: pattern-as-policy proposals with explicit inclusion/exclusion reasons"
+     :fits-pattern "aif/candidate-pattern-action-space"
+     :addresses-however
+     "if the action space is any pattern at any time, evaluation becomes unstructured and selection becomes arbitrary or dominated by recency — the play-out action space must be a constructed candidate set with bounded size; but this grounds the action space, not the gates (a bounded set of play-outs is meaningless if G-SIM cannot predict and G-REWARD cannot score)"
+     :produces [:bounded-playout-action-space]}
+    {:id :b2
+     :role "the mission's status triage: :active with measured blockers, not :greenfield or :settled"
+     :fits-pattern "devmap-coherence/status-keywords"
+     :addresses-however
+     "without a shared status mapping, different reviewers read the same mission as done, active, or speculative — the status keyword (:active, precision prior 0.8) catches the activity, but the evidence is present-but-contaminated (:degenerate? true), so the status is legible but the evidence quality is not"
+     :produces [:mission-status-triage]}
+    {:id :b3
+     :role "the mission at :blocked in the lifecycle state machine, awaiting G-SIM and G-REWARD dependencies"
+     :fits-pattern "futon-theory/mission-lifecycle"
+     :addresses-however
+     "missions may be blocked by dependencies — the lifecycle's :blocked state with cited blockers makes G-SIM and G-REWARD auditable dependencies, not invisible drift; the :blocked→:active transition requires both gates to clear"
+     :consumes [:mission-status-triage]
+     :produces [:blocked-state-governance]}
+    {:id :b4
+     :role "coordinated discipline for the multi-component loop under shared objective"
+     :fits-pattern "iching/hexagram-07-shi"
+     :addresses-however
+     "collective action requires discipline and unified direction — the loop's components must coordinate under a clear objective; PARTIAL: the coordinated-force core transposes, the ant/CA numerics (Pi-o, tau, policy-priors) do not"
+     :produces [:loop-coordination-discipline]}
+    {:id :b5
+     :role "advanceability gate: the gates are BLOCKERS not advanceable holes; only §4 safe work products are advanceable this cycle"
+     :fits-pattern "war-machine/advanceability"
+     :addresses-however
+     "a mission with concrete open holes that are BLOCKERS (dependencies on other missions) must not be picked for autonomous advancement on the blocker itself — the advanceability gate correctly identifies that G-SIM and G-REWARD are not clearable by engagement; the NAG ('articulate the next hole') is the honest signal that the gates need substrate-2 and M-pudding-peradams work, not pattern-prose"
+     :consumes [:blocked-state-governance :bounded-playout-action-space]
+     :produces [:advanceability-verdict]}]
+   :hyperedges
+   [{:from [:b2] :to [:b3] :connective :seq
+     :rationale "status triage (b2) classifies the mission as :active-with-blockers; the lifecycle (b3) formalizes the blocked state — order-dependent: classify first, then place in the state machine"}
+    {:from [:b3] :to [:b5] :connective :seq
+     :rationale "the blocked-state governance (b3) names the blockers; the advanceability gate (b5) reads the blockers to determine what is advanceable — order-dependent: the lifecycle must cite the blockers before the gate can evaluate them"}
+    {:from [:b1] :to [:b5] :connective :copar
+     :rationale "the bounded action space (b1) co-applies with the advanceability gate (b5) — the action space is what the gate filters; copar because the space informs the gate without being consumed"}
+    {:from [:b4] :to [:b1] :connective :copar
+     :rationale "the coordination discipline (b4) co-applies with the action space (b1) — discipline shapes how the bounded set is selected; copar because the discipline frames the selection without being a sequential step"}]
+   :terminals [{:id :b5 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "G-SIM (field simulator) remains ungrounded — no pattern in this cascade clears it"
+     :why
+     "Flight 2 measured G-SIM as UNCLEARED: verdict :insufficient-evidence, :degenerate? true (13/15 pairs are censored-fallback), 0 independent measured pairs. This cascade provides governance patterns (lifecycle, status, advanceability) that correctly identify the gate as a blocker, but NONE of the five patterns grounds the field simulator itself — a forward model that predicts play-out consequences with confidence and uncertainty. The cascade honestly manages the blocked state; it does not resolve the blockage."}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "G-REWARD (anti-laundered positive reward) remains ungrounded"
+     :why
+     "Flight 2 measured G-REWARD as UNCLEARED: rejection side functional (8/8 laundering shapes rejected), positive substance ungrounded. No pattern in this cascade grounds the Dokusan/peradam reward computation or the Pudding Prover G1 arrow-witness binding. The red-team fixture defines what reward is NOT; the cascade does not define what it IS."}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the policy/value update rule is ungrounded"
+     :why
+     "b1 grounds the ACTION SPACE (bounded candidate play-outs) but not the UPDATE RULE — how a witnessed play-out outcome modifies the policy network (pattern library) or value network (EFE/forward model). The charter defers this until gates clear; the cascade correctly does not invent it."}
+    {:id :h4
+     :unfolded-pattern "iching/hexagram-07-shi"
+     :free "shi's ant/CA numerics do not transpose to the WM learner"
+     :why
+     "shī's coordinated-force wisdom-shape ('collective action requires discipline and unified direction') transposes to the multi-component loop's orchestration; the ant/CA numerics (Pi-o 0.7, tau 0.4, policy-priors, update-prob 0.35, trail-follow 0.7) are domain-specific calibration numbers that do not transpose. b4 is :satiety :partial: the core transposes, the numerics are inapplicable-by-judgment (satiety convention, exclusion recorded)."}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "b2 and b3 overlap: both are governance/triage patterns for the same blocked state"
+     :why
+     "b2 (status-keywords) classifies the mission's status (:active with blockers) and b3 (mission-lifecycle) formalizes the blocked state in the state machine. They are not independent contributions: b2 is the triage lens, b3 is the lifecycle lens, both applied to the same blocked-state governance. The overlap is genuine and productive (triage informs lifecycle placement), recorded as honest overlap rather than false independence."}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "The War Machine ranking and executing bounded moves under guardrails; the capability star map; FutonZero-monitor; a static rollout ledger; a toy field fixture; a reward red-team fixture rejecting 8 laundering shapes; a policy/value vocabulary v0 with no actuator; calibration audit with verdict :insufficient-evidence and :degenerate? true; 0 independent measured pairs; the mission chartered at :blocked."
+  :want
+  "A self-bootstrapping WM learner — the generative loop gated by G-SIM and G-REWARD, converting functionings into capabilities."
+  :via
+  "psi authored by zai-1 from futon0/holes/missions/M-futonzero-generative.md (HEAD/IDENTIFY/hard-gates/scope) + Flight 2 gap report as HAVE, resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-futonzero-generative-012"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

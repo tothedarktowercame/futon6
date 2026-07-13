@@ -1,0 +1,118 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "stop-the-line as the tripwire enforcement discipline: the mission's five tripwire tests ARE stop-the-line triggers, each defining a condition under which the hinge-log's own protections are violated and production must halt. Tripwire 1 (operator-voice content attributed to agent, or vice versa, in a hinge-log entry) = I-1 invariant violation -> STOPPED state: APPLY_CHANGE blocked, OBSERVE allowed for diagnosis (which entry, which attribution), VERIFY allowed to test the fix. Tripwire 2 (any tool that indexes, queries, or aggregates hinge-logs across missions) = anti-life-logging drift -> STOPPED state: the tool is blocked, the aggregation is refused. The protocol maps directly: INVARIANT_CHECK fails (tripwire fires), system enters STOPPED, writes blocked, reads allowed, fix applied, invariants re-checked, line resumes. The anti-patterns the pattern names (force-pushing despite violations, disabling checks, logging but continuing) are exactly the failure modes the tripwires guard against: a mission that silently lets agent voice creep into the hinge-log, or quietly adds a cross-mission summary tool, has wet its tail. The two writable-now tripwires (1 and 2) are stop-the-line triggers operational today; the three pending tripwires (3: zero learning-loop firings; 4: question-pool drift past ~20 entries without use-frequency; 5: B→A entries degrade to keyword-tag shape) will become stop-the-line triggers once use-data arrives."
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "cross-mission-escrow as the deferral-record discipline: the mission's three DRs ARE escrow ledger entries, each a held requirement that releases in two steps. DR-1 (hypergraph-overlay replacement): :held — the sidecar is file-based; the requirement is a hypergraph-overlay from M-hypergraph-operator's Click/Tick machinery; re-entry condition (STANDARD-VERIFY equivalent) = M-hypergraph-operator stabilises and consumes at least one evidence type; then :contract-released (migration is projection-and-integration, not rebuild); then :satisfied when the overlay ships. DR-2 (QSR/QUR turn-tagging infrastructure): :held — manual question-register at hinge-scale; re-entry condition = sidecar proves itself across >=3 missions; then :contract-released (automating turn-level Q-tagging becomes worth the build). DR-3 (P-1'..P-6' operator-inhabits-mission invariants): :held — M-peripheral-phenomenology's P-1..P-6 agent-side analogues exist but aren't adopted; re-entry condition = hinge-log practice identifies at least one concrete inhabitation-verification gap a P-analogue would close. The structurally-void sorry (specific B→A content shape) is a fourth held requirement: :held until use-data from >=3 missions arrives; :contract-released when the shape forms from practice; never :satisfied in the traditional sense (the shape keeps evolving). At mission dissolution, any unsatisfied escrow entries become follow-on missions — named, never dropped."
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "mission-interface-signature as the port-constraint discipline for the hinge-log register, with a fresh angle vs the 001 deposit: here the signature's force is on what the ports may NOT become. The anti-life-logging protections ARE port-type constraints — negative specifications that constrain the output port's evolution. INPUT: first-person hinge-crossing (type: prose, optionally five fields; constraint: must be first-person, never agent-ascribed per I-1). OUTPUT: hinge-log entries (type: file-based sidecar entries; constraint: no cross-mission aggregation, no summarisation, no NLP, no sentiment analysis — the port may not become a database). OUTPUT: learning-loop firings (type: updates to four channels; constraint: must be genuine updates, not synthetic checkpoints). The fidelity contract's composition constraint (each output port must be specified, implemented, tested, documented) exposes the current state: the B→A content port is 'specified' (field list sketched) but deliberately left as a structurally-void sorry — the signature pattern's own 'discovery during implementation may reveal new boundary types' clause. The port-type constraints (anti-life-logging) are what distinguish this register from a surveillance apparatus: the port accepts first-person phenomenology and emits steering signal, but refuses to become queryable, aggregable, or analysable across missions."
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "interest-event-vocabulary as the append-only provenance discipline for hinge-log entries: the pattern's core — mission checkpoints update entity standing by emitting typed, provenance-bearing, append-only state-transition events — partially transposes. The hinge-log IS an append-only, provenance-bearing event log: each entry is an event at a hinge boundary, carrying the operator's rationale (the load-bearing :operator/rationale field), never edited or deleted. The emission discipline (operator-asserted boundary, not inferred from prose; no-op days emit no checkpoint; validation blocks not warns) maps closely: hinge-entries are authored by the operator at hinge boundaries, not extracted by a processor; empty hinges are structurally valid (no-op); malformed entries block. HOWEVER the 8-event vocabulary (state/spawned, state/refined, state/strengthened, state/addressed, state/falsified, state/foreclosed, state/reopened, link/asserted) is designed for EoI interest-network entities (essay annotations, institution-objects, basins, composite-arrow edges). Hinge-log entries are first-person phenomenological prose about mission experience, not typed state-transitions against interest-network entities. The lifecycle events partially map (state/spawned = first binding of a hinge-theme; state/strengthened = subsequent hinge-entries adding evidence; state/refined = sharpening a tension's framing), but the vocabulary's entity classes and its link/asserted relational event don't transpose — hinge-logs are explicitly NOT cross-mission (the anti-aggregation protection forbids the network view the vocabulary enables). The append-only + provenance + operator-authored core transposes; the typed 8-event vocabulary and its entity-class taxonomy do not."
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b2] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a trip-journal (hinge-log) whose deferral records and structurally-void sorry are held in escrow — named, not built, released in two steps when their re-entry conditions fire. The mission's anti-life-logging tripwires are stop-the-line triggers: when tripwire 1 (operator-voice attributed to agent) or tripwire 2 (cross-mission indexing tool detected) fires, the line stops — APPLY_CHANGE blocked, OBSERVE and VERIFY allowed for diagnosis. The hinge-log register's typed ports (input: first-person hinge-crossing; output: entries + learning-loop firings) are constrained by what they may NOT become (no aggregation, no summarisation, no NLP). The register's entries are append-only, provenance-bearing events — each carries the operator's rationale as load-bearing provenance.\nHUNGRY-FOR: the three deferred records to release — DR-1 (hypergraph-overlay: held until M-hypergraph-operator Click/Tick stabilises), DR-2 (QSR/QUR turn-tagging: held until sidecar proves itself across >=3 missions), DR-3 (P-1'..P-6' operator-inhabits-mission invariants: held until hinge-log practice identifies a concrete gap); the structurally-void sorry (B→A content shape) to form from use through the four-channel learning loop, not be imposed before use-data arrives; completion criterion 7 (M-daily-scan adopts hinge-log for >=3 daily cycles); empirical validation that the hinge-log trains the operator (does question-pool growth correlate with operator-performance sharpening?).\nHAVE: INSTANTIATE complete-as-sufficient — recursive first instance operational (hinge-log entries from IDENTIFY-exit onward), question-pool seeded with 7 flexiargs, four-channel learning loop exercised at least once each; fidelity contract with 7-row capability preservation matrix (no drops); 5 tripwire tests (2 writable now: I-1 violation + anti-life-logging drift; 3 pending use-data: zero learning-loop firings, question-pool drift, B→A degradation); 3 deferral records with explicit re-entry conditions; anti-life-logging protections articulated (no cross-mission aggregation, no summarisation, no NLP, no obligation); theoretical backing externalised to TN-halliday-clines.md and TN-mvsg.md.\nREMAINS: criterion 7 NOT met (M-daily-scan has not adopted the hinge-log); tripwires 3-5 NOT writable (need >=1 mission's hinge-log data); structurally-void sorry NOT resolved (deliberately open); DR-1/DR-2/DR-3 all still :held (none of their re-entry conditions have fired); the improvement loop running in-use but early; the hinge-log's append-only event discipline is practiced but not formalised into a typed event vocabulary (the entries are first-person prose, not typed state-transition records)."
+  :psi-sha256
+  "a75b85df6cbd7f36104de386d6e9809133983e3f37cb7682dcc2d2a80eb31582"
+  :pattern-ids
+  ["structure/interest-event-vocabulary"
+   "futon-theory/stop-the-line"
+   "peripherals/read-existing-seam-before-implementing"
+   "futon-theory/mission-interface-signature"
+   "campaign-coherence/cross-mission-escrow"
+   "campaign-coherence/campaign-as-temporary-institution"]
+  :size 6
+  :truncated false
+  :budget 6
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "5b32802bf04f366a"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-8"
+  :source "M-trip-journal.md full doc authored fresh from INSTANTIATE-complete-as-sufficient state — psi is FRESH vs ft-trip-journal-001 (same mission, different proposal, first-contact between my own deposits). The 001 deposit emphasized typed-hole representation, worked-contrast argumentation, and the anti-capture inversion; this 002 deposit emphasizes the escrow discipline for deferral records, the stop-the-line enforcement for tripwires, and the port-constraint (negative specification) angle on the interface signature. Both author against the same REMAINS surface from different pattern-grounded angles."
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a/mission/trip-journal"
+ :proposal/hash "5b32802bf04f366a"
+ :fold-turn/id "ft-trip-journal-002"
+ :turn
+ {:agent "zai-8"
+  :model "zai"
+  :edge "invoke-1783774158491-170-4cc0ee7d"
+  :at "2026-07-11T21:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "stop-the-line as tripwire enforcement: 5 tripwires = stop-the-line triggers (tripwire 1 I-1 violation, tripwire 2 anti-life-logging drift — both writable now; tripwires 3-5 pending use-data); protocol maps directly (INVARIANT_CHECK fails -> STOPPED -> writes blocked, reads allowed -> fix -> resume)"
+     :fits-pattern "futon-theory/stop-the-line"
+     :addresses-however
+     "without stop-the-line discipline, tripwire violations are logged but not enforced — a mission that silently lets agent voice creep into the hinge-log, or quietly adds a cross-mission summary tool, continues producing corrupt entries; stop-the-line makes the tripwire a blocking condition, not an advisory"
+     :produces [:tripwire-enforcement-discipline]}
+    {:id :b2
+     :role "cross-mission-escrow as deferral-record discipline: 3 DRs = escrow ledger entries (:held -> :contract-released on re-entry condition -> :satisfied on delivery); DR-1 hypergraph-overlay held until M-hypergraph-operator stabilises; DR-2 QSR/QUR held until sidecar proves itself >=3 missions; DR-3 P-1'..P-6' held until practice identifies gap; structurally-void sorry = fourth held requirement"
+     :fits-pattern "campaign-coherence/cross-mission-escrow"
+     :addresses-however
+     "without escrow discipline, deferred requirements are prose TODOs that silently disappear — the two-step release (:held -> :contract-released -> :satisfied) makes 'we're holding off building this' a first-class auditable state rather than an implicit gap; at dissolution, unsatisfied entries become follow-on missions, never dropped"
+     :produces [:escrow-discipline-for-deferrals]}
+    {:id :b3
+     :role "mission-interface-signature as port-constraint (negative specification): anti-life-logging protections ARE port-type constraints — the output port accepts first-person phenomenology and emits steering signal but REFUSES to become queryable, aggregable, or analysable across missions; the B→A content port is deliberately unspecified (structurally-void sorry = the signature's own discovery-during-implementation clause)"
+     :fits-pattern "futon-theory/mission-interface-signature"
+     :addresses-however
+     "without negative port specifications, the register drifts toward surveillance — the protections constrain what the port may NOT become, which is as important as what it IS; the signature's composition constraint exposes the current state: ports specified but one type deliberately left open"
+     :consumes [:tripwire-enforcement-discipline :escrow-discipline-for-deferrals]
+     :produces [:negative-port-specification]}
+    {:id :b4
+     :role "interest-event-vocabulary as append-only provenance discipline (partial): hinge-log IS append-only, provenance-bearing, operator-authored event log; emission discipline maps (operator-asserted boundary, no-op days emit nothing, validation blocks); HOWEVER 8-event EoI vocabulary and entity classes don't transpose — hinge-logs are first-person prose, not typed state-transitions against interest-network entities; anti-aggregation protection forbids the network view the vocabulary enables"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "without append-only provenance discipline, hinge-log entries could be silently edited or deleted, losing the trail that makes the register trustworthy; the discipline's core (never edit, correct by new entry, operator-authored not processor-extracted) preserves the register's integrity; the typed vocabulary doesn't transpose but the discipline does"
+     :produces [:append-only-provenance-discipline]}]
+   :policy-holes
+   [{:id :ph1
+     :kind :non-contributor
+     :pattern "peripherals/read-existing-seam-before-implementing"
+     :description
+     "read-existing-seam-before-implementing says: before building a peripheral, locate the canonical seams (transport, event, registration, consent, prior-art) and extend rather than fork. For M-trip-journal, the mission's INSTANTIATE already DID this seam-read: it extended existing parallel-register discipline (devmaps, tech notes, mission docs already run multiple registers) rather than building a new register framework; it seeded the question-pool in the existing futon3/library/structure/ location rather than inventing a parallel library; it adapted the agent-scribe convention (I-1) by analogy to human operators rather than creating a new identity scheme. The pattern's force is spent — the seam-read happened during INSTANTIATE and is documented in the fidelity contract's capability preservation matrix (all 'adapt' or 'preserve-as-new', no 'drop' or fork). The pattern would contribute if the mission were at IDENTIFY or DERIVE; at INSTANTIATE-complete-as-sufficient, it's retrospective."
+     :absorbed-patterns []}
+    {:id :ph2
+     :kind :non-contributor
+     :pattern "campaign-coherence/campaign-as-temporary-institution"
+     :description
+     "campaign-as-temporary-institution says: when several missions depend on one shared standard that no single mission owns, charter a Temporary Autonomous Institution (7-phase Campaign spine: CHARTER through DISSOLUTION). For M-trip-journal, the mission is a SINGLE mission, not a Campaign. Its cross-refs (M-learning-loop mines B→A pairs; M-a-sorry-enterprise uses B→A turns as observations; M-daily-scan as first consumer; M-peripheral-phenomenology as operator-side analogue) are DEPENDENCIES and COMPLEMENTARY relationships, not a chartered cluster with a joint completion criterion. M-trip-journal doesn't charter a Campaign; it produces apparatus (hinge-log convention, question-pool) that other missions may ADOPT (criterion 7). The Campaign pattern would apply if someone chartered a 'Campaign-operator-capacity' with M-trip-journal as keystone and M-daily-scan, M-learning-loop, M-a-sorry-enterprise as dependents — but that institution doesn't exist. The mission's own scope explicitly says 'no obligation' (some missions don't need a hinge-log), which is anti-Campaign (a Campaign coordinates members; M-trip-journal offers an affordance)."
+     :absorbed-patterns []}
+    {:id :ph3
+     :kind :honest-overlap
+     :affects [:b1 :b3]
+     :description
+     "stop-the-line (b1) and mission-interface-signature (b3) both ground the protection discipline for the hinge-log register. b1 says: tripwires are stop-the-line triggers that block production when protections are violated. b3 says: anti-life-logging protections are port-type constraints that limit what the output may become. The same five tripwires are both stop-the-line triggers (b1's enforcement mechanism) and port-constraint violations (b3's boundary specifications). Two lenses on one protection apparatus — b1 provides the enforcement protocol (what happens when a protection is violated), b3 provides the specification (what the protections constrain)."
+     :absorbed-patterns []}]
+   :library-alternatives
+   [{:for :b4
+     :suggest "futon-theory/proof-path"
+     :why "the hinge-log's append-only, provenance-bearing event discipline is a proof-path instance: each hinge-entry is an event in an auditable chain (CLOCK_IN at hinge-crossing, OBSERVE the cleavage, PROPOSE_CLAIM the entry's content, APPLY_CHANGE the write, VERIFY the I-1 check, PROOF_COMMIT the durable sidecar entry). proof-path grounds the discipline more precisely than interest-event-vocabulary, whose 8-event EoI vocabulary is domain-specific. The proof-path's auditability axiom (A1: fully traceable) is exactly what the append-only log provides."}]}}}

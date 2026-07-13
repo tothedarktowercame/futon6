@@ -1,0 +1,112 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "typed-hole-as-frontier as the mission's native representation discipline: every incompleteness in M-trip-journal IS a typed hole with WANT/HAVE/discharge-condition. The structurally-void sorry (specific shape of B→A hinge-log content) is the mission's central typed hole — WANT: the shape that forms from use through the four-channel learning loop; HAVE: the scaffold + optional five fields (entry state, dominant tension, shift, residual unknowns, energy signature); discharge condition: >=3 missions of hinge-log data, at which point the shape is read off practice rather than imposed. The three deferral records ARE typed holes: DR-1 (WANT: hypergraph-overlay; HAVE: file-based sidecar; discharge: M-hypergraph-operator Click/Tick stabilises), DR-2 (WANT: QSR/QUR turn-tagging infrastructure; HAVE: manual question-register at hinge-scale; discharge: sidecar proves itself across >=3 missions), DR-3 (WANT: P-1'..P-6' operator-inhabits-mission invariants; HAVE: M-peripheral-phenomenology's P-1..P-6 agent-side analogues; discharge: hinge-log practice identifies a concrete gap a P-analogue would close). The completion criteria ARE a typed-frontier enumeration: nine criteria, each with a discharge condition, queryable as a set — criterion 7 (adoption-ready) is the frontier's current head. The mission's own epigram is load-bearing here: the wish-granting room surfaces the most secret wish, which is not the wish the stalker thought they had — the hinge-log's function is to let the mission tell the writer what it was about, which is exactly the typed-hole discipline (the WANT is not known in advance; it forms from use)."
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "mission-interface-signature as the port discipline for the hinge-log register: the trip-journal IS a new mission with typed ports. INPUT: the operator's first-person hinge-crossing experience (source: whoever inhabits the peripheral at a natural cleavage; type: first-person prose, optionally with five fields; description: the phenomenology of the work while it was happening). OUTPUT: hinge-log entries consumed by the mission's own steering (consumer: the operator at the next hinge; description: the B→A register-layer complement to the A→B pattern tagging). OUTPUT: learning-loop firings (consumer: the four channels — pattern library, vocabulary, connection-graph, question pool; description: genuine updates that prove the mission trains its operator). The fidelity contract IS the interface signature's composition constraint: each output port must be specified, implemented, tested, documented — and the mission deliberately leaves one port type (B→A content shape) as a structurally-void sorry, which is the signature pattern's own 'discovery during implementation may reveal new boundary types' clause in action. The anti-life-logging protections (no cross-mission aggregation, no summarisation, no NLP, no obligation) ARE port-type constraints: they constrain what the output port may NOT become, which is as important as what it IS."
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "worked-contrast as the mission's argumentative structure: the A→B vs B→A asymmetry IS a paired worked contrast that shows the model biting differently. A→B (agent-response → pattern) is operational: 850+ flexiarg patterns tagging agent responses across 50+ namespaces, round-tripping through XTDB, queryable. B→A (operator's turn → what problem is being inhabited) is untagged: no infrastructure, no vocabulary, no query surface. The contrast is load-bearing — a single case (either A→B alone or B→A alone) would not reveal the asymmetry that motivates the mission. The M-daily-scan pairing is a second worked contrast: M-daily-scan generates landscape intelligence (production); M-trip-journal ensures that intelligence meets operator capacity (consumption/training). Neither mission alone would produce the same legibility. The mission's own recursive instance (hinge-log entries from IDENTIFY-exit onward) is a third contrast: the ledger doc (what the mission IS, formally) vs the hinge-log (what the mission WAS, phenomenologically) — completion criterion 6 requires at least one hinge-log entry containing content the ledger doc does not and could not, which IS the worked-contrast discipline (the two registers must bite differently to justify their parallel existence)."
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "state-capture as the anti-life-logging defense: the hinge-log's anti-aggregation protections ARE a state-capture defense, but the capture risk is inverted from the pattern's canonical concern. The pattern's core: a nomadic practice is captured when it reproduces itself rather than following external flows (infrastructure maintenance dominating external sorrys). For the hinge-log, the capture risk is the OPPOSITE direction: the register could become life-logging (self-surveillance institution) rather than nomadic practice following the operator's actual hinge-crossings. The protections — no cross-mission aggregation, no summarisation, no sentiment analysis, no NLP, no obligation — are pocketwatch-style constraints (the pattern's recommended defense) applied to prevent the hinge-log from becoming an institution that reproduces itself. Tripwire 2 (any tool that indexes, queries, or aggregates hinge-logs across missions = anti-life-logging drift) IS the state-capture test: is the hinge-log serving the operator's hinge-crossings (external flows) or serving itself (self-reproduction through aggregation)? The 'no obligation' clause (some missions are purely computational; a hinge-log would be forced prose) is the strongest anti-capture move: the register is offered, not mandated. HOWEVER the pattern's primary concern (stack work dominating consulting/portfolio work) doesn't transpose — the hinge-log's capture risk is self-surveillance, not infrastructure-maintenance dominance. Partial: the anti-capture PRINCIPLE transposes (pocketwatch constraints, explicit external-sorry checks); the specific capture dynamic inverts."
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b3] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b2 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a trip-journal (hinge-log) as a parallel register sitting alongside the mission ledger, scoped to operator-steering at natural cleavages (Cook Ting hinges), written first-person by whoever inhabits the peripheral (I-1 applied to humans). The hinge-log is the B→A complement to the stack's operational A→B tagging: it records the operator's turn → what problem is being inhabited, where the generation-of-new-turns is coming from. Its purpose is not merely to preserve phenomenology but to make the two-register mission architecture an operator-capacity-development loop — so running missions trains the operator for the next mission. The four-channel learning loop (pattern library, operator vocabulary, connection-graph, question pool) fires per-mission when at least one hinge-entry produces a genuine update. Epigram load-bearing: the hinge-log lets the mission tell the writer what it was about, not the reverse.\nHUNGRY-FOR: adoption beyond the recursive first instance — completion criterion 7 (M-daily-scan adopts the hinge-log for >=3 daily cycles, validating that the convention travels); the specific shape of B→A hinge-log content forming from use through the four-channel learning loop (deliberately a structurally-void sorry — not to be foreclosed before use-data arrives); empirical validation that the hinge-log measurably trains the operator rather than merely recording the mission (does question-pool growth correlate with operator-performance sharpening?); the question-pool growing by use, not prescription, with use-frequency data before it exceeds ~20 entries (tripwire 4).\nHAVE: hinge-log convention specified and operationalised as recursive first instance (M-trip-journal.journal/hinge-log.md, entries from IDENTIFY-exit onward); question-pool seeded at futon3/library/structure/ with seven flexiargs (cook-ting, hinge-point, what-problem-is-this-actually-solving, whose-question-is-this, unresolved-tensions-at-closure, backwards-induction, hinge-entry-slots); theoretical backing externalised to TN-halliday-clines.md and TN-mvsg.md (cline of instantiation, A↔B symmetry, five-aggregates MVSG mapping); INSTANTIATE declared complete-as-sufficient to begin the applied-chaos-theory improvement loop; four-channel learning loop exercised at least once each in recursive instance (patterns grew, vocabulary grew, connections grew, question pool grew); fidelity contract with seven-row capability preservation matrix (adapt/preserve-as-new/preserve/defer — no drops); five tripwire tests (two writable now, three pending use-data); three deferral records (DR-1 hypergraph-overlay, DR-2 QSR/QUR infrastructure, DR-3 P-1'..P-6' invariants); anti-life-logging protection articulated (no cross-mission aggregation, no summarisation, no NLP, no obligation).\nREMAINS: completion criterion 7 NOT met — M-daily-scan has not yet adopted the hinge-log for >=3 daily cycles (the empirical validation path is specified but not run); tripwire tests 3-5 NOT writable yet (need >=1 mission's hinge-log data); the structurally-void sorry (specific B→A content shape) NOT resolved — deliberately open, must form from use; DR-1 (hypergraph-overlay replacement) deferred until M-hypergraph-operator stabilises; DR-2 (QSR/QUR turn-tagging infrastructure) deferred until sidecar proves itself across >=3 missions; DR-3 (P-1'..P-6' operator-inhabits-mission invariants) deferred until hinge-log practice identifies a concrete gap; the improvement loop running in-use but early (applied-chaos-theory phase just begun)."
+  :psi-sha256
+  "50287340d1b6e961ea26e7eea545c04a4459168b88e1e24113dd563516c5145c"
+  :pattern-ids
+  ["enrichment/ARGUMENT"
+   "futon-theory/mission-interface-signature"
+   "proof-search/typed-hole-as-frontier"
+   "ukrns/worked-contrast"
+   "war-machine/state-capture"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "4eeb16716731d90c"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-8"
+  :source "M-trip-journal.md full doc (IDENTIFY through INSTANTIATE + completion criteria + scope + relationships) authored fresh from the mission's current state — the status says IDENTIFY but the doc has landed VERIFY (fidelity contract, tripwires, DRs) and INSTANTIATE (recursive instance operational, question-pool seeded, four-channel loop exercised). The doc-freshness probe found significant landed work: INSTANTIATE is complete-as-sufficient, the improvement loop is running. Psi covers what REMAINS: adoption validation (criterion 7), the structurally-void sorry, deferred infrastructure."
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a/mission/trip-journal"
+ :proposal/hash "4eeb16716731d90c"
+ :fold-turn/id "ft-trip-journal-001"
+ :turn
+ {:agent "zai-8"
+  :model "zai"
+  :edge "invoke-1783774158491-170-4cc0ee7d"
+  :at "2026-07-11T21:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "typed-hole-as-frontier as native representation: structurally-void sorry = central typed hole (WANT: B→A content shape from use; HAVE: scaffold + five optional fields; discharge: >=3 missions of data); three DRs = typed holes with re-entry conditions; nine completion criteria = enumerable typed frontier; epigram load-bearing (the hinge-log lets the mission tell the writer what it was about)"
+     :fits-pattern "proof-search/typed-hole-as-frontier"
+     :addresses-however
+     "without typed holes, the mission's incompletenesses are prose TODOs — unqueryable, unrankable, undispatchable; the structurally-void sorry would be a vague gap rather than a typed hole with an explicit discharge condition (use-data from >=3 missions)"
+     :produces [:typed-frontier-representation]}
+    {:id :b2
+     :role "mission-interface-signature as port discipline: hinge-log register = typed ports (INPUT: operator first-person hinge-crossing; OUTPUT: hinge-log entries for steering + learning-loop firings for four channels); fidelity contract = composition constraint; anti-life-logging protections = port-type constraints (what the output may NOT become)"
+     :fits-pattern "futon-theory/mission-interface-signature"
+     :addresses-however
+     "without typed ports, the hinge-log register can't compose with the rest of the stack — it would be an internal-only artifact with no boundary specification; the composition constraint exposes that one port type (B→A content shape) is deliberately unspecified, which is the signature pattern's own discovery-during-implementation clause"
+     :consumes [:typed-frontier-representation]
+     :produces [:typed-port-discipline]}
+    {:id :b3
+     :role "worked-contrast as argumentative structure: A→B vs B→A asymmetry = paired contrast showing the model biting differently (A→B operational and tagged, B→A untagged); M-daily-scan pairing = production/consumption contrast; ledger vs hinge-log = formal/phenomenological contrast (criterion 6: at least one entry the ledger could not contain)"
+     :fits-pattern "ukrns/worked-contrast"
+     :addresses-however
+     "without the paired contrast, the A↔B asymmetry is invisible — a single case (either side alone) would not reveal the gap that motivates the mission; the contrast IS load-bearing for the argument that the stack tracks but doesn't train"
+     :consumes [:typed-frontier-representation]
+     :produces [:argumentative-contrast-structure]}
+    {:id :b4
+     :role "state-capture as anti-life-logging defense (inverted): anti-aggregation protections = pocketwatch constraints preventing the hinge-log from becoming a self-surveillance institution; tripwire 2 (no cross-mission indexing) = the state-capture test; 'no obligation' = strongest anti-capture move; HOWEVER capture risk inverts from pattern's canonical concern (self-surveillance not infrastructure-dominance)"
+     :fits-pattern "war-machine/state-capture"
+     :addresses-however
+     "without anti-capture protections, the hinge-log drifts from nomadic practice (following the operator's actual hinge-crossings) to institution (aggregating, summarising, NLP-ing, mandating); the protections are the pocketwatch constraints that keep the register serving external flows (the operator's phenomenology) rather than self-reproducing"
+     :produces [:anti-capture-discipline]}]
+   :policy-holes
+   [{:id :ph1
+     :kind :non-contributor
+     :pattern "enrichment/ARGUMENT"
+     :description
+     "enrichment/ARGUMENT is about building cross-column connective tissue in XTDB via layered rational reconstruction — hyperedge ingestion (code/namespace, code/var, code/requires, code/file-churn, code/indentation-complexity), meta/enrichment-layer metadata, git churn as behavioral signal, indentation as complexity proxy. For M-trip-journal, the parallel-register architecture (ledger || journal) has a structural analogy to layered enrichment, but the enrichment argument's concrete machinery is about codebase enrichment through XTDB hyperedges, not about mission-register architecture. The PRINCIPLE (layered, timestamped, replayable, each layer is evidence) partially transposes to the hinge-log's per-hinge cadence; the MACHINERY (hyperedge types, reflection API, ingest-three-columns.py, hotspot ranking) does not. The hinge-log is file-based prose, not XTDB hyperedges. The learning-loop's four channels (pattern library, vocabulary, connection-graph, question pool) are related to enrichment's learn-as-you-go pattern but operate at a different layer (operator-capacity vs codebase-intelligence). Non-contributor: the enrichment argument grounds a different mission's apparatus (M-three-column-stack / M-self-representing-stack); its machinery doesn't transpose to the trip-journal's register architecture."
+     :absorbed-patterns []}
+    {:id :ph2
+     :kind :honest-overlap
+     :affects [:b1 :b2]
+     :description
+     "typed-hole-as-frontier (b1) and mission-interface-signature (b2) both ground the boundary-discipline for the mission's incompletenesses. b1 says: represent every gap as a typed hole with WANT/HAVE/discharge. b2 says: every port must be typed with composition constraints. The structurally-void sorry is both a typed hole (b1's central instance) and an unspecified output port (b2's deliberate discovery-during-implementation clause). These are two lenses on the same boundary discipline — b1 provides the representation (how to write the gap), b2 provides the architecture (where the gap sits in the port structure). Recorded as overlap, not double-counted."
+     :absorbed-patterns []}]
+   :library-alternatives
+   [{:for :b4
+     :suggest "futon-theory/stop-the-line"
+     :why "the anti-life-logging tripwires (especially tripwire 2: any tool that indexes hinge-logs across missions = drift) are stop-the-line triggers — they define conditions under which the mission's own protections are being violated and work must halt. stop-the-line grounds the tripwire's force more precisely than state-capture, which is about the broader capture dynamic, not the specific trigger-and-halt mechanic."}]}}}

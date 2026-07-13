@@ -1,0 +1,134 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "viriya (F2) as the energy-circulation question for the JSDQ operator: the terminal vocabulary IS an AIF generative model — observables, beliefs, policies, actions — but viriya asks whether energy actually CIRCULATES through it. Without hooks connecting JSDQ observables to the operator's action surface, the loop is a specification, not a circuit. The mission doc says 'use the vocabulary, don't rebuild the engine' — viriya is why: the AIF engine lives in futon2/AIF+, and the JSDQ operator's job is to provide the HOOKS that let futon2's energy flow through Joe's market-interface state space. The F2 designation means this is futon2's own energy layer — the JSDQ operator inherits it, doesn't replicate it. Energy circulates when: observables (per-sector edge-activity, signal-strength) drive belief updates (mode, policy), which drive action selection (have-the-conversation, build-artifact), which produce new observables. The JSDQ operator must wire these hooks, not describe them"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via
+    "the baseline-cyber-ant as structural template instantiated for Joe's market interfaces: the terminal vocabulary explicitly maps Joe to the ant — forages (co-learns), carries cargo (artifacts), deposits at home (sends invoice), lays pheromone (publishes interfaces). The observables are ant-state (edge-activity=food, signal-strength=pher, revenue-proximity=home-prox, cargo=cargo, reserves=reserve-home). The cyber-ant IS the right structural template for the JSDQ because the 8 sectors ARE foraging interfaces. HOWEVER the baseline-cyber-ant pattern as defined concerns 'pattern-flashed twins' of futon2's species — making cyber-ants from pattern assets. The JSDQ instantiation (binding the ant template to the 8-sector topology with per-sector forage/carry/deposit/trail states) is the unbuilt step. The template transposes; the instantiation does not yet exist"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "structural tension as the observation vector for JSDQ evolution: the sorry topology's typed holes (SORRY-vsat-revenue, SORRY-peer-eval-artifact, SORRY-governance-interface, SORRY-paragogy-revenue) ARE structural tension — each is a connection that should exist but doesn't, and that tension is what the operator OBSERVES. The pattern says structural tension tells you WHEN the library (here: the capability model) needs to evolve. A persistent sorry is not just a gap; it is evolution pressure on the model. The alignment.edn adapter chain (Placemat → Terminal Vocabulary → Hypergraph) is the wiring diagram; the sorry annotations are the structural-tension criteria. Without this connection, the AIF loop and the sorry topology are parallel projects; with it, the sorry IS the observation vector that drives the loop. The operator reads structural tension (which sorries persist?) to update beliefs (which capabilities are stuck?) to select actions (which conversation resolves the constraint?)"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "AIF as environment not instruction: the Emacs modeline doesn't tell you to save — it shows '**' and you notice. The JSDQ operator must constitute the operator's world, not issue commands. The foraging→depositing diagnosis should reach Joe the way the modeline reaches the programmer: the operator GLANCES at the hypergraph state and notices the mode is wrong, the cargo is high, the revenue-proximity is zero. The pocketwatch-as-peripheral design (mission scope-in) is exactly this: AIF state rendered in the sensory surface, not delivered as instruction. This is why the MAP ruling superseded the generic pocketwatch but kept the JSDQ-specific operator — the WM renders generic capability as environment, but the JSDQ operator must render JOE'S market interfaces as environment. The information is in the world (the rendered topology), not in a command ('switch to depositing'). Adaptation, not compliance"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via
+    "the sense-deliberate-act cycle as the JSDQ operator's process structure: the terminal vocabulary IS a sense-deliberate-act loop — observables (sense: edge-activity, signal-strength, revenue-proximity, cargo, reserves), beliefs (deliberate: mode, policy, constraint state, free-energy computation), actions (act: have-the-conversation, build-artifact, lay-new-trail). The three-phase structure prevents both impulsive drift (acting without sensing — e.g. applying for jobs without reading the market signal) and endless deliberation (sensing without acting — the foraging trap). The phase boundaries are where the operator's reasoning becomes INSPECTABLE: at the sense→deliberate boundary, the operator can ask 'am I sensing the right observables?'; at the deliberate→act boundary, 'is my belief-update sound?'; at the act→sense boundary, 'did my action produce new evidence?'. The JSDQ operator must render these boundaries visible so the operator sees WHERE in the cycle they are stuck — the foraging→depositing malfunction is a deliberate→act boundary failure (beliefs formed correctly but action not taken)"
+    :rule "fold-turn/box"}
+   {:id :b6
+    :role :application
+    :satiety :partial
+    :via
+    "the interest-event vocabulary as the maturity-transition provenance discipline: the JSDQ's I0→I4 maturity axis defines state-transitions against sector entities (S0-communication, S1-infrastructure, ... S7-boundary-crossing). The event vocabulary provides the discrimination-shape: state/spawned (first attestation of a capability), state/strengthened (subsequent market evidence), state/refined (capability scope sharpened). The append-only discipline preserves the trail — without it, the operator cannot tell whether maturity progress is real (market-attested) or confabulation (self-reported). The explicit-emission rule keeps the scoring honest. HOWEVER the full 8-event vocabulary is designed for interest-network entities (link/asserted is a cross-essay relation specific to the EoI domain); the JSDQ sector entities are capability-interfaces, not relations between essays. The core — state-transition typing + provenance + append-only — transposes; the relational-event layer does not. Partial: the maturity-event core transposes, the full relational vocabulary does not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b2] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b4] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b6] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b6] :to [:b1] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b5 :discharges :want-signature}
+              {:id :b4 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a JSDQ hypergraph operator whose AIF loop actually CIRCULATES — not a static maturity map but an active cyberant-instantiated sense-deliberate-act cycle where the operator's market-interface observables (edge-activity, signal-strength, revenue-proximity, cargo, reserves) flow through beliefs (mode, policy, constraint state) to actions (have-the-conversation, build-artifact, lay-new-trail), with the hypergraph as the state space and structural tension (the sorry topology) as the observation vector that tells the operator WHEN the model needs to evolve. The MAP ruling (2026-06-09) superseded the generic operational-loop half (pocketwatch, constraint-firing, mission-selection) with WM/capability-star-map/pudding-prover machinery — so this is NOT a second generic AIF engine; it is the JSDQ-specific AIF instantiation where the cyberant template (forage=co-learn, carry=cargo, deposit=invoice, trail-lay=publish) binds to Joe's 8-sector market interfaces, the AIF state reaches the operator as ENVIRONMENT (the operator notices their mode is wrong, like noticing the modeline — not told to switch), and the maturity transitions (I0→I4) are provenance-bearing state-events the operator can inspect at phase boundaries.\nHUNGRY-FOR:\n1. AIF energy circulation through the person-facing model (viriya — without hooks, the terminal vocabulary's AIF loop is a spec, not a circuit; the observables→beliefs→actions pathway must actually flow through JSDQ sectors, not just be described)\n2. The cyberant template instantiated for Joe's market interfaces (the baseline-cyber-ant IS the structural template — forage/co-learn, carry/cargo, deposit/invoice, trail-lay/publish — but the JSDQ instantiation binding it to the 8-sector topology is unbuilt)\n3. Structural tension as the observation vector (the sorry topology's typed holes ARE the structural tension that tells the operator when the capability model needs to evolve — a persistent sorry is evolution pressure, not just a gap)\n4. AIF state as environment not instruction (the operator should NOTICE their foraging-when-should-be-depositing state the way you notice an unsaved buffer — via the peripheral, not a command; the JSDQ operator's design principle is environment-constitution, not instruction-delivery)\n5. Phase-boundary inspectability (the sense-deliberate-act cycle's phase boundaries — observation, belief-formation, action-selection — must be inspectable so the operator can see WHERE in the cycle they are stuck, not merely THAT they are stuck)\n6. Maturity transitions as provenance-bearing state-events (the I0→I4 transitions are state-transitions against sector entities; the interest-event vocabulary's append-only discipline + provenance keeps the trail honest — without it, the operator can't tell whether maturity progress is real or confabulation)\nHAVE: jsdq-terminal-vocabulary.edn (the full AIF adapter — observables, beliefs, policies, actions, constraints, free-energy, the cyberant mapping, the 2026-04-09 snapshot with the foraging→depositing diagnosis); jsdq-hypergraph.edn (8 sectors, 39 items, I0→I4 maturity axis); alignment.edn (sorry topology, adapter chain); MAP ruling 2026-06-09 (operational-loop half superseded by WM — the generic AIF engine, pocketwatch, and scheduler are NOT rebuilt here); futon2 AIF+ (the active inference framework the JSDQ vocabulary plugs into); futon0 Click 1 Beta-binomial template (read-only port)."
+  :psi-sha256
+  "c44981cf22801ef50fcff49ed599b6dfc282866795d2b0667e7da0d76239a75d"
+  :pattern-ids
+  ["devmap-coherence/ifr-f2-viriya"
+   "ants/baseline-cyber-ant"
+   "futon-theory/structural-tension-as-observation"
+   "gauntlet/aif-as-environment-not-instruction"
+   "agent/sense-deliberate-act"
+   "structure/interest-event-vocabulary"]
+  :size 6
+  :truncated false
+  :budget 6
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "a800524301199a8a"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-10"
+  :source "M-hypergraph-operator.md (IDENTIFY + MAP ruling 2026-06-09) authored fresh from AIF-loop-circulation angle — distinct from D1's person-facing-maturity-topology angle; same staleness probe (doc current to 2026-06-09 ruling, operational-loop half superseded, WM confirmed live)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon5a/mission/hypergraph-operator"
+ :proposal/hash "a800524301199a8a"
+ :fold-turn/id "ft-hypergraph-operator-002"
+ :turn
+ {:agent "zai-10"
+  :model "zai"
+  :edge "invoke-1783802284206-219-7389490c"
+  :at "2026-07-11T20:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "viriya: the AIF loop must CIRCULATE energy (observables→beliefs→actions) through JSDQ sectors via hooks — the terminal vocabulary is a spec, not a circuit, until futon2's AIF+ energy flows through Joe's market-interface state space"
+     :fits-pattern "devmap-coherence/ifr-f2-viriya"
+     :addresses-however
+     "without hooks binding JSDQ observables to the AIF engine, the terminal vocabulary describes a loop that doesn't run — viriya says the energy layer is futon2's own (F2), so the JSDQ operator provides hooks, not a second engine. The mission doc's 'use the vocabulary, don't rebuild the engine' IS the viriya discipline"
+     :produces [:aif-energy-hooks]}
+    {:id :b2
+     :role "the cyberant template instantiated for Joe's market interfaces: Joe IS the ant (forage/co-learn, carry/cargo, deposit/invoice, trail-lay/publish) — the observables ARE ant-state, but the per-sector binding to the 8-sector topology is unbuilt"
+     :fits-pattern "ants/baseline-cyber-ant"
+     :addresses-however
+     "the cyberant mapping exists in the terminal vocabulary (Joe forages, carries cargo, deposits at home) but is not yet instantiated per-sector — the baseline-cyber-ant pattern concerns making cyber-ants from pattern assets; the JSDQ instantiation (ant template × 8-sector topology) is the missing step"
+     :produces [:cyberant-instantiation]}
+    {:id :b3
+     :role "structural tension as the observation vector: the sorry topology's typed holes ARE structural tension — a persistent sorry is evolution pressure on the capability model, telling the operator WHEN to evolve it"
+     :fits-pattern "futon-theory/structural-tension-as-observation"
+     :addresses-however
+     "without connecting structural tension to the AIF loop, the sorry topology and the observation pipeline are parallel projects — structural-tension-as-observation says they are the same project: the sorry IS what the operator observes, and the tension IS what drives belief-updates and action-selection"
+     :consumes [:aif-energy-hooks]
+     :produces [:structural-tension-observation]}
+    {:id :b4
+     :role "AIF state as environment not instruction: the operator notices their foraging-when-should-be-depositing state the way you notice an unsaved buffer (modeline '**') — via the sensory surface, not a command"
+     :fits-pattern "gauntlet/aif-as-environment-not-instruction"
+     :addresses-however
+     "a pocketwatch that tells Joe 'switch to depositing' produces compliance; a topology that SHOWS high cargo + zero revenue-proximity + violated constraints produces adaptation. The JSDQ operator must constitute the operator's world, not deliver instructions — this is the peripheral/sensory-surface design principle from the mission's scope-in"
+     :consumes [:structural-tension-observation]
+     :produces [:aif-as-environment-surface]}
+    {:id :b5
+     :role "the sense-deliberate-act cycle as process structure: observables (sense) → beliefs (deliberate) → actions (act) with phase boundaries made inspectable — the foraging→depositing malfunction is a deliberate→act boundary failure (beliefs formed but action not taken)"
+     :fits-pattern "agent/sense-deliberate-act"
+     :addresses-however
+     "without phase-boundary inspectability, the operator knows they are stuck but not WHERE — the three-phase structure prevents impulsive drift and endless deliberation. The JSDQ operator must render the sense→deliberate and deliberate→act boundaries visible, so the operator sees that the failure is at the action-execution boundary, not at the perception or reasoning boundary"
+     :consumes [:cyberant-instantiation :aif-energy-hooks]
+     :produces [:inspectable-phase-boundaries]}
+    {:id :b6
+     :role "maturity transitions as provenance-bearing state-events: I0→I4 transitions typed (spawned, strengthened, refined) with append-only trail + provenance — the operator can tell real maturity progress from confabulation"
+     :fits-pattern "structure/interest-event-vocabulary"
+     :addresses-however
+     "without provenance on maturity claims, the operator cannot distinguish market-attested maturity from self-reported maturity — the event vocabulary's append-only discipline + explicit-emission rule keeps the trail honest. The core state-transition typing transposes to sector entities; the relational-event layer (link/asserted between essays) does not"
+     :produces [:maturity-provenance-trail]}]
+   :policy-holes
+   [{:hole :b1-b5-loop-structure-overlap
+     :note "devmap-coherence/ifr-f2-viriya (energy circulation through hooks) and agent/sense-deliberate-act (three-phase cycle structure) both describe the AIF loop's operation. Assessed as DISTINCT contributions: viriya grounds the ENERGY question (does the loop actually run? — hooks, wiring, futon2 integration) while SDA grounds the STRUCTURE question (are the phase boundaries inspectable? — sense, deliberate, act discrimination). Same loop, different move (energy-flow vs phase-structure). If the reviewer judges these as same-move-different-aspect, they could absorb; I assessed them as distinct because the JSDQ operator needs both the wiring (viriya) and the inspectability (SDA) — they fail differently"
+     :nominal-contribution 6
+     :true-contribution 6}
+    {:hole :b2-b6-provenance-vs-instantiation
+     :note "ants/baseline-cyber-ant and structure/interest-event-vocabulary both touch the JSDQ entity model. The cyberant provides the behavioral template (what the entity DOES: forage/carry/deposit/trail), while the event vocabulary provides the state-transition discipline (how the entity CHANGES: spawned/strengthened/refined with provenance). Assessed as distinct: behavior-template vs state-transition-discipline. Both are needed; they ground different surfaces of the same entity layer"
+     :nominal-contribution 6
+     :true-contribution 6}]
+   :prediction-errors
+   "EXPECTED: this AIF/cyberant/SDA pattern set would fold more naturally than D1's iching/scan set (the mission doc's own vocabulary IS AIF/cyberant). ACTUAL: it folded naturally but the staleness probe's MAP ruling cut DEEPER here — the mission doc says 'use the vocabulary, don't rebuild the engine,' and viriya (F2) made that constraint into the fold's organizing principle: the JSDQ operator provides hooks and instantiation, not a second AIF engine. The surprise was that the MAP ruling's supersession (WM owns the generic loop) is not just a scope-cut but a STRUCTURAL PRINCIPLE visible in the pattern set itself — viriya says futon2 IS the energy layer, so the fold's contribution is wiring, not engine-building. The 2 :partial boxes (b2 cyberant instantiation, b6 event vocabulary) both fail at the same boundary: the template/discipline transposes but the JSDQ-specific binding to the 8-sector topology is unbuilt."}}}

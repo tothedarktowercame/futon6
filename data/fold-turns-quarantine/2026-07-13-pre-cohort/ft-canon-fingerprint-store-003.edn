@@ -1,0 +1,86 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the canon fingerprint store IS an evidence ledger: each CanonFingerprint row must list concrete evidence (paper_id, strategy, strategy_anchor — the structural locator that replaced byte position per §8a), and the CanonAggregate carries source_paper_ids + strategy_breakdown as the citation trail stored next to the canon ID. CI checks (the idempotent re-run from completion criterion 5, the schema-mirroring tests from F1/F2) fail when evidence fields are blank — this is the ledger's 'CI checks that fail when fields are blank' applied to fingerprint records. The MAP-REDUCE pipeline is the ledger-update mechanism: each batch appends evidence-cited records (MAP), the reducer aggregates without losing the citation trail (REDUCE state-merge preserves source_paper_ids). The frequency-ordered seed (§3.1) is the ledger's 'backfill highest-priority patterns first' — most-cited papers and most-common objects are the highest-priority evidence, reduced first. Without this discipline the store collapses into lore: a canon distribution with no paper-level provenance is an unsupported claim, not a fingerprint. The pattern's own words — 'a canon without an evidence ledger collapses into lore' — are the mission's design imperative stated as an anti-pattern"
+    :rule "fold-turn/box"}]
+  :hyperedges []
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a canon fingerprint store where every binding the engine emits becomes a traceable, evidence-cited fingerprint record — not lore. Each CanonFingerprint row carries its proof artifacts (paper_id, strategy, strategy_anchor) so the aggregate is auditable: anyone can inspect which paper, which strategy, which structural locator produced a given (symbol, canon) binding. The store is a canon evidence ledger in the Billey-Tenner sense — searchable, collaborative, indexed by small canonical data — but the 'canonical' part is only honest if every claim cites verifiable evidence. CI checks (idempotent re-run, schema-mirroring tests) fail when evidence fields are blank, preventing drift. The MAP-REDUCE pipeline is the ledger-update mechanism: each batch appends evidence-cited records, the reducer aggregates without losing the citation trail, and the CanonAggregate's source_paper_ids + strategy_breakdown ARE the ledger entries stored next to the canon IDs. Scope bindings (§2.1) extend the ledger: a theorem fingerprint cites not just (symbol, canon) but the scoped role and output relation, each with its own evidence anchor.\nHUNGRY-FOR: the citation discipline that prevents the store from collapsing into lore (every fingerprint must trace to a paper + strategy + structural locator); the CI check that fails on blank evidence fields (the idempotent re-run is the ledger audit); the backfill ordering (most-cited-first per §3.1 is the evidence-ledger's 'backfill highest-priority patterns first' applied to mathematical objects); the aggregate-level auditability (CanonAggregate.source_paper_ids and strategy_breakdown are the ledger citations stored next to the canon ID); the scope-binding evidence (role and scope fields must each cite their own evidence, not just inherit the symbol-level citation).\nHAVE: Stage 5's detect_grounded_symbols (the emission surface that produces fingerprint records); the existing strategy vocabulary (let-binding, single, comma-list, relation-chain) as the strategy-field domain; learned-newcommand-vocab.json snapshots (the current per-batch output, evidence-poor — no paper_id, no strategy_anchor); the §8 decisions RESOLVED (SQLite, scope bindings, strategy-anchor not position); the F1-F5 slice plan (schema+writer, reducer+query, posterior-consumes-store, strategy-merge-proposer, Stage-5-closes-loop); the Billey-Tenner OEIS framing (fingerprints must be 'small, language-independent, and canonical' — canonical requires evidence).\n"
+  :psi-sha256
+  "6a04391e404a71a7ec3fe7f770a0e7f59db6a316d18601ba13ca1f1ac0446622"
+  :pattern-ids
+  ["library-coherence/library-evidence-ledger"]
+  :size 1
+  :truncated false
+  :budget 1
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "b661f0cb20315323"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-3"
+  :source "M-canon-fingerprint-store.md sections 1-9 (HEAD/IDENTIFY/§2.1-scope/§3-MAP-REDUCE/§8-decisions/§9-holes) authored fresh from the mission's own terms through the evidence-ledger lens — resolver-blind to the proposer's pattern rationale; not inherited from ft-canon-fingerprint-store-002 (first-contact discipline between own deposits)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon6-d/mission/canon-fingerprint-store"
+ :proposal/hash "b661f0cb20315323"
+ :fold-turn/id "ft-canon-fingerprint-store-003"
+ :turn
+ {:agent "zai-3"
+  :model "zai"
+  :edge "invoke-1783703533057-77-f68c25be"
+  :at "2026-07-10T19:10:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the canon fingerprint store as evidence ledger: every CanonFingerprint row cites verifiable evidence (paper_id, strategy, strategy_anchor); CanonAggregate carries source_paper_ids + strategy_breakdown as citations next to canon IDs; CI checks (idempotent re-run, schema-mirroring) fail on blank evidence fields; MAP-REDUCE is the ledger-update mechanism; frequency-ordered seed is the backfill-highest-priority-first discipline"
+     :fits-pattern "library-coherence/library-evidence-ledger"
+     :addresses-however
+     "the current output (learned-newcommand-vocab.json) is evidence-poor — no paper_id, no strategy_anchor — so the existing per-batch snapshots are lore, not fingerprints; the evidence-ledger discipline requires every record to cite concrete proof artifacts, and the CI check (idempotent re-run as ledger audit) must fail when those fields are blank, not silently accept incomplete records. The pattern's anti-pattern — 'a canon without an evidence ledger collapses into lore' — is the exact failure mode the store exists to prevent: a canon distribution with no paper-level provenance is an unsupported claim"
+     :produces [:evidence-cited-fingerprint-records]}]
+   :hyperedges []
+   :terminals [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the posterior-consumes-store layer (F3) — the evidence ledger does not ground the Bayesian inference mechanism"
+     :why
+     "the evidence-ledger pattern grounds the CITATION discipline (every fingerprint traces to evidence, CI fails on blanks), but the store's purpose is not just auditability — it IS the prior for the per-binding posterior (§4: P(c|X) proportional to the normalised canon distribution). HOW the canon distribution becomes a Bayesian prior (the reliability-weighting formula from M-bayesian-structure-learning §3.2, the vote-combination mechanism) is not grounded by the ledger pattern. The ledger says 'cite your evidence'; it does not say 'and here is how evidence aggregates into a posterior'. A single-pattern cascade cannot ground the inference layer — it grounds the integrity layer only"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "the scope-binding extraction (how role/scope fields are populated from detect_grounded_symbols output)"
+     :why
+     "the evidence-ledger pattern requires every field to cite evidence, including the new scope fields (role, scope per §2.1) — but HOW Stage 5's detect_grounded_symbols output is mapped to binder/role values is an extraction-design decision not grounded by the ledger pattern. The ledger says 'the role field must cite its evidence'; it does not say 'here is how to extract the role from the paper'. The schema is decidable from the pattern (every field needs a citation); the population strategy is not"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the in-run queryability requirement (§8c: SQLite, Stage 5 queries DURING the run)"
+     :why
+     "the evidence-ledger pattern specifies the citation discipline and the CI check, but not the storage medium or query interface. §8c resolved SQLite specifically because 'in-run queryability is the requirement' — Stage 5 opens the store read/write per run. The ledger pattern is storage-agnostic: it says 'store citations next to pattern IDs' but not 'use SQLite with symbol + canon indexes for in-run query'. The ledger discipline transposes to any storage; the in-run-query requirement is a separate engineering constraint the pattern does not address"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the literature-lifted strategy merge (F4) — the ledger does not ground cross-strategy synonymy discovery"
+     :why
+     "the evidence-ledger grounds per-record provenance and aggregate auditability, but the F4 strategy-merge proposer (§5) requires the literature graph (PM pmrelated, ProofWiki namespaces, nLab parent-links) to detect that two strategies emitting graph-adjacent canons are candidates for merging. The ledger says 'every record cites its strategy'; it does not say 'and here is how to discover that two strategies are capturing the same concept under different framings'. The merge-proposal mechanism is a composition the single pattern cannot supply — it requires the literature graph as an external regulariser"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the held-out gold partition and precision-lift metric — the ledger does not ground falsifiability"
+     :why
+     "the mission's falsifiability criterion (after batch N+1, arbitration precision on common symbols lifts vs empty-store baseline; held-out gold measures it) requires a gold-standard partition and a precision metric — neither grounded by the evidence-ledger pattern. The ledger says 'every claim cites evidence'; it does not say 'and here is how to measure whether the aggregated evidence improves arbitration'. The CI check the pattern supplies (fail on blank fields) verifies ledger integrity, not predictive lift. The falsifiability layer is a validation design the single pattern cannot ground"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "Stage 5's detect_grounded_symbols (the emission surface); the existing strategy vocabulary (let-binding, single, comma-list, relation-chain); learned-newcommand-vocab.json snapshots (evidence-poor — no paper_id, no strategy_anchor); the §8 decisions RESOLVED (SQLite, scope bindings, strategy-anchor not position); the F1-F5 slice plan; the Billey-Tenner OEIS framing."
+  :want
+  "A canon fingerprint store where every binding is an evidence-cited fingerprint record — not lore — with CI checks failing on blank evidence fields, the MAP-REDUCE as ledger-update mechanism, and the frequency-ordered seed as backfill-highest-priority-first."
+  :via
+  "psi authored by zai-3 from futon6/holes/missions/M-canon-fingerprint-store.md (sections 1-9, through the evidence-ledger lens), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-canon-fingerprint-store-002"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

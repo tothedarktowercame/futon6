@@ -60,7 +60,7 @@
   :terminals
   [{:id :b4, :discharges :want-signature}
    {:id :b7, :discharges :want-signature}]},
- :pins [:prompt-sha :arming :delta-g-recompute :clean-0-sorry],
+ :pins [:prompt-sha :arming :coverage-score-delta-recompute :clean-0-sorry],
  :cascade
  {:psi
   "WANT: a recorded disposition (improve→interface / keep-logged / evict) for each of the 23 legacy code/v05/sorry entries with a one-line rationale, so the sorry type carries ONE coherent meaning (the interface sense) and no paid-for signal is lost.\nHUNGRY-FOR: a careful validation-and-improvement pass — NOT a blanket retyping; recovering real have→want interfaces via the A-next method (doc+code+git+XTDB) where they hide, discriminating the rest as :logged, evicting only the resolved/n-a-by-design.\nHAVE: 23 logged-issue entries (single self-endpoint, prose :sorry/title, zero have/want orientation, zero typed endpoints over real ns-vars); the A-next interface-sorry schema (labs/A-next-sorry-hyperedge-schema.md); the legacy-sorries-snapshot.edn audit trail (sha256 d242066d…); the gated erase path (futon1a/scripts/erase.bb, penholder joe); first-pass hypotheses (the 4 :open most likely to hide a real interface; :n-a-by-design lean evict/keep).\n",
@@ -83,7 +83,7 @@
   :size 11,
   :truncated false,
   :budget 20,
-  :F-free-energy 1.113,
+  :cascade-score 1.113,
   :constructor
   {:entry "construct_cascade",
    :epsilon 0.15,
@@ -300,4 +300,4 @@
    "4a6a28b2423f9899f92b598ff1d5f2f3ecbb2832a4f624fac4960462a1b8e862"},
   :prose-source
   "verbatim futon3/library/<pattern-id>.flexiarg"},
- :eval {:delta-g -0.5714285714285714, :g-grain :coverage}}
+ :eval {:coverage-score-delta -0.5714285714285714, :score-grain :coverage}}

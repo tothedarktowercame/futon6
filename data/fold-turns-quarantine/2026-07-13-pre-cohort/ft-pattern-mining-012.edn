@@ -1,0 +1,129 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the IFR demands typed pattern shapes — {context, tension, ameliorating-move} where context means a region of the futon stack codebase, not an abstract scenario. This IS the shape-first protocol: 'what shape is a pattern one instance of?' The answer: a pattern is an instance of the protocol 'typed region inside a geometric projection of the codebase'. The current {id, title, hotwords} flat record is the anti-pattern the mission exists to replace — it is the literal-sentence implementation with no visible family. The hypergraph-first verdict directly applies the shape-first discipline: typed slots are the whole point (well-specified ✓ in the IFR comparison table), and namespace-discriminated instances (pattern/instance IDs) are how patterns live as subgraphs. The mission has already found the family (context→tension→move is the protocol signature) and multiple instances (each pattern in the 955-entry catalog is an instance); progressing to MAP without the shape would have been the coherence violation IC-shape-first guards against"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via
+    "the six-layer ingestion architecture (L0 topology → L1 mission provenance → L2 pattern provenance → L3 evidence binding → L4 tension surface → L5 cross-futon dependencies) is the DERIVE plan for the replacement hypergraph substrate: each layer verified before the next, because the current pipeline's failures (F-1 through F-6) are the cascade symptoms of an unlayered substrate where errors in topology corrupt provenance silently. P-8 (auto-ingest pipeline with debounced, content-hashed, per-file incremental embedding) is a shadow of L0; P-5a (activation browser) is a shadow of L4 (tension surface). HOWEVER the six layers are specified for the ENRICHMENT store (code browser), not for the pattern-mining pipeline; the mapping is structural (each layer addresses one concern, verified before the next) but the specific layers don't transpose one-to-one. The pattern-mining substrate's layers would be: L0 pattern-library topology (the .flexiarg files), L1 pattern-to-codebase-region provenance, L2 pattern-to-evidence binding, L3 activation-on-turn records, L4 catchment/tension surface, L5 cross-mission dependencies — a reshaped L0-L5, not the enrichment layers verbatim. The layered discipline transposes; the specific layer assignments are the DERIVE work this MAP-state mission has not yet done"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "F-6 IS the violation of this pattern: the searchable corpus (407 embedded patterns) monotonically drifts from the canonical library (955 catalogued patterns) because adding a new .flexiarg file does not make it retrievable without a manual re-embedding. The pattern prescribes immutable/versioned source of truth (futon1 → the canonical library IS the source of truth, the embeddings JSON is a derived artifact that drifted) with live sync (P-8 auto-ingest pipeline IS the live sync: watch roots, debounce, content-hash, incremental embed, emit evidence per ingestion). The bidirectional flow (drafts back upstream) connects to the sibling mission M-pattern-application-diagnostic's typed-pattern work and M-operational-vocabulary's promotion paths — new patterns discovered in mining flow back to the library. The version-logging requirement (log which pattern version was used in each run) maps to the prior/posterior framing (M-5): each pattern carries prior/session-delta/posterior, and the version ID IS the prior's anchor. The immutable-source-of-truth discipline is what prevents the F-2 ID collisions: if the canonical library is the single source, the embeddings file cannot develop independent collisions"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via
+    "the mission's sorry IS the structural tension the glacial loop observes: 'we are emitting pattern-retrieval evidence as if it were a clean sensor reading on what patterns are firing, when in fact it is a noisy, biased, partially-collated reading whose biases we have not characterised.' This gap — between what the library says should work (similarity retrieval) and what actually works in practice (decoration, not diagnosis) — IS free energy. The six findings are the three observation-vector components: F-1/F-6 (coverage gap, corpus drift) = STRUCTURAL IRRITATION (a recurring problem shape: patterns are invisible to retrieval); F-3/F-4 (transport bias, silent-fail) = PRE-SYMBOLIC PRESSURE (difficulty expressing what the task IS — the existing vocabulary {id, title, hotwords} is insufficient to describe activation); F-5 (meta-pattern dominance) = TRANS-SITUATIONAL REAPPEARANCE (broad-catchment patterns appear across unrelated contexts because MiniLM cannot distinguish real signal from wide catchment). The NAMING step (giving each finding an F-number and a citable description) compresses raw tension into representable observation. The SELECTION step (the hypergraph-first verdict, choosing which observations to take seriously) updates the model. The CANALIZATION step (promoting typed-shape retrieval to invariant status — the IFR) changes what future tasks are governed by. The mission IS the glacial loop in operation"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b4] :to [:b1] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b3] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b2 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a pattern-mining substrate where each turn A→B is coded as an activation of a well-specified, repeatable, demonstrably-valuable pattern — the IFR. The current futon3a MiniLM-cosine pipeline is artifact, not signal: it produces similarity scores, not structural diagnoses. The replacement is hypergraph-first: patterns as typed shapes (context → tension → ameliorating-move) living as subgraphs inside a geometric projection of the codebase, where retrieval is 'where does this turn land and which pattern-shaped neighbourhoods is it inside?' — diagnostic, not similarity. The five IFR properties (coverage, well-specified, repeatable, demonstrable value, replicable under automation) are the acceptance criteria; the current pipeline fails all five.\nHUNGRY-FOR: the layered ingestion that builds the typed substrate incrementally — L0 namespace topology verified before L1 mission provenance, L1 before L2 pattern provenance, each layer a checkpoint, because ingesting all six concerns at once would cascade errors silently (F-1 through F-6 are the cascade symptoms of an unlayered substrate); the live sync that keeps the searchable corpus identical to the canonical library — new .flexiarg files become retrievable automatically, versioned, with the corpus as immutable source of truth (F-6: the 548 missing patterns, the monotonic drift between catalog and embeddings, is the violation of this); the structural tension (coverage gap, silent-fail invisibility, meta-pattern dominance, transport bias) READ as the glacial loop's observation vector — these are not bugs to fix but the system telling the library it needs to evolve from embedding-similarity to typed-shape-diagnostic; the shape-first discipline applied to the pattern schema itself — 'what shape is this pattern one instance of?' before progressing — so the typed slots {context, tension, move} are the protocol family, and individual patterns are namespace-discriminated instances, not flat {id, title, hotwords} records.\nHAVE: the IDENTIFY findings (F-1: 955 catalogued but only 407 searchable; F-2: ID collisions; F-3: producer-side Claude-only bias until 2026-04-26; F-4: silent-fail on empty results; F-5: top hits are meta-patterns about pattern infrastructure; F-6: corpus drifts from on-disk library); the MAP-phase typed pipeline graph (M-1: only the query→pattern edge is learned, everything else is mechanical); seven bounded probes P-1 through P-8 sequenced (invoke-factory audit, embeddings-coverage audit, collision sweep, empty-result emission, activation browser, embedding comparison, prior/posterior shape, auto-ingest pipeline); the hypergraph-first verdict against embedding-first on three of five IFR properties; the sibling mission M-pattern-application-diagnostic carrying the IFR-direction work; the lineage (futon5a stereolithography, B→A typed graph, Arxana hypergraph, futon3a embeddings as the one unsuited projection)."
+  :psi-sha256
+  "42e8a6a57def0248c377672f25975d4a3df8ef96996326981596ea7ad1463d05"
+  :pattern-ids
+  ["enrichment/layered-ingestion"
+   "exotic/live-sync-source-truth"
+   "futon-theory/structural-tension-as-observation"
+   "invariant-coherence/shape-first-identify"]
+  :size 4
+  :truncated false
+  :budget 4
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "4dae731fd2ec629a"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-4"
+  :source "M-pattern-mining.md (IFR/IDENTIFY-findings/MAP-pipeline-graph/verdict/lineage) authored fresh from the mission's own terms through the four-pattern combined lens — resolver-blind to the proposer's pattern rationale; first-contact with this mission doc"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3-d/mission/pattern-mining"
+ :proposal/hash "4dae731fd2ec629a"
+ :fold-turn/id "ft-pattern-mining-012"
+ :turn
+ {:agent "zai-4"
+  :model "zai"
+  :edge "invoke-1783709013194-105-dc6dc200"
+  :at "2026-07-10T21:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "shape-first IDENTIFY applied to the pattern schema: the IFR's typed slots {context, tension, move} ARE the protocol family; the current {id, title, hotwords} is the flat-record anti-pattern; hypergraph-first IS the shape with multiple instances already visible (955 catalogued patterns)"
+     :fits-pattern "invariant-coherence/shape-first-identify"
+     :addresses-however
+     "the mission could have progressed from IDENTIFY to MAP with only the literal finding ('MiniLM is biased') without naming the shape (typed-shape retrieval as the protocol, embedding-similarity as the one unsuited projection). Instead the IFR names the protocol signature explicitly (context→tension→move), the hypergraph-first verdict enumerates the instances (the lineage: futon5a stereolithography, B→A typed graph, Arxana hypergraph), and the sibling mission M-pattern-application-diagnostic carries the family work. IC-shape-first is satisfied: the mission found the family before the instance"
+     :produces [:typed-pattern-schema]}
+    {:id :b2
+     :role "the six-layer ingestion architecture as the DERIVE plan for the replacement substrate: each layer verified before the next (L0 topology → L1 provenance → ... → L5 dependencies), because F-1 through F-6 are cascade symptoms of an unlayered substrate"
+     :fits-pattern "enrichment/layered-ingestion"
+     :addresses-however
+     "the six layers are specified for the enrichment store (code browser), not for the pattern-mining pipeline; the specific layers (L0 namespace topology, L1 mission provenance, etc.) map structurally but not verbatim — the pattern-mining substrate needs its own L0-L5 (pattern-library topology, pattern-to-codebase-region provenance, activation-on-turn records, catchment surface, cross-mission dependencies). The layered discipline transposes (verify each layer before the next); the specific layer assignments are the DERIVE work this MAP-state mission has not yet done. The mission is at MAP entering DERIVE, not yet building the hypergraph — the layers are the plan, not the built artifact"
+     :consumes [:typed-pattern-schema]
+     :produces [:incremental-layered-build-plan]}
+    {:id :b3
+     :role "live sync from source of truth: F-6 IS the violation (corpus drifts from canonical library); P-8 auto-ingest IS the prescribed sync; the canonical library IS the immutable source; version-logging maps to the prior/posterior framing"
+     :fits-pattern "exotic/live-sync-source-truth"
+     :addresses-however
+     "one-time import drifts out of date — exactly F-6 (548 patterns missing, monotonic drift); continuous sync without versioning loses reproducibility — the prior/posterior framing (M-5) IS the versioning that prevents this; the bidirectional flow (drafts back upstream) connects to the promotion paths in M-operational-vocabulary and the sibling M-pattern-application-diagnostic. The F-2 ID collisions are what happens when the source of truth is not immutable and unique — two patterns claiming the same ID is the overwrite the immutable-source discipline prevents"
+     :produces [:live-synced-corpus]}
+    {:id :b4
+     :role "structural tension as the glacial loop's observation vector: F-1/F-6 = structural irritation, F-3/F-4 = pre-symbolic pressure, F-5 = trans-situational reappearance; the mission's sorry IS free energy; NAMING (F-numbers) → SELECTION (hypergraph-first verdict) → CANALIZATION (IFR as invariant)"
+     :fits-pattern "futon-theory/structural-tension-as-observation"
+     :addresses-however
+     "the mission's own framing ('we are emitting pattern-retrieval evidence as if it were a clean sensor reading when it is noisy, biased, and partially-collated') IS the gap between what the library says should work and what actually works — the definition of free energy in library evolution. Reading the findings not as bugs to fix but as the system telling the library to evolve (from embedding-similarity to typed-shape-diagnostic) is exactly the pattern's thesis: structural tension is the observation vector for the glacial loop, and this mission IS that loop in operation"
+     :produces [:tension-as-evolution-signal]}]
+   :wires
+   [{:from :b4 :to :b1 :connective :seq}
+    {:from :b1 :to :b2 :connective :seq}
+    {:from :b3 :to :b2 :connective :copar}
+    {:from :b4 :to :b3 :connective :copar}]
+   :terminals [{:id :b2 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "enrichment/layered-ingestion"
+     :free "the specific L0-L5 layer assignments for the pattern-mining substrate are not the enrichment layers verbatim"
+     :why
+     "the pattern specifies L0 namespace topology, L1 mission provenance, L2 pattern provenance, L3 evidence binding, L4 tension surface, L5 cross-futon dependencies — these are enrichment-store layers (for the code browser). The pattern-mining substrate needs its own layering: pattern-library topology, pattern-to-codebase-region mapping, activation records, catchment/tension surface, cross-mission dependencies. The layered discipline (verify each before the next, each layer a checkpoint) transposes; the specific layers do not. Recording as policy-hole rather than forcing a false one-to-one mapping or dropping the pattern — the discipline is load-bearing even though the layer assignments are the DERIVE work"
+    :id :h2
+     :unfolded-pattern nil
+     :free "the actual hypergraph substrate build is not grounded by any of the four patterns"
+     :why
+     "the four patterns ground the WHY (tension-as-observation: b4), the WHAT (typed pattern shapes: b1), the HOW-ORDERED (layered ingestion: b2), and the HOW-SYNCED (live sync: b3). But the actual hypergraph implementation — the geometric projection of the codebase, the subgraph-match retrieval mechanism, the typed-slot extraction from .flexiarg files — is the DERIVE work the mission has chartered (P-1 through P-8) but not yet built. The patterns name the shape of the solution; they do not supply the Arxana hypergraph wiring, the futon5a stereolithography machinery, or the futon1a hyperedge API integration. The build is the mission's own work, not derivable from these patterns"
+    :id :h3
+     :unfolded-pattern nil
+     :free "the B→A mirror (M-trip-journal, the operator-side mining) is referenced but not grounded"
+     :why
+     "the mission doc extensively references the B→A side (M-trip-journal's hinge-log, E-btoa-candidate-queue-reweighting-v0, the prior/posterior symmetry). The four patterns ground the A→B replacement (pattern retrieval from agent turns), but the B→A mirror (learning from operator-side turns) is explicitly out-of-scope for this mission ('Building the B→A side of the queue. That's M-trip-journal'). The live-sync pattern's bidirectional flow gestures at the B→A return path, but the actual B→A learning mechanism is not grounded by any of these four patterns — it is a sibling mission's work"
+    :id :h4
+     :unfolded-pattern nil
+     :free "the disconfirmation check (P-6: MiniLM vs GloVe vs FastText comparison) is not grounded — the patterns prescribe replacement, not comparison"
+     :why
+     "the four patterns all point toward the hypergraph-first replacement. But the mission's P-6 probe is a disconfirmation check: if a different embedding looks materially saner via the activation browser, the pipeline survives with a model swap. The patterns do not ground the comparison-of-embeddings procedure because they prescribe moving beyond embeddings entirely. The disconfirmation check is a scientific-hygiene step (test the null hypothesis before retiring the substrate) that the patterns' directional commitment (hypergraph-first) does not address. The patterns say 'replace'; the mission also says 'but first verify the embedding-class verdict stands'"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "the IDENTIFY findings (F-1 through F-6: coverage gap, ID collisions, transport bias, silent-fail, meta-pattern dominance, corpus drift); the MAP-phase typed pipeline graph; seven bounded probes P-1 through P-8 sequenced; the hypergraph-first verdict; the lineage of four partial projections; the sibling mission M-pattern-application-diagnostic carrying the IFR-direction work."
+  :want
+  "a hypergraph-first pattern-mining substrate where patterns are typed shapes (context→tension→move) living as subgraphs in a geometric projection of the codebase, ingested incrementally in verified layers, live-synced from the canonical library, with the current pipeline's structural tensions read as the observation vector driving the replacement."
+  :via
+  "psi authored by zai-4 from futon3/holes/missions/M-pattern-mining.md (IFR/IDENTIFY/MAP/verdict/lineage), resolver-blind to the proposer's pattern rationale; first-contact with this mission doc"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

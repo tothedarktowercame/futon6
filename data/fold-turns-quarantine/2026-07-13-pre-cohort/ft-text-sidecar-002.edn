@@ -149,4 +149,4 @@
   :via
   "psi authored by zai-12 from futon2/holes/M-text-sidecar.md (HEAD/IDENTIFY/MAP/VERIFY/D1-ACCEPTANCE/CHECKPOINTS + staleness-probe verifying D1 artifacts and P1 outputs on disk), resolver-blind to the proposer's pattern rationale; authored fresh through the storage-determinism lens, not inherited from ft-text-sidecar-001"
   :rule "fold-turn/hole-from-mission-doc"}
- :eval {:delta-g "not-computed — blinded proposal fold, no cascade_serve.py run" :g-grain :coverage}}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

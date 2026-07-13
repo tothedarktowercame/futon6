@@ -1,0 +1,86 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "the mission's extraction pipeline IS this pattern's evidence base: the op-field discourse drift (~50% pre-fix → 0 in smoke via move-class allowlist + 'none' sentinel), the new_patterns over-firing (95% → 27% via rate-anchored instruction → 8% via rate-anchor + golden negatives), the correction label over-firing (88% → default-to-reach + 'agreement-plus-detail is NOT a correction' + negatives), and the off-spec creep caught by allowlist warn (resume/pair/draft/continue) that the blocklist missed — these ARE the pattern's EVIDENCE section (dated 2026-06-25, futon6). The pattern's discipline applies fully at CPU scale and the GPU box run is its at-scale stress test: the ~6.4k-turn run is where the allowlist + frequency anchor + labeled negatives must hold without regressing. P2 (bounded op-vocabulary) and P6 (new-pattern proposals = the R17 signal) are precision-bound predictions that this pattern directly grounds — P6 is only usable if new_patterns fires at honest rarity, which is exactly the default-to-common + frequency-anchor + negatives discipline the pattern prescribes. The joint runner's 4-part schema (memes · pattern_apps · cascade · new_patterns) has two fields (op in memes, new_patterns) that are the pattern's direct concern, and pattern_apps is a vocabulary-constrained field (must name real PSR patterns, not discourse paraphrases) — the same allowlist discipline transposed to a different downstream vocabulary"
+    :rule "fold-turn/box"}]
+  :hyperedges []
+  :terminals [{:id :b1 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: the GPU box run's extracted fields constrained to downstream vocabularies at scale — the miner's op field limited to WM move-classes (build/dispatch/deploy/find/close/survey/apply-cascade), new_patterns defaulting to the common case (the R17 signal is precision-bound: if new-pattern over-fires at 95%, it drowns the niche-construction signal the mission exists to detect), and pattern_apps naming real PSR patterns not discourse paraphrases. The CPU smoke-test corrections (discourse verbs ~50%→0, new_patterns 95%→8% via allowlist + frequency anchor + golden negatives) must survive the ~6.4k-turn GPU run without regressing — the box run is where unconstrained extraction meets real mess at volume, and an allowlist check (not a blocklist) gates every field. P6 (new-pattern proposals = the R17 signal) is only usable if new_patterns fires at honest rarity, not at model-temptation frequency.\nHUNGRY-FOR: the allowlist discipline holding at GPU scale (the CPU corrections were validated on a smoke sample; the box run is the stress test where off-spec creep — near-synonyms like resume/pair/draft/continue that a blocklist misses — could return); the rare-label precision surviving volume (default-to-common + frequency anchor + labeled negatives must hold when the model processes 6.4k turns, not just the smoke set); the op-field staying operational (the downstream act-gate can only consume a value in its own vocabulary — a discourse verb is downstream-dead, producing a move the WM cannot act on); the endpoint-resolution vocabulary staying honest (the contextual 59% / named 23% / unsupported 18% tiers from P1 must not inflate unsupported→contextual under volume pressure).\nHAVE: the CPU-validated extraction discipline — op constrained to move-class vocabulary + 'none' sentinel (discourse drift ~50%→0 in smoke); new_patterns rate-anchored ('almost always []') + golden negatives (95%→27%→8%); correction label default-to-reach + 'agreement-plus-detail is NOT a correction' + negatives (88% over-fire addressed); allowlist warn catching off-spec creep (resume/pair/draft/continue) that the blocklist missed; the joint runner's 4-part schema (memes · pattern_apps · cascade · new_patterns) stub-validated at 6/8 candidate recall; the preregistration P1–P6 predictions with decision rule. The GPU box run is where these CPU-scale corrections meet ~6.4k turns of real human→agent asks at volume."
+  :psi-sha256
+  "6ca7c21a281611952b020095a4a0ad930133bb3e3b8a6e1eb1cc48b5cafeb5e1"
+  :pattern-ids
+  ["data-mining/constrain-extraction-to-the-downstream-vocabulary"]
+  :size 1
+  :truncated false
+  :budget 1
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "ab1e77e5de2fc3a2"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-4"
+  :source "M-operational-vocabulary.md sections 1-6 (IDENTIFY/MAP-DERIVE/ARGUE/VERIFY/INSTANTIATE/completion-criteria) authored fresh from the mission's own terms through the constrain-extraction-to-the-downstream-vocabulary lens — the vocabulary-constraint / over-firing / precision discipline applied to the miner's output fields at GPU scale; resolver-blind to the proposer's pattern rationale; not inherited from ft-operational-vocabulary-001 or ft-operational-vocabulary-002 (first-contact discipline between own deposits)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon2-d/mission/operational-vocabulary"
+ :proposal/hash "ab1e77e5de2fc3a2"
+ :fold-turn/id "ft-operational-vocabulary-003"
+ :turn
+ {:agent "zai-4"
+  :model "zai"
+  :edge "invoke-1783708857064-103-7564bcfa"
+  :at "2026-07-10T20:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the extraction-constraint discipline at GPU scale: op-field allowlisted to move-classes, new_patterns defaulting to common case with frequency anchor + golden negatives, pattern_apps naming real PSR patterns — the CPU smoke-test corrections (50%→0 discourse drift, 95%→8% over-firing) must survive the ~6.4k-turn box run; P2 and P6 are precision-bound predictions this pattern directly grounds"
+     :fits-pattern "data-mining/constrain-extraction-to-the-downstream-vocabulary"
+     :addresses-however
+     "the model labels the SURFACE act not the operational target, and reaches for the interesting label far more often than the data warrants — at CPU scale this was corrected (allowlist + default-to-common + frequency anchor + labeled negatives), but the GPU box run is the stress test: 6.4k turns of real mess at volume is where off-spec creep (near-synonyms a blocklist misses) and over-firing regress if the allowlist gate is not enforced in-code. The pattern's own evidence is this mission's CPU validation — the discipline transposes fully because it was derived FROM this pipeline's extraction problem"
+     :produces [:vocabulary-constrained-extraction-at-scale]}]
+   :hyperedges []
+   :terminals [{:id :b1 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the joint retrieval mechanism (CPU retriever: top-K candidate missions+patterns per turn via concept-tag/co-embedding) — the extraction-constraint pattern does not ground retrieval"
+     :why
+     "the pattern constrains what the model EMITS for fields the downstream consumes, but the CPU retriever that feeds candidates to the GPU joint reasoner is a separate subsystem: concept-tag (1307-surface gazetteer, 32/300 turns route) and co-embedding (198 missions, 161-d, 0.79 NN-match). The retrieval quality (6/8 candidate recall at stub-validation) determines what the joint reasoner can ground; the extraction constraint determines how it labels what it sees. A single-pattern cascade cannot ground the retrieval layer — it grounds the labelling discipline only. P5 (joint retrieval lifts grounding) is the prediction that measures retrieval quality, not extraction precision"
+    :id :h2
+     :unfolded-pattern nil
+     :free "the cascade composition step (c) of the joint runner's 4-part schema — the extraction-constraint pattern does not ground cascade assembly"
+     :why
+     "the joint runner's schema is (a) memes, (b) pattern_apps, (c) cascade, (d) new_patterns. The pattern grounds the extraction discipline for fields (a) op, (b) pattern_apps naming, and (d) new_patterns firing rate. But (c) cascade composition — HOW individual pattern applications and memes are wired into a sequential/coproduct cascade with honest hyperedges — is a composition skill not derivable from 'constrain to the downstream vocabulary'. The allowlist governs what labels appear; it does not govern how labelled boxes are wired into a cascade structure. The composition layer needs the fold-turn/wire rule family, not the extraction-constraint pattern"
+    :id :h3
+     :unfolded-pattern nil
+     :free "the promotion paths (new_patterns→library, cascades→move-set, meme-moves→substrate-2 PROOF) — the extraction-constraint pattern does not ground promotion"
+     :why
+     "the pattern constrains extraction so the OUTPUT is usable (the R17 signal is precision-bound because the promotion path new_patterns→library can only promote honest niches, not noise). But HOW a new_pattern is promoted to the library, HOW a cascade enters the move-set, HOW meme-moves populate substrate-2's PROOF layer — these are promotion mechanisms the pattern does not address. The pattern makes the signal clean enough to promote; it does not supply the promotion procedure. The §5 post-run promotion step is chartered but not built, and the extraction-constraint pattern cannot ground its implementation"
+    :id :h4
+     :unfolded-pattern nil
+     :free "the backward/sorry half — the extraction-constraint pattern is forward-only"
+     :why
+     "the pattern's evidence and mechanics are entirely forward (have→want memes, the WM's methods). The backward half (want⊣have sorries, the WM's goals, chartered as M-goals-and-holes/M-a-sorry-enterprise) has its own extraction problem: sorry-classification (110 real vs 33 boilerplate, the trust filter). The extraction-constraint discipline WOULD transpose to the sorry vocabulary (constrain sorry-type to the capability-star-map vocabulary, default to boilerplate), but that application is not yet built and the pattern's evidence does not cover it. The forward extraction discipline transposes; the backward extraction discipline is a policy-hole because the backward half is chartered, not instantiated"
+    :id :h5
+     :unfolded-pattern nil
+     :free "the endpoint-resolution tiers (contextual 59% / named 23% / unsupported 18%) — the extraction-constraint pattern governs field vocabulary, not endpoint grounding"
+     :why
+     "P1 predicts endpoint-resolution tiers ~59/23/18, measured from the CPU stub. The extraction-constraint pattern ensures the op field is a valid move-class, but the endpoint-resolution question (does 'have' ground to a real mission id, does 'want' ground to a real mission id, or is the endpoint merely contextual/unsupported?) is a different problem: it is about whether the meme's source/target entities are real, not whether the label is in-vocabulary. The pattern says 'constrain op to move-classes'; it does not say 'and here is how to assess whether the have/want endpoints are real ids vs contextual descriptions'. The endpoint-resolution layer needs the grounding-tier taxonomy from the meme-mine-runner spec, not the extraction-constraint pattern"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "the CPU-validated extraction discipline — op constrained to move-class allowlist (50%→0 discourse drift), new_patterns rate-anchored + golden negatives (95%→8%), correction default-to-reach + negatives (88% addressed), allowlist warn catching off-spec creep; the joint runner's 4-part schema stub-validated at 6/8 candidate recall; preregistration P1–P6 with decision rule."
+  :want
+  "the extraction-constraint discipline surviving the ~6.4k-turn GPU box run at scale — op, new_patterns, and pattern_apps staying in-vocabulary under volume, with P2 (bounded op-vocab) and P6 (R17 signal) as the precision-bound predictions this discipline grounds."
+  :via
+  "psi authored by zai-4 from futon2/holes/M-operational-vocabulary.md (sections 1-6, through the constrain-extraction-to-the-downstream-vocabulary lens), resolver-blind to the proposer's pattern rationale; authored fresh, not inherited from ft-operational-vocabulary-001 or ft-operational-vocabulary-002"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

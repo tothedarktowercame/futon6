@@ -1,0 +1,151 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "world-is-hypergraph as the ArSE's environment design: the agents' game world is not a separate artifact to build — it IS the hypergraph they already inhabit. futon4 (Arxana) is the hypertext fabric with N-ary typed hyperedges connecting documents, code, annotations, and agents; futon1a (XTDB) is the persistent map; futon6 (math dictionary / proof engine) is a quest zone. The ArSE's self-play loop (Asker queries the graph for gaps, Answerer constructs answers, Critic evaluates) operates IN this hypergraph — the questions target isolated nodes and missing cross-links (navigable gaps in the world), the answers are new hyperedges (typed relations added to the graph), and the critic scores gate whether the new edge is committed. The landed code confirms this: arse-store.py stores synthetic QA in hypergraph-native format (typed nodes and edges, immediately FAISS-indexable), and run-arse-hotspot-loop.py weaves hotspot identification (gap analysis in the proof graph) with corpus retrieval and synthetic QA generation — the proof nodes ARE the Askers (they generate questions via gap analysis), the LLM is the Answerer, the hypergraph schema is the structure. The pattern's evidence (ALFWorld sessions showed first-person inhabitation language; the same phenomenology emerged when exploring Drawbridge code) confirms: agents navigating the hypergraph experience it as a world, not an API"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "agential-oss-infrastructure as the ArSE's evidence and audit layer: when agents ask, answer, and evaluate questions in the Stack Exchange, their learning loops must be explicit, machine-checkable, and auditable — PSR (pattern selection records) for which retrieval/generation strategy the Answerer chose, PUR (pattern use records) for what happened, confidence scoring for the Critic's evaluation, and evidence chains linking Q to A to graph-update. The pattern's core claim — 'agents don't learn through socialization; their learning loops must be explicit' — is the ArSE's design imperative: the gate pipeline (futon3b G5 to G0) IS the institution that makes agent Q&A auditable (G3 requires PSR, G1 produces PUR, G0 gates on durability). The landed code (generate-synthetic-qa.py uses the codex backend with structured output) already produces audit-trail-shaped artifacts; the arse-store.py's ingest/reindex/query operations are the evidence-chain infrastructure. The pattern's next-steps (document how sidecar logging enables coordination patterns, identify which tacit human OSS practices need explicit agent infrastructure) map to the ArSE's Phase 2 (institutional modelling: map SE reputation mechanics to gate constraints)"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :partial
+    :via
+    "teaching-inversion as the ArSE's knowledge-transfer channel: the default assumption (knowledge flows one way: human teaches agent) becomes false when agents explore faster than humans — the ArSE's self-play loop produces answers the human hasn't seen, and the teaching channel (IRC, PAR, handoff documents) must carry insight, not just results. The pattern maps to Phase 5 (GitHub integration: the Stack Exchange becomes the stack's own support forum) and to the Q-perp-A structure (a well-posed question constrains its answer — the Askers' gap-analysis questions ARE the teaching surface, because they reveal what the graph is missing). HOWEVER teaching-inversion is about the agent-to-human direction specifically — the ArSE's primary loop is agent-to-agent (Asker to Answerer to Critic), with the human as supervisor. The insight-carries-not-just-results discipline transposes to the agent-to-agent channel (the Critic must explain WHY a Q&A pair scored low, not just THAT it did), but the pattern's specific concern (human learning from agent discoveries, vocabulary-trajectory impulses) is a Phase 5 concern, not the core self-play loop. The communication-channel-carries-insight discipline transposes; the human-learning-specific framing applies only to Phase 5"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "ai4ci/umbrella as the ArSE's reasoning-cue extraction frame: the pattern's core claim — AI should train humans in cognitively intense skills by surfacing mid-level reasoning cues from expository traces, not just polished outcomes — maps to the ArSE's Q&A quality criterion: the system should produce answers that carry the REASONING PROCESS (the cues, the tactic-describing phrases), not just the correct result. The ArSE's critic agent should evaluate whether a Q&A pair surfaces reasoning cues, not just whether the answer is correct. The pattern's constrained-workflow next-step (extract, validate, evaluate mid-level reasoning cues in mathematics) IS the ArSE's Phase 1 self-play loop applied to mathematical proofs: the hotspot loop (run-arse-hotspot-loop.py) identifies proof nodes that need reasoning (the gaps), and the synthetic QA generation targets those gaps with reasoning-bearing answers. HOWEVER ai4ci/umbrella is specifically about AI TRAINING HUMANS — the ArSE's primary loop is agent-to-agent self-play for graph improvement, not human training. The reasoning-cue-surfacing discipline transposes to the agent-to-agent Critic evaluation; the human-training framing applies to Phase 5, not the core loop"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "f0-f4-boundary as the ArSE's signal-structure separation: FUTON0 tracks signals (is continued ascent safe and worthwhile? = is the self-play loop producing quality Q&A?) while FUTON4 records structures (what movements are possible from here? = what new graph connections are now navigable?). The boundary maps to the ArSE's separation between the Critic's quality signals (gate scores, evidence-weighted evaluations — these are FUTON0 signals answering 'is this Q&A pair worth committing?') and the hypergraph's structural additions (new typed edges, new annotated nodes — these are FUTON4 footholds answering 'what new questions can we now ask?'). The pattern's anti-pattern (blurring the roles risks false reassurance or unsafe exertion) maps to: using graph-growth metrics (number of new edges) as quality signals (are the edges GOOD?) conflates FUTON0 and FUTON4. HOWEVER f0-f4-boundary is a personal-exploration pattern about separating situational awareness from action affordance in long-term working life — its domain is the operator's cognitive discipline, not the ArSE's system architecture. The signal-structure separation transposes as a design principle; the personal-exploration framing does not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b5] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1] :to [:b3] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b4] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :seq :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b2 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: a running Artificial Stack Exchange where agents ask questions, answer them, evaluate the results, improve a shared knowledge graph, and write new agents and new institutions — the futon stack's primary engine of self-improvement. Phase 1 (self-play instantiation) has landed code (arse-store.py, run-arse-hotspot-loop.py, generate-synthetic-qa.py) that implements the hotspot loop (proof-graph gap analysis -> corpus retrieval -> synthetic QA generation in hypergraph-native format), but the full Asker/Answerer/Critic loop for 100 iterations with measurable graph growth is not yet run. Phases 2-5 (IAD institutional modelling, agents writing agents M16, agents writing institutions M17, GitHub integration) are specified but not started.\nHUNGRY-FOR: the self-play loop mechanism wired end-to-end (Asker queries graph for gaps, Answerer constructs from corpus + patterns, Critic gates via G5 to G0, graph updates committed when scores exceed threshold); the IAD institutional mapping (SE reputation/voting/tags as futon3b gate constraints); the meta-level capabilities (agents writing specialist sub-agents M16, agents proposing new gate rules M17); GitHub integration (questions triggered by real dev events, answers grounded in codebase via reflection).\nHAVE: the futon4 hypergraph as the agents' world (Arxana N-ary typed hyperedges in XTDB — documents, code, annotations, agents all nodes and edges in one structure); the futon3b gate pipeline (G5 to G0, 30 tests 107 assertions — the institution); the futon3c agency registry + peripherals (running agents: Claude, Codex, Tickle); the futon6 P7 corpus (114K physics.SE QA pairs, NER-tagged); the futon3a pattern search (50+ patterns, works but not wired to agents); the futon2 AIF reference implementation (settled); the f6/self-play-loop pattern (Asker/Answerer/Critic defined, not instantiated); the landed ArSE code (arse-store.py for hypergraph-native QA storage, run-arse-hotspot-loop.py for the proof-improvement self-play loop, generate-synthetic-qa.py for gap-targeted synthetic QA generation); the O-0 classical baseline (in progress)."
+  :psi-sha256
+  "c8bdbb20f5aab658bc36b26d9060f3833873537b6cf7dcd6db79cef9a7a3fe85"
+  :pattern-ids
+  ["ai4ci/umbrella"
+   "control/agential-oss-infrastructure"
+   "gauntlet/teaching-inversion"
+   "gauntlet/world-is-hypergraph"
+   "transition/f0-f4-boundary"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "c8ba0db7e1d88eed"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-5"
+  :source "M-artificial-stack-exchange.md IDENTIFY (mission proposal, 2026-02-25) + landed code (arse-store.py, run-arse-hotspot-loop.py, generate-synthetic-qa.py implementing Phase 1 self-play) — authored fresh, resolver-blind to the proposer's pattern rationale"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon6-d/mission/artificial-stack-exchange"
+ :proposal/hash "c8ba0db7e1d88eed"
+ :fold-turn/id "ft-artificial-stack-exchange-001"
+ :turn
+ {:agent "zai-5"
+  :model "zai"
+  :edge "invoke-1783754895648-131-cae3a42e"
+  :at "2026-07-11T22:00:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "world-is-hypergraph: the ArSE's environment IS the futon4 hypergraph — agents navigate nodes and edges as a world, not an API; the self-play loop operates IN the graph (Askers find gaps, Answerers add edges, Critics gate commits)"
+     :fits-pattern "gauntlet/world-is-hypergraph"
+     :addresses-however
+     "without the hypergraph-as-world frame, the ArSE would need a separate game server (like ALFWorld's HTTP+TextWorld wrapper) — the landed code confirms the hypergraph-native approach: arse-store.py stores QA in hypergraph format, run-arse-hotspot-loop.py operates on proof-graph hotspots; the agents' first-person inhabitation language (finding functions in code = finding objects in rooms) is the phenomenological evidence the pattern predicts"}
+    {:id :b2
+     :role "agential-oss-infrastructure: the ArSE's evidence and audit layer — PSR/PUR for strategy selection and outcomes, confidence scoring for Critic evaluation, evidence chains linking Q to A to graph-update; the gate pipeline IS the institution"
+     :fits-pattern "control/agential-oss-infrastructure"
+     :addresses-however
+     "without explicit learning loops, agent Q&A is unauditable — the gate pipeline (G5 to G0) makes the ArSE's Q&A quality machine-checkable; the landed code (generate-synthetic-qa.py with structured output, arse-store.py with ingest/reindex/query) already produces audit-trail-shaped artifacts; the pattern's next-steps (document coordination patterns, identify tacit human OSS practices needing explicit agent infrastructure) map to Phase 2 institutional modelling"}
+    {:id :b3
+     :role "teaching-inversion: the ArSE's knowledge-transfer channel must carry insight not just results — the Critic explains WHY a Q&A pair scored low, not just THAT it did; Phase 5 makes the ArSE the stack's own support forum where agents teach humans"
+     :fits-pattern "gauntlet/teaching-inversion"
+     :addresses-however
+     "the default assumption (knowledge flows human-to-agent) inverts when agents explore faster — the ArSE's self-play loop produces answers the human hasn't seen; however, teaching-inversion is specifically about agent-to-human transfer, while the ArSE's primary loop is agent-to-agent; the insight-carries-not-just-results discipline transposes to the Critic's evaluation, but the human-learning framing applies only to Phase 5"}
+    {:id :b4
+     :role "ai4ci/umbrella: the ArSE's Q&A should surface mid-level reasoning cues, not just correct outcomes — the Critic evaluates whether answers carry the reasoning process; the hotspot loop targets proof gaps that need reasoning-bearing answers"
+     :fits-pattern "ai4ci/umbrella"
+     :addresses-however
+     "the pattern's constrained-workflow (extract, validate, evaluate reasoning cues in mathematics) IS the ArSE's Phase 1 self-play applied to proofs; however, ai4ci/umbrella is about AI TRAINING HUMANS — the ArSE's primary loop is agent-to-agent graph improvement; the reasoning-cue-surfacing discipline transposes to Critic evaluation quality, but the human-training framing applies to Phase 5"}
+    {:id :b5
+     :role "f0-f4-boundary: separate quality signals (FUTON0: is this Q&A worth committing?) from knowledge structures (FUTON4: what new questions can we now ask?) — using graph-growth metrics as quality signals conflates the two"
+     :fits-pattern "transition/f0-f4-boundary"
+     :addresses-however
+     "the signal-structure separation is a genuine design principle for the ArSE: the Critic's quality scores (FUTON0 signals) must not be confused with the hypergraph's structural growth (FUTON4 footholds); however, f0-f4-boundary is a personal-exploration pattern about the operator's cognitive discipline, not system architecture; the separation transposes as a design principle, the personal-exploration framing does not"}]
+   :wires
+   [{:from :b1 :to :b2 :connective :seq
+     :rationale "the hypergraph-as-world (b1) precedes the evidence-and-audit layer (b2) — the world must exist before agents can leave auditable traces in it; order-dependent: the audit infrastructure operates on hypergraph nodes and edges"}
+    {:from :b2 :to :b5 :connective :copar
+     :rationale "the evidence layer (b2) and the signal-structure separation (b5) are co-active — b2 provides the audit trail, b5 provides the discipline for reading it; copar because both are needed to evaluate Q&A quality but neither subsumes the other"}
+    {:from :b1 :to :b3 :connective :copar
+     :rationale "the hypergraph-as-world (b1) and the teaching-inversion channel (b3) are co-active — b1 is where agents navigate, b3 is how insight flows back; copar because the world and the teaching channel are independent surfaces of the same system"}
+    {:from :b3 :to :b4 :connective :copar
+     :rationale "teaching-inversion (b3) and ai4ci/umbrella (b4) are co-active — both address the CONTENT of what flows through the communication channel: b3 says carry insight not just results, b4 says surface reasoning cues not just outcomes; copar because they are complementary quality-of-content lenses"}
+    {:from :b4 :to :b5 :connective :seq
+     :rationale "reasoning-cue quality (b4) precedes the signal-structure separation (b5) — the Critic must evaluate reasoning-cue quality (b4) before its score can serve as a FUTON0 signal (b5); order-dependent: the quality evaluation produces the signal that the separation discipline reads"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b2 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the self-play loop instantiation (Phase 1: Asker/Answerer/Critic wired into a running system with 100-iteration pilot) is not grounded by any of these 5 patterns"
+     :why
+     "the 5 patterns address the environment (world-is-hypergraph), the audit layer (agential-oss), the communication channel (teaching-inversion), the content quality (ai4ci/umbrella), and the signal-structure separation (f0-f4-boundary). NONE of them ground the actual self-play MECHANISM: how the Asker generates questions from graph gaps, how the Answerer constructs answers from corpus + pattern library, how the Critic scores Q&A pairs, and how graph updates are committed only when scores exceed threshold. The landed code (run-arse-hotspot-loop.py, generate-synthetic-qa.py) implements parts of this, but the mechanism itself needs f6/self-play-loop pattern (not in this cascade) and the AIF loop (futon2 reference impl). The patterns frame the self-play loop's environment and quality criteria; they do not ground the loop's mechanics"}
+    {:id :h2
+     :unfolded-pattern nil
+     :free "agents writing agents (M16/Phase 3) and agents writing institutions (M17/Phase 4) are not grounded by any of these 5 patterns"
+     :why
+     "the mission's qualitative-leap phases (an agent identifies a capability gap and writes a specialist sub-agent; an agent observes failure patterns and proposes new gate rules) are not addressed by the environment, audit, communication, content-quality, or signal-structure patterns. These phases require the peripheral model (futon3c), the agency registry, and the gate-pipeline's programmability — none of which are in this cascade. The patterns frame the context in which agents-writing-agents would happen; they do not ground the meta-level capability"}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the IAD institutional modelling (Phase 2: map SE reputation/voting/tags to gate constraints) is only weakly grounded"
+     :why
+     "agential-oss-infrastructure (b2) provides the audit infrastructure (PSR/PUR, evidence chains) that institutions operate on, but the SPECIFIC mapping of Stack Exchange institutions (reputation mechanics, voting, tags) to gate rules (G5 to G0 constraints) is not grounded by any pattern. The gate pipeline IS an institution, but the pattern only says 'make learning loops explicit' — it does not say 'here is how to model SE reputation as a gate constraint'. The institutional modelling requires IAD framework knowledge (OBLIGED/FORBIDDEN/PERMITTED under CONDITIONS) not present in any retrieved pattern"}
+    {:id :h4
+     :unfolded-pattern "gauntlet/teaching-inversion"
+     :free "teaching-inversion and ai4ci/umbrella overlap: both address what the communication channel should carry (insight/reasoning cues vs just results)"
+     :why
+     "teaching-inversion (b3) says 'carry insight not just results' and ai4ci/umbrella (b4) says 'surface reasoning cues not just polished outcomes'. These are two patterns whose CORE concern (the channel should carry the reasoning process, not just the outcome) is the same move from different angles: teaching-inversion from the agent-discovery direction (agents find things humans haven't seen), ai4ci/umbrella from the human-training direction (AI should train humans by surfacing mid-level cues). Recording as honest overlap — they share the insight-not-results quality criterion without being independent contributions to it"}
+    {:id :h5
+     :unfolded-pattern "transition/f0-f4-boundary"
+     :free "f0-f4-boundary is a personal-exploration pattern whose signal-structure separation transposes only as a weak design principle"
+     :why
+     "the pattern's domain is the operator's long-term working life (separating situational awareness from action affordance in exploration). Its transpose to the ArSE (separating quality signals from knowledge structures) is real but thin: it names a design discipline (don't confuse metrics with quality) without grounding the specific signal types (what ARE the ArSE's FUTON0 signals? gate scores? critic ratings? evidence-weight?) or the specific structure types (what ARE the ArSE's FUTON4 footholds? new edges? new annotations? new mission docs?). The separation transposes; the specific content of what is separated does not"}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "IDENTIFY-stage mission proposal (2026-02-25); landed code implementing Phase 1 self-play (arse-store.py, run-arse-hotspot-loop.py, generate-synthetic-qa.py); existing futon infrastructure (futon4 hypergraph, futon3b gate pipeline, futon3c agency, futon6 P7 114K QA corpus, futon3a pattern search); the self-play-loop pattern defined but not fully instantiated."
+  :want
+  "A running Artificial Stack Exchange: self-play loop (Asker/Answerer/Critic) instantiated for 100 iterations with measurable graph growth; IAD institutional modelling (SE reputation/voting/tags as gate rules); agents writing agents (M16); agents writing institutions (M17); GitHub integration (Phase 5)."
+  :via
+  "psi authored by zai-5 from futon6/holes/missions/M-artificial-stack-exchange.md (IDENTIFY proposal + landed code), resolver-blind to the proposer's pattern rationale"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

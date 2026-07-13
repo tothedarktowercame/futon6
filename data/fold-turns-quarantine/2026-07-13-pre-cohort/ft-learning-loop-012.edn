@@ -1,0 +1,140 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via "the mining pipeline is a chain of handoffs — hinge-log markdown -> Shape A bridge -> futon1a typed entities -> mining extraction -> capability hypergraph -> WebArxana render — and prototype-alignment-bridge requires each link to declare (a) its explicit upstream reference, (b) its defined bridge artifact (API, trail, schema), and (c) its named downstream consumer, emitting a follow-up obligation where any element is missing; applied here, the bridge between the Shape A lift and the mining extraction is the under-specified seam, and this box makes that gap a first-class follow-up rather than a silent hole"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :partial
+    :via "the mining loop is itself a horizon-bridge: it sits far from day-to-day mission operations (the UKRN-lead-far-from-operations shape) and must translate long-arc cross-mission intelligence into lightweight moves the operator can act on, routing signal through the centerline rather than convening a new committee; the 'translate horizon signals into usable moves' core applies, but the institutional quarter-call cadence and funder-credibility framing are sector-specific and do not transpose to a single-operator mission stack — see policy-hole h2"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via "bridge-before-portal applied to the capability-promotion gate: the mining pipeline produces candidate capability-tags and cross-mission connections as low-stakes, low-pressure proposals (orientation, sample objects, similarity candidates) BEFORE requiring formal deposit as committed flexiargs in futon3/library/ — the operator encounters the condensed hypergraph as a navigable surface first, and only promotes a candidate to authoritative fact after low-pressure exposure, exactly the sandbox-before-registration move"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :full
+    :via "mining IS a scan, and mission-anchored-scan governs it: anchor every mining pass to one live mission's named capability question (stated as a hypothesis whose YES and NO are both informative — 'does mission X instantiate capability Y?'); split the instruments so per-mission hinge-log probes (audience-shaped: named missions, named hinges) never share a lane with capability-dimension research (concept-shaped: vocabulary sweep); and treat a non-recurring candidate as a result, not a failure — the DERIVE phase's negative-evidence discipline (apparatus-to-end reframing did not recur at hinge 2) IS the confirming-negative-as-finding move"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :full
+    :via "the capability hypergraph needs a published, enforced entity/relation schema and salience contract before downstream tools (WebArxana as monitor, M-hypergraph-operator's Click/Tick as analytic layer) can depend on it: graph-memory-contract requires defining the typed entities (capability-dimension, capability-signature, operator-turn, cross-mission-edge), the typed relations, and the salience metadata (confidence level, source channels, content hash) as a stable contract with schema-mirroring tests, so queries and ingest do not drift and become brittle"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b5] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b1 :b4] :to [:b2] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b3 :discharges :want-signature}]}
+ :pins [:psi-sha256] ;; prompt-sha/coverage-score-delta-recompute NOT pinned: blinded fold, no cascade_serve prompt to replay (reviewer fix, claude-2)
+ :cascade
+ {:psi
+  "WANT: a cross-mission capability mining loop that condenses ~25 missions' hinge-log evidence into a navigable capability hypergraph the operator can read, with non-obvious cross-mission connections visible and signal base-rate-normalised against recording-cadence noise. HUNGRY-FOR: contrast-based signal detection (what fires relative to random, not what fires); per-tag confidence so weak tags read as articulation-floor noise not capability; the fractal mining move (B->A extraction at turn-scale and mission-scale); a vocabulary that grows by use, not by upfront design; honest negative evidence as a deliverable. HAVE: M-trip-journal's hinge-log / question-pool / sidecar apparatus installed as B->A tagging at mission-scale; the Shape A bridge lifting markdown into futon1a typed entities (hinge-entries, questions, learning-updates, cross-mission edges); 25+ active mission docs; a 4-step mining pipeline v0 (input -> existing-pattern check / recurrence-test / novel-candidate proposal -> cluster -> confirm) with two candidate patterns tracked and one honest negative (apparatus-to-end reframing did not recur at hinge 2); checkpoint-1 diagnostics (contrast not accumulation, mid-confidence ceiling, articulation-floor noise)."
+  :psi-sha256 "5ea0e7034a7e90845a0d79cffe0d62249f3a317240044a76e4dc359501da55c6"
+  :pattern-ids
+  ["devmap-coherence/prototype-alignment-bridge"
+   "or2/ukrn-horizon-bridge"
+   "p4ng/bridge-before-portal"
+   "scan-coherence/mission-anchored-scan"
+   "storage/graph-memory-contract"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "50eebf78f29c0b64"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-1"
+  :source "M-learning-loop.md HEAD/IDENTIFY/sorry/completion-criteria (resolver-blind: gap described in the mission's own terms — condensed navigable capability map across ~25 missions, signal vs recording-cadence noise, vocabulary growing by use — without reading the proposer's pattern rationale)"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author. The proposal brought its own 5-pattern cascade; the psi was authored from the mission doc alone."}
+ :deposit-contract :v2
+ :mission "futon5a-d/mission/learning-loop"
+ :proposal/hash "50eebf78f29c0b64"
+ :fold-turn/id "ft-learning-loop-012"
+ :turn
+ {:agent "zai-1"
+  :model "zai"
+  :edge "invoke-1783691624144-12-79b857d9"
+  :at "2026-07-10T13:55:07Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "the mining pipeline is a chain of handoffs — hinge-log markdown -> Shape A bridge -> futon1a typed entities -> mining extraction -> capability hypergraph -> WebArxana render — and prototype-alignment-bridge requires each link to declare its upstream reference, bridge artifact, and downstream consumer, emitting a follow-up obligation where any element is missing"
+     :fits-pattern "devmap-coherence/prototype-alignment-bridge"
+     :addresses-however
+     "context clauses in mission apparatus prototypes often omit the concrete bridge (export, adapter, schema) that makes the handoff testable; the mining pipeline v0 sketches steps 1-4 but does not declare the bridge artifact at the Shape-A-lift to mining-extraction seam — this box forces that declaration and logs the gap as a follow-up obligation rather than letting it stay implicit"
+     :produces [:handoff-bridge-declarations]}
+    {:id :b2
+     :role "the mining loop as horizon-bridge: translating long-arc cross-mission capability intelligence into lightweight operator-actionable moves, routed through the centerline"
+     :fits-pattern "or2/ukrn-horizon-bridge"
+     :addresses-however
+     "the UKRN lead sits far from day-to-day operations and without explicit ties horizon intelligence remains abstract and unused — this is structurally the mining loop's position relative to per-mission work; the translate-to-lightweight-moves core applies, but the quarterly altitude-call cadence and funder/REF credibility framing are sector-specific and strain under transposition to a single-operator mission stack (see policy-hole h2)"
+     :produces [:horizon-translation-shape]}
+    {:id :b3
+     :role "bridge-before-portal at the capability-promotion gate: candidates surface as low-stakes navigable proposals before formal deposit as committed flexiargs"
+     :fits-pattern "p4ng/bridge-before-portal"
+     :addresses-however
+     "researchers (here: the operator) encounter new systems (here: a proposed capability-tag or cross-mission connection) without preparation; requiring formal deposit (flexiarg commit) before low-pressure exposure would suppress the exploratory surface the mining loop exists to provide; the sandbox/sample-objects-before-registration move is exactly the notion-to-fact promotion discipline the tri-store separation in ft-learning-loop-010 box b4 already gestures at, here grounded in the bridge-before-portal rationale"
+     :consumes [:capability-graph-schema :horizon-translation-shape]
+     :produces [:promotion-gate]}
+    {:id :b4
+     :role "mining as mission-anchored scan: anchor each pass to a live mission's named capability question, split audience-probes from concept-research, treat confirming-negative as result"
+     :fits-pattern "scan-coherence/mission-anchored-scan"
+     :addresses-however
+     "un-anchored foraging returns output that looks like progress but feeds no decision; the mining pipeline v0 step 2c (novel-candidate proposal) could forage the capability space without a mission anchor, producing orphaned 'something'; mission-anchoring supplies the named hypothesis for free, the audience/concept instrument-split keeps per-mission hinge probes (low-noise) separate from vocabulary research (topic-noise-prone), and the confirming-negative-as-finding reading is exactly what lets the pipeline record that apparatus-to-end reframing did not recur at hinge 2 as a finding rather than a gap"
+     :produces [:anchored-mining-protocol]}
+    {:id :b5
+     :role "the capability hypergraph needs a published entity/relation schema and salience contract before WebArxana and Click/Tick can depend on it"
+     :fits-pattern "storage/graph-memory-contract"
+     :addresses-however
+     "futon1 storage is the substrate for multiple futons and external tools, and without a schema contract queries and ingest drift and become brittle; the capability entities, operator-turn entities, typed cross-mission edges, and salience metadata (confidence, source channels, content hashes) must be a documented, enforced contract with schema-mirroring tests, or the navigable hypergraph completion criterion (criterion 1, 3) cannot be met idempotently and re-runnably (criterion 5)"
+     :consumes [:handoff-bridge-declarations :anchored-mining-protocol]
+     :produces [:capability-graph-schema]}]
+   :hyperedges
+   [{:from [:b1] :to [:b5] :connective :seq
+     :rationale "the handoff declarations (b1) name the downstream consumer and bridge artifact, which the schema contract (b5) must then formalize — order-dependent: the schema codifies what the handoff audit named"}
+    {:from [:b4] :to [:b5] :connective :seq
+     :rationale "the anchored mining protocol (b4) fixes what entities the schema (b5) must cover — mission-anchoring names the typed probe shapes the schema must support; schema before protocol would be groundless"}
+    {:from [:b1 :b4] :to [:b2] :connective :copar
+     :rationale "the horizon-translation shape (b2) co-applies with the structural audits (b1, b4) — it is a co-application lens on the same pipeline, not a sequential step; the 'translate horizon signal to operator move' move runs alongside the handoff and scan disciplines"}
+    {:from [:b5] :to [:b3] :connective :seq
+     :rationale "the schema contract (b5) must exist before the promotion gate (b3) can be meaningful — bridge-before-portal needs a portal (the schema) to gate against; without a stable schema the low-stakes bridge surface has nothing to promote into"}
+    {:from [:b2] :to [:b3] :connective :copar
+     :rationale "the horizon-translation shape (b2) and the promotion gate (b3) co-apply: the translated lightweight move IS the low-stakes proposal the operator encounters before formal deposit; copar because neither subsumes the other"}]
+   :terminals [{:id :b3 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern nil
+     :free "the base-rate normalisation formula"
+     :why "the psi is hungry for contrast-based signal detection (what fires relative to random, not what fires); the cascade supplies the mission-anchored scan (which prevents foraging) and the promotion gate (which prevents premature commitment) but NO pattern in the cascade grounds the actual base-rate computation — how recording-cadence noise is quantitatively separated from capability signal. The mission's checkpoint-1 diagnostic (mid-confidence ceiling, articulation-floor noise) names the symptom; the cascade does not provide the cure. This is the structural hole: the mining loop's discrimination mechanism is ungrounded by these five patterns."}
+    {:id :h2
+     :unfolded-pattern "or2/ukrn-horizon-bridge"
+     :free "the horizon-bridge pattern's institutional cadence does not transpose"
+     :why "or2/ukrn-horizon-bridge specifies quarterly altitude calls with PVC/ORPM and cites UKRN/funder/REF credibility as the because-clause; the mining loop is single-operator with no PVC, no funder credibility axis, and no quarterly cadence. The 'translate long-arc horizon signal into lightweight move routed through centerline' CORE transposes; the institutional machinery does not. Box b2 is marked :satiety :partial for this reason — the pattern contributes the shape, not the substance, and a dedicated cross-mission-horizon-bridge pattern for the operator-scale would carry this load more honestly than forcing the UKRN institutional pattern to fit."}
+    {:id :h3
+     :unfolded-pattern nil
+     :free "the fractal mining move (turn-scale AND mission-scale) is not grounded"
+     :why "the mission's central bet is that the same B->A extraction move works at turn-scale (within a mission) and mission-scale (across missions); the cascade provides scan-anchoring, schema-contract, promotion-gate, handoff-audit, and horizon-translation — none of which grounds WHY the same extraction shape should hold at two scales. The fractal property is asserted by the mission, not derived by the cascade."}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "the capability vocabulary dimensions themselves"
+     :why "criterion 1 demands ~8-12 capability dimensions grounded in actual mission corpus evidence; the cascade treats the vocabulary as a downstream-consumer contract (b5) and a scan-anchor (b4) but cannot supply the dimensions' content. The vocabulary is to grow by use per the mission's discipline; this fold cannot shortcut that growth."}]}}
+ :hole
+ {:confidence :authored
+  :have
+  "M-trip-journal's hinge-log / question-pool / sidecar apparatus installed as B->A tagging at mission-scale; the Shape A bridge lifting markdown into futon1a typed entities (hinge-entries, questions, learning-updates, cross-mission edges); 25+ active mission docs; a 4-step mining pipeline v0 with two candidate patterns tracked and one honest negative; checkpoint-1 diagnostics (contrast not accumulation, mid-confidence ceiling, articulation-floor noise)."
+  :want
+  "A cross-mission capability mining loop that condenses ~25 missions' hinge-log evidence into a navigable capability hypergraph the operator can read, with non-obvious cross-mission connections visible and signal base-rate-normalised against recording-cadence noise."
+  :via
+  "psi authored by zai-1 from futon5a/holes/missions/M-learning-loop.md (HEAD/IDENTIFY/sorry/completion-criteria), resolver-blind to the proposer's pattern rationale"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed — blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

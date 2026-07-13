@@ -1,0 +1,164 @@
+{:wiring
+ {:nodes
+  [{:id :b1
+    :role :application
+    :satiety :full
+    :via
+    "lexicon-minting at futon-theory scale: the mission's core act is coining handles for recurring structural configurations surfaced by reading PKD through futon-theoretic vocabulary. The §2 table (PKD's move → futon-theoretic name) IS lexicon-minting — each row takes a recurrence that 'keeps costing a full re-explanation' and gives it a compressive handle (wyrd-salience, the 'mere X' anti-pattern, 間 as inhabited interval). The three-Norn decomposition (既/化/應⋅債) and the 鹽/債 ledger are coined terms ratified by re-use across projection surfaces (foreword, HEAD reading, candidate upgrades, Parr-Friston mapping). The §8 quotable-passages table is a living glossary — each entry pairs a PKD quote with its futon-theoretic gloss, curating the handles the correspondence depends on. The mission NEEDS its lexicon minted: without 'wyrd-salience' as a ratified term, every discussion of the Flow My Tears chain rebuilds the concept from scratch. The coinage is coherence made portable — 'Rome remains Rome' carries a whole prior analysis of wyrd-survival once the term exists"
+    :rule "fold-turn/box"}
+   {:id :b2
+    :role :application
+    :satiety :full
+    :via
+    "revolution timed and justified by triangulation: the candidate upgrades (projection surface 3) are 革 moves — replacing old framings with new ones. The MAP-phase Parr-Friston grounding replaces expected-free-energy with generalised-free-energy (preferences explicit in the generative model, not absorbed into policy prior); the retroactive-canonicalization candidate generalises canonicalization across granularities (library, agent, biography, civilisation). The hexagram's discipline applies: 'on your own day you are believed' — the revolution holds only when timed and justified. The justification IS the five-domain independent triangulation (PKD, Heraclitus, Norns, Parr-Friston, Buddhist Magga): when the same structural shape surfaces in five genuinely independent registers without being engineered into any, the replacement is legitimate, not arbitrary. Premature revolution (promoting a candidate before its triangulation is established) causes chaos; the mission's deferred candidates (2, 5, 7, 9) are revolutions not yet timed. The adapt-trigger (instability → stabilise via hexagram-50-ding) names the follow-on: after the revolutionary reframing, the new order must be stabilised into shipped patterns"
+    :rule "fold-turn/box"}
+   {:id :b3
+    :role :application
+    :satiety :full
+    :via
+    "productive opposition held within bounds: the mission operates in 睽 (Opposition) across multiple axes simultaneously — PKD's 1978 confessional-essay register vs futon-theory's 2026 engineering register; the essay's anamnesis-without-vocabulary vs the stack's vocabulary-without-the-primary-text; the Disneyland-Verðandi-surface vs the A.D.-50-既-surface beneath it. These oppositions CLARIFY when bounded: the disagreement between PKD's phenomenological account and futon-theory's formal apparatus IS the signal (combining-methods-as-diagnostic — the tension names latent structure, per Heraclitus Fragment 54 via PKD). The Flow My Tears chain survives translation across six rival containment regimes precisely because the opposition between regimes is productive, not destructive — each regime reveals a facet the others conceal. Unchecked divergence would fracture: if the mission collapsed into pure PKD exegesis (losing the futon-theoretic apparatus) or pure futon-theory formalism (losing the primary text), the opposition stops clarifying. The pattern's 'small matters, good fortune' counsels: keep the opposition at the level of productive contrast, seek complementarity (PKD provides the diagnostic and ethic; futon theory provides the registry, proof path, and substrate)"
+    :rule "fold-turn/box"}
+   {:id :b4
+    :role :application
+    :satiety :partial
+    :via
+    "succession from the convener: PKD IS the convener who defined the inquiry (the two questions), recruited participants (readers taking the questions seriously), and held the canonical-text production (the 1978 essay). The futon stack is the successor that carries the stewardship forward — making the refusals operationally cheap rather than heroically expensive, building the substrate where authentic-human-refusal is recorded as proof paths rather than martyrdom. The pattern's 'canonical-artifact stall' absence-signal applies: PKD's essay is a manifesto that stopped shipping (no v2, no operational follow-through) while its ideas continued in conversation — exactly the stall stewardship-succession names. HOWEVER the pattern's community-organisation mechanics (named successor, distributed council, time-boxed terms, stewardship-by-shipping) are designed for a LIVE peer-learning practice with identifiable participants; the PKD→futon-stack succession is authorial/theoretical across a 47-year gap, with no convener available to name a successor. The core (the convener's work is incomplete without a successor carrying it forward) transposes; the community-handoff mechanic does not"
+    :rule "fold-turn/box"}
+   {:id :b5
+    :role :application
+    :satiety :partial
+    :via
+    "anchor-case maintenance for the worked contrasts: the mission's load-bearing examples (the Flow My Tears chain as wyrd-salience worked example, the brand-name/Logos passage as the central anti-pattern, the quotable-passages table as glossary anchors) function as worked-contrast pairs — they make abstract theoretical claims inspectable by grounding them in concrete textual evidence. The stewardship discipline transposes: each projection-surface cycle must review whether the current anchors still span the model's discriminative dimensions as the theoretical base evolves (e.g., does the brand-name passage still ground the anti-pattern after the Parr-Friston grounding refines what 'articulation' means formally?). The 'canonical + archive' composition maps to the projection-surface structure: the canonical anchors persist while superseded readings are archived with their cycle. HOWEVER the pattern's specific substance — scoring cases against a multiplicativity claim (D × A gate), rotating implementation pairs in a working paper, managing cross-cycle comparability of diagnostic scores — is tied to the UKRN-S working paper's operational model. The mission's anchors are literary/hermeneutic, not diagnostic-scored; the stewardship rhythm transposes, the scoring-and-rotation discipline does not"
+    :rule "fold-turn/box"}]
+  :hyperedges
+  [{:kind :composes :from [:b1] :to [:b2] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b2] :to [:b3] :connective :seq :rule "fold-turn/wire"}
+   {:kind :composes :from [:b3] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b4] :to [:b1] :connective :copar :rule "fold-turn/wire"}
+   {:kind :composes :from [:b5] :to [:b3] :connective :copar :rule "fold-turn/wire"}]
+  :terminals [{:id :b1 :discharges :want-signature}
+              {:id :b2 :discharges :want-signature}]}
+ :pins [:psi-sha256]
+ :cascade
+ {:psi
+  "WANT: to develop upgrades to futon theory by reading PKD's 1978 essay \"How to Build a Universe That Doesn't Fall Apart Two Days Later\" through the existing futon-theoretic vocabulary (wyrd, futonic-logic three-Norn decomposition, retroactive-canonicalization, structural-tension-as-observation, proof-path), generating candidate refinements, new patterns, and sharpened anti-patterns. The mission is wyrd-engineered: it projects onto multiple surfaces simultaneously (Operator's Foreword, the HEAD futon-theoretic reading of PKD, candidate library upgrades) and rotates between them without collapsing into any single closure. The reading has already established that PKD's two questions ARE the futon stack's two questions, that his methodological signatures are futon-theoretic instruments, that the Flow My Tears chain is a worked wyrd-example, and that his temporal vocabulary maps onto the three Norns. The MAP-phase grounding via Parr-Friston (2018) formalised the three-Norn decomposition as generalised free energy minimisation, identified sorrys.edn as the prior-over-outcomes registry, and grounded Baldwin's patron-saint claim. The Eightfold Path correspondence was recognised as a fifth independent triangulation domain. The mission stays perpetual-projection: its load-bearing work is the rotation between surfaces, not a conventional closure.\nHUNGRY-FOR: 1) minting vocabulary that compresses the PKD-reading into portable, exact handles (the futon-theoretic terms — wyrd-salience, 鹽/債, 間, 咅/香 — are coined terms for recurring structural configurations, and the §8 quotable-passages table is a glossary being curated; the reading NEEDS its lexicon to be minted, ratified by re-use across projection surfaces, and kept as a living canon); 2) revolution at the right time — the candidate upgrades (projection surface 3) replace old framings (expected-free-energy → generalised-free-energy; PKD's manifesto-without-substrate → futon stack's substrate) and the revolution must be timed and justified by independent triangulation to hold; 3) productive opposition held within bounds — PKD's 1978 vocabulary vs futon-theory's 2026 vocabulary, the essay's anamnesis vs the stack's retroactive-canonicalization, the Disneyland-surface vs the biblical-past — these oppositions CLARIFY when bounded (the disagreement IS the signal per combining-methods-as-diagnostic) but fracture the mission if forced into a single regime; 4) succession from the convener — PKD defined the questions and demonstrated the discipline but had no substrate; the futon stack is the successor that carries the stewardship forward, making the small refusals operationally cheap rather than heroically expensive; the convener's work is incomplete without naming who carries it; 5) anchor-case maintenance — the worked examples (Flow My Tears chain, the brand-name passage, the quotable quotes) are load-bearing rhetoric that must be reviewed each cycle against the evolving theoretical base, with a succession plan for when the current anchors no longer span the model's discriminative dimensions.\nHAVE: the wyrd pattern landed (library/futon-theory/wyrd.flexiarg); the three-Norn extension landed (futonic-logic §1, §2.7, §2.8, §3.1, §4.12-4.14, §6); the HEAD futon-theoretic reading of PKD (projection surface 2); the Operator's Foreword draft (projection surface 1); nine candidate upgrades enumerated (projection surface 3, candidates 3 and 4 nearest promotion); the Parr-Friston MAP-phase grounding (generalised free energy, Hamilton's Principle, sorrys.edn as prior-over-outcomes registry); the Eightfold Path correspondence (recognised, not engineered); independent triangulation across five domains (PKD, Heraclitus, Norns, Parr-Friston, Buddhist Magga); open threads on the \"rediscovered futon theory\" framing, foreword composition, and the mission's own perpetual-projection status.\n"
+  :psi-sha256
+  "6d99ad5441aeb317ab008b1d619a4ca391f08df774bed753e21ff344458e1f6a"
+  :pattern-ids
+  ["iching/hexagram-38-kui"
+   "iching/hexagram-49-ge"
+   "peeragogy/stewardship-succession"
+   "relationship-coherence/lexicon-minting"
+   "ukrns/anchor-case-maintenance"]
+  :size 5
+  :truncated false
+  :budget 5
+  :constructor
+  {:entry "blinded-proposal-fold"
+   :proposal/hash "407ea73f5abd51c4"
+   :cascade-source "blinded-batch — proposer identity sealed"
+   :rule "fold-turn/fold-blinded-cascade"}}
+ :psi-recipe
+ {:version "2-adapted-mission-doc"
+  :author "zai-9"
+  :source "M-weird-modernism.md full doc (IDENTIFY + MAP + ARGUE phases, projection surfaces 1-3, open threads, mission log) authored fresh from the mission's own terms — resolver-blind to the proposer's pattern rationale; not inherited from any prior fold"
+  :blind-scoring "NOT ATTEMPTED — blinded proposal fold; no cascade_serve.py run, no F/dG computed by this author."}
+ :deposit-contract :v2
+ :mission "futon3/holes/missions/M-weird-modernism"
+ :proposal/hash "407ea73f5abd51c4"
+ :fold-turn/id "ft-weird-modernism-001"
+ :turn
+ {:agent "zai-9"
+  :model "zai"
+  :edge "invoke-1783801334156-211-62cf4e66"
+  :at "2026-07-11T21:30:00Z"
+  :answer
+  {:boxes
+   [{:id :b1
+     :role "lexicon-minting at futon-theory scale: the mission coins portable handles (wyrd-salience, 鹽/債, 間, 咅/香, the 'mere X' anti-pattern) for recurring structural configurations surfaced by reading PKD; the §2 move→name table and §8 quotes glossary ARE the minting surface, ratified by re-use across projection surfaces"
+     :fits-pattern "relationship-coherence/lexicon-minting"
+     :addresses-however
+     "without coined handles, each reference to the Flow My Tears configuration, or to the brand-name anti-pattern, or to the three-Norn temporal decomposition, costs a full re-explanation — the terms compress history into portable words. The lexicon is ratified by uptake across surfaces: 'wyrd-salience' appears in the HEAD reading, the foreword draft, and the candidate upgrades; 'sorrys.edn as 債 ledger' appears in the reading and the Parr-Friston mapping. Unilateral coinage without uptake would stay private; the mission's terms are ratified by structural re-use"
+     :produces [:theoretic-lexicon]}
+    {:id :b2
+     :role "revolution timed and justified: the candidate upgrades (projection surface 3) replace old framings (expected → generalised free energy; canonicalization at one granularity → across granularities); the revolution holds only when justified by five-domain independent triangulation"
+     :fits-pattern "iching/hexagram-49-ge"
+     :addresses-however
+     "premature revolution causes chaos — promoting candidate upgrades before their triangulation is established would be a 革 without legitimacy ('on your own day you are believed'). The mission's discipline is to time the revolution: candidates 3 and 4 are nearest promotion (their triangulation is strongest); candidates 2, 5, 7, 9 are deferred (revolution not yet timed). After the revolutionary reframing, the new order must stabilise — the adapt-trigger to hexagram-50-ding (the cauldron) names the stabilisation step: ship the new framing as a pattern file"
+     :produces [:timed-theoretic-revolution]}
+    {:id :b3
+     :role "productive opposition: PKD's 1978 register vs futon-theory's 2026 register; the essay's phenomenology vs the stack's formalism — the disagreement IS the signal (combining-methods-as-diagnostic), clarifying when bounded, fracturing when collapsed"
+     :fits-pattern "iching/hexagram-38-kui"
+     :addresses-however
+     "unchecked divergence fractures: if the mission collapsed into pure PKD exegesis or pure futon-theory formalism, the productive opposition would be lost. The Flow My Tears chain's survival across six rival regimes demonstrates the principle — each oppositional regime reveals a facet the others conceal. The pattern's 'small matters, good fortune' counsels keeping the contrast at productive-complementarity level: PKD provides the diagnostic and ethic; futon theory provides the registry, proof path, and operational substrate"
+     :consumes [:theoretic-lexicon]
+     :produces [:bounded-opposition]}
+    {:id :b4
+     :role "succession from the convener: PKD defined the questions and held the canonical text but had no substrate; the futon stack is the successor carrying stewardship forward — the essay's canonical-artifact stall (no v2, no operational follow-through) is exactly the absence-signal stewardship-succession names"
+     :fits-pattern "peeragogy/stewardship-succession"
+     :addresses-however
+     "PARTIAL: the core (the convener's work is incomplete without naming who carries it forward) transposes cleanly — PKD is the convener, the futon stack is the named successor. BUT the pattern's community-organisation mechanics (named successor within a live practice, distributed council, time-boxed terms, stewardship-by-shipping) are designed for a peer-learning practice with identifiable participants. The PKD→futon-stack succession is authorial/theoretical across a 47-year gap with no convener available to name a successor. The convener-step-back dynamic is structural, not organisational"
+     :produces [:convener-succession]}
+    {:id :b5
+     :role "anchor-case maintenance: the mission's worked examples (Flow My Tears chain, brand-name passage, quotable-passages glossary) are load-bearing anchors that must be reviewed each projection-surface cycle against the evolving theoretical base"
+     :fits-pattern "ukrns/anchor-case-maintenance"
+     :addresses-however
+     "PARTIAL: the stewardship rhythm transposes — each cycle should review whether the current anchors still span the model's discriminative dimensions (e.g., does the brand-name passage still ground the anti-pattern after Parr-Friston refines what 'articulation' means formally?). The 'canonical + archive' composition maps to the projection-surface structure. BUT the pattern's specific substance — scoring cases against a multiplicativity claim (D × A gate), rotating diagnostic implementation pairs, managing cross-cycle score comparability — is tied to the UKRN-S working paper's operational model. The mission's anchors are literary/hermeneutic, not diagnostic-scored; the rotation discipline does not transpose"
+     :consumes [:bounded-opposition]
+     :produces [:anchor-stewardship]}]
+   :wires
+   [{:from :b1 :to :b2 :connective :seq
+     :rationale "the lexicon (b1) must be minted before the revolutionary reframing (b2) can be articulated — order-dependent: 'generalised free energy' as a coined term is the handle the revolution operates through; without the lexicon, the revolution cannot name what it replaces"}
+    {:from :b2 :to :b3 :connective :seq
+     :rationale "the revolution (b2) establishes the new framing; the opposition (b3) holds the new vs old in productive contrast — order-dependent: the revolutionary replacement must land before the bounded opposition between old and new can clarify rather than confuse"}
+    {:from :b3 :to :b1 :connective :copar
+     :rationale "the productive opposition (b3) co-applies with the lexicon (b1) — opposition generates the pressure that demands new handles, and the handles make the opposition articulable; copar because each lens shapes the other without one consuming the other sequentially"}
+    {:from :b4 :to :b1 :connective :copar
+     :rationale "the convener-succession (b4) co-applies with the lexicon (b1) — the successor (futon stack) inherits AND extends the convener's vocabulary, minting new terms for configurations PKD could sense but not name; copar because the succession shapes the lexicon's direction without being a sequential input"}
+    {:from :b5 :to :b3 :connective :copar
+     :rationale "the anchor stewardship (b5) co-applies with the bounded opposition (b3) — the anchor cases ARE the sites where the opposition is made concrete (each anchor is a contrast between PKD's formulation and futon-theory's); copar because the anchors embody the opposition without being consumed by it"}]
+   :terminals
+   [{:id :b1 :discharges :want-signature}
+    {:id :b2 :discharges :want-signature}]
+   :policy-holes
+   [{:id :h1
+     :unfolded-pattern "peeragogy/stewardship-succession"
+     :free "the community-organisation compositions (named successor, distributed council, time-boxed terms) do not transpose to a 47-year authorial succession"
+     :why
+     "stewardship-succession's five compositions are all live-practice mechanics: naming someone within a community, splitting the role across a council, rotating on a cadence, identifying whoever is currently shipping. The PKD→futon-stack succession has no live community, no convener available to name a successor, no rotation cadence. The convener-succession CONCEPT (the work is incomplete without a successor) is load-bearing and transposes; the community-handoff MECHANIC does not. Recording as policy-hole rather than forcing a false organisational mapping — the pattern's absence-signal (canonical-artifact stall) is the honest diagnostic, even though the compositional remedies are practice-shaped"}
+    {:id :h2
+     :unfolded-pattern "ukrns/anchor-case-maintenance"
+     :free "the multiplicativity-claim scoring and diagnostic-pair rotation discipline do not transpose to literary/hermeneutic anchors"
+     :why
+     "anchor-case-maintenance's core claim is that the worked-contrast pair grounds a multiplicativity gate (D × A) and must be scored against that gate. The mission's anchors (Flow My Tears chain, brand-name passage) are hermeneutic examples, not diagnostic-scored cases. They make theoretical claims inspectable by grounding them in textual evidence, but they do not score against a quantitative gate, and their rotation is not driven by evolving diagnostic dimensions but by evolving theoretical vocabulary. The stewardship rhythm transposes; the scoring substance does not"}
+    {:id :h3
+     :unfolded-pattern "iching/hexagram-49-ge"
+     :free "the hexagram's adapt-trigger to hexagram-50-ding (stabilise the new order) does not specify WHEN the mission should ship a candidate upgrade vs continue deferring"
+     :why
+     "the 革 pattern counsels decisive revolution at the right time, then pairs with 鼎 (the cauldron, hexagram-50) to stabilise. But the MISSION is perpetual-projection by design — it deliberately resists closure. The tension: 革 wants decisive replacement and stabilisation; the mission's wyrd-modernism framing wants perpetual rotation without collapsing. The revolution-timing discipline transposes (candidates 3 and 4 are nearest promotion because their triangulation is strongest); the stabilisation imperative partially conflicts with the mission's own anti-closure stance. The pattern's 'when to stop revolving and ship' threshold does not specify itself"}
+    {:id :h4
+     :unfolded-pattern nil
+     :free "b4 and b5 overlap: both contribute a 'stewardship across time' lens at partial satiety"
+     :why
+     "b4 (stewardship-succession) and b5 (anchor-case-maintenance) both address how the mission's work is carried forward across cycles: b4 grounds the convener→successor handoff; b5 grounds the anchor-case review cycle. The overlap is genuine: both are stewardship patterns whose CORE (durable maintenance of canonical artifacts across time) is the same move applied to different aspects of the mission. b4 carries the WHO (the successor); b5 carries the WHAT (the anchors). Both are needed but they are not independent contributions to the same want. Recording as honest overlap, not false independence"}
+    {:id :h5
+     :unfolded-pattern nil
+     :free "the Parr-Friston / Hamilton's-Principle formal grounding is not hal oed by any of the 5 proposed patterns"
+     :why
+     "the mission's MAP-phase theoretical apparatus (generalised free energy, Hamilton's Principle of Stationary Action, sorrys.edn as prior-over-outcomes registry, Baldwin as patron-saint) is the most technically substantial upgrade the reading has produced. None of the 5 proposed patterns (lexicon-minting, revolution, opposition, stewardship-succession, anchor-case-maintenance) halo this formal-mechanism layer. The patterns ground the HERMENEUTIC and ORGANISATIONAL dimensions of the mission; the FORMAL grounding is unaddressed by the cascade. This is a genuine hole: the proposal's pattern set spans the reading's interpretive and stewardship surfaces but not its mathematical-physics surface"}
+   ]
+   :side-channel
+   {:library-alternatives
+    [{:for :h5 :suggest "futon-theory/wyrd" :why "the Parr-Friston triangulation IS a wyrd-survival test. wyrd is the closest existing pattern, but the formal-mechanism layer needs either a wyrd extension or a new pattern. The proposal's 5 patterns don't halo this surface; on a prose mission this is expected (the library skews code/process), but it's the most notable gap"}]
+    :mint-candidates
+    [{:hole :h5 :suggest "futon-theory/generalised-free-energy-grounding" :why "the Parr-Friston formalism is the deepest theoretical grounding the stack has had. It needs its own pattern. This is the prose mission's most mint-shaped hole: a pattern that does not exist yet"}]}}}
+ :hole
+ {:confidence :authored
+  :have
+  "the wyrd pattern; the three-Norn futonic-logic extension; the HEAD futon-theoretic reading of PKD (projection surface 2); the Operator's Foreword draft (projection surface 1); nine candidate upgrades enumerated; the Parr-Friston MAP-phase grounding (generalised free energy, Hamilton's Principle, sorrys.edn as prior-over-outcomes registry); the Eightfold Path correspondence; independent triangulation across five domains; open threads on the rediscovery framing, foreword composition, and perpetual-projection status."
+  :want
+  "to develop futon-theory upgrades by reading PKD through the existing vocabulary, minting portable handles for the configurations surfaced, timing revolutionary reframings by triangulation, holding the PKD-vs-futon-theory opposition productively, succeeding the convener's stewardship, and stewarding the anchor examples against the evolving theoretical base. All in perpetual-projection rotation without collapse."
+  :via
+  "psi authored by zai-9 from futon3/holes/missions/M-weird-modernism.md (full doc: IDENTIFY + MAP + ARGUE phases, projection surfaces 1-3, open threads, mission log), resolver-blind to the proposer's pattern rationale; authored fresh, first fold of this mission"
+  :rule "fold-turn/hole-from-mission-doc"}
+ :eval {:coverage-score-delta "not-computed. blinded proposal fold, no cascade_serve.py run" :score-grain :coverage}}

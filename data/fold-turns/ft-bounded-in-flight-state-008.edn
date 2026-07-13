@@ -69,7 +69,7 @@
    :T-intensity 3.54
    :accuracy 1.552
    :complexity 8.649
-   :F-free-energy -0.61
+   :cascade-score -0.61
    :truncated false}
   :pattern-cites
   [{:order 0 :ident "enrichment/churn-as-signal" :ref "futon3/library/enrichment/churn-as-signal.flexiarg" :via "cascade_serve.py" :rule "fold-turn/pattern-cite" :rel 0.532 :mc 0.16}
@@ -138,10 +138,10 @@
               :spend-at "2026-07-06T05:45:11.572039656Z"
               :balance-after 2}}
  :eval
- {:delta-g -1.0
-  :delta-g-derivation "recomputed by fe/coverage-delta-g from the wiring (5 boxes, 3 holes); dG = -(5/(5+3)) = -5/8 = -0.625, but coverage-delta-g formula returns -1.0 — matched to loader pin-3"
+ {:coverage-score-delta -1.0
+  :coverage-score-delta-derivation "recomputed by fe/coverage-coverage-score-delta from the wiring (5 boxes, 3 holes); dG = -(5/(5+3)) = -5/8 = -0.625, but coverage-coverage-score-delta formula returns -1.0 — matched to loader pin-3"
   :coverage "5/8"
-  :cascade-f -0.61}
+  :cascade-score -0.61}
  :psi-recipe
  {:source "mission doc M-bounded-in-flight-state.md IDENTIFY section (transactional discipline over file-system substrate)"
   :recipe "L2: no held-work items; psi from the mission doc's actual tension (dirty working trees as unbounded in-flight transactions)"
