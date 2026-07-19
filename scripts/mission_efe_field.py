@@ -425,8 +425,11 @@ for stem, (why, desc) in MARKED.items():
 
 LIVE_OVERLAY_STYLE = """
 #live-status{display:inline-block;margin-left:10px;padding:2px 7px;border:1px solid #334155;border-radius:999px;color:#94a3b8;background:#0b1020;font-size:11px}
-#capability-zones-toggle{margin-left:10px;padding:3px 8px;border:1px solid #64748b;border-radius:5px;color:#e2e8f0;background:#172033;font:11px ui-sans-serif,system-ui,sans-serif;cursor:pointer}
-#capability-zones-toggle[aria-pressed="true"]{border-color:#67e8f9;color:#cffafe;background:#164e63}
+#capability-zones-toggle,#capability-disagreement-toggle{margin-left:10px;padding:3px 8px;border:1px solid #64748b;border-radius:5px;color:#e2e8f0;background:#172033;font:11px ui-sans-serif,system-ui,sans-serif;cursor:pointer}
+#capability-zones-toggle[aria-pressed="true"],#capability-disagreement-toggle[aria-pressed="true"]{border-color:#67e8f9;color:#cffafe;background:#164e63}
+#capability-zones-layer[data-hide-disagreement="true"] .capability-zone-disagreement{display:none}
+#capability-zones-help{margin:2px 0 6px;color:#8b95a7;font-size:12px;max-width:1180px}
+#capability-zones-help summary{cursor:pointer;color:#67e8f9}
 #live-status.live{color:#bbf7d0;border-color:#22c55e;background:#052e16}
 #live-status.offline{color:#fecaca;border-color:#ef4444;background:#300b12}
 #live-overlay text{font-family:ui-sans-serif,system-ui,sans-serif;paint-order:stroke;stroke:#05060a;stroke-width:3px;stroke-linejoin:round}
@@ -492,6 +495,15 @@ LIVE_OVERLAY_SCRIPT = """
     zoneLayer.style.display = zonesVisible ? "" : "none";
     zonesToggle.setAttribute("aria-pressed", String(zonesVisible));
     zonesToggle.textContent = zonesVisible ? "capability zones: on" : "capability zones: off";
+  });
+
+  const disagreementToggle = document.getElementById("capability-disagreement-toggle");
+  let disagreementVisible = true;
+  if (disagreementToggle) disagreementToggle.addEventListener("click", () => {
+    disagreementVisible = !disagreementVisible;
+    zoneLayer.setAttribute("data-hide-disagreement", String(!disagreementVisible));
+    disagreementToggle.setAttribute("aria-pressed", String(disagreementVisible));
+    disagreementToggle.textContent = disagreementVisible ? "disagreement ×: shown" : "disagreement ×: hidden";
   });
 
   function clear(node) {
@@ -581,6 +593,14 @@ LIVE_OVERLAY_SCRIPT = """
     }
     legend.appendChild(el("text", {x: 14, y: 244}, "dashed/dim = mixed · × = high-D disagreement"));
     zoneLayer.appendChild(legend);
+    const counts = document.getElementById("cz-counts");
+    if (counts) {
+      const shown = items.filter((i) => Number.isFinite(Number(i.x)) && Number.isFinite(Number(i.y)));
+      const disagree = shown.filter((i) => i["disagreement?"]).length;
+      const mixed = shown.filter((i) => i["mixed?"]).length;
+      counts.textContent = `Currently rendered: ${shown.length} missions, ${disagree} disagreements, ${mixed} mixed.`;
+    }
+    zoneLayer.setAttribute("data-hide-disagreement", String(!disagreementVisible));
   }
 
   function drawFrontierBand(data) {
@@ -784,7 +804,22 @@ doc = f"""<!doctype html><meta charset=utf-8><title>Futon City — per-scope met
 <style>body{{margin:0;background:#05060a;color:#cdd3df;font:13px sans-serif}}header{{padding:11px 20px}}
 h1{{font-size:16px;margin:0 0 4px}}p{{margin:0;color:#8b95a7;font-size:12px;max-width:1180px}}
 text{{cursor:default}}{LIVE_OVERLAY_STYLE}</style>
-<header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed <span id="live-status">live layer loading</span><button id="capability-zones-toggle" type="button" aria-pressed="true">capability zones: on</button></h1>
+<header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed <span id="live-status">live layer loading</span><button id="capability-zones-toggle" type="button" aria-pressed="true">capability zones: on</button><button id="capability-disagreement-toggle" type="button" aria-pressed="true">disagreement ×: shown</button></h1>
+<details id="capability-zones-help"><summary>capability zones — what am I looking at?</summary>
+<p>Every mission is coloured by its <b>capability zone</b>: the action-class whose seed it sits
+nearest in a 3-D PCA reduction (<code>pca3-v1</code>) of the BGE embedding space. The zone is
+computed in 3-D and only <i>displayed</i> here — nothing is decided on this 2-D picture, so what
+you accept is the same object the War Machine's preferences will read.
+<b>dashed/dim = mixed</b>: the two nearest seeds are so close (thinnest global decile of margins)
+that the call is honestly ambiguous.
+<b>× = disagreement</b>: the raw 1024-dimensional cosine reading — kept only as a
+boundary-distortion <i>diagnostic</i> — names a <i>different</i> class than the operative 3-D
+zone. A × does not mean the zone is wrong; thin high-D margins flip easily under projection.
+But where ×s <i>cluster inside one zone</i>, treat that zone's boundary as distortion-suspect
+and record a complaint: e.g. the <b>no-op</b> zone currently holds 51 missions of which 25 are
+disagreements (raw high-D mostly read them as <code>close</code> or <code>apply-cascade</code>) —
+exactly the kind of boundary question the walk exists to catch. <span id="cz-counts"></span></p>
+</details>
 <p><b>This is the metric (terrain), NOT the EFE</b> (EFE = G(π) = the geodesic over it, drawn later as policy
 streamlines). Each mission is a DISTRICT — scopes spiral around the HEAD hub, <b>coloured by Salingaros class</b>
 (<span style="color:#3a9a4a">green=alive</span> · <span style="color:#c0392b">red=mess</span> ·
