@@ -20,6 +20,7 @@ SCOPES = json.load(open(ROOT / "futon6/data/efe-scopes.json"))  # reproducible: 
 CAPS = json.load(open(ROOT / "futon6/data/capability-graph.json"))
 ROADS = json.load(open(ROOT / "futon6/data/mission-carpet-roads.json"))
 OUT = ROOT / "futon6/data" / (f"mission-efe-field-{_VARIANT}.html" if _VARIANT else "mission-efe-field.html")
+CAPABILITY_ZONES = json.load(open(ROOT / "futon3c/resources/capability_zones/live-map-pca3-v1.json"))
 bare = lambda k: k[2:] if k.startswith("M-") else k
 
 # Off-map minters: builder/* and external/* are NOT missions, so a claimed cap
@@ -424,6 +425,8 @@ for stem, (why, desc) in MARKED.items():
 
 LIVE_OVERLAY_STYLE = """
 #live-status{display:inline-block;margin-left:10px;padding:2px 7px;border:1px solid #334155;border-radius:999px;color:#94a3b8;background:#0b1020;font-size:11px}
+#capability-zones-toggle{margin-left:10px;padding:3px 8px;border:1px solid #64748b;border-radius:5px;color:#e2e8f0;background:#172033;font:11px ui-sans-serif,system-ui,sans-serif;cursor:pointer}
+#capability-zones-toggle[aria-pressed="true"]{border-color:#67e8f9;color:#cffafe;background:#164e63}
 #live-status.live{color:#bbf7d0;border-color:#22c55e;background:#052e16}
 #live-status.offline{color:#fecaca;border-color:#ef4444;background:#300b12}
 #live-overlay text{font-family:ui-sans-serif,system-ui,sans-serif;paint-order:stroke;stroke:#05060a;stroke-width:3px;stroke-linejoin:round}
@@ -446,6 +449,11 @@ LIVE_OVERLAY_STYLE = """
 .live-ship-glyph{font-size:30px;text-anchor:middle;dominant-baseline:central;stroke:none}
 .live-ship-label{fill:#ffd89a;font-size:13px;font-weight:800}
 .live-offline-badge{fill:#fecaca;font-size:22px;font-weight:800}
+.capability-zone-entity{stroke:#05060a;stroke-width:2.2;paint-order:stroke;vector-effect:non-scaling-stroke}
+.capability-zone-mixed{fill-opacity:.22;stroke:#f8fafc;stroke-width:2.6;stroke-dasharray:4 3}
+.capability-zone-disagreement{fill:none;stroke:#ffffff;stroke-width:2.4;vector-effect:non-scaling-stroke}
+.capability-zone-legend text{font-family:ui-sans-serif,system-ui,sans-serif;fill:#f8fafc;font-size:12px;paint-order:stroke;stroke:#05060a;stroke-width:3px}
+.capability-zone-legend-bg{fill:#07101d;fill-opacity:.92;stroke:#94a3b8;stroke-width:1.2}
 @keyframes liveAgentPulse{0%,100%{opacity:.65}50%{opacity:1}}
 @keyframes liveWmPulse{0%{opacity:.95;transform:scale(.82)}70%{opacity:.08;transform:scale(1.45)}100%{opacity:0;transform:scale(1.55)}}
 """
@@ -456,10 +464,12 @@ LIVE_OVERLAY_SCRIPT = """
   const NS = "http://www.w3.org/2000/svg";
   const ENDPOINT = "http://localhost:7070/api/alpha/live-efe-map";
   const REFRESH_MS = 10000;
+  const STATIC_CAPABILITY_ZONES = __CAPABILITY_ZONES_JSON__;
   const FRONTIER_Y = 3410;
   const FRONTIER_H = 175;
   const svg = document.getElementById("efe-field");
   const badge = document.getElementById("live-status");
+  const zonesToggle = document.getElementById("capability-zones-toggle");
   if (!svg) return;
 
   function el(name, attrs = {}, text = null) {
@@ -471,8 +481,18 @@ LIVE_OVERLAY_SCRIPT = """
     return node;
   }
 
+  const zoneLayer = el("g", {id: "capability-zones-layer", "data-reduction-version": "pending"});
+  svg.appendChild(zoneLayer);
   const layer = el("g", {id: "live-overlay"});
   svg.appendChild(layer);
+  let zonesVisible = true;
+
+  if (zonesToggle) zonesToggle.addEventListener("click", () => {
+    zonesVisible = !zonesVisible;
+    zoneLayer.style.display = zonesVisible ? "" : "none";
+    zonesToggle.setAttribute("aria-pressed", String(zonesVisible));
+    zonesToggle.textContent = zonesVisible ? "capability zones: on" : "capability zones: off";
+  });
 
   function clear(node) {
     while (node.firstChild) node.removeChild(node.firstChild);
@@ -524,6 +544,43 @@ LIVE_OVERLAY_SCRIPT = """
 
   function title(parent, text) {
     parent.appendChild(el("title", {}, text));
+  }
+
+  function drawCapabilityZones(data) {
+    clear(zoneLayer);
+    const zones = data["capability-zones"] || STATIC_CAPABILITY_ZONES;
+    zoneLayer.setAttribute("data-reduction-version", zones["reduction-version"] || "unavailable");
+    const items = zones.items || [];
+    for (const item of items) {
+      if (!Number.isFinite(Number(item.x)) || !Number.isFinite(Number(item.y))) continue;
+      const g = el("g", {
+        "data-capability-mission-id": item["mission-id"],
+        "data-capability-zone": item.class,
+        "data-capability-mixed": Boolean(item["mixed?"]),
+        "data-capability-disagreement": Boolean(item["disagreement?"])
+      });
+      const color = item.color || ((zones.legend || []).find((z) => z.class === item.class) || {}).color || "#94a3b8";
+      title(g, `${item["mission-id"]}\n3-D zone=${item.class} margin=${fmt(item.margin)}${item["mixed?"] ? " (mixed)" : ""}\nraw high-D diagnostic=${item["high-d-class"]} margin=${fmt(item["high-d-margin"])}${item["disagreement?"] ? " · DISAGREES" : ""}`);
+      g.appendChild(el("circle", {cx: item.x, cy: item.y, r: 11, fill: color, opacity: item["mixed?"] ? .55 : .82,
+        class: `capability-zone-entity ${item["mixed?"] ? "capability-zone-mixed" : ""}`}));
+      if (item["disagreement?"]) {
+        const x = Number(item.x), y = Number(item.y);
+        g.appendChild(el("path", {d: `M ${x-5} ${y-5} L ${x+5} ${y+5} M ${x+5} ${y-5} L ${x-5} ${y+5}`,
+          class: "capability-zone-disagreement"}));
+      }
+      zoneLayer.appendChild(g);
+    }
+    const legend = el("g", {class: "capability-zone-legend", "data-capability-legend": "true", transform: "translate(2800 55)"});
+    legend.appendChild(el("rect", {x: 0, y: 0, width: 330, height: 265, rx: 8, class: "capability-zone-legend-bg"}));
+    legend.appendChild(el("text", {x: 14, y: 22, style: "font-weight:800"}, `capability zones · ${zones["reduction-version"] || "unavailable"}`));
+    for (const [i, row] of (zones.legend || []).entries()) {
+      const col = i >= 7 ? 1 : 0, line = i % 7;
+      const x = 14 + col * 158, y = 47 + line * 27;
+      legend.appendChild(el("circle", {cx: x + 6, cy: y - 4, r: 6, fill: row.color, stroke: "#fff", "stroke-width": .7}));
+      legend.appendChild(el("text", {x: x + 18, y}, `${row.class} · ${row["mission-count"] || 0}`));
+    }
+    legend.appendChild(el("text", {x: 14, y: 244}, "dashed/dim = mixed · × = high-D disagreement"));
+    zoneLayer.appendChild(legend);
   }
 
   function drawFrontierBand(data) {
@@ -682,6 +739,7 @@ LIVE_OVERLAY_SCRIPT = """
   }
 
   function draw(data) {
+    drawCapabilityZones(data);
     clear(layer);
     drawFrontierBand(data);
     drawWarMachine(data);
@@ -715,6 +773,7 @@ LIVE_OVERLAY_SCRIPT = """
     }
   }
 
+  drawCapabilityZones({"capability-zones": STATIC_CAPABILITY_ZONES});
   refresh();
   window.setInterval(refresh, REFRESH_MS);
 })();
@@ -725,7 +784,7 @@ doc = f"""<!doctype html><meta charset=utf-8><title>Futon City — per-scope met
 <style>body{{margin:0;background:#05060a;color:#cdd3df;font:13px sans-serif}}header{{padding:11px 20px}}
 h1{{font-size:16px;margin:0 0 4px}}p{{margin:0;color:#8b95a7;font-size:12px;max-width:1180px}}
 text{{cursor:default}}{LIVE_OVERLAY_STYLE}</style>
-<header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed <span id="live-status">live layer loading</span></h1>
+<header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed <span id="live-status">live layer loading</span><button id="capability-zones-toggle" type="button" aria-pressed="true">capability zones: on</button></h1>
 <p><b>This is the metric (terrain), NOT the EFE</b> (EFE = G(π) = the geodesic over it, drawn later as policy
 streamlines). Each mission is a DISTRICT — scopes spiral around the HEAD hub, <b>coloured by Salingaros class</b>
 (<span style="color:#3a9a4a">green=alive</span> · <span style="color:#c0392b">red=mess</span> ·
@@ -756,7 +815,7 @@ momentum but no substrate-2 district — a mission worked but not yet ingested).
 <g>{hubline_svg}</g><g>{scope_svg}</g><g>{hub_svg}</g>
 <g>{lasso}</g><g>{''.join(ghosts)}</g>
 <g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
-<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT}"""
+<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))) }"""
 OUT.write_text(doc)
 print(f"wrote {OUT}")
 print(f"{len(scope_pts)} scopes / {len(hubs)} districts · {sum(1 for p in scope_pts if p[3])} holes · "
