@@ -111,3 +111,42 @@ Derive the frame.
         for item in map_items
         for end in item["ends"]
     )
+
+
+def test_operator_gates_are_distinct_typed_nodes_with_source_lines(tmp_path: Path) -> None:
+    path = _write(
+        tmp_path,
+        "M-gated-demo.md",
+        """# Mission: Gated Demo
+
+**Status:** INSTANTIATE
+**Gate:** operator-acceptance — inspect the rendered graph
+**Gate:** operator-input — choose the production threshold
+
+## 1. IDENTIFY
+The implementation is complete; the remaining actions belong to the operator.
+""",
+    )
+
+    tree = scope_detect.detect_mission_scopes(
+        path,
+        kernel_terms=["implementation", "operator"],
+        capabilities=set(),
+        patterns=[],
+    )
+
+    gates = _by_binder(tree, "operator-gate")
+    assert tree["scope-count-by-binder-type"]["operator-gate"] == 2
+    assert [gate["gate-kind"] for gate in gates] == [
+        "operator-acceptance",
+        "operator-input",
+    ]
+    assert [gate["source-line"] for gate in gates] == [4, 5]
+    assert gates[0]["gate-text"] == "inspect the rendered graph"
+    assert gates[0]["ends"][2] == {
+        "role": "operator-gate",
+        "kind": "operator-acceptance",
+        "text": "inspect the rendered graph",
+        "source-line": 4,
+    }
+    assert all(gate["hx/type"] == "mission-scope/operator-gate" for gate in gates)

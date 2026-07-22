@@ -66,6 +66,12 @@ CERT_VERDICT_RE = re.compile(
     r"\bverdict(?:\s+on\s+record)?:?\s*(GATE OPEN|GATE SHUT|PASS(?:ED)?|FAIL(?:ED)?)\b",
     re.I,
 )
+OPERATOR_GATE_RE = re.compile(
+    r"^\*\*Gate:\*\*\s+"
+    r"(?P<kind>operator-[a-z0-9]+(?:-[a-z0-9]+)*)\s+—\s+"
+    r"(?P<text>\S.*?)\s*$",
+    re.M,
+)
 
 MISSION_REF_RE = re.compile(r"\bM-[A-Za-z0-9][A-Za-z0-9-]*\b")
 PATH_RE = re.compile(r"\b[\w./{}-]+\.(?:clj|cljs|cljc|py|edn|bb|el|json|md|html|css|ts|js|cert)\b")
@@ -196,6 +202,22 @@ def bullet_items(text: str) -> list[str]:
             if item:
                 items.append(item[:240])
     return items
+
+
+def operator_gate_records(text: str) -> list[dict]:
+    records = []
+    for match in OPERATOR_GATE_RE.finditer(text):
+        records.append(
+            {
+                "kind": match.group("kind"),
+                "text": match.group("text"),
+                "source-line": text.count("\n", 0, match.start()) + 1,
+                "position": match.start(),
+                "end": match.end(),
+                "anchor-line": match.group(0),
+            }
+        )
+    return records
 
 
 def source_slots(text: str) -> list[dict]:
@@ -351,6 +373,14 @@ def make_scope(
         "hx/content": {"match": title[:120], "position": position, "end": end},
         "hx/labels": ["scope", "mission-scope", binder_type, phase],
     }
+
+
+def get_position(scope: dict) -> int:
+    return int(scope.get("hx/content", {}).get("position", 0))
+
+
+def get_end(scope: dict) -> int:
+    return int(scope.get("hx/content", {}).get("end", get_position(scope)))
 
 
 def is_scope_in(title: str) -> bool:
@@ -561,6 +591,46 @@ def detect_mission_scopes(
             scope["anchor-line"] = rec["anchor"]
             scopes.append(scope)
             idx += 1
+
+    # Operator gates are mission-level structural binders, conventionally in
+    # the header rather than under a lifecycle heading. Detect them across the
+    # whole document so multiple gates remain distinct typed nodes.
+    for gate in operator_gate_records(text):
+        containing = [
+            scope
+            for scope in scopes
+            if get_position(scope) <= gate["position"] < get_end(scope)
+        ]
+        parent_scope = min(
+            containing,
+            key=lambda scope: get_end(scope) - get_position(scope),
+            default=None,
+        )
+        ends = [
+            {
+                "role": "operator-gate",
+                "kind": gate["kind"],
+                "text": gate["text"],
+                "source-line": gate["source-line"],
+            }
+        ]
+        scope = make_scope(
+            entity_id,
+            idx,
+            "operator-gate",
+            parent_scope["scope-id"] if parent_scope else None,
+            f"operator gate: {gate['kind']}",
+            "head",
+            gate["position"],
+            gate["end"],
+            ends,
+        )
+        scope["gate-kind"] = gate["kind"]
+        scope["gate-text"] = gate["text"]
+        scope["source-line"] = gate["source-line"]
+        scope["anchor-line"] = gate["anchor-line"]
+        scopes.append(scope)
+        idx += 1
 
     if not scopes:
         ends = find_concepts(text, kernel_terms)
