@@ -4,7 +4,7 @@
   "scope-count-by-binder-type": {
     "capability-scope": 10,
     "eightfold-phase": 6,
-    "loose-section": 39,
+    "loose-section": 40,
     "mission-scope-in": 1,
     "mission-scope-out": 1,
     "operator-gate": 1,
@@ -71,7 +71,7 @@
         }
       ],
       "hx/content": {
-        "end": 1188,
+        "end": 1264,
         "match": "Mission: Learning Loop",
         "position": 0
       },
@@ -163,9 +163,9 @@
         }
       ],
       "hx/content": {
-        "end": 1204,
+        "end": 1280,
         "match": "IDENTIFY",
-        "position": 1188
+        "position": 1264
       },
       "hx/ends": [
         {
@@ -239,9 +239,9 @@
         }
       ],
       "hx/content": {
-        "end": 2054,
+        "end": 2130,
         "match": "Motivation",
-        "position": 1204
+        "position": 1280
       },
       "hx/ends": [
         {
@@ -344,9 +344,9 @@
         }
       ],
       "hx/content": {
-        "end": 2054,
+        "end": 2130,
         "match": "Motivation",
-        "position": 1204
+        "position": 1280
       },
       "hx/ends": [
         {
@@ -453,9 +453,9 @@
         }
       ],
       "hx/content": {
-        "end": 2862,
+        "end": 2938,
         "match": "The actual sorry",
-        "position": 2054
+        "position": 2130
       },
       "hx/ends": [
         {
@@ -561,9 +561,9 @@
         }
       ],
       "hx/content": {
-        "end": 2862,
+        "end": 2938,
         "match": "The actual sorry",
-        "position": 2054
+        "position": 2130
       },
       "hx/ends": [
         {
@@ -673,9 +673,9 @@
         }
       ],
       "hx/content": {
-        "end": 3732,
+        "end": 3808,
         "match": "Two parallel scales, same move",
-        "position": 2862
+        "position": 2938
       },
       "hx/ends": [
         {
@@ -789,9 +789,9 @@
         }
       ],
       "hx/content": {
-        "end": 3732,
+        "end": 3808,
         "match": "Two parallel scales, same move",
-        "position": 2862
+        "position": 2938
       },
       "hx/ends": [
         {
@@ -897,9 +897,9 @@
         }
       ],
       "hx/content": {
-        "end": 4822,
+        "end": 4898,
         "match": "Scope in",
-        "position": 3732
+        "position": 3808
       },
       "hx/ends": [
         {
@@ -1012,9 +1012,9 @@
         }
       ],
       "hx/content": {
-        "end": 4822,
+        "end": 4898,
         "match": "Scope in",
-        "position": 3732
+        "position": 3808
       },
       "hx/ends": [
         {
@@ -1127,9 +1127,9 @@
         }
       ],
       "hx/content": {
-        "end": 4822,
+        "end": 4898,
         "match": "Scope in",
-        "position": 3732
+        "position": 3808
       },
       "hx/ends": [
         {
@@ -1239,9 +1239,9 @@
         }
       ],
       "hx/content": {
-        "end": 5950,
+        "end": 6026,
         "match": "Scope out",
-        "position": 4822
+        "position": 4898
       },
       "hx/ends": [
         {
@@ -1378,9 +1378,9 @@
         }
       ],
       "hx/content": {
-        "end": 5950,
+        "end": 6026,
         "match": "Scope out",
-        "position": 4822
+        "position": 4898
       },
       "hx/ends": [
         {
@@ -1532,9 +1532,9 @@
         }
       ],
       "hx/content": {
-        "end": 5950,
+        "end": 6026,
         "match": "Scope out",
-        "position": 4822
+        "position": 4898
       },
       "hx/ends": [
         {
@@ -1675,9 +1675,9 @@
         }
       ],
       "hx/content": {
-        "end": 6879,
+        "end": 6955,
         "match": "Completion criteria",
-        "position": 5950
+        "position": 6026
       },
       "hx/ends": [
         {
@@ -1807,9 +1807,9 @@
         }
       ],
       "hx/content": {
-        "end": 6879,
+        "end": 6955,
         "match": "Completion criteria",
-        "position": 5950
+        "position": 6026
       },
       "hx/ends": [
         {
@@ -1919,9 +1919,9 @@
         }
       ],
       "hx/content": {
-        "end": 7668,
+        "end": 7744,
         "match": "Open questions",
-        "position": 6879
+        "position": 6955
       },
       "hx/ends": [
         {
@@ -2019,9 +2019,9 @@
         }
       ],
       "hx/content": {
-        "end": 8323,
+        "end": 8399,
         "match": "MAP",
-        "position": 7668
+        "position": 7744
       },
       "hx/ends": [
         {
@@ -2132,9 +2132,9 @@
         }
       ],
       "hx/content": {
-        "end": 8323,
+        "end": 8399,
         "match": "MAP",
-        "position": 7668
+        "position": 7744
       },
       "hx/ends": [
         {
@@ -2273,9 +2273,9 @@
         }
       ],
       "hx/content": {
-        "end": 11013,
+        "end": 11089,
         "match": "DERIVE",
-        "position": 8323
+        "position": 8399
       },
       "hx/ends": [
         {
@@ -2437,9 +2437,9 @@
         }
       ],
       "hx/content": {
-        "end": 11013,
+        "end": 11089,
         "match": "DERIVE",
-        "position": 8323
+        "position": 8399
       },
       "hx/ends": [
         {
@@ -2561,9 +2561,9 @@
         }
       ],
       "hx/content": {
-        "end": 11311,
+        "end": 11387,
         "match": "ARGUE",
-        "position": 11013
+        "position": 11089
       },
       "hx/ends": [
         {
@@ -2649,9 +2649,9 @@
         }
       ],
       "hx/content": {
-        "end": 11685,
+        "end": 11761,
         "match": "The sorry restated",
-        "position": 11311
+        "position": 11387
       },
       "hx/ends": [
         {
@@ -2769,9 +2769,9 @@
         }
       ],
       "hx/content": {
-        "end": 13016,
+        "end": 13092,
         "match": "What the construction warrants",
-        "position": 11685
+        "position": 11761
       },
       "hx/ends": [
         {
@@ -2917,9 +2917,9 @@
         }
       ],
       "hx/content": {
-        "end": 14745,
+        "end": 14821,
         "match": "Against the completion criteria",
-        "position": 13016
+        "position": 13092
       },
       "hx/ends": [
         {
@@ -3037,9 +3037,9 @@
         }
       ],
       "hx/content": {
-        "end": 16150,
+        "end": 16226,
         "match": "The strongest objection",
-        "position": 14745
+        "position": 14821
       },
       "hx/ends": [
         {
@@ -3137,9 +3137,9 @@
         }
       ],
       "hx/content": {
-        "end": 17173,
+        "end": 17249,
         "match": "What falsifies this argument",
-        "position": 16150
+        "position": 16226
       },
       "hx/ends": [
         {
@@ -3245,9 +3245,9 @@
         }
       ],
       "hx/content": {
-        "end": 17976,
+        "end": 18052,
         "match": "What this ARGUE phase establishes",
-        "position": 17173
+        "position": 17249
       },
       "hx/ends": [
         {
@@ -3349,9 +3349,9 @@
         }
       ],
       "hx/content": {
-        "end": 18481,
+        "end": 18557,
         "match": "VERIFY",
-        "position": 17976
+        "position": 18052
       },
       "hx/ends": [
         {
@@ -3454,9 +3454,9 @@
         }
       ],
       "hx/content": {
-        "end": 18481,
+        "end": 18557,
         "match": "VERIFY",
-        "position": 17976
+        "position": 18052
       },
       "hx/ends": [
         {
@@ -3555,9 +3555,9 @@
         }
       ],
       "hx/content": {
-        "end": 19444,
+        "end": 19520,
         "match": "Probe 1 \u2014 flexiarg existence and content",
-        "position": 18481
+        "position": 18557
       },
       "hx/ends": [
         {
@@ -3655,9 +3655,9 @@
         }
       ],
       "hx/content": {
-        "end": 20571,
+        "end": 20647,
         "match": "Probe 2 \u2014 the negative-evidence claim",
-        "position": 19444
+        "position": 19520
       },
       "hx/ends": [
         {
@@ -3763,9 +3763,9 @@
         }
       ],
       "hx/content": {
-        "end": 20571,
+        "end": 20647,
         "match": "Probe 2 \u2014 the negative-evidence claim",
-        "position": 19444
+        "position": 19520
       },
       "hx/ends": [
         {
@@ -3883,9 +3883,9 @@
         }
       ],
       "hx/content": {
-        "end": 21923,
+        "end": 21999,
         "match": "Probe 3 \u2014 idempotency by construction",
-        "position": 20571
+        "position": 20647
       },
       "hx/ends": [
         {
@@ -3983,9 +3983,9 @@
         }
       ],
       "hx/content": {
-        "end": 22747,
+        "end": 22823,
         "match": "Probe 4 \u2014 the derivation's step-structure grew from use",
-        "position": 21923
+        "position": 21999
       },
       "hx/ends": [
         {
@@ -4063,9 +4063,9 @@
         }
       ],
       "hx/content": {
-        "end": 23792,
+        "end": 23868,
         "match": "What VERIFY does NOT yet check",
-        "position": 22747
+        "position": 22823
       },
       "hx/ends": [
         {
@@ -4171,9 +4171,9 @@
         }
       ],
       "hx/content": {
-        "end": 24787,
+        "end": 24863,
         "match": "Verify-phase witness summary",
-        "position": 23792
+        "position": 23868
       },
       "hx/ends": [
         {
@@ -4283,9 +4283,9 @@
         }
       ],
       "hx/content": {
-        "end": 25186,
+        "end": 25262,
         "match": "INSTANTIATE",
-        "position": 24787
+        "position": 24863
       },
       "hx/ends": [
         {
@@ -4367,9 +4367,9 @@
         }
       ],
       "hx/content": {
-        "end": 26138,
+        "end": 26214,
         "match": "The offramp wiring",
-        "position": 25186
+        "position": 25262
       },
       "hx/ends": [
         {
@@ -4435,9 +4435,9 @@
         }
       ],
       "hx/content": {
-        "end": 25400,
+        "end": 25476,
         "match": "pattern: hinge-entry-slots",
-        "position": 25383
+        "position": 25459
       },
       "hx/ends": [
         {
@@ -4503,9 +4503,9 @@
         }
       ],
       "hx/content": {
-        "end": 25472,
+        "end": 25548,
         "match": "pattern: whose-question-is-this",
-        "position": 25450
+        "position": 25526
       },
       "hx/ends": [
         {
@@ -4571,9 +4571,9 @@
         }
       ],
       "hx/content": {
-        "end": 25545,
+        "end": 25621,
         "match": "pattern: interest-event-vocabulary",
-        "position": 25520
+        "position": 25596
       },
       "hx/ends": [
         {
@@ -4639,9 +4639,9 @@
         }
       ],
       "hx/content": {
-        "end": 26138,
+        "end": 26214,
         "match": "The offramp wiring",
-        "position": 25186
+        "position": 25262
       },
       "hx/ends": [
         {
@@ -4751,9 +4751,9 @@
         }
       ],
       "hx/content": {
-        "end": 29692,
+        "end": 29768,
         "match": "Hinge 3 consumed \u2014 the agent-voiced test",
-        "position": 26138
+        "position": 26214
       },
       "hx/ends": [
         {
@@ -4863,9 +4863,9 @@
         }
       ],
       "hx/content": {
-        "end": 26648,
+        "end": 26724,
         "match": "pattern: what-problem-is-this-actually-solving",
-        "position": 26611
+        "position": 26687
       },
       "hx/ends": [
         {
@@ -4947,9 +4947,9 @@
         }
       ],
       "hx/content": {
-        "end": 31094,
+        "end": 31170,
         "match": "What INSTANTIATE establishes",
-        "position": 29692
+        "position": 29768
       },
       "hx/ends": [
         {
@@ -5043,9 +5043,9 @@
         }
       ],
       "hx/content": {
-        "end": 31882,
+        "end": 31958,
         "match": "What INSTANTIATE does NOT establish",
-        "position": 31094
+        "position": 31170
       },
       "hx/ends": [
         {
@@ -5167,9 +5167,9 @@
         }
       ],
       "hx/content": {
-        "end": 37611,
+        "end": 37687,
         "match": "Full-loop implementation \u2014 attributed B/A entities",
-        "position": 31882
+        "position": 31958
       },
       "hx/ends": [
         {
@@ -5275,9 +5275,9 @@
         }
       ],
       "hx/content": {
-        "end": 36938,
+        "end": 37014,
         "match": "pattern: all-or-nothing",
-        "position": 36924
+        "position": 37000
       },
       "hx/ends": [
         {
@@ -5398,9 +5398,9 @@
         }
       ],
       "hx/content": {
-        "end": 37611,
+        "end": 37687,
         "match": "Full-loop implementation \u2014 attributed B/A entities",
-        "position": 31882
+        "position": 31958
       },
       "hx/ends": [
         {
@@ -5553,9 +5553,9 @@
         }
       ],
       "hx/content": {
-        "end": 39369,
+        "end": 39445,
         "match": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
-        "position": 37611
+        "position": 37687
       },
       "hx/ends": [
         {
@@ -5682,9 +5682,9 @@
         }
       ],
       "hx/content": {
-        "end": 39369,
+        "end": 39445,
         "match": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
-        "position": 37611
+        "position": 37687
       },
       "hx/ends": [
         {
@@ -5807,9 +5807,9 @@
         }
       ],
       "hx/content": {
-        "end": 41300,
+        "end": 41376,
         "match": "Full-loop implementation \u2014 capability-matrix aggregate view",
-        "position": 39369
+        "position": 39445
       },
       "hx/ends": [
         {
@@ -5928,9 +5928,9 @@
         }
       ],
       "hx/content": {
-        "end": 41300,
+        "end": 41376,
         "match": "Full-loop implementation \u2014 capability-matrix aggregate view",
-        "position": 39369
+        "position": 39445
       },
       "hx/ends": [
         {
@@ -6049,9 +6049,9 @@
         }
       ],
       "hx/content": {
-        "end": 41300,
+        "end": 41376,
         "match": "Full-loop implementation \u2014 capability-matrix aggregate view",
-        "position": 39369
+        "position": 39445
       },
       "hx/ends": [
         {
@@ -6169,9 +6169,9 @@
         }
       ],
       "hx/content": {
-        "end": 42814,
+        "end": 42890,
         "match": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
-        "position": 41300
+        "position": 41376
       },
       "hx/ends": [
         {
@@ -6298,9 +6298,9 @@
         }
       ],
       "hx/content": {
-        "end": 42814,
+        "end": 42890,
         "match": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
-        "position": 41300
+        "position": 41376
       },
       "hx/ends": [
         {
@@ -6435,9 +6435,9 @@
         }
       ],
       "hx/content": {
-        "end": 45680,
+        "end": 45756,
         "match": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
-        "position": 42814
+        "position": 42890
       },
       "hx/ends": [
         {
@@ -6600,9 +6600,9 @@
         }
       ],
       "hx/content": {
-        "end": 45680,
+        "end": 45756,
         "match": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
-        "position": 42814
+        "position": 42890
       },
       "hx/ends": [
         {
@@ -6757,9 +6757,9 @@
         }
       ],
       "hx/content": {
-        "end": 49003,
+        "end": 49079,
         "match": "Full-loop implementation \u2014 WebArxana render surface",
-        "position": 45680
+        "position": 45756
       },
       "hx/ends": [
         {
@@ -6906,9 +6906,9 @@
         }
       ],
       "hx/content": {
-        "end": 49003,
+        "end": 49079,
         "match": "Full-loop implementation \u2014 WebArxana render surface",
-        "position": 45680
+        "position": 45756
       },
       "hx/ends": [
         {
@@ -7063,9 +7063,9 @@
         }
       ],
       "hx/content": {
-        "end": 51168,
+        "end": 51244,
         "match": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
-        "position": 49003
+        "position": 49079
       },
       "hx/ends": [
         {
@@ -7228,9 +7228,9 @@
         }
       ],
       "hx/content": {
-        "end": 51168,
+        "end": 51244,
         "match": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
-        "position": 49003
+        "position": 49079
       },
       "hx/ends": [
         {
@@ -7373,9 +7373,9 @@
         }
       ],
       "hx/content": {
-        "end": 53434,
+        "end": 53510,
         "match": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
-        "position": 51168
+        "position": 51244
       },
       "hx/ends": [
         {
@@ -7493,9 +7493,9 @@
         }
       ],
       "hx/content": {
-        "end": 53434,
+        "end": 53510,
         "match": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
-        "position": 51168
+        "position": 51244
       },
       "hx/ends": [
         {
@@ -7625,9 +7625,9 @@
         }
       ],
       "hx/content": {
-        "end": 54932,
+        "end": 55008,
         "match": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
-        "position": 53434
+        "position": 53510
       },
       "hx/ends": [
         {
@@ -7737,9 +7737,9 @@
         }
       ],
       "hx/content": {
-        "end": 53760,
+        "end": 53836,
         "match": "pattern: capability-vocabulary-v0",
-        "position": 53736
+        "position": 53812
       },
       "hx/ends": [
         {
@@ -7833,9 +7833,9 @@
         }
       ],
       "hx/content": {
-        "end": 54187,
+        "end": 54263,
         "match": "pattern: capability-signature-vector",
-        "position": 54160
+        "position": 54236
       },
       "hx/ends": [
         {
@@ -7925,9 +7925,9 @@
         }
       ],
       "hx/content": {
-        "end": 54394,
+        "end": 54470,
         "match": "pattern: hinge-capability-extraction",
-        "position": 54367
+        "position": 54443
       },
       "hx/ends": [
         {
@@ -8033,9 +8033,9 @@
         }
       ],
       "hx/content": {
-        "end": 54932,
+        "end": 55008,
         "match": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
-        "position": 53434
+        "position": 53510
       },
       "hx/ends": [
         {
@@ -8157,9 +8157,9 @@
         }
       ],
       "hx/content": {
-        "end": 54932,
+        "end": 55008,
         "match": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
-        "position": 53434
+        "position": 53510
       },
       "hx/ends": [
         {
@@ -8245,9 +8245,9 @@
         }
       ],
       "hx/content": {
-        "end": 54948,
+        "end": 55024,
         "match": "Checkpoints",
-        "position": 54932
+        "position": 55008
       },
       "hx/ends": [
         {
@@ -8365,9 +8365,9 @@
         }
       ],
       "hx/content": {
-        "end": 59577,
+        "end": 59653,
         "match": "Checkpoint 1 \u2014 2026-04-18: A\u2192B artefact diagnosis",
-        "position": 54948
+        "position": 55024
       },
       "hx/ends": [
         {
@@ -8553,9 +8553,9 @@
         }
       ],
       "hx/content": {
-        "end": 66434,
+        "end": 66510,
         "match": "Checkpoint 2 \u2014 2026-04-18: The tagging/mining cut",
-        "position": 59577
+        "position": 59653
       },
       "hx/ends": [
         {
@@ -8741,9 +8741,9 @@
         }
       ],
       "hx/content": {
-        "end": 73422,
+        "end": 73498,
         "match": "Checkpoint 3 \u2014 2026-07-09: Pipeline v0 pair-consumption on M-trip-journal IDENTIFY-exit",
-        "position": 66434
+        "position": 66510
       },
       "hx/ends": [
         {
@@ -8969,9 +8969,9 @@
         }
       ],
       "hx/content": {
-        "end": 83019,
+        "end": 83095,
         "match": "Checkpoint 4 \u2014 2026-07-09: DERIVE \u2014 second pair consumed, first negative-evidence result",
-        "position": 73422
+        "position": 73498
       },
       "hx/ends": [
         {
@@ -9141,9 +9141,9 @@
         }
       ],
       "hx/content": {
-        "end": 83562,
+        "end": 83639,
         "match": "Named extension (deferred): need-all-three mission-value blend",
-        "position": 83019
+        "position": 83095
       },
       "hx/ends": [
         {
@@ -9187,31 +9187,63 @@
       "scope-id": "M-learning-loop:scope-076"
     },
     {
-      "anchor-line": "**Gate:** operator-acceptance \u2014 criteria 3-4 acceptance of the capability graph at http://localhost:3100/live/capability-graph.html (set 2026-07-22)",
-      "binder-type": "operator-gate",
+      "binder-type": "loose-section",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "operator gate: operator-acceptance",
-          "phase": "head",
+          "name": "Checkpoint \u2014 2026-07-22: operator acceptance of criteria 3\u20134",
+          "phase": "loose",
           "role": "environment"
         },
         {
-          "kind": "operator-acceptance",
-          "role": "operator-gate",
-          "source-line": 5,
-          "text": "criteria 3-4 acceptance of the capability graph at http://localhost:3100/live/capability-graph.html (set 2026-07-22)"
+          "level": 3,
+          "role": "heading",
+          "title": "Checkpoint \u2014 2026-07-22: operator acceptance of criteria 3\u20134"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "capabilities"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "backend"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
         }
       ],
-      "gate-kind": "operator-acceptance",
-      "gate-text": "criteria 3-4 acceptance of the capability graph at http://localhost:3100/live/capability-graph.html (set 2026-07-22)",
       "hx/content": {
-        "end": 438,
-        "match": "operator gate: operator-acceptance",
-        "position": 290
+        "end": 85034,
+        "match": "Checkpoint \u2014 2026-07-22: operator acceptance of criteria 3\u20134",
+        "position": 83639
       },
       "hx/ends": [
         {
@@ -9219,18 +9251,110 @@
           "role": "entity"
         },
         {
-          "name": "operator gate: operator-acceptance",
+          "name": "Checkpoint \u2014 2026-07-22: operator acceptance of criteria 3\u20134",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Checkpoint \u2014 2026-07-22: operator acceptance of criteria 3\u20134"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "capabilities"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "backend"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-077",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-learning-loop:scope-071",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-learning-loop:scope-071",
+      "scope-id": "M-learning-loop:scope-077"
+    },
+    {
+      "anchor-line": "**Gate:** operator-input \u2014 E-capability-graph-ui-polish interactive UI session (set 2026-07-22; supersedes the operator-acceptance gate, resolved same day by criteria 3\u20134 acceptance)",
+      "binder-type": "operator-gate",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "operator gate: operator-input",
           "phase": "head",
           "role": "environment"
         },
         {
-          "kind": "operator-acceptance",
+          "kind": "operator-input",
           "role": "operator-gate",
           "source-line": 5,
-          "text": "criteria 3-4 acceptance of the capability graph at http://localhost:3100/live/capability-graph.html (set 2026-07-22)"
+          "text": "E-capability-graph-ui-polish interactive UI session (set 2026-07-22; supersedes the operator-acceptance gate, resolved same day by criteria 3\u20134 acceptance)"
         }
       ],
-      "hx/id": "M-learning-loop:scope-077",
+      "gate-kind": "operator-input",
+      "gate-text": "E-capability-graph-ui-polish interactive UI session (set 2026-07-22; supersedes the operator-acceptance gate, resolved same day by criteria 3\u20134 acceptance)",
+      "hx/content": {
+        "end": 514,
+        "match": "operator gate: operator-input",
+        "position": 332
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "operator gate: operator-input",
+          "phase": "head",
+          "role": "environment"
+        },
+        {
+          "kind": "operator-input",
+          "role": "operator-gate",
+          "source-line": 5,
+          "text": "E-capability-graph-ui-polish interactive UI session (set 2026-07-22; supersedes the operator-acceptance gate, resolved same day by criteria 3\u20134 acceptance)"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-078",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -9241,7 +9365,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/operator-gate",
       "parent": "M-learning-loop:scope-000",
-      "scope-id": "M-learning-loop:scope-077",
+      "scope-id": "M-learning-loop:scope-078",
       "source-line": 5
     }
   ]
