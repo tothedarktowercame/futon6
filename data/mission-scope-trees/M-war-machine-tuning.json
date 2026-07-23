@@ -8,7 +8,7 @@
     "map-item": 20,
     "mission-scope-in": 1,
     "mission-scope-out": 1,
-    "pattern": 3,
+    "pattern": 7,
     "plain-argument": 1,
     "source-material": 2
   },
@@ -1692,6 +1692,98 @@
       "scope-id": "M-war-machine-tuning:scope-018"
     },
     {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: maturity-evidence-audit",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "maturity-evidence-audit",
+          "ref": "futon3/library/stack-coherence/maturity-evidence-audit.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "auditable"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        }
+      ],
+      "hx/content": {
+        "end": 18312,
+        "match": "pattern: maturity-evidence-audit",
+        "position": 18289
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: maturity-evidence-audit",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "maturity-evidence-audit",
+          "ref": "futon3/library/stack-coherence/maturity-evidence-audit.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "auditable"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        }
+      ],
+      "hx/id": "M-war-machine-tuning:scope-019",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine-tuning:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-tuning:scope-001",
+      "scope-id": "M-war-machine-tuning:scope-019"
+    },
+    {
       "binder-type": "capability-scope",
       "ends": [
         {
@@ -1804,7 +1896,7 @@
           "term": "status"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-019",
+      "hx/id": "M-war-machine-tuning:scope-020",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1814,122 +1906,6 @@
       "hx/parent": "M-war-machine-tuning:scope-001",
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
-      "parent": "M-war-machine-tuning:scope-001",
-      "scope-id": "M-war-machine-tuning:scope-019"
-    },
-    {
-      "binder-type": "pattern",
-      "ends": [
-        {
-          "ident": "M-war-machine-tuning",
-          "role": "entity"
-        },
-        {
-          "name": "Theoretical anchoring",
-          "phase": "identify",
-          "role": "environment"
-        },
-        {
-          "ident": "maturity-evidence-audit",
-          "ref": "futon3/library/stack-coherence/maturity-evidence-audit.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "aif"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "auditable"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        }
-      ],
-      "hx/content": {
-        "end": 18752,
-        "match": "Theoretical anchoring",
-        "position": 17768
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-tuning",
-          "role": "entity"
-        },
-        {
-          "name": "Theoretical anchoring",
-          "phase": "identify",
-          "role": "environment"
-        },
-        {
-          "ident": "maturity-evidence-audit",
-          "ref": "futon3/library/stack-coherence/maturity-evidence-audit.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "aif"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "auditable"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        }
-      ],
-      "hx/id": "M-war-machine-tuning:scope-020",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "identify"
-      ],
-      "hx/parent": "M-war-machine-tuning:scope-001",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
       "parent": "M-war-machine-tuning:scope-001",
       "scope-id": "M-war-machine-tuning:scope-020"
     },
@@ -2654,6 +2630,90 @@
       "scope-id": "M-war-machine-tuning:scope-027"
     },
     {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: stop-the-line",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "stop-the-line",
+          "ref": "futon3/library/futon-theory/stop-the-line.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "refactored"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "blocker"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/content": {
+        "end": 21860,
+        "match": "pattern: stop-the-line",
+        "position": 21847
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: stop-the-line",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "stop-the-line",
+          "ref": "futon3/library/futon-theory/stop-the-line.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "refactored"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "blocker"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/id": "M-war-machine-tuning:scope-028",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine-tuning:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-tuning:scope-001",
+      "scope-id": "M-war-machine-tuning:scope-028"
+    },
+    {
       "binder-type": "capability-scope",
       "ends": [
         {
@@ -2788,7 +2848,7 @@
           "term": "rationale"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-028",
+      "hx/id": "M-war-machine-tuning:scope-029",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -2798,154 +2858,6 @@
       "hx/parent": "M-war-machine-tuning:scope-001",
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
-      "parent": "M-war-machine-tuning:scope-001",
-      "scope-id": "M-war-machine-tuning:scope-028"
-    },
-    {
-      "binder-type": "pattern",
-      "ends": [
-        {
-          "ident": "M-war-machine-tuning",
-          "role": "entity"
-        },
-        {
-          "name": "Completion criteria",
-          "phase": "identify",
-          "role": "environment"
-        },
-        {
-          "ident": "stop-the-line",
-          "ref": "futon3/library/futon-theory/stop-the-line.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "aif"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "truth"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "refactored"
-        },
-        {
-          "role": "concept",
-          "term": "blocker"
-        },
-        {
-          "role": "concept",
-          "term": "scope"
-        },
-        {
-          "role": "concept",
-          "term": "fulab"
-        },
-        {
-          "role": "concept",
-          "term": "rationale"
-        }
-      ],
-      "hx/content": {
-        "end": 22736,
-        "match": "Completion criteria",
-        "position": 20585
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-tuning",
-          "role": "entity"
-        },
-        {
-          "name": "Completion criteria",
-          "phase": "identify",
-          "role": "environment"
-        },
-        {
-          "ident": "stop-the-line",
-          "ref": "futon3/library/futon-theory/stop-the-line.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "aif"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "truth"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "refactored"
-        },
-        {
-          "role": "concept",
-          "term": "blocker"
-        },
-        {
-          "role": "concept",
-          "term": "scope"
-        },
-        {
-          "role": "concept",
-          "term": "fulab"
-        },
-        {
-          "role": "concept",
-          "term": "rationale"
-        }
-      ],
-      "hx/id": "M-war-machine-tuning:scope-029",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "identify"
-      ],
-      "hx/parent": "M-war-machine-tuning:scope-001",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
       "parent": "M-war-machine-tuning:scope-001",
       "scope-id": "M-war-machine-tuning:scope-029"
     },
@@ -11562,6 +11474,394 @@
       "scope-id": "M-war-machine-tuning:scope-109"
     },
     {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: readme-devmap-sync",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "readme-devmap-sync",
+          "ref": "futon3/library/stack-coherence/readme-devmap-sync.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "readme"
+        },
+        {
+          "role": "concept",
+          "term": "devmap"
+        }
+      ],
+      "hx/content": {
+        "end": 105416,
+        "match": "pattern: readme-devmap-sync",
+        "position": 105398
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: readme-devmap-sync",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "readme-devmap-sync",
+          "ref": "futon3/library/stack-coherence/readme-devmap-sync.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "readme"
+        },
+        {
+          "role": "concept",
+          "term": "devmap"
+        }
+      ],
+      "hx/id": "M-war-machine-tuning:scope-110",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-tuning:scope-108",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-tuning:scope-108",
+      "scope-id": "M-war-machine-tuning:scope-110"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: ready-blocked-triage",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "ready-blocked-triage",
+          "ref": "futon3/library/stack-coherence/ready-blocked-triage.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "derive"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        }
+      ],
+      "hx/content": {
+        "end": 105893,
+        "match": "pattern: ready-blocked-triage",
+        "position": 105873
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: ready-blocked-triage",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "ready-blocked-triage",
+          "ref": "futon3/library/stack-coherence/ready-blocked-triage.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "derive"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        }
+      ],
+      "hx/id": "M-war-machine-tuning:scope-111",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-tuning:scope-108",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-tuning:scope-108",
+      "scope-id": "M-war-machine-tuning:scope-111"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: surface-earns-inhabitation",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "surface-earns-inhabitation",
+          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        }
+      ],
+      "hx/content": {
+        "end": 106161,
+        "match": "pattern: surface-earns-inhabitation",
+        "position": 106135
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: surface-earns-inhabitation",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "surface-earns-inhabitation",
+          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        }
+      ],
+      "hx/id": "M-war-machine-tuning:scope-112",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-tuning:scope-108",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-tuning:scope-108",
+      "scope-id": "M-war-machine-tuning:scope-112"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: inhabitation-feeds-evolution",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "inhabitation-feeds-evolution",
+          "ref": "futon3/library/peripherals/inhabitation-feeds-evolution.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "fulab"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        }
+      ],
+      "hx/content": {
+        "end": 106448,
+        "match": "pattern: inhabitation-feeds-evolution",
+        "position": 106420
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: inhabitation-feeds-evolution",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "inhabitation-feeds-evolution",
+          "ref": "futon3/library/peripherals/inhabitation-feeds-evolution.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "fulab"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        }
+      ],
+      "hx/id": "M-war-machine-tuning:scope-113",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-tuning:scope-108",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-tuning:scope-108",
+      "scope-id": "M-war-machine-tuning:scope-113"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: prototype-maturity-lifecycle",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "prototype-maturity-lifecycle",
+          "ref": "futon3/library/devmap-coherence/prototype-maturity-lifecycle.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "devmap"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 106693,
+        "match": "pattern: prototype-maturity-lifecycle",
+        "position": 106665
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-tuning",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: prototype-maturity-lifecycle",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "prototype-maturity-lifecycle",
+          "ref": "futon3/library/devmap-coherence/prototype-maturity-lifecycle.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "devmap"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-war-machine-tuning:scope-114",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-tuning:scope-108",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-tuning:scope-108",
+      "scope-id": "M-war-machine-tuning:scope-114"
+    },
+    {
       "binder-type": "capability-scope",
       "ends": [
         {
@@ -11736,7 +12036,7 @@
           "term": "aif"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-110",
+      "hx/id": "M-war-machine-tuning:scope-115",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -11747,235 +12047,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
       "parent": "M-war-machine-tuning:scope-108",
-      "scope-id": "M-war-machine-tuning:scope-110"
-    },
-    {
-      "binder-type": "pattern",
-      "ends": [
-        {
-          "ident": "M-war-machine-tuning",
-          "role": "entity"
-        },
-        {
-          "name": "Pattern cross-reference",
-          "phase": "derive",
-          "role": "environment"
-        },
-        {
-          "ident": "readme-devmap-sync",
-          "ref": "futon3/library/stack-coherence/readme-devmap-sync.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "ready-blocked-triage",
-          "ref": "futon3/library/stack-coherence/ready-blocked-triage.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "surface-earns-inhabitation",
-          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "inhabitation-feeds-evolution",
-          "ref": "futon3/library/peripherals/inhabitation-feeds-evolution.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "prototype-maturity-lifecycle",
-          "ref": "futon3/library/devmap-coherence/prototype-maturity-lifecycle.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "derive"
-        },
-        {
-          "role": "concept",
-          "term": "invariants"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "readme"
-        },
-        {
-          "role": "concept",
-          "term": "devmap"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "identify"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "fulab"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "lifecycle"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "aif"
-        }
-      ],
-      "hx/content": {
-        "end": 107502,
-        "match": "Pattern cross-reference",
-        "position": 104646
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-tuning",
-          "role": "entity"
-        },
-        {
-          "name": "Pattern cross-reference",
-          "phase": "derive",
-          "role": "environment"
-        },
-        {
-          "ident": "readme-devmap-sync",
-          "ref": "futon3/library/stack-coherence/readme-devmap-sync.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "ready-blocked-triage",
-          "ref": "futon3/library/stack-coherence/ready-blocked-triage.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "surface-earns-inhabitation",
-          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "inhabitation-feeds-evolution",
-          "ref": "futon3/library/peripherals/inhabitation-feeds-evolution.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "prototype-maturity-lifecycle",
-          "ref": "futon3/library/devmap-coherence/prototype-maturity-lifecycle.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "derive"
-        },
-        {
-          "role": "concept",
-          "term": "invariants"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "readme"
-        },
-        {
-          "role": "concept",
-          "term": "devmap"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "identify"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "fulab"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "lifecycle"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "aif"
-        }
-      ],
-      "hx/id": "M-war-machine-tuning:scope-111",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "derive"
-      ],
-      "hx/parent": "M-war-machine-tuning:scope-108",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
-      "parent": "M-war-machine-tuning:scope-108",
-      "scope-id": "M-war-machine-tuning:scope-111"
+      "scope-id": "M-war-machine-tuning:scope-115"
     },
     {
       "binder-type": "loose-section",
@@ -12120,7 +12192,7 @@
           "term": "fulab"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-112",
+      "hx/id": "M-war-machine-tuning:scope-116",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -12131,7 +12203,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-108",
-      "scope-id": "M-war-machine-tuning:scope-112"
+      "scope-id": "M-war-machine-tuning:scope-116"
     },
     {
       "binder-type": "loose-section",
@@ -12236,7 +12308,7 @@
           "term": "patterns"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-113",
+      "hx/id": "M-war-machine-tuning:scope-117",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -12247,7 +12319,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-108",
-      "scope-id": "M-war-machine-tuning:scope-113"
+      "scope-id": "M-war-machine-tuning:scope-117"
     },
     {
       "binder-type": "loose-section",
@@ -12344,7 +12416,7 @@
           "term": "value"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-114",
+      "hx/id": "M-war-machine-tuning:scope-118",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -12355,7 +12427,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-108",
-      "scope-id": "M-war-machine-tuning:scope-114"
+      "scope-id": "M-war-machine-tuning:scope-118"
     },
     {
       "binder-type": "plain-argument",
@@ -12420,7 +12492,7 @@
           "term": "evidence"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-115",
+      "hx/id": "M-war-machine-tuning:scope-119",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -12431,7 +12503,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/plain-argument",
       "parent": "M-war-machine-tuning:scope-108",
-      "scope-id": "M-war-machine-tuning:scope-115"
+      "scope-id": "M-war-machine-tuning:scope-119"
     },
     {
       "binder-type": "loose-section",
@@ -12504,7 +12576,7 @@
           "term": "argue"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-116",
+      "hx/id": "M-war-machine-tuning:scope-120",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -12515,7 +12587,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-108",
-      "scope-id": "M-war-machine-tuning:scope-116"
+      "scope-id": "M-war-machine-tuning:scope-120"
     },
     {
       "binder-type": "eightfold-phase",
@@ -12596,7 +12668,7 @@
           "term": "pre"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-117",
+      "hx/id": "M-war-machine-tuning:scope-121",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -12607,7 +12679,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/eightfold-phase",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-117"
+      "scope-id": "M-war-machine-tuning:scope-121"
     },
     {
       "binder-type": "loose-section",
@@ -12712,18 +12784,18 @@
           "term": "map"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-118",
+      "hx/id": "M-war-machine-tuning:scope-122",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-117",
+      "hx/parent": "M-war-machine-tuning:scope-121",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-117",
-      "scope-id": "M-war-machine-tuning:scope-118"
+      "parent": "M-war-machine-tuning:scope-121",
+      "scope-id": "M-war-machine-tuning:scope-122"
     },
     {
       "binder-type": "loose-section",
@@ -12860,18 +12932,18 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-119",
+      "hx/id": "M-war-machine-tuning:scope-123",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-117",
+      "hx/parent": "M-war-machine-tuning:scope-121",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-117",
-      "scope-id": "M-war-machine-tuning:scope-119"
+      "parent": "M-war-machine-tuning:scope-121",
+      "scope-id": "M-war-machine-tuning:scope-123"
     },
     {
       "binder-type": "source-material",
@@ -13008,18 +13080,18 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-120",
+      "hx/id": "M-war-machine-tuning:scope-124",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-117",
+      "hx/parent": "M-war-machine-tuning:scope-121",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-tuning:scope-117",
-      "scope-id": "M-war-machine-tuning:scope-120"
+      "parent": "M-war-machine-tuning:scope-121",
+      "scope-id": "M-war-machine-tuning:scope-124"
     },
     {
       "binder-type": "loose-section",
@@ -13108,18 +13180,18 @@
           "term": "truth"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-121",
+      "hx/id": "M-war-machine-tuning:scope-125",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-117",
+      "hx/parent": "M-war-machine-tuning:scope-121",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-117",
-      "scope-id": "M-war-machine-tuning:scope-121"
+      "parent": "M-war-machine-tuning:scope-121",
+      "scope-id": "M-war-machine-tuning:scope-125"
     },
     {
       "binder-type": "loose-section",
@@ -13216,18 +13288,18 @@
           "term": "verify"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-122",
+      "hx/id": "M-war-machine-tuning:scope-126",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "derive"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-117",
+      "hx/parent": "M-war-machine-tuning:scope-121",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-117",
-      "scope-id": "M-war-machine-tuning:scope-122"
+      "parent": "M-war-machine-tuning:scope-121",
+      "scope-id": "M-war-machine-tuning:scope-126"
     },
     {
       "binder-type": "capability-scope",
@@ -13324,18 +13396,18 @@
           "term": "verify"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-123",
+      "hx/id": "M-war-machine-tuning:scope-127",
       "hx/labels": [
         "scope",
         "mission-scope",
         "capability-scope",
         "derive"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-117",
+      "hx/parent": "M-war-machine-tuning:scope-121",
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
-      "parent": "M-war-machine-tuning:scope-117",
-      "scope-id": "M-war-machine-tuning:scope-123"
+      "parent": "M-war-machine-tuning:scope-121",
+      "scope-id": "M-war-machine-tuning:scope-127"
     },
     {
       "binder-type": "loose-section",
@@ -13392,18 +13464,18 @@
           "term": "evidence"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-124",
+      "hx/id": "M-war-machine-tuning:scope-128",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-117",
+      "hx/parent": "M-war-machine-tuning:scope-121",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-117",
-      "scope-id": "M-war-machine-tuning:scope-124"
+      "parent": "M-war-machine-tuning:scope-121",
+      "scope-id": "M-war-machine-tuning:scope-128"
     },
     {
       "binder-type": "loose-section",
@@ -13500,18 +13572,18 @@
           "term": "instantiate"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-125",
+      "hx/id": "M-war-machine-tuning:scope-129",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "verify"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-117",
+      "hx/parent": "M-war-machine-tuning:scope-121",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-117",
-      "scope-id": "M-war-machine-tuning:scope-125"
+      "parent": "M-war-machine-tuning:scope-121",
+      "scope-id": "M-war-machine-tuning:scope-129"
     },
     {
       "binder-type": "loose-section",
@@ -13560,7 +13632,7 @@
           "term": "truth"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-126",
+      "hx/id": "M-war-machine-tuning:scope-130",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -13571,7 +13643,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-126"
+      "scope-id": "M-war-machine-tuning:scope-130"
     },
     {
       "binder-type": "loose-section",
@@ -13652,18 +13724,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-127",
+      "hx/id": "M-war-machine-tuning:scope-131",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-126",
+      "hx/parent": "M-war-machine-tuning:scope-130",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-126",
-      "scope-id": "M-war-machine-tuning:scope-127"
+      "parent": "M-war-machine-tuning:scope-130",
+      "scope-id": "M-war-machine-tuning:scope-131"
     },
     {
       "binder-type": "loose-section",
@@ -13800,18 +13872,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-128",
+      "hx/id": "M-war-machine-tuning:scope-132",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-126",
+      "hx/parent": "M-war-machine-tuning:scope-130",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-126",
-      "scope-id": "M-war-machine-tuning:scope-128"
+      "parent": "M-war-machine-tuning:scope-130",
+      "scope-id": "M-war-machine-tuning:scope-132"
     },
     {
       "binder-type": "loose-section",
@@ -13948,18 +14020,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-129",
+      "hx/id": "M-war-machine-tuning:scope-133",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-126",
+      "hx/parent": "M-war-machine-tuning:scope-130",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-126",
-      "scope-id": "M-war-machine-tuning:scope-129"
+      "parent": "M-war-machine-tuning:scope-130",
+      "scope-id": "M-war-machine-tuning:scope-133"
     },
     {
       "binder-type": "loose-section",
@@ -14032,18 +14104,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-130",
+      "hx/id": "M-war-machine-tuning:scope-134",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-126",
+      "hx/parent": "M-war-machine-tuning:scope-130",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-126",
-      "scope-id": "M-war-machine-tuning:scope-130"
+      "parent": "M-war-machine-tuning:scope-130",
+      "scope-id": "M-war-machine-tuning:scope-134"
     },
     {
       "binder-type": "loose-section",
@@ -14124,18 +14196,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-131",
+      "hx/id": "M-war-machine-tuning:scope-135",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-126",
+      "hx/parent": "M-war-machine-tuning:scope-130",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-126",
-      "scope-id": "M-war-machine-tuning:scope-131"
+      "parent": "M-war-machine-tuning:scope-130",
+      "scope-id": "M-war-machine-tuning:scope-135"
     },
     {
       "binder-type": "loose-section",
@@ -14232,18 +14304,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-132",
+      "hx/id": "M-war-machine-tuning:scope-136",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-126",
+      "hx/parent": "M-war-machine-tuning:scope-130",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-126",
-      "scope-id": "M-war-machine-tuning:scope-132"
+      "parent": "M-war-machine-tuning:scope-130",
+      "scope-id": "M-war-machine-tuning:scope-136"
     },
     {
       "binder-type": "loose-section",
@@ -14436,18 +14508,18 @@
           "term": "instantiate"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-133",
+      "hx/id": "M-war-machine-tuning:scope-137",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-tuning:scope-126",
+      "hx/parent": "M-war-machine-tuning:scope-130",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-tuning:scope-126",
-      "scope-id": "M-war-machine-tuning:scope-133"
+      "parent": "M-war-machine-tuning:scope-130",
+      "scope-id": "M-war-machine-tuning:scope-137"
     },
     {
       "binder-type": "loose-section",
@@ -14512,7 +14584,7 @@
           "term": "evidence"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-134",
+      "hx/id": "M-war-machine-tuning:scope-138",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -14523,7 +14595,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-134"
+      "scope-id": "M-war-machine-tuning:scope-138"
     },
     {
       "binder-type": "loose-section",
@@ -14533,14 +14605,14 @@
           "role": "entity"
         },
         {
-          "name": "7b. D&G audit",
+          "name": "D&G audit",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 2,
           "role": "heading",
-          "title": "7b. D&G audit"
+          "title": "D&G audit"
         },
         {
           "role": "concept",
@@ -14609,7 +14681,7 @@
       ],
       "hx/content": {
         "end": 138358,
-        "match": "7b. D&G audit",
+        "match": "D&G audit",
         "position": 134039
       },
       "hx/ends": [
@@ -14618,14 +14690,14 @@
           "role": "entity"
         },
         {
-          "name": "7b. D&G audit",
+          "name": "D&G audit",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 2,
           "role": "heading",
-          "title": "7b. D&G audit"
+          "title": "D&G audit"
         },
         {
           "role": "concept",
@@ -14692,7 +14764,7 @@
           "term": "scope"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-135",
+      "hx/id": "M-war-machine-tuning:scope-139",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -14703,7 +14775,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-135"
+      "scope-id": "M-war-machine-tuning:scope-139"
     },
     {
       "binder-type": "loose-section",
@@ -14760,7 +14832,7 @@
           "term": "aif"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-136",
+      "hx/id": "M-war-machine-tuning:scope-140",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -14771,7 +14843,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-136"
+      "scope-id": "M-war-machine-tuning:scope-140"
     },
     {
       "binder-type": "loose-section",
@@ -14812,7 +14884,7 @@
           "title": "Discoverability audit"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-137",
+      "hx/id": "M-war-machine-tuning:scope-141",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -14823,7 +14895,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-137"
+      "scope-id": "M-war-machine-tuning:scope-141"
     },
     {
       "binder-type": "loose-section",
@@ -14864,7 +14936,7 @@
           "title": "Audacity-style timeline spec"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-138",
+      "hx/id": "M-war-machine-tuning:scope-142",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -14875,7 +14947,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-138"
+      "scope-id": "M-war-machine-tuning:scope-142"
     },
     {
       "binder-type": "loose-section",
@@ -14940,7 +15012,7 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-139",
+      "hx/id": "M-war-machine-tuning:scope-143",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -14951,7 +15023,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-139"
+      "scope-id": "M-war-machine-tuning:scope-143"
     },
     {
       "binder-type": "loose-section",
@@ -15160,7 +15232,7 @@
           "term": "template"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-140",
+      "hx/id": "M-war-machine-tuning:scope-144",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -15171,7 +15243,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-140"
+      "scope-id": "M-war-machine-tuning:scope-144"
     },
     {
       "binder-type": "source-material",
@@ -15520,7 +15592,7 @@
           "term": "template"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-141",
+      "hx/id": "M-war-machine-tuning:scope-145",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -15531,7 +15603,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-141"
+      "scope-id": "M-war-machine-tuning:scope-145"
     },
     {
       "binder-type": "capability-scope",
@@ -15740,7 +15812,7 @@
           "term": "template"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-142",
+      "hx/id": "M-war-machine-tuning:scope-146",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -15751,7 +15823,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-142"
+      "scope-id": "M-war-machine-tuning:scope-146"
     },
     {
       "binder-type": "eightfold-phase",
@@ -15792,7 +15864,7 @@
           "title": "pending DOCUMENT"
         }
       ],
-      "hx/id": "M-war-machine-tuning:scope-143",
+      "hx/id": "M-war-machine-tuning:scope-147",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -15803,7 +15875,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/eightfold-phase",
       "parent": "M-war-machine-tuning:scope-000",
-      "scope-id": "M-war-machine-tuning:scope-143"
+      "scope-id": "M-war-machine-tuning:scope-147"
     }
   ]
 }

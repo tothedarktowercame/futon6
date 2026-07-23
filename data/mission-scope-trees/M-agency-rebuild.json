@@ -6,7 +6,7 @@
     "map-item": 10,
     "mission-scope-in": 1,
     "mission-scope-out": 1,
-    "pattern": 2,
+    "pattern": 3,
     "relates-to": 2,
     "source-material": 4
   },
@@ -439,18 +439,13 @@
           "role": "entity"
         },
         {
-          "name": "Patterns",
+          "name": "pattern: single-routing-authority",
           "phase": "derive",
           "role": "environment"
         },
         {
           "ident": "single-routing-authority",
           "ref": "futon3/library/agency/single-routing-authority.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "all-or-nothing",
-          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
           "role": "pattern"
         },
         {
@@ -480,44 +475,12 @@
         {
           "role": "concept",
           "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "lifecycle"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "scope"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
         }
       ],
       "hx/content": {
-        "end": 2737,
-        "match": "Patterns",
-        "position": 1550
+        "end": 1799,
+        "match": "pattern: single-routing-authority",
+        "position": 1775
       },
       "hx/ends": [
         {
@@ -525,18 +488,13 @@
           "role": "entity"
         },
         {
-          "name": "Patterns",
+          "name": "pattern: single-routing-authority",
           "phase": "derive",
           "role": "environment"
         },
         {
           "ident": "single-routing-authority",
           "ref": "futon3/library/agency/single-routing-authority.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "all-or-nothing",
-          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
           "role": "pattern"
         },
         {
@@ -566,38 +524,6 @@
         {
           "role": "concept",
           "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "lifecycle"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "scope"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
         }
       ],
       "hx/id": "M-agency-rebuild:scope-003",
@@ -612,6 +538,98 @@
       "hx/type": "mission-scope/pattern",
       "parent": "M-agency-rebuild:scope-000",
       "scope-id": "M-agency-rebuild:scope-003"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: all-or-nothing",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "all-or-nothing",
+          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/content": {
+        "end": 1980,
+        "match": "pattern: all-or-nothing",
+        "position": 1966
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: all-or-nothing",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "all-or-nothing",
+          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "lifecycle"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-004",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-agency-rebuild:scope-000",
+      "scope-id": "M-agency-rebuild:scope-004"
     },
     {
       "binder-type": "loose-section",
@@ -652,7 +670,7 @@
           "title": "Scope"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-004",
+      "hx/id": "M-agency-rebuild:scope-005",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -663,7 +681,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-rebuild:scope-000",
-      "scope-id": "M-agency-rebuild:scope-004"
+      "scope-id": "M-agency-rebuild:scope-005"
     },
     {
       "binder-type": "loose-section",
@@ -760,18 +778,18 @@
           "term": "agent"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-005",
+      "hx/id": "M-agency-rebuild:scope-006",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "identify"
       ],
-      "hx/parent": "M-agency-rebuild:scope-004",
+      "hx/parent": "M-agency-rebuild:scope-005",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-agency-rebuild:scope-004",
-      "scope-id": "M-agency-rebuild:scope-005"
+      "parent": "M-agency-rebuild:scope-005",
+      "scope-id": "M-agency-rebuild:scope-006"
     },
     {
       "binder-type": "mission-scope-in",
@@ -914,18 +932,18 @@
           "term": "agent"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-006",
+      "hx/id": "M-agency-rebuild:scope-007",
       "hx/labels": [
         "scope",
         "mission-scope",
         "mission-scope-in",
         "identify"
       ],
-      "hx/parent": "M-agency-rebuild:scope-004",
+      "hx/parent": "M-agency-rebuild:scope-005",
       "hx/role": "component",
       "hx/type": "mission-scope/mission-scope-in",
-      "parent": "M-agency-rebuild:scope-004",
-      "scope-id": "M-agency-rebuild:scope-006"
+      "parent": "M-agency-rebuild:scope-005",
+      "scope-id": "M-agency-rebuild:scope-007"
     },
     {
       "binder-type": "loose-section",
@@ -990,18 +1008,18 @@
           "term": "agency"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-007",
+      "hx/id": "M-agency-rebuild:scope-008",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "identify"
       ],
-      "hx/parent": "M-agency-rebuild:scope-004",
+      "hx/parent": "M-agency-rebuild:scope-005",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-agency-rebuild:scope-004",
-      "scope-id": "M-agency-rebuild:scope-007"
+      "parent": "M-agency-rebuild:scope-005",
+      "scope-id": "M-agency-rebuild:scope-008"
     },
     {
       "binder-type": "mission-scope-out",
@@ -1080,18 +1098,18 @@
           "term": "agency"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-008",
+      "hx/id": "M-agency-rebuild:scope-009",
       "hx/labels": [
         "scope",
         "mission-scope",
         "mission-scope-out",
         "identify"
       ],
-      "hx/parent": "M-agency-rebuild:scope-004",
+      "hx/parent": "M-agency-rebuild:scope-005",
       "hx/role": "component",
       "hx/type": "mission-scope/mission-scope-out",
-      "parent": "M-agency-rebuild:scope-004",
-      "scope-id": "M-agency-rebuild:scope-008"
+      "parent": "M-agency-rebuild:scope-005",
+      "scope-id": "M-agency-rebuild:scope-009"
     },
     {
       "binder-type": "loose-section",
@@ -1132,7 +1150,7 @@
           "title": "Dependencies"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-009",
+      "hx/id": "M-agency-rebuild:scope-010",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1143,7 +1161,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-rebuild:scope-000",
-      "scope-id": "M-agency-rebuild:scope-009"
+      "scope-id": "M-agency-rebuild:scope-010"
     },
     {
       "binder-type": "loose-section",
@@ -1192,18 +1210,18 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-010",
+      "hx/id": "M-agency-rebuild:scope-011",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/parent": "M-agency-rebuild:scope-010",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-agency-rebuild:scope-009",
-      "scope-id": "M-agency-rebuild:scope-010"
+      "parent": "M-agency-rebuild:scope-010",
+      "scope-id": "M-agency-rebuild:scope-011"
     },
     {
       "binder-type": "map-item",
@@ -1250,18 +1268,18 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-011",
+      "hx/id": "M-agency-rebuild:scope-012",
       "hx/labels": [
         "scope",
         "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/parent": "M-agency-rebuild:scope-010",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-009",
-      "scope-id": "M-agency-rebuild:scope-011"
+      "parent": "M-agency-rebuild:scope-010",
+      "scope-id": "M-agency-rebuild:scope-012"
     },
     {
       "binder-type": "loose-section",
@@ -1334,18 +1352,18 @@
           "term": "prior"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-012",
+      "hx/id": "M-agency-rebuild:scope-013",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/parent": "M-agency-rebuild:scope-010",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-agency-rebuild:scope-009",
-      "scope-id": "M-agency-rebuild:scope-012"
+      "parent": "M-agency-rebuild:scope-010",
+      "scope-id": "M-agency-rebuild:scope-013"
     },
     {
       "binder-type": "relates-to",
@@ -1400,128 +1418,6 @@
           "name": "Enables",
           "phase": "map",
           "role": "environment"
-        },
-        {
-          "ident": "M-agency-unified-routing",
-          "relation": "relates-to",
-          "role": "mission"
-        },
-        {
-          "ident": "M-make-agency-work-properly",
-          "relation": "relates-to",
-          "role": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        }
-      ],
-      "hx/id": "M-agency-rebuild:scope-013",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "relates-to",
-        "map"
-      ],
-      "hx/parent": "M-agency-rebuild:scope-009",
-      "hx/role": "component",
-      "hx/type": "mission-scope/relates-to",
-      "parent": "M-agency-rebuild:scope-009",
-      "scope-id": "M-agency-rebuild:scope-013"
-    },
-    {
-      "binder-type": "map-item",
-      "ends": [
-        {
-          "ident": "M-agency-rebuild",
-          "role": "entity"
-        },
-        {
-          "name": "Enables",
-          "phase": "map",
-          "role": "environment"
-        },
-        {
-          "role": "map-item",
-          "title": "Enables"
-        },
-        {
-          "kind": "file",
-          "ref": "holes/missions/M-agency-unified-routing.md",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "holes/missions/M-make-agency-work-properly.md",
-          "role": "source"
-        },
-        {
-          "ident": "M-agency-unified-routing",
-          "relation": "relates-to",
-          "role": "mission"
-        },
-        {
-          "ident": "M-make-agency-work-properly",
-          "relation": "relates-to",
-          "role": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        }
-      ],
-      "hx/content": {
-        "end": 4425,
-        "match": "Enables",
-        "position": 4145
-      },
-      "hx/ends": [
-        {
-          "ident": "M-agency-rebuild",
-          "role": "entity"
-        },
-        {
-          "name": "Enables",
-          "phase": "map",
-          "role": "environment"
-        },
-        {
-          "role": "map-item",
-          "title": "Enables"
-        },
-        {
-          "kind": "file",
-          "ref": "holes/missions/M-agency-unified-routing.md",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "holes/missions/M-make-agency-work-properly.md",
-          "role": "source"
         },
         {
           "ident": "M-agency-unified-routing",
@@ -1554,14 +1450,136 @@
       "hx/labels": [
         "scope",
         "mission-scope",
+        "relates-to",
+        "map"
+      ],
+      "hx/parent": "M-agency-rebuild:scope-010",
+      "hx/role": "component",
+      "hx/type": "mission-scope/relates-to",
+      "parent": "M-agency-rebuild:scope-010",
+      "scope-id": "M-agency-rebuild:scope-014"
+    },
+    {
+      "binder-type": "map-item",
+      "ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Enables",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Enables"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-agency-unified-routing.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-make-agency-work-properly.md",
+          "role": "source"
+        },
+        {
+          "ident": "M-agency-unified-routing",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-make-agency-work-properly",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        }
+      ],
+      "hx/content": {
+        "end": 4425,
+        "match": "Enables",
+        "position": 4145
+      },
+      "hx/ends": [
+        {
+          "ident": "M-agency-rebuild",
+          "role": "entity"
+        },
+        {
+          "name": "Enables",
+          "phase": "map",
+          "role": "environment"
+        },
+        {
+          "role": "map-item",
+          "title": "Enables"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-agency-unified-routing.md",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "holes/missions/M-make-agency-work-properly.md",
+          "role": "source"
+        },
+        {
+          "ident": "M-agency-unified-routing",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "ident": "M-make-agency-work-properly",
+          "relation": "relates-to",
+          "role": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        }
+      ],
+      "hx/id": "M-agency-rebuild:scope-015",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/parent": "M-agency-rebuild:scope-010",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-009",
-      "scope-id": "M-agency-rebuild:scope-014"
+      "parent": "M-agency-rebuild:scope-010",
+      "scope-id": "M-agency-rebuild:scope-015"
     },
     {
       "binder-type": "loose-section",
@@ -1642,18 +1660,18 @@
           "term": "invariant"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-015",
+      "hx/id": "M-agency-rebuild:scope-016",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/parent": "M-agency-rebuild:scope-010",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-agency-rebuild:scope-009",
-      "scope-id": "M-agency-rebuild:scope-015"
+      "parent": "M-agency-rebuild:scope-010",
+      "scope-id": "M-agency-rebuild:scope-016"
     },
     {
       "binder-type": "relates-to",
@@ -1734,18 +1752,18 @@
           "term": "invariant"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-016",
+      "hx/id": "M-agency-rebuild:scope-017",
       "hx/labels": [
         "scope",
         "mission-scope",
         "relates-to",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/parent": "M-agency-rebuild:scope-010",
       "hx/role": "component",
       "hx/type": "mission-scope/relates-to",
-      "parent": "M-agency-rebuild:scope-009",
-      "scope-id": "M-agency-rebuild:scope-016"
+      "parent": "M-agency-rebuild:scope-010",
+      "scope-id": "M-agency-rebuild:scope-017"
     },
     {
       "binder-type": "map-item",
@@ -1844,18 +1862,18 @@
           "term": "invariant"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-017",
+      "hx/id": "M-agency-rebuild:scope-018",
       "hx/labels": [
         "scope",
         "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-009",
+      "hx/parent": "M-agency-rebuild:scope-010",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-009",
-      "scope-id": "M-agency-rebuild:scope-017"
+      "parent": "M-agency-rebuild:scope-010",
+      "scope-id": "M-agency-rebuild:scope-018"
     },
     {
       "binder-type": "loose-section",
@@ -1952,7 +1970,7 @@
           "term": "state"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-018",
+      "hx/id": "M-agency-rebuild:scope-019",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -1963,7 +1981,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-rebuild:scope-000",
-      "scope-id": "M-agency-rebuild:scope-018"
+      "scope-id": "M-agency-rebuild:scope-019"
     },
     {
       "binder-type": "loose-section",
@@ -2036,7 +2054,7 @@
           "term": "scope"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-019",
+      "hx/id": "M-agency-rebuild:scope-020",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -2047,7 +2065,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-rebuild:scope-000",
-      "scope-id": "M-agency-rebuild:scope-019"
+      "scope-id": "M-agency-rebuild:scope-020"
     },
     {
       "binder-type": "loose-section",
@@ -2128,7 +2146,7 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-020",
+      "hx/id": "M-agency-rebuild:scope-021",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -2139,7 +2157,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-rebuild:scope-000",
-      "scope-id": "M-agency-rebuild:scope-020"
+      "scope-id": "M-agency-rebuild:scope-021"
     },
     {
       "binder-type": "loose-section",
@@ -2180,7 +2198,7 @@
           "title": "Work Plan"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-021",
+      "hx/id": "M-agency-rebuild:scope-022",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -2191,7 +2209,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-rebuild:scope-000",
-      "scope-id": "M-agency-rebuild:scope-021"
+      "scope-id": "M-agency-rebuild:scope-022"
     },
     {
       "binder-type": "loose-section",
@@ -2264,18 +2282,18 @@
           "term": "lifecycle"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-022",
+      "hx/id": "M-agency-rebuild:scope-023",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/parent": "M-agency-rebuild:scope-022",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-agency-rebuild:scope-021",
-      "scope-id": "M-agency-rebuild:scope-022"
+      "parent": "M-agency-rebuild:scope-022",
+      "scope-id": "M-agency-rebuild:scope-023"
     },
     {
       "binder-type": "map-item",
@@ -2346,18 +2364,18 @@
           "term": "lifecycle"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-023",
+      "hx/id": "M-agency-rebuild:scope-024",
       "hx/labels": [
         "scope",
         "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/parent": "M-agency-rebuild:scope-022",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-021",
-      "scope-id": "M-agency-rebuild:scope-023"
+      "parent": "M-agency-rebuild:scope-022",
+      "scope-id": "M-agency-rebuild:scope-024"
     },
     {
       "binder-type": "map-item",
@@ -2536,18 +2554,18 @@
           "term": "timeout"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-024",
+      "hx/id": "M-agency-rebuild:scope-025",
       "hx/labels": [
         "scope",
         "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-022",
+      "hx/parent": "M-agency-rebuild:scope-023",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-022",
-      "scope-id": "M-agency-rebuild:scope-024"
+      "parent": "M-agency-rebuild:scope-023",
+      "scope-id": "M-agency-rebuild:scope-025"
     },
     {
       "binder-type": "loose-section",
@@ -2636,18 +2654,18 @@
           "term": "agent"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-025",
+      "hx/id": "M-agency-rebuild:scope-026",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/parent": "M-agency-rebuild:scope-022",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-agency-rebuild:scope-021",
-      "scope-id": "M-agency-rebuild:scope-025"
+      "parent": "M-agency-rebuild:scope-022",
+      "scope-id": "M-agency-rebuild:scope-026"
     },
     {
       "binder-type": "map-item",
@@ -2734,18 +2752,18 @@
           "term": "agent"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-026",
+      "hx/id": "M-agency-rebuild:scope-027",
       "hx/labels": [
         "scope",
         "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/parent": "M-agency-rebuild:scope-022",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-021",
-      "scope-id": "M-agency-rebuild:scope-026"
+      "parent": "M-agency-rebuild:scope-022",
+      "scope-id": "M-agency-rebuild:scope-027"
     },
     {
       "binder-type": "map-item",
@@ -2906,18 +2924,18 @@
           "term": "async"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-027",
+      "hx/id": "M-agency-rebuild:scope-028",
       "hx/labels": [
         "scope",
         "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-025",
+      "hx/parent": "M-agency-rebuild:scope-026",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-025",
-      "scope-id": "M-agency-rebuild:scope-027"
+      "parent": "M-agency-rebuild:scope-026",
+      "scope-id": "M-agency-rebuild:scope-028"
     },
     {
       "binder-type": "loose-section",
@@ -2982,18 +3000,18 @@
           "term": "llm"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-028",
+      "hx/id": "M-agency-rebuild:scope-029",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/parent": "M-agency-rebuild:scope-022",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-agency-rebuild:scope-021",
-      "scope-id": "M-agency-rebuild:scope-028"
+      "parent": "M-agency-rebuild:scope-022",
+      "scope-id": "M-agency-rebuild:scope-029"
     },
     {
       "binder-type": "map-item",
@@ -3056,18 +3074,18 @@
           "term": "llm"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-029",
+      "hx/id": "M-agency-rebuild:scope-030",
       "hx/labels": [
         "scope",
         "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/parent": "M-agency-rebuild:scope-022",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-021",
-      "scope-id": "M-agency-rebuild:scope-029"
+      "parent": "M-agency-rebuild:scope-022",
+      "scope-id": "M-agency-rebuild:scope-030"
     },
     {
       "binder-type": "map-item",
@@ -3304,18 +3322,18 @@
           "term": "blockers"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-030",
+      "hx/id": "M-agency-rebuild:scope-031",
       "hx/labels": [
         "scope",
         "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-028",
+      "hx/parent": "M-agency-rebuild:scope-029",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-028",
-      "scope-id": "M-agency-rebuild:scope-030"
+      "parent": "M-agency-rebuild:scope-029",
+      "scope-id": "M-agency-rebuild:scope-031"
     },
     {
       "binder-type": "pattern",
@@ -3325,7 +3343,7 @@
           "role": "entity"
         },
         {
-          "name": "Agent Compatibility Audit",
+          "name": "pattern: reconnect-with-backoff",
           "phase": "map",
           "role": "environment"
         },
@@ -3333,10 +3351,6 @@
           "ident": "reconnect-with-backoff",
           "ref": "futon3c/library/realtime/reconnect-with-backoff.flexiarg",
           "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
         },
         {
           "role": "concept",
@@ -3348,39 +3362,7 @@
         },
         {
           "role": "concept",
-          "term": "agents"
-        },
-        {
-          "role": "concept",
-          "term": "src"
-        },
-        {
-          "role": "concept",
-          "term": "runtime"
-        },
-        {
-          "role": "concept",
-          "term": "fucodex"
-        },
-        {
-          "role": "concept",
-          "term": "wrapper"
-        },
-        {
-          "role": "concept",
-          "term": "fuclaude"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
+          "term": "phase"
         },
         {
           "role": "concept",
@@ -3388,13 +3370,13 @@
         },
         {
           "role": "concept",
-          "term": "mission"
+          "term": "agents"
         }
       ],
       "hx/content": {
-        "end": 16670,
-        "match": "Agent Compatibility Audit",
-        "position": 14334
+        "end": 16316,
+        "match": "pattern: reconnect-with-backoff",
+        "position": 16294
       },
       "hx/ends": [
         {
@@ -3402,7 +3384,7 @@
           "role": "entity"
         },
         {
-          "name": "Agent Compatibility Audit",
+          "name": "pattern: reconnect-with-backoff",
           "phase": "map",
           "role": "environment"
         },
@@ -3410,10 +3392,6 @@
           "ident": "reconnect-with-backoff",
           "ref": "futon3c/library/realtime/reconnect-with-backoff.flexiarg",
           "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
         },
         {
           "role": "concept",
@@ -3425,39 +3403,7 @@
         },
         {
           "role": "concept",
-          "term": "agents"
-        },
-        {
-          "role": "concept",
-          "term": "src"
-        },
-        {
-          "role": "concept",
-          "term": "runtime"
-        },
-        {
-          "role": "concept",
-          "term": "fucodex"
-        },
-        {
-          "role": "concept",
-          "term": "wrapper"
-        },
-        {
-          "role": "concept",
-          "term": "fuclaude"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
+          "term": "phase"
         },
         {
           "role": "concept",
@@ -3465,21 +3411,21 @@
         },
         {
           "role": "concept",
-          "term": "mission"
+          "term": "agents"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-031",
+      "hx/id": "M-agency-rebuild:scope-032",
       "hx/labels": [
         "scope",
         "mission-scope",
         "pattern",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-028",
+      "hx/parent": "M-agency-rebuild:scope-029",
       "hx/role": "component",
       "hx/type": "mission-scope/pattern",
-      "parent": "M-agency-rebuild:scope-028",
-      "scope-id": "M-agency-rebuild:scope-031"
+      "parent": "M-agency-rebuild:scope-029",
+      "scope-id": "M-agency-rebuild:scope-032"
     },
     {
       "binder-type": "map-item",
@@ -3700,18 +3646,18 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-032",
+      "hx/id": "M-agency-rebuild:scope-033",
       "hx/labels": [
         "scope",
         "mission-scope",
         "map-item",
         "map"
       ],
-      "hx/parent": "M-agency-rebuild:scope-028",
+      "hx/parent": "M-agency-rebuild:scope-029",
       "hx/role": "component",
       "hx/type": "mission-scope/map-item",
-      "parent": "M-agency-rebuild:scope-028",
-      "scope-id": "M-agency-rebuild:scope-032"
+      "parent": "M-agency-rebuild:scope-029",
+      "scope-id": "M-agency-rebuild:scope-033"
     },
     {
       "binder-type": "loose-section",
@@ -3752,18 +3698,18 @@
           "title": "Phase 3: Validation + Evidence"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-033",
+      "hx/id": "M-agency-rebuild:scope-034",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "verify"
       ],
-      "hx/parent": "M-agency-rebuild:scope-021",
+      "hx/parent": "M-agency-rebuild:scope-022",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-agency-rebuild:scope-021",
-      "scope-id": "M-agency-rebuild:scope-033"
+      "parent": "M-agency-rebuild:scope-022",
+      "scope-id": "M-agency-rebuild:scope-034"
     },
     {
       "binder-type": "source-material",
@@ -3773,7 +3719,7 @@
           "role": "entity"
         },
         {
-          "name": "3a. Pre-validation fixes",
+          "name": "Pre-validation fixes",
           "phase": "verify",
           "role": "environment"
         },
@@ -3793,7 +3739,7 @@
       ],
       "hx/content": {
         "end": 17231,
-        "match": "3a. Pre-validation fixes",
+        "match": "Pre-validation fixes",
         "position": 16714
       },
       "hx/ends": [
@@ -3802,7 +3748,7 @@
           "role": "entity"
         },
         {
-          "name": "3a. Pre-validation fixes",
+          "name": "Pre-validation fixes",
           "phase": "verify",
           "role": "environment"
         },
@@ -3820,18 +3766,18 @@
           "term": "agent"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-034",
+      "hx/id": "M-agency-rebuild:scope-035",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-agency-rebuild:scope-033",
+      "hx/parent": "M-agency-rebuild:scope-034",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-agency-rebuild:scope-033",
-      "scope-id": "M-agency-rebuild:scope-034"
+      "parent": "M-agency-rebuild:scope-034",
+      "scope-id": "M-agency-rebuild:scope-035"
     },
     {
       "binder-type": "source-material",
@@ -3841,7 +3787,7 @@
           "role": "entity"
         },
         {
-          "name": "3b. Soak test",
+          "name": "Soak test",
           "phase": "verify",
           "role": "environment"
         },
@@ -3861,7 +3807,7 @@
       ],
       "hx/content": {
         "end": 17436,
-        "match": "3b. Soak test",
+        "match": "Soak test",
         "position": 17231
       },
       "hx/ends": [
@@ -3870,7 +3816,7 @@
           "role": "entity"
         },
         {
-          "name": "3b. Soak test",
+          "name": "Soak test",
           "phase": "verify",
           "role": "environment"
         },
@@ -3888,18 +3834,18 @@
           "term": "invariants"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-035",
+      "hx/id": "M-agency-rebuild:scope-036",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-agency-rebuild:scope-033",
+      "hx/parent": "M-agency-rebuild:scope-034",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-agency-rebuild:scope-033",
-      "scope-id": "M-agency-rebuild:scope-035"
+      "parent": "M-agency-rebuild:scope-034",
+      "scope-id": "M-agency-rebuild:scope-036"
     },
     {
       "binder-type": "source-material",
@@ -3909,7 +3855,7 @@
           "role": "entity"
         },
         {
-          "name": "3c. Agent integration tests",
+          "name": "Agent integration tests",
           "phase": "verify",
           "role": "environment"
         },
@@ -3933,7 +3879,7 @@
       ],
       "hx/content": {
         "end": 17894,
-        "match": "3c. Agent integration tests",
+        "match": "Agent integration tests",
         "position": 17436
       },
       "hx/ends": [
@@ -3942,7 +3888,7 @@
           "role": "entity"
         },
         {
-          "name": "3c. Agent integration tests",
+          "name": "Agent integration tests",
           "phase": "verify",
           "role": "environment"
         },
@@ -3964,18 +3910,18 @@
           "term": "agency"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-036",
+      "hx/id": "M-agency-rebuild:scope-037",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-agency-rebuild:scope-033",
+      "hx/parent": "M-agency-rebuild:scope-034",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-agency-rebuild:scope-033",
-      "scope-id": "M-agency-rebuild:scope-036"
+      "parent": "M-agency-rebuild:scope-034",
+      "scope-id": "M-agency-rebuild:scope-037"
     },
     {
       "binder-type": "source-material",
@@ -3985,7 +3931,7 @@
           "role": "entity"
         },
         {
-          "name": "3d. Standup end-to-end",
+          "name": "Standup end-to-end",
           "phase": "verify",
           "role": "environment"
         },
@@ -4017,7 +3963,7 @@
       ],
       "hx/content": {
         "end": 18164,
-        "match": "3d. Standup end-to-end",
+        "match": "Standup end-to-end",
         "position": 17894
       },
       "hx/ends": [
@@ -4026,7 +3972,7 @@
           "role": "entity"
         },
         {
-          "name": "3d. Standup end-to-end",
+          "name": "Standup end-to-end",
           "phase": "verify",
           "role": "environment"
         },
@@ -4056,18 +4002,18 @@
           "term": "timeout"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-037",
+      "hx/id": "M-agency-rebuild:scope-038",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-agency-rebuild:scope-033",
+      "hx/parent": "M-agency-rebuild:scope-034",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-agency-rebuild:scope-033",
-      "scope-id": "M-agency-rebuild:scope-037"
+      "parent": "M-agency-rebuild:scope-034",
+      "scope-id": "M-agency-rebuild:scope-038"
     },
     {
       "binder-type": "loose-section",
@@ -4172,7 +4118,7 @@
           "term": "invariant"
         }
       ],
-      "hx/id": "M-agency-rebuild:scope-038",
+      "hx/id": "M-agency-rebuild:scope-039",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -4183,7 +4129,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-agency-rebuild:scope-000",
-      "scope-id": "M-agency-rebuild:scope-038"
+      "scope-id": "M-agency-rebuild:scope-039"
     }
   ]
 }

@@ -1,0 +1,115 @@
+{:futonzero-sequencing-plan
+ {:version "0.1.0"
+  :source "ft-futonzero-generative-014 box b1 (iching/hexagram-07-shi — the disciplined army) applied to the gate-work coordination plan"
+  :mission "futon0-d/mission/futonzero-generative"
+  :deposit "ft-futonzero-generative-014"
+  :flight "FLIGHTS-BATCH2-2026-07-10 Flight B2-F6"
+  :author "zai-2"
+  :pattern-basis
+  "shi (Hexagram 07, The Army) names the discipline a multi-component force needs: collective action requires unified direction, coordinated restraint, and perseverance. Applied to FutonZero: the gate work (G-SIM, G-REWARD) and the loop components (proposer, simulator, reward, updater) must proceed under a shared objective with clear command and sequential restraint — no component starts before its preconditions clear. The 'perseverance furthers' reading supports the charter's patient stance: the gates are blocked, the safe work products are complete, and the loop waits for its preconditions rather than forcing forward."
+
+  :owners
+  {:G-SIM
+   {:owner "substrate-2 / full-C / field-model work"
+    :scope "field simulator that reads the same capability/mission substrate as WM, predicts one-step and two-step consequences as explicit hypotheses, records confidence and uncertainty, is calibrated against prior play-out -> outcome evidence, refuses fabricated dynamics when the field has no data"
+    :gate-clearance-criteria
+    ["reads the same capability/mission substrate as WM"
+     "predicts at least one-step and two-step consequences as explicit hypotheses"
+     "records confidence and uncertainty, not just a rank"
+     "calibrated against prior play-out -> outcome evidence"
+     "refuses fabricated dynamics when the field has no data"]
+    :current-status "UNCLEARED — verdict :insufficient-evidence, :degenerate? true, 0 independent measured pairs of ~11+ needed"
+    :evidence-ref "futonzero-gap-report.edn :G-SIM :clearance-status :not-cleared"}
+
+   :G-REWARD
+   {:owner "M-pudding-peradams G1 / Pudding Prover reward channel"
+    :scope "anti-laundered reward signal that distinguishes build discharge from witness discharge, uses Pudding Prover / peradam-style witness discipline, keeps G1 arrow-witness false until bound to live affect evidence, records rejected/routed outcomes, treats operator approval as a gate not as retroactive proof"
+    :gate-clearance-criteria
+    ["distinguishes build discharge from witness discharge"
+     "uses Pudding Prover / peradam-style witness discipline where applicable"
+     "keeps G1 arrow-witness false until bound to live affect evidence"
+     "records rejected/routed outcomes, not only wins"
+     "treats operator approval as a gate, not as retroactive proof of fruit"]
+    :current-status "UNCLEARED — rejection side functional (8/8 laundering shapes rejected), positive reward substance (Dokusan/peradam computation, G1 binding) ungrounded"
+    :evidence-ref "futonzero-gap-report.edn :G-REWARD :clearance-status :not-cleared"}
+
+   :WM-pilot-lane
+   {:owner "the WM pilot loop (substrate-1, live)"
+    :scope "accrue independent measured calibration pairs toward G-SIM's ~11+ threshold by advancing FutonZero-generative targets through the WM pilot loop, keeping post-field readings so :realised-source is :measured (not censored-fallback)"
+    :current-status "accruing — measured pairs beginning to accumulate; 0 independent measured pairs at last audit, but the mission doc checkpoint (2026-06-11) records the first non-fallback pair"
+    :evidence-ref "M-futonzero-generative.md checkpoint 2026-06-11 — 'the first non-fallback (:realised-source :measured) pair for G-SIM'; futonzero-gap-report.edn :G-SIM :actual :independent-paired-count 0"
+    :role "this lane does NOT clear the gate — it feeds the calibration substrate the gate's clearance criteria read. The lane owns the DATA ACCRUAL, not the simulator construction."}}
+
+  :order
+  {:description
+   "The gate work proceeds in two parallel tracks with a strict join point. shi's discipline: unified direction (both gates serve the same want), but coordinated timing (the loop cannot start until both clear)."
+   :sequence
+   [{:phase 1
+     :name "parallel gate-work tracks"
+     :tracks
+     {:track-A "substrate-2/full-C builds the field simulator (G-SIM scope) — the forward model that predicts play-out consequences"
+      :track-B "M-pudding-peradams builds the Pudding Prover G1 binding and Dokusan/peradam reward computation (G-REWARD scope) — the positive reward substance"
+      :track-C "WM pilot lane accrues independent measured calibration pairs (ongoing, feeds track-A's calibration criterion)"}}
+    {:phase 2
+     :name "gate clearance check"
+     :condition "both G-SIM and G-REWARD meet their minimum admissible criteria (all clearance-criteria items satisfied)"
+     :action "if both clear, advance mission from :blocked to :active; if either fails, remain :blocked and re-evaluate"}
+    {:phase 3
+     :name "generative loop prototype (only after both gates clear)"
+     :condition "G-SIM cleared AND G-REWARD cleared"
+     :scope "small, local, read-only rollout-learning prototype per mission doc §6 — the update rule (deposit h3) becomes advanceable ONLY at this phase"
+     :components-in-order
+     ["bounded candidate play-out action space (deposit h4) — construct the mission x pattern selector"
+      "field simulator predicts consequences (from G-SIM)"
+      "execute under WM guardrail (existing)"
+      "reward certifier scores outcome (from G-REWARD)"
+      "policy/value updater applies witnessed outcome (the update rule, deposit h3) — LAST component, never before"]}]
+
+  :sequential-restraint
+  {:description
+   "What does NOT start before what. shi's discipline: the army does not advance before its supply line is secure. Each restraint is a refusal to overreach."
+   :restraints
+   [{:id :R1
+     :restraint "NO autonomous self-play runner before G-SIM AND G-REWARD both clear"
+     :scope "the generative loop's propose-predict-execute-score-update cycle may not run autonomously"
+     :rationale "mission doc §3 scope-out: 'No autonomous self-play runner'; mission doc §6: 'only logic models, fixtures, and read-only evaluation are allowed' before G-SIM clears"}
+    {:id :R2
+     :restraint "NO reward-trained policy update before G-REWARD clears"
+     :scope "the update rule (deposit h3) may not be wired to a live reward signal"
+     :rationale "an update rule trained on laundered reward would embed the laundering in the policy — G-REWARD's anti-laundering must be in place first"}
+    {:id :R3
+     :restraint "NO policy/value update-rule work before BOTH gates clear"
+     :scope "the update math itself (how a witnessed outcome modifies the policy/value network) is deferred"
+     :rationale "the update rule is transitively blocked: it cannot be built until the simulator predicts (G-SIM) and the reward scores (G-REWARD). Building the update rule before its inputs exist would be constructing a consumer without a producer."}
+    {:id :R4
+     :restraint "NO batch-3 FutonZero-generative folds pretending the gates are clearable by pattern-prose"
+     :scope "further cascade folds for this mission cannot clear G-SIM or G-REWARD — the gates are substrate dependencies, not pattern-coverage gaps"
+     :rationale "B2-F5's advanceability triage: 0 advanceable holes. Every open hole is 0-cycle-leaf-blocked. Folds can provide governance patterns (like this shi plan) but cannot ground the simulator or the reward substance."}
+    {:id :R5
+     :restraint "NO bypass of WM guardrails or Pudding Prover anti-laundering"
+     :scope "even after gates clear, the loop operates under existing WM guardrails and Pudding Prover witness discipline"
+     :rationale "mission doc §3 scope-out: 'No bypass of WM guardrails or Pudding Prover anti-laundering' — invariant, not negotiable"}]}
+
+  :kill-criteria
+  {:description
+   "Carried verbatim from the preregistration (p4ng/main-2026.tex sec:prereg, dated 2026-07-10; operational twin: futon2/holes/labs/slush-demo/SPEC-full-loop-gfn.md). These are the loop-level kill criteria for the GFN slush proposer and learned reward R̂ — the system this mission's gate-work feeds into."
+   :criterion
+   {:source "p4ng/main-2026.tex sec:prereg — Stopping rule (verbatim)"
+    :text
+    "If after two reward revisions with at least 40 flown folds S3 still fails to clear its null, we stop: the finding is that the operator's value structure is not recoverable from fold outcomes at this grain, and the question routes to explicit operator-interest modelling rather than a third revision. No tuning on labels already counted in a reported S3 point. Changing any S-definition after first flown-fold data constitutes a new preregistration and must be labelled as such."
+    :spec-twin-text
+    "Kill criterion (M-action-vocabulary discipline): if after two R̂ revisions with n(flown) >= 40 S3 still does not clear its null, STOP — the finding routes to the reward-structure question (operator-interest signal / Joe-HUD thread), not to a third revision. No tuning on adjudicated labels already counted in a reported S3 point (each retrain reports on held-out-in-time labels)."
+    :where-S3-is
+    "discrimination curve: AUC of R̂ ranking adjudicated successes above failures, against a 200-shuffle null, recomputed at each retrain on labels held out in time; baseline at preregistration 0.542 at n=12 against a null-95 of 0.854"
+    :relation-to-gate-work
+    "The kill criterion is the loop-level stopping rule for the R̂/GFN proposer. The gate-level stopping rule is simpler: if substrate-2/full-C cannot produce a field simulator that meets G-SIM's minimum admissible criteria, or M-pudding-peradams cannot produce an anti-laundered reward that meets G-REWARD's criteria, the generative mission stays :blocked indefinitely. The gates do not have a deadline; they have clearance criteria. shi's 'perseverance furthers' supports this: the mission waits rather than forcing forward on inadequate foundations."}}
+
+  :plan-summary
+  {:total-phases 3
+   :parallel-tracks 3
+   :restraints 5
+   :kill-criteria 1
+   :want-grain-assessment
+   {:discharged? false
+    :rationale
+    "The want (a RUNNING gated generative loop) is NOT discharged. This sequencing plan provides the coordination discipline (shi) for HOW the gate work proceeds — owners named, order specified, restraints declared, kill criteria carried — but the gates remain uncleared. Governance manages the blocked state; it does not clear gates. The plan is the disciplined-army stance: unified direction, coordinated restraint, perseverance."}}}}}

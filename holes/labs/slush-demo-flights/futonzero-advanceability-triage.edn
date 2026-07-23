@@ -1,0 +1,140 @@
+{:futonzero-advanceability-triage
+ {:version "0.1.0"
+  :source "ft-futonzero-generative-013 box b5 (war-machine/advanceability) applied to every open hole of M-futonzero-generative"
+  :mission "futon0-d/mission/futonzero-generative"
+  :deposit "ft-futonzero-generative-013"
+  :flight "FLIGHTS-BATCH2-2026-07-10 Flight B2-F5"
+  :author "zai-2"
+  :classification-scheme
+  "Three categories per b5 (war-machine/advanceability):
+   ADVANCEABLE — concrete next step that moves the mission forward this cycle; not blocked by external dependencies.
+   0-CYCLE-LEAF-BLOCKED — a blocker that is a dependency on another mission's work; cannot be cleared by engagement or pattern-prose; the advanceability gate's NAG fires ('nothing concrete to advance here; articulate the next hole').
+   SAFE-PRODUCT — completed safe work product from §4; landed and dated; not an open hole but recorded for completeness (b5 requires the gate to distinguish what CAN advance from what is DONE)."
+
+  :holes
+  [;; === MISSION DOC HOLES (unchecked in Remaining Work) ===
+
+   {:hole/id "G-SIM"
+    :hole/name "field-simulator adequacy"
+    :hole/source "M-futonzero-generative.md §2 G-SIM + Remaining Work unchecked item"
+    :hole/classification :0-cycle-leaf-blocked
+    :hole/owner "substrate-2 / full-C / field-model work"
+    :hole/evidence-ref "futonzero-gap-report.edn :G-SIM :clearance-status :not-cleared — verdict :insufficient-evidence, :degenerate? true, 0 independent measured pairs; deposit policy-hole h1"
+    :hole/rationale
+    "G-SIM is the hard gate: no forward model exists, no independent measured calibration pairs (0 of ~11+ needed). The gate is a dependency on substrate-2/full-C field-model work, not an advanceable increment. b5's advanceability gate correctly fires its NAG: 'nothing concrete to advance here; articulate the next hole.' The cascade provides governance patterns (lifecycle, status, advanceability) that identify the gate as a blocker, but none grounds the field simulator itself."}
+
+   {:hole/id "G-REWARD"
+    :hole/name "anti-laundered reward rigor (positive substance)"
+    :hole/source "M-futonzero-generative.md §2 G-REWARD + Remaining Work unchecked item"
+    :hole/classification :0-cycle-leaf-blocked
+    :hole/owner "M-pudding-peradams G1 / Pudding Prover reward channel"
+    :hole/evidence-ref "futonzero-gap-report.edn :G-REWARD :clearance-status :not-cleared — rejection side functional (8/8 laundering shapes rejected), positive substance ungrounded; deposit policy-hole h2"
+    :hole/rationale
+    "G-REWARD's rejection side is built and tested (8/8 laundering shapes rejected). The POSITIVE side — the Dokusan/peradam reward computation and Pudding Prover G1 arrow-witness binding to live affect — is a dependency on M-pudding-peradams, not an advanceable increment. The red-team fixture defines what reward is NOT; the gate needs what reward IS. b5 fires its NAG: the blocker is external."}
+
+   ;; === DEPOSIT POLICY HOLES h1-h5 ===
+
+   {:hole/id "h1"
+    :hole/name "G-SIM (field simulator) remains ungrounded — no pattern in cascade clears it"
+    :hole/source "ft-futonzero-generative-013 policy-hole h1"
+    :hole/classification :0-cycle-leaf-blocked
+    :hole/owner "substrate-2 / full-C"
+    :hole/evidence-ref "futonzero-gap-report.edn :G-SIM — verdict :insufficient-evidence, :degenerate? true, 0 independent measured pairs"
+    :hole/rationale
+    "Same gate as the mission-doc G-SIM hole. The deposit names it as policy-hole h1: the cascade provides governance patterns that manage the blocked state but cannot resolve the blockage. The field simulator needs substrate-2/full-C work, not pattern-prose. Classification: 0-CYCLE-LEAF-BLOCKED (duplicate of G-SIM — the policy-hole IS the gate, restated at the fold layer)."}
+
+   {:hole/id "h2"
+    :hole/name "G-REWARD (anti-laundered positive reward) remains ungrounded"
+    :hole/source "ft-futonzero-generative-013 policy-hole h2"
+    :hole/classification :0-cycle-leaf-blocked
+    :hole/owner "M-pudding-peradams G1"
+    :hole/evidence-ref "futonzero-gap-report.edn :G-REWARD — rejection side functional, positive substance ungrounded"
+    :hole/rationale
+    "Same gate as the mission-doc G-REWARD hole. The deposit names it as policy-hole h2: the cascade does not define what reward IS. Classification: 0-CYCLE-LEAF-BLOCKED (duplicate of G-REWARD — the policy-hole IS the gate, restated at the fold layer)."}
+
+   {:hole/id "h3"
+    :hole/name "policy/value update rule ungrounded"
+    :hole/source "ft-futonzero-generative-013 policy-hole h3"
+    :hole/classification :0-cycle-leaf-blocked
+    :hole/owner "deferred until G-SIM and G-REWARD clear (mission doc §6)"
+    :hole/evidence-ref "ft-futonzero-generative-013 h3 — b1 grounds the action space but not the update rule; gap report :summary :fold-policy-holes-not-covered-by-this-flight h3"
+    :hole/rationale
+    "The policy/value update rule (how a witnessed play-out outcome modifies the policy or value network) is deferred until both gates clear — the mission doc §6 states 'only logic models, fixtures, and read-only evaluation are allowed' before G-SIM. The update rule is transitively blocked: it cannot be built until the simulator predicts (G-SIM) and the reward scores (G-REWARD). Classification: 0-CYCLE-LEAF-BLOCKED — a leaf in the dependency tree rooted at the two gates."}
+
+   {:hole/id "h4"
+    :hole/name "shi ant/CA numerics do not transpose to WM learner"
+    :hole/source "ft-futonzero-generative-013 policy-hole h4"
+    :hole/classification :safe-product
+    :hole/owner "resolved by judgment (b4 :satiety :partial)"
+    :hole/evidence-ref "ft-futonzero-generative-013 h4 — shi's coordinated-force wisdom-shape transposes, ant/CA numerics inapplicable by judgment; satiety convention: exclusion recorded"
+    :hole/rationale
+    "This is not an open hole — it is a recorded satiety judgment. b4 (shi/Hexagram-07) is :satiety :partial: the coordinated-force core transposes to the multi-component loop's orchestration, the ant/CA numerics (Pi-o, tau, policy-priors, update-prob) are domain-specific calibration numbers that do not transpose. The exclusion is recorded per the satiety convention (:partial = needed part unavailable/non-transposing). Classification: SAFE-PRODUCT — the partial transposition is a landed judgment, not an open gap."}
+
+   {:hole/id "h5"
+    :hole/name "b2 and b3 overlap: governance/triage patterns for the same blocked state"
+    :hole/source "ft-futonzero-generative-013 policy-hole h5"
+    :hole/classification :safe-product
+    :hole/owner "resolved by overlap convention (recorded honest overlap)"
+    :hole/evidence-ref "ft-futonzero-generative-013 h5 — b2 (status-keywords) classifies, b3 (mission-lifecycle) formalizes; both applied to the same blocked-state governance; overlap recorded as productive"
+    :hole/rationale
+    "This is not an open hole — it is a recorded overlap. b2 and b3 are not independent contributions: b2 is the triage lens (:active with blockers), b3 is the lifecycle lens (:blocked in state machine). The overlap is genuine and productive (triage informs lifecycle placement). Per the overlap convention, this is recorded as honest overlap rather than false independence. Classification: SAFE-PRODUCT — the overlap is a landed observation, not an open gap."}
+
+   ;; === MISSION DOC SAFE WORK PRODUCTS (checked — completed) ===
+
+   {:hole/id "S4.1"
+    :hole/name "§4.1 Static rollout ledger"
+    :hole/source "M-futonzero-generative.md Remaining Work checked item"
+    :hole/classification :safe-product
+    :hole/owner "landed (futon0 2c820cd, audit ac4f7ad, consolidation fae1979)"
+    :hole/evidence-ref "M-futonzero-generative.md Remaining Work — [x] §4.1; artifact at futon0/data/futonzero-rollout-ledger.edn"
+    :hole/rationale
+    "Completed safe work product. b5 requires the advanceability gate to distinguish what CAN advance from what is DONE — this is DONE."}
+
+   {:hole/id "S4.2"
+    :hole/name "§4.2 Toy field fixture"
+    :hole/source "M-futonzero-generative.md Remaining Work checked item"
+    :hole/classification :safe-product
+    :hole/owner "landed (futon0 b32b421)"
+    :hole/evidence-ref "M-futonzero-generative.md Remaining Work — [x] §4.2; artifact at scripts/futon0/futonzero/toy_field.clj; 18 tests/88 assertions pass"
+    :hole/rationale
+    "Completed safe work product. Synthetic 4-state chain demonstrating successful update + refusal to learn from laundered reward. DONE."}
+
+   {:hole/id "S4.3"
+    :hole/name "§4.3 Policy/value vocabulary"
+    :hole/source "M-futonzero-generative.md Remaining Work checked item"
+    :hole/classification :safe-product
+    :hole/owner "landed"
+    :hole/evidence-ref "M-futonzero-generative.md Remaining Work — [x] §4.3; artifact at holes/missions/M-futonzero-generative.policy-value-vocabulary.edn (v0, prototyping-forward, no actuator)"
+    :hole/rationale
+    "Completed safe work product. Data shapes for pattern-as-policy + value estimates, no live actuator. DONE."}
+
+   {:hole/id "S4.4"
+    :hole/name "§4.4 Calibration audit"
+    :hole/source "M-futonzero-generative.md Remaining Work checked item"
+    :hole/classification :safe-product
+    :hole/owner "landed (futon3c 976fb2c + consolidation)"
+    :hole/evidence-ref "M-futonzero-generative.md Remaining Work — [x] §4.4; artifact at futon0/data/futonzero-calibration-report.edn; canonical reader futon3c.aif.calibration"
+    :hole/rationale
+    "Completed safe work product. Cross-checks ledger entry counts, degeneracy flag, verdict, witness counts. DONE."}
+
+   {:hole/id "S4.5"
+    :hole/name "§4.5 Reward red-team fixture"
+    :hole/source "M-futonzero-generative.md Remaining Work checked item"
+    :hole/classification :safe-product
+    :hole/owner "landed (futon0 71b22d2)"
+    :hole/evidence-ref "M-futonzero-gap-report.edn :red-team-fixture-result — 8/8 cases passing; M-futonzero-generative.md Remaining Work — [x] §4.5; 21 tests/127 assertions pass"
+    :hole/rationale
+    "Completed safe work product. 8 laundering shapes rejected with explicit routed reasons; legit case still accepted. DONE. §4 safe work products now complete per the mission doc checkpoint (2026-06-11)."}]
+
+  :triage-summary
+  {:total-holes 12
+   :advanceable 0
+   :0-cycle-leaf-blocked 4
+   :safe-product 8
+   :blocked-gates [:G-SIM :G-REWARD]
+   :advanceable-this-cycle "NONE — b5's advanceability gate fires its NAG for every open hole. G-SIM and G-REWARD are 0-cycle-leaf-blocked (dependencies on substrate-2/full-C and M-pudding-peradams). h3 (policy/value update rule) is transitively blocked by both gates. h4 and h5 are not open holes (landed judgments). All §4 safe work products are complete."
+   :want-grain-assessment
+   {:discharged? false
+    :rationale
+    "The want (a RUNNING gated generative loop) is NOT discharged. Both hard gates (G-SIM, G-REWARD) remain uncleared per Flight 2's gap report. This triage confirms the blocked state is governance-managed (b2+b3 classify and formalize it) but NOT clearable by prose or engagement — b5's advanceability gate fires its NAG on every open hole. Governance manages the blocked state; it does not clear gates."}}}
+}

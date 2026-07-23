@@ -1,0 +1,124 @@
+{:futonzero-gap-report
+ {:version "0.1.0"
+  :source "ft-futonzero-generative-012 box b5 (war-machine/ideal-actual-gap applied to G-SIM and G-REWARD gates)"
+  :mission "futon0-d/mission/futonzero-generative"
+  :deposit-proposal/hash "ae8d0daea7bd3897"
+  :flight "FLIGHTS-2026-07-10 Flight 2"
+  :verdict :discharged-false
+  :verdict-rationale
+  "The want (a RUNNING gated generative loop) is NOT discharged. Both hard gates remain uncleared. This gap report is the attempt evidence for the :discharged? false adjudication label — not a failure to deliver, but the measured confirmation that the fold's own policy-holes h1 and h2 are live structural gaps."
+
+  :red-team-fixture-result
+  {:command "cd futon0 && bb -cp scripts:test -e '(require \\[futon0.futonzero.reward-red-team :as rt\\]) (let [s (rt/certify-red-team)] ...) '"
+   :source-files
+   ["futon0/scripts/futon0/futonzero/reward_red_team.clj"
+    "futon0/scripts/futon0/futonzero/toy_field.clj"
+    "futon0/test/futon0/futonzero/reward_red_team_test.clj"]
+   :total-cases 8
+   :cases-passing 8
+   :all-rejected true
+   :legit-accepted true
+   :known-leniency "launder-by-omission: omitting :realised-read passes the settled check (contains? guard); currently accepted, stricten-to [:not-settled]; documented in reward_red_team.clj known-leniencies"
+   :output
+   "Red-team cases: 8
+  censored-fallback: PASS (expected #{:not-measured}, got #{:not-measured})
+  transient-spike: PASS (expected #{:not-settled}, got #{:not-settled})
+  prior-value-tautology: PASS (expected #{:prior-value-tautology :no-observational-component}, got #{:prior-value-tautology :no-observational-component})
+  operator-gate-as-fruit: PASS (expected #{:missing-witness}, got #{:missing-witness})
+  non-independent: PASS (expected #{:not-independent}, got #{:not-independent})
+  non-measured: PASS (expected #{:not-measured}, got #{:not-measured})
+  missing-witness: PASS (expected #{:missing-witness}, got #{:missing-witness})
+  missing-return: PASS (expected #{:missing-return}, got #{:missing-return})
+
+Total: 8 cases, 8/8 passing
+Legit outcome accepted: true
+Known leniency (launder-by-omission): currently accepted = true"
+   :note "The fixture is run via Babashka (bb), not JVM Clojure, per the artifact-only constraint. The fixture namespaces are pure Clojure with no external deps beyond clojure.core, so bb execution is faithful to the source. The test namespace (reward_red_team_test.clj) uses clojure.test and cognitect.test-runner (JVM); the bb invocation calls certify-red-team directly, which is the same code path the test exercises."}
+
+  :gates
+  {:G-SIM
+   {:gate-name "field-simulator adequacy"
+    :fold-policy-hole :h1
+    :ideal
+    {:description "A field simulator that reads the same capability/mission substrate as WM, predicts at least one-step and two-step consequences as explicit hypotheses, records confidence and uncertainty (not just a rank), is calibrated against prior play-out → outcome evidence, and refuses fabricated dynamics when the field has no data."
+     :source "M-futonzero-generative.md §2 G-SIM"
+     :minimum-admissible-criteria
+     ["reads the same capability/mission substrate as WM"
+      "predicts at least one-step and two-step consequences as explicit hypotheses"
+      "records confidence and uncertainty, not just a rank"
+      "calibrated against prior play-out → outcome evidence"
+      "refuses fabricated dynamics when the field has no data"]}
+    :actual
+    {:description "No field simulator exists. The calibration reader (futon3c.aif.calibration) reads evidence and computes error statistics, but it is a retrospective evaluator, not a forward predictor. The calibration verdict is :insufficient-evidence with :degenerate? true (predicted = realised in most pairs, indicating censored-fallback not measurement). Independent paired count is 0."
+     :evidence-files
+     [{:path "futon0/data/futonzero-calibration-report.edn"
+       :what-it-shows ":verdict :insufficient-evidence, :degenerate? true, :paired-G-count 15, :independent-paired-count 0 — the calibration reader exists but has no independent measured pairs to calibrate against"
+       :key-fields {:gate :G-SIM :verdict :insufficient-evidence :degenerate? true :independent-paired-count 0}}
+      {:path "futon0/data/futonzero-calibration-evidence.edn"
+       :what-it-shows "35 evidence entries, mostly :realised-source nil (not measured) and :independent? false — raw substrate exists but is not calibrated prediction data"
+       :key-statistics {:total-entries 35 :measured-pairs 0 :independent-pairs 0}}
+      {:path "futon0/scripts/futon0/futonzero/toy_field.clj"
+       :what-it-shows "A SYNTHETIC four-state chain with known transitions — tests update math and failure modes, NOT real-field dynamics. Explicitly: 'does not model, call, or mutate the real field'"
+       :limitation "toy fixture, not a field simulator — it has known transitions, not learned predictions"}
+      {:path "futon0/holes/missions/M-futonzero-generative.policy-value-vocabulary.edn"
+       :what-it-shows "Policy/value vocabulary v0 with :no-actuator? true and :status :prototyping-forward — declarative shapes, not a running forward model"
+       :limitation "data shapes only, no prediction capability"}]
+     :missing
+     ["a forward model that predicts play-out consequences from the capability/mission substrate"
+      "confidence and uncertainty recording per prediction (not just error statistics after the fact)"
+      "calibration against independent measured pairs (currently 0 independent pairs)"
+      "refusal logic for fabricated dynamics when field data is absent"]}
+    :where-it-would-live
+    {:home "substrate-2 / full-C / field-model work (per mission doc §2 G-SIM)"
+     :candidate-path "futon0/scripts/futon0/futonzero/field_simulator.clj (does not exist)"
+     :calibration-dependency "futon3c.aif.calibration would consume the simulator's predictions as predicted values paired against realised outcomes — currently the calibration reader has no forward-prediction input, only retrospective evidence"}
+    :clearance-status :not-cleared
+    :blocking "the generative loop cannot run until G-SIM clears — the mission's §6 explicitly states 'only logic models, fixtures, and read-only evaluation are allowed' before this gate"}
+
+    :G-REWARD
+    {:gate-name "anti-laundered reward rigor"
+     :fold-policy-hole :h2
+     :ideal
+     {:description "A reward signal that distinguishes build discharge from witness discharge, uses Pudding Prover / peradam-style witness discipline where applicable, keeps G1 arrow-witness false until bound to live affect evidence, records rejected/routed outcomes (not only wins), and treats operator approval as a gate, not as retroactive proof of fruit."
+      :source "M-futonzero-generative.md §2 G-REWARD"
+      :minimum-admissible-criteria
+      ["distinguishes build discharge from witness discharge"
+       "uses Pudding Prover / peradam-style witness discipline where applicable"
+       "keeps G1 arrow-witness false until bound to live affect evidence"
+       "records rejected/routed outcomes, not only wins"
+       "treats operator approval as a gate, not as retroactive proof of fruit"]}
+     :actual
+     {:description "The REJECTION side is well-built: the reward red-team fixture (§4.5) correctly rejects 8 laundering shapes, and the toy field fixture (§4.2) demonstrates refusal to learn from laundered reward including operator-gate-is-not-fruit. But the POSITIVE side — what counts as a genuine witness discharge, how Dokusan/peradam reward is computed, how the Pudding Prover G1 arrow-witness binds to live affect — is ungrounded. The fixture defines what reward is NOT; it does not define what reward IS."
+      :evidence-files
+      [{:path "futon0/scripts/futon0/futonzero/reward_red_team.clj"
+        :what-it-shows "8 laundering shapes rejected with explicit routed reasons; legit outcome accepted; known leniency (launder-by-omission) documented. The rejection discipline is sound."
+        :limitation "defines what reward is NOT (8 laundering shapes), not what reward IS (the positive witness-discharge computation)"}
+       {:path "futon0/scripts/futon0/futonzero/toy_field.clj"
+        :what-it-shows "witnessed-reward-classes #{:build-discharge :witness-discharge}; reward-admissible? checks witness-class + independent? + measured-source + numeric return. Anti-laundering gate is functional."
+        :limitation "the witnessed classes are NAMED but their positive substance (what makes something a genuine build-discharge vs witness-discharge, how the Dokusan/peradam reward is computed from a witnessed outcome) is not defined — the gate admits them but does not score them"}
+       {:path "futon0/data/futonzero-calibration-report.edn"
+        :what-it-shows "witness-counts {:none 18, :operator-gate 2, :build-discharge 13, :discipline-event 2} — build-discharge is the most common witness class, but these are calibration evidence labels, not computed reward signals"
+        :limitation "the calibration reader tags witness classes but does not compute a reward value from them"}]
+      :missing
+      ["the Pudding Prover G1 arrow-witness binding to live affect evidence (scoped to M-pudding-peradams)"
+       "the Dokusan / peradam reward computation (how a witnessed outcome produces a numeric reward value)"
+       "the distinction between build-discharge reward and witness-discharge reward in computation (not just in labeling)"]}
+     :where-it-would-live
+     {:home "M-pudding-peradams G1 and the Pudding Prover reward channel (per mission doc §2 G-REWARD)"
+      :candidate-path "futon0/scripts/futon0/futonzero/reward_signal.clj (does not exist — the positive reward computation)"
+      :dependency "Pudding Prover G1 arrow-witness must be bound to live affect before any reward signal may train the learner"}
+     :clearance-status :not-cleared
+     :partial-progress "the REJECTION side is built and tested (8/8 laundering shapes rejected); the POSITIVE side (what genuine reward IS) remains ungrounded"}}
+
+  :summary
+  {:gates-total 2
+   :gates-cleared 0
+   :gates-not-cleared 2
+   :discharged? false
+   :attempt-evidence
+   {:red-team-fixture "8/8 laundering shapes rejected (rejection side functional)"
+    :g-sim "calibration verdict :insufficient-evidence, 0 independent measured pairs, no forward model exists"
+    :g-reward "rejection side built (8 shapes); positive reward substance ungrounded (Pudding Prover G1 binding deferred to M-pudding-peradams)"}
+   :fold-policy-holes-covered [:h1 :h2]
+   :fold-policy-holes-not-covered-by-this-flight [:h3 "policy/value update rule — out of scope for this gap report, held as first-class hole until gates clear"
+                                                  :h4 "meng numerics — inapplicable by judgment, not a gap"]}}}

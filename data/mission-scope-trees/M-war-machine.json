@@ -2654,6 +2654,74 @@
       "scope-id": "M-war-machine:scope-021"
     },
     {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: surface-earns-inhabitation",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "surface-earns-inhabitation",
+          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/content": {
+        "end": 9374,
+        "match": "pattern: surface-earns-inhabitation",
+        "position": 9348
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: surface-earns-inhabitation",
+          "phase": "identify",
+          "role": "environment"
+        },
+        {
+          "ident": "surface-earns-inhabitation",
+          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/id": "M-war-machine:scope-022",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "identify"
+      ],
+      "hx/parent": "M-war-machine:scope-001",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine:scope-001",
+      "scope-id": "M-war-machine:scope-022"
+    },
+    {
       "binder-type": "capability-scope",
       "ends": [
         {
@@ -2788,7 +2856,7 @@
           "term": "evidence"
         }
       ],
-      "hx/id": "M-war-machine:scope-022",
+      "hx/id": "M-war-machine:scope-023",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -2798,154 +2866,6 @@
       "hx/parent": "M-war-machine:scope-001",
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
-      "parent": "M-war-machine:scope-001",
-      "scope-id": "M-war-machine:scope-022"
-    },
-    {
-      "binder-type": "pattern",
-      "ends": [
-        {
-          "ident": "M-war-machine",
-          "role": "entity"
-        },
-        {
-          "name": "Theoretical grounding: Deleuze & Guattari's War Machine",
-          "phase": "identify",
-          "role": "environment"
-        },
-        {
-          "ident": "surface-earns-inhabitation",
-          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        },
-        {
-          "role": "concept",
-          "term": "hyperreal"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "sorry"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "sorrys"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        }
-      ],
-      "hx/content": {
-        "end": 9991,
-        "match": "Theoretical grounding: Deleuze & Guattari's War Machine",
-        "position": 7043
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine",
-          "role": "entity"
-        },
-        {
-          "name": "Theoretical grounding: Deleuze & Guattari's War Machine",
-          "phase": "identify",
-          "role": "environment"
-        },
-        {
-          "ident": "surface-earns-inhabitation",
-          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        },
-        {
-          "role": "concept",
-          "term": "hyperreal"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "sorry"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "sorrys"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        }
-      ],
-      "hx/id": "M-war-machine:scope-023",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "identify"
-      ],
-      "hx/parent": "M-war-machine:scope-001",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
       "parent": "M-war-machine:scope-001",
       "scope-id": "M-war-machine:scope-023"
     },

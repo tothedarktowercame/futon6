@@ -8,7 +8,7 @@
     "map-item": 16,
     "mission-scope-in": 1,
     "mission-scope-out": 1,
-    "pattern": 7,
+    "pattern": 18,
     "plain-argument": 1,
     "relates-to": 2,
     "source-material": 19
@@ -8301,6 +8301,342 @@
       "scope-id": "M-war-machine-pilot:scope-056"
     },
     {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: agent-decorator-pattern",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "agent-decorator-pattern",
+          "ref": "futon3/library/software-design/agent-decorator-pattern.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 45384,
+        "match": "pattern: agent-decorator-pattern",
+        "position": 45361
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: agent-decorator-pattern",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "agent-decorator-pattern",
+          "ref": "futon3/library/software-design/agent-decorator-pattern.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-057",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-055",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-055",
+      "scope-id": "M-war-machine-pilot:scope-057"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: agent-command-pattern",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "agent-command-pattern",
+          "ref": "futon3/library/software-design/agent-command-pattern.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "behaviour"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "value"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        }
+      ],
+      "hx/content": {
+        "end": 45718,
+        "match": "pattern: agent-command-pattern",
+        "position": 45697
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: agent-command-pattern",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "agent-command-pattern",
+          "ref": "futon3/library/software-design/agent-command-pattern.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "behaviour"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "value"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-058",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-055",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-055",
+      "scope-id": "M-war-machine-pilot:scope-058"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: intent-handshake-is-binding",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "intent-handshake-is-binding",
+          "ref": "futon3/library/agent/intent-handshake-is-binding.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "value"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/content": {
+        "end": 45922,
+        "match": "pattern: intent-handshake-is-binding",
+        "position": 45895
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: intent-handshake-is-binding",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "intent-handshake-is-binding",
+          "ref": "futon3/library/agent/intent-handshake-is-binding.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "value"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-059",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-055",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-055",
+      "scope-id": "M-war-machine-pilot:scope-059"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: provisional-claims-ledger",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "provisional-claims-ledger",
+          "ref": "futon3/library/agent/provisional-claims-ledger.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/content": {
+        "end": 46128,
+        "match": "pattern: provisional-claims-ledger",
+        "position": 46103
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: provisional-claims-ledger",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "provisional-claims-ledger",
+          "ref": "futon3/library/agent/provisional-claims-ledger.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-060",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-055",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-055",
+      "scope-id": "M-war-machine-pilot:scope-060"
+    },
+    {
       "binder-type": "capability-scope",
       "ends": [
         {
@@ -8411,7 +8747,7 @@
           "term": "evidence"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-057",
+      "hx/id": "M-war-machine-pilot:scope-061",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -8422,161 +8758,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-057"
-    },
-    {
-      "binder-type": "pattern",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Pattern-survey synthesis",
-          "phase": "derive",
-          "role": "environment"
-        },
-        {
-          "ident": "agent-decorator-pattern",
-          "ref": "futon3/library/software-design/agent-decorator-pattern.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "agent-command-pattern",
-          "ref": "futon3/library/software-design/agent-command-pattern.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "intent-handshake-is-binding",
-          "ref": "futon3/library/agent/intent-handshake-is-binding.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "provisional-claims-ledger",
-          "ref": "futon3/library/agent/provisional-claims-ledger.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "behaviour"
-        },
-        {
-          "role": "concept",
-          "term": "value"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "scope"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        }
-      ],
-      "hx/content": {
-        "end": 46385,
-        "match": "Pattern-survey synthesis",
-        "position": 44747
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Pattern-survey synthesis",
-          "phase": "derive",
-          "role": "environment"
-        },
-        {
-          "ident": "agent-decorator-pattern",
-          "ref": "futon3/library/software-design/agent-decorator-pattern.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "agent-command-pattern",
-          "ref": "futon3/library/software-design/agent-command-pattern.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "intent-handshake-is-binding",
-          "ref": "futon3/library/agent/intent-handshake-is-binding.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "provisional-claims-ledger",
-          "ref": "futon3/library/agent/provisional-claims-ledger.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "behaviour"
-        },
-        {
-          "role": "concept",
-          "term": "value"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "scope"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-058",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "derive"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-055",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
-      "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-058"
+      "scope-id": "M-war-machine-pilot:scope-061"
     },
     {
       "binder-type": "loose-section",
@@ -8721,7 +8903,7 @@
           "term": "futon"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-059",
+      "hx/id": "M-war-machine-pilot:scope-062",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -8732,7 +8914,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-059"
+      "scope-id": "M-war-machine-pilot:scope-062"
     },
     {
       "binder-type": "capability-scope",
@@ -8887,7 +9069,7 @@
           "term": "futon"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-060",
+      "hx/id": "M-war-machine-pilot:scope-063",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -8898,7 +9080,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-060"
+      "scope-id": "M-war-machine-pilot:scope-063"
     },
     {
       "binder-type": "loose-section",
@@ -8963,324 +9145,6 @@
           "term": "state"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-061",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "loose-section",
-        "loose"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-055",
-      "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-061"
-    },
-    {
-      "binder-type": "loose-section",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Invariant rules",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Invariant rules"
-        },
-        {
-          "role": "concept",
-          "term": "exotype"
-        },
-        {
-          "role": "concept",
-          "term": "invariants"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "handoff"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        }
-      ],
-      "hx/content": {
-        "end": 51359,
-        "match": "Invariant rules",
-        "position": 49602
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Invariant rules",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Invariant rules"
-        },
-        {
-          "role": "concept",
-          "term": "exotype"
-        },
-        {
-          "role": "concept",
-          "term": "invariants"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "handoff"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-062",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "loose-section",
-        "loose"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-055",
-      "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-062"
-    },
-    {
-      "binder-type": "capability-scope",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Invariant rules",
-          "phase": "derive",
-          "role": "environment"
-        },
-        {
-          "ident": "war-machine",
-          "role": "capability",
-          "source": "star-map"
-        },
-        {
-          "ident": "capability",
-          "role": "capability",
-          "source": "kernel"
-        },
-        {
-          "role": "concept",
-          "term": "exotype"
-        },
-        {
-          "role": "concept",
-          "term": "invariants"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "handoff"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        }
-      ],
-      "hx/content": {
-        "end": 51359,
-        "match": "Invariant rules",
-        "position": 49602
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Invariant rules",
-          "phase": "derive",
-          "role": "environment"
-        },
-        {
-          "ident": "war-machine",
-          "role": "capability",
-          "source": "star-map"
-        },
-        {
-          "ident": "capability",
-          "role": "capability",
-          "source": "kernel"
-        },
-        {
-          "role": "concept",
-          "term": "exotype"
-        },
-        {
-          "role": "concept",
-          "term": "invariants"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        },
-        {
-          "role": "concept",
-          "term": "handoff"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-063",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "capability-scope",
-        "derive"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-055",
-      "hx/role": "component",
-      "hx/type": "mission-scope/capability-scope",
-      "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-063"
-    },
-    {
-      "binder-type": "loose-section",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Data flow",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Data flow"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "sorrys"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "handoff"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        }
-      ],
-      "hx/content": {
-        "end": 52376,
-        "match": "Data flow",
-        "position": 51359
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Data flow",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Data flow"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "sorrys"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "handoff"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        }
-      ],
       "hx/id": "M-war-machine-pilot:scope-064",
       "hx/labels": [
         "scope",
@@ -9295,6 +9159,324 @@
       "scope-id": "M-war-machine-pilot:scope-064"
     },
     {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Invariant rules",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Invariant rules"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/content": {
+        "end": 51359,
+        "match": "Invariant rules",
+        "position": 49602
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Invariant rules",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Invariant rules"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-065",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-055",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-war-machine-pilot:scope-055",
+      "scope-id": "M-war-machine-pilot:scope-065"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Invariant rules",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "capability",
+          "role": "capability",
+          "source": "kernel"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/content": {
+        "end": 51359,
+        "match": "Invariant rules",
+        "position": 49602
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Invariant rules",
+          "phase": "derive",
+          "role": "environment"
+        },
+        {
+          "ident": "war-machine",
+          "role": "capability",
+          "source": "star-map"
+        },
+        {
+          "ident": "capability",
+          "role": "capability",
+          "source": "kernel"
+        },
+        {
+          "role": "concept",
+          "term": "exotype"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-066",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "derive"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-055",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
+      "parent": "M-war-machine-pilot:scope-055",
+      "scope-id": "M-war-machine-pilot:scope-066"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Data flow",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Data flow"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        }
+      ],
+      "hx/content": {
+        "end": 52376,
+        "match": "Data flow",
+        "position": 51359
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Data flow",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Data flow"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "sorrys"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "handoff"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-067",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-055",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-war-machine-pilot:scope-055",
+      "scope-id": "M-war-machine-pilot:scope-067"
+    },
+    {
       "binder-type": "capability-scope",
       "ends": [
         {
@@ -9373,7 +9555,7 @@
           "term": "futon"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-065",
+      "hx/id": "M-war-machine-pilot:scope-068",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -9384,7 +9566,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-065"
+      "scope-id": "M-war-machine-pilot:scope-068"
     },
     {
       "binder-type": "loose-section",
@@ -9617,7 +9799,7 @@
           "term": "invariants"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-066",
+      "hx/id": "M-war-machine-pilot:scope-069",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -9628,7 +9810,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-066"
+      "scope-id": "M-war-machine-pilot:scope-069"
     },
     {
       "binder-type": "loose-section",
@@ -9701,7 +9883,7 @@
           "term": "evidence"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-067",
+      "hx/id": "M-war-machine-pilot:scope-070",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -9712,7 +9894,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-067"
+      "scope-id": "M-war-machine-pilot:scope-070"
     },
     {
       "binder-type": "loose-section",
@@ -9777,7 +9959,7 @@
           "term": "derive"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-068",
+      "hx/id": "M-war-machine-pilot:scope-071",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -9788,7 +9970,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-068"
+      "scope-id": "M-war-machine-pilot:scope-071"
     },
     {
       "binder-type": "capability-scope",
@@ -9853,7 +10035,7 @@
           "term": "derive"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-069",
+      "hx/id": "M-war-machine-pilot:scope-072",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -9864,7 +10046,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-069"
+      "scope-id": "M-war-machine-pilot:scope-072"
     },
     {
       "binder-type": "loose-section",
@@ -9969,7 +10151,7 @@
           "term": "legacy"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-070",
+      "hx/id": "M-war-machine-pilot:scope-073",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -9980,7 +10162,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-070"
+      "scope-id": "M-war-machine-pilot:scope-073"
     },
     {
       "binder-type": "loose-section",
@@ -10205,7 +10387,7 @@
           "term": "held"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-071",
+      "hx/id": "M-war-machine-pilot:scope-074",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -10216,7 +10398,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-071"
+      "scope-id": "M-war-machine-pilot:scope-074"
     },
     {
       "binder-type": "capability-scope",
@@ -10461,7 +10643,7 @@
           "term": "held"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-072",
+      "hx/id": "M-war-machine-pilot:scope-075",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -10472,7 +10654,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-072"
+      "scope-id": "M-war-machine-pilot:scope-075"
     },
     {
       "binder-type": "loose-section",
@@ -10569,7 +10751,7 @@
           "term": "instantiate"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-073",
+      "hx/id": "M-war-machine-pilot:scope-076",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -10580,7 +10762,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-073"
+      "scope-id": "M-war-machine-pilot:scope-076"
     },
     {
       "binder-type": "loose-section",
@@ -10677,7 +10859,7 @@
           "term": "argue"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-074",
+      "hx/id": "M-war-machine-pilot:scope-077",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -10688,7 +10870,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-war-machine-pilot:scope-055",
-      "scope-id": "M-war-machine-pilot:scope-074"
+      "scope-id": "M-war-machine-pilot:scope-077"
     },
     {
       "binder-type": "eightfold-phase",
@@ -10729,7 +10911,7 @@
           "title": "ARGUE"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-075",
+      "hx/id": "M-war-machine-pilot:scope-078",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -10740,7 +10922,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/eightfold-phase",
       "parent": "M-war-machine-pilot:scope-000",
-      "scope-id": "M-war-machine-pilot:scope-075"
+      "scope-id": "M-war-machine-pilot:scope-078"
     },
     {
       "binder-type": "plain-argument",
@@ -10853,18 +11035,18 @@
           "term": "invariants"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-076",
+      "hx/id": "M-war-machine-pilot:scope-079",
       "hx/labels": [
         "scope",
         "mission-scope",
         "plain-argument",
         "argue"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-075",
+      "hx/parent": "M-war-machine-pilot:scope-078",
       "hx/role": "component",
       "hx/type": "mission-scope/plain-argument",
-      "parent": "M-war-machine-pilot:scope-075",
-      "scope-id": "M-war-machine-pilot:scope-076"
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-079"
     },
     {
       "binder-type": "pattern",
@@ -10874,28 +11056,13 @@
           "role": "entity"
         },
         {
-          "name": "Plain-language argument",
+          "name": "pattern: predictive-coding-belief-update",
           "phase": "argue",
           "role": "environment"
         },
         {
           "ident": "predictive-coding-belief-update",
           "ref": "futon3/library/aif/predictive-coding-belief-update.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "expected-free-energy-scorecard",
-          "ref": "futon3/library/aif/expected-free-energy-scorecard.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "aif-as-environment-not-instruction",
-          "ref": "futon3/library/gauntlet/aif-as-environment-not-instruction.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "state-is-hypothesis",
-          "ref": "futon3/library/agent/state-is-hypothesis.flexiarg",
           "role": "pattern"
         },
         {
@@ -10909,36 +11076,12 @@
         {
           "role": "concept",
           "term": "aif"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "runtime"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "invariants"
         }
       ],
       "hx/content": {
-        "end": 70002,
-        "match": "Plain-language argument",
-        "position": 67983
+        "end": 68325,
+        "match": "pattern: predictive-coding-belief-update",
+        "position": 68294
       },
       "hx/ends": [
         {
@@ -10946,28 +11089,13 @@
           "role": "entity"
         },
         {
-          "name": "Plain-language argument",
+          "name": "pattern: predictive-coding-belief-update",
           "phase": "argue",
           "role": "environment"
         },
         {
           "ident": "predictive-coding-belief-update",
           "ref": "futon3/library/aif/predictive-coding-belief-update.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "expected-free-energy-scorecard",
-          "ref": "futon3/library/aif/expected-free-energy-scorecard.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "aif-as-environment-not-instruction",
-          "ref": "futon3/library/gauntlet/aif-as-environment-not-instruction.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "state-is-hypothesis",
-          "ref": "futon3/library/agent/state-is-hypothesis.flexiarg",
           "role": "pattern"
         },
         {
@@ -10981,22 +11109,165 @@
         {
           "role": "concept",
           "term": "aif"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-080",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "argue"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-078",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-080"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: expected-free-energy-scorecard",
+          "phase": "argue",
+          "role": "environment"
+        },
+        {
+          "ident": "expected-free-energy-scorecard",
+          "ref": "futon3/library/aif/expected-free-energy-scorecard.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        }
+      ],
+      "hx/content": {
+        "end": 68363,
+        "match": "pattern: expected-free-energy-scorecard",
+        "position": 68333
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: expected-free-energy-scorecard",
+          "phase": "argue",
+          "role": "environment"
+        },
+        {
+          "ident": "expected-free-energy-scorecard",
+          "ref": "futon3/library/aif/expected-free-energy-scorecard.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-081",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "argue"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-078",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-081"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: aif-as-environment-not-instruction",
+          "phase": "argue",
+          "role": "environment"
+        },
+        {
+          "ident": "aif-as-environment-not-instruction",
+          "ref": "futon3/library/gauntlet/aif-as-environment-not-instruction.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "aif"
         },
         {
           "role": "concept",
           "term": "state"
+        }
+      ],
+      "hx/content": {
+        "end": 68537,
+        "match": "pattern: aif-as-environment-not-instruction",
+        "position": 68503
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: aif-as-environment-not-instruction",
+          "phase": "argue",
+          "role": "environment"
+        },
+        {
+          "ident": "aif-as-environment-not-instruction",
+          "ref": "futon3/library/gauntlet/aif-as-environment-not-instruction.flexiarg",
+          "role": "pattern"
         },
         {
           "role": "concept",
-          "term": "pattern"
+          "term": "aif"
         },
         {
           "role": "concept",
-          "term": "runtime"
+          "term": "state"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-082",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "argue"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-078",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-082"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
         },
         {
-          "role": "concept",
-          "term": "capability"
+          "name": "pattern: state-is-hypothesis",
+          "phase": "argue",
+          "role": "environment"
+        },
+        {
+          "ident": "state-is-hypothesis",
+          "ref": "futon3/library/agent/state-is-hypothesis.flexiarg",
+          "role": "pattern"
         },
         {
           "role": "concept",
@@ -11004,21 +11275,66 @@
         },
         {
           "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
           "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "state"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-077",
+      "hx/content": {
+        "end": 69566,
+        "match": "pattern: state-is-hypothesis",
+        "position": 69547
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: state-is-hypothesis",
+          "phase": "argue",
+          "role": "environment"
+        },
+        {
+          "ident": "state-is-hypothesis",
+          "ref": "futon3/library/agent/state-is-hypothesis.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
+          "term": "invariants"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-083",
       "hx/labels": [
         "scope",
         "mission-scope",
         "pattern",
         "argue"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-075",
+      "hx/parent": "M-war-machine-pilot:scope-078",
       "hx/role": "component",
       "hx/type": "mission-scope/pattern",
-      "parent": "M-war-machine-pilot:scope-075",
-      "scope-id": "M-war-machine-pilot:scope-077"
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-083"
     },
     {
       "binder-type": "loose-section",
@@ -11139,18 +11455,18 @@
           "term": "roles"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-078",
+      "hx/id": "M-war-machine-pilot:scope-084",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "derive"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-075",
+      "hx/parent": "M-war-machine-pilot:scope-078",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-075",
-      "scope-id": "M-war-machine-pilot:scope-078"
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-084"
     },
     {
       "binder-type": "loose-section",
@@ -11279,18 +11595,18 @@
           "term": "argument"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-079",
+      "hx/id": "M-war-machine-pilot:scope-085",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-075",
+      "hx/parent": "M-war-machine-pilot:scope-078",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-075",
-      "scope-id": "M-war-machine-pilot:scope-079"
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-085"
     },
     {
       "binder-type": "loose-section",
@@ -11355,18 +11671,18 @@
           "term": "pattern"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-080",
+      "hx/id": "M-war-machine-pilot:scope-086",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-075",
+      "hx/parent": "M-war-machine-pilot:scope-078",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-075",
-      "scope-id": "M-war-machine-pilot:scope-080"
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-086"
     },
     {
       "binder-type": "loose-section",
@@ -11495,18 +11811,18 @@
           "term": "agents"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-081",
+      "hx/id": "M-war-machine-pilot:scope-087",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "argue"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-075",
+      "hx/parent": "M-war-machine-pilot:scope-078",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-075",
-      "scope-id": "M-war-machine-pilot:scope-081"
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-087"
     },
     {
       "binder-type": "loose-section",
@@ -11611,18 +11927,18 @@
           "term": "pattern"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-082",
+      "hx/id": "M-war-machine-pilot:scope-088",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "argue"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-075",
+      "hx/parent": "M-war-machine-pilot:scope-078",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-075",
-      "scope-id": "M-war-machine-pilot:scope-082"
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-088"
     },
     {
       "binder-type": "loose-section",
@@ -11711,18 +12027,18 @@
           "term": "verify"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-083",
+      "hx/id": "M-war-machine-pilot:scope-089",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-075",
+      "hx/parent": "M-war-machine-pilot:scope-078",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-075",
-      "scope-id": "M-war-machine-pilot:scope-083"
+      "parent": "M-war-machine-pilot:scope-078",
+      "scope-id": "M-war-machine-pilot:scope-089"
     },
     {
       "binder-type": "eightfold-phase",
@@ -11803,7 +12119,7 @@
           "term": "derive"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-084",
+      "hx/id": "M-war-machine-pilot:scope-090",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -11814,7 +12130,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/eightfold-phase",
       "parent": "M-war-machine-pilot:scope-000",
-      "scope-id": "M-war-machine-pilot:scope-084"
+      "scope-id": "M-war-machine-pilot:scope-090"
     },
     {
       "binder-type": "source-material",
@@ -11895,7 +12211,7 @@
           "term": "derive"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-085",
+      "hx/id": "M-war-machine-pilot:scope-091",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -11906,7 +12222,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
       "parent": "M-war-machine-pilot:scope-000",
-      "scope-id": "M-war-machine-pilot:scope-085"
+      "scope-id": "M-war-machine-pilot:scope-091"
     },
     {
       "binder-type": "loose-section",
@@ -12099,18 +12415,18 @@
           "term": "behaviour"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-086",
+      "hx/id": "M-war-machine-pilot:scope-092",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-086"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-092"
     },
     {
       "binder-type": "source-material",
@@ -12303,18 +12619,18 @@
           "term": "behaviour"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-087",
+      "hx/id": "M-war-machine-pilot:scope-093",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-087"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-093"
     },
     {
       "binder-type": "loose-section",
@@ -12435,18 +12751,18 @@
           "term": "eval"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-088",
+      "hx/id": "M-war-machine-pilot:scope-094",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-088"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-094"
     },
     {
       "binder-type": "source-material",
@@ -12617,18 +12933,18 @@
           "term": "eval"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-089",
+      "hx/id": "M-war-machine-pilot:scope-095",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-089"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-095"
     },
     {
       "binder-type": "loose-section",
@@ -12741,18 +13057,18 @@
           "term": "argue"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-090",
+      "hx/id": "M-war-machine-pilot:scope-096",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-090"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-096"
     },
     {
       "binder-type": "loose-section",
@@ -12873,18 +13189,18 @@
           "term": "requires"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-091",
+      "hx/id": "M-war-machine-pilot:scope-097",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-091"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-097"
     },
     {
       "binder-type": "source-material",
@@ -13025,18 +13341,18 @@
           "term": "requires"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-092",
+      "hx/id": "M-war-machine-pilot:scope-098",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-092"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-098"
     },
     {
       "binder-type": "loose-section",
@@ -13269,18 +13585,18 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-093",
+      "hx/id": "M-war-machine-pilot:scope-099",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "derive"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-093"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-099"
     },
     {
       "binder-type": "capability-scope",
@@ -13523,18 +13839,18 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-094",
+      "hx/id": "M-war-machine-pilot:scope-100",
       "hx/labels": [
         "scope",
         "mission-scope",
         "capability-scope",
         "derive"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-094"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-100"
     },
     {
       "binder-type": "loose-section",
@@ -13623,18 +13939,18 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-095",
+      "hx/id": "M-war-machine-pilot:scope-101",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-095"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-101"
     },
     {
       "binder-type": "source-material",
@@ -13723,18 +14039,18 @@
           "term": "mission"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-096",
+      "hx/id": "M-war-machine-pilot:scope-102",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-096"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-102"
     },
     {
       "binder-type": "loose-section",
@@ -13855,18 +14171,18 @@
           "term": "foundational"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-097",
+      "hx/id": "M-war-machine-pilot:scope-103",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-097"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-103"
     },
     {
       "binder-type": "source-material",
@@ -14007,18 +14323,18 @@
           "term": "foundational"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-098",
+      "hx/id": "M-war-machine-pilot:scope-104",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "verify"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-084",
+      "hx/parent": "M-war-machine-pilot:scope-090",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-084",
-      "scope-id": "M-war-machine-pilot:scope-098"
+      "parent": "M-war-machine-pilot:scope-090",
+      "scope-id": "M-war-machine-pilot:scope-104"
     },
     {
       "binder-type": "eightfold-phase",
@@ -14107,7 +14423,7 @@
           "term": "phases"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-099",
+      "hx/id": "M-war-machine-pilot:scope-105",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -14118,906 +14434,6 @@
       "hx/role": "component",
       "hx/type": "mission-scope/eightfold-phase",
       "parent": "M-war-machine-pilot:scope-000",
-      "scope-id": "M-war-machine-pilot:scope-099"
-    },
-    {
-      "binder-type": "loose-section",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Pre-INSTANTIATE discipline",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Pre-INSTANTIATE discipline"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "satisfied"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
-        },
-        {
-          "role": "concept",
-          "term": "psr"
-        },
-        {
-          "role": "concept",
-          "term": "pur"
-        }
-      ],
-      "hx/content": {
-        "end": 96256,
-        "match": "Pre-INSTANTIATE discipline",
-        "position": 95565
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Pre-INSTANTIATE discipline",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Pre-INSTANTIATE discipline"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "satisfied"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
-        },
-        {
-          "role": "concept",
-          "term": "psr"
-        },
-        {
-          "role": "concept",
-          "term": "pur"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-100",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "loose-section",
-        "loose"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
-      "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-100"
-    },
-    {
-      "binder-type": "source-material",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Pre-INSTANTIATE discipline",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "cycle.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "mission.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "peripherals.edn",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "satisfied"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
-        },
-        {
-          "role": "concept",
-          "term": "psr"
-        },
-        {
-          "role": "concept",
-          "term": "pur"
-        }
-      ],
-      "hx/content": {
-        "end": 96256,
-        "match": "Pre-INSTANTIATE discipline",
-        "position": 95565
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Pre-INSTANTIATE discipline",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "cycle.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "mission.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "peripherals.edn",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "satisfied"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
-        },
-        {
-          "role": "concept",
-          "term": "psr"
-        },
-        {
-          "role": "concept",
-          "term": "pur"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-101",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "source-material",
-        "instantiate"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
-      "hx/role": "component",
-      "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-101"
-    },
-    {
-      "binder-type": "pattern",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Pre-INSTANTIATE discipline",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "ident": "read-existing-seam-before-implementing",
-          "ref": "futon3/library/peripherals/read-existing-seam-before-implementing.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "pattern-becomes-peripheral",
-          "ref": "futon3/library/peripherals/pattern-becomes-peripheral.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "satisfied"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
-        },
-        {
-          "role": "concept",
-          "term": "psr"
-        },
-        {
-          "role": "concept",
-          "term": "pur"
-        }
-      ],
-      "hx/content": {
-        "end": 96256,
-        "match": "Pre-INSTANTIATE discipline",
-        "position": 95565
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Pre-INSTANTIATE discipline",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "ident": "read-existing-seam-before-implementing",
-          "ref": "futon3/library/peripherals/read-existing-seam-before-implementing.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "pattern-becomes-peripheral",
-          "ref": "futon3/library/peripherals/pattern-becomes-peripheral.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "satisfied"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "futon"
-        },
-        {
-          "role": "concept",
-          "term": "proof"
-        },
-        {
-          "role": "concept",
-          "term": "psr"
-        },
-        {
-          "role": "concept",
-          "term": "pur"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-102",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "instantiate"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-102"
-    },
-    {
-      "binder-type": "loose-section",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phase 1 \u2014 READ-ONLY v0",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Phase 1 \u2014 READ-ONLY v0"
-        },
-        {
-          "role": "concept",
-          "term": "instantiation"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "deliverables"
-        },
-        {
-          "role": "concept",
-          "term": "backend"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        },
-        {
-          "role": "concept",
-          "term": "agents"
-        },
-        {
-          "role": "concept",
-          "term": "sorries"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        }
-      ],
-      "hx/content": {
-        "end": 97713,
-        "match": "Phase 1 \u2014 READ-ONLY v0",
-        "position": 96256
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phase 1 \u2014 READ-ONLY v0",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Phase 1 \u2014 READ-ONLY v0"
-        },
-        {
-          "role": "concept",
-          "term": "instantiation"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "deliverables"
-        },
-        {
-          "role": "concept",
-          "term": "backend"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        },
-        {
-          "role": "concept",
-          "term": "agents"
-        },
-        {
-          "role": "concept",
-          "term": "sorries"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-103",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "loose-section",
-        "loose"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
-      "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-103"
-    },
-    {
-      "binder-type": "source-material",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phase 1 \u2014 READ-ONLY v0",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "api",
-          "ref": "POST /api/alpha/agents/auto",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "wm-ui-anchors.edn",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "cycle.clj",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "instantiation"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "deliverables"
-        },
-        {
-          "role": "concept",
-          "term": "backend"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        },
-        {
-          "role": "concept",
-          "term": "agents"
-        },
-        {
-          "role": "concept",
-          "term": "sorries"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        }
-      ],
-      "hx/content": {
-        "end": 97713,
-        "match": "Phase 1 \u2014 READ-ONLY v0",
-        "position": 96256
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phase 1 \u2014 READ-ONLY v0",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "api",
-          "ref": "POST /api/alpha/agents/auto",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "wm-ui-anchors.edn",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "cycle.clj",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "instantiation"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "deliverables"
-        },
-        {
-          "role": "concept",
-          "term": "backend"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        },
-        {
-          "role": "concept",
-          "term": "agents"
-        },
-        {
-          "role": "concept",
-          "term": "sorries"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-104",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "source-material",
-        "instantiate"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
-      "hx/role": "component",
-      "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-104"
-    },
-    {
-      "binder-type": "pattern",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phase 1 \u2014 READ-ONLY v0",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "ident": "hot-reload-as-default-fix-path",
-          "ref": "futon3/library/peripherals/hot-reload-as-default-fix-path.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "constrained-execution-envelope",
-          "ref": "futon3/library/peripherals/constrained-execution-envelope.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "instantiation"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "deliverables"
-        },
-        {
-          "role": "concept",
-          "term": "backend"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        },
-        {
-          "role": "concept",
-          "term": "agents"
-        },
-        {
-          "role": "concept",
-          "term": "sorries"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        }
-      ],
-      "hx/content": {
-        "end": 97713,
-        "match": "Phase 1 \u2014 READ-ONLY v0",
-        "position": 96256
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phase 1 \u2014 READ-ONLY v0",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "ident": "hot-reload-as-default-fix-path",
-          "ref": "futon3/library/peripherals/hot-reload-as-default-fix-path.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "constrained-execution-envelope",
-          "ref": "futon3/library/peripherals/constrained-execution-envelope.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "instantiation"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "deliverables"
-        },
-        {
-          "role": "concept",
-          "term": "backend"
-        },
-        {
-          "role": "concept",
-          "term": "agency"
-        },
-        {
-          "role": "concept",
-          "term": "agents"
-        },
-        {
-          "role": "concept",
-          "term": "sorries"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-105",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "instantiate"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
-      "parent": "M-war-machine-pilot:scope-099",
       "scope-id": "M-war-machine-pilot:scope-105"
     },
     {
@@ -15028,6 +14444,974 @@
           "role": "entity"
         },
         {
+          "name": "Pre-INSTANTIATE discipline",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Pre-INSTANTIATE discipline"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "satisfied"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "pur"
+        }
+      ],
+      "hx/content": {
+        "end": 96256,
+        "match": "Pre-INSTANTIATE discipline",
+        "position": 95565
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Pre-INSTANTIATE discipline",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Pre-INSTANTIATE discipline"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "satisfied"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "pur"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-106",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-106"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: read-existing-seam-before-implementing",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "read-existing-seam-before-implementing",
+          "ref": "futon3/library/peripherals/read-existing-seam-before-implementing.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "satisfied"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 95744,
+        "match": "pattern: read-existing-seam-before-implementing",
+        "position": 95706
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: read-existing-seam-before-implementing",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "read-existing-seam-before-implementing",
+          "ref": "futon3/library/peripherals/read-existing-seam-before-implementing.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "satisfied"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-107",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-107"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: pattern-becomes-peripheral",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "pattern-becomes-peripheral",
+          "ref": "futon3/library/peripherals/pattern-becomes-peripheral.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "pur"
+        }
+      ],
+      "hx/content": {
+        "end": 96030,
+        "match": "pattern: pattern-becomes-peripheral",
+        "position": 96004
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: pattern-becomes-peripheral",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "pattern-becomes-peripheral",
+          "ref": "futon3/library/peripherals/pattern-becomes-peripheral.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "pur"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-108",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-108"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Pre-INSTANTIATE discipline",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "cycle.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "mission.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "peripherals.edn",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "satisfied"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "pur"
+        }
+      ],
+      "hx/content": {
+        "end": 96256,
+        "match": "Pre-INSTANTIATE discipline",
+        "position": 95565
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Pre-INSTANTIATE discipline",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "cycle.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "mission.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "peripherals.edn",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "satisfied"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "futon"
+        },
+        {
+          "role": "concept",
+          "term": "proof"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "pur"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-109",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-109"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1 \u2014 READ-ONLY v0",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 1 \u2014 READ-ONLY v0"
+        },
+        {
+          "role": "concept",
+          "term": "instantiation"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "deliverables"
+        },
+        {
+          "role": "concept",
+          "term": "backend"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "sorries"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        }
+      ],
+      "hx/content": {
+        "end": 97713,
+        "match": "Phase 1 \u2014 READ-ONLY v0",
+        "position": 96256
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1 \u2014 READ-ONLY v0",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Phase 1 \u2014 READ-ONLY v0"
+        },
+        {
+          "role": "concept",
+          "term": "instantiation"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "deliverables"
+        },
+        {
+          "role": "concept",
+          "term": "backend"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "sorries"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-110",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-110"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: hot-reload-as-default-fix-path",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "hot-reload-as-default-fix-path",
+          "ref": "futon3/library/peripherals/hot-reload-as-default-fix-path.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        }
+      ],
+      "hx/content": {
+        "end": 97451,
+        "match": "pattern: hot-reload-as-default-fix-path",
+        "position": 97421
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: hot-reload-as-default-fix-path",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "hot-reload-as-default-fix-path",
+          "ref": "futon3/library/peripherals/hot-reload-as-default-fix-path.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-111",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-111"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: constrained-execution-envelope",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "constrained-execution-envelope",
+          "ref": "futon3/library/peripherals/constrained-execution-envelope.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        }
+      ],
+      "hx/content": {
+        "end": 97576,
+        "match": "pattern: constrained-execution-envelope",
+        "position": 97546
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: constrained-execution-envelope",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "constrained-execution-envelope",
+          "ref": "futon3/library/peripherals/constrained-execution-envelope.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-112",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-112"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1 \u2014 READ-ONLY v0",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "POST /api/alpha/agents/auto",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "wm-ui-anchors.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "cycle.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "instantiation"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "deliverables"
+        },
+        {
+          "role": "concept",
+          "term": "backend"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "sorries"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        }
+      ],
+      "hx/content": {
+        "end": 97713,
+        "match": "Phase 1 \u2014 READ-ONLY v0",
+        "position": 96256
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "Phase 1 \u2014 READ-ONLY v0",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "POST /api/alpha/agents/auto",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "wm-ui-anchors.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "cycle.clj",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "instantiation"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "deliverables"
+        },
+        {
+          "role": "concept",
+          "term": "backend"
+        },
+        {
+          "role": "concept",
+          "term": "agency"
+        },
+        {
+          "role": "concept",
+          "term": "agents"
+        },
+        {
+          "role": "concept",
+          "term": "sorries"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-113",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-113"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
           "name": "Phase 2 \u2014 TRANSPORT WIRING",
           "phase": "loose",
           "role": "environment"
@@ -15147,18 +15531,18 @@
           "term": "eval"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-106",
+      "hx/id": "M-war-machine-pilot:scope-114",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-106"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-114"
     },
     {
       "binder-type": "source-material",
@@ -15287,18 +15671,18 @@
           "term": "eval"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-107",
+      "hx/id": "M-war-machine-pilot:scope-115",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-107"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-115"
     },
     {
       "binder-type": "loose-section",
@@ -15419,18 +15803,162 @@
           "term": "pattern"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-108",
+      "hx/id": "M-war-machine-pilot:scope-116",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-108"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-116"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: progress-heartbeat-distinct-from-cycle-completion",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "progress-heartbeat-distinct-from-cycle-completion",
+          "ref": "futon3/library/peripherals/progress-heartbeat-distinct-from-cycle-completion.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "heartbeat"
+        }
+      ],
+      "hx/content": {
+        "end": 99925,
+        "match": "pattern: progress-heartbeat-distinct-from-cycle-completion",
+        "position": 99876
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: progress-heartbeat-distinct-from-cycle-completion",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "progress-heartbeat-distinct-from-cycle-completion",
+          "ref": "futon3/library/peripherals/progress-heartbeat-distinct-from-cycle-completion.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "psr"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "heartbeat"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-117",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-117"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: canonical-typed-event-vs-side-channel",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "canonical-typed-event-vs-side-channel",
+          "ref": "futon3/library/peripherals/canonical-typed-event-vs-side-channel.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        }
+      ],
+      "hx/content": {
+        "end": 100606,
+        "match": "pattern: canonical-typed-event-vs-side-channel",
+        "position": 100569
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: canonical-typed-event-vs-side-channel",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "canonical-typed-event-vs-side-channel",
+          "ref": "futon3/library/peripherals/canonical-typed-event-vs-side-channel.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-118",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-118"
     },
     {
       "binder-type": "capability-scope",
@@ -15551,160 +16079,18 @@
           "term": "pattern"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-109",
+      "hx/id": "M-war-machine-pilot:scope-119",
       "hx/labels": [
         "scope",
         "mission-scope",
         "capability-scope",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-109"
-    },
-    {
-      "binder-type": "pattern",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phase 3 \u2014 WRITE CAPABILITY",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "ident": "progress-heartbeat-distinct-from-cycle-completion",
-          "ref": "futon3/library/peripherals/progress-heartbeat-distinct-from-cycle-completion.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "canonical-typed-event-vs-side-channel",
-          "ref": "futon3/library/peripherals/canonical-typed-event-vs-side-channel.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "instantiation"
-        },
-        {
-          "role": "concept",
-          "term": "deliverables"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "psr"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "heartbeat"
-        },
-        {
-          "role": "concept",
-          "term": "invariants"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        }
-      ],
-      "hx/content": {
-        "end": 100724,
-        "match": "Phase 3 \u2014 WRITE CAPABILITY",
-        "position": 99226
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phase 3 \u2014 WRITE CAPABILITY",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "ident": "progress-heartbeat-distinct-from-cycle-completion",
-          "ref": "futon3/library/peripherals/progress-heartbeat-distinct-from-cycle-completion.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "canonical-typed-event-vs-side-channel",
-          "ref": "futon3/library/peripherals/canonical-typed-event-vs-side-channel.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "instantiation"
-        },
-        {
-          "role": "concept",
-          "term": "deliverables"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "psr"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "heartbeat"
-        },
-        {
-          "role": "concept",
-          "term": "invariants"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-110",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "instantiate"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-110"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-119"
     },
     {
       "binder-type": "loose-section",
@@ -15809,18 +16195,18 @@
           "term": "held"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-111",
+      "hx/id": "M-war-machine-pilot:scope-120",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-111"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-120"
     },
     {
       "binder-type": "loose-section",
@@ -15885,18 +16271,18 @@
           "term": "value"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-112",
+      "hx/id": "M-war-machine-pilot:scope-121",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-112"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-121"
     },
     {
       "binder-type": "loose-section",
@@ -15985,18 +16371,86 @@
           "term": "rationale"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-113",
+      "hx/id": "M-war-machine-pilot:scope-122",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-113"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-122"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: read-only-first-then-extend",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "read-only-first-then-extend",
+          "ref": "futon3/library/peripherals/read-only-first-then-extend.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "instantiate"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        }
+      ],
+      "hx/content": {
+        "end": 102829,
+        "match": "pattern: read-only-first-then-extend",
+        "position": 102802
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: read-only-first-then-extend",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "read-only-first-then-extend",
+          "ref": "futon3/library/peripherals/read-only-first-then-extend.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "instantiate"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-123",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-123"
     },
     {
       "binder-type": "source-material",
@@ -16085,118 +16539,18 @@
           "term": "rationale"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-114",
+      "hx/id": "M-war-machine-pilot:scope-124",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-114"
-    },
-    {
-      "binder-type": "pattern",
-      "ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phasing rationale",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "ident": "read-only-first-then-extend",
-          "ref": "futon3/library/peripherals/read-only-first-then-extend.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "instantiate"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "checkable"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        },
-        {
-          "role": "concept",
-          "term": "rationale"
-        }
-      ],
-      "hx/content": {
-        "end": 103339,
-        "match": "Phasing rationale",
-        "position": 102508
-      },
-      "hx/ends": [
-        {
-          "ident": "M-war-machine-pilot",
-          "role": "entity"
-        },
-        {
-          "name": "Phasing rationale",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "ident": "read-only-first-then-extend",
-          "ref": "futon3/library/peripherals/read-only-first-then-extend.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "instantiate"
-        },
-        {
-          "role": "concept",
-          "term": "phase"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "checkable"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        },
-        {
-          "role": "concept",
-          "term": "rationale"
-        }
-      ],
-      "hx/id": "M-war-machine-pilot:scope-115",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "instantiate"
-      ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-115"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-124"
     },
     {
       "binder-type": "loose-section",
@@ -16341,18 +16695,18 @@
           "term": "patterns"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-116",
+      "hx/id": "M-war-machine-pilot:scope-125",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-116"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-125"
     },
     {
       "binder-type": "pattern",
@@ -16362,23 +16716,13 @@
           "role": "entity"
         },
         {
-          "name": "Cross-references",
+          "name": "pattern: split-transport-from-embodiment",
           "phase": "instantiate",
           "role": "environment"
         },
         {
           "ident": "split-transport-from-embodiment",
           "ref": "futon3/library/peripherals/split-transport-from-embodiment.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "surface-earns-inhabitation",
-          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "inhabitation-feeds-evolution",
-          "ref": "futon3/library/peripherals/inhabitation-feeds-evolution.flexiarg",
           "role": "pattern"
         },
         {
@@ -16392,52 +16736,12 @@
         {
           "role": "concept",
           "term": "heartbeat"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "satisfied"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "derive"
-        },
-        {
-          "role": "concept",
-          "term": "psrs"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
         }
       ],
       "hx/content": {
-        "end": 104471,
-        "match": "Cross-references",
-        "position": 103339
+        "end": 103590,
+        "match": "pattern: split-transport-from-embodiment",
+        "position": 103559
       },
       "hx/ends": [
         {
@@ -16445,7 +16749,7 @@
           "role": "entity"
         },
         {
-          "name": "Cross-references",
+          "name": "pattern: split-transport-from-embodiment",
           "phase": "instantiate",
           "role": "environment"
         },
@@ -16455,22 +16759,51 @@
           "role": "pattern"
         },
         {
-          "ident": "surface-earns-inhabitation",
-          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
-          "role": "pattern"
-        },
-        {
-          "ident": "inhabitation-feeds-evolution",
-          "ref": "futon3/library/peripherals/inhabitation-feeds-evolution.flexiarg",
-          "role": "pattern"
-        },
-        {
           "role": "concept",
           "term": "phase"
         },
         {
           "role": "concept",
           "term": "phases"
+        },
+        {
+          "role": "concept",
+          "term": "heartbeat"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-126",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-126"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: surface-earns-inhabitation",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "surface-earns-inhabitation",
+          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
         },
         {
           "role": "concept",
@@ -16487,48 +16820,161 @@
         {
           "role": "concept",
           "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "satisfied"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "derive"
-        },
-        {
-          "role": "concept",
-          "term": "psrs"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-117",
+      "hx/content": {
+        "end": 103842,
+        "match": "pattern: surface-earns-inhabitation",
+        "position": 103816
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: surface-earns-inhabitation",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "surface-earns-inhabitation",
+          "ref": "futon3/library/peripherals/surface-earns-inhabitation.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "heartbeat"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-127",
       "hx/labels": [
         "scope",
         "mission-scope",
         "pattern",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/pattern",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-117"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-127"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: inhabitation-feeds-evolution",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "inhabitation-feeds-evolution",
+          "ref": "futon3/library/peripherals/inhabitation-feeds-evolution.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "heartbeat"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        }
+      ],
+      "hx/content": {
+        "end": 103948,
+        "match": "pattern: inhabitation-feeds-evolution",
+        "position": 103920
+      },
+      "hx/ends": [
+        {
+          "ident": "M-war-machine-pilot",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: inhabitation-feeds-evolution",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "inhabitation-feeds-evolution",
+          "ref": "futon3/library/peripherals/inhabitation-feeds-evolution.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "heartbeat"
+        },
+        {
+          "role": "concept",
+          "term": "phase"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        }
+      ],
+      "hx/id": "M-war-machine-pilot:scope-128",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-war-machine-pilot:scope-105",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-128"
     },
     {
       "binder-type": "loose-section",
@@ -16577,18 +17023,18 @@
           "term": "phase"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-118",
+      "hx/id": "M-war-machine-pilot:scope-129",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-118"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-129"
     },
     {
       "binder-type": "loose-section",
@@ -16741,18 +17187,18 @@
           "term": "agents"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-119",
+      "hx/id": "M-war-machine-pilot:scope-130",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-119"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-130"
     },
     {
       "binder-type": "source-material",
@@ -16935,18 +17381,18 @@
           "term": "agents"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-120",
+      "hx/id": "M-war-machine-pilot:scope-131",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-120"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-131"
     },
     {
       "binder-type": "loose-section",
@@ -17171,18 +17617,18 @@
           "term": "capability"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-121",
+      "hx/id": "M-war-machine-pilot:scope-132",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-121"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-132"
     },
     {
       "binder-type": "source-material",
@@ -17457,18 +17903,18 @@
           "term": "capability"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-122",
+      "hx/id": "M-war-machine-pilot:scope-133",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-122"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-133"
     },
     {
       "binder-type": "loose-section",
@@ -17669,18 +18115,18 @@
           "term": "inhabitation"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-123",
+      "hx/id": "M-war-machine-pilot:scope-134",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-123"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-134"
     },
     {
       "binder-type": "source-material",
@@ -17951,18 +18397,18 @@
           "term": "inhabitation"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-124",
+      "hx/id": "M-war-machine-pilot:scope-135",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-124"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-135"
     },
     {
       "binder-type": "loose-section",
@@ -18035,18 +18481,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-125",
+      "hx/id": "M-war-machine-pilot:scope-136",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-125"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-136"
     },
     {
       "binder-type": "loose-section",
@@ -18191,18 +18637,18 @@
           "term": "produces"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-126",
+      "hx/id": "M-war-machine-pilot:scope-137",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-126"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-137"
     },
     {
       "binder-type": "source-material",
@@ -18357,18 +18803,18 @@
           "term": "produces"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-127",
+      "hx/id": "M-war-machine-pilot:scope-138",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-127"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-138"
     },
     {
       "binder-type": "loose-section",
@@ -18505,18 +18951,18 @@
           "term": "inhabitation"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-128",
+      "hx/id": "M-war-machine-pilot:scope-139",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-128"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-139"
     },
     {
       "binder-type": "loose-section",
@@ -18645,18 +19091,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-129",
+      "hx/id": "M-war-machine-pilot:scope-140",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-129"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-140"
     },
     {
       "binder-type": "loose-section",
@@ -18745,18 +19191,18 @@
           "term": "inhabitation"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-130",
+      "hx/id": "M-war-machine-pilot:scope-141",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-130"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-141"
     },
     {
       "binder-type": "loose-section",
@@ -18965,18 +19411,18 @@
           "term": "agents"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-131",
+      "hx/id": "M-war-machine-pilot:scope-142",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-131"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-142"
     },
     {
       "binder-type": "source-material",
@@ -19335,18 +19781,18 @@
           "term": "agents"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-132",
+      "hx/id": "M-war-machine-pilot:scope-143",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-132"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-143"
     },
     {
       "binder-type": "loose-section",
@@ -19451,18 +19897,18 @@
           "term": "heartbeat"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-133",
+      "hx/id": "M-war-machine-pilot:scope-144",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-133"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-144"
     },
     {
       "binder-type": "loose-section",
@@ -19599,18 +20045,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-134",
+      "hx/id": "M-war-machine-pilot:scope-145",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-134"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-145"
     },
     {
       "binder-type": "source-material",
@@ -19757,18 +20203,18 @@
           "term": "complete"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-135",
+      "hx/id": "M-war-machine-pilot:scope-146",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-135"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-146"
     },
     {
       "binder-type": "loose-section",
@@ -19977,18 +20423,18 @@
           "term": "held"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-136",
+      "hx/id": "M-war-machine-pilot:scope-147",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-136"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-147"
     },
     {
       "binder-type": "source-material",
@@ -20237,18 +20683,18 @@
           "term": "held"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-137",
+      "hx/id": "M-war-machine-pilot:scope-148",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-137"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-148"
     },
     {
       "binder-type": "loose-section",
@@ -20369,18 +20815,18 @@
           "term": "held"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-138",
+      "hx/id": "M-war-machine-pilot:scope-149",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-138"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-149"
     },
     {
       "binder-type": "source-material",
@@ -20551,18 +20997,18 @@
           "term": "held"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-139",
+      "hx/id": "M-war-machine-pilot:scope-150",
       "hx/labels": [
         "scope",
         "mission-scope",
         "source-material",
         "instantiate"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-139"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-150"
     },
     {
       "binder-type": "loose-section",
@@ -20627,18 +21073,18 @@
           "term": "agency"
         }
       ],
-      "hx/id": "M-war-machine-pilot:scope-140",
+      "hx/id": "M-war-machine-pilot:scope-151",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "argue"
       ],
-      "hx/parent": "M-war-machine-pilot:scope-099",
+      "hx/parent": "M-war-machine-pilot:scope-105",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-war-machine-pilot:scope-099",
-      "scope-id": "M-war-machine-pilot:scope-140"
+      "parent": "M-war-machine-pilot:scope-105",
+      "scope-id": "M-war-machine-pilot:scope-151"
     }
   ]
 }
