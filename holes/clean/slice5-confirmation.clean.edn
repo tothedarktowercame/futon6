@@ -146,18 +146,22 @@
     :sensor {:field :runs/yield
              :source "ants.aif.experiment run records"
              :coverage-precondition "every (scenario, arm, seed) cell present; 540 records"
-             :coverage-check :count-equals-design}}
+             :coverage-check {:status :met :check :count-equals-design}}}
    {:id :starvation :direction :lower-better :role :primary
     :sensor {:field :runs/starved
              :source "ants.aif.experiment run records"
              :coverage-precondition "same 540 cells; starvation is share of yield exactly 0.0"
-             :coverage-check :count-equals-design}
+             :coverage-check {:status :met :check :count-equals-design}}
     :note "added on the pilot's evidence; yield alone cannot see a survival-trading controller"}
    {:id :selection-divergence :direction :informational :role :secondary
     :sensor {:field :runs/trajectory
              :source "per-tick action log"
+             ;; reason vocabulary (claude-7): :sensor-absent / :coverage-below-threshold /
+             ;; :regime-limited are different facts with different repairs. They hit
+             ;; all three in one afternoon.
              :coverage-precondition "UNVERIFIED — the pilot did not persist trajectories"
-             :coverage-check :unmet}
+             :coverage-check {:status :unmet :reason :sensor-absent
+                              :repair "harness change: persist per-tick action log"}}
     :note "declared and NOT reportable under this registration: its sensor fails
            its own precondition. Recorded rather than dropped so the gap is
            visible; discharging it is a harness change, not an analysis choice."}]
@@ -233,11 +237,34 @@
    :assumption "paired seeds make arms exchangeable; the mode FSM and admissible
                 set are unaffected by ablation"
    :receipt-ref nil
+   ;; {:none :requested :received :refused} (claude-7). :refused matters most:
+   ;; a causal engine's TYPED REFUSAL, cited in a registration, is a stronger
+   ;; artifact than an absent receipt — it records that identification was
+   ;; sought and failed, rather than never attempted.
    :receipt-status :none
    :note "no external identification receipt exists for this design. Stated as
           absent rather than omitted. For V3's cohort and E2 the corresponding
           slot is expected to cite Rob's causal engine against
           futon3c/docs/memory-causal-graph-spec.json."}
+
+  ;; EXTENSION 4 (claude-7, 2026-08-01): a hold-out names its ENFORCEMENT POINT.
+  ;; Their near-miss: a hold-out norm written in mission prose while the dispatch
+  ;; selector read only the queue — four held-out rows sat dispatchable. Rule
+  ;; adopted: "hold-outs must be excluded in the selector, not the doc." An
+  ;; enforcement that cannot be named is prose.
+  ;;
+  ;; Slice 5's hold-out is the pilot's seed universe, and it is a real one: the
+  ;; confirmation must not reuse any seed the pilot has already shown us.
+  :holdouts
+  {:ids [:pilot-seed-universe]
+   :enforced-by "the confirmation seed formulas themselves — distinct bases
+                 (2026091xx vs 2026081xx) make reuse arithmetically impossible,
+                 not merely unintended"
+   :verified-by "computable disjointness over the generated universes: 270 pilot
+                 seeds vs 270 confirmation seeds, overlap 0. Checked at
+                 registration; the render should re-check at build."
+   :note "the enforcement is in the generator, not in a review instruction —
+          which is the whole content of this extension"}
 
   :budget {:estimated-cell-runs 540 :cap-cell-runs 720
            :teardown "artifacts written under futon2/holes/labs/ants-faithfulness/ regardless of outcome"}}
