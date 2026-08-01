@@ -1,0 +1,35 @@
+{:clean/experiment "slice5-negative-arm-only-positive-control"
+ :clean/title "Negative fixture: an arm-only positive-control claim"
+ :clean/status :registered-not-run
+ :clean/seq [:measure]
+ :clean/boxes
+ [{:id :e1 :method :measure :produces :verdict
+   :binding {:kind :artifact :type :edn/verdict}}]
+ :clean/wires []
+ :clean/shape {:macro :controlled-ablation}
+ :clean/experiment-design
+ {:claim :comparative
+  :axes
+  [{:id :directed-eig :levels [0 1] :score-varies? false
+    :justification "dead axis deliberately lacks an axis-level positive-control role"}]
+  :arms
+  [{:id :aif-full :neutral? false :ablates []}
+   {:id :no-directed-eig :neutral? false :ablates [:directed-eig]
+    :role :positive-control}]
+  :scenarios [:patchy]
+  :seeds {:runs-per-cell 1
+          :pilot {:runs-per-cell 1
+                  :food-fn "100 + 10*s + i"
+                  :movement-fn "101 + 10*s + i"
+                  :choice-fn "102 + 10*s + i"}
+          :food-fn "200 + 10*s + i"
+          :movement-fn "201 + 10*s + i"
+          :choice-fn "202 + 10*s + i"
+          :disjoint-from-pilot? true}
+  :stop-rules
+  [{:id :positive-control-violated
+    :comparison :full-run-record
+    :action :abandon-run}]
+  :decision {:incomplete :not-interpretable}
+  :budget {:estimated-cell-runs 2 :cap-cell-runs 2
+           :teardown "write the negative fixture artifact"}}}

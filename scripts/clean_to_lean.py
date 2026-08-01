@@ -324,10 +324,16 @@ def emit_experiment(d):
     for arm in arms:
         arm_id = kw(arm["id"])
         axes_expr = ", ".join(axis_names[kw(x)] for x in arm.get("ablates", []))
+        source_role = kw(arm.get("role"))
+        lean_role = {
+            "positive-control": "ArmRole.positiveControl",
+            "baseline": "ArmRole.baselineNeutral",
+        }.get(source_role, "ArmRole.treatment")
         a(f"noncomputable def {arm_names[arm_id]} : Arm where")
         a(f"  name := {lean_string(arm_id)}")
         a(f"  neutral := {str(bool(arm.get('neutral?'))).lower()}")
         a(f"  axes := [{axes_expr}]")
+        a(f"  role := {lean_role}")
         a("")
 
     trace_classes = [camel(key) for key in decision]
@@ -450,6 +456,61 @@ def emit_experiment(d):
     a("  stopRulesNonempty := by simp")
     a("  decision := decisionRule")
     a("")
+    a("def readinessEvidence : Evidence where")
+    a("  toolchainExercised := true")
+    a("  codeIdentityAsserted := true")
+    a("  teardownExercised := true")
+    a("  armsShownDistinct := true")
+    a("")
+    a("def readinessSmoke : ExperimentTrace where")
+    a(f"  classification := TraceClass.{trace_classes[0]}")
+    a("  positiveControlViolated := false")
+    a("")
+    obligation_proofs = []
+    for arm in arms:
+        is_positive = kw(arm.get("role")) == "positive-control"
+        for axis_id_value in arm.get("ablates", []):
+            axis_name = axis_names[kw(axis_id_value)]
+            suffix = "predicted_not_navigable" if is_positive else "navigable"
+            obligation_proofs.append(f"exact {axis_name}_{suffix}")
+    if claim == "comparative":
+        obligation_proofs.append("rfl")
+    elif claim == "rarer-than-chance":
+        neutral_arms = [arm_names[kw(arm["id"])] for arm in arms
+                        if bool(arm.get("neutral?"))]
+        if not neutral_arms:
+            raise ValueError("rarer-than-chance registration requires a neutral control arm")
+        neutral_arm = neutral_arms[0]
+        obligation_proofs.append(
+            f"exact ⟨{neutral_arm}, by simp [baseRegistration], by simp [{neutral_arm}]⟩"
+        )
+    a("noncomputable def baseReadyToRun :")
+    a("    ReadyToRun baseRegistration readinessEvidence readinessSmoke where")
+    a("  apparatus := by simp [Evidence.apparatusSound, readinessEvidence]")
+    a("  discharged := by")
+    a("    intro o ho")
+    arm_defs = ", ".join(arm_names[kw(arm["id"])] for arm in arms)
+    a(f"    simp [Registration.obligations, baseRegistration, {arm_defs}] at ho")
+    if obligation_proofs:
+        cases = " | ".join(["rfl"] * len(obligation_proofs) + ["h"])
+        a(f"    rcases ho with ({cases})")
+        for proof in obligation_proofs:
+            a(f"    · {proof}")
+        a("    · rcases h with (rfl | rfl)")
+    else:
+        a("    rcases ho with (rfl | rfl)")
+    a("      · norm_num [Discharged, baseRegistration]")
+    a("      · rfl")
+    a("")
+    a("noncomputable def prospectiveReadyToRun :")
+    a("    ProspectiveReadyToRun prospectiveRegistration readinessEvidence readinessSmoke where")
+    a("  baseReady := by simpa [prospectiveRegistration] using baseReadyToRun")
+    a("  smokeClear := by")
+    a("    intro s hs")
+    a("    simp only [prospectiveRegistration, List.mem_singleton] at hs")
+    a("    subst s")
+    a("    rfl")
+    a("")
     a("example : prospectiveRegistration.stopRules ≠ [] := by decide")
     a("example : prospectiveRegistration.replication.pilotSeeds.Disjoint")
     a("    prospectiveRegistration.replication.confirmationSeeds :=")
@@ -468,11 +529,13 @@ def emit_experiment(d):
         a("/-- The positive control's dead axis is an explicit prediction, not")
         a("an accidentally accepted treatment axis. -/")
         a("theorem positiveControl_nonNavigability_registered :")
-        a(f"    Obligation.axisNavigable {positive_axis} ∈ baseRegistration.obligations ∧")
+        a(f"    Obligation.axisPredictedNonNavigable {positive_axis} ∈")
+        a("      baseRegistration.obligations ∧")
         a(f"      ¬ {positive_axis}.Navigable := by")
         a("  constructor")
-        a(f"  · exact mem_obligations_axisNavigable (a := {positive_arm_name})")
-        a("      (by simp [baseRegistration]) (by simp [" + positive_arm_name + "])")
+        a(f"  · exact mem_obligations_axisPredictedNonNavigable")
+        a(f"      (a := {positive_arm_name}) (by simp [baseRegistration])")
+        a(f"      (by simp [{positive_arm_name}]) (by simp [{positive_arm_name}])")
         a(f"  · exact {positive_axis}_predicted_not_navigable")
     a("")
     a(f"end {ns}")

@@ -98,17 +98,13 @@
   ;;     not a contrast, and it belongs in pre-flight. V3's cohort check is this.
   ;;
   ;; Do NOT push a sensor check into an axis to inherit the navigability gate.
-  ;; That is bending the design to the format, it inflates the arm count with
-  ;; non-contrasts, and — see the limitation note below — it would needlessly
-  ;; cost you ProspectiveReadyToRun.
+  ;; That is bending the design to the format and inflates the arm count with
+  ;; non-contrasts.
   ;;
-  ;; LIMITATION, live as of 2026-08-01: Registration.obligations generates an
-  ;; axisNavigable obligation for EVERY axis, including a scientific control's,
-  ;; whose non-navigability is the prediction. So a registration carrying one is
-  ;; storable and provable but CANNOT construct ProspectiveReadyToRun. The parent
-  ;; change needed is an arm role plus a distinct positive-control obligation
-  ;; requiring PREDICTED non-navigability. Dispatched; until it lands, expect
-  ;; registrations with scientific controls to stop at "provable".
+  ;; RESOLVED, 2026-08-01: Registration.obligations routes scientific controls
+  ;; to axisPredictedNonNavigable, whose discharge is a proof of the predicted
+  ;; null. Treatments still generate axisNavigable. Thus a control is neither
+  ;; silently exempted nor forced to prove both a proposition and its negation.
   ;;
   ;; An axis is an ablation dial. :score-varies? is the NAVIGABILITY GATE:
   ;; the render must refuse to build an arm whose only axis has it false,
