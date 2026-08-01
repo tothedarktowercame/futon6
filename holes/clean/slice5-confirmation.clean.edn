@@ -1,0 +1,164 @@
+;; CLean — CT treatment of an EXPERIMENT rather than a proof.
+;; Slice 5 confirmation run: does any AIF term in the ant forager carry a
+;; measurable explore/exploit effect?
+;;
+;; This is the first experiment-shaped CLean. The vocabulary extension is
+;; deliberate and minimal: the existing :clean/boxes + :clean/wires machinery
+;; carries the experiment PIPELINE unchanged (a pipeline is a typed composition
+;; like any other), and one new block :clean/experiment carries the parts a
+;; proof does not have — arms, axes, seeds, stopping, interpretation.
+;;
+;; :clean/copar gains a THIRD reading. A proof pairs informal prose with a formal
+;; diagram; an experiment additionally has an EXECUTABLE reading, and the whole
+;; point of registering it is that all three derive from this one file:
+;;
+;;   informal   -> the prose design (M-aif-stack.md)
+;;   formal     -> generated Lean Registration (render = gate)
+;;   executable -> malli-validated harness config (validation = gate)
+;;
+;; Predecessor pilot: futon2/holes/labs/ants-faithfulness/slice5.md (2026-08-01).
+;; That run is a PILOT and stays labelled so: its data were observed before a
+;; ReplicationPlan and total DecisionRule existed, so a prospective registration
+;; cannot honestly be attached to it. This registers its CONFIRMATION.
+
+{:clean/experiment "slice5-confirmation"
+ :clean/title  "Do any AIF terms in the ant forager carry a measurable explore/exploit effect?"
+ :clean/source {:mission "futon2/holes/M-aif-stack.md"
+                :pilot   "futon2/holes/labs/ants-faithfulness/slice5.md"
+                :pilot-sha "a5caf04ad4d6a568d82c2cc9ee27ee3ae259962f0e2622e502dd54a070b003c0"}
+ :clean/status :registered-not-run
+
+ ;; ---------------------------------------------------------------------------
+ ;; The informal reading: the experiment as a sequence of methods.
+ ;; ---------------------------------------------------------------------------
+ :clean/seq [:freeze-environment       ;; e1
+             :fix-interpretation       ;; e2
+             :verify-instrument        ;; e3
+             :measure-treatments       ;; e4
+             :adjudicate]              ;; e5
+
+ ;; ---------------------------------------------------------------------------
+ ;; The formal reading: the pipeline as a typed composition. Each :produces must
+ ;; be inhabited by a real artifact — this is what build-match checks.
+ ;; ---------------------------------------------------------------------------
+ :clean/boxes
+ [{:id :e1 :method :freeze-environment
+   :text "Freeze the environment config and the seed generator before any arm runs. Copied verbatim from the pilot so the two are comparable; seeds disjoint from it so the confirmation is independent."
+   :produces :frozen-design
+   :binding {:kind :artifact :type :edn/config}}
+
+  {:id :e2 :method :fix-interpretation
+   :text "Commit the total decision rule BEFORE data exist. Every trace the run can emit — complete, incomplete, control-violated, mixed-significance — maps to a named outcome."
+   :consumes [:frozen-design] :produces :decision-rule
+   :binding {:kind :artifact :type :edn/decision}}
+
+  {:id :e3 :method :verify-instrument
+   :text "Run the positive control first. :no-canonical-ambiguity must be bit-identical to :aif-full on every seed, because the canonical ambiguity addend is common to all candidates and cancels under argmax. If it differs, the analysis behind this design is wrong and the run is abandoned, not interpreted."
+   :consumes [:decision-rule] :produces :instrument-verified
+   :binding {:kind :artifact :type :edn/control-result}
+   :hole {:kind :gate :discharge :positive-control :satiety :canon
+          :wanted "paired run records identical, not merely equal yields — equal yields can conceal changed behaviour"}}
+
+  {:id :e4 :method :measure-treatments
+   :text "Run the treatment arms against the frozen design. Report yield AND starvation; the pilot established that yield alone penalises exactly the survival-trading behaviour the risk term exists to produce."
+   :consumes [:instrument-verified] :produces :contrasts
+   :binding {:kind :artifact :type :edn/contrasts}}
+
+  {:id :e5 :method :adjudicate
+   :text "Apply the pre-committed decision rule. No estimand substitution: the disposition of each hypothesis is fixed by e2."
+   :consumes [:contrasts] :produces :verdict
+   :binding {:kind :artifact :type :edn/verdict}
+   :discharges {:to :decision-rule}}]
+
+ :clean/wires
+ [{:from :e1 :to :e2 :carries :frozen-design}
+  {:from :e2 :to :e3 :carries :decision-rule}
+  {:from :e3 :to :e4 :carries :instrument-verified}
+  {:from :e4 :to :e5 :carries :contrasts}]
+
+ ;; ---------------------------------------------------------------------------
+ ;; The experiment block — what a proof does not have.
+ ;; ---------------------------------------------------------------------------
+ :clean/experiment-design
+ {:claim :comparative
+
+  ;; An axis is an ablation dial. :score-varies? is the NAVIGABILITY GATE:
+  ;; the render must refuse to build an arm whose only axis has it false,
+  ;; because ablating a term that cannot change selection is not a treatment.
+  ;; Every value here carries its justification, so a reader can reject the
+  ;; premise rather than the conclusion.
+  :axes
+  [{:id :canonical-ambiguity :levels [0 1] :score-varies? false
+    :role :positive-control
+    :justification "computed from (:var mu), identical across candidate actions (policy.clj:612-624); a common addend cannot change an argmax. Proved in DarkTower/Slice5Preregistration.lean as ambiguity_ablation_preserves_selection."}
+   {:id :directed-eig :levels [0 1] :score-varies? true
+    :justification "food_belief.clj:101-149; action-dependent, so it can reorder candidates."}
+   {:id :info-gain :levels [0 1] :score-varies? true
+    :justification "action-dependent."}
+   {:id :kl-risk :levels [0 1] :score-varies? true
+    :justification "action-dependent; pilot showed ablating it nearly triples sparse starvation (0.233 -> 0.667) while raising yield."}]
+
+  :arms
+  [{:id :aif-full               :neutral? false :ablates []}
+   {:id :no-canonical-ambiguity :neutral? false :ablates [:canonical-ambiguity]
+    :role :positive-control}
+   {:id :no-directed-eig        :neutral? false :ablates [:directed-eig]}
+   {:id :no-info-gain           :neutral? false :ablates [:info-gain]}
+   {:id :no-risk                :neutral? false :ablates [:kl-risk]}
+   {:id :classic                :neutral? true  :ablates []
+    :role :baseline
+    :note "selection disabled; the empirical null the comparative claim obliges"}]
+
+  :scenarios [:patchy :sparse :snowdrift]
+
+  ;; Verbatim from the pilot so the runs are comparable.
+  :environment {:size [10 10]
+                :food {:patchy    {:num-patches 4 :patch-radius 2}
+                       :sparse    {:num-patches 2 :patch-radius 1}
+                       :snowdrift {:num-patches 4 :patch-radius 2}}
+                :ticks 300 :initial-reserves 0.5 :metabolism 0.06
+                :ants-per-side 3}
+
+  ;; DISJOINT from the pilot, which used base 202608110/202608111/202658110.
+  ;; Disjointness is a checkable property of these formulas, not a promise.
+  :seeds {:runs-per-cell 30
+          :food-fn     "202609110 + 100000*s + 2*i"
+          :movement-fn "202609111 + 100000*s + 2*i"
+          :choice-fn   "202659110 + 100000*s + i"
+          :disjoint-from-pilot? true}
+
+  :outcomes [{:id :yield      :direction :higher-better}
+             {:id :starvation :direction :lower-better
+              :note "added on the pilot's evidence; yield alone cannot see a survival-trading controller"}]
+
+  :stop-rules
+  [{:id :positive-control-violated
+    :fires-when "any paired (aif-full, no-canonical-ambiguity) run record differs"
+    :comparison :full-run-record
+    :note "record equality, NOT yield equality — the pilot's harness was strengthened to this mid-run and the weaker form is what codex-8 flagged"
+    :action :abandon-run}]
+
+  ;; Total: every trace the run can emit maps to a named outcome.
+  :decision
+  {:control-violated      :abandoned-analysis-invalid
+   :no-arm-significant    :no-term-carries-effect
+   :epistemic-significant :explore-exploit-regulator-established
+   :risk-only-significant :risk-carries-effect-epistemic-decorative
+   :mixed                 :report-per-scenario-no-global-claim
+   :incomplete            :pilot-only-not-interpretable}
+
+  :budget {:estimated-cell-runs 540 :cap-cell-runs 720
+           :teardown "artifacts written under futon2/holes/labs/ants-faithfulness/ regardless of outcome"}}
+
+ ;; ---------------------------------------------------------------------------
+ ;; Three readings of one object. This is the bridge.
+ ;; ---------------------------------------------------------------------------
+ :clean/copar [{:reading :informal   :is :clean/seq}
+               {:reading :formal     :is [:clean/boxes :clean/wires]}
+               {:reading :executable :is :clean/experiment-design
+                :note "renders to a malli schema the harness must validate against before it starts; an unregistered arm is a startup failure, not a review finding"}]
+
+ :clean/shape {:macro :controlled-ablation
+               :holes-at [:e3]
+               :discharges-at [:e5]
+               :note "the positive control is a hole in the INSTRUMENT, not in the hypothesis: e3 must discharge before e4 is permitted to run"}}
