@@ -122,14 +122,45 @@
   ;; DISJOINT from the pilot, which used base 202608110/202608111/202658110.
   ;; Disjointness is a checkable property of these formulas, not a promise.
   :seeds {:runs-per-cell 30
+          ;; Historical pilot formulas are data, not renderer folklore. They are
+          ;; pinned by :clean/source/:pilot-sha above and provide the concrete
+          ;; left side of ReplicationPlan.disjoint.
+          :pilot {:runs-per-cell 30
+                  :food-fn     "202608110 + 100000*s + 2*i"
+                  :movement-fn "202608111 + 100000*s + 2*i"
+                  :choice-fn   "202658110 + 100000*s + i"}
           :food-fn     "202609110 + 100000*s + 2*i"
           :movement-fn "202609111 + 100000*s + 2*i"
           :choice-fn   "202659110 + 100000*s + i"
           :disjoint-from-pilot? true}
 
-  :outcomes [{:id :yield      :direction :higher-better}
-             {:id :starvation :direction :lower-better
-              :note "added on the pilot's evidence; yield alone cannot see a survival-trading controller"}]
+  ;; EXTENSION 1 (claude-7, 2026-08-01): every endpoint declares the SENSOR that
+  ;; supplies it and a COVERAGE PRECONDITION. Their V2 was salvage from receipt
+  ;; fields populated at 16% with recency bias — a registration that does not
+  ;; declare its sensor reproduces that failure inside this machinery. This is
+  ;; DarkTower's check_sound discipline lifted to the endpoint level: an
+  ;; endpoint whose sensor misses its coverage bar is NOT REPORTABLE, and the
+  ;; render should refuse a primary endpoint with no sensor at all.
+  :outcomes
+  [{:id :yield :direction :higher-better :role :primary
+    :sensor {:field :runs/yield
+             :source "ants.aif.experiment run records"
+             :coverage-precondition "every (scenario, arm, seed) cell present; 540 records"
+             :coverage-check :count-equals-design}}
+   {:id :starvation :direction :lower-better :role :primary
+    :sensor {:field :runs/starved
+             :source "ants.aif.experiment run records"
+             :coverage-precondition "same 540 cells; starvation is share of yield exactly 0.0"
+             :coverage-check :count-equals-design}
+    :note "added on the pilot's evidence; yield alone cannot see a survival-trading controller"}
+   {:id :selection-divergence :direction :informational :role :secondary
+    :sensor {:field :runs/trajectory
+             :source "per-tick action log"
+             :coverage-precondition "UNVERIFIED — the pilot did not persist trajectories"
+             :coverage-check :unmet}
+    :note "declared and NOT reportable under this registration: its sensor fails
+           its own precondition. Recorded rather than dropped so the gap is
+           visible; discharging it is a harness change, not an analysis choice."}]
 
   :stop-rules
   [{:id :positive-control-violated
@@ -147,6 +178,67 @@
    :mixed                 :report-per-scenario-no-global-claim
    :incomplete            :pilot-only-not-interpretable}
 
+  ;; EXTENSION 2 (claude-7, 2026-08-01): what the design IDENTIFIES, with a
+  ;; receipt reference — so "identified before spent" is a gate rather than a
+  ;; habit. claude-7's sharpening applies here too: an ablation identifies the
+  ;; effect of AVAILABILITY of a term, not of its content.
+  ;; EXTENSION 3 (claude-7, 2026-08-01). Answer to the design question: YES,
+  ;; holes are the right register — they are already "the things that can bite
+  ;; you", and :clean/shape/:holes-at already tracks them. But :kind :gate is
+  ;; the WRONG kind for what you describe.
+  ;;
+  ;;   :kind :gate       — UNDISCHARGED. Blocks a downstream box until it fires.
+  ;;                       (e3's positive control: e4 may not run until it passes.)
+  ;;   :kind :assumption — CURRENTLY DISCHARGED, CONDITIONALLY. Holds now, under
+  ;;                       stated conditions, with a predicted expiry. It blocks
+  ;;                       nothing today and invalidates results later.
+  ;;
+  ;; The second is genuinely different and stretching :gate to cover it would
+  ;; lose the distinction that matters: one stops the run, the other dates it.
+  ;; :breaks-when is REQUIRED on an :assumption — an assumption with no stated
+  ;; way to fail is a belief.
+  :assumptions
+  [{:id :tau-argmax-invariance :kind :assumption
+    :holds "argmax over -G/tau equals argmax over -G for every tau > 0, so the
+            commitment temperature cannot affect selection"
+    :holds-while "arithmetic is exact reals; ordering is total and tie-free"
+    :breaks-when "IEEE double rounding creates ties, or underflow/overflow/NaN
+                  appear in G or tau — none of which the exact-real argument
+                  covers (codex-8, review of Slice5Preregistration.lean)"
+    :evidence "90 bit-identical runs of arm :a3 in the authority pilot — evidence
+               for the float case, NOT a proof of it"
+    :on-break :invalidates-tau-claims-only
+    :discharge-condition "a float-level argument, or a tie-detection assertion in
+                          the selector that fails loudly rather than silently"}
+
+   {:id :ablation-preserves-admissible-set :kind :assumption
+    :holds "ablating a score term does not change which actions are admissible,
+            so arms differ only in ordering within a fixed candidate set"
+    :holds-while "the mode FSM and hard admissibility filters read observations
+                  only, never scores"
+    :breaks-when "any admissibility predicate comes to depend on a score term —
+                  at which point ablation arms stop being comparable at all"
+    :evidence "policy.clj: candidate filtering precedes scoring"
+    :on-break :invalidates-all-contrasts
+    :discharge-condition "a build-match relation asserting no admissibility
+                          predicate reads a score field"}]
+
+  :identification
+  {:estimand "effect on (yield, starvation) of removing term T from the candidate
+              score, holding environment, seeds and admissibility gating fixed"
+   :identifies :availability-of-term
+   :does-not-identify "the contribution of the quantity T is named after; a term
+                       may be present, computed, and causally inert (proved for
+                       :canonical-ambiguity)"
+   :assumption "paired seeds make arms exchangeable; the mode FSM and admissible
+                set are unaffected by ablation"
+   :receipt-ref nil
+   :receipt-status :none
+   :note "no external identification receipt exists for this design. Stated as
+          absent rather than omitted. For V3's cohort and E2 the corresponding
+          slot is expected to cite Rob's causal engine against
+          futon3c/docs/memory-causal-graph-spec.json."}
+
   :budget {:estimated-cell-runs 540 :cap-cell-runs 720
            :teardown "artifacts written under futon2/holes/labs/ants-faithfulness/ regardless of outcome"}}
 
@@ -160,5 +252,7 @@
 
  :clean/shape {:macro :controlled-ablation
                :holes-at [:e3]
+               :assumptions-at [:tau-argmax-invariance
+                                :ablation-preserves-admissible-set]
                :discharges-at [:e5]
                :note "the positive control is a hole in the INSTRUMENT, not in the hypothesis: e3 must discharge before e4 is permitted to run"}}
