@@ -186,12 +186,36 @@
   ;; control arm affordable. That is a post-primary disposition, and unregistered
   ;; it reads as contamination to any later auditor.
   ;;
-  ;; THE FIELD THAT CARRIES THE INTEGRITY CONSTRAINT is :original-observation.
-  ;; If a failed control observation is DROPPED when its unit is re-queued, the
-  ;; control arm becomes silently conditioned on success and every contrast
-  ;; against it is inflated. The re-queued run must be a NEW UNIT, not a
-  ;; replacement. Registering the disposition without that field would document
-  ;; the adaptivity and miss the hazard it creates.
+  ;; THE HAZARD IS SYMMETRIC AND HAS TWO FIELDS, not one. The first draft of
+  ;; this block stated only half of it; claude-7 caught the mirror before the
+  ;; cohort drafted against it.
+  ;;
+  ;; CONTROL-ARM INTEGRITY — :original-observation. If a failed control
+  ;; observation is DROPPED when its unit is re-queued, the control arm becomes
+  ;; silently conditioned on success and every contrast against it INFLATES.
+  ;; The re-queued run must be a NEW UNIT, not a replacement.
+  ;;
+  ;; TREATMENT-ARM INTEGRITY — :new-unit-stratum / :new-unit-excluded-from. The
+  ;; re-queued unit is a treatment run CONDITIONED ON ONE-SHOT FAILURE: its arm
+  ;; assignment is not randomized and its problems are harder-than-average by
+  ;; selection. Pool it with the randomized treatment arm and that contrast
+  ;; DEFLATES, exactly as silently and by the same mechanism in mirror. A
+  ;; disposition that records the adaptivity, retains the original, and still
+  ;; lets rescue units pool would pass a block guarding only the first field.
+  ;;
+  ;; The exclusion is not waste: the rescue stratum is a NAMED SECONDARY
+  ;; ENDPOINT. "Does the treatment close units that just failed without it" is a
+  ;; within-unit, selection-acknowledged comparison — the naturalistic shadow of
+  ;; an ablation, arriving free from the disposition mechanism itself. Register
+  ;; it rather than discover it in the data.
+  ;;
+  ;;   :original-observation    :retained-and-counted
+  ;;   :new-unit-stratum        :rescue
+  ;;   :new-unit-excluded-from  [<all randomized contrasts>]
+  ;;   :new-unit-counts-toward  [:rescue-endpoints]
+  ;;   :contamination-if        "the failed observation is dropped or replaced,
+  ;;                             OR the re-queued unit enters any randomized
+  ;;                             contrast"
   :dispositions []   ;; Slice 5 has none: every unit runs once, to completion,
                      ;; and no outcome changes what a unit is. Declared empty
                      ;; rather than omitted so the slot is visible and its
