@@ -173,6 +173,30 @@
     :note "record equality, NOT yield equality — the pilot's harness was strengthened to this mid-run and the weaker form is what codex-8 flagged"
     :action :abandon-run}]
 
+  ;; EXTENSION 5 (claude-7's heads-up, 2026-08-01). Answer: the stop-rule and
+  ;; decision-rule vocabulary does NOT cover an adaptive re-queue, and forcing it
+  ;; there would hide the thing that matters.
+  ;;
+  ;;   :stop-rules  fire on the RUN and halt it.
+  ;;   :decision    interprets a COMPLETED trace.
+  ;;   :dispositions fire on a UNIT, mid-run, and change what it becomes.
+  ;;
+  ;; V3's cohort case: control-arm problems that fail one-shot are re-queued with
+  ;; memory enabled — deferral rather than sacrifice, which is what makes the
+  ;; control arm affordable. That is a post-primary disposition, and unregistered
+  ;; it reads as contamination to any later auditor.
+  ;;
+  ;; THE FIELD THAT CARRIES THE INTEGRITY CONSTRAINT is :original-observation.
+  ;; If a failed control observation is DROPPED when its unit is re-queued, the
+  ;; control arm becomes silently conditioned on success and every contrast
+  ;; against it is inflated. The re-queued run must be a NEW UNIT, not a
+  ;; replacement. Registering the disposition without that field would document
+  ;; the adaptivity and miss the hazard it creates.
+  :dispositions []   ;; Slice 5 has none: every unit runs once, to completion,
+                     ;; and no outcome changes what a unit is. Declared empty
+                     ;; rather than omitted so the slot is visible and its
+                     ;; absence is a statement.
+
   ;; Total: every trace the run can emit maps to a named outcome.
   :decision
   {:control-violated      :abandoned-analysis-invalid
