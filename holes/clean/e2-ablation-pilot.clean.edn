@@ -276,16 +276,17 @@
     :evidence "the E1 back-fill's regime discovery (boundary at 50916c84): the pooled 60.95% was deployment history, not competition — a dated assumption about the measurement regime is exactly what nearly got headlined"
     :on-break :invalidates-cross-run-pooling
     :discharge-condition "per-run check of the receipt's version tag; any mismatch marks the run :regime-tainted and excludes it from pooling"
-    ;; RESIDUAL (R-0 re-read, claude-4 2026-08-02: "declaring an assumption does
-    ;; not protect you if you declare the wrong :breaks-when"): the version-tag
-    ;; check is a RUNTIME guard (the strong form) and catches any regime change
-    ;; that BUMPS the version — broader than the commissioning enumeration in
-    ;; :holds-while. But it does NOT catch a SILENT regime change (same version
-    ;; tag, changed behaviour: a store re-index, a config change, a dependency
-    ;; bump that doesn't touch the tag). That is this assumption's true residual
-    ;; failure mode, and the version tag cannot see it. Named here rather than
-    ;; left implicit; a stronger guard would fingerprint recall BEHAVIOUR, not
-    ;; just its declared version — deferred, noted."}
+    ;; RESIDUAL (R-0 re-read, claude-4 2026-08-02 -- a declared assumption does
+    ;; not protect you if the :breaks-when names the wrong failure mode): the
+    ;; version-tag check is a RUNTIME guard (the strong form) and catches any
+    ;; regime change that BUMPS the version -- broader than the commissioning
+    ;; enumeration in :holds-while. But it does NOT catch a SILENT regime change
+    ;; (same version tag, changed behaviour: a store re-index, a config change, a
+    ;; dependency bump that never touches the tag). That is this assumption's
+    ;; true residual failure mode, and the version tag cannot see it. Named here
+    ;; rather than left implicit; a stronger guard would fingerprint recall
+    ;; BEHAVIOUR, not just its declared version -- deferred, noted.
+    }
    {:id :statement-integrity :kind :assumption
     :holds "a95J01's formal statement is sound (it closed at zero sorries, axiom-clean, at 016bf0fb)"
     :holds-while "a95J01 is not among the operator's six statement-defect holds (known-residual-20260801.md Part A — it is not)"
