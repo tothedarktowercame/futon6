@@ -1,0 +1,187 @@
+;; R-0: test whether the apparent inertness of the ants' epistemic terms was
+;; caused by measuring them in a world where food was reachable without search.
+{:clean/experiment "r0-discriminating-environment"
+ :clean/title "Does epistemic-ablation identity fall when exploration becomes valuable?"
+ :clean/source
+ {:mission "futon2/holes/M-aif-stack.md"
+  :pilot "futon2/holes/labs/ants-faithfulness/slice5.edn"
+  :pilot-sha "a5caf04ad4d6a568d82c2cc9ee27ee3ae259962f0e2622e502dd54a070b003c0"
+  :confirmation "futon2/holes/labs/ants-faithfulness/slice5-confirmation.edn"
+  :confirmation-sha "964462c707120c1ea48a9ba04ca40a2996d49b6753d7dfe6929c6c5257f64d88"}
+ :clean/status :registered-not-run
+
+ :clean/seq [:freeze-factorial-design
+             :verify-mechanism-preconditions
+             :verify-positive-control
+             :measure-identity
+             :adjudicate]
+ :clean/boxes
+ [{:id :e1 :method :freeze-factorial-design :produces :frozen-design
+   :binding {:kind :artifact :type :edn/config}}
+  {:id :e2 :method :verify-mechanism-preconditions
+   :consumes [:frozen-design] :produces :preconditions-verified
+   :binding {:kind :artifact :type :edn/manipulation-check}}
+  {:id :e3 :method :verify-positive-control
+   :consumes [:preconditions-verified] :produces :instrument-verified
+   :binding {:kind :artifact :type :edn/control-result}
+   :hole {:kind :gate :discharge :positive-control :satiety :canon
+          :wanted "aif-full and no-canonical-ambiguity records are bit-identical for every paired seed at every grid size"}}
+  {:id :e4 :method :measure-identity
+   :consumes [:instrument-verified] :produces :identity-table
+   :binding {:kind :artifact :type :edn/identity-counts}}
+  {:id :e5 :method :adjudicate
+   :consumes [:identity-table] :produces :verdict
+   :binding {:kind :artifact :type :edn/verdict}
+   :discharges {:to :decision-rule}}]
+ :clean/wires
+ [{:from :e1 :to :e2 :carries :frozen-design}
+  {:from :e2 :to :e3 :carries :preconditions-verified}
+  {:from :e3 :to :e4 :carries :instrument-verified}
+  {:from :e4 :to :e5 :carries :identity-table}]
+
+ :clean/experiment-design
+ {:claim :comparative
+  :axes
+  [{:id :canonical-ambiguity :levels [0 1] :score-varies? false
+    :role :positive-control
+    :justification "(:var mu) is common to all candidate actions; its ablation cannot alter argmax in any environment"}
+   {:id :directed-eig :levels [0 1] :score-varies? true
+    :justification "action-dependent directed information gain"}
+   {:id :info-gain :levels [0 1] :score-varies? true
+    :justification "action-dependent information-gain augmentation"}
+   {:id :kl-risk :levels [0 1] :score-varies? true
+    :justification "action-dependent pragmatic risk"}
+   {:id :grid-scale :kind :environment :levels [10 24 36] :score-varies? true
+    :justification "crossed environmental factor manipulating how readily food can be reached without exploration"}]
+
+  :arms
+  [{:id :aif-full :neutral? false :ablates []}
+   {:id :no-canonical-ambiguity :neutral? false
+    :ablates [:canonical-ambiguity] :role :positive-control}
+   {:id :no-directed-eig :neutral? false :ablates [:directed-eig]}
+   {:id :no-info-gain :neutral? false :ablates [:info-gain]}
+   {:id :no-risk :neutral? false :ablates [:kl-risk]}
+   {:id :classic :neutral? true :ablates [] :role :baseline}]
+
+  :scenarios [:patchy :sparse :snowdrift]
+  :environment
+  {:grid-scale
+   [{:size [10 10] :ticks 300}
+    {:size [24 24] :ticks 720}
+    {:size [36 36] :ticks 1080}]
+   :food {:patchy {:num-patches 4 :patch-radius 2}
+          :sparse {:num-patches 2 :patch-radius 1}
+          :snowdrift {:num-patches 4 :patch-radius 2}}
+   :initial-reserves 0.5
+   :metabolism 0.06
+   :ants-per-side 3}
+
+  ;; Limb (a): establish that the task does not remain trivially solvable
+  ;; without epistemic exploration. The grid factor directly manipulates the
+  ;; first path; the remaining paths are declared so an identity result is not
+  ;; over-interpreted as proof that no substitute exists.
+  :preconditions
+  {:mechanism-necessary
+   {:mechanism :epistemic-exploration
+    :alternative-paths
+    [{:id :food-reachable-without-exploring
+      :kind :environment
+      :ruled-out-by :grid-scale
+      :check "identity rate must be reported separately at 10, 24, and 36; falling identity diagnoses the former 10x10 shortcut"}
+     {:id :chance-local-motion-finds-food
+      :kind :competence
+      :ruled-out-by :grid-scale
+      :check "larger fixed-density worlds reduce accidental encounter probability"}
+     {:id :pheromone-or-local-gradient-substitutes
+      :kind :environment
+      :ruled-out-by :paired-term-ablation
+      :check "term-specific identity can persist through a genuine substitute and must be reported as such"}
+     {:id :risk-and-mode-gating-substitute
+      :kind :controller
+      :ruled-out-by :no-risk-arm
+      :check "no-risk is retained as a registered comparator; no global necessity claim follows from one ablation"}]}
+
+   ;; Limb (b): verify delivery per experimental cell, before interpreting a
+   ;; null. The producer constructs the effective world config and checks the
+   ;; registered lambda override before running that cell.
+   :mechanism-delivered
+   {:unit [:grid :scenario :arm]
+    :check :effective-lambda-matches-registered-ablation
+    :requires "each ablation key is present with value 0.0 in the effective world config; full/classic carry no override"
+    :on-failure :abandon-run}}
+
+  :assumptions
+  [{:id :diameter-scaled-time :kind :assumption
+    :holds "ticks scale with linear grid dimension: 300 at 10, 720 at 24, 1080 at 36"
+    :holds-while "one tick affords the same maximum displacement at every grid size"
+    :breaks-when "movement speed, obstacles, or action duration become grid-size dependent"}
+   {:id :fixed-population-and-food-count :kind :assumption
+    :holds "ants-per-side and patch counts remain fixed, so scale deliberately lowers encounter density"
+    :holds-while "the estimand is sensitivity to search sparsity rather than constant-density colony throughput"
+    :breaks-when "finite-population extinction or resource scarcity overwhelms action selection before exploration can differ"}
+   {:id :paired-rng-streams-across-grids :kind :assumption
+    :holds "the same fresh seed triples pair arms and grid sizes within a scenario"
+    :holds-while "seeded generators are deterministic and grid construction consumes randomness consistently within each grid cell"
+    :breaks-when "world generation or movement draws from an unseeded source"}]
+
+  ;; Fresh R-0 seeds. :pilot records the historical pilot universe used by the
+  ;; ReplicationPlan; :prior-confirmation adds the second historical holdout.
+  :seeds
+  {:runs-per-cell 30
+   :pilot {:runs-per-cell 30
+           :food-fn "202608110 + 100000*s + 2*i"
+           :movement-fn "202608111 + 100000*s + 2*i"
+           :choice-fn "202658110 + 100000*s + i"}
+   :prior-confirmation {:runs-per-cell 30
+                        :food-fn "202609110 + 100000*s + 2*i"
+                        :movement-fn "202609111 + 100000*s + 2*i"
+                        :choice-fn "202659110 + 100000*s + i"}
+   :food-fn "202610110 + 100000*s + 2*i"
+   :movement-fn "202610111 + 100000*s + 2*i"
+   :choice-fn "202660110 + 100000*s + i"
+   :disjoint-from-pilot? true
+   :disjoint-from-prior-confirmation? true}
+
+  :outcomes
+  [{:id :record-identity :role :primary :direction :lower-means-environmental-confound
+    :sensor {:field :identity-counts
+             :coverage-precondition "all 54 grid x scenario x arm cells present with 30 paired records"
+             :coverage-check {:status :met :check :count-equals-design}}}
+   {:id :yield :role :secondary :direction :higher-better
+    :sensor {:field :cells/yield :coverage-precondition "1620 run records"
+             :coverage-check {:status :met :check :count-equals-design}}}
+   {:id :starvation :role :secondary :direction :lower-better
+    :sensor {:field :cells/starvation :coverage-precondition "1620 run records"
+             :coverage-check {:status :met :check :count-equals-design}}}]
+
+  :stop-rules
+  [{:id :positive-control-violated
+    :fires-when "any paired full/control record differs at any grid size"
+    :comparison :full-run-record
+    :action :abandon-run}]
+
+  :decision
+  {:control-violated :abandoned-analysis-invalid
+   :identity-persists :structural-inertness-survives-scaling
+   :identity-falls :prior-inertness-was-environment-confounded
+   :mixed :report-grid-and-scenario-specific
+   :incomplete :not-interpretable}
+
+  :holdouts
+  {:ids [:slice5-pilot-seeds :slice5-confirmation-seeds]
+   :enforced-by "fresh 202610/202660 bases plus generated disjointness proofs"
+   :verified-by "renderer and startup contract check both historical universes"}
+
+  :budget {:estimated-cell-runs 1620 :cap-cell-runs 1620
+           :teardown "write r0-environment.{edn,md}; never overwrite pilot or confirmation artifacts"}}
+
+ :clean/copar
+ [{:reading :informal :is :clean/seq}
+  {:reading :formal :is [:clean/boxes :clean/wires]}
+  {:reading :executable :is :clean/experiment-design}]
+ :clean/shape
+ {:macro :controlled-ablation
+  :holes-at [:e3]
+  :assumptions-at [:diameter-scaled-time :fixed-population-and-food-count
+                   :paired-rng-streams-across-grids]
+  :discharges-at [:e5]}}

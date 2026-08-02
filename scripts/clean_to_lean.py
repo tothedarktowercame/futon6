@@ -244,6 +244,11 @@ def validate_experiment(d):
         raise ValueError("experiment requires at least one scenario")
     pilot_rows = seed_rows(seeds["pilot"], scenarios, seeds.get("runs-per-cell"))
     confirmation_rows = seed_rows(seeds, scenarios)
+    prior_confirmation = seeds.get("prior-confirmation")
+    prior_confirmation_rows = (
+        seed_rows(prior_confirmation, scenarios, seeds.get("runs-per-cell"))
+        if prior_confirmation is not None else []
+    )
     pilot_ids = {row[2] for row in pilot_rows}
     confirmation_ids = {row[2] for row in confirmation_rows}
     if len(pilot_ids) != len(pilot_rows) or len(confirmation_ids) != len(confirmation_rows):
@@ -251,18 +256,42 @@ def validate_experiment(d):
     overlap = sorted(pilot_ids & confirmation_ids)
     if overlap:
         raise ValueError(f"pilot and confirmation seeds overlap: {overlap[:5]}")
+    if prior_confirmation is not None:
+        if not bool(seeds.get("disjoint-from-prior-confirmation?")):
+            raise ValueError(
+                "seed plan must assert :disjoint-from-prior-confirmation? true"
+            )
+        prior_ids = {row[2] for row in prior_confirmation_rows}
+        overlap = sorted(prior_ids & confirmation_ids)
+        if overlap:
+            raise ValueError(
+                f"prior-confirmation and new seeds overlap: {overlap[:5]}"
+            )
+    preconditions = plain_map(design.get("preconditions") or {})
+    if preconditions:
+        necessity = plain_map(preconditions.get("mechanism-necessary") or {})
+        delivery = plain_map(preconditions.get("mechanism-delivered") or {})
+        if not list(necessity.get("alternative-paths", [])):
+            raise ValueError(
+                "mechanism-necessary precondition must enumerate alternative paths"
+            )
+        if not delivery.get("unit") or not delivery.get("check"):
+            raise ValueError(
+                "mechanism-delivered precondition requires :unit and :check"
+            )
     budget = plain_map(design.get("budget") or {})
     if not str(budget.get("teardown", "")).strip():
         raise ValueError("budget requires a non-empty teardown commitment")
     if int(budget.get("estimated-cell-runs", -1)) > int(budget.get("cap-cell-runs", -1)):
         raise ValueError("estimated cell-runs exceed the registered cap")
-    return design, axes, arms, scenarios, pilot_rows, confirmation_rows, decision
+    return (design, axes, arms, scenarios, pilot_rows, confirmation_rows,
+            prior_confirmation_rows, decision)
 
 
 def emit_experiment(d):
     """Render an experiment-shaped CLean to the existing DarkTower structures."""
-    (design, axes, arms, scenarios, pilot_rows,
-     confirmation_rows, decision) = validate_experiment(d)
+    (design, axes, arms, scenarios, pilot_rows, confirmation_rows,
+     prior_confirmation_rows, decision) = validate_experiment(d)
     eid = kw(d["experiment"])
     ns = f"CLeanExperiment_{eid.replace('-', '_')}"
     axis_names = {kw(axis["id"]): camel(kw(axis["id"])) + "Axis" for axis in axes}
@@ -301,6 +330,8 @@ def emit_experiment(d):
 
     emit_rows("pilotSeedTriples", pilot_rows)
     emit_rows("confirmationSeedTriples", confirmation_rows)
+    if prior_confirmation_rows:
+        emit_rows("priorConfirmationSeedTriples", prior_confirmation_rows)
 
     for axis in axes:
         axis_id = kw(axis["id"])
@@ -400,6 +431,17 @@ def emit_experiment(d):
     a(f"    (List.range {confirmation_runs}).map (fun i =>")
     a(f"      {confirmation_base} + {confirmation_stride} * s + {confirmation_coeff} * i))")
     a("")
+    if prior_confirmation_rows:
+        prior_spec = plain_map(seed_spec["prior-confirmation"])
+        prior_base, prior_stride, prior_coeff = parse_seed_formula(
+            prior_spec["food-fn"], ":prior-confirmation/:food-fn"
+        )
+        prior_runs = int(prior_spec.get("runs-per-cell", seed_spec["runs-per-cell"]))
+        a("def priorConfirmationSeedIds : List Nat :=")
+        a(f"  (List.range {len(scenarios)}).flatMap (fun s =>")
+        a(f"    (List.range {prior_runs}).map (fun i =>")
+        a(f"      {prior_base} + {prior_stride} * s + {prior_coeff} * i))")
+        a("")
     a("theorem seedIds_disjoint : pilotSeedIds.Disjoint confirmationSeedIds := by")
     a("  rw [List.disjoint_left]")
     a("  intro x hp hc")
@@ -417,6 +459,25 @@ def emit_experiment(d):
     a("  have hi'_lt := List.mem_range.mp hi'")
     a("  omega")
     a("")
+    if prior_confirmation_rows:
+        a("theorem priorConfirmationSeedIds_disjoint :")
+        a("    priorConfirmationSeedIds.Disjoint confirmationSeedIds := by")
+        a("  rw [List.disjoint_left]")
+        a("  intro x hp hc")
+        a("  simp only [priorConfirmationSeedIds, List.mem_flatMap] at hp")
+        a("  rcases hp with ⟨s, hs, hp⟩")
+        a("  simp only [List.mem_map] at hp")
+        a("  rcases hp with ⟨i, hi, rfl⟩")
+        a("  simp only [confirmationSeedIds, List.mem_flatMap] at hc")
+        a("  rcases hc with ⟨s', hs', hc⟩")
+        a("  simp only [List.mem_map] at hc")
+        a("  rcases hc with ⟨i', hi', heq⟩")
+        a("  have hs_lt := List.mem_range.mp hs")
+        a("  have hi_lt := List.mem_range.mp hi")
+        a("  have hs'_lt := List.mem_range.mp hs'")
+        a("  have hi'_lt := List.mem_range.mp hi'")
+        a("  omega")
+        a("")
     a("def replicationPlan : ReplicationPlan where")
     a("  pilotSeeds := pilotSeedIds")
     a("  confirmationSeeds := confirmationSeedIds")
