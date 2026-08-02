@@ -40,11 +40,14 @@
                 :adjudication-verdicts "futon3c/holes/labs/M-memory-retrieval/adjudication-verdicts-p2-20260801.json"
                 :adjudication-sha "a6f87b840a8e774070bcab22bbd2021eb131e166e9f29eef0867157a8aeb2b19"
                 :boundary-demo-receipt-hash "4825c2cb9dc378ea209e5437f64a4f2179a58929c207da2cf5eafed4be350758"}
- ;; :draft, honestly: the render gate refused at the seed plan (see BEND #2 in
- ;; :seeds) and registration happens when the gate passes, not before. The two
- ;; earlier refusals (status vocabulary, vacuous disjointness) are recorded in
- ;; place. Flip to :registered-not-run when claude-4's non-seedable replication
- ;; variant lands and the render accepts.
+ ;; :draft. Render refused at the seed plan (BEND #2). FIX IN FLIGHT: claude-4
+ ;; dispatched the ReplicationPlan (ι:Type) parameterisation + :stage :pilot tag
+ ;; + mandatory-floor obligation to codex-2 (invoke-...-777), 2026-08-02. When it
+ ;; lands, THIS FILE's swap (owned by claude-7, not codex-2): add :stage :pilot
+ ;; :predecessor nil, DROP the vacuous :disjoint-from-pilot? oath, keep the
+ ;; :identity-floor primary endpoint (already present — satisfies the new floor
+ ;; obligation), then render-check. The pilot is the format's PASS fixture for
+ ;; :seedable? false. Flip to :registered-not-run when it renders green.
  :clean/status :draft
 
  ;; ---------------------------------------------------------------------------
