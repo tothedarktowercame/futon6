@@ -44,6 +44,18 @@
   :axes
   [{:id :canonical-ambiguity :levels [0 1] :score-varies? false
     :role :positive-control
+    ;; AMENDMENT 2026-08-02: :on-violation became a required field for
+    ;; positive-control axes after this registration was authored (futon6
+    ;; d8a8f7b, bend #3). Recorded as an amendment rather than a silent edit.
+    ;; The value is not a new decision: :abandon-run was specified in the R-0
+    ;; dispatch brief and park payload on 2026-08-01 — "if the scientific
+    ;; control moves at any grid size, that scale's data is not trustworthy and
+    ;; you stop". It had no field to live in until now.
+    ;; Legitimate to amend because R-0 NEVER RAN: job
+    ;; invoke-1785660875753-774-92c25110 failed with zero tool events and
+    ;; produced no artifact. There is no in-flight experiment whose terms this
+    ;; could change.
+    :on-violation :abandon-run
     :justification "(:var mu) is common to all candidate actions; its ablation cannot alter argmax in any environment"}
    {:id :directed-eig :levels [0 1] :score-varies? true
     :justification "action-dependent directed information gain"}
@@ -126,8 +138,27 @@
 
   ;; Fresh R-0 seeds. :pilot records the historical pilot universe used by the
   ;; ReplicationPlan; :prior-confirmation adds the second historical holdout.
+  ;; AMENDMENT 2026-08-02 (third, same cause): the replication plan gained a
+  ;; required :stage and :variation in futon6 2d36233 / mathlib4 44c572d4a6,
+  ;; after this registration was authored.
+  ;;
+  ;; R-0 is a PILOT, not a confirmation. It asks a NEW question — does the
+  ;; environment discriminate at all — and no prior run asks it. The :pilot and
+  ;; :prior-confirmation blocks below record seed-disjointness from the Slice 5
+  ;; runs, which is hygiene worth documenting; it is NOT the schema's
+  ;; confirmation relation, which means "this confirms that". Declaring
+  ;; :confirmation to reuse those blocks would be a stage tag chosen for
+  ;; convenience, which the schema explicitly guards against.
+  ;;
+  ;; Variation is :controlled — R-0 is a seeded deterministic simulation, so the
+  ;; burden it owes is reproducibility rather than an identity floor.
   :seeds
   {:runs-per-cell 30
+   :stage :pilot
+   :predecessor nil
+   :seedable? true
+   :variation :controlled
+   :reproducibility-endpoint :seeded-trace-replay
    :pilot {:runs-per-cell 30
            :food-fn "202608110 + 100000*s + 2*i"
            :movement-fn "202608111 + 100000*s + 2*i"
@@ -155,9 +186,15 @@
              :coverage-check {:status :met :check :count-equals-design}}}]
 
   :stop-rules
+  ;; AMENDMENT 2026-08-02 (second, same cause): stop rules gained a required
+  ;; executable :predicate in futon6 d8a8f7b, after this registration was
+  ;; authored. Under the old ABI the positive-control predicate was implicit in
+  ;; the emitter; it is now named. Same value Slice 5 declares, no change of
+  ;; meaning. Legitimate because R-0 never ran.
   [{:id :positive-control-violated
     :fires-when "any paired full/control record differs at any grid size"
     :comparison :full-run-record
+    :predicate {:kind :bool-field :field :positive-control-violated}
     :action :abandon-run}]
 
   :decision
