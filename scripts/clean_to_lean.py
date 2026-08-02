@@ -264,6 +264,14 @@ def validate_experiment(d):
             raise ValueError(
                 "measured variation requires a named :floor-endpoint"
             )
+        floor_id = kw(endpoint)
+        outcomes = [plain_map(outcome) for outcome in design.get("outcomes", [])]
+        if not any(kw(outcome.get("id")) == floor_id
+                   and kw(outcome.get("role")) == "primary"
+                   for outcome in outcomes):
+            raise ValueError(
+                "measured variation :floor-endpoint must name a :role :primary endpoint"
+            )
 
     scenarios = [kw(s) for s in design.get("scenarios", [])]
     if not scenarios:

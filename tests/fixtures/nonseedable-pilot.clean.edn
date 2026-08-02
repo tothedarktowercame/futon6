@@ -1,0 +1,32 @@
+{:clean/experiment "nonseedable-pilot-fixture"
+ :clean/title "Measured-variation pilot over problem identifiers"
+ :clean/status :registered-not-run
+ :clean/seq [:register :run :classify]
+ :clean/boxes
+ [{:id :e1 :method :register :produces :registration
+   :binding {:kind :artifact :type :edn/registration}}
+  {:id :e2 :method :run :consumes [:registration] :produces :trace
+   :binding {:kind :artifact :type :edn/trace}}
+  {:id :e3 :method :classify :consumes [:trace] :produces :verdict
+   :binding {:kind :artifact :type :edn/verdict}}]
+ :clean/wires
+ [{:from :e1 :to :e2 :carries :registration}
+  {:from :e2 :to :e3 :carries :trace}]
+ :clean/experiment-design
+ {:claim :comparative
+  :axes [{:id :memory :levels [0 1] :score-varies? true
+          :justification "withholding the registered memory changes the offered set"}]
+  :arms [{:id :control :neutral? true :ablates [] :role :baseline}
+         {:id :without-memory :neutral? false :ablates [:memory]}]
+  :scenarios [:problem-alpha]
+  :seeds {:stage :pilot
+          :predecessor nil
+          :seedable? false
+          :variation :measured
+          :floor-endpoint :identity-floor
+          :runs-per-cell 2}
+  :outcomes [{:id :identity-floor :role :primary :direction :higher-better}]
+  :stop-rules [{:id :invalid-trace :comparison :full-run-record}]
+  :decision {:complete :accept :invalid :reject}
+  :budget {:estimated-cell-runs 4 :cap-cell-runs 4
+           :teardown "retain the fixture receipt and delete its temporary worktree"}}}

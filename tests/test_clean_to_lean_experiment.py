@@ -53,15 +53,9 @@ def test_measured_variation_without_floor_refuses():
 
 
 def test_nonseedable_pilot_uses_problem_identifiers():
-    registration = copy.deepcopy(registered_slice5())
-    replication = registration["experiment-design"]["seeds"]
-    replication.update({
-        "stage": "pilot",
-        "predecessor": None,
-        "seedable?": False,
-        "variation": "measured",
-        "floor-endpoint": "identity-floor",
-    })
+    registration = clean_to_lean.load_clean(
+        ROOT / "tests" / "fixtures" / "nonseedable-pilot.clean.edn"
+    )
     rendered = clean_to_lean.emit_experiment(registration)
     assert "inductive ProblemId where" in rendered
     assert "ReplicationPlan.pilot" in rendered
