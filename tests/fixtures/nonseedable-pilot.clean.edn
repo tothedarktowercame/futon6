@@ -26,7 +26,12 @@
           :floor-endpoint :identity-floor
           :runs-per-cell 2}
   :outcomes [{:id :identity-floor :role :primary :direction :higher-better}]
-  :stop-rules [{:id :invalid-trace :comparison :full-run-record}]
+  :stop-rules [{:id :boundary-refusal
+                :predicate {:kind :bool-field :field :boundary-refused}
+                :action :abandon-run}
+               {:id :budget-cap
+                :predicate {:kind :nat-ge :field :completed-runs :threshold 4}
+                :action :abandon-run}]
   :decision {:complete :accept :invalid :reject}
   :budget {:estimated-cell-runs 4 :cap-cell-runs 4
            :teardown "retain the fixture receipt and delete its temporary worktree"}}}

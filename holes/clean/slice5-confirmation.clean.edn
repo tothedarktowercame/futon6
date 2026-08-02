@@ -114,6 +114,7 @@
   :axes
   [{:id :canonical-ambiguity :levels [0 1] :score-varies? false
     :role :positive-control
+    :on-violation :abandon-run
     :justification "computed from (:var mu), identical across candidate actions (policy.clj:612-624); a common addend cannot change an argmax. Proved in DarkTower/Slice5Preregistration.lean as ambiguity_ablation_preserves_selection."}
    {:id :directed-eig :levels [0 1] :score-varies? true
     :justification "food_belief.clj:101-149; action-dependent, so it can reorder candidates."}
@@ -199,6 +200,7 @@
   [{:id :positive-control-violated
     :fires-when "any paired (aif-full, no-canonical-ambiguity) run record differs"
     :comparison :full-run-record
+    :predicate {:kind :bool-field :field :positive-control-violated}
     :note "record equality, NOT yield equality — the pilot's harness was strengthened to this mid-run and the weaker form is what codex-8 flagged"
     :action :abandon-run}]
 

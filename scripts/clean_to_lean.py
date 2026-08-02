@@ -227,10 +227,27 @@ def validate_experiment(d):
                 raise ValueError("positive-control arm must reference the positive-control axis")
             if not str(axis.get("justification", "")).strip():
                 raise ValueError("positive-control axis requires a non-empty justification")
+            disposition = kw(axis.get("on-violation"))
+            if disposition not in {"abandon-run", "record-as-finding"}:
+                raise ValueError(
+                    "positive-control axis requires :on-violation "
+                    ":abandon-run or :record-as-finding"
+                )
 
-    stop_rules = list(design.get("stop-rules", []))
+    stop_rules = [plain_map(rule) for rule in design.get("stop-rules", [])]
     if not stop_rules:
         raise ValueError("ProspectiveRegistration requires at least one stop rule")
+    for rule in stop_rules:
+        predicate = plain_map(rule.get("predicate") or {})
+        kind = kw(predicate.get("kind"))
+        if kind not in {"bool-field", "nat-ge"}:
+            raise ValueError(
+                f"stop rule :{kw(rule.get('id'))} requires a supported executable :predicate"
+            )
+        if not kw(predicate.get("field")):
+            raise ValueError(f"stop rule :{kw(rule.get('id'))} predicate requires :field")
+        if kind == "nat-ge" and int(predicate.get("threshold", -1)) < 0:
+            raise ValueError(f"stop rule :{kw(rule.get('id'))} :nat-ge requires :threshold")
     decision = plain_map(design.get("decision") or {})
     if not decision:
         raise ValueError("ProspectiveRegistration requires a total decision table")
@@ -406,6 +423,12 @@ def emit_experiment(d):
         a(f"  name := {lean_string(axis_id)}")
         a(f"  levels := [{levels}]")
         a(f"  score := {'fun x => x' if varies else 'fun _ => 0'}")
+        if kw(axis.get("role")) == "positive-control":
+            disposition = {
+                "abandon-run": "ControlViolationDisposition.abandonRun",
+                "record-as-finding": "ControlViolationDisposition.recordAsFinding",
+            }[kw(axis["on-violation"])]
+            a(f"  onViolation := some {disposition}")
         a("")
         if varies:
             a(f"theorem {name}_navigable : {name}.Navigable := by")
@@ -446,26 +469,41 @@ def emit_experiment(d):
         a(f"  | {outcome}")
     a("  deriving DecidableEq, Repr")
     a("")
+    stop_rules = [plain_map(rule) for rule in design["stop-rules"]]
+    stop_fields = []
+    for rule in stop_rules:
+        predicate = plain_map(rule["predicate"])
+        field = camel(kw(predicate["field"]))
+        kind = kw(predicate["kind"])
+        if (field, kind) not in stop_fields:
+            stop_fields.append((field, kind))
+
     a("structure ExperimentTrace where")
     a("  classification : TraceClass")
-    a("  positiveControlViolated : Bool")
+    for field, kind in stop_fields:
+        a(f"  {field} : {'Bool' if kind == 'bool-field' else 'Nat'}")
     a("  deriving Repr")
     a("")
 
-    stop_rules = [plain_map(rule) for rule in design["stop-rules"]]
-    for index, rule in enumerate(stop_rules):
+    stop_names = []
+    for rule in stop_rules:
         rule_name = camel(kw(rule["id"])) + "Stop"
-        if index > 0:
-            raise ValueError("current Trace ABI supports exactly one positive-control stop rule")
-        if kw(rule.get("comparison")) != "full-run-record":
-            raise ValueError("stop rule comparison must be :full-run-record")
+        stop_names.append(rule_name)
+        predicate = plain_map(rule["predicate"])
+        field = camel(kw(predicate["field"]))
+        kind = kw(predicate["kind"])
         a(f"def {rule_name} : StopRule ExperimentTrace where")
         a(f"  name := {lean_string(kw(rule['id']))}")
-        a("  fires := fun trace => trace.positiveControlViolated = true")
-        a("  check := fun trace => trace.positiveControlViolated")
-        a("  check_iff := fun _ => Iff.rfl")
+        if kind == "bool-field":
+            a(f"  fires := fun trace => trace.{field} = true")
+            a(f"  check := fun trace => trace.{field}")
+            a("  check_iff := fun _ => Iff.rfl")
+        else:
+            threshold = int(predicate["threshold"])
+            a(f"  fires := fun trace => {threshold} ≤ trace.{field}")
+            a(f"  check := fun trace => decide ({threshold} ≤ trace.{field})")
+            a("  check_iff := fun trace => by simp")
         a("")
-    stop_name = camel(kw(stop_rules[0]["id"])) + "Stop"
 
     a("def decisionRule : DecisionRule ExperimentTrace Outcome where")
     a(f"  name := {lean_string(eid + '-decision')}")
@@ -589,7 +627,7 @@ def emit_experiment(d):
     a(f"    ProspectiveRegistration {unit_type} ExperimentTrace Outcome where")
     a("  base := baseRegistration")
     a("  replication := replicationPlan")
-    a(f"  stopRules := [{stop_name}]")
+    a(f"  stopRules := [{', '.join(stop_names)}]")
     a("  stopRulesNonempty := by simp")
     a("  decision := decisionRule")
     a("")
@@ -601,7 +639,8 @@ def emit_experiment(d):
     a("")
     a("def readinessSmoke : ExperimentTrace where")
     a(f"  classification := TraceClass.{trace_classes[0]}")
-    a("  positiveControlViolated := false")
+    for field, kind in stop_fields:
+        a(f"  {field} := {'false' if kind == 'bool-field' else '0'}")
     a("")
     obligation_proofs = []
     for arm in arms:
@@ -644,9 +683,19 @@ def emit_experiment(d):
     a("  baseReady := by simpa [prospectiveRegistration] using baseReadyToRun")
     a("  smokeClear := by")
     a("    intro s hs")
-    a("    simp only [prospectiveRegistration, List.mem_singleton] at hs")
-    a("    subst s")
-    a("    rfl")
+    if len(stop_names) == 1:
+        a("    have h : s = " + stop_names[0] + " := by")
+        a("      simpa [prospectiveRegistration] using hs")
+        a("    subst s")
+        a("    rfl")
+    else:
+        alternatives = " ∨ ".join(f"s = {name}" for name in stop_names)
+        a(f"    have h : {alternatives} := by")
+        a("      simpa [prospectiveRegistration] using hs")
+        cases = " | ".join(["rfl"] * len(stop_names))
+        a(f"    rcases h with ({cases})")
+        for _ in stop_names:
+            a("    · rfl")
     a("")
     a("example : prospectiveRegistration.stopRules ≠ [] := by decide")
     a(f"example : prospectiveRegistration.replication.stage = RegistrationStage.{stage} := rfl")
