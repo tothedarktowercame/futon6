@@ -40,14 +40,19 @@
                 :adjudication-verdicts "futon3c/holes/labs/M-memory-retrieval/adjudication-verdicts-p2-20260801.json"
                 :adjudication-sha "a6f87b840a8e774070bcab22bbd2021eb131e166e9f29eef0867157a8aeb2b19"
                 :boundary-demo-receipt-hash "4825c2cb9dc378ea209e5437f64a4f2179a58929c207da2cf5eafed4be350758"}
- ;; :draft. Render refused at the seed plan (BEND #2). FIX IN FLIGHT: claude-4
- ;; dispatched the ReplicationPlan (ι:Type) parameterisation + :stage :pilot tag
- ;; + mandatory-floor obligation to codex-2 (invoke-...-777), 2026-08-02. When it
- ;; lands, THIS FILE's swap (owned by claude-7, not codex-2): add :stage :pilot
- ;; :predecessor nil, DROP the vacuous :disjoint-from-pilot? oath, keep the
- ;; :identity-floor primary endpoint (already present — satisfies the new floor
- ;; obligation), then render-check. The pilot is the format's PASS fixture for
- ;; :seedable? false. Flip to :registered-not-run when it renders green.
+ ;; :draft. PROGRESS 2026-08-02: the ReplicationPlan (ι:Type) extension landed
+ ;; in the renderer (working tree, codex-2 still in-flight) and the seed block
+ ;; below is swapped to it — BENDS #1 AND #2 ARE RESOLVED, the render now clears
+ ;; the seed plan. It refuses one step further, at the stop-rule emitter
+ ;; (clean_to_lean.py:451-458): the current Trace ABI hardcodes the slice5
+ ;; shape — "exactly one positive-control stop rule", fires :=
+ ;; trace.positiveControlViolated. This pilot's stop rules are OPERATIONAL
+ ;; (boundary-refusal, budget-cap), not positive-control violations; reshaping
+ ;; them into that mold to pass would be a launder (a budget cap is not a
+ ;; positive-control violation). POTENTIAL BEND #3 — held until codex-2 reports
+ ;; done, since its renderer edit is uncommitted and may already address it.
+ ;; Flip to :registered-not-run only when the render passes on the COMMITTED
+ ;; renderer.
  :clean/status :draft
 
  ;; ---------------------------------------------------------------------------
@@ -143,25 +148,26 @@
   ;; is by PROBLEM, not by seed: the confirmation panel is cohort-manufactured
   ;; pairs, and its registration must exclude a95J01 (its holdout block is the
   ;; enforcement point, mirroring this one).
-  :seeds {:runs-per-cell 4
+  ;; RESOLVED via claude-4's ReplicationPlan (ι:Type) extension (2026-08-02):
+  ;; both bends are gone. Bend #1 (vacuous disjointness oath) — a :stage :pilot
+  ;; generates NO disjointness obligation, so the oath is dropped, not sworn.
+  ;; Bend #2 (hard-coded seed formulas) — :seedable? false is now first-class
+  ;; and OWES a floor endpoint instead of formulas: :variation :measured +
+  ;; :floor-endpoint. Disjointness lives at ι:=ProblemId, in the confirmation's
+  ;; registration, not here. Nothing fabricated; the burden moved, per the
+  ;; axisPredictedNonNavigable principle (swap a proof burden, never suppress).
+  :seeds {:stage :pilot
+          :predecessor nil
           :seedable? false
+          :variation :measured
+          :floor-endpoint :identity-floor
+          :runs-per-cell 4
           :replication-unit "fresh ephemeral codex session per run (sessionId uniqueness is a ProtocolError check in the Lean: shared sessions cannot validate)"
-          ;; BEND #1 (for claude-4): the seed schema requires this assertion,
-          ;; assuming every registration is a confirmation with a predecessor
-          ;; pilot. THIS registration IS the pilot — there is no predecessor,
-          ;; so the assertion is VACUOUSLY true (disjoint from the empty set).
-          ;; The format wants a first-stage shape (:predecessor nil) rather
-          ;; than a vacuous oath.
-          ;; BEND #2 (the real one — render currently REFUSES here): the seed
-          ;; machinery requires food-fn/movement-fn/choice-fn arithmetic per
-          ;; scenario — simulation-shaped, seedable-deterministic. E2's runs
-          ;; are not seedable: replication = fresh ephemeral sessions,
-          ;; variation is MEASURED (the control identity floor), disjointness
-          ;; is BY PROBLEM with a checkable predicate. Fabricating formulas
-          ;; to pass would be a gate satisfied by meaningless values.
-          ;; Registration waits for a non-seedable replication variant.
-          :disjoint-from-pilot? true
-          :disjoint-from-confirmation "by problem: confirmation panel ∩ #{a95J01} = ∅, enforced in the confirmation's own registration"}
+          ;; :identity-floor is a :role :primary endpoint (control-vs-control
+          ;; decision-sequence identity rate). It IS the reproducibility
+          ;; substitute a non-seedable design owes: without it, "treatment inert"
+          ;; and "runner noisy" are indistinguishable (the ant result).
+          :disjoint-from-confirmation "by problem at ι:=ProblemId: confirmation panel ∩ #{a95J01} = ∅, enforced in the confirmation's own registration"}
 
   ;; Every endpoint declares its sensor and coverage (extension 1). The pilot's
   ;; PRIMARY endpoints are apparatus properties; effect readouts are secondary
