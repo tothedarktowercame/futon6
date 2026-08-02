@@ -269,6 +269,26 @@
    :verified-by "run-start check: the dispatch target equals the registered panel entry (problem AND revision AND both memory ids); the wrapper independently verifies the staged tree's native git tree id against the revision"
    :note "hold-outs excluded in the selector, not the doc — the near-miss rule, enforced here by the panel type rather than a list"}
 
+  ;; The generalized inertness precondition, in the VALIDATED :preconditions
+  ;; slot (the renderer enumerates alternative-paths and requires a delivery
+  ;; unit+check) rather than as axis-justification prose. This is the four-path
+  ;; enumeration moved from words into a field the render checks.
+  :preconditions
+  {:mechanism-necessary
+   {:mechanism "availability of the withheld bridge memory on (a95J01, 51b6bc00)"
+    :alternative-paths
+    [{:path :in-tree-content
+      :ruled-out "the memory-free run invoke-1785393010025-303-f9f19596 (2026-07-30T06:30Z, commit 51b6bc00) stopped at exactly the missing nonvanishing-derivative/local-degree bridge"}
+     {:path :library-search
+      :ruled-out "direct and paraphrase greps for the bridge vocabulary return zero hits in the problem tree and pinned Mathlib at 51b6bc00 (re-verified independently at review)"}
+     {:path :model-competence
+      :ruled-out "that same run is a recorded memory-free failure by the production runner — the task is not one-shot-closable without external content"}
+     {:path :corpus-emptiness
+      :ruled-out "inverts for an ablation: the memory WAS deliverable — reviewed-attached before the closing dispatch (frozen graph export 2026-07-30T19:00:54Z), two use receipts, closure at 016bf0fb"}]}
+   :mechanism-delivered
+   {:unit "per run"
+    :check "withheld id ∉ surfaced set on ablated runs AND ∈ surfaced set on control runs, read from v1.2 offered receipts"}}
+
   :budget {:estimated-cell-runs 12 :cap-cell-runs 15
            :cost-basis "per-run token cost taken from the invoke-jobs ledger's measured mean for a95J01-class dispatches at registration time, not guessed — DarkTower estimatedCost discipline"
            :teardown "artifacts written under futon3c/holes/labs/M-memory-retrieval/e2-pilot/ regardless of outcome; receipts land in the store as ordinary v1.2 rows; the staged tree is reset to 51b6bc00 between runs"}}
