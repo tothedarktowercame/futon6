@@ -146,6 +146,11 @@
   ;; DISJOINT from the pilot, which used base 202608110/202608111/202658110.
   ;; Disjointness is a checkable property of these formulas, not a promise.
   :seeds {:runs-per-cell 30
+          :stage :confirmation
+          :predecessor "slice5-pilot"
+          :seedable? true
+          :variation :controlled
+          :reproducibility-endpoint :seeded-trace-replay
           ;; Historical pilot formulas are data, not renderer folklore. They are
           ;; pinned by :clean/source/:pilot-sha above and provide the concrete
           ;; left side of ReplicationPlan.disjoint.

@@ -235,16 +235,67 @@ def validate_experiment(d):
     if not decision:
         raise ValueError("ProspectiveRegistration requires a total decision table")
     seeds = plain_map(design.get("seeds") or {})
-    if not bool(seeds.get("disjoint-from-pilot?")):
-        raise ValueError("seed plan must assert :disjoint-from-pilot? true")
-    if "pilot" not in seeds:
-        raise ValueError("seed plan must carry structured :pilot formulas")
+    stage = kw(seeds.get("stage"))
+    if stage not in {"pilot", "confirmation"}:
+        raise ValueError("replication plan requires :stage :pilot or :confirmation")
+    predecessor = seeds.get("predecessor")
+    if stage == "pilot" and predecessor is not None:
+        raise ValueError("pilot replication plan must have :predecessor nil")
+    if stage == "confirmation" and not str(predecessor or "").strip():
+        raise ValueError("confirmation replication plan requires a non-nil :predecessor")
+
+    seedable = seeds.get("seedable?")
+    if not isinstance(seedable, bool):
+        raise ValueError("replication plan requires boolean :seedable?")
+    variation = kw(seeds.get("variation"))
+    if seedable:
+        if variation != "controlled":
+            raise ValueError("seedable replication requires :variation :controlled")
+        endpoint = seeds.get("reproducibility-endpoint")
+        if not str(endpoint or "").strip():
+            raise ValueError(
+                "controlled variation requires a named :reproducibility-endpoint"
+            )
+    else:
+        if variation != "measured":
+            raise ValueError("non-seedable replication requires :variation :measured")
+        endpoint = seeds.get("floor-endpoint")
+        if not str(endpoint or "").strip():
+            raise ValueError(
+                "measured variation requires a named :floor-endpoint"
+            )
+
     scenarios = [kw(s) for s in design.get("scenarios", [])]
     if not scenarios:
         raise ValueError("experiment requires at least one scenario")
-    pilot_rows = seed_rows(seeds["pilot"], scenarios, seeds.get("runs-per-cell"))
-    confirmation_rows = seed_rows(seeds, scenarios)
-    prior_confirmation = seeds.get("prior-confirmation")
+    problem_units = []
+    predecessor_units = []
+    if not seedable:
+        problem_units = scenarios
+        if stage == "confirmation":
+            predecessor_units = [kw(unit) for unit in seeds.get("predecessor-units", [])]
+            if not predecessor_units:
+                raise ValueError(
+                    "non-seedable confirmation requires nonempty :predecessor-units"
+                )
+            overlap = sorted(set(problem_units) & set(predecessor_units))
+            if overlap:
+                raise ValueError(
+                    f"predecessor and confirmation problem units overlap: {overlap[:5]}"
+                )
+        pilot_rows = []
+        confirmation_rows = []
+    elif stage == "confirmation":
+        if not bool(seeds.get("disjoint-from-pilot?")):
+            raise ValueError("confirmation seed plan must assert :disjoint-from-pilot? true")
+        if "pilot" not in seeds:
+            raise ValueError("confirmation seed plan must carry structured :pilot formulas")
+        pilot_rows = seed_rows(seeds["pilot"], scenarios, seeds.get("runs-per-cell"))
+        confirmation_rows = seed_rows(seeds, scenarios)
+    else:
+        pilot_rows = seed_rows(seeds, scenarios)
+        confirmation_rows = []
+    prior_confirmation = seeds.get("prior-confirmation") if seedable else None
     prior_confirmation_rows = (
         seed_rows(prior_confirmation, scenarios, seeds.get("runs-per-cell"))
         if prior_confirmation is not None else []
@@ -285,13 +336,15 @@ def validate_experiment(d):
     if int(budget.get("estimated-cell-runs", -1)) > int(budget.get("cap-cell-runs", -1)):
         raise ValueError("estimated cell-runs exceed the registered cap")
     return (design, axes, arms, scenarios, pilot_rows, confirmation_rows,
-            prior_confirmation_rows, decision)
+            prior_confirmation_rows, decision, stage, predecessor, variation,
+            endpoint, seedable, problem_units, predecessor_units)
 
 
 def emit_experiment(d):
     """Render an experiment-shaped CLean to the existing DarkTower structures."""
     (design, axes, arms, scenarios, pilot_rows, confirmation_rows,
-     prior_confirmation_rows, decision) = validate_experiment(d)
+     prior_confirmation_rows, decision, stage, predecessor, variation,
+     endpoint, seedable, problem_units, predecessor_units) = validate_experiment(d)
     eid = kw(d["experiment"])
     ns = f"CLeanExperiment_{eid.replace('-', '_')}"
     axis_names = {kw(axis["id"]): camel(kw(axis["id"])) + "Axis" for axis in axes}
@@ -310,14 +363,15 @@ def emit_experiment(d):
         a(f"  | {camel(scenario)}")
     a("  deriving DecidableEq, Repr")
     a("")
-    a("structure SeedTriple where")
-    a("  scenario : Scenario")
-    a("  run : Nat")
-    a("  food : Nat")
-    a("  movement : Nat")
-    a("  choice : Nat")
-    a("  deriving DecidableEq, Repr")
-    a("")
+    if seedable:
+        a("structure SeedTriple where")
+        a("  scenario : Scenario")
+        a("  run : Nat")
+        a("  food : Nat")
+        a("  movement : Nat")
+        a("  choice : Nat")
+        a("  deriving DecidableEq, Repr")
+        a("")
 
     def emit_rows(name, rows):
         a(f"def {name} : List SeedTriple := [")
@@ -328,10 +382,11 @@ def emit_experiment(d):
         a("]")
         a("")
 
-    emit_rows("pilotSeedTriples", pilot_rows)
-    emit_rows("confirmationSeedTriples", confirmation_rows)
-    if prior_confirmation_rows:
-        emit_rows("priorConfirmationSeedTriples", prior_confirmation_rows)
+    if seedable:
+        emit_rows("pilotSeedTriples", pilot_rows)
+        emit_rows("confirmationSeedTriples", confirmation_rows)
+        if prior_confirmation_rows:
+            emit_rows("priorConfirmationSeedTriples", prior_confirmation_rows)
 
     for axis in axes:
         axis_id = kw(axis["id"])
@@ -412,78 +467,90 @@ def emit_experiment(d):
     a("")
 
     seed_spec = plain_map(design["seeds"])
-    pilot_spec = plain_map(seed_spec["pilot"])
-    pilot_base, pilot_stride, pilot_coeff = parse_seed_formula(
-        pilot_spec["food-fn"], ":pilot/:food-fn"
-    )
-    confirmation_base, confirmation_stride, confirmation_coeff = parse_seed_formula(
-        seed_spec["food-fn"], ":food-fn"
-    )
-    pilot_runs = int(pilot_spec.get("runs-per-cell", seed_spec["runs-per-cell"]))
-    confirmation_runs = int(seed_spec["runs-per-cell"])
-    a("def pilotSeedIds : List Nat :=")
-    a(f"  (List.range {len(scenarios)}).flatMap (fun s =>")
-    a(f"    (List.range {pilot_runs}).map (fun i =>")
-    a(f"      {pilot_base} + {pilot_stride} * s + {pilot_coeff} * i))")
+    endpoint_kind = "controlled" if variation == "controlled" else "measured"
+    endpoint_name = ("reproducibilityEndpoint" if variation == "controlled"
+                     else "identityFloorEndpoint")
+    a(f"def {endpoint_name} : NamedEndpoint where")
+    a(f"  name := {lean_string(kw(endpoint))}")
+    a("  nameNonempty := by decide")
     a("")
-    a("def confirmationSeedIds : List Nat :=")
-    a(f"  (List.range {len(scenarios)}).flatMap (fun s =>")
-    a(f"    (List.range {confirmation_runs}).map (fun i =>")
-    a(f"      {confirmation_base} + {confirmation_stride} * s + {confirmation_coeff} * i))")
-    a("")
-    if prior_confirmation_rows:
-        prior_spec = plain_map(seed_spec["prior-confirmation"])
-        prior_base, prior_stride, prior_coeff = parse_seed_formula(
-            prior_spec["food-fn"], ":prior-confirmation/:food-fn"
+    if stage == "confirmation":
+        a("def predecessorEndpoint : NamedEndpoint where")
+        a(f"  name := {lean_string(str(predecessor))}")
+        a("  nameNonempty := by decide")
+        a("")
+
+    if seedable:
+        pilot_spec = plain_map(seed_spec["pilot"] if stage == "confirmation" else seed_spec)
+        pilot_base, pilot_stride, pilot_coeff = parse_seed_formula(
+            pilot_spec["food-fn"], ":pilot/:food-fn"
         )
-        prior_runs = int(prior_spec.get("runs-per-cell", seed_spec["runs-per-cell"]))
-        a("def priorConfirmationSeedIds : List Nat :=")
+        pilot_runs = int(pilot_spec.get("runs-per-cell", seed_spec["runs-per-cell"]))
+        a("def pilotUnitIds : List Nat :=")
         a(f"  (List.range {len(scenarios)}).flatMap (fun s =>")
-        a(f"    (List.range {prior_runs}).map (fun i =>")
-        a(f"      {prior_base} + {prior_stride} * s + {prior_coeff} * i))")
+        a(f"    (List.range {pilot_runs}).map (fun i =>")
+        a(f"      {pilot_base} + {pilot_stride} * s + {pilot_coeff} * i))")
         a("")
-    a("theorem seedIds_disjoint : pilotSeedIds.Disjoint confirmationSeedIds := by")
-    a("  rw [List.disjoint_left]")
-    a("  intro x hp hc")
-    a("  simp only [pilotSeedIds, List.mem_flatMap] at hp")
-    a("  rcases hp with ⟨s, hs, hp⟩")
-    a("  simp only [List.mem_map] at hp")
-    a("  rcases hp with ⟨i, hi, rfl⟩")
-    a("  simp only [confirmationSeedIds, List.mem_flatMap] at hc")
-    a("  rcases hc with ⟨s', hs', hc⟩")
-    a("  simp only [List.mem_map] at hc")
-    a("  rcases hc with ⟨i', hi', heq⟩")
-    a("  have hs_lt := List.mem_range.mp hs")
-    a("  have hi_lt := List.mem_range.mp hi")
-    a("  have hs'_lt := List.mem_range.mp hs'")
-    a("  have hi'_lt := List.mem_range.mp hi'")
-    a("  omega")
-    a("")
-    if prior_confirmation_rows:
-        a("theorem priorConfirmationSeedIds_disjoint :")
-        a("    priorConfirmationSeedIds.Disjoint confirmationSeedIds := by")
-        a("  rw [List.disjoint_left]")
-        a("  intro x hp hc")
-        a("  simp only [priorConfirmationSeedIds, List.mem_flatMap] at hp")
-        a("  rcases hp with ⟨s, hs, hp⟩")
-        a("  simp only [List.mem_map] at hp")
-        a("  rcases hp with ⟨i, hi, rfl⟩")
-        a("  simp only [confirmationSeedIds, List.mem_flatMap] at hc")
-        a("  rcases hc with ⟨s', hs', hc⟩")
-        a("  simp only [List.mem_map] at hc")
-        a("  rcases hc with ⟨i', hi', heq⟩")
-        a("  have hs_lt := List.mem_range.mp hs")
-        a("  have hi_lt := List.mem_range.mp hi")
-        a("  have hs'_lt := List.mem_range.mp hs'")
-        a("  have hi'_lt := List.mem_range.mp hi'")
-        a("  omega")
+        if stage == "confirmation":
+            confirmation_base, confirmation_stride, confirmation_coeff = parse_seed_formula(
+                seed_spec["food-fn"], ":food-fn"
+            )
+            confirmation_runs = int(seed_spec["runs-per-cell"])
+            a("def confirmationUnitIds : List Nat :=")
+            a(f"  (List.range {len(scenarios)}).flatMap (fun s =>")
+            a(f"    (List.range {confirmation_runs}).map (fun i =>")
+            a(f"      {confirmation_base} + {confirmation_stride} * s + {confirmation_coeff} * i))")
+            a("")
+            a("theorem unitIds_disjoint : pilotUnitIds.Disjoint confirmationUnitIds := by")
+            a("  rw [List.disjoint_left]")
+            a("  intro x hp hc")
+            a("  simp only [pilotUnitIds, List.mem_flatMap] at hp")
+            a("  rcases hp with ⟨s, hs, hp⟩")
+            a("  simp only [List.mem_map] at hp")
+            a("  rcases hp with ⟨i, hi, rfl⟩")
+            a("  simp only [confirmationUnitIds, List.mem_flatMap] at hc")
+            a("  rcases hc with ⟨s', hs', hc⟩")
+            a("  simp only [List.mem_map] at hc")
+            a("  rcases hc with ⟨i', hi', heq⟩")
+            a("  have hs_lt := List.mem_range.mp hs")
+            a("  have hi_lt := List.mem_range.mp hi")
+            a("  have hs'_lt := List.mem_range.mp hs'")
+            a("  have hi'_lt := List.mem_range.mp hi'")
+            a("  omega")
+            a("")
+    else:
+        all_units = list(dict.fromkeys(predecessor_units + problem_units))
+        a("inductive ProblemId where")
+        for unit in all_units:
+            a(f"  | {camel(unit)}")
+        a("  deriving DecidableEq, Repr")
         a("")
-    a("def replicationPlan : ReplicationPlan where")
-    a("  pilotSeeds := pilotSeedIds")
-    a("  confirmationSeeds := confirmationSeedIds")
-    a("  pilotNonempty := by native_decide")
-    a("  confirmationNonempty := by native_decide")
-    a("  disjoint := seedIds_disjoint")
+        if stage == "confirmation":
+            a("def pilotUnitIds : List ProblemId := [")
+            for unit in predecessor_units:
+                a(f"  .{camel(unit)},")
+            a("]")
+            a("")
+        a(f"def {'confirmation' if stage == 'confirmation' else 'pilot'}UnitIds : List ProblemId := [")
+        for unit in problem_units:
+            a(f"  .{camel(unit)},")
+        a("]")
+        a("")
+        if stage == "confirmation":
+            a("theorem unitIds_disjoint : pilotUnitIds.Disjoint confirmationUnitIds := by")
+            a("  native_decide")
+            a("")
+
+    variation_expr = f"VariationPlan.{endpoint_kind} {endpoint_name}"
+    if stage == "pilot":
+        a("def replicationPlan := ReplicationPlan.pilot")
+        a("  pilotUnitIds (by native_decide)")
+        a(f"  ({variation_expr})")
+    else:
+        a("def replicationPlan := ReplicationPlan.confirmation predecessorEndpoint")
+        a("  pilotUnitIds confirmationUnitIds (by native_decide) (by native_decide)")
+        a("  unitIds_disjoint")
+        a(f"  ({variation_expr})")
     a("")
 
     claim_map = {
@@ -510,7 +577,8 @@ def emit_experiment(d):
     a(f"def teardownCommitment : String := {lean_string(budget['teardown'])}")
     a("")
     a("noncomputable def prospectiveRegistration :")
-    a("    ProspectiveRegistration ExperimentTrace Outcome where")
+    unit_type = "Nat" if seedable else "ProblemId"
+    a(f"    ProspectiveRegistration {unit_type} ExperimentTrace Outcome where")
     a("  base := baseRegistration")
     a("  replication := replicationPlan")
     a(f"  stopRules := [{stop_name}]")
@@ -573,9 +641,9 @@ def emit_experiment(d):
     a("    rfl")
     a("")
     a("example : prospectiveRegistration.stopRules ≠ [] := by decide")
-    a("example : prospectiveRegistration.replication.pilotSeeds.Disjoint")
-    a("    prospectiveRegistration.replication.confirmationSeeds :=")
-    a("  replicationPlan.disjoint")
+    a(f"example : prospectiveRegistration.replication.stage = RegistrationStage.{stage} := rfl")
+    if stage == "confirmation":
+        a("example : pilotUnitIds.Disjoint confirmationUnitIds := unitIds_disjoint")
     for axis in axes:
         if not bool(axis.get("score-varies?")):
             axis_name = axis_names[kw(axis["id"])]
