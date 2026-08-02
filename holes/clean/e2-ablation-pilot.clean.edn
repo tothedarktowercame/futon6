@@ -40,26 +40,27 @@
                 :adjudication-verdicts "futon3c/holes/labs/M-memory-retrieval/adjudication-verdicts-p2-20260801.json"
                 :adjudication-sha "a6f87b840a8e774070bcab22bbd2021eb131e166e9f29eef0867157a8aeb2b19"
                 :boundary-demo-receipt-hash "4825c2cb9dc378ea209e5437f64a4f2179a58929c207da2cf5eafed4be350758"}
- ;; :draft. RESUMPTION ANCHOR — four bends, status as of 2026-08-02 pm:
- ;;   #1 vacuous disjointness oath  — RESOLVED (:stage :pilot generates none).
- ;;   #2 hard-coded seed formulas   — RESOLVED (:seedable? false owes a
- ;;      :floor-endpoint via :variation :measured; ReplicationPlan (ι:Type),
- ;;      claude-4, committed 2d36233). Seed block below is swapped to it.
- ;;   #3 trace-ABI stop-rule shape  — BEING FIXED by codex-2 (invoke-...-777,
- ;;      still running). Root: `fires := trace.positiveControlViolated` and
- ;;      `classify := trace.classification` read the SAME frozen slice5 fields,
- ;;      so this pilot's OPERATIONAL stop rules (boundary-refusal, budget-cap)
- ;;      and its operational decision keys are one ABI limitation. The fix
- ;;      parameterises the trace's named outcomes + adds :on-violation
- ;;      :abandon-run|:record-as-finding AND makes decision-table totality
- ;;      checkable. When it lands COMMITTED, this file should render GREEN — it
- ;;      is the format's PASS fixture for :seedable? false.
- ;;   #4 factorial cell grid        — LATENT, does NOT block this pilot (1
- ;;      scenario degenerates it); blocks the CONFIRMATION, whose unit is a
- ;;      (problem,memory) pair. Queued as the next ι-parameterisation.
- ;; Flip to :registered-not-run only when the render passes on the committed
- ;; renderer. Everything else in this file already renders.
- :clean/status :draft
+ ;; RENDERS GREEN + BUILDS 0-SORRY (2026-08-02, verified claude-7). Reproduce:
+ ;;   futon6:  python3 scripts/clean_to_lean.py --clean-dir holes/clean \
+ ;;              --kind experiment --only e2-ablation-pilot --mode real --out X.lean
+ ;;   mathlib4: cp X.lean DarkTower/CLeanE2AblationPilot.lean && \
+ ;;             lake build DarkTower.CLeanE2AblationPilot   # 8502 jobs, exit 0
+ ;; #print axioms prospectiveReadyToRun = [propext, Classical.choice, Quot.sound,
+ ;;   replicationPlan._native.native_decide.ax_1]. No sorryAx. The native_decide
+ ;;   term is BELOW the [propext, Quot.sound] bar codex-1's hand-written
+ ;;   predecessor met — it is the RENDERER's emission (replicationPlan), not this
+ ;;   EDN, and is flagged to claude-4 as a purity follow-up (emit `decide`).
+ ;; Bends resolved to get here: #1 (disjointness oath — :stage :pilot),
+ ;;   #2 (seed formulas — :variation :measured + :floor-endpoint),
+ ;;   #3 (stop-rule ABI — operational :predicates over trace fields,
+ ;;       committed d8a8f7b). #4 (cell grid) stays LATENT for the confirmation.
+ ;; Three fields ADDED at build time, none a launder: :on-violation
+ ;;   :record-as-finding on the positive-control axis (a moved incidental arm is
+ ;;   a finding, not an abandon); stop-rule :predicates (:boundary-refused
+ ;;   bool-field, :completed-runs nat-ge); numeric [0 1] levels + :satiety :canon
+ ;;   (the renderer emits keyword levels / a missing satiety as invalid Lean —
+ ;;   two robustness gaps flagged to claude-4).
+ :clean/status :registered-not-run
 
  ;; ---------------------------------------------------------------------------
  ;; Informal reading: the pilot as a sequence of methods.
@@ -88,8 +89,13 @@
    :text "Run control run 1 as the instrument gate: the isolation receipt must validate (all probes true, process-bound, hash present); the run must leave >=1 incremental commit per attempt in the staged tree; the canonicalized decision-sequence extractor must produce a stable hash from those commits on two extractions. No arm run is permitted until this discharges. This is sensor verification, not a scientific control — it lives here as a gate, not as an axis (see the slot note in slice5-confirmation)."
    :consumes [:decision-rule] :produces :instrument-verified
    :binding {:kind :artifact :type :edn/control-result}
-   :hole {:kind :gate :discharge :instrument-check
+   :hole {:kind :gate :discharge :instrument-check :satiety :canon
           :wanted "receipt validity + commit discipline + extractor stability, each shown on the actual first run rather than asserted"}}
+   ;; :satiety :canon matches slice5's experiment instrument-hole convention.
+   ;; SatietyGrade is a fixed {parse|payoff|canon|bundling|role} enum from the
+   ;; fold/proof domain; :canon is the established grade for an experiment
+   ;; instrument gate. (Renderer gap: a MISSING :satiety emits an invalid
+   ;; `SatietyGrade.None` rather than refusing — same class as the levels gap.)
 
   {:id :e4 :method :measure-arms
    :text "Run the three arms: control (full corpus), lb-ablated (withhold the bridge memory), inc-ablated (withhold the ignored memory; predicted null). runs-per-cell fresh ephemeral sessions each; ablation applied as filter-at-dispatch (mechanism b), licensed by the star-forest assumption below, whose runtime assertion runs before EVERY dispatch. Manipulation check per run: the withheld id absent from the offered set, the non-withheld memories present."
@@ -115,15 +121,27 @@
  {:claim :comparative
 
   ;; An axis is an ablation dial; :score-varies? is the navigability gate.
+  ;; Levels are [0 1] = [present withheld] — the ablation dial encoded as the
+  ;; standard binary Axis (as slice5 does), NOT keyword levels: the renderer
+  ;; emits :levels verbatim into Lean, so symbolic levels produce invalid Lean.
+  ;; 0/1 for present/withheld is faithful for a binary ablation, not a launder.
   ;; The LB axis carries the four-path inertness evidence; the IN axis is a
   ;; SCIENTIFIC control (prediction about the system), so it is an axis with
   ;; :score-varies? false and :role :positive-control — the render routes it
   ;; to axisPredictedNonNavigable (ArmRole change, mathlib4 084930e).
   :axes
-  [{:id :lb-bridge-memory :levels [:present :withheld] :score-varies? true
+  [{:id :lb-bridge-memory :levels [0 1] :score-varies? true
     :justification "Four-path inertness precondition, per path: (1) in-tree — the memory-free run invoke-1785393010025-303-f9f19596 (2026-07-30T06:30Z, commit 51b6bc00) stopped at exactly the missing nonvanishing-derivative/local-degree bridge; (2) library — direct and paraphrase searches for the bridge vocabulary return zero hits in the problem tree and pinned Mathlib at 51b6bc00 (re-verified independently at review, panel-nomination-sweep-20260801.md); (3) model competence — the same run is a recorded memory-free failure by the production runner; (4) delivery — the memory was reviewed-attached before the closing dispatch (frozen graph export 2026-07-30T19:00:54Z) and two later receipts attribute use; closure at 016bf0fb followed. Withholding therefore plausibly changes rediscovery cost, attempts, and the decision sequence."}
-   {:id :inc-ignored-memory :levels [:present :withheld] :score-varies? false
+   {:id :inc-ignored-memory :levels [0 1] :score-varies? false
     :role :positive-control
+    ;; :record-as-finding, NOT :abandon-run — this is the disposition claude-4
+    ;; built the option for. If the incidental arm MOVES (the "ignored" memory
+    ;; turns out to change the trajectory), that is a FINDING about the
+    ;; receipt-incidental label, not an instrument failure to abandon on. The
+    ;; slice5 positive control abandons because its violation means a Lean-proved
+    ;; theorem is false; ours is a prediction under test. Same slot, opposite
+    ;; epistemic role — which is exactly why the field is required, not defaulted.
+    :on-violation :record-as-finding
     :justification "e-codexpilot-combine-Schwarz-rigidity-with-power-series-uniqueness surfaced on historical a95J01 dispatches and was recorded IGNORED in the receipts — incidental BY RECEIPT, not by the P2 rubric (this memory postdates the P2 census; noted in adjudication-verdicts-provenance.md). Prediction: withholding it leaves the decision sequence at the control-control identity floor. Topically adjacent-but-ignored is the most informative predicted null: the runner saw it and did not use it."}]
 
   :arms
@@ -214,14 +232,20 @@
              :coverage-check {:status :met-by-construction :check "same gate"}}
     :note "the predicted null, read as an identity rate against the floor — direct evidence, no power argument"}]
 
+  ;; Operational stop rules, now expressible via the generalised predicate ABI
+  ;; (bend #3 fix, d8a8f7b): each names an executable :predicate over a real
+  ;; ExperimentTrace field, so Lean emits a genuine `fires`, not prose. Fields
+  ;; match codex-2's measured-variation fixture (:boundary-refused, :completed-runs).
   :stop-rules
   [{:id :boundary-refusal
+    :predicate {:kind :bool-field :field :boundary-refused}
     :fires-when "any run's wrapper exits 78 (probe failure) after e3 has discharged"
-    :comparison :wrapper-exit-and-receipt-absence
     :action :abandon-run
     :note "a refusal after the gate means the boundary regressed mid-pilot; the pilot's product is apparatus knowledge, so this outcome is a finding, not noise"}
-   {:id :budget-cap :fires-when "run 16 would start (cap 15 vs estimated 12)"
-    :comparison :run-count :action :abandon-run}]
+   {:id :budget-cap
+    :predicate {:kind :nat-ge :field :completed-runs :threshold 15}
+    :fires-when "the 16th run would start (cap-cell-runs 15 vs estimated 12)"
+    :action :abandon-run}]
 
   :dispositions []   ;; every unit runs once to completion; no outcome changes
                      ;; what a unit is. Empty rather than omitted — the absence
@@ -293,7 +317,21 @@
       :ruled-out "inverts for an ablation: the memory WAS deliverable — reviewed-attached before the closing dispatch (frozen graph export 2026-07-30T19:00:54Z), two use receipts, closure at 016bf0fb"}]}
    :mechanism-delivered
    {:unit "per run"
-    :check "withheld id ∉ surfaced set on ablated runs AND ∈ surfaced set on control runs, read from v1.2 offered receipts"}}
+    :check "withheld id ∉ surfaced set on ablated runs AND ∈ surfaced set on control runs, read from v1.2 offered receipts"}
+
+   ;; FIFTH precondition, from R-0 (claude-4, 2026-08-02): distinct in KIND from
+   ;; the four reachability paths above. Those ask "is the withheld content
+   ;; available another way?"; this asks "can the task EXHIBIT the effect at
+   ;; all?" R-0's 36x36-lethal grid killed every colony, so all arms shared a
+   ;; failure floor and NOTHING discriminated — a null that is an environment
+   ;; property, not a mechanism property. The ablation analogue: if the problem
+   ;; fails under the CONTROL arm (memory present) too, the contrast is a shared
+   ;; floor of failure, not evidence about the memory. (The renderer does not yet
+   ;; validate this slot — flagged to claude-4: viability wants its own
+   ;; precondition kind, alongside :mechanism-necessary and :mechanism-delivered.)
+   :mechanism-can-exhibit
+   {:viability-check "the control arm (full corpus) must close a95J01 at least once; if control fails on all runs, the pilot is measuring a failure floor and is NOT interpretable — decision key :incomplete"
+    :ruled-out-a-priori "a95J01 provably closed WITH memory at 016bf0fb (zero sorries, axiom-clean), so a viable-with-mechanism path demonstrably exists; the lethal case is excluded by construction for THIS pair, unlike R-0's grids which were never shown viable at 36x36 before the sweep"}}
 
   :budget {:estimated-cell-runs 12 :cap-cell-runs 15
            :cost-basis "per-run token cost taken from the invoke-jobs ledger's measured mean for a95J01-class dispatches at registration time, not guessed — DarkTower estimatedCost discipline"
