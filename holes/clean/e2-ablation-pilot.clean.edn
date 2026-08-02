@@ -40,19 +40,25 @@
                 :adjudication-verdicts "futon3c/holes/labs/M-memory-retrieval/adjudication-verdicts-p2-20260801.json"
                 :adjudication-sha "a6f87b840a8e774070bcab22bbd2021eb131e166e9f29eef0867157a8aeb2b19"
                 :boundary-demo-receipt-hash "4825c2cb9dc378ea209e5437f64a4f2179a58929c207da2cf5eafed4be350758"}
- ;; :draft. PROGRESS 2026-08-02: the ReplicationPlan (ι:Type) extension landed
- ;; in the renderer (working tree, codex-2 still in-flight) and the seed block
- ;; below is swapped to it — BENDS #1 AND #2 ARE RESOLVED, the render now clears
- ;; the seed plan. It refuses one step further, at the stop-rule emitter
- ;; (clean_to_lean.py:451-458): the current Trace ABI hardcodes the slice5
- ;; shape — "exactly one positive-control stop rule", fires :=
- ;; trace.positiveControlViolated. This pilot's stop rules are OPERATIONAL
- ;; (boundary-refusal, budget-cap), not positive-control violations; reshaping
- ;; them into that mold to pass would be a launder (a budget cap is not a
- ;; positive-control violation). POTENTIAL BEND #3 — held until codex-2 reports
- ;; done, since its renderer edit is uncommitted and may already address it.
- ;; Flip to :registered-not-run only when the render passes on the COMMITTED
- ;; renderer.
+ ;; :draft. RESUMPTION ANCHOR — four bends, status as of 2026-08-02 pm:
+ ;;   #1 vacuous disjointness oath  — RESOLVED (:stage :pilot generates none).
+ ;;   #2 hard-coded seed formulas   — RESOLVED (:seedable? false owes a
+ ;;      :floor-endpoint via :variation :measured; ReplicationPlan (ι:Type),
+ ;;      claude-4, committed 2d36233). Seed block below is swapped to it.
+ ;;   #3 trace-ABI stop-rule shape  — BEING FIXED by codex-2 (invoke-...-777,
+ ;;      still running). Root: `fires := trace.positiveControlViolated` and
+ ;;      `classify := trace.classification` read the SAME frozen slice5 fields,
+ ;;      so this pilot's OPERATIONAL stop rules (boundary-refusal, budget-cap)
+ ;;      and its operational decision keys are one ABI limitation. The fix
+ ;;      parameterises the trace's named outcomes + adds :on-violation
+ ;;      :abandon-run|:record-as-finding AND makes decision-table totality
+ ;;      checkable. When it lands COMMITTED, this file should render GREEN — it
+ ;;      is the format's PASS fixture for :seedable? false.
+ ;;   #4 factorial cell grid        — LATENT, does NOT block this pilot (1
+ ;;      scenario degenerates it); blocks the CONFIRMATION, whose unit is a
+ ;;      (problem,memory) pair. Queued as the next ι-parameterisation.
+ ;; Flip to :registered-not-run only when the render passes on the committed
+ ;; renderer. Everything else in this file already renders.
  :clean/status :draft
 
  ;; ---------------------------------------------------------------------------
