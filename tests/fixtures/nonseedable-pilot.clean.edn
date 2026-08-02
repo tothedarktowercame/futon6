@@ -26,6 +26,10 @@
           :floor-endpoint :identity-floor
           :runs-per-cell 2}
   :outcomes [{:id :identity-floor :role :primary :direction :higher-better}]
+  :preconditions
+  {:mechanism-can-exhibit
+   {:viability-check "the control arm must produce a completed trace"
+    :ruled-out-a-priori "the fixture's control trace is constructed by the readiness smoke witness"}}
   :stop-rules [{:id :boundary-refusal
                 :predicate {:kind :bool-field :field :boundary-refused}
                 :action :abandon-run}

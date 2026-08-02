@@ -41,6 +41,9 @@ import argparse
 import glob
 import os
 import re
+import subprocess
+import time
+from pathlib import Path
 from clean_structure_embed import kw, load_clean, boxes_of, wires_of
 
 
@@ -188,6 +191,9 @@ def validate_experiment(d):
         levels = list(axis.get("levels", []))
         if len(levels) < 2:
             raise ValueError(f"axis :{axis_id} requires at least two reachable levels")
+        if any(isinstance(level, bool) or not isinstance(level, (int, float))
+               for level in levels):
+            raise ValueError(f"axis :{axis_id} levels must be numeric Lean values")
         varies = bool(axis.get("score-varies?"))
         if varies and not any(x != y for x, y in zip(levels, levels[1:])):
             raise ValueError(
@@ -344,16 +350,24 @@ def validate_experiment(d):
                 f"prior-confirmation and new seeds overlap: {overlap[:5]}"
             )
     preconditions = plain_map(design.get("preconditions") or {})
-    if preconditions:
-        necessity = plain_map(preconditions.get("mechanism-necessary") or {})
-        delivery = plain_map(preconditions.get("mechanism-delivered") or {})
+    necessity = plain_map(preconditions.get("mechanism-necessary") or {})
+    delivery = plain_map(preconditions.get("mechanism-delivered") or {})
+    viability = plain_map(preconditions.get("mechanism-can-exhibit") or {})
+    if necessity:
         if not list(necessity.get("alternative-paths", [])):
             raise ValueError(
                 "mechanism-necessary precondition must enumerate alternative paths"
             )
+    if delivery:
         if not delivery.get("unit") or not delivery.get("check"):
             raise ValueError(
                 "mechanism-delivered precondition requires :unit and :check"
+            )
+    if kw(design.get("claim")) == "comparative":
+        if not viability.get("viability-check") or not viability.get("ruled-out-a-priori"):
+            raise ValueError(
+                "comparative registration requires :mechanism-can-exhibit with "
+                ":viability-check and :ruled-out-a-priori"
             )
     budget = plain_map(design.get("budget") or {})
     if not str(budget.get("teardown", "")).strip():
@@ -584,17 +598,17 @@ def emit_experiment(d):
         a("")
         if stage == "confirmation":
             a("theorem unitIds_disjoint : pilotUnitIds.Disjoint confirmationUnitIds := by")
-            a("  native_decide")
+            a("  decide")
             a("")
 
     variation_expr = f"VariationPlan.{endpoint_kind} {endpoint_name}"
     if stage == "pilot":
         a("def replicationPlan := ReplicationPlan.pilot")
-        a("  pilotUnitIds (by native_decide)")
+        a("  pilotUnitIds (by decide)")
         a(f"  ({variation_expr})")
     else:
         a("def replicationPlan := ReplicationPlan.confirmation predecessorEndpoint")
-        a("  pilotUnitIds confirmationUnitIds (by native_decide) (by native_decide)")
+        a("  pilotUnitIds confirmationUnitIds (by decide) (by decide)")
         a("  unitIds_disjoint")
         a(f"  ({variation_expr})")
     a("")
@@ -731,6 +745,12 @@ def emit_experiment(d):
 def emit_proof(d, include_sorry_discharge_check=True):
     pid = kw(d["proof"])
     boxes = boxes_of(d)
+    for box in boxes:
+        if "hole" in box and kw(box["hole"].get("satiety")) not in {
+                "parse", "payoff", "canon", "bundling", "role"}:
+            raise ValueError(
+                f"box :{box['id']} hole requires a valid :satiety grade"
+            )
     wires = wires_of(d)
     seq = [kw(x) for x in d["seq"]]
     # sanitize step ids to valid Lean identifiers (hand ids s1.. are unchanged;
@@ -930,6 +950,10 @@ def main():
                     help="render proof-shaped or experiment-shaped CLean")
     ap.add_argument("--out", required=True)
     ap.add_argument("--only", default=None, help="emit only this proof id")
+    ap.add_argument(
+        "--no-build-check", action="store_true",
+        help="UNSAFE: write generated Lean without running the default lake/Lean gate",
+    )
     args = ap.parse_args()
 
     files = sorted(glob.glob(os.path.join(args.clean_dir, "*.clean.edn")))
@@ -971,6 +995,33 @@ def main():
     with open(args.out, "w") as fh:
         fh.write(out)
     print(f"wrote {args.out}  ({len(bodies)} {args.kind}s, mode={args.mode})")
+    if args.no_build_check:
+        print("WARNING: build check disabled; output has NOT passed the render gate")
+        return
+
+    started = time.perf_counter()
+    if args.mode == "standalone":
+        command = ["lean", os.path.abspath(args.out)]
+        cwd = None
+    else:
+        mathlib_root = Path(__file__).resolve().parents[2] / "mathlib4"
+        if args.kind == "experiment":
+            dependency = subprocess.run(
+                ["lake", "build", "DarkTower.ExperimentPreregistration",
+                 "DarkTower.ExperimentalDesign"],
+                cwd=mathlib_root, text=True, capture_output=True,
+            )
+            if dependency.returncode != 0:
+                detail = dependency.stdout + dependency.stderr
+                raise SystemExit(f"refused generated Lean: dependency build failed\n{detail}")
+        command = ["lake", "env", "lean", os.path.abspath(args.out)]
+        cwd = mathlib_root
+    checked = subprocess.run(command, cwd=cwd, text=True, capture_output=True)
+    detail = checked.stdout + checked.stderr
+    if checked.returncode != 0 or "declaration uses 'sorry'" in detail:
+        raise SystemExit(f"refused generated Lean: build/zero-sorry check failed\n{detail}")
+    elapsed = time.perf_counter() - started
+    print(f"render gate passed: Lean exit 0, zero emitted sorry warnings ({elapsed:.2f}s)")
 
 
 if __name__ == "__main__":

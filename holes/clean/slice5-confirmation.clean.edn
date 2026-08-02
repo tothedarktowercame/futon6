@@ -196,6 +196,11 @@
            its own precondition. Recorded rather than dropped so the gap is
            visible; discharging it is a harness change, not an analysis choice."}]
 
+  :preconditions
+  {:mechanism-can-exhibit
+   {:viability-check "the full AIF arm must produce at least one non-starved run in every scenario; an all-arm failure floor makes treatment contrasts uninterpretable"
+    :ruled-out-a-priori "the completed pilot produced surviving full-AIF runs in patchy, sparse, and snowdrift scenarios under the same environment settings"}}
+
   :stop-rules
   [{:id :positive-control-violated
     :fires-when "any paired (aif-full, no-canonical-ambiguity) run record differs"

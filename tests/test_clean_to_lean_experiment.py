@@ -68,3 +68,27 @@ def test_nonnavigable_treatment_still_refuses():
     )
     with pytest.raises(ValueError, match="non-navigable treatment refused"):
         clean_to_lean.validate_experiment(registration)
+
+
+def test_keyword_axis_level_refuses_before_emission():
+    registration = copy.deepcopy(registered_slice5())
+    design = registration["experiment-design"]
+    axes = [clean_to_lean.plain_map(axis) for axis in design["axes"]]
+    axes[0]["levels"] = ["present", "withheld"]
+    design["axes"] = axes
+    with pytest.raises(ValueError, match="levels must be numeric Lean values"):
+        clean_to_lean.validate_experiment(registration)
+
+
+def test_hole_without_satiety_refuses_before_emission():
+    registration = clean_to_lean.load_clean(
+        ROOT / "tests" / "fixtures" / "nonseedable-pilot.clean.edn"
+    )
+    pipeline = dict(registration)
+    pipeline["proof"] = registration["experiment"]
+    boxes = list(pipeline["boxes"])
+    first = clean_to_lean.plain_map(boxes[0])
+    first["hole"] = {"kind": "gate"}
+    pipeline["boxes"] = [first, *boxes[1:]]
+    with pytest.raises(ValueError, match="hole requires a valid :satiety grade"):
+        clean_to_lean.emit_proof(pipeline)
