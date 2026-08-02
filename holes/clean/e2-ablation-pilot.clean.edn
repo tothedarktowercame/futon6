@@ -266,7 +266,7 @@
     :holds "filter-at-dispatch (mechanism b) is equivalent to shipping a store without the withheld memory (mechanism a): the runner's view differs only by the withheld entry"
     :holds-while "the memory graph is a star forest — no memory reaches the surfaced set through a shared pattern with another memory"
     :breaks-when "multi-attachment populates the graph: removing M then changes what ELSE surfaces through shared patterns, and (a) and (b) diverge"
-    :evidence "V2 sect 4.6: multi-attachment was always representable and never written; the d-separation form (outcome ⊥ withheld-content | surfaced set) is requested receipt Q3 against futon3c/docs/memory-causal-graph-spec.json, on BOTH topologies — the predicted divergence under population is itself preregistered there"
+    :evidence "V2 sect 4.6: multi-attachment was always representable and never written. The d-separation form (outcome ⊥ withheld-content | surfaced set) is now RECEIPT-CONFIRMED: M-diagramprover's Q3 receipt (landed 2026-08-02, futon3c 2e50339d + 504be25c, engine-verified and independently cross-checked) proves filter-at-dispatch is a FAITHFUL do(withhold M) on the current star_forest topology, and confirms this assumption's :breaks-when directly — under populated_graph the path [:M-in-store → :shared-patterns → :V12-minus-M] opens and mechanism (a) and (b) diverge. Oracle cross-validation (dagitty/bnlearn/networkx/y0) in flight; a verdict change would bell a correction"
     :on-break :invalidates-ablation-mechanism-equivalence
     :discharge-condition "runtime assertion BEFORE EVERY DISPATCH: store query asserting no memory carries >1 reviewed pattern attachment; fails loudly (refusal, not log line)"}
    {:id :recall-regime-stable :kind :assumption
@@ -296,13 +296,23 @@
     :discharge-condition "none needed now; re-check against the residual note at run start"}]
 
   :identification
-  {:estimand "effect of AVAILABILITY of one specific memory on (decision-sequence identity, attempts-to-close, closure) for the bound pair (a95J01, 51b6bc00), under the isolation boundary"
+  ;; ESTIMAND HYGIENE (M-diagramprover Q3, claude-10 2026-08-02): name the two
+  ;; do-operators separately, because they COINCIDE on today's topology and
+  ;; DIVERGE after the multi-attachment repair:
+  ;;   do-on-membership  = "having M in the store"   (the availability effect)
+  ;;   dispatch-filter   = "surfacing M"             (mechanism (b) as run)
+  ;; Q3 proves they are equal on star_forest, so this pilot identifies the
+  ;; availability effect faithfully NOW. Any E2 run AFTER the repair must switch
+  ;; to mechanism (a) — ship a per-condition DB with M actually removed — or
+  ;; explicitly measure the (a)-vs-(b) gap (which doubles as a behavioural audit
+  ;; of the repair: nonzero gap = real shared-pattern channels were created).
+  {:estimand "effect of AVAILABILITY (do-on-membership: having M in the store) of one specific memory on (decision-sequence identity, attempts-to-close, closure) for the bound pair (a95J01, 51b6bc00), under the isolation boundary. On the current star_forest topology this coincides with the dispatch-filter (surfacing) effect, per Q3; the two must be kept named-separately across the multi-attachment repair boundary"
    :identifies :availability-of-memory
-   :does-not-identify "the memory's content-mediated contribution (mediation needs the :memory-use/kind channel data, and n=1); the P2 rubric's validity (confirmation's job, on a cohort-manufactured panel); generalization beyond this pair"
+   :does-not-identify "the memory's content-mediated contribution (mediation needs the :memory-use/kind channel data, and n=1); the P2 rubric's validity (confirmation's job, on a cohort-manufactured panel); generalization beyond this pair; the availability effect POST-REPAIR, where filter-at-dispatch would measure a narrower content effect biased toward zero"
    :assumption "fresh ephemeral sessions make runs exchangeable within arm; the star-forest and regime assumptions above hold; the four inertness paths are closed as evidenced in the LB axis"
-   :receipt-ref "futon3c/docs/memory-causal-graph-spec.json requested_receipts Q2"
-   :receipt-status :requested
-   :note "Rob's engine's Q2 receipt (what do(withhold M) identifies given the L1-L4 surgery) was requested 2026-08-01; the pilot may run before it returns — the receipt upgrades the registration from :requested to :received/:refused and is cited either way"}
+   :receipt-ref "futon3c/docs/memory-causal-graph-spec.json requested_receipts Q3 (mechanism-(b) faithfulness, RECEIVED 2026-08-02, futon3c 2e50339d+504be25c) and Q2 (fuller do(withhold M) under L1-L4 surgery)"
+   :receipt-status :received
+   :note "Q3 (filter-at-dispatch = faithful do(withhold M) on star_forest) landed and is cited above; it licenses this pilot's availability identification on the current topology. Q2 (the fuller estimand) remains outstanding but is not blocking — the pilot's identification claim is exactly what Q3 confirms"}
 
   :holdouts
   {:ids [:bpm-held-out-files :statement-defect-holds :confirmation-problem-space]
