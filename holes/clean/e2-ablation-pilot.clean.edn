@@ -1,0 +1,281 @@
+;; CLean — E2-PILOT: single-problem memory-ablation apparatus shakedown.
+;;
+;; REGISTRATION #2 through this pipeline, and the first from the V3 memory
+;; programme (futon3c). The predecessor design is the eleven-times-reviewed
+;; DarkTower/MemoryAblationPreregistration.lean (mathlib4), whose ValidatedTrace
+;; refactor (2026-08-01, codex-1) makes an unvalidated trace untypeable into a
+;; verdict. This file is the EXECUTABLE registration of its PILOT stage.
+;;
+;; PILOT DISCIPLINE (the process rule, stated first): this is an apparatus
+;; shakedown plus first identity-rate measurements on ONE problem-pair. n=1.
+;; It validates the isolation boundary, the trace canonicalization, and the
+;; receipt sensors. It CANNOT validate the load-bearing rubric and will not
+;; claim to; every effect-shaped endpoint below is :role :secondary and
+;; labelled hypothesis-generating. The confirmation panel is manufactured by
+;; the V3 cohort's control arm (fresh preregistered window — the corpus
+;; archaeology found exactly ONE strong pair in 50 candidates, see
+;; panel-nomination-sweep-20260801.md) and registers separately.
+;;
+;; THE GENERALIZED INERTNESS PRECONDITION (from the ants 10x10-grid failure,
+;; claude-4 2026-08-01): before measuring whether mechanism M helps, establish
+;; that the task cannot be solved without M — and ENUMERATE the paths ruled
+;; out. For withholding a memory, four paths could make the contrast inert:
+;;   (1) in-tree content   — the problem tree carries the operative plan;
+;;   (2) library search    — reachable by grep in pinned Mathlib;
+;;   (3) model competence  — the runner closes it without any external content;
+;;   (4) corpus emptiness  — nothing would have been delivered anyway.
+;; The LB axis justification below carries the per-path evidence for this
+;; pair. Path (4) inverts for ablation designs: the manipulation check is
+;; that the withheld memory WOULD have been delivered (it is offered on
+;; every control run) and IS absent from ablated runs' offered sets.
+
+{:clean/experiment "e2-ablation-pilot"
+ :clean/title "Does withholding the adjudicated bridge memory change what the runner does on a95J01? (apparatus pilot)"
+ :clean/source {:mission "futon3c/holes/excursions/E-memory-v3-programme.md"
+                :design-predecessor "mathlib4/DarkTower/MemoryAblationPreregistration.lean"
+                :panel-evidence "futon3c/holes/labs/M-memory-retrieval/panel-nomination-sweep-20260801.md"
+                :panel-evidence-sha "cd6803f16ae94bfd41fffef5b6a66ff41e3b857965435dc9425037b68020c362"
+                :cancellation-criteria "futon3c/holes/labs/M-memory-retrieval/panel-cancellation-check-20260801.md"
+                :cancellation-sha "75ae95b46ed75af53953eedaeaecfafd2893c4785684404724177bb9bebd0eba"
+                :adjudication-verdicts "futon3c/holes/labs/M-memory-retrieval/adjudication-verdicts-p2-20260801.json"
+                :adjudication-sha "a6f87b840a8e774070bcab22bbd2021eb131e166e9f29eef0867157a8aeb2b19"
+                :boundary-demo-receipt-hash "4825c2cb9dc378ea209e5437f64a4f2179a58929c207da2cf5eafed4be350758"}
+ ;; :draft, honestly: the render gate refused at the seed plan (see BEND #2 in
+ ;; :seeds) and registration happens when the gate passes, not before. The two
+ ;; earlier refusals (status vocabulary, vacuous disjointness) are recorded in
+ ;; place. Flip to :registered-not-run when claude-4's non-seedable replication
+ ;; variant lands and the render accepts.
+ :clean/status :draft
+
+ ;; ---------------------------------------------------------------------------
+ ;; Informal reading: the pilot as a sequence of methods.
+ ;; ---------------------------------------------------------------------------
+ :clean/seq [:freeze-panel-and-boundary   ;; e1
+             :fix-interpretation          ;; e2
+             :verify-instrument           ;; e3
+             :measure-arms                ;; e4
+             :adjudicate]                 ;; e5
+
+ ;; ---------------------------------------------------------------------------
+ ;; Formal reading: the pipeline as a typed composition.
+ ;; ---------------------------------------------------------------------------
+ :clean/boxes
+ [{:id :e1 :method :freeze-panel-and-boundary
+   :text "Freeze the panel binding and the isolation boundary. Panel: problem a95J01, base revision 51b6bc00, LB memory e-codexpilot-analytic-order-at-least-two-implies-local-noninjectivity, IN memory e-codexpilot-combine-Schwarz-rigidity-with-power-series-uniqueness — one structure, per PanelEntry, so no run can mix-and-match. Boundary: scripts/e2_ablation_dispatch.sh as the apmablate user, staged tree at the base revision, ephemeral per-run CODEX_HOME containing auth.json only, codex invocations policed for exec --ephemeral --ignore-user-config --ignore-rules."
+   :produces :frozen-panel
+   :binding {:kind :artifact :type :edn/panel}}
+
+  {:id :e2 :method :fix-interpretation
+   :text "Commit the total decision rule BEFORE any run. Every trace the pilot can emit — boundary refusal, instrument failure, incomplete arms, complete — maps to a named outcome. Effect-shaped readouts are hypothesis-generating only; the rule cannot promote them."
+   :consumes [:frozen-panel] :produces :decision-rule
+   :binding {:kind :artifact :type :edn/decision}}
+
+  {:id :e3 :method :verify-instrument
+   :text "Run control run 1 as the instrument gate: the isolation receipt must validate (all probes true, process-bound, hash present); the run must leave >=1 incremental commit per attempt in the staged tree; the canonicalized decision-sequence extractor must produce a stable hash from those commits on two extractions. No arm run is permitted until this discharges. This is sensor verification, not a scientific control — it lives here as a gate, not as an axis (see the slot note in slice5-confirmation)."
+   :consumes [:decision-rule] :produces :instrument-verified
+   :binding {:kind :artifact :type :edn/control-result}
+   :hole {:kind :gate :discharge :instrument-check
+          :wanted "receipt validity + commit discipline + extractor stability, each shown on the actual first run rather than asserted"}}
+
+  {:id :e4 :method :measure-arms
+   :text "Run the three arms: control (full corpus), lb-ablated (withhold the bridge memory), inc-ablated (withhold the ignored memory; predicted null). runs-per-cell fresh ephemeral sessions each; ablation applied as filter-at-dispatch (mechanism b), licensed by the star-forest assumption below, whose runtime assertion runs before EVERY dispatch. Manipulation check per run: the withheld id absent from the offered set, the non-withheld memories present."
+   :consumes [:instrument-verified] :produces :run-records
+   :binding {:kind :artifact :type :edn/run-records}}
+
+  {:id :e5 :method :adjudicate
+   :text "Validate every trace through DarkTower validate (all protocol errors at once, or the only type classify accepts); apply the pre-committed decision rule. Identity rates read against the control-control floor, per the slice5 finding: for a predicted null, an identity rate is direct evidence where a CI is a power argument."
+   :consumes [:run-records] :produces :verdict
+   :binding {:kind :artifact :type :edn/verdict}
+   :discharges {:to :decision-rule}}]
+
+ :clean/wires
+ [{:from :e1 :to :e2 :carries :frozen-panel}
+  {:from :e2 :to :e3 :carries :decision-rule}
+  {:from :e3 :to :e4 :carries :instrument-verified}
+  {:from :e4 :to :e5 :carries :run-records}]
+
+ ;; ---------------------------------------------------------------------------
+ ;; The experiment block.
+ ;; ---------------------------------------------------------------------------
+ :clean/experiment-design
+ {:claim :comparative
+
+  ;; An axis is an ablation dial; :score-varies? is the navigability gate.
+  ;; The LB axis carries the four-path inertness evidence; the IN axis is a
+  ;; SCIENTIFIC control (prediction about the system), so it is an axis with
+  ;; :score-varies? false and :role :positive-control — the render routes it
+  ;; to axisPredictedNonNavigable (ArmRole change, mathlib4 084930e).
+  :axes
+  [{:id :lb-bridge-memory :levels [:present :withheld] :score-varies? true
+    :justification "Four-path inertness precondition, per path: (1) in-tree — the memory-free run invoke-1785393010025-303-f9f19596 (2026-07-30T06:30Z, commit 51b6bc00) stopped at exactly the missing nonvanishing-derivative/local-degree bridge; (2) library — direct and paraphrase searches for the bridge vocabulary return zero hits in the problem tree and pinned Mathlib at 51b6bc00 (re-verified independently at review, panel-nomination-sweep-20260801.md); (3) model competence — the same run is a recorded memory-free failure by the production runner; (4) delivery — the memory was reviewed-attached before the closing dispatch (frozen graph export 2026-07-30T19:00:54Z) and two later receipts attribute use; closure at 016bf0fb followed. Withholding therefore plausibly changes rediscovery cost, attempts, and the decision sequence."}
+   {:id :inc-ignored-memory :levels [:present :withheld] :score-varies? false
+    :role :positive-control
+    :justification "e-codexpilot-combine-Schwarz-rigidity-with-power-series-uniqueness surfaced on historical a95J01 dispatches and was recorded IGNORED in the receipts — incidental BY RECEIPT, not by the P2 rubric (this memory postdates the P2 census; noted in adjudication-verdicts-provenance.md). Prediction: withholding it leaves the decision sequence at the control-control identity floor. Topically adjacent-but-ignored is the most informative predicted null: the runner saw it and did not use it."}]
+
+  :arms
+  [{:id :control    :neutral? false :ablates []
+    :role :baseline
+    :note "full corpus; repeated runs supply the identity-rate floor that makes the other two arms readable under runner nondeterminism"}
+   {:id :lb-ablated :neutral? false :ablates [:lb-bridge-memory]}
+   {:id :inc-ablated :neutral? false :ablates [:inc-ignored-memory]
+    :role :positive-control}]
+
+  :scenarios [:a95J01-at-51b6bc00]
+
+  :environment
+  {:account "apmablate"
+   :wrapper "futon3c/scripts/e2_ablation_dispatch.sh"
+   :staged-tree "a95J01 at 51b6bc00 (native git tree id checked against 51b6bc00^{tree} inside the boundary)"
+   :runner "codex exec --ephemeral --ignore-user-config --ignore-rules (policed by the wrapper)"
+   :codex-home "per-run ephemeral, auth.json only (H3g minimal-credential finding: config.toml is leak-bearing; a fresh session under an existing CODEX_HOME is not a fresh state boundary)"
+   :probes [:home-read-denied :no-analysis-artifacts :operator-store-unreadable
+            :source-repo-unreachable :no-future-commits :own-store-clean
+            :checkout-base-revision]
+   :note "probes execute INSIDE the runner's process boundary and the receipt is hashed there; any probe failure refuses at exit 78 before the runner starts (verified live 2026-08-02, receipt 4825c2cb...)"}
+
+  ;; FORMAT NOTE (bend candidate for claude-4): these runs are NOT seedable —
+  ;; the runner is a stochastic LLM session. The replication unit is a fresh
+  ;; ephemeral session; run-to-run variation is MEASURED (the control arm's
+  ;; identity floor) rather than controlled. Disjointness from the confirmation
+  ;; is by PROBLEM, not by seed: the confirmation panel is cohort-manufactured
+  ;; pairs, and its registration must exclude a95J01 (its holdout block is the
+  ;; enforcement point, mirroring this one).
+  :seeds {:runs-per-cell 4
+          :seedable? false
+          :replication-unit "fresh ephemeral codex session per run (sessionId uniqueness is a ProtocolError check in the Lean: shared sessions cannot validate)"
+          ;; BEND #1 (for claude-4): the seed schema requires this assertion,
+          ;; assuming every registration is a confirmation with a predecessor
+          ;; pilot. THIS registration IS the pilot — there is no predecessor,
+          ;; so the assertion is VACUOUSLY true (disjoint from the empty set).
+          ;; The format wants a first-stage shape (:predecessor nil) rather
+          ;; than a vacuous oath.
+          ;; BEND #2 (the real one — render currently REFUSES here): the seed
+          ;; machinery requires food-fn/movement-fn/choice-fn arithmetic per
+          ;; scenario — simulation-shaped, seedable-deterministic. E2's runs
+          ;; are not seedable: replication = fresh ephemeral sessions,
+          ;; variation is MEASURED (the control identity floor), disjointness
+          ;; is BY PROBLEM with a checkable predicate. Fabricating formulas
+          ;; to pass would be a gate satisfied by meaningless values.
+          ;; Registration waits for a non-seedable replication variant.
+          :disjoint-from-pilot? true
+          :disjoint-from-confirmation "by problem: confirmation panel ∩ #{a95J01} = ∅, enforced in the confirmation's own registration"}
+
+  ;; Every endpoint declares its sensor and coverage (extension 1). The pilot's
+  ;; PRIMARY endpoints are apparatus properties; effect readouts are secondary
+  ;; and hypothesis-generating — that split IS the pilot label, structurally.
+  :outcomes
+  [{:id :isolation-valid :direction :required-true :role :primary
+    :sensor {:field :receipt/probe-results
+             :source "wrapper receipt, process-bound, per run"
+             :coverage-precondition "a receipt exists for every run; all probes true; probe-result-hash present"
+             :coverage-check {:status :met-by-construction
+                              :check "the wrapper refuses (exit 78, no receipt) rather than running unisolated; verified live incl. sabotage path 2026-08-02"}}}
+   {:id :ablation-delivered :direction :required-true :role :primary
+    :sensor {:field :memory-use/surfaced-ids
+             :source "v1.2 offered receipts (dispatch CLI, live since 2026-08-01)"
+             :coverage-precondition "offered receipt present per run; withheld id ∉ surfaced set on ablated runs; withheld id ∈ surfaced set on control runs"
+             :coverage-check {:status :met :check "receipt fields shipped and reviewed (commit dadff8da); the control-side membership is the manipulation check — path (4) of the inertness precondition, inverted for ablation"}}}
+   {:id :identity-floor :direction :informational :role :primary
+    :sensor {:field :trace/decision-sequence-hash
+             :source "canonicalized from the run's incremental commits in the staged tree: ordered (declaration-touched, edit-kind, build-outcome) triples, tactic-text-insensitive, hashed"
+             :coverage-precondition ">=1 commit per attempt (wrapper-mandated); extractor committed and stable (two extractions, same hash)"
+             :coverage-check {:status :met-by-construction
+                              :check "e3 gates on exactly this before any arm runs; the extractor is NEW — first live use is this pilot, which is why e3 exists"}}
+    :note "control-vs-control identity rate. Under nondeterminism the floor IS the yardstick: the IN arm's claim is identity ~ floor, the LB arm's is identity << floor (slice5 finding, relativized)"}
+   {:id :attempts-to-close :direction :informational :role :secondary
+    :sensor {:field :trace/attempt-count
+             :source "same canonicalized trace"
+             :coverage-precondition "as :identity-floor"
+             :coverage-check {:status :met-by-construction :check "same gate"}}
+    :note "the validated E2 DV; hypothesis-generating at n=1"}
+   {:id :lb-identity-vs-floor :direction :informational :role :secondary
+    :sensor {:field :trace/decision-sequence-hash :source "as :identity-floor"
+             :coverage-precondition "as :identity-floor"
+             :coverage-check {:status :met-by-construction :check "same gate"}}
+    :note "NON-CONFIRMATORY: n=1 problem. A LB-ablated sequence identical to control on k/n runs is per-pair evidence AGAINST the pair's load-bearing designation — recorded, not promoted"}
+   {:id :inc-identity-vs-floor :direction :informational :role :secondary
+    :sensor {:field :trace/decision-sequence-hash :source "as :identity-floor"
+             :coverage-precondition "as :identity-floor"
+             :coverage-check {:status :met-by-construction :check "same gate"}}
+    :note "the predicted null, read as an identity rate against the floor — direct evidence, no power argument"}]
+
+  :stop-rules
+  [{:id :boundary-refusal
+    :fires-when "any run's wrapper exits 78 (probe failure) after e3 has discharged"
+    :comparison :wrapper-exit-and-receipt-absence
+    :action :abandon-run
+    :note "a refusal after the gate means the boundary regressed mid-pilot; the pilot's product is apparatus knowledge, so this outcome is a finding, not noise"}
+   {:id :budget-cap :fires-when "run 16 would start (cap 15 vs estimated 12)"
+    :comparison :run-count :action :abandon-run}]
+
+  :dispositions []   ;; every unit runs once to completion; no outcome changes
+                     ;; what a unit is. Empty rather than omitted — the absence
+                     ;; is a statement. (The cohort's re-queue disposition, with
+                     ;; both integrity fields, lives in ITS registration.)
+
+  ;; Total: every trace the pilot can emit maps to a named outcome.
+  :decision
+  {:boundary-failed        :apparatus-defect-isolation
+   :instrument-gate-failed :apparatus-defect-trace-sensor
+   :delivery-failed        :apparatus-defect-ablation-mechanism
+   :incomplete             :pilot-incomplete-not-interpretable
+   :complete               :apparatus-validated-report-identity-rates
+   :mixed                  :apparatus-partially-validated-enumerate-defects}
+
+  :assumptions
+  [{:id :filter-equals-ship :kind :assumption
+    :holds "filter-at-dispatch (mechanism b) is equivalent to shipping a store without the withheld memory (mechanism a): the runner's view differs only by the withheld entry"
+    :holds-while "the memory graph is a star forest — no memory reaches the surfaced set through a shared pattern with another memory"
+    :breaks-when "multi-attachment populates the graph: removing M then changes what ELSE surfaces through shared patterns, and (a) and (b) diverge"
+    :evidence "V2 sect 4.6: multi-attachment was always representable and never written; the d-separation form (outcome ⊥ withheld-content | surfaced set) is requested receipt Q3 against futon3c/docs/memory-causal-graph-spec.json, on BOTH topologies — the predicted divergence under population is itself preregistered there"
+    :on-break :invalidates-ablation-mechanism-equivalence
+    :discharge-condition "runtime assertion BEFORE EVERY DISPATCH: store query asserting no memory carries >1 reviewed pattern attachment; fails loudly (refusal, not log line)"}
+   {:id :recall-regime-stable :kind :assumption
+    :holds "the recall architecture is constant across the pilot window (:recall-system :v1.2-receipt-instrumented on every receipt)"
+    :holds-while "no arm commissioning, decommissioning, or recall-system version change during the window"
+    :breaks-when "any receipt in the window carries a different version tag"
+    :evidence "the E1 back-fill's regime discovery (boundary at 50916c84): the pooled 60.95% was deployment history, not competition — a dated assumption about the measurement regime is exactly what nearly got headlined"
+    :on-break :invalidates-cross-run-pooling
+    :discharge-condition "per-run check of the receipt's version tag; any mismatch marks the run :regime-tainted and excludes it from pooling"}
+   {:id :statement-integrity :kind :assumption
+    :holds "a95J01's formal statement is sound (it closed at zero sorries, axiom-clean, at 016bf0fb)"
+    :holds-while "a95J01 is not among the operator's six statement-defect holds (known-residual-20260801.md Part A — it is not)"
+    :breaks-when "later review reclassifies the statement"
+    :evidence "closure commit 016bf0fb; the residual note's Part A list"
+    :on-break :invalidates-problem-choice
+    :discharge-condition "none needed now; re-check against the residual note at run start"}]
+
+  :identification
+  {:estimand "effect of AVAILABILITY of one specific memory on (decision-sequence identity, attempts-to-close, closure) for the bound pair (a95J01, 51b6bc00), under the isolation boundary"
+   :identifies :availability-of-memory
+   :does-not-identify "the memory's content-mediated contribution (mediation needs the :memory-use/kind channel data, and n=1); the P2 rubric's validity (confirmation's job, on a cohort-manufactured panel); generalization beyond this pair"
+   :assumption "fresh ephemeral sessions make runs exchangeable within arm; the star-forest and regime assumptions above hold; the four inertness paths are closed as evidenced in the LB axis"
+   :receipt-ref "futon3c/docs/memory-causal-graph-spec.json requested_receipts Q2"
+   :receipt-status :requested
+   :note "Rob's engine's Q2 receipt (what do(withhold M) identifies given the L1-L4 surgery) was requested 2026-08-01; the pilot may run before it returns — the receipt upgrades the registration from :requested to :received/:refused and is cited either way"}
+
+  :holdouts
+  {:ids [:bpm-held-out-files :statement-defect-holds :confirmation-problem-space]
+   :enforced-by "the PanelEntry binding: the wrapper runs only staged trees, and a95J01@51b6bc00 is the sole staged pilot target; bpm-* and the six held problems are not staged and CANNOT be dispatched through this boundary"
+   :verified-by "run-start check: the dispatch target equals the registered panel entry (problem AND revision AND both memory ids); the wrapper independently verifies the staged tree's native git tree id against the revision"
+   :note "hold-outs excluded in the selector, not the doc — the near-miss rule, enforced here by the panel type rather than a list"}
+
+  :budget {:estimated-cell-runs 12 :cap-cell-runs 15
+           :cost-basis "per-run token cost taken from the invoke-jobs ledger's measured mean for a95J01-class dispatches at registration time, not guessed — DarkTower estimatedCost discipline"
+           :teardown "artifacts written under futon3c/holes/labs/M-memory-retrieval/e2-pilot/ regardless of outcome; receipts land in the store as ordinary v1.2 rows; the staged tree is reset to 51b6bc00 between runs"}}
+
+ ;; ---------------------------------------------------------------------------
+ ;; Three readings of one object.
+ ;; ---------------------------------------------------------------------------
+ :clean/copar [{:reading :informal   :is :clean/seq}
+               {:reading :formal     :is [:clean/boxes :clean/wires]}
+               {:reading :executable :is :clean/experiment-design
+                :note "renders to the malli schema the dispatch harness validates before any run; an unregistered arm is a startup failure, not a review finding"}]
+
+ :clean/shape {:macro :controlled-ablation
+               :holes-at [:e3]
+               :assumptions-at [:filter-equals-ship
+                                :recall-regime-stable
+                                :statement-integrity]
+               :discharges-at [:e5]
+               :note "e3 is a hole in the INSTRUMENT (sensor verification), not in the hypothesis; the scientific control is the :inc-ignored-memory axis, routed to axisPredictedNonNavigable by its role"}}
