@@ -141,6 +141,41 @@ running niced on Zone, IATC queued to auto-start when shard-a drains
 (`run-ctcausal-when-free.sh` → `data/iatc-argument-graphs/run-ctcausal`,
 own corpus-id, own out dir — no stream added, no bookkeeping blur).
 
+## 7. Preview/think-through (Joe's questions, 2026-08-05 evening)
+
+- **Memory store vs superpod = process vs product.** The store mines agent
+  turns (informal, MiniPolymath/MathOverflow-like); the superpod mines
+  polished papers. The measured 67% missing-warrant rate in papers is the
+  quantified Lakatos point: publication deletes scaffolding; turns contain
+  it pre-deletion. Holding instruments for BOTH halves is the edge.
+- **Scribe upgrade (mark6-inspired):** emit IATC-typed records from turns
+  (moves with transcript anchors, warrant-explicit inferences, retraction
+  events via the γ lexicon, holes as demand records) → turns and papers
+  share one schema, one store, one query ladder, one R6-style QA surface.
+  Preregisterable prediction: warrant-capture on turn-mines ≫ 33%; if not,
+  the Scribe is dropping exactly the process content that justifies it.
+- **Fully-mined arXiv.CT value-prop (Rob):** first corpus-scale empirical
+  account of how a field argues — move-lexicon size/convergence (S10),
+  archetype census (S11), warrant-omission profile (= map of the field's
+  shared implicit background), backbone saturation. CT is 1/124 of math.
+- **What the 22 causal-CT papers give M-diagramprover:** concept spine
+  (roadmap); gap map (their mined holes/missing warrants = what a
+  formalization layer must supply first — no Mathlib for Markov cats);
+  self-referential exam material.
+- **Causal-CT beyond Pearl** (for capability proofs): on one finite DAG,
+  nothing — d-sep/do() have faithful categorical reconstructions
+  (Fritz–Klingler; JKZ surgery). The gains: (1) **compositional
+  identification** — proofs about systems-of-systems from interface
+  properties; (2) **higher-order/feedback** — the mining-qual loop itself
+  (behaviour v(k+1) ← survey of v(k) outputs while the corpus grows) is a
+  **comb**-shaped identification claim (2404.02017), the first of our
+  capability proofs to structurally outgrow the APM DAG apparatus;
+  (3) **transport as comparison of experiments** (2010.07416) — the
+  theorem-shaped home of APM's N6; (4) typed variables + native
+  deterministic/stochastic mixture (quasi-Borel) = causal-engine target-3
+  semantics. One line: Pearl suffices for any single experiment; the
+  architecture needs the categorical layer.
+
 ## Log
 
 - 2026-08-05 — opened from Joe's framing; no code yet. Shard state at
