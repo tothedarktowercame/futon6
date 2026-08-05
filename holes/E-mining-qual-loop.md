@@ -114,7 +114,36 @@ the point of §1 is that we don't wait two weeks to learn something.
 4. Full-extraction ingest (mission next-step 3) so arm-1 retrieval has the
    marks/scopes/enrichment layers, not just S3 graphs.
 
+## 6. The strange loop: mine the causal-CT literature alongside (Joe, same day)
+
+M-diagramprover's causal layer is DAG-Pearl today; its next layers are
+**category-theoretic causal reasoning** — and that literature is itself
+category theory on arXiv. So we mine it with the same pipeline: corpus
+**`ct-causal-v0`, 22 papers** (`holes/mark7z-ctcausal.ids.txt`), assembled
+2026-08-05 by manifest-abstract search + API-verification (no id taken
+from model memory unverified): Fong 1301.6201 (Causal Theories); Cho–Jacobs
+1709.00322; Jacobs–Kissinger–Zanasi 1811.08338 (string-diagram surgery);
+Fritz 1908.07021 (Markov categories) + the Markov-categories line
+(1912.02769, 2010.07416, 2105.02639, 2204.02284, 2204.04920, 2207.05740
+(d-separation), 2211.02507, 2303.14049, 2308.00651, 2401.14669 (Bayes
+filter), 2404.02017 (combs/causality), 2411.12840, 2312.09666 excluded →
+kept 2501.18404 (causal intervention diagrams), 2512.24417 (causal Markov
+category with Kolmogorov products)); plus 1406.6030, 1701.02547
+(quasi-Borel), 2004.09999, 2201.08963. Spacetime-causality homonyms
+(Lorentzian "causal" papers) explicitly excluded.
+
+The mined output is a **roadmap of the domain the causal engine will
+model** — and since the causal engine is (Joe) a superstructure for the
+memory system, this corpus is first-class exam material for §3: its
+questions are the ones the *system itself* will need answered. Ops:
+eprints staged (20 were already local; 2 fetched + verified), S1+extract
+running niced on Zone, IATC queued to auto-start when shard-a drains
+(`run-ctcausal-when-free.sh` → `data/iatc-argument-graphs/run-ctcausal`,
+own corpus-id, own out dir — no stream added, no bookkeeping blur).
+
 ## Log
 
 - 2026-08-05 — opened from Joe's framing; no code yet. Shard state at
   writing: S3 2-way, ~10 finals done.
+- 2026-08-05 (later) — §6 added: ct-causal-v0 corpus assembled, staged,
+  queued behind shard-a.
