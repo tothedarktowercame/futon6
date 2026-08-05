@@ -74,7 +74,8 @@ def query_model(endpoint, model, prompt):
                        "messages": [{"role": "user", "content": prompt}]}).encode()
     req = urllib.request.Request(endpoint, data=body,
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
+    with urllib.request.urlopen(
+            req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "120"))) as r:
         return json.loads(r.read())["choices"][0]["message"]["content"]
 
 

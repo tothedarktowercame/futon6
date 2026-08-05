@@ -70,7 +70,11 @@ OPS = {
     "S1": {"cmd": "{PY} scripts/emit_marks.py --list {IDS} --run-dir " + RUN + " --run-id $RUN_ID --corpus-id $CORPUS",
            "gate": "{PY} scripts/check_invariants.py --corpus",
            "crit": "wf=0 across the batch — read data/loss/dashboard.json at the halt"},
-    "S2": {"cmd": "{PY} scripts/coverage_inline.py  # concept-substrate corpus-fresh; G-coverage inline",
+    "S2": {"cmd": "{PY} scripts/warp_substrate_check.py --ids {IDS} && "
+           "{PY} scripts/coverage_inline.py --concepts data/warp/concept-usage.json --field paper_concepts",
+           "note": "substrate-corpus match is now a measured gate (E-superpod-hardening H1 tier 1); "
+                   "committed concept-usage is df>=10-filtered so the coverage curve reads flat — "
+                   "the raw-stream instrument needs S1 to dump per-paper raw concepts (tier 2)",
            "crit": "G-coverage: raw coverage rises with corpus-fraction"},
     "S3": {"cmd": f"{{PY}} scripts/mark3_extract_candidates.py --list {{IDS}} --all-proofs --out {CAND} && "
            f"CANDIDATES={CAND} OUT={GRAPHS} bash scripts/linode-4gpu-run.sh",
@@ -259,6 +263,12 @@ def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
             nxt = stages[stages.index(s) + 1]["id"] if stages.index(s) + 1 < len(stages) else "(done)"
             print(f"⏸ BOOT step — do this from dev, then run the stepper ON THE HOST with --from {nxt}:")
             print(f"   {_boot_note(profile, s['id'])}")
+            # E-superpod-hardening H2: boot steps write no ledger entry, so the ledger
+            # will BLOCK the next stage unless the resume names them in --reuse. Say so.
+            boots = [x["id"] for x in stages[:stages.index(s) + 1] if OPS[x["id"]].get("boot")]
+            reuse_hint = " ".join(sorted(set(boots + (reuse or []))))
+            print(f"   then resume with: --from {nxt} --reuse {reuse_hint}"
+                  f"   (boot steps never ledger-record; without --reuse the next stage is BLOCKED)")
             return
         missing = [p for p in op.get("inputs", []) if not os.path.exists(os.path.join(ROOT, p))]
         if missing:

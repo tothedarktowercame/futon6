@@ -74,9 +74,13 @@ the `FUTON6_EPRINTS` naming doesn't match — ping us.
 ```bash
 cd ~/code/futon6
 # (substrate extracted; model served; FUTON6_EPRINTS exported)
+# -u = unbuffered (else the log looks stalled while healthy); --from S1 --reuse S0 STAGE
+# because the S0/STAGE boot steps never write ledger entries and the ledger would
+# otherwise BLOCK S1. Optional: FUTON6_LLM_TIMEOUT=<sec> raises the per-call LLM
+# timeout (defaults 300/120 s) if batch congestion bites.
 FUTON6_EPRINTS=$YOUR_EPRINTS OPENAI_BASE_URL=$URL OPENAI_API_KEY=x RUN_ID=mark7 CORPUS=math-ct-full \
-  .venv/bin/python scripts/linode_stepper.py --run --profile superpod \
-    --ids holes/math-ct-full.ids.txt \
+  .venv/bin/python -u scripts/linode_stepper.py --run --profile superpod \
+    --from S1 --reuse S0 STAGE --ids holes/math-ct-full.ids.txt \
     --run-dir data/runs/mark7 --corpus-id math-ct-full --run-id mark7
 ```
 

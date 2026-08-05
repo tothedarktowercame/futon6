@@ -148,7 +148,8 @@ def call_openai(prompt: str, cand: dict, attempt: int, model: str) -> str:
                                  headers={"Content-Type": "application/json",
                                           "Authorization": f"Bearer {key}"})
     try:
-        with urllib.request.urlopen(req, timeout=300) as r:
+        with urllib.request.urlopen(
+                req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as r:
             return json.loads(r.read())["choices"][0]["message"]["content"]
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", "replace")[:300]

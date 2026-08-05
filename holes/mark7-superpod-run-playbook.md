@@ -49,8 +49,12 @@ futon6/.venv/bin/python scripts/linode_stepper.py --plan --profile superpod   # 
 #     (NO eprint download — Rob has all of arXiv math on the Superpod already) ...
 
 # S1..S12 ON THE HOST (set IDS=holes/math-ct-full.ids.txt, CORPUS=math-ct-full@<date>):
+#   -u: unbuffered, or the log looks stalled while healthy (E-superpod-hardening H6)
+#   --from S1 --reuse S0 STAGE: boot steps never ledger-record; without --reuse the
+#   ledger BLOCKS S1 (H2). --ids is load-bearing (below).
 RUN_ID=mark7  CORPUS=math-ct-full  \
-  futon6/.venv/bin/python scripts/linode_stepper.py --run --profile superpod \
+  futon6/.venv/bin/python -u scripts/linode_stepper.py --run --profile superpod \
+    --from S1 --reuse S0 STAGE --ids holes/math-ct-full.ids.txt \
     --run-dir data/runs/mark7 --corpus-id math-ct-full --run-id mark7
 #   halts at each gate; ledger refuses any stage whose upstream didn't run for this corpus.
 
@@ -66,8 +70,15 @@ lexicon+reground · S11 structural+whole-paper · S12 accretion-sweep · RETRIEV
 
 Process **chronologically**; rely on vLLM batch concurrency across 8 GPUs. Rough shares:
 
-- **S3 IATC** (~27k proofs) and **S7 box-typing** (~27k) are the cost; **cap S4 expository**
+- **S3 IATC** and **S7 box-typing** are the cost; **cap S4 expository**
   (sample ~30 regions/paper, not all — one paper had 466) so it doesn't dominate.
+- **Budget the proof count from measurement, not the old ~6/paper guess** (§7 H4):
+  the top-100 most-cited yielded 1,525 all-proofs candidates from 91 contributing
+  papers (~15.3/contributing paper). If the head rate held corpus-wide that's
+  4,616 × 0.91 × 15.3 ≈ **64k proofs (2.4× the ~27k planned)**; the tail likely
+  yields fewer, so the true count sits between 27k and 64k. Plan the window
+  arithmetic against the upper half of that range and let S12's checkpoints
+  carry a non-completion gracefully.
 - CPU stages (S1/S2/S5/S6/S8–S12) are cheap and parallel.
 - If batching gives ~20× single-stream, the full corpus is plausible in the window; if not,
   the sweep simply checkpoints a chronological prefix. **Either outcome is a usable result.**
@@ -103,3 +114,33 @@ The run is designed to produce, in one window, the curves that turn assertions i
 
 Every one of these is a *curve or census over the corpus*, so a partial 20h sweep still
 teaches us where math.CT's reasoning, exposition, and definitional structure converge.
+
+## 7. Pre-flight findings from the Zone CPU probe (2026-08-05) — fix before the window
+
+A quality-probe run of this exact playbook on a CPU-only 256 GB box (GLM-4.5-Air
+via llama.cpp's OpenAI endpoint, top-100 citation-ranked papers, run-id
+`mark7z`) surfaced three things Rob's window would otherwise hit or want:
+
+1. **S2's stepper command is a stub and fails on any host.** `linode_stepper.py`
+   S2 runs `coverage_inline.py` bare; the script requires `--concepts <json>`
+   and dies with `TypeError: expected str … not NoneType`. The corpus-fresh
+   WARP substrate build the contract demands is NOT wired into the stepper —
+   the mark5 silent-skip lesson can recur as a loud stop (better) but still a
+   stop, mid-window. Fix the S2 cmd (substrate build + `coverage_inline
+   --concepts …`) before booking the slot. The Zone probe proceeded with
+   `--reuse S2` on the shipped substrate (defensible there: top-100 ⊂ the
+   4,616-paper corpus the shipped spine was mined from; NOT defensible for a
+   whole-domain run).
+2. **Hardcoded LLM timeouts assume GPU throughput.** `mark3_iatc_loop.py`,
+   `mark3_expository_loop.py` (300 s) and `clean_box_typing.py` (120 s) now
+   read `FUTON6_LLM_TIMEOUT` (defaults unchanged). Slow endpoints need it;
+   the Superpod won't, but batch congestion might.
+3. **`linode-4gpu-run.sh` is endpoint-agnostic in practice** — with
+   `PORT/MODEL/REPO/VENV/PYTHON` env it drove a llama.cpp CPU endpoint
+   unmodified (it only waits on `/v1/models` and runs the loop). Also: the
+   smoke test + first graphs PASS gates with GLM-4.5-Air, so a model-sensitivity
+   comparison (Air vs the 70B) is available from the mark7z artifacts.
+4. **Census fact:** top-100 citation-ranked papers yield **1,525 all-proofs
+   candidates from 91/100 papers** (~15 extractable proofs/paper among the
+   most-cited — 2.5× the ~6/paper the 20 h budget in §4 assumed; re-check the
+   window arithmetic for the full 4,616).
