@@ -73,10 +73,16 @@ def as_list(p):
 
 
 def _edn_safe(text):
-    """edn_format (strict) rejects ' in symbols/keywords (e.g. :phi', common in CT
-    primes), but bb (the lenient reader that PRODUCED these graphs) accepts it.
-    Replace ' with 'prime' ONLY outside double-quoted strings — fixes keyword/symbol
-    tokens while leaving :text verbatim. Global+consistent, so ids/refs stay aligned."""
+    """edn_format (strict) rejects tokens that bb (the lenient reader which PRODUCED
+    these graphs) accepts, so a graph can pass the bb gates and still be unreadable
+    here. Two known classes, both fixed ONLY outside double-quoted strings so :text
+    stays verbatim; both substitutions are global and deterministic, so ids and the
+    edge refs pointing at them stay aligned:
+
+      ' in symbols/keywords (:phi', common in CT primes)  -> 'prime'
+      non-ASCII in symbols/keywords (:hom->cone with a real arrow, :mu-natural)
+        -> 'u<hex codepoint>'  (E-superpod-hardening H12, 2026-08-06: 5/98 graphs
+        on the Zone e2e run carried unicode ids and were dropped at S7)"""
     out, in_str, esc = [], False, False
     for ch in text:
         if in_str:
@@ -92,6 +98,8 @@ def _edn_safe(text):
             out.append(ch)
         elif ch == "'":
             out.append("prime")
+        elif ord(ch) > 127:
+            out.append("u%04x" % ord(ch))
         else:
             out.append(ch)
     return "".join(out)

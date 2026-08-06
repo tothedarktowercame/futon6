@@ -174,6 +174,31 @@ Same incident, secondary find: the S4 region-cap trim grouped by filename
 and silently missed new-style paper ids (0806.1324 kept all 336 regions);
 trim now groups by the candidate's `paper-id` field. 280 candidates ≤30/paper.
 
+### H12 — graphs pass the bb gates but are unreadable by the Python stages (unicode ids). **FIXED**
+
+The IATC gates run under **bb (lenient Clojure reader)**; S5–S8 consume the
+same graphs through **`edn_format` (strict Python)**. A graph can therefore
+be gate-PASS and still be *silently dropped downstream*. Known instances:
+`'` in keywords (already handled), and — new, 2026-08-06 — **non-ASCII in
+keywords**: the model naturally writes mathematical ids like `:hom→cone`,
+`:mu-natural`, which Clojure accepts and Python rejects with
+`Illegal character`. Hit **5 of 98 graphs (~5%)** on the Zone e2e run; at
+4,616-paper scale that is ~5% of S3's output lost between stages, visible
+only as scattered `load error` lines.
+
+Fixed in `iatc_to_clean.py:_edn_safe` (the shared loader, so every Python
+consumer benefits): non-ASCII outside double-quoted strings →
+`u<hex codepoint>`, deterministic and global so ids and the edge refs
+pointing at them stay aligned; `:text` prose keeps its unicode verbatim.
+Verified: all 5 affected graphs now load (10/8, 6/3, 5/4, 9/4, 8/5
+nodes/infer-edges).
+
+**The general lesson for the Superpod run:** any stage boundary that crosses
+readers needs a conformance check, not an assumption. A cheap standing guard
+would be a post-S3 pass that loads every gated graph through the *Python*
+reader and fails loudly on mismatch — the gates prove Clojure-readability
+only.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus
