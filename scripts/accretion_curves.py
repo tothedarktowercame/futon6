@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Plot the 'improve as we run' accretion curves: a metric rising with corpus size.
 
-Tier-2 move-grounding curve: harvest move-cues from the first-n papers' IATC graphs, feed
+Tier-2 move-grounding curve: harvest move-cues from the first-n PROOF GRAPHS (not papers;
+one paper contributes ~15 of them on the citation head), feed
 them to the strategy recognizer, measure proof-move grounding over a FIXED set of proof
 windows. As n grows, more cues → more recognition → the curve rises (until the move
 vocabulary saturates = convergence). Writes an SVG line chart.
@@ -67,12 +68,12 @@ def svg(pts, n_windows):
                    for x in xs)
     return (f'<!doctype html><meta charset=utf-8><title>accretion curve</title>'
             f'<body style="font:14px Georgia,serif;background:#f7f5ef;margin:24px">'
-            f'<h2>"Improve as we run" — proof-move grounding vs #papers harvested</h2>'
-            f'<p>fixed {n_windows} measure windows; cues accrete from more papers → grounding rises '
+            f'<h2>"Improve as we run" — proof-move grounding vs #proof-graphs harvested</h2>'
+            f'<p>fixed {n_windows} measure windows; cues accrete from more proof-graphs → grounding rises '
             f'(honest: lift is recognition/"thin", not faked verification)</p>'
             f'<svg width="{W}" height="{H}" style="background:#fff;border:1px solid #d9cdbd">'
             f'<polyline points="{poly}" fill="none" stroke="#0f766e" stroke-width="2"/>{dots}{labs}'
-            f'<text x="{W//2}" y="{H-8}" font-size="11" text-anchor="middle">papers harvested (n)</text>'
+            f'<text x="{W//2}" y="{H-8}" font-size="11" text-anchor="middle">proof-graphs harvested (n)</text>'
             f'</svg></body>')
 
 
@@ -86,7 +87,7 @@ def main():
     ap.add_argument("--corpus-id", default="adhoc")
     a = ap.parse_args()
     pts, nw = move_curve(a.graphs, a.candidates)
-    print("proof-move grounding accretion curve (n papers, #cues, grounding):")
+    print("proof-move grounding accretion curve (n PROOF-GRAPHS, #cues, grounding):")
     for k, c, g in pts:
         print(f"  n={k:2d}  cues={c:2d}  grounding={g:.3f}")
     rise = pts[-1][2] - pts[0][2]
@@ -107,7 +108,7 @@ def main():
         with open(os.path.join(out_dir, "accretion-curve.json"), "w") as fh:
             _json.dump({"run_id": a.run_id, "corpus_id": a.corpus_id,
                         "metric": "proof-move-grounding",
-                        "points": [{"n_papers": k, "cues": c, "grounding": g} for k, c, g in pts],
+                        "points": [{"n_proof_graphs": k, "cues": c, "grounding": g} for k, c, g in pts],
                         "rise": round(rise, 6), "rising": rising}, fh, indent=1)
         print(f"wrote {os.path.join(a.run_dir, 'accretion-curve.json')}")
         try:

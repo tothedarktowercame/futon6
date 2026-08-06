@@ -326,6 +326,20 @@ produces *findings* prints them. That asymmetry is invisible until the
 pipeline runs somewhere its operator cannot watch — which is exactly what a
 20-hour cluster window is.
 
+### H17 — the accretion curve's x-axis was labelled "papers"; it counts proof-graphs. **FIXED**
+
+`move_curve` iterates over `*.edn` **proof graphs**, but every label said
+papers — the stdout header, the SVG title, the SVG axis, the caption. On the
+citation head one paper yields ~15 graphs, so a full run would render
+*"n=64000 papers"* for a 4,616-paper corpus: a 15× misstatement on the run's
+headline artifact, in the one place a reader looks first. Fixed in all four
+places (and in the JSON key I had just added, which inherited the error —
+check what a number *counts* before persisting it).
+
+Worth generalising for the handoff: **H15/H16 asked whether the science
+survives; H17 asks whether it means what it says.** A retrievable curve with a
+wrong axis is not better than a lost one.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus
