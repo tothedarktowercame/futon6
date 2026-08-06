@@ -142,6 +142,18 @@ OPEN: the e2e run applies a deterministic out-of-band trim (first 30 per
 paper by filename) between extract and loop; the durable fix is a
 `--max-regions-per-paper` flag threaded through both scripts.
 
+### H11 — expository loop had no per-candidate endpoint-error containment. **FIXED**
+
+One oversized region (context-exceeded → HTTP 500) killed the whole S4
+batch (observed on Zone 2026-08-06; the IATC loop already contains these
+per-candidate). Now: try/except around the call, `last_error` recorded,
+and 400/413/500 stop retrying that candidate (same prompt cannot shrink).
+Sizing note for concurrent legs: llama.cpp's unified KV pool is shared
+across slots, so `-c` must cover the SUM of concurrent prompts — S4's
+region prompts + S7's graph prompts overflowed 32k; Zone now runs
+`-c 65536`. On the Superpod, vLLM sizing differs but the same additive
+logic applies to `max-model-len` × concurrency.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus

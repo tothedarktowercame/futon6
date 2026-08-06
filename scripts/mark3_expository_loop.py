@@ -243,11 +243,20 @@ def run(args: argparse.Namespace) -> int:
                 if attempt == 0
                 else prompt + f"\n\n# previous attempt failed:\n{last_error}\n# fix it and emit only EDN."
             )
-            response = (
-                call_stub(attempt_prompt, candidate, attempt)
-                if args.backend == "stub"
-                else call_openai(attempt_prompt, candidate, attempt, args.model)
-            )
+            try:
+                response = (
+                    call_stub(attempt_prompt, candidate, attempt)
+                    if args.backend == "stub"
+                    else call_openai(attempt_prompt, candidate, attempt, args.model)
+                )
+            except Exception as e:  # endpoint/network — one candidate must never
+                # abort the batch (E-superpod-hardening H11; the IATC loop already
+                # contains these). Oversized-context 4xx/5xx: retrying the same
+                # prompt cannot help, so stop attempting this candidate.
+                last_error = f"endpoint error: {e}"
+                if getattr(e, "code", None) in (400, 413, 500):
+                    break
+                continue
             edn = extract_edn(response)
             if not edn:
                 last_error = "no EDN map found in response"
