@@ -81,16 +81,48 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--graphs", default="data/iatc-argument-graphs/loop-run-70b")
     ap.add_argument("--candidates", default="data/cand-neighborhood")
-    ap.add_argument("--run-dir", default=None)   # accepted for stepper symmetry
+    ap.add_argument("--run-dir", default=None)
+    ap.add_argument("--run-id", default="adhoc")
+    ap.add_argument("--corpus-id", default="adhoc")
     a = ap.parse_args()
     pts, nw = move_curve(a.graphs, a.candidates)
     print("proof-move grounding accretion curve (n papers, #cues, grounding):")
     for k, c, g in pts:
         print(f"  n={k:2d}  cues={c:2d}  grounding={g:.3f}")
     rise = pts[-1][2] - pts[0][2]
-    print(f"  rise {pts[0][2]:.3f} → {pts[-1][2]:.3f}  (+{rise:.3f}); rising={all(pts[i][2] <= pts[i+1][2] + 1e-9 for i in range(len(pts)-1))}")
-    open(OUT, "w").write(svg(pts, nw))
-    print(f"wrote {os.path.relpath(OUT, ROOT)}")
+    rising = all(pts[i][2] <= pts[i + 1][2] + 1e-9 for i in range(len(pts) - 1))
+    print(f"  rise {pts[0][2]:.3f} → {pts[-1][2]:.3f}  (+{rise:.3f}); rising={rising}")
+
+    # The curve IS the product of the sweep ("coverage is a bonus; the curve is
+    # the product" — playbook §1), so it must land where RETRIEVE looks and must
+    # not clobber a previous run's artifact. --run-dir was previously accepted
+    # and ignored, and OUT is a mark6-hardcoded showcase path outside the
+    # RETRIEVE manifest (E-superpod-hardening H16, 2026-08-06).
+    targets = [OUT]
+    if a.run_dir:
+        out_dir = a.run_dir if os.path.isabs(a.run_dir) else os.path.join(ROOT, a.run_dir)
+        os.makedirs(out_dir, exist_ok=True)
+        targets.append(os.path.join(out_dir, "accretion-curve.html"))
+        import json as _json
+        with open(os.path.join(out_dir, "accretion-curve.json"), "w") as fh:
+            _json.dump({"run_id": a.run_id, "corpus_id": a.corpus_id,
+                        "metric": "proof-move-grounding",
+                        "points": [{"n_papers": k, "cues": c, "grounding": g} for k, c, g in pts],
+                        "rise": round(rise, 6), "rising": rising}, fh, indent=1)
+        print(f"wrote {os.path.join(a.run_dir, 'accretion-curve.json')}")
+        try:
+            sys.path.insert(0, os.path.join(ROOT, "scripts"))
+            import metric_harness as mh
+            for k, _c, g in pts:
+                mh.emit_record(out_dir, run_id=a.run_id, corpus_id=a.corpus_id,
+                               paper_id=f"(corpus n={k})", stage="S12",
+                               metric="proof-move-grounding", axis="accretion",
+                               value=round(g, 4), computable=True)
+        except Exception as ee:
+            print(f"  (metric emit skipped: {ee})")
+    for t in targets:
+        open(t, "w").write(svg(pts, nw))
+        print(f"wrote {os.path.relpath(t, ROOT)}")
 
 
 if __name__ == "__main__":

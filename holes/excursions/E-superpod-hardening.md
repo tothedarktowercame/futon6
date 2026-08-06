@@ -288,7 +288,43 @@ so aggregation was unaffected.
 **Standing question this raises for the other learning stages:** S11 and S12
 should be audited the same way before the window — if the accretion curves
 (learning goal #1) are likewise stdout-only, the sweep's whole product is
-unretrievable.
+unretrievable. *Audited immediately; see H16 — the answer was yes, worse.*
+
+### H16 — the whole learning layer's product is unretrievable. **S12 FIXED · S11 OPEN**
+
+Auditing S11/S12 per H15's standing question found the same failure across the
+entire layer the playbook calls the point of the run:
+
+| stage | learning goal | persistence before 2026-08-06 |
+|---|---|---|
+| S10 lexicon | #2 move-lexicon convergence | stdout only (H15, fixed) |
+| S11 structural | #3 archetype census · #4 whole-paper signatures | `sfc_struct_canon` **0 file writes**; `clean_paper_signature` **0 file writes** |
+| S12 accretion | #1 the curves | hardcoded `data/showcases/`**`mark6`**`-accretion-curve.html`; `--run-dir` accepted and never referenced; SVG only, no numbers |
+
+S12 was the worst of the three: a mark7 run would write its curve into the
+**mark6-named artifact** (silently clobbering it), **outside** the RETRIEVE
+manifest (so teardown destroys it), and persist **no numeric data** — for the
+stage whose own criterion says *"coverage is a bonus; the curve is the
+product."*
+
+**S12 fixed:** writes `<run-dir>/accretion-curve.{html,json}` (points, rise,
+rising-flag) and emits per-checkpoint MetricRecords so the curve is
+machine-readable; legacy showcase path retained; `--run-id`/`--corpus-id`
+threaded through the stepper.
+
+**S11 OPEN:** both scripts remain stdout-only. Deliberately not patched blind —
+unlike the lexicon and the curve, the natural artifact shape for a structural
+canon and a whole-paper signature set has not been established here, and
+inventing one risks a format nobody downstream reads. Needs a five-minute
+decision, then the same treatment.
+
+**The pattern behind H15/H16, worth stating for the handoff:** the pipeline was
+developed on a dev box where stdout is a terminal the author is watching, so
+nothing scientific ever had to survive a teardown. Every stage that produces
+*artifacts* (graphs, CLeans, embeds) persists correctly; every stage that
+produces *findings* prints them. That asymmetry is invisible until the
+pipeline runs somewhere its operator cannot watch — which is exactly what a
+20-hour cluster window is.
 
 ### H8 — model-sensitivity comparison now available. **ASSET**
 

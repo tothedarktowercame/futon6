@@ -113,7 +113,8 @@ OPS = {
     "S11": {"cmd": f"{{PY}} scripts/sfc_struct_canon.py --formulae {RUN}/def-formulae.txt ; "
             f"{{PY}} scripts/clean_paper_signature.py --embed {DEMO}/clean-embed.json",
             "crit": "structural canonical shapes + whole-paper signatures produced"},
-    "S12": {"cmd": f"{{PY}} scripts/accretion_curves.py --graphs {GRAPHS} --candidates {CAND} --run-dir {RUN}",
+    "S12": {"cmd": f"{{PY}} scripts/accretion_curves.py --graphs {GRAPHS} --candidates {CAND} "
+            f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
             "crit": "ACCRETION SWEEP: every tier metric checkpointed at log-spaced n -> rising curves"},
     "RETRIEVE": {"boot": True, "halt": True, "note": "<profile.retrieve> — pull ALL run outputs to dev BEFORE teardown"},
 }
