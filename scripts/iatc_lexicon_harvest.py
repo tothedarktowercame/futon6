@@ -18,6 +18,7 @@ Each harvested entry carries the IATC's OWN CONFIDENCE in that anchoring:
 """
 import argparse
 import glob
+import json
 import os
 import re
 import sys
@@ -149,6 +150,34 @@ def main():
     for fl in flattened[:4]:
         print(f"  {fl['pid']} L{fl['lines'][0]}-{fl['lines'][1]}: {fl['text'][:55]!r}")
     if a.run_dir:
+        # PERSIST the lexicon (E-superpod-hardening H15, 2026-08-06). The playbook's
+        # RETRIEVE manifest promises "the harvested lexicons" under data/runs/<id>
+        # and names move-lexicon convergence as learning goal #2 — but every S10
+        # script was stdout-only, so on a cluster the corpus's move vocabulary died
+        # with the terminal at teardown. Exactly the mark6 lost-CLeans shape.
+        try:
+            out_dir = a.run_dir if os.path.isabs(a.run_dir) else os.path.join(ROOT, a.run_dir)
+            os.makedirs(out_dir, exist_ok=True)
+            payload = {
+                "run_id": a.run_id, "corpus_id": a.corpus_id,
+                "distinct_entries": len(lex),
+                "layers": dict(layers),
+                "grammar": dict(grammar.most_common()),
+                "confidence": {"high_ge_0.7": len(hi), "low_lt_0.3": len(lo),
+                               "mean": round(sum(mc(e) for _, e in entries) / max(1, len(entries)), 4)},
+                "entries": [{"phrase": k, "count": e["count"],
+                             "mean_conf": round(mc(e), 4),
+                             "layers": sorted(set(e["layer"])),
+                             "exemplars": e.get("exemplars", [])[:3]}
+                            for k, e in entries],
+                "flattened": flattened,
+            }
+            lex_path = os.path.join(out_dir, "inference-lexicon.json")
+            with open(lex_path, "w") as fh:
+                json.dump(payload, fh, indent=1)
+            print(f"\nwrote {lex_path}  ({len(lex)} entries)")
+        except Exception as ee:
+            print(f"  (lexicon persist skipped: {ee})")
         try:
             import metric_harness as mh
             mh.emit_record(a.run_dir, run_id=a.run_id, corpus_id=a.corpus_id, paper_id="(corpus)",

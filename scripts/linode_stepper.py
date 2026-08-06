@@ -106,7 +106,8 @@ OPS = {
            f"--embed-json {DEMO}/clean-embed.json"},
     "S9": {"cmd": "{PY} scripts/mark4_apm_structure_coverage.py ; {PY} scripts/clean_hole_harvest.py  # optional CPU tails"},
     # --- LEARNING LAYER (the 'improve as we run' instrumentation; CPU post-stages) ---
-    "S10": {"cmd": f"{{PY}} scripts/iatc_lexicon_harvest.py --graphs {GRAPHS} --run-dir {RUN} && "
+    "S10": {"cmd": f"{{PY}} scripts/iatc_lexicon_harvest.py --graphs {GRAPHS} --run-dir {RUN} "
+            "--run-id $RUN_ID --corpus-id $CORPUS && "
             f"{{PY}} scripts/iatc_move_reground.py && {{PY}} scripts/expository_reground.py",
             "crit": "move-lexicon harvested (relations+warrants+expository moves); reground lift >= 0"},
     "S11": {"cmd": f"{{PY}} scripts/sfc_struct_canon.py --formulae {RUN}/def-formulae.txt ; "

@@ -263,6 +263,33 @@ secondary find). Together they say: **derive paper ids from the artifact's
 splitting.** math.CT is roughly half old-style ids, so at 4,616 papers this
 is not an edge case.
 
+### H15 — the run's headline science was never written to disk. **FIXED**
+
+The playbook's RETRIEVE manifest promises "metrics + ledger + **the harvested
+lexicons** + accretion curves" under `data/runs/<id>`, and learning goal #2 is
+*"Move-lexicon convergence (S10) — how large is math.CT's inference/expository
+move vocabulary, and where does it saturate?"* But all three S10 scripts
+(`iatc_lexicon_harvest`, `iatc_move_reground`, `expository_reground`) are
+**stdout-only** — verified, zero file writes between them. On a cluster the
+answer to learning goal #2 would live in a terminal buffer and die at
+teardown: the mark6 lost-CLeans shape, in the one stage whose entire output is
+the science rather than an artifact.
+
+Fixed: `iatc_lexicon_harvest` now writes `<run-dir>/inference-lexicon.json`
+(entries with counts/mean-confidence/exemplars, the relation grammar, the
+confidence split). Verified on the e2e run: 185 KB, 732 entries.
+
+Secondary (same commit): the stepper's S10 cmd passed `--run-dir` but not
+`--run-id`/`--corpus-id`, so S10's MetricRecords were tagged `adhoc/adhoc`
+(the H9/H10 pattern again). Now threaded. Severity is **provenance, not data
+loss** — `metric_harness` groups by `(metric, stage, axis)` within a run-dir,
+so aggregation was unaffected.
+
+**Standing question this raises for the other learning stages:** S11 and S12
+should be audited the same way before the window — if the accretion curves
+(learning goal #1) are likewise stdout-only, the sweep's whole product is
+unretrievable.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus
