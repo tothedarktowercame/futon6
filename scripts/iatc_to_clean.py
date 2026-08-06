@@ -83,26 +83,8 @@ def _edn_safe(text):
       non-ASCII in symbols/keywords (:hom->cone with a real arrow, :mu-natural)
         -> 'u<hex codepoint>'  (E-superpod-hardening H12, 2026-08-06: 5/98 graphs
         on the Zone e2e run carried unicode ids and were dropped at S7)"""
-    out, in_str, esc = [], False, False
-    for ch in text:
-        if in_str:
-            out.append(ch)
-            if esc:
-                esc = False
-            elif ch == "\\":
-                esc = True
-            elif ch == '"':
-                in_str = False
-        elif ch == '"':
-            in_str = True
-            out.append(ch)
-        elif ch == "'":
-            out.append("prime")
-        elif ord(ch) > 127:
-            out.append("u%04x" % ord(ch))
-        else:
-            out.append(ch)
-    return "".join(out)
+    from edn_compat import edn_safe   # single source of truth (H12)
+    return edn_safe(text)
 
 
 def load_graph(path):

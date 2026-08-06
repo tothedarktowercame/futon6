@@ -104,8 +104,17 @@ def plain_to_edn(value: Any) -> Any:
 
 
 def load_edn(path: Path) -> dict[str, Any]:
-    text = re.sub(r":([A-Za-z0-9_./?=-]+)'", r":\1-prime", path.read_text())
-    return edn_to_plain(edn_format.loads(text))
+    # Shared bb->Python reconciliation (E-superpod-hardening H12). The previous
+    # inline regex handled `'` only, so unicode keyword ids (:hom<arrow>cone,
+    # which bb accepts) raised EDNDecodeError here and the graph was SKIPped out
+    # of comprehension without ever failing a gate.
+    import os as _os
+    import sys as _sys
+    _here = _os.path.dirname(_os.path.abspath(__file__))
+    if _here not in _sys.path:
+        _sys.path.insert(0, _here)
+    from edn_compat import edn_safe
+    return edn_to_plain(edn_format.loads(edn_safe(path.read_text())))
 
 
 def clean_text(text: str) -> str:

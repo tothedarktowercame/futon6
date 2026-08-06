@@ -207,6 +207,43 @@ would be a post-S3 pass that loads every gated graph through the *Python*
 reader and fails loudly on mismatch — the gates prove Clojure-readability
 only.
 
+### H12b — the same reader divergence was patched in three loaders; now one. **FIXED**
+
+The H12 fix landed in `iatc_to_clean._edn_safe` and S5 still dropped the same
+graph, because `r2d_concept_coverage.load_edn` is a *separate* reader with its
+own inline regex (apostrophes only) and `clean_box_typing` inherits whichever
+it imports. Three ad-hoc reconciliations of one divergence, so each new
+divergence has to be found three times — and the two unpatched paths keep
+silently dropping graphs (`SKIP <pid>: EDNDecodeError`, no gate failure).
+
+Now a single module, `scripts/edn_compat.py:edn_safe`, which both loaders
+delegate to. Verified: the unicode graph loads through the iatc path *and*
+the r2d path; S5's comprehension went 97 → **98 graphs covered**.
+
+### H13 — S5's own criterion is unmeetable: rung3-technique is in no stage. **OPEN**
+
+S5 comprehension = R2d (nouns grounded) ⊕ rung-3 (strategies grounded), and
+its stepper criterion is *"G-comprehension: verdict separates weak-extraction
+from weak-proof."* The rung-3 half reads `data/rung3-technique/<pid>.technique.json`,
+produced by `scripts/rung3_technique.py` — which **appears nowhere in
+`linode_stepper.py`'s stage list or the DAG contract**. The only directory
+present is `loop-run-70b/`, a mark4-era artifact for a different corpus.
+
+Consequence, measured on the e2e run: the strategy column is empty for every
+paper (`s:r3 = --`), and the verdict distribution is
+`{weak-extraction: 97, partial-comprehension: 1, no-structure: 98}` — i.e.
+**all 98 proofs are "no-structure"**, and `weak-proof` is unreachable by
+construction. The stage passes (it has a `crit`, not a gate) while emitting a
+column that cannot discriminate. At 4,616 papers this produces a vacuous
+comprehension verdict for the entire corpus.
+
+Fix requires a decision, not just wiring: either add rung3_technique as a
+stage (it needs `--steps-dir`/`--cas-select` inputs whose producers must be
+traced), or restate S5's criterion to what the pipeline can actually compute.
+**Not attempted here** — it is a scoping question for Joe, and it is the one
+finding in this excursion that changes what a run *means* rather than whether
+it completes.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus
