@@ -57,8 +57,19 @@ def _norm(phrase):
 
 
 def _pid_of(fname):
+    """Paper id from a graph filename `<pid>__p<N>.edn`.
+
+    The pid ITSELF contains `__` for old-style arXiv ids (`math__0608040` is the
+    safe-form of `math/0608040`), so splitting on `__` and taking the first field
+    collapses every pre-2007 paper to the bare archive name `math` — the harvest
+    then looks up an eprint called "math", finds none, and aborts the whole run
+    (E-superpod-hardening H14, 2026-08-06). Strip the proof suffix instead; that
+    is the convention the rest of the pipeline already uses.
+    """
     base = os.path.basename(fname)
-    return base.split("__")[0].split("_")[0][:-4] if "__" not in base and "_" not in base else base.split("__")[0].split("_")[0]
+    if base.endswith(".edn"):
+        base = base[:-4]
+    return base.rsplit("__p", 1)[0]
 
 
 def harvest(graph_dir):

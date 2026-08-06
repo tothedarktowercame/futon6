@@ -244,6 +244,25 @@ traced), or restate S5's criterion to what the pipeline can actually compute.
 finding in this excursion that changes what a run *means* rather than whether
 it completes.
 
+### H14 — filename id-parsing breaks on one arXiv id family (twice, opposite ways). **FIXED**
+
+`iatc_lexicon_harvest._pid_of` derived the paper id as
+`basename.split("__")[0]`. But the pid *itself* contains `__` for **old-style
+arXiv ids** — `math__0608040` is the safe-form of `math/0608040` — so every
+pre-2007 paper collapsed to the bare archive name `math`, the harvest looked
+up an eprint called "math", found none, and **aborted the entire S10 run**
+(not per-paper: one bad id ends the stage). Fixed to strip the proof suffix
+(`rsplit("__p", 1)[0]`), the convention the rest of the pipeline uses;
+unit-checked across both id families.
+
+This is the **second** instance of the same class in this excursion, failing
+in the opposite direction: the S4 region-cap trim grouped by *filename* and
+so missed **new-style** ids, leaving one paper at 336 uncapped regions (H11b,
+secondary find). Together they say: **derive paper ids from the artifact's
+`paper-id` field, or from one shared helper — never by ad-hoc filename
+splitting.** math.CT is roughly half old-style ids, so at 4,616 papers this
+is not an edge case.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus
