@@ -154,6 +154,26 @@ region prompts + S7's graph prompts overflowed 32k; Zone now runs
 `-c 65536`. On the Superpod, vLLM sizing differs but the same additive
 logic applies to `max-model-len` × concurrency.
 
+### H11b — server-down must pause loops, not fail items; serve the model supervised. **FIXED**
+
+Sequel to H11, learned twice in one day on Zone: per-item error containment
+without distinguishing *endpoint-down* from *item-bad* converts a server
+blip into batch loss. A 35 s llama-server restart wiped 87/98 box-typing
+graphs (fast-fail per graph); later the server itself died (SIGTERM,
+killer unidentified, ~23 min after a manual nohup restart) and the
+expository loop burned all 589 candidates in minutes while the box-typing
+loop — already carrying the fix — sat waiting politely. Fixes now in both
+loops: on connection-refused, poll the endpoint's `/health` (bounded,
+~5 min) and retry the SAME item. And the model server is no longer a
+nohup'd orphan: `systemd-run --user --unit=llama-glm -p Restart=on-failure`
+(+ `loginctl enable-linger`), so unexplained deaths self-heal. Superpod
+translation: serve vLLM under the cluster's supervisor, and assume client
+loops WILL see the endpoint vanish at least once per long window.
+
+Same incident, secondary find: the S4 region-cap trim grouped by filename
+and silently missed new-style paper ids (0806.1324 kept all 336 regions);
+trim now groups by the candidate's `paper-id` field. 280 candidates ≤30/paper.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus

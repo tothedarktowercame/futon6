@@ -13,6 +13,8 @@ import os
 import re
 import subprocess
 import sys
+import time
+import urllib.request
 from pathlib import Path
 from typing import Any
 
@@ -256,6 +258,19 @@ def run(args: argparse.Namespace) -> int:
                 last_error = f"endpoint error: {e}"
                 if getattr(e, "code", None) in (400, 413, 500):
                     break
+                # Server-down is a SERVER state, not a candidate property
+                # (H11b: a dead endpoint fast-failed 589 candidates in minutes,
+                # 2026-08-06). Wait for /health to return, then retry.
+                if "Connection refused" in str(e):
+                    base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
+                    health = base.rsplit("/v1", 1)[0] + "/health"
+                    for _ in range(30):
+                        time.sleep(10)
+                        try:
+                            urllib.request.urlopen(health, timeout=5)
+                            break
+                        except Exception:
+                            continue
                 continue
             edn = extract_edn(response)
             if not edn:

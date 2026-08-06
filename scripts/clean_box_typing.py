@@ -127,6 +127,21 @@ def main():
                            f"valid JSON using ONLY the listed tags.")
             except Exception as e:  # network / endpoint
                 why = f"query error: {e}"
+                # Server-down (connection refused) is a SERVER state, not a graph
+                # property: fast-failing here wiped 87/98 graphs during a 35 s
+                # llama-server restart (2026-08-06). Wait for the endpoint to
+                # come back (bounded), then retry the same graph.
+                if "Connection refused" in str(e):
+                    import time as _time
+                    for _wait in range(30):
+                        _time.sleep(10)
+                        try:
+                            import urllib.request as _ur
+                            _ur.urlopen(args.endpoint.rsplit("/v1", 1)[0] + "/health",
+                                        timeout=5)
+                            break
+                        except Exception:
+                            continue
         if typing is None:
             failed.append((pid, why))
             print(f"  FAIL {pid}: {why}")
