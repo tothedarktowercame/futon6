@@ -182,9 +182,17 @@ be gate-PASS and still be *silently dropped downstream*. Known instances:
 `'` in keywords (already handled), and — new, 2026-08-06 — **non-ASCII in
 keywords**: the model naturally writes mathematical ids like `:hom→cone`,
 `:mu-natural`, which Clojure accepts and Python rejects with
-`Illegal character`. Hit **5 of 98 graphs (~5%)** on the Zone e2e run; at
-4,616-paper scale that is ~5% of S3's output lost between stages, visible
-only as scattered `load error` lines.
+`Illegal character`. Hit **1 of 98 graphs (~1%)** on the Zone e2e run,
+visible only as a single scattered `load error` line.
+
+*Rate corrected 2026-08-06 (was "5 of 98"): the first census grepped for
+non-ASCII after a colon and matched **inside strings** too — the other four
+hits were unicode in `:text` prose (`α ↦`, `RΨ_C(M)`, `lens_{C,⊗}`, `iso τ`),
+which `edn_format` reads without complaint, and all four produced CLeans
+normally. Only keyword-position unicode breaks. The fix and its general
+lesson stand; the frequency does not. Recorded rather than quietly edited
+because an inflated defect rate in a doc headed for Rob is worse than no
+number.*
 
 Fixed in `iatc_to_clean.py:_edn_safe` (the shared loader, so every Python
 consumer benefits): non-ASCII outside double-quoted strings →
