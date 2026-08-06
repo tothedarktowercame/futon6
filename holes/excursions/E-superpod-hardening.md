@@ -122,6 +122,26 @@ as alive. Discipline: `pkill -x` on the binary name, or split the pattern
 (`P=linode; pgrep -f "${P}_stepper"`), and verify via ledger/process table,
 never via the incantation that contains the pattern.
 
+### H9 — S7's stepper command hardcoded `--model mark4-70b`. **FIXED**
+
+Any deployment whose served model isn't literally named `mark4-70b` gets
+silent 404s (or, worse, a different model that happens to answer). Now
+`--model ${MODEL:-mark4-70b}` — same env var the S3 wrapper honors.
+Found by static read during the e2e-sample planning (2026-08-06); the
+stage had never been executed off the original box.
+
+### H10 — S4's model and region-cap are unwired. **PARTIALLY FIXED**
+
+Two defects: (a) the stepper's S4 cmd never passed `--model`, so the
+expository loop fell back to its default `meta-llama/Llama-3.1-8B-Instruct`
+— a silent 404 on any server not serving that exact name. FIXED:
+`--model ${MODEL:-...}`. (b) The playbook caps S4 at ~30 regions/paper
+(one paper had 466), but `mark3_extract_expository_candidates.py` has no
+cap flag and the stepper can't express one — the cmd runs ALL regions.
+OPEN: the e2e run applies a deterministic out-of-band trim (first 30 per
+paper by filename) between extract and loop; the durable fix is a
+`--max-regions-per-paper` flag threaded through both scripts.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus

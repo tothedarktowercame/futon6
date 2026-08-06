@@ -84,7 +84,8 @@ OPS = {
     "S4": {"cmd": "{PY} scripts/mark3_extract_expository_candidates.py --list {IDS} "
            "--out data/expository-candidates-run && {PY} scripts/mark3_expository_loop.py "
            "--candidates data/expository-candidates-run --out data/expository-scope-graphs/run "
-           f"--backend openai --run-dir {RUN}",
+           "--backend openai --model ${MODEL:-meta-llama/Llama-3.1-8B-Instruct} "
+           f"--run-dir {RUN}",
            "crit": "expository_argcheck (self-gated in loop)",
            "note": "ALL regions by default — cap/sample per paper at archive scale "
                    "(mark7 playbook: ~30 regions/paper so S4 doesn't dominate the window)"},
@@ -96,7 +97,8 @@ OPS = {
            "|| exit 1; done < {IDS}",
            "crit": "B wellformed: every proof attaches to a statement; orphans flagged"},
     "S7": {"cmd": f"{{PY}} scripts/clean_box_typing.py --graphs {GRAPHS} --out {CLEAN} "
-           f"--endpoint http://localhost:$PORT/v1/chat/completions --model mark4-70b --run-dir {RUN} && "
+           "--endpoint http://localhost:$PORT/v1/chat/completions --model ${MODEL:-mark4-70b} "
+           f"--run-dir {RUN} && "
            f"{{PY}} scripts/clean_structure_embed.py --clean-dir {CLEAN} --out {DEMO}",
            "gate": f"bb scripts/clean_vocab_gate.bb {CLEAN} && {{PY}} scripts/clean_entropy_gate.py "
            f"--embed {DEMO}/clean-embed.json"},
