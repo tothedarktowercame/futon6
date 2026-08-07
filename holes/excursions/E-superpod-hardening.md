@@ -423,6 +423,45 @@ window. Fixed with the cache shape `iatc_lexicon_harvest._text_lines` already
 used. With it the stage completes and harvests 28 corpus discourse-cues
 (`note`, `recall`, `observe`, `in fact`, `clearly`, `well known`, …).
 
+### H21 — source anchors are approximately right and precisely wrong. **FIXED (validating)**
+
+A *faithfulness* hazard — the first of its kind here; H1–H20 are all about
+whether a stage runs, persists, or reads the right corpus, none about whether
+the artifacts **point where they say they point**.
+
+Found by reading one paper against its source for the annex (2311.05789):
+line 176 carries *"Clearly composites of semi-groupal functors and natural
+transformations are semi-groupal"*, the node glosses it faithfully — and
+anchors it `[171 172]`. Mechanism, confirmed from the candidate file: the
+prompt hands over the window as **bare text**, stating only its bounds, so to
+emit `:source {:lines [a b]}` the model must **count** lines from the top of
+the window. It miscounts by a few.
+
+**Measured** (`scripts/anchor_drift2.py`, searching only inside each node's own
+window — see the method note below): of 290 node texts locatable in their
+window, **41% of anchors cover the line the text came from**; median drift when
+wrong **3 lines**; 72% within 3; max 61.
+
+*Method note, recorded because the first attempt was wrong.* A first pass
+searched the WHOLE paper for the best lexical match and reported 22% exact with
+a 130-line median drift. Bimodality (44% within 5 lines, yet a 130-line median)
+gave it away: in a category-theory paper a restated definition matches
+elsewhere, so the locator was finding other legitimate occurrences and scoring
+them as drift. That measured the locator, not the model. Restricting the search
+to the window the model was shown — where the correct anchor necessarily is —
+gives the figures above. The alarming number was the artifact.
+
+**Fix:** render the window with absolute line numbers in the margin and
+instruct the model to use them verbatim rather than counting
+(`numbered_window()` in both the IATC and expository loops). Counting becomes
+reading. Validation re-mine of four proofs under the numbered prompt is in
+flight; the before/after belongs in the annex, not in a claim here.
+
+**Why the aggregate census could not find this.** R6d asks whether an anchor
+escapes its passage; these do not — they are wrong *inside* it. Only reading a
+worked example against its source separates "in the right region" from "on the
+right line". That is the argument for keeping an annex at all.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus

@@ -90,6 +90,20 @@ def render_enrichment(cand: dict) -> str:
     return "\n".join(f"L{r['line']} ({r['kind']}) {r['tip']}" for r in rows)
 
 
+def numbered_window(cand: dict) -> str:
+    """Render the source window with ABSOLUTE line numbers.
+
+    The window used to be handed over as bare text with only its bounds stated,
+    so the model had to COUNT lines to produce :source {:lines [a b]} anchors —
+    and it miscounted: measured over the e2e corpus, only 41% of node anchors
+    covered the line their own text came from (median drift 3 lines, 72% within
+    3). Numbering turns counting into reading (E-superpod-hardening H21).
+    """
+    lo = (cand.get("window-lines") or [1, 1])[0]
+    body = str(cand.get("source-window", ""))
+    return "\n".join(f"{lo + i:5d} | {ln}" for i, ln in enumerate(body.split("\n")))
+
+
 def build_prompt(cand: dict, seeds: str) -> str:
     binders = "\n".join(cand.get("binder-context", [])) or "(none)"
     anatomy = render_enrichment(cand)
@@ -108,8 +122,9 @@ deterministic anatomy detected IN this window (symbol typings, definitions,
 quantifiers, proof-moves, citations — anchor to these; do not contradict them):
 {anatomy}
 
-source-window:
-{cand['source-window']}
+source-window (ABSOLUTE line numbers on the left; use them verbatim in
+every :source {{:lines [a b]}} — do not count lines yourself):
+{numbered_window(cand)}
 
 EDN graph:"""
 

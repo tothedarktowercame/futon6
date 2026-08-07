@@ -101,6 +101,14 @@ def render_enrichment(candidate: dict[str, Any]) -> str:
     return "\n".join(f"L{r['line']} ({r['kind']}) {r['tip']}" for r in rows)
 
 
+def numbered_window(candidate: dict[str, Any]) -> str:
+    """Source window with ABSOLUTE line numbers — see H21; the model was
+    otherwise counting lines to place :source {:lines [a b]} and miscounting."""
+    lo = (candidate.get("window-lines") or [1, 1])[0]
+    body = str(candidate.get("source-window", ""))
+    return "\n".join(f"{lo + i:5d} | {ln}" for i, ln in enumerate(body.split("\n")))
+
+
 def build_prompt(candidate: dict[str, Any]) -> str:
     return f"""{SYSTEM}
 
@@ -119,8 +127,9 @@ region-type: {candidate.get('region-type')}
 deterministic anatomy in this region:
 {render_enrichment(candidate)}
 
-source-window:
-{candidate['source-window']}
+source-window (ABSOLUTE line numbers on the left; use them verbatim in
+every :source {{:lines [a b]}} — do not count lines yourself):
+{numbered_window(candidate)}
 
 EDN graph:"""
 
