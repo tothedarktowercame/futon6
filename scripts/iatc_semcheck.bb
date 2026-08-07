@@ -190,12 +190,25 @@
     :warrant-resolution (empty? (:edges graph))
     false))
 
-(defn normalize-check [graph result]
+;; A check whose floor admits every rate cannot fail, so printing it as PASS in
+;; the same column as three gating rungs makes any aggregate over that column a
+;; mixture of "verified" and "not checked". :warrant-resolution is configured
+;; report-only (:warrant-floor 0.0) until a stricter floor is calibrated, and on
+;; the 98-graph corpus it duly reported 98/98 with 31 of those at rate 0.000.
+;; The gating semantics are unchanged -- only the label it prints under.
+(defn report-only? [check opts]
+  (and (= :warrant-resolution check)
+       (zero? (double (or (:warrant-floor opts) 0.0)))))
+
+(defn normalize-check [graph result & [opts]]
   (let [na? (or (absent-structure? (:check result) graph)
                 (and (= :concept-coverage (:check result))
                      (empty? (:per-item result))))]
     (cond-> result
-      true (assoc :status (if na? :na (if (:pass result) :pass :fail)))
+      true (assoc :status (cond na? :na
+                                (report-only? (:check result) opts) :report
+                                (:pass result) :pass
+                                :else :fail))
       na? (assoc :pass true
                  :rate nil
                  :reasons ["N/A: required structure absent at this resolution"]))))
@@ -232,7 +245,7 @@
           ctx (anchor-load-lines graph (io/file file) anchor-opts)
           anchor-result (normalize-check graph
                                          (anchor-check-graph graph ctx anchor-opts))
-          closure-results (mapv #(normalize-check graph %)
+          closure-results (mapv #(normalize-check graph % opts)
                                 (closure-check-graph graph
                                                      {:file (.getPath (io/file file))
                                                       :paper-id (graph-paper-id graph file)
@@ -264,6 +277,9 @@
                     [check {:pass (count (filter #(= :pass (:status %)) rows))
                             :fail (count (filter #(= :fail (:status %)) rows))
                             :na (count (filter #(= :na (:status %)) rows))
+                            ;; report-only rows are neither verified nor failed;
+                            ;; kept out of :pass so no aggregate mixes them in
+                            :report (count (filter #(= :report (:status %)) rows))
                             :rates (vec (keep :rate rows))}])
         failures (vec (filter (complement :pass) results))]
     {:schema :futon6.iatc-semcheck.v1
