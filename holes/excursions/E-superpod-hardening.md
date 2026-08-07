@@ -547,6 +547,32 @@ deliberate policy, not silent abstention. An earlier draft of this note called
 them silent; that was a regex in the analysis script that matched only
 `PASS|FAIL`, not the pipeline hiding anything.
 
+## The CAS-SEL Tier-1 cost, measured — and what it says about the window
+
+The Tier-1 verify is one LLM call per proof step. Over the 16-paper corpus that
+is **818 calls for 98 proof graphs**, and `llama-server` here runs with a single
+slot (no `-np`), so they serialize. At the observed rate — the first paper's 9
+steps had not completed after 9 minutes, so >60s per call including prefill —
+the pilot corpus costs **14–20 hours of wall clock on Zone**.
+
+That is not a defect; it is the measurement that was missing. Two consequences:
+
+- **It is the argument for the GPU window, quantified.** math.CT is ~5,000
+  papers against this corpus's 16. Tier-1 over that is on the order of a hundred
+  times the calls, which is not a CPU workload under any scheduling. Until now
+  "the Superpod is needed" rested on the mining stages; this puts a number on the
+  cascade's share too.
+- **It is why H24's checkpointing was worth doing before the run, not after.**
+  A 14-hour serialized pass with no incremental write is a 14-hour wager on the
+  last call. With `--checkpoint` the run resumes by paper id, and the per-paper
+  stderr line is the only thing distinguishing "healthy" from "wedged" on a host
+  nobody is watching — a distinction this ledger has now had to make four times.
+
+Two-way sharding measured at 1.58x earlier in this note would bring the pilot
+under ~10 hours, but it needs `-np 2` on the server, i.e. restarting a shared
+endpoint that other agents on this box are using. That is an operator call, not
+a unilateral one.
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =
