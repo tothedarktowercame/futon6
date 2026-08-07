@@ -119,7 +119,27 @@ OPS = {
            f"--embed {DEMO}/clean-embed.json"},
     "S8": {"cmd": f"{{PY}} scripts/clean_graph_export.py --clean-dir {CLEAN} --out {DEMO}/ingest "
            f"--embed-json {DEMO}/clean-embed.json"},
-    "S9": {"cmd": "{PY} scripts/mark4_apm_structure_coverage.py && {PY} scripts/clean_hole_harvest.py"},
+    # S9 is run-scoped: both tails read THIS run's graphs and write under $RUN.
+    # They previously defaulted to the global graph tree (recursive, every run
+    # ever made) and to a shared demo path outside any run directory, so their
+    # products were neither about this corpus nor collected by RETRIEVE.
+    # The APM structure-match tail consumes proof/eprint scope files produced by
+    # the nlab-wiring detector, which belongs to a different programme and which
+    # this corpus does not generate. Chained with `;` it failed silently on every
+    # run (it needs two required arguments the stage never passed); chained with
+    # `&&` it would block S9's real products. It is therefore invoked only when
+    # its inputs exist, and skipped audibly when they do not.
+    "S9": {"cmd": "if [ -f data/apm-proof-scope-audit.json ] && [ -f data/nlab-wiring/eprint-scopes.json ]; "
+           "then {PY} scripts/mark4_apm_structure_coverage.py "
+           "--proof-scopes data/apm-proof-scope-audit.json "
+           "--eprint-scopes data/nlab-wiring/eprint-scopes.json; "
+           "else echo '  (skip APM structure-match: cross-programme scope inputs absent"
+           " — not produced by this corpus)'; fi && "
+           f"{{PY}} scripts/clean_hole_harvest.py --graphs {GRAPHS} "
+           f"--out {RUN}/pass3-holes.json && "
+           f"{{PY}} scripts/warrant_normalize.py --graphs {GRAPHS} "
+           f"--out {RUN}/hole-vocabulary.json",
+           "crit": "pass-3 hole map + normalized (type, concept) hole vocabulary, both run-scoped"},
     # --- LEARNING LAYER (the 'improve as we run' instrumentation; CPU post-stages) ---
     "S10": {"cmd": f"{{PY}} scripts/iatc_lexicon_harvest.py --graphs {GRAPHS} --run-dir {RUN} "
             "--run-id $RUN_ID --corpus-id $CORPUS && "

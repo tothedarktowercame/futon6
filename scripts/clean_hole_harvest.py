@@ -41,12 +41,28 @@ def load(path):
 
 def main():
     ap = argparse.ArgumentParser()
+    # Default was the GLOBAL graph tree (recursive), so this read every run ever
+    # made rather than the run in hand. The stepper now passes the run dir.
     ap.add_argument("--graphs", default="data/iatc-argument-graphs")
+    # Default was a shared demo path outside any run directory, so the product
+    # was not a run artifact and RETRIEVE never collected it.
     ap.add_argument("--out", default="data/showcases/clean-demo/pass3-holes.json")
     args = ap.parse_args()
 
     files = [f for f in glob.glob(os.path.join(args.graphs, "**", "*.edn"), recursive=True)
              if "/.attempts/" not in f and "/by-pid/" not in f]
+    # Exclude the sidecar reports the IATC loop writes beside each graph; without
+    # this a run of N proofs is read as 2N (run_artifacts, 2026-08-07).
+    try:
+        import sys as _sys
+        _h = os.path.dirname(os.path.abspath(__file__))
+        if _h not in _sys.path:
+            _sys.path.insert(0, _h)
+        from run_artifacts import is_sidecar
+        files = [f for f in files if not is_sidecar(f)]
+    except Exception:
+        files = [f for f in files if not f.endswith(".rung2.edn")]
+
     # dedup by paper id, prefer the richer runs
     pref = ["loop-run-70b", "gh200", "linode-stageA", "loop-run-dpdemo-final", "loop-run"]
     def rank(f):
