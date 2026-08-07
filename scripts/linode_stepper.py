@@ -60,6 +60,7 @@ IDS = "holes/math-ct-200.ids.txt"
 RUN = "data/runs/$RUN_ID"           # set per run; stages emit MetricRecords here
 CAND = "data/iatc-candidates-run"
 GRAPHS = "data/iatc-argument-graphs/run"
+EXPO = "data/expository-scope-graphs/run"
 CLEAN = "holes/clean-run"
 STEPS = "data/cas-select-steps/run"      # S5 rung-3 inputs (H13)
 RUNG3 = "data/rung3-technique/run"
@@ -117,8 +118,17 @@ OPS = {
            f"{{PY}} scripts/clean_structure_embed.py --clean-dir {CLEAN} --out {DEMO}",
            "gate": f"bb scripts/clean_vocab_gate.bb {CLEAN} && {{PY}} scripts/clean_entropy_gate.py "
            f"--embed {DEMO}/clean-embed.json"},
+    # S8's render tail is part of the stage, not an option. It reads THIS run's
+    # graphs (--graph-dir) and writes under $RUN, so the pages describe the
+    # corpus that produced them; the layer modules were pinned to loop-run-70b
+    # and to Joe's absolute checkout path until 2026-08-07, which made
+    # `render_run --all` report "16/16 rendered" over pages whose pipeline
+    # overlays were empty. Span counts now equal the artifact counts (98 IATC,
+    # 280 expository), which is the check worth keeping.
     "S8": {"cmd": f"{{PY}} scripts/clean_graph_export.py --clean-dir {CLEAN} --out {DEMO}/ingest "
-           f"--embed-json {DEMO}/clean-embed.json"},
+           f"--embed-json {DEMO}/clean-embed.json"
+           f" && FUTON6_IATC_DIR={GRAPHS} FUTON6_EXPO_DIR={EXPO} "
+           f"{{PY}} scripts/render_run.py --all --graph-dir {GRAPHS} --out-dir {RUN}/render"},
     # S9 is run-scoped: both tails read THIS run's graphs and write under $RUN.
     # They previously defaulted to the global graph tree (recursive, every run
     # ever made) and to a shared demo path outside any run directory, so their

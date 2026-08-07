@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 """render_run · ⑤ Expository — informal-reasoning moves (rail + margin verdict)."""
 from __future__ import annotations
+import os
 import glob, html, re
 from pathlib import Path
 from rr_compositor import Annotation, Layer, Span
 
-ROOT = Path("/home/joe/code/futon6")
-DIR = ROOT / "data/expository-scope-graphs/loop-run-70b"
+# Derived, not hardcoded — this only ran from Joe's checkout before.
+ROOT = Path(__file__).resolve().parent.parent
+# Pinned to loop-run-70b until 2026-08-07, so `render_run --all` over the current
+# run produced pages whose pipeline layers were empty while reporting 16/16
+# rendered. An overlay that finds nothing renders the same as one that is not
+# wired; only the span count tells them apart.
+DIR = Path(os.environ.get("FUTON6_EXPO_DIR", ROOT / "data/expository-scope-graphs/run"))
 
 
 def _src(b: str):

@@ -5,12 +5,18 @@ Anchored as a line rail (not inline) so it annotates the proof passage without
 muddying the composited CPU detail. The margin card says what it ADDED and judges
 it honestly."""
 from __future__ import annotations
+import os
 import html, re
 from pathlib import Path
 from rr_compositor import Annotation, Layer, Span
 
-ROOT = Path("/home/joe/code/futon6")
-DIR = ROOT / "data/iatc-argument-graphs/loop-run-70b"
+# Derived, not hardcoded — this only ran from Joe's checkout before.
+ROOT = Path(__file__).resolve().parent.parent
+# Pinned to loop-run-70b until 2026-08-07, so `render_run --all` over the current
+# run produced pages whose pipeline layers were empty while reporting 16/16
+# rendered. An overlay that finds nothing renders the same as one that is not
+# wired; only the span count tells them apart.
+DIR = Path(os.environ.get("FUTON6_IATC_DIR", ROOT / "data/iatc-argument-graphs/run"))
 
 
 def _src(block: str):
@@ -19,25 +25,38 @@ def _src(block: str):
 
 
 def layer(pid: str, line_start=None) -> Layer:
-    f = DIR / f"{pid}.edn"
-    if not f.exists():
+    # A paper has one graph per PROOF (`<pid>__p0.edn`), not one per paper. This
+    # looked up `<pid>.edn` only, which existed in loop-run-70b but not in the
+    # run directory — so the layer silently found nothing and rendered "IATC —
+    # none" over a corpus of 98 graphs. Same per-paper/per-proof confusion that
+    # collapsed 98 graphs into 12 files in S5.
+    files = [q for q in sorted(DIR.glob(f"{pid}.edn")) + sorted(DIR.glob(f"{pid}__p*.edn"))
+             if not q.name.endswith(".rung2.edn")]
+    if not files:
         return Layer("④", "IATC / formal argument", "#a11", "none", False, [],
                      [Annotation(1, "④", "IATC — none",
                                  '<div class="verdict">no IATC graph for this paper.</div>', "#a11")])
-    t = f.read_text()
-    nodes = {nid: tx for nid, _, tx in
-             re.findall(r'\{:id (:[^ ,]+), :kind (:[^ ,]+), :text "([^"]*)"', t)}
-    edges = re.findall(
-        r"\{:id (:e-[^ ,]+), :kind :infer, :relation (:[^ ,]+), :premise (:[^ ,]+), "
-        r':warrant \{:kind (:[^ ,}]+)(?:, :text "([^"]*)")?\}, :conclusion (:[^ ,}]+)'
-        r'(?:, :source \{:lines \[(\d+) (\d+)\]\})?', t)
-    src = _src(t[: t.find(":nodes")]) or (1, 1)
+    nodes: dict = {}
+    edges: list = []
+    spans: list = []
+    src = None
+    for q in files:
+        t = q.read_text()
+        nodes.update({nid: tx for nid, _, tx in
+                      re.findall(r'\{:id (:[^ ,]+), :kind (:[^ ,]+), :text "([^"]*)"', t)})
+        edges.extend(re.findall(
+            r"\{:id (:e-[^ ,]+), :kind :infer, :relation (:[^ ,]+), :premise (:[^ ,]+), "
+            r':warrant \{:kind (:[^ ,}]+)(?:, :text "([^"]*)")?\}, :conclusion (:[^ ,}]+)'
+            r'(?:, :source \{:lines \[(\d+) (\d+)\]\})?', t))
+        q0, q1 = _src(t[: t.find(":nodes")]) or (1, 1)
+        if src is None:
+            src = (q0, q1)
+        qs = line_start[q0 - 1] if line_start and q0 - 1 < len(line_start) else 0
+        qe = line_start[q1] if line_start and q1 < len(line_start) else qs + 1
+        spans.append(Span(qs, max(qe, qs + 1), "ov-iatc", f"IATC L{q0}-{q1}"))
     warr = sum(1 for e in edges if e[3] != ":missing-warrant")
     n, e = len(nodes), len(edges)
-    l0, l1 = src
-    s_char = line_start[l0 - 1] if line_start and l0 - 1 < len(line_start) else 0
-    e_char = line_start[l1] if line_start and l1 < len(line_start) else s_char + 1
-    spans = [Span(s_char, max(e_char, s_char + 1), "ov-iatc", f"IATC L{l0}-{l1}")]
+    l0, l1 = src or (1, 1)
 
     # per-line reasoning rows: show each inference edge ON the line it is anchored to
     def short(nid):
