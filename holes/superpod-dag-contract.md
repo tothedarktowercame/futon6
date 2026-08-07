@@ -146,21 +146,38 @@ the only safety net. They are now load-bearing, not advisory.
                        ledger entry for the same :corpus-id, else REFUSE (or --reuse)"}
  :units {:p1 :per-paper :p2 :corpus}   ; Phase 1 mines each paper; Phase 2 reasons across all papers
  :dag
- [{:id :S0 :depends-on []            :required true  :phase :p1}
-  {:id :S1 :depends-on [:S0]         :required true  :phase :p1
-   :note "whole-paper graph (target B): definitions + theorem/lemma statements as nodes, EVERY proof as a substructure off its statement, expository prose as connective edges. NOT a single-proof candidate (that mark3 one-passage selector is superseded)."}
-  {:id :S2 :depends-on [:S1]         :required true :barrier true :must-be-corpus-fresh true :phase :p2
+ ;; STAGE SEMANTICS MUST MATCH linode_stepper.OPS. They did not until 2026-08-07:
+ ;; this block still carried the pre-2026-06-23 numbering (S4 clean, S5 strategy,
+ ;; S6 comprehension, S7 embedding) while the runner used the corrected one, so
+ ;; load_deps() proved completeness of a DAG the runner never executes — S5
+ ;; depended only on S1, S6 omitted its expository input, and S10-S12 had no
+ ;; dependencies at all. Current semantics: S3 IATC | S4 expository |
+ ;; S5 comprehension | S6 paper-graph | S7 CLean+embed | S8 export | S9 APM |
+ ;; S10 lexicon+reground | S11 structural canon | S12 accretion sweep.
+ [{:id :S0  :depends-on []             :required true  :phase :p1}
+  {:id :S1  :depends-on [:S0]          :required true  :phase :p1
+   :note "deterministic anatomy: marks over the LaTeX source. Every later per-paper stage reads these."}
+  {:id :S2  :depends-on [:S1]          :required true :barrier true :must-be-corpus-fresh true :phase :p2
    :note "concept-substrate — EMERGENT from this corpus; NEVER reused from a prior/pre-planned vocabulary (mark5 wrongly reused a stale index). No --reuse for S2: a foreign corpus-id is a hard refusal."}
-  {:id :S3 :depends-on [:S0 :S1]     :required true :compute :gpu-llm :phase :p1
-   :note "reconstruct EVERY proof substructure in the paper's graph (not one selected passage)"}
-  {:id :S4 :depends-on [:S0 :S3]     :required true :compute :gpu-llm :phase :p1}
-  {:id :S5 :depends-on [:S1]         :required true  :phase :p1}
-  {:id :S6 :depends-on [:S2 :S3 :S5] :required true  :phase :p2
-   :note "LOAD-BEARING EDGE: depends-on S2 — cannot ground without the corpus substrate; CROSS-PAPER (comprehension is corpus-relative)"}
-  {:id :S7 :depends-on [:S4]         :required true  :phase :p2
-   :note "structure embeddings + retrieval are CROSS-PAPER (cluster proofs by method across topics)"}
-  {:id :S8 :depends-on [:S4 :S7]     :required true  :phase :p2}
-  {:id :S9 :depends-on [:S4 :S6]     :required false :optional true :phase :p2}]
+  {:id :S3  :depends-on [:S1]          :required true :compute :gpu-llm :phase :p1
+   :note "reconstruct EVERY proof substructure in the paper (not one selected passage). Finals only: *.rung2.edn are reports, not graphs."}
+  {:id :S4  :depends-on [:S1]          :required true :compute :gpu-llm :phase :p1
+   :note "expository scopes over the same anatomy; parallel to S3, not downstream of it."}
+  {:id :S5  :depends-on [:S2 :S3]      :required true  :phase :p2
+   :note "comprehension = R2d (needs the S2 substrate) (+) rung-3 (built from S3 graphs by cas_segment -> rung3_technique). CROSS-PAPER: corpus-relative."}
+  {:id :S6  :depends-on [:S2 :S3 :S4]  :required true  :phase :p2
+   :note "LOAD-BEARING EDGE on S4: the whole-paper object is proofs AND exposition AND concepts. Output belongs in the RETRIEVE path (data/iatc-paper-graphs/<run-id>)."}
+  {:id :S7  :depends-on [:S3]          :required true :compute :gpu-llm :phase :p2
+   :note "CLean typing then structure embedding; retrieval is CROSS-PAPER (cluster proofs by method across topics)."}
+  {:id :S8  :depends-on [:S7]          :required true  :phase :p2}
+  {:id :S9  :depends-on [:S3 :S7]      :required false :optional true :phase :p2
+   :note "APM coverage + pass-3 hole harvest; both must be run-scoped, not global-tree."}
+  {:id :S10 :depends-on [:S3 :S4]      :required true  :phase :p2
+   :note "move lexicon from S3 graphs; expository reground over S4 scopes. Persist the lexicon — it is the answer to learning goal #2."}
+  {:id :S11 :depends-on [:S2 :S7]      :required true  :phase :p2
+   :note "definition canon from the S2 substrate's snippets; paper signatures from the S7 embedding."}
+  {:id :S12 :depends-on [:S3 :S10]     :required true  :phase :p2
+   :note "accretion sweep over S3 graphs using S10's harvested cues; the curve is the sweep's product and must land in the run dir."}]
  :gate-registry :inherited            ; see linode-stepper-contract.md (G-coverage … G-entropy)
  :superpod {:compute :llama-only :no-claude-codex true
             :s2-fresh-required true
