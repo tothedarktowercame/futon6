@@ -197,6 +197,12 @@ def call_openai(prompt: str, model: str) -> dict[str, Any]:
             "model": model,
             "messages": [{"role": "user", "content": prompt}],
             "temperature": 0,
+            # The verdict is one small JSON object, but no cap was sent, so the
+            # model could generate to the 65536-token context. Observed on Zone:
+            # ~15 min per call and two steps exceeding the 1800s timeout, which
+            # put the 98-graph pass on a ~9-day trajectory. The prompt is ~85
+            # tokens; the cost was entirely unbounded decode.
+            "max_tokens": int(os.environ.get("FUTON6_LLM_MAX_TOKENS", "256")),
         }
     ).encode()
     req = urllib.request.Request(
