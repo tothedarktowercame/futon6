@@ -528,17 +528,24 @@ The run-level lesson is the one that costs most on a booked window: **work not
 checkpointed is work wagered on the last call succeeding.** A 98-paper LLM pass
 should write incrementally; it currently does not.
 
-## H25 — passes that had nothing to check are counted as passes
+## H25 — a rung that cannot fail is reported alongside rungs that can
 
-Rung-2's R2c (warrant-resolution) reports PASS on 98/98 graphs, but **31 of
-those are `rate=0.000`** — no resolved warrant edges existed to check. A check
-that passes vacuously is not evidence of the property it names, and aggregating
-it with genuine passes overstates verification. Separately, **R2d emitted no
-verdict at all on 6 graphs** — neither pass nor fail — and silent abstention
-inflates any rate computed over "graphs that reported".
+Rung-2's R2c (warrant-resolution) reports PASS on 98/98. That is not a result:
+its threshold is `:warrant-floor 0.0`, so **no rate can fail it**. The code says
+so — *"loop-run-70b final spread includes 0.0; aggregate 6/28, so default is
+report-only until calibrated"* — and 31 of the 98 passes are indeed at
+`rate=0.000`. The check is doing what it was configured to do; the defect is
+that a report-only rung is printed in the same PASS/FAIL column as three rungs
+that gate, so an aggregate over the column silently mixes them.
 
-Reporting fix wanted: every rung emits `pass | fail | vacuous | abstain`, and
-headline rates quote the denominator they were computed over.
+Wanted: report-only checks print as `REPORT rate=…`, not `PASS`, and no
+headline rate sums a gating rung with a non-gating one.
+
+**Not a defect (checked):** R2d's six no-verdict graphs are reported explicitly
+as `NA`, and `:na-not-fail true` is a stated schema property — "N/A != FAIL" is
+deliberate policy, not silent abstention. An earlier draft of this note called
+them silent; that was a regex in the analysis script that matched only
+`PASS|FAIL`, not the pipeline hiding anything.
 
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
@@ -560,4 +567,6 @@ headline rates quote the denominator they were computed over.
   writing. Two-stream throughput measured live (see Measurements).
 - 2026-08-07 — H23–H25 opened from the rung-2 corpus measurement. H23 and H24
   fixed same day; the reporting fix in H25 and incremental checkpointing in
-  H24 remain open.
+  H24 remain open. H25 was narrowed after checking the code: R2d's NA handling
+  is correct and deliberate; the real issue is R2c being un-failable by
+  configuration while printed as a pass.
