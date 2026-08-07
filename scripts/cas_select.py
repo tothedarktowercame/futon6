@@ -235,8 +235,19 @@ def _parse_verdict(txt: str) -> dict[str, Any]:
     well-formed object. And an unparseable verdict is a legitimate outcome
     ("no match"), not an error condition.
     """
+    def _repairs(c: str):
+        yield c
+        c1 = re.sub(r",\s*([}\]])", r"\1", c)          # trailing comma
+        yield c1
+        # Bare property names -- the actual cause of the 2026-08-07 abort. The
+        # error was "Expecting property name enclosed in double quotes", and a
+        # live response shows why: {"pattern": null, descriptions: "..."}. The
+        # first diagnosis here said trailing comma; that was a guess, and the
+        # endpoint disagreed. Quote unquoted keys and the verdict survives.
+        yield re.sub(r'([{,]\s*)([A-Za-z_][A-Za-z0-9_-]*)(\s*:)', r'\1"\2"\3', c1)
+
     for cand in reversed(re.findall(r"\{[^{}]*\}", txt or "", re.S)):
-        for attempt in (cand, re.sub(r",\s*([}\]])", r"\1", cand)):
+        for attempt in _repairs(cand):
             try:
                 v = json.loads(attempt)
             except ValueError:

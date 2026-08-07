@@ -514,8 +514,14 @@ written at the end.
 
 Three defects, one symptom:
 
-1. **No tolerance for near-miss JSON.** Trailing commas are the single most
-   common LLM JSON defect. Now stripped on a retry pass.
+1. **No tolerance for near-miss JSON.** The cause was **bare property names** —
+   a live response reads `{"pattern": null, descriptions: "..."}`, and
+   `json.loads` on that raises exactly the recorded error, *"Expecting property
+   name enclosed in double quotes"*. An earlier draft of this note blamed a
+   trailing comma; that was inference from the exception type rather than from a
+   response, and the endpoint disagreed when finally asked. Both are now
+   repaired on retry passes, but the correction is the point: **the traceback
+   named the defect precisely and it was still guessed at.**
 2. **A greedy `\{.*\}` regex.** It spans the first `{` to the *last* `}`, so
    any response containing two objects — commentary plus verdict — yields
    garbage. Now takes the last well-formed object.
