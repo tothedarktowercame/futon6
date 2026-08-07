@@ -19,6 +19,9 @@ import json
 import math
 import statistics as st
 from collections import Counter, defaultdict
+import os
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 FEATS = ["n_boxes", "n_wires", "n_holes", "n_discharges_known", "max_fanout",
          "depth", "n_sources", "n_sinks"]
@@ -60,6 +63,9 @@ def cos(a, b):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--embed", default="data/showcases/mark6-clean-embed.json")
+    ap.add_argument("--run-dir", help="persist structural-canon.json here (H16/S11)")
+    ap.add_argument("--run-id", default="adhoc")
+    ap.add_argument("--corpus-id", default="adhoc")
     a = ap.parse_args()
     d = json.load(open(a.embed))
     papers, sig, bypaper, macros = signatures(d["ids"], d["breakdowns"])
@@ -76,6 +82,43 @@ def main():
         print(f"  {p}  ≈  {q}   (paper-sim {s:.2f})")
     print(f"\npaper-twin sim: mean {st.mean(sims):.2f}, range {min(sims):.2f}–{max(sims):.2f} "
           f"— papers cluster by argument-shape composition, not topic")
+
+    # PERSIST (E-superpod-hardening S11). This stage computed a shape census and
+    # a signature per paper and then printed both into a terminal, so learning
+    # goals #3 and #4 died at teardown exactly as the lexicon and the curve did
+    # (H15/H16). Artifact shape per the annex fixture: one record per canonical
+    # shape with population and exemplars, plus one signature per paper.
+    if a.run_dir:
+        out_dir = a.run_dir if os.path.isabs(a.run_dir) else os.path.join(ROOT, a.run_dir)
+        os.makedirs(out_dir, exist_ok=True)
+        shape_pop = Counter()
+        shape_ex = {}
+        for pid, rows in bypaper.items():
+            for b in rows:
+                m = b["macro"]
+                shape_pop[m] += 1
+                shape_ex.setdefault(m, [])
+                if len(shape_ex[m]) < 4:
+                    shape_ex[m].append(b.get("id") or pid)
+        payload = {
+            "run_id": a.run_id, "corpus_id": a.corpus_id,
+            "n_papers": len(papers),
+            "shapes": [{"shape": m, "n": n, "exemplars": shape_ex.get(m, [])}
+                       for m, n in shape_pop.most_common()],
+            "signatures": [
+                {"paper": p,
+                 "n_proofs": len(bypaper[p]),
+                 "profile": dict(Counter(b["macro"] for b in bypaper[p])),
+                 "nearest": sorted([(x, round(cos(vec(sig, p), vec(sig, x)), 4))
+                                    for x in papers if x != p], key=lambda z: -z[1])[0]}
+                for p in papers],
+            "paper_twin_sim": {"mean": round(st.mean(sims), 4),
+                               "min": round(min(sims), 4), "max": round(max(sims), 4)},
+        }
+        path = os.path.join(out_dir, "structural-canon.json")
+        with open(path, "w") as fh:
+            json.dump(payload, fh, indent=1)
+        print(f"\nwrote {path}  ({len(payload['shapes'])} shapes, {len(papers)} signatures)")
 
 
 if __name__ == "__main__":
