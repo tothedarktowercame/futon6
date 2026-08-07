@@ -95,6 +95,34 @@ FUTON6_EPRINTS=$YOUR_EPRINTS OPENAI_BASE_URL=$URL OPENAI_API_KEY=x RUN_ID=mark7 
 - ~28k all-proofs; full completion in 20h is plausible with 8-GPU batching, but **the run need
   not finish** — S12 checkpoints the curves as it goes.
 
+## PRE-GO-LIVE — run this BEFORE the alloc, and believe it over any doc
+
+```bash
+cd ~/code/futon6
+FUTON6_EPRINTS=$YOUR_EPRINTS OPENAI_BASE_URL=$URL MODEL=<served-model> \
+  .venv/bin/python scripts/preflight.py --ids holes/math-ct-full.ids.txt
+#   exit 0 -> GO.   exit >0 -> each failure prints its remedy; --fix tries the safe ones
+```
+
+Nine checks: `bb` and `latexmlmath` present; **the live formula→`:structure`
+chain actually returning a structure**; python modules; all 7 gate scripts;
+the 6 substrate files; a sample of your manifest's ids resolving as eprints;
+the model endpoint reachable *and serving the name you pass*; free disk.
+
+Why it exists, stated plainly because the lesson generalises: LaTeXML was
+audited as the #1 fresh-box hazard on 2026-07-04, fixed the same day in
+`linode-postsetup-deps.sh`, and recorded READY in the readiness dashboard.
+On 2026-08-07 it was **absent from the run host** — so S11's `:structure`
+lift had been a silent no-op on every run since, and the stage reported PASS
+throughout because it chained its scripts with `;`. Nothing was wrong with the
+fix. What was missing was anything that verified the fix had been applied
+*here*. **A setup script is a statement of intent; a preflight is a statement
+of fact.** Run the preflight even if you ran the setup script.
+
+(The setup script itself had a matching bug: it defaulted `REPO` to
+`$HOME/futon6`, so on a host where futon6 lives elsewhere it reported FATAL
+for gate scripts that were present. Fixed to derive from its own location.)
+
 ## MID-RUN ABORT GATE — run this after the first ~12 and ~100 papers
 
 **Purpose: give you your window back if the run is producing garbage.** It

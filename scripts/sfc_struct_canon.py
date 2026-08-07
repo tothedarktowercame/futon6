@@ -20,6 +20,8 @@ one canonical encyclopedia entry instead of N near-duplicates.
   echo '<formula>' | bb scripts/sfc_def_structure.bb - | sfc_struct_canon.py -   # one
 """
 import argparse
+import json
+import os
 import re
 import sys
 
@@ -118,8 +120,34 @@ def main():
     ap.add_argument("input", nargs="?", default=None, help="EDN file (or - for stdin), else --self-test")
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--formulae", help="file of definition formulae (one per line) -> normalization ratio")
+    ap.add_argument("--run-dir", help="persist the shape census here")
+    ap.add_argument("--run-id", default="adhoc")
+    ap.add_argument("--corpus-id", default="adhoc")
     a = ap.parse_args()
     if a.formulae:
+        # RECORD A REFUSAL rather than dying into a void. This stage has never run:
+        # nothing in the pipeline produces def-formulae.txt, and the transducer that
+        # would (sfc_def_structure.bb) needs latexmlmath, which is not installed and
+        # is documented nowhere. Because S11 chained its two scripts with `;`, the
+        # FileNotFoundError was swallowed and the stage reported PASS on every run
+        # (E-superpod-hardening H22). An artifact saying "not measured, because X"
+        # is worth more than an exception nobody sees.
+        if not os.path.exists(a.formulae):
+            reason = (f"input {a.formulae} absent: no pipeline stage produces definition "
+                      f"formulae. Producing them needs (a) an extraction step from "
+                      f"data/warp/def-snippets.json prose and (b) the latexmlmath binary "
+                      f"required by scripts/sfc_def_structure.bb, which is not installed "
+                      f"and not listed as a dependency.")
+            print(f"REFUSED: {reason}")
+            if a.run_dir:
+                out = a.run_dir if os.path.isabs(a.run_dir) else os.path.join(
+                    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), a.run_dir)
+                os.makedirs(out, exist_ok=True)
+                with open(os.path.join(out, "structural-canon-defs.json"), "w") as fh:
+                    json.dump({"run_id": a.run_id, "corpus_id": a.corpus_id,
+                               "measured": False, "reason": reason}, fh, indent=1)
+                print(f"wrote {a.run_dir}/structural-canon-defs.json (refusal recorded)")
+            return
         forms = [l.strip() for l in open(a.formulae) if l.strip()]
         groups, gaps = batch(forms)
         nf = sum(len(v) for v in groups.values())
@@ -133,6 +161,20 @@ def main():
             print(f"\nSFC coverage gaps ({len(gaps)} — :hole/unhandled, NOT merged; the constructs to teach SFC):")
             for f in gaps[:8]:
                 print(f"   ⚑ {f[:64]}")
+        if a.run_dir:
+            out = a.run_dir if os.path.isabs(a.run_dir) else os.path.join(
+                os.path.dirname(os.path.dirname(os.path.abspath(__file__))), a.run_dir)
+            os.makedirs(out, exist_ok=True)
+            payload = {"run_id": a.run_id, "corpus_id": a.corpus_id, "measured": True,
+                       "n_formulae": nf, "n_canonical_shapes": len(groups),
+                       "compression_ratio": round(nf / max(1, len(groups)), 4),
+                       "shapes": [{"key": k, "n": len(v), "exemplars": v[:3]}
+                                  for k, v in sorted(groups.items(), key=lambda kv: -len(kv[1]))],
+                       "sfc_coverage_gaps": gaps[:200]}
+            with open(os.path.join(out, "structural-canon-defs.json"), "w") as fh:
+                json.dump(payload, fh, indent=1)
+            print(f"\nwrote {a.run_dir}/structural-canon-defs.json "
+                  f"({len(groups)} shapes, {len(gaps)} coverage gaps)")
         return
     if a.self_test or not a.input:
         from collections import defaultdict

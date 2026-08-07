@@ -27,7 +27,11 @@
 #   (substance_gate.py is pure-stdlib python3 — nothing to install.)
 set -euo pipefail
 
-REPO="${REPO:-$HOME/futon6}"
+# Derive the repo from THIS script's own location rather than assuming futon6
+# sits directly in $HOME. It does not on every host (Zone: ~/code/futon6), and
+# the mismatch made the final sanity check FATAL on gate scripts that were
+# present — an operator would reasonably read that as "deps failed".
+REPO="${REPO:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 
 echo "== babashka (bb) =="
 if command -v bb >/dev/null 2>&1; then
