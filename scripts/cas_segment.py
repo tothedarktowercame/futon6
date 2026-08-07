@@ -153,6 +153,25 @@ def write_steps(graph_path: Path, out_dir: Path = DEFAULT_OUT_DIR, out_path: Pat
     return target
 
 
+def _drop_sidecars(paths):
+    """Refuse rung-2 reports even when a caller hands them over.
+
+    The S5 stage command globs `<graphs>/*.edn` in the shell, which cannot use
+    the shared selector, so sidecars re-entered here and produced empty
+    `<pid>.rung2.steps.json` files that then flowed into cas_select. Enforcing
+    at the producer means no caller can reintroduce them.
+    """
+    try:
+        import sys as _sys
+        _h = os.path.dirname(os.path.abspath(__file__))
+        if _h not in _sys.path:
+            _sys.path.insert(0, _h)
+        from run_artifacts import is_sidecar
+        return [p for p in paths if not is_sidecar(str(p))]
+    except Exception:
+        return [p for p in paths if not str(p).endswith(".rung2.edn")]
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("graphs", nargs="+", type=Path)
@@ -168,7 +187,11 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(segment_graph(args.graphs[0]), indent=2, ensure_ascii=False, sort_keys=True))
         return 0
 
-    paths = [write_steps(path, args.out_dir, args.out) for path in args.graphs]
+    graphs = _drop_sidecars(args.graphs)
+    dropped = len(args.graphs) - len(graphs)
+    if dropped:
+        print(f"  ({dropped} rung-2 sidecar(s) refused — they are reports, not graphs)")
+    paths = [write_steps(path, args.out_dir, args.out) for path in graphs]
     for path in paths:
         print(path)
     return 0
