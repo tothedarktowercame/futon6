@@ -23,6 +23,60 @@ and the edge refs pointing at them stay aligned:
 from __future__ import annotations
 
 
+_EDN_SIMPLE_ESCAPES = set('"\\/bfnrt')
+
+
+def repair_string_escapes(text: str) -> str:
+    """Escape backslashes INSIDE EDN strings that are not legal EDN escapes.
+
+    The models write mathematical prose, so `:text` fields are full of LaTeX —
+    `\\Phi`, `\\xi`, `\\circ`, `\\lambda`. EDN permits only `\\" \\\\ \\/ \\b \\f
+    \\n \\r \\t` and `\\uXXXX`; every other backslash is a hard parse error, so
+    the graph is rejected by the bb gate with `Unsupported escape character`.
+    On the Zone e2e run this was the cause of **all 42 S4 failures (15% of the
+    expository layer)** and a contributor to S3's 48% retry rate — a
+    serialization-contract problem, not a model-quality one
+    (E-superpod-hardening H18, 2026-08-06).
+
+    Doubling the backslash preserves the author's intent exactly: EDN then reads
+    `"\\\\Phi"` back as the literal text `\\Phi`. Complementary to `edn_safe`,
+    which repairs tokens OUTSIDE strings and leaves string content untouched.
+    """
+    out, in_str, i, n = [], False, 0, len(text)
+    while i < n:
+        ch = text[i]
+        if not in_str:
+            if ch == '"':
+                in_str = True
+            out.append(ch)
+            i += 1
+            continue
+        if ch == '\\':
+            nxt = text[i + 1] if i + 1 < n else ''
+            if nxt == 'u':
+                hexes = text[i + 2:i + 6]
+                if len(hexes) == 4 and all(c in '0123456789abcdefABCDEF' for c in hexes):
+                    out.append(text[i:i + 6])   # legal \uXXXX
+                    i += 6
+                    continue
+                out.append('\\\\')              # \upsilon etc — not a codepoint
+                i += 1
+                continue
+            if nxt in _EDN_SIMPLE_ESCAPES:
+                out.append(ch)
+                out.append(nxt)
+                i += 2
+                continue
+            out.append('\\\\')                  # \Phi, \xi, ... — escape it
+            i += 1
+            continue
+        if ch == '"':
+            in_str = False
+        out.append(ch)
+        i += 1
+    return "".join(out)
+
+
 def edn_safe(text: str) -> str:
     """Rewrite bb-legal-but-edn_format-illegal tokens outside string literals."""
     out, in_str, esc = [], False, False

@@ -25,6 +25,20 @@ ALIGNMENT = REPO / "holes" / "excursions" / "E-iatc-expository-alignment.md"
 CANDIDATE_SCHEMA = "expo-candidate/v1"
 MAX_ATTEMPTS = 3
 
+
+def _repair_escapes(edn: str) -> str:
+    """LaTeX in :text is illegal EDN escaping; repair before gating (H18)."""
+    try:
+        import os as _os
+        import sys as _sys
+        _h = _os.path.dirname(_os.path.abspath(__file__))
+        if _h not in _sys.path:
+            _sys.path.insert(0, _h)
+        from edn_compat import repair_string_escapes
+        return repair_string_escapes(edn)
+    except Exception:
+        return edn
+
 SYSTEM = """You classify and fill arXiv expository-region scopes as EDN.
 Rules:
 - Output exactly one EDN map.
@@ -276,6 +290,9 @@ def run(args: argparse.Namespace) -> int:
             if not edn:
                 last_error = "no EDN map found in response"
                 continue
+            # LaTeX in :text prose is not legal EDN escaping (\Phi, \xi ...) and the
+            # bb gate rejects the whole graph. Repair before gating: H18.
+            edn = _repair_escapes(edn)
             attempt_path = attempts / f"{candidate_path.stem}.attempt{attempt}.edn"
             attempt_path.write_text(edn, encoding="utf-8")
             ok, err = candidate_check(edn, candidate)
@@ -290,7 +307,12 @@ def run(args: argparse.Namespace) -> int:
         rec = bypaper.setdefault(pid, [0, 0])
         rec[0] += 1
         rec[1] += 1 if status == "pass" else 0
-        print(f"  {candidate['passage-id']}: {status} ({last_error[:100]})")
+        # Show the INFORMATIVE part of a gate failure. `last_error[:100]` was
+        # consumed entirely by the long attempt-file path the gate echoes first,
+        # so 42 failures were logged with no stated reason (H18 diagnosability).
+        _why = " | ".join(ln.strip() for ln in last_error.splitlines()
+                          if ln.strip() and not ln.strip().startswith("FAIL "))[:160]
+        print(f"  {candidate['passage-id']}: {status} ({_why or last_error[:100]})")
 
     passed = sum(1 for _, status, _ in results if status == "pass")
     print(f"\nexpository-loop: {passed}/{len(results)} graphs gated PASS")

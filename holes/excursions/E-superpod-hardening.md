@@ -340,6 +340,36 @@ Worth generalising for the handoff: **H15/H16 asked whether the science
 survives; H17 asks whether it means what it says.** A retrievable curve with a
 wrong axis is not better than a lost one.
 
+### H18 — LaTeX in prose is illegal EDN escaping; 15% of S4 lost to it. **FIXED**
+
+Every one of S4's 42 gate failures (15% of the expository layer) had the same
+cause, recovered by re-running the gate by hand: `Unsupported escape
+character` — `\P`(hi), `\x`(i), `\s`(igma), `\c`(irc), `\v`(ee), `\l`(ambda),
+`\S`(igma). The models write mathematical prose, so `:text` fields are full of
+LaTeX; EDN permits only `\" \\ \/ \b \f \n \r \t` and `\uXXXX`, so **every
+LaTeX command in a string is a hard parse error**. This is a serialization-
+contract problem, not a model-quality one — the graphs were fine.
+
+Fixed in `edn_compat.repair_string_escapes` (complementary to `edn_safe`: this
+one repairs INSIDE strings, that one outside), wired into both the expository
+and IATC loops before gating. Doubling the backslash preserves intent exactly —
+EDN reads `"\\Phi"` back as the literal `\Phi`. `\uXXXX` is honoured only when
+four hex digits actually follow, so `\upsilon` is repaired rather than
+mangled.
+
+**Measured on the real failures:** of the retained attempt files, 207 are
+changed by the repair and **203 now gate-PASS (98%)**. Two payoffs: the 42
+final failures become recoverable, and — larger for a cluster window — much of
+the retry traffic disappears, since attempts were being burned re-rolling a
+serialization error rather than a reasoning one (S3 ran at a 48% retry rate).
+
+**Diagnosability, same finding:** the loop logged these 42 failures with no
+stated reason. `gate_one` captures the gate's last 800 chars, but the printer
+used `last_error[:100]` — and the gate echoes its long attempt-file path
+first, so the reason on line 2 was always cut off. The printer now shows the
+informative lines instead. A 15%-of-stage failure mode was invisible for want
+of a slice index.
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus

@@ -333,6 +333,18 @@ def run(args) -> int:
             if not edn:
                 last_err = "no EDN map found in response"
                 continue
+            # LaTeX in :text is illegal EDN escaping (\\Phi, \\xi); repair before
+            # gating so the bb reader does not reject an otherwise good graph (H18).
+            try:
+                import os as _os
+                import sys as _sys
+                _h = _os.path.dirname(_os.path.abspath(__file__))
+                if _h not in _sys.path:
+                    _sys.path.insert(0, _h)
+                from edn_compat import repair_string_escapes as _rse
+                edn = _rse(edn)
+            except Exception:
+                pass
             ap = tmp / f"{pid}.attempt{attempt}.edn"
             ap.parent.mkdir(parents=True, exist_ok=True)
             ap.write_text(edn)
