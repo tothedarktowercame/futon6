@@ -86,7 +86,7 @@ OPS = {
     "S4": {"cmd": "{PY} scripts/mark3_extract_expository_candidates.py --list {IDS} "
            "--out data/expository-candidates-run && {PY} scripts/mark3_expository_loop.py "
            "--candidates data/expository-candidates-run --out data/expository-scope-graphs/run "
-           "--backend openai --model ${MODEL:-meta-llama/Llama-3.1-8B-Instruct} "
+           "--backend openai --model ${{MODEL:-meta-llama/Llama-3.1-8B-Instruct}} "
            f"--run-dir {RUN}",
            "crit": "expository_argcheck (self-gated in loop)",
            "note": "ALL regions by default — cap/sample per paper at archive scale "
@@ -108,14 +108,14 @@ OPS = {
            "|| exit 1; done < {IDS}",
            "crit": "B wellformed: every proof attaches to a statement; orphans flagged"},
     "S7": {"cmd": f"{{PY}} scripts/clean_box_typing.py --graphs {GRAPHS} --out {CLEAN} "
-           "--endpoint http://localhost:$PORT/v1/chat/completions --model ${MODEL:-mark4-70b} "
+           "--endpoint http://localhost:$PORT/v1/chat/completions --model ${{MODEL:-mark4-70b}} "
            f"--run-dir {RUN} && "
            f"{{PY}} scripts/clean_structure_embed.py --clean-dir {CLEAN} --out {DEMO}",
            "gate": f"bb scripts/clean_vocab_gate.bb {CLEAN} && {{PY}} scripts/clean_entropy_gate.py "
            f"--embed {DEMO}/clean-embed.json"},
     "S8": {"cmd": f"{{PY}} scripts/clean_graph_export.py --clean-dir {CLEAN} --out {DEMO}/ingest "
            f"--embed-json {DEMO}/clean-embed.json"},
-    "S9": {"cmd": "{PY} scripts/mark4_apm_structure_coverage.py ; {PY} scripts/clean_hole_harvest.py  # optional CPU tails"},
+    "S9": {"cmd": "{PY} scripts/mark4_apm_structure_coverage.py && {PY} scripts/clean_hole_harvest.py"},
     # --- LEARNING LAYER (the 'improve as we run' instrumentation; CPU post-stages) ---
     "S10": {"cmd": f"{{PY}} scripts/iatc_lexicon_harvest.py --graphs {GRAPHS} --run-dir {RUN} "
             "--run-id $RUN_ID --corpus-id $CORPUS && "
@@ -273,6 +273,16 @@ def plan(stages, profile):
 
 
 def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
+    """Execute stages; RETURN AN EXIT CODE rather than merely printing.
+
+    0 = ran to completion (or halted deliberately); 1 = refused/blocked;
+    2 = a stage command failed; 3 = a stage gate failed.
+
+    Previously every failure path printed and returned None, and main() exited
+    0 regardless — so an outer scheduler recorded success while the stepper had
+    stopped. For an unattended cluster window that is the difference between
+    "the run finished" and "the run stopped four hours in and nobody knew".
+    """
     print(f"=== {PROFILES[profile]['banner']} | corpus={corpus_id} run={run_id} ===")
     for s in stages:
         op = OPS.get(s["id"], {})
@@ -281,7 +291,7 @@ def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
         block = completeness_block(s["id"], DEPS.get(s["id"], []), run_dir, corpus_id, reuse)
         if block:
             print(block)
-            return
+            return 1
         if op.get("boot"):   # S0 provision / STAGE rsync — done from dev, then resume on the host
             nxt = stages[stages.index(s) + 1]["id"] if stages.index(s) + 1 < len(stages) else "(done)"
             print(f"⏸ BOOT step — do this from dev, then run the stepper ON THE HOST with --from {nxt}:")
@@ -292,21 +302,21 @@ def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
             reuse_hint = " ".join(sorted(set(boots + (reuse or []))))
             print(f"   then resume with: --from {nxt} --reuse {reuse_hint}"
                   f"   (boot steps never ledger-record; without --reuse the next stage is BLOCKED)")
-            return
+            return 0
         missing = [p for p in op.get("inputs", []) if not os.path.exists(os.path.join(ROOT, p))]
         if missing:
             print(f"✗ precondition FAILED — missing input(s): {missing}")
-            return
+            return 1
         if op.get("cmd"):
             print(f"$ {op['cmd'].format(PY=PY, IDS=IDS)}")
             if sh(op["cmd"].format(PY=PY, IDS=IDS)) != 0:
                 print(f"✗ {s['id']} command FAILED — stopping")
-                return
+                return 2
         if op.get("gate"):
             print(f"[gate] {op['gate'].format(PY=PY, IDS=IDS)}")
             if sh(op["gate"].format(PY=PY, IDS=IDS)) != 0:
                 print(f"✗ {s['id']} GATE FAILED ({','.join(s['go'])}) — stopping for fix")
-                return
+                return 3
         if op.get("crit"):  # human criterion, judged at the halt — never a shell command
             print(f"[crit] {op['crit']}")
         if run_dir:
@@ -315,8 +325,9 @@ def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
         if s["halt"] and not no_halt:
             nxt = stages[stages.index(s) + 1]["id"] if stages.index(s) + 1 < len(stages) else "(done)"
             print(f"⏸ HALT — inspect {s['id']} output; resume with --from {nxt}")
-            return
+            return 0
     print("\n✓ run complete")
+    return 0
 
 
 def main():
@@ -357,13 +368,16 @@ def main():
         for sid in args.mark_done:
             ledger_record(args.run_dir, sid, args.corpus_id, args.run_id)
             print(f"ledger: {sid} marked done for corpus {args.corpus_id}")
-        return
+        return 0
     if args.plan or not args.run:
         plan(stages, args.profile)
     if args.run:
-        run(order(stages, args.frm, args.to), args.profile, args.no_halt,
-            args.run_dir, args.corpus_id, args.run_id, args.reuse)
+        # Propagate the stage outcome to the process exit status, so a scheduler
+        # (or `&&` in a shell) can tell a stopped run from a finished one.
+        return run(order(stages, args.frm, args.to), args.profile, args.no_halt,
+                   args.run_dir, args.corpus_id, args.run_id, args.reuse)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main() or 0)
