@@ -170,8 +170,8 @@ the only safety net. They are now load-bearing, not advisory.
   {:id :S7  :depends-on [:S3]          :required true :compute :gpu-llm :phase :p2
    :note "CLean typing then structure embedding; retrieval is CROSS-PAPER (cluster proofs by method across topics)."}
   {:id :S8  :depends-on [:S7]          :required true  :phase :p2}
-  {:id :S9  :depends-on [:S3 :S7]      :required false :optional true :phase :p2
-   :note "APM coverage + pass-3 hole harvest; both must be run-scoped, not global-tree."}
+  {:id :S9  :depends-on [:S3 :S7]      :required true  :phase :p2
+   :note "pass-3 hole map + normalized hole vocabulary, both run-scoped. The APM\n         structure-match tail was DEPRECATED 2026-08-07: it consumes nlab-wiring\n         scope files this corpus does not produce, and had failed silently on\n         every run since it was written."}
   {:id :S10 :depends-on [:S3 :S4]      :required true  :phase :p2
    :note "move lexicon from S3 graphs; expository reground over S4 scopes. Persist the lexicon — it is the answer to learning goal #2."}
   {:id :S11 :depends-on [:S2 :S7]      :required true  :phase :p2

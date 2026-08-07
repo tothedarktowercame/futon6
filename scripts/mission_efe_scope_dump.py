@@ -18,6 +18,7 @@ EFE landscape in light of the improved anatomy-of-a-Mission work):
 Output: data/efe-scopes.json — [{m, binder, det, phase, skolem, verdict}, ...]
 """
 import json
+import os
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -25,7 +26,17 @@ from pathlib import Path
 ROOT = Path("/home/joe/code/futon6")
 OUT = ROOT / "data" / "efe-scopes.json"
 TREES = ROOT / "data" / "mission-scope-trees"
-BASE = "http://localhost:7071/api/alpha/hyperedges"
+# Substrate URL resolution, same precedence as futon3c.watcher.multi: the
+# canonical FUTON_SUBSTRATE_URL wins, FUTON1A_URL is the compatibility input,
+# and the default follows the 2026-07-12 futon1a(:7071) -> futon1b(:7073)
+# switchover.  The old hardcoded :7071 made this a nightly connection-refused
+# that aborted daily_reembed.sh under `set -e` before the EFE field regen.
+SUBSTRATE = (
+    os.environ.get("FUTON_SUBSTRATE_URL")
+    or os.environ.get("FUTON1A_URL")
+    or "http://127.0.0.1:7073"
+).rstrip("/")
+BASE = f"{SUBSTRATE}/api/alpha/hyperedges"
 BINDERS = [
     "eightfold-phase", "loose-section", "mission-scope-in", "mission-scope-out",
     "map-item", "source-material", "relates-to", "capability-scope",
@@ -33,14 +44,35 @@ BINDERS = [
     # anatomy additions (2026-06-10/11): typed gates and their outcomes
     "verify-gate", "certificate", "plain-argument",
 ]
-LIMIT = 8000
+# futon1b validates `limit` server-side and rejects anything above
+# max-result-limit=5000 with a layer-4 :invalid-limit error (futon1b_server.clj
+# :313).  futon1a had no such cap, so the old 8000 became a hard 400 after the
+# switchover.  5000 is still far above every per-binder population (largest is
+# loose-section) and fetch() asserts non-truncation rather than trusting that.
+LIMIT = 5000
+FETCH_TIMEOUT_S = int(os.environ.get("EFE_SCOPE_TIMEOUT_S", "180"))
+
+# The dump is an overwrite, and the mission-scope surface in futon1b is only
+# partly populated while the watcher scope lane is dark.  Refuse to replace a
+# healthy dump with a drastically smaller one, in the same spirit as
+# refresh_pattern_attestation.sh's "refusing to overwrite" guard: a shrunken
+# EFE landscape must be an operator decision, not a silent nightly regression.
+SHRINK_FLOOR = 0.75
 
 
 def fetch(binder):
     q = urllib.parse.urlencode({"type": f"mission-scope/{binder}", "limit": LIMIT})
     req = urllib.request.Request(f"{BASE}?{q}", headers={"Accept": "application/json"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r).get("hyperedges", [])
+    # futon1b routes these through with-expensive-read!; the largest binder
+    # (loose-section) exceeds the old 30s budget that futon1a met comfortably.
+    with urllib.request.urlopen(req, timeout=FETCH_TIMEOUT_S) as r:
+        hxs = json.load(r).get("hyperedges", [])
+    if len(hxs) >= LIMIT:
+        raise SystemExit(
+            f"binder {binder!r} returned {len(hxs)} rows at the {LIMIT} cap — "
+            "the result is truncated; paginate before trusting this dump"
+        )
+    return hxs
 
 
 def tree_index():
@@ -100,6 +132,23 @@ def main():
                 "vacuous": joined.get("vacuous", False),
                 "verdict": joined.get("verdict"),
             })
+    if OUT.exists():
+        try:
+            prev = len(json.loads(OUT.read_text()))
+        except (ValueError, OSError):
+            prev = 0
+        allow_shrink = os.environ.get("EFE_SCOPE_ALLOW_SHRINK", "").lower() in {
+            "1", "true", "yes", "on",
+        }
+        if prev and len(out) < prev * SHRINK_FLOOR and not allow_shrink:
+            raise SystemExit(
+                f"refusing to overwrite {OUT.name}: {len(out)} scopes vs {prev} "
+                f"previously ({len(out) / prev:.0%}). The substrate is under-"
+                "populated for this surface — check that the mission-scope "
+                "reingest lane has run (FUTON3C_WATCHER_SCOPE_LANE / "
+                "futon3c/scripts/mission-scope-reingest.sh) before accepting a "
+                "smaller landscape. Override with EFE_SCOPE_ALLOW_SHRINK=1."
+            )
     OUT.write_text(json.dumps(out))
     print(f"{len(out)} scopes -> {OUT}")
     for b, n in sorted(counts.items(), key=lambda kv: -kv[1]):

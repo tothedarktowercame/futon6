@@ -263,26 +263,6 @@ def p2(run_dir, corpus_id):
             + (f"; missing {missing}" if missing else ""))
 
 
-@check("P4-skips-recorded", "stage_skip", needs="S9")
-def p4(run_dir):
-    """Every optional step must have left either a product or a written refusal.
-
-    A step that printed "skipping" and moved on is indistinguishable, after the
-    fact, from a step that was never reached. This asserts the run directory can
-    account for its own omissions."""
-    d = os.path.join(run_dir, "skipped")
-    if not os.path.isdir(d):
-        return "warn", "no skip records — either nothing skipped, or skips were not recorded"
-    recs = glob.glob(os.path.join(d, "*.json"))
-    named = []
-    for r in recs:
-        try:
-            named.append(json.load(open(r)).get("step", os.path.basename(r)))
-        except Exception:
-            named.append(os.path.basename(r))
-    return True, f"{len(recs)} optional step(s) recorded as skipped: {', '.join(named)}"
-
-
 @check("P3-curve-is-rising", "S12 criterion", needs="S12")
 def p3(run_dir):
     p = os.path.join(run_dir, "accretion-curve.json")
@@ -327,7 +307,6 @@ def main() -> int:
     p1(R(a.run_dir), through=T)
     p2(R(a.run_dir), a.corpus_id, through=T)
     p3(R(a.run_dir), through=T)
-    p4(R(a.run_dir), through=T)
 
     if not RESULTS:
         print("no checks applicable at --through " + a.through)
@@ -347,7 +326,7 @@ def main() -> int:
         else:
             tag = "PASS"
         print(f"  [{tag}] {cid:<{width}}  {msg}   ({hz})")
-    skipped = 12 - len(RESULTS)
+    skipped = 11 - len(RESULTS)
     print(f"\n{len(RESULTS) - fails - warns}/{len(RESULTS)} pass, {warns} warn, {fails} fail"
           + (f"  ({skipped} not yet applicable)" if skipped else ""))
     if fails:

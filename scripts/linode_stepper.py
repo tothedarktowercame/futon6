@@ -123,20 +123,14 @@ OPS = {
     # They previously defaulted to the global graph tree (recursive, every run
     # ever made) and to a shared demo path outside any run directory, so their
     # products were neither about this corpus nor collected by RETRIEVE.
-    # The APM structure-match tail consumes proof/eprint scope files produced by
-    # the nlab-wiring detector, which belongs to a different programme and which
-    # this corpus does not generate. Chained with `;` it failed silently on every
-    # run (it needs two required arguments the stage never passed); chained with
-    # `&&` it would block S9's real products. It is therefore invoked only when
-    # its inputs exist, and skipped audibly when they do not.
-    "S9": {"cmd": "if [ -f data/apm-proof-scope-audit.json ] && [ -f data/nlab-wiring/eprint-scopes.json ]; "
-           "then {PY} scripts/mark4_apm_structure_coverage.py "
-           "--proof-scopes data/apm-proof-scope-audit.json "
-           "--eprint-scopes data/nlab-wiring/eprint-scopes.json; "
-           "else {PY} scripts/stage_skip.py --run-dir " + RUN + " --step apm-structure-match "
-           "--reason 'cross-programme scope inputs absent — not produced by this corpus' "
-           "--missing data/apm-proof-scope-audit.json data/nlab-wiring/eprint-scopes.json; fi && "
-           f"{{PY}} scripts/clean_hole_harvest.py --graphs {GRAPHS} "
+    # DEPRECATED and removed from this pipeline: mark4_apm_structure_coverage.
+    # It matches APM proof scopes against literature scopes produced by the
+    # nlab-wiring detector — inputs this corpus does not generate and never has.
+    # It was chained here with `;`, so it failed on every run since it was
+    # written without anyone seeing it. It belongs to the APM programme; invoke
+    # it there against APM's own inputs. S9's product is the pass-3 hole map and
+    # the normalized hole vocabulary, both run-scoped.
+    "S9": {"cmd": f"{{PY}} scripts/clean_hole_harvest.py --graphs {GRAPHS} "
            f"--out {RUN}/pass3-holes.json && "
            f"{{PY}} scripts/warrant_normalize.py --graphs {GRAPHS} "
            f"--out {RUN}/hole-vocabulary.json",

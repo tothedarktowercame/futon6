@@ -155,24 +155,6 @@ def check_endpoint(url, model):
 
 # ---------------------------------------------------------------- disk
 
-def check_optional_inputs():
-    """Which optional stage steps will SKIP, decided before the window rather than
-    discovered in a log afterwards. A skip is legitimate; a skip nobody knew about
-    is how a run silently produces less than its manifest promises."""
-    optional = {
-        "apm-structure-match (S9)": ["data/apm-proof-scope-audit.json",
-                                     "data/nlab-wiring/eprint-scopes.json"],
-    }
-    lines = []
-    for step, needs in optional.items():
-        missing = [n for n in needs if not os.path.exists(os.path.join(ROOT, n))]
-        lines.append(f"{step}: {'WILL SKIP (' + ', '.join(missing) + ')' if missing else 'will run'}")
-    # Never a failure — an optional step is allowed to skip. This check exists so
-    # the decision is visible in advance and recorded in the run directory.
-    rec("optional:steps", True, "; ".join(lines),
-        "if a listed step should run, supply its inputs before starting")
-
-
 def check_disk(min_gb=50):
     st = os.statvfs(ROOT)
     free = st.f_bavail * st.f_frsize / 1e9
@@ -197,7 +179,6 @@ def main() -> int:
     check_substrate()
     check_eprints(ids)
     check_endpoint(a.endpoint, a.model)
-    check_optional_inputs()
     check_disk(a.min_disk_gb)
 
     w = max(len(n) for n, _, _, _ in R)
