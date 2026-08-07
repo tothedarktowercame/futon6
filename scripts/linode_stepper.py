@@ -61,6 +61,8 @@ RUN = "data/runs/$RUN_ID"           # set per run; stages emit MetricRecords her
 CAND = "data/iatc-candidates-run"
 GRAPHS = "data/iatc-argument-graphs/run"
 CLEAN = "holes/clean-run"
+STEPS = "data/cas-select-steps/run"      # S5 rung-3 inputs (H13)
+RUNG3 = "data/rung3-technique/run"
 DEMO = "data/showcases/clean-run-demo"
 OPS = {
     "S0": {"boot": True, "note": "<profile.s0> — provision the host + serve the model"},
@@ -89,8 +91,17 @@ OPS = {
            "crit": "expository_argcheck (self-gated in loop)",
            "note": "ALL regions by default — cap/sample per paper at archive scale "
                    "(mark7 playbook: ~30 regions/paper so S4 doesn't dominate the window)"},
-    "S5": {"cmd": f"{{PY}} scripts/clean_comprehension.py --graphs {GRAPHS} --candidates {CAND} --run-dir {RUN} "
-           "# rung-ladder + R2d + strategy_recognizer (reads the staged substrate + futon3 patterns)",
+    # S5 now BUILDS its own rung-3 half. Both producers are deterministic (no model):
+    # cas_segment turns gated graphs into proof steps, rung3_technique turns those into
+    # technique gap maps, and only then does comprehension have a strategy axis to score.
+    # They were absent from the DAG entirely, so `weak-proof` was unreachable and every
+    # proof scored no-structure — the criterion below could not be met by construction
+    # (E-superpod-hardening H13). Closing it needed no GPU, only the wiring.
+    "S5": {"cmd": f"{{PY}} scripts/cas_segment.py {GRAPHS}/*.edn --out-dir {STEPS} && "
+           f"{{PY}} scripts/rung3_technique.py --steps-dir {STEPS} --out-dir {RUNG3} && "
+           f"{{PY}} scripts/clean_comprehension.py --graphs {GRAPHS} --candidates {CAND} "
+           f"--steps {STEPS} --rung3 {RUNG3} --run-dir {RUN} "
+           "--run-id $RUN_ID --corpus-id $CORPUS",
            "crit": "G-comprehension: verdict separates weak-extraction from weak-proof"},
     "S6": {"cmd": "while read -r pid; do [ -n \"$pid\" ] || continue; "
            f"{{PY}} scripts/paper_graph_assemble.py --paper $pid --iatc {GRAPHS} --run-dir {RUN} "
