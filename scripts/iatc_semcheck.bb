@@ -200,8 +200,20 @@
                  :rate nil
                  :reasons ["N/A: required structure absent at this resolution"]))))
 
+;; Prefer the repo venv's interpreter. Invoking bare "python3" picked up the
+;; system Python, which has no edn_format, so R2d raised ModuleNotFoundError and
+;; the composer reported "R2d concept coverage failed" — rung-2 FAILing on every
+;; graph in the corpus while R2d succeeded when run directly. Same class as the
+;; LaTeXML gap: the dependency exists, but not where the caller looks.
+(def python-bin
+  (let [venv (io/file "/.venv/bin/python")
+        local (io/file ".venv/bin/python")]
+    (cond (.exists local) (.getPath local)
+          (.exists venv) (.getPath venv)
+          :else "python3")))
+
 (defn concept-check-file [file]
-  (let [result @(p/process ["python3" "scripts/r2d_concept_coverage.py"
+  (let [result @(p/process [python-bin "scripts/r2d_concept_coverage.py"
                             "--edn" (.getPath (io/file file))]
                            {:out :string :err :string})]
     (when-not (zero? (:exit result))

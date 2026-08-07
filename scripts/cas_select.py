@@ -204,10 +204,40 @@ def call_openai(prompt: str, model: str) -> dict[str, Any]:
         data=body,
         headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(req, timeout=300) as r:
+    # Hardcoded 300s assumes GPU throughput; the local CPU endpoint needs longer.
+    # Same defect as H3, which fixed the other three LLM callers and missed this one.
+    with urllib.request.urlopen(
+            req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as r:
         txt = _json.loads(r.read())["choices"][0]["message"]["content"]
-    m = re.search(r"\{.*\}", txt, re.S)
-    return _json.loads(m.group(0)) if m else {"pattern": None, "slot": None, "confidence": 0.0}
+    return _parse_verdict(txt)
+
+
+NO_MATCH = {"pattern": None, "slot": None, "confidence": 0.0}
+
+
+def _parse_verdict(txt: str) -> dict[str, Any]:
+    r"""Recover a verdict from model prose, and never raise.
+
+    A single malformed response killed a 136-call run outright on 2026-08-07: the
+    greedy `\{.*\}` grabbed a JSON object the model had written with a trailing
+    comma, `json.loads` raised, and the exception unwound through `select_proof`
+    to `main`, discarding every verdict computed up to that point. One bad
+    generation out of a hundred-odd should cost one verdict, not the run.
+
+    Two lessons applied: the greedy match spans from the first `{` to the LAST
+    `}`, so any prose containing two objects yields garbage — prefer the last
+    well-formed object. And an unparseable verdict is a legitimate outcome
+    ("no match"), not an error condition.
+    """
+    for cand in reversed(re.findall(r"\{[^{}]*\}", txt or "", re.S)):
+        for attempt in (cand, re.sub(r",\s*([}\]])", r"\1", cand)):
+            try:
+                v = json.loads(attempt)
+            except ValueError:
+                continue
+            if isinstance(v, dict):
+                return v
+    return dict(NO_MATCH)
 
 
 def verify(
@@ -242,6 +272,7 @@ def assemble(
     matches: list[dict[str, Any]],
     induce_queue: list[dict[str, Any]],
     patterns: dict[str, Pattern],
+    errors: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     topology = [m["pattern"] for m in matches]
     wiring = [
@@ -271,6 +302,7 @@ def assemble(
         "sorry": sorry,
         "induce_queue": induce_queue,
         "checks": checks,
+        "errors": errors or [],
     }
 
 
@@ -285,6 +317,7 @@ def select_proof(
     confidence_floor: float = 0.0,
 ) -> dict[str, Any]:
     matches: list[dict[str, Any]] = []
+    errors: list[dict[str, Any]] = []
     induce_queue: list[dict[str, Any]] = []
     for step in steps_doc["steps"]:
         candidates = retrieve(step["text"], patterns, k=k)
@@ -298,15 +331,24 @@ def select_proof(
             oracle_pattern = oracle.get(step["id"], {}).get("pattern")
             if oracle_pattern in patterns and oracle_pattern not in {c["pattern"] for c in candidates}:
                 candidates = [*candidates, {"pattern": oracle_pattern, "score": 1.0, "hits": ["oracle"]}]
-        verdict = verify(
-            step,
-            candidates,
-            patterns,
-            backend=backend,
-            oracle=oracle,
-            model=model,
-            confidence_floor=confidence_floor,
-        )
+        # One step's verification must never cost the run. The 2026-08-07 abort
+        # unwound a single bad generation all the way to main() and discarded
+        # every verdict already computed; a timeout or a 503 from the endpoint
+        # would have done the same. A failed step is recorded as unverified and
+        # counted, so the loss is visible in the payload rather than silent.
+        try:
+            verdict = verify(
+                step,
+                candidates,
+                patterns,
+                backend=backend,
+                oracle=oracle,
+                model=model,
+                confidence_floor=confidence_floor,
+            )
+        except Exception as e:                                  # noqa: BLE001
+            errors.append({"step": step["id"], "error": f"{type(e).__name__}: {e}"})
+            verdict = {"pattern": None, "slot": None, "confidence": 0.0, "tier1": "error"}
         if verdict["pattern"]:
             matches.append(
                 {
@@ -326,7 +368,7 @@ def select_proof(
                     "reason": "no candidate verified",
                 }
             )
-    return assemble(steps_doc["paper_id"], matches, induce_queue, patterns)
+    return assemble(steps_doc["paper_id"], matches, induce_queue, patterns, errors)
 
 
 def evaluate(results: dict[str, dict[str, Any]], fixture_dir: Path = DEFAULT_FIXTURES) -> dict[str, Any]:

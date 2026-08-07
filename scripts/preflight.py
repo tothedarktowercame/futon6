@@ -24,6 +24,7 @@ safe to automate.
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import os
 import shutil
@@ -75,6 +76,38 @@ def check_structure_chain():
     return rec("chain:formula->structure", ok,
                "structure returned" if ok else f"no :structure in output ({out[:80]})",
                "run scripts/linode-postsetup-deps.sh; check latexmlmath")
+
+
+# ------------------------------------------------- gate scripts' own interpreter
+
+def check_gate_subprocess():
+    """Run a gate the way the pipeline runs it, not the way this file imports.
+
+    `check_python` imports edn_format into *preflight's* interpreter and passes.
+    But `iatc_semcheck.bb` shells out to its own Python, and on 2026-08-07 that
+    was the system interpreter, which has no edn_format — so R2d raised, the
+    composer reported the graph failed, and rung-2 read as 0/98 corpus-wide when
+    the true figure was 49/98. Preflight was green throughout.
+
+    The lesson is H21's, one level in: it is not enough to check that a
+    dependency is installed, or even that it is importable *here*. The check has
+    to traverse the same path the caller traverses.
+    """
+    script = os.path.join(ROOT, "scripts", "iatc_semcheck.bb")
+    if not shutil.which("bb") or not os.path.exists(script):
+        return rec("chain:gate-subprocess", False, "bb or iatc_semcheck.bb absent",
+                   "run scripts/linode-postsetup-deps.sh")
+    graphs = sorted(glob.glob(os.path.join(ROOT, "data", "iatc-argument-graphs", "run", "*.edn")))
+    graphs = [g for g in graphs if not g.endswith(".rung2.edn")]
+    if not graphs:
+        return rec("chain:gate-subprocess", True, "no graphs yet — nothing to exercise")
+    code, out = sh(f'bb {script} {graphs[0]}', timeout=300)
+    # PASS or FAIL are both fine; what must not happen is R2d failing to report.
+    ok = "R2d" in out and "concept-coverage" in out and "R2d concept coverage failed" not in out
+    return rec("chain:gate-subprocess", ok,
+               "R2d reports through the composer" if ok
+               else f"R2d did not report ({out[-120:]})",
+               "the gate's own interpreter lacks a module — check python-bin in iatc_semcheck.bb")
 
 
 # ---------------------------------------------------------------- python deps
@@ -174,6 +207,7 @@ def main() -> int:
     ids = a.ids if os.path.isabs(a.ids) else os.path.join(ROOT, a.ids)
     check_binaries(a.fix)
     check_structure_chain()
+    check_gate_subprocess()
     check_python()
     check_gates()
     check_substrate()

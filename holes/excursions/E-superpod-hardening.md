@@ -479,6 +479,67 @@ portability (de-hardcode `warp_run.py` + per-script paths) — required for
 any beyond-math.CT domain run; plus an eventual clean dry pass on the
 Superpod profile itself. H5/H7/H8 are documentation and carry no code.
 
+## H23 — a gate script invoked bare `python3`, not the venv interpreter
+
+`iatc_semcheck.bb` shelled out to `["python3" "scripts/r2d_concept_coverage.py"]`.
+The system interpreter has no `edn_format`, so R2d raised `ModuleNotFoundError`,
+the composer saw a nonzero exit, and reported the whole graph FAILED. Every
+graph in the corpus failed identically, so rung-2 read as 0/98 when the true
+figure is **49/98**.
+
+Two things make this Superpod-relevant beyond the one-line fix:
+
+- **A uniform failure across a heterogeneous corpus is evidence about the
+  harness, not the corpus.** Real content failures are distributed; 98/98
+  identical is a signature. That heuristic is cheap and would have caught this
+  in minutes rather than being carried into a written conclusion.
+- It is the **same class as the LaTeXML gap** (H21): a dependency that is
+  installed but not on the path the caller searches. `preflight.py` checks
+  `python:modules` by importing them *in its own interpreter* — which is the
+  venv, so it passes — while the actual caller uses a different one. A
+  preflight that does not execute the real call path can attest to the wrong
+  environment.
+
+**Fixed:** `python-bin` prefers `.venv/bin/python`, falls back to `python3`.
+**Still open:** `preflight.py` should invoke the gate scripts as the pipeline
+invokes them, rather than import-testing in-process.
+
+## H24 — one malformed model response aborted a 98-paper run and discarded it
+
+The CAS-SEL Tier-1 verify died ~4 minutes in on a `JSONDecodeError`. The model
+emitted an object with a trailing comma; `call_openai` did `json.loads` with no
+guard; the exception unwound through `select_proof` to `main`, and **every
+verdict computed before that point was lost** because the payload is only
+written at the end.
+
+Three defects, one symptom:
+
+1. **No tolerance for near-miss JSON.** Trailing commas are the single most
+   common LLM JSON defect. Now stripped on a retry pass.
+2. **A greedy `\{.*\}` regex.** It spans the first `{` to the *last* `}`, so
+   any response containing two objects — commentary plus verdict — yields
+   garbage. Now takes the last well-formed object.
+3. **An unparseable verdict was treated as an error, not an outcome.** "I could
+   not classify this step" is a legitimate result. Now returns no-match, and
+   per-step failures are collected into an `errors` list in the payload so the
+   loss is counted rather than silent.
+
+The run-level lesson is the one that costs most on a booked window: **work not
+checkpointed is work wagered on the last call succeeding.** A 98-paper LLM pass
+should write incrementally; it currently does not.
+
+## H25 — passes that had nothing to check are counted as passes
+
+Rung-2's R2c (warrant-resolution) reports PASS on 98/98 graphs, but **31 of
+those are `rate=0.000`** — no resolved warrant edges existed to check. A check
+that passes vacuously is not evidence of the property it names, and aggregating
+it with genuine passes overstates verification. Separately, **R2d emitted no
+verdict at all on 6 graphs** — neither pass nor fail — and silent abstention
+inflates any rate computed over "graphs that reported".
+
+Reporting fix wanted: every rung emits `pass | fail | vacuous | abstain`, and
+headline rates quote the denominator they were computed over.
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =
@@ -497,3 +558,6 @@ Superpod profile itself. H5/H7/H8 are documentation and carry no code.
 - 2026-08-05 — opened with H1–H8 from the Zone probe, same day as the
   probe itself. mark7z S3 loop running (1,525 candidates) at time of
   writing. Two-stream throughput measured live (see Measurements).
+- 2026-08-07 — H23–H25 opened from the rung-2 corpus measurement. H23 and H24
+  fixed same day; the reporting fix in H25 and incremental checkpointing in
+  H24 remain open.
