@@ -126,7 +126,8 @@ OPS = {
     # `;` here swallowed a FileNotFoundError on every run, so S11 reported PASS while
     # half of it had never executed (H22). sfc_struct_canon now records an explicit
     # refusal artifact instead of dying, so `&&` is safe and a real failure surfaces.
-    "S11": {"cmd": f"{{PY}} scripts/sfc_struct_canon.py --formulae {RUN}/def-formulae.txt "
+    "S11": {"cmd": f"{{PY}} scripts/def_formulae_extract.py --ids {{IDS}} --out {RUN}/def-formulae.txt && "
+            f"{{PY}} scripts/sfc_struct_canon.py --formulae {RUN}/def-formulae.txt "
             f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS && "
             f"{{PY}} scripts/clean_paper_signature.py --embed {DEMO}/clean-embed.json "
             f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
