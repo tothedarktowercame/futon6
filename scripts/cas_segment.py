@@ -141,7 +141,13 @@ def segment_graph(graph_path: Path) -> dict[str, Any]:
 
 def write_steps(graph_path: Path, out_dir: Path = DEFAULT_OUT_DIR, out_path: Path | None = None) -> Path:
     doc = segment_graph(graph_path)
-    target = out_path or out_dir / f"{doc['paper_id']}.steps.json"
+    # Name by the GRAPH (proof) id, not the paper id. Naming by paper made every
+    # proof of a paper write the same file, so 98 graphs collapsed to 12 with the
+    # later silently overwriting the earlier — and S5 looks up per-proof
+    # (`<pid>__pN.steps.json`), so it found nothing and the whole rung-3 half of
+    # comprehension went dark (E-superpod-hardening H13).
+    stem = graph_path.stem
+    target = out_path or out_dir / f"{stem}.steps.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(doc, indent=2, ensure_ascii=False, sort_keys=True) + "\n")
     return target

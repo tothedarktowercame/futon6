@@ -95,6 +95,43 @@ FUTON6_EPRINTS=$YOUR_EPRINTS OPENAI_BASE_URL=$URL OPENAI_API_KEY=x RUN_ID=mark7 
 - ~28k all-proofs; full completion in 20h is plausible with 8-GPU batching, but **the run need
   not finish** — S12 checkpoints the curves as it goes.
 
+## MID-RUN ABORT GATE — run this after the first ~12 and ~100 papers
+
+**Purpose: give you your window back if the run is producing garbage.** It
+takes under a second, needs no GPU, and reads only artifacts already on disk.
+
+```bash
+cd ~/code/futon6
+.venv/bin/python scripts/replay_e2e.py --through S3 \
+    --graphs data/iatc-argument-graphs/run \
+    --steps  data/cas-select-steps/run \
+    --ids    holes/math-ct-full.ids.txt \
+    --corpus-id math-ct-full
+#   exit 0  -> CONTINUE
+#   exit >0 -> ABORT: kill the run, tell us the failing check, reclaim the window
+```
+
+Why it is worth the interruption: the 21 hazards we found running this
+pipeline off the dev box were overwhelmingly **accounting** failures, not
+compute failures — a stage naming output per paper while its consumer read per
+proof; scripts reading a fixture corpus instead of the run; the learning layer
+printing findings it never wrote down; graphs passing the bb gate and then
+being unreadable by the Python stages. Every one of those is detectable from a
+12-paper prefix, and **none of them repairs itself downstream** — a 20-hour
+window spent on top of them produces 20 hours of unusable output.
+
+The gate reports three severities. **FAIL** means artifacts violate an
+invariant the rest of the pipeline depends on: abort. **WARN** means
+provenance is imperfect (e.g. a stage not threading `--corpus-id`) but the
+artifacts are sound: keep going, tell us afterwards. **not yet applicable**
+means the check needs a later stage — at `--through S3` seven of eleven checks
+run, and the four that are skipped are the completeness/persistence ones.
+
+Run it again at `--through S12` when the pipeline finishes, before RETRIEVE:
+that adds the checks that the run directory actually contains what the
+manifest below promises. Those exist because we lost a run's entire learning
+layer to stdout once already.
+
 ## Send back (BEFORE you release the alloc — we lost mark6's CLeans this way)
 
 `rsync` these to us:
