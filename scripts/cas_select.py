@@ -419,11 +419,41 @@ def _allowed_patterns(args: argparse.Namespace) -> set[str] | None:
 
 
 def run_steps_paths(args: argparse.Namespace, paths: list[Path]) -> dict[str, Any]:
+    """Select over many papers, writing each one's result as it lands.
+
+    Without `--checkpoint` this is a wager on the last call succeeding: the
+    payload goes to stdout only at the end, so an abort at paper 97 of 98
+    discards 96 papers of completed LLM work. That is what happened on
+    2026-08-07. It also means a long run gives no progress signal at all —
+    an empty output file looks identical whether the run is healthy, wedged,
+    or dead, which is not a distinction to leave to guesswork on a booked
+    window.
+
+    With `--checkpoint`, each paper is appended as one JSON line as soon as it
+    completes, and a restart skips the papers already present. Resume is by
+    paper id rather than by position, so it survives the input set changing.
+    """
     patterns = load_patterns(index_path=args.index, library_dir=args.library, allowed=_allowed_patterns(args))
-    results = {}
-    for steps_path in sorted(paths):
+    results: dict[str, Any] = {}
+    ckpt: Path | None = getattr(args, "checkpoint", None)
+
+    if ckpt and ckpt.exists():
+        for line in ckpt.read_text().splitlines():
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+            except ValueError:
+                continue                      # a torn final line from a hard kill
+            if isinstance(row, dict) and "paper_id" in row:
+                results[row["paper_id"]] = row
+        if results:
+            print(f"resuming: {len(results)} paper(s) already in {ckpt}", file=sys.stderr)
+
+    todo = [q for q in sorted(paths) if load_steps(q)["paper_id"] not in results]
+    for i, steps_path in enumerate(todo, 1):
         steps_doc = load_steps(steps_path)
-        results[steps_doc["paper_id"]] = select_proof(
+        row = select_proof(
             steps_doc,
             patterns,
             backend=args.backend,
@@ -432,6 +462,15 @@ def run_steps_paths(args: argparse.Namespace, paths: list[Path]) -> dict[str, An
             k=args.k,
             confidence_floor=args.confidence_floor,
         )
+        results[steps_doc["paper_id"]] = row
+        if ckpt:
+            with ckpt.open("a") as fh:
+                fh.write(json.dumps(row) + "\n")
+                fh.flush()
+                os.fsync(fh.fileno())         # survive a kill, not just an exit
+        print(f"  [{i}/{len(todo)}] {steps_doc['paper_id']}: "
+              f"{len(row.get('matches', []))} match(es), {len(row.get('errors', []))} error(s)",
+              file=sys.stderr, flush=True)
     return {"results": results}
 
 
@@ -446,6 +485,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--model", default="mark4-70b")
     ap.add_argument("--k", type=int, default=4)
     ap.add_argument("--confidence-floor", type=float, default=0.0)
+    ap.add_argument("--checkpoint", type=Path,
+                    help="append each paper's result here as JSON lines; resume skips those already present")
     ap.add_argument("--exclude-patterns", default="")
     args = ap.parse_args(argv)
     if args.steps and args.steps_dir:

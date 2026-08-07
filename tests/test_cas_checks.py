@@ -109,7 +109,13 @@ def test_registry_executes_built_rung2_checks_on_loop_run_graph():
 
     assert result["pass"] is True
     assert by_label["R2c-warrant"]["check"] == "warrant-resolution"
-    assert by_label["R2c-warrant"]["status"] == "pass"
+    # warrant-resolution is configured report-only (:warrant-floor 0.0), so no
+    # rate can fail it and it must NOT report as "pass" beside rungs that gate
+    # -- otherwise an aggregate over the status column sums "verified" with
+    # "not checked". Gating is unaffected, which is what result["pass"] above
+    # pins down: the label moved, the semantics did not.
+    assert by_label["R2c-warrant"]["status"] == "report"
+    assert by_label["R2c-warrant"]["status"] != "pass"
     assert by_label["R2c-warrant"]["rate"] == 0.2
     assert by_label["R2b-closure"]["check"] == "closure"
     assert by_label["R2b-closure"]["status"] == "pass"
