@@ -57,14 +57,24 @@ def score(vocab, windows):
 
 
 def main():
-    lex, _, _ = harvest(os.path.join(ROOT, "data/iatc-argument-graphs/loop-run-70b"))
+    import argparse
+    _ap = argparse.ArgumentParser()
+    # These were hardcoded to mark4-era paths, so the "reground lift" criterion was
+    # computed against a stale corpus no matter which run invoked it — silently, on
+    # any host that happens to have those files (E-superpod-hardening H19).
+    _ap.add_argument("--graphs", default="data/iatc-argument-graphs/loop-run-70b")
+    _ap.add_argument("--candidates", default="data/cand-neighborhood")
+    _a = _ap.parse_args()
+    lex, _, _ = harvest(_a.graphs if os.path.isabs(_a.graphs) else os.path.join(ROOT, _a.graphs))
     cues = cluster_cues(lex)
     print(f"data-driven move-cues harvested from the corpus ({len(cues)}):")
     print("  " + ", ".join(cues) + "\n")
     vocab = sr.load_vocab(os.path.join(ROOT, "holes/clean/tactic-gesture-vocab.edn"))
     aug = {**vocab, "heuristic": {**vocab["heuristic"], "corpus-move": cues}}
     windows = [json.load(open(f)).get("source-window", "")
-               for f in glob.glob(os.path.join(ROOT, "data/cand-neighborhood/*.candidate.json"))]
+               for f in glob.glob(os.path.join(
+                   _a.candidates if os.path.isabs(_a.candidates) else os.path.join(ROOT, _a.candidates),
+                   "*.candidate.json"))]
     print(f"measuring proof-move grounding over {len(windows)} proof windows:\n")
     base = score(vocab, windows)
     augd = score(aug, windows)

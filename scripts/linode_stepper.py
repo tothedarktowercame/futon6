@@ -108,7 +108,9 @@ OPS = {
     # --- LEARNING LAYER (the 'improve as we run' instrumentation; CPU post-stages) ---
     "S10": {"cmd": f"{{PY}} scripts/iatc_lexicon_harvest.py --graphs {GRAPHS} --run-dir {RUN} "
             "--run-id $RUN_ID --corpus-id $CORPUS && "
-            f"{{PY}} scripts/iatc_move_reground.py && {{PY}} scripts/expository_reground.py",
+            f"{{PY}} scripts/iatc_move_reground.py --graphs {GRAPHS} --candidates {CAND} && "
+            "{PY} scripts/expository_reground.py --scopes data/expository-scope-graphs/run "
+            "--measure-ids {IDS}",
             "crit": "move-lexicon harvested (relations+warrants+expository moves); reground lift >= 0"},
     "S11": {"cmd": f"{{PY}} scripts/sfc_struct_canon.py --formulae {RUN}/def-formulae.txt ; "
             f"{{PY}} scripts/clean_paper_signature.py --embed {DEMO}/clean-embed.json",

@@ -370,6 +370,59 @@ first, so the reason on line 2 was always cut off. The printer now shows the
 informative lines instead. A 15%-of-stage failure mode was invisible for want
 of a slice index.
 
+### H19 — S10's reground scripts measured a stale corpus, silently. **FIXED**
+
+The worst failure shape found in this excursion: not a crash, not a loss, but
+**plausible numbers computed from the wrong inputs**. S10 chains three scripts;
+the second and third took *no arguments at all* and read hardcoded paths:
+
+- `iatc_move_reground` → graphs `data/iatc-argument-graphs/`**`loop-run-70b`**
+  (mark4-era) and windows `data/cand-neighborhood/` (a 76-file dev fixture);
+- `expository_reground` → scopes `data/expository-scope-graphs/`**`loop-run-70b`**
+  (10 mark4 files, against our run's 280);
+- **H19c**, same script: the lift is measured over *five literal paper ids*
+  written into the source — `["0705.0452", "0706.1286", "0708.2185",
+  "0712.0724", "0801.0199"]` — of which two are in our corpus.
+
+So S10's criterion (*"reground lift ≥ 0"*) was evaluated against mark4 data
+whatever corpus you ran. On Zone it failed loudly **only by luck**: it reached
+for a fixture paper whose eprint we had never staged. On the Superpod, where
+Rob has all of arXiv math, every one of those lookups succeeds — and S10 would
+have reported a confident lift for a corpus he was not running, with nothing
+to indicate it.
+
+All three inputs plus the measurement set are now CLI parameters (old defaults
+retained for other callers), threaded from the stepper. A missing eprint now
+skips one paper instead of aborting the stage. **First honest numbers for
+`math-ct-e2e-12`:** proof-move grounding **0.118 → 0.272 (+0.154)**;
+expository-move recognition **0.033 → 0.094 (+0.061)**.
+
+### H19b — the H14 id bug again, in a third script. **FIXED — and refactored**
+
+`expository_reground.harvest_cues` did `basename.split("_")[0]`, collapsing
+`math__0310337` to `math`, aborting the stage exactly as H14 did. That made
+three instances of one class, each failing differently and each patched
+locally: H14 (split `__`, broke old-style), H11b (filename-prefix grouping,
+broke new-style), H19b (split `_`, broke old-style).
+
+So this one was not patched a third time. `scripts/paper_ids.py` is now the
+single parser, anchoring on the **id itself** (both families, all three of the
+pipeline's naming conventions) rather than on whatever separator a stage
+happened to use; unit-checked on six real filenames; both callers delegate.
+Same move as `edn_compat` for the reader divergence, and the same trigger —
+*when one abstraction grows several independent implementations in one small
+codebase, the abstraction wants to be shared.*
+
+### H20 — S10 was O(scope files), not O(papers); it never finishes at scale. **FIXED**
+
+`harvest_cues` called `dpv.build(pid)` — a full paper re-parse — **once per
+scope file**. On this run: 280 rebuilds where 12 would do (23× waste, and the
+cause of an exit I first mistook for a crash). At 4,616 papers × ~30 regions
+that is **~138,000 rebuilds** and the stage simply does not finish inside any
+window. Fixed with the cache shape `iatc_lexicon_harvest._text_lines` already
+used. With it the stage completes and harvests 28 corpus discourse-cues
+(`note`, `recall`, `observe`, `in fact`, `clearly`, `well known`, …).
+
 ### H8 — model-sensitivity comparison now available. **ASSET**
 
 The mark7z artifacts (GLM-4.5-Air, gates enforced) give a same-corpus

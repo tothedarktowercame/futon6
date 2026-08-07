@@ -67,10 +67,18 @@ def _pid_of(fname):
     (E-superpod-hardening H14, 2026-08-06). Strip the proof suffix instead; that
     is the convention the rest of the pipeline already uses.
     """
-    base = os.path.basename(fname)
-    if base.endswith(".edn"):
-        base = base[:-4]
-    return base.rsplit("__p", 1)[0]
+    try:
+        import sys as _sys
+        _h = os.path.dirname(os.path.abspath(__file__))
+        if _h not in _sys.path:
+            _sys.path.insert(0, _h)
+        from paper_ids import proof_pid_from_graph_name
+        return proof_pid_from_graph_name(fname)
+    except Exception:
+        base = os.path.basename(fname)
+        if base.endswith(".edn"):
+            base = base[:-4]
+        return base.rsplit("__p", 1)[0]
 
 
 def harvest(graph_dir):
