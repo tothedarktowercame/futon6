@@ -20,8 +20,19 @@ import math
 import statistics as st
 from collections import Counter, defaultdict
 import os
+import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "scripts"))
+
+
+def _pid(graph_id):
+    """Paper id from a proof-graph id, via the one shared parser."""
+    try:
+        from paper_ids import proof_pid_from_graph_name
+        return proof_pid_from_graph_name(graph_id)
+    except Exception:
+        return graph_id.split("__p")[0]
 
 FEATS = ["n_boxes", "n_wires", "n_holes", "n_discharges_known", "max_fanout",
          "depth", "n_sources", "n_sinks"]
@@ -32,7 +43,10 @@ def signatures(ids, breakdowns, min_proofs=2):
     feats = [f for f in FEATS if isinstance(breakdowns[0].get(f), (int, float))]
     bypaper = defaultdict(list)
     for i, b in zip(ids, breakdowns):
-        bypaper[i.split("__")[0]].append(b)
+        # split("__")[0] collapses every legacy id (math__0310337 -> "math"), which
+        # merges five distinct papers into one signature. Fourth instance of this
+        # class; use the shared parser (H14/H19b).
+        bypaper[_pid(i)].append(b)
     papers = [p for p in bypaper if len(bypaper[p]) >= min_proofs]
     sig = {}
     for p in papers:
