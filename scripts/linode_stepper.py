@@ -63,6 +63,7 @@ GRAPHS = "data/iatc-argument-graphs/run"
 CLEAN = "holes/clean-run"
 STEPS = "data/cas-select-steps/run"      # S5 rung-3 inputs (H13)
 RUNG3 = "data/rung3-technique/run"
+PAPERG = "data/iatc-paper-graphs"   # S6 output; RETRIEVE collects <run-id> under this
 DEMO = "data/showcases/clean-run-demo"
 OPS = {
     "S0": {"boot": True, "note": "<profile.s0> — provision the host + serve the model"},
@@ -104,8 +105,11 @@ OPS = {
            "--run-id $RUN_ID --corpus-id $CORPUS",
            "crit": "G-comprehension: verdict separates weak-extraction from weak-proof"},
     "S6": {"cmd": "while read -r pid; do [ -n \"$pid\" ] || continue; "
-           f"{{PY}} scripts/paper_graph_assemble.py --paper $pid --iatc {GRAPHS} --run-dir {RUN} "
+           f"{{PY}} scripts/paper_graph_assemble.py --paper $pid --iatc {GRAPHS} "
+           f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS "
            "|| exit 1; done < {IDS}",
+           "gate": f"test -d {PAPERG}/$RUN_ID && "
+                   f"test $(ls {PAPERG}/$RUN_ID/*.B.json 2>/dev/null | wc -l) -gt 0",
            "crit": "B wellformed: every proof attaches to a statement; orphans flagged"},
     "S7": {"cmd": f"{{PY}} scripts/clean_box_typing.py --graphs {GRAPHS} --out {CLEAN} "
            "--endpoint http://localhost:$PORT/v1/chat/completions --model ${{MODEL:-mark4-70b}} "

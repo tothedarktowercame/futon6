@@ -28,6 +28,7 @@ Usage:
 """
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -116,7 +117,20 @@ def main():
 
     rows = []
     skipped = []
-    for path in sorted(graph_dir.glob("*.edn")):
+    # Sidecar rung-2 reports are not argument graphs; scoring them produced 98
+    # spurious `no-structure` verdict rows that any reader of the distribution
+    # then had to discount by hand (run_artifacts, 2026-08-07).
+    try:
+        import sys as _sys
+        _h = os.path.dirname(os.path.abspath(__file__))
+        if _h not in _sys.path:
+            _sys.path.insert(0, _h)
+        from run_artifacts import proof_graphs
+        _graph_paths = [Path(x) for x in proof_graphs(str(graph_dir))]
+    except Exception:
+        _graph_paths = sorted(x for x in graph_dir.glob("*.edn")
+                              if not x.name.endswith(".rung2.edn"))
+    for path in _graph_paths:
         pid = path.stem
         try:  # per-graph isolation: a single malformed graph (e.g. illegal EDN from the
             # model) must not sink the whole comprehension batch

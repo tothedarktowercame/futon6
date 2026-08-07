@@ -214,7 +214,20 @@ def collect(paths: list[str]) -> list[Path]:
     for p in paths:
         pp = Path(p)
         if pp.is_dir():
-            out += sorted(pp.glob("*.edn"))
+            # A directory of graphs also contains <pid>.rung2.edn reports; gating
+            # them as if they were argument graphs failed the S3 stage gate on its
+            # own sidecars (run_artifacts, 2026-08-07). An explicitly named file is
+            # still gated, so --include-attempts style use is unaffected.
+            try:
+                import sys as _sys, os as _os
+                _h = _os.path.dirname(_os.path.abspath(__file__))
+                if _h not in _sys.path:
+                    _sys.path.insert(0, _h)
+                from run_artifacts import proof_graphs
+                out += [Path(x) for x in proof_graphs(str(pp))]
+            except Exception:
+                out += sorted(x for x in pp.glob("*.edn")
+                              if not x.name.endswith(".rung2.edn"))
         elif pp.is_file():
             out.append(pp)
     return out

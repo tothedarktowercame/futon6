@@ -17,6 +17,7 @@ import bisect
 import glob
 import json
 import os
+import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GOLDEN = os.path.join(ROOT, "data/showcases/ct-anatomy/golden")
@@ -86,7 +87,11 @@ def main():
     ap.add_argument("--paper", required=True)
     ap.add_argument("--marks-dir", default=GOLDEN)
     ap.add_argument("--iatc", help="dir of reconstructed IATC graphs to attach by overlap")
-    ap.add_argument("--out", default="data/paper-graphs")
+    # RETRIEVE collects data/iatc-paper-graphs/<run-id>; the old default wrote to
+    # data/paper-graphs, so S6's product was outside the retrieval manifest and
+    # would have been destroyed at cluster teardown.
+    ap.add_argument("--out", default=None,
+                    help="default: data/iatc-paper-graphs/<run-id> (the RETRIEVE path)")
     ap.add_argument("--run-dir")
     ap.add_argument("--run-id", default="adhoc")
     ap.add_argument("--corpus-id", default="adhoc")
@@ -96,7 +101,8 @@ def main():
         print(f"no marks for {a.paper}")
         return 1
     c = B["counts"]
-    outdir = a.out if os.path.isabs(a.out) else os.path.join(ROOT, a.out)
+    out = a.out or os.path.join("data", "iatc-paper-graphs", a.run_id or "adhoc")
+    outdir = out if os.path.isabs(out) else os.path.join(ROOT, out)
     os.makedirs(outdir, exist_ok=True)
     json.dump(B, open(os.path.join(outdir, f"{a.paper}.B.json"), "w"), indent=1)
     attach = (c["statements"] - c["orphan_statements"]) / max(1, c["statements"])
@@ -110,8 +116,19 @@ def main():
                            value=round(attach, 4), computable=True)
         except Exception as ee:
             print(f"  (S6 metric emit skipped: {ee})")
+    if not B["wellformed"]:
+        # A proof that attaches to no statement is a defect in the whole-paper
+        # object, not a note: returning 0 here let two malformed objects sit
+        # behind a passing stage ledger entry.
+        unattached = [pr.get("id") for pr in B.get("proofs", []) if not pr.get("proves")]
+        print(f"✗ {a.paper}: NOT well-formed — {len(unattached)} proof(s) attach to no "
+              f"statement, e.g. {unattached[:3]}")
+        return 2
     return 0
 
 
 if __name__ == "__main__":
-    main()
+    # main() returns a status; discarding it made every failure exit 0, so the
+    # S6 loop's `|| exit 1` could never fire and two malformed paper objects sat
+    # behind a passing stage ledger entry.
+    sys.exit(main() or 0)
