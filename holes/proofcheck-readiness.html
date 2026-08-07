@@ -195,9 +195,12 @@ const CARDS = {
   {id:"PASS3-HARVEST", t:"Pass-3 hole harvest → conjecture / weak-proof map", s:"partial", c:"cpu", new:true,
    ev:"scripts/clean_hole_harvest.py",
    n:"Mine typed holes from the CLean corpus → a corpus <b>open-problem map</b> (conjectures = author-declared known holes — the Rob value-demo) + weak-proof candidates, disambiguated from weak-EXTRACTION by the comprehension gate. CPU, runs on already-extracted graphs."},
-  {id:"LEAN-NL", t:"Lean↔NL corpus + Herald reconciliation + mathlib-CT replication", s:"partial", c:"cpu", new:true,
+  {id:"LEAN-NL", t:"Lean↔NL corpus + Herald reconciliation + mathlib-CT replication", s:"ready", c:"cpu", new:true,
    ev:"scripts/herald_validate.py · herald_ct_endtoend.py · FrenzyMath/Herald_proofs (44,553 pairs) · E-strategy-recognizer.md",
-   n:"<b>DONE (core):</b> Herald pulled; recognizer self-validated; vocab reconciled into <b>12 discursive targets + 11 hidden-layer (silent bookkeeping) tactics</b> (\"rw is a hidden layer — we can't recognize what isn't there\"). mathlib-CT replication via Herald's CT subset (3952 proofs = mathlib-CT + NL): two-layer profile (discursive from prose + hidden from Lean trace) works end-to-end, <b>0.71 recall on CT discursive strategies</b>; CT signature = apply/intro/constructor (discursive) + simp/rw/ext/aesop_cat (hidden). Remaining: grow vocab on CT (562 misses), per-step attribution, attach the hidden layer into CLean."}
+   n:"Herald pulled; recognizer self-validated; vocab reconciled into <b>12 discursive targets + 11 hidden-layer (silent bookkeeping) tactics</b> (\"rw is a hidden layer — we can't recognize what isn't there\"). mathlib-CT replication via Herald's CT subset (3952 proofs = mathlib-CT + NL): the two-layer profile (discursive from prose + hidden from Lean trace) works end-to-end at <b>0.71 recall on CT discursive strategies</b>; CT signature = apply/intro/constructor (discursive) + simp/rw/ext/aesop_cat (hidden). Scope is the <i>reconciliation</i>: the two vocabularies are aligned and the replication holds. Consuming it inside CLean is LEAN-NL-ATTACH."},
+  {id:"LEAN-NL-ATTACH", t:"Attach the hidden layer into CLean + per-step attribution", s:"build", c:"cpu", new:true,
+   ev:"depends on LEAN-NL (ready) · E-strategy-recognizer.md",
+   n:"Split from LEAN-NL so a finished result stops reading as a gap. Three items, none started: <b>(1)</b> grow the discursive vocab on CT — 562 misses at 0.71 recall, and the misses are the sample that says where the vocabulary is thin; <b>(2)</b> per-step attribution, so a strategy attaches to the proof step it governs rather than to the proof; <b>(3)</b> attach the hidden layer into CLean typing, which is what makes the Lean side <i>usable</i> rather than merely reconciled. Only (3) is on the critical path to a query surface; (1) and (2) improve recall and resolution respectively."}
  ]
 };
 const app=document.getElementById('app'), bd=document.getElementById('breakdowns');
@@ -241,7 +244,8 @@ const LINKS={
  "STRAT-REC":"holes/excursions/E-strategy-recognizer.md",
  "WARRANT-NORM":"holes/excursions/E-comprehension-foundation.md",
  "PASS3-HARVEST":"holes/excursions/E-strategy-recognizer.md",
- "LEAN-NL":"holes/excursions/E-strategy-recognizer.md"
+ "LEAN-NL":"holes/excursions/E-strategy-recognizer.md",
+ "LEAN-NL-ATTACH":"holes/excursions/E-strategy-recognizer.md"
 };
 for(const [phase,cards] of Object.entries(CARDS)){
   const sec=document.createElement('section'); sec.className='phase';
