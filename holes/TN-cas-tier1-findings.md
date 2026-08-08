@@ -123,3 +123,46 @@ misreading is easy to make from the summary line alone, which prints
 The honest calibration statement is therefore: *on math.CT prose, tactic-gesture
 recognition covers 9.3% of proof steps, and pattern-level LLM verification
 covers 58.4%; the residue between them is what rung-3 is for.*
+
+---
+
+# Appendix B: the rung-3 residue pass (W8)
+
+92 residue gaps over 16 papers, GLM-4.5-Air on Zone, ~28 min.
+
+| | |
+|---|---:|
+| gaps asked | 92 / 92 |
+| model-written questions | **92** |
+| template fallback · endpoint error | **0 · 0** |
+| classified `novel-technique` · `real-gap` | 5 · 87 |
+| distinct question strings | **92 / 92** |
+| median similarity to the deterministic template | **0.23** (none above 0.90) |
+
+Every question is the model's own and distinct. The five `novel-technique`
+classifications are legible as such — e.g. *"How does the pivotal structure on a
+rigid monoidal category C induce a monoidal natural isomorphism τ between the
+identity functor and the double dual?"* — and the `real-gap` questions name the
+objects of the step they interrogate rather than restating its pattern.
+
+**It took four passes to get here, and the first one reported clean.** The
+progression is the point:
+
+| pass | reported | actually |
+|---|---|---|
+| 1 | 88/92 model-written | every question was the deterministic template verbatim (median similarity **1.00**) |
+| 2 | 78/92 model-written | template clause removed; but the model now ran past `max_tokens` and truncated mid-word |
+| 3 | 78/92, 14 unparseable | `maxLength` fixed truncation; the 14 were mathematical questions containing LaTeX braces, which the JSON extractor could not parse |
+| 4 | 92/92, 0 degraded | brace-balanced extraction |
+
+Each pass fixed a real defect and exposed the next, which had been masked. Two
+of the four were in instruments I had added earlier in the same session to catch
+the previous fault. The provenance field (`source: model|template|error`) is
+what made passes 1–3 legible at all; without it, pass 1 would have shipped as a
+result.
+
+**The lesson worth keeping is about what provenance measures.** `source: model`
+records *authorship*, not *originality*: a pass can be 100% model-written and 0%
+informative, and pass 1 was exactly that. The check that caught it was
+similarity-to-stub — comparing the output against what the deterministic
+fallback would have produced. Any LLM stage should carry both.
