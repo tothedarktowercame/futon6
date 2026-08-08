@@ -312,6 +312,34 @@ def plan(stages, profile):
             print(f"     note: {op['note']}")
 
 
+def preflight_gate(ids: str) -> int:
+    """Refuse to start unless every declared dependency is present. 0 = go.
+
+    preflight.py existed and printed "DO NOT START", and nothing consulted it —
+    so it was advice, and advice was not what it was for. LaTeXML was audited,
+    fixed, recorded READY, and then absent from the run host for a month while
+    S11's :structure lift was a silent no-op; an eprint store was mis-reported as
+    missing because only an env var was checked. Both classes are exactly what a
+    preflight catches, and neither was caught, because running it was optional.
+
+    There is no override flag. A run that cannot satisfy its dependencies is not
+    a run with a caveat, it is a run whose numbers mean nothing, and the cost of
+    finding that out at stage 7 of 12 on a booked window is the whole window.
+    """
+    import subprocess
+    print("preflight (mandatory) ...")
+    # PY is a command string with a flag ("... python -u"), not a bare path.
+    p = subprocess.run([*PY.split(), os.path.join(ROOT, "scripts", "preflight.py"), "--ids", ids],
+                       cwd=ROOT, text=True, capture_output=True)
+    print(p.stdout.rstrip() or p.stderr.rstrip())
+    if p.returncode != 0:
+        print(f"\nREFUSING TO START: {p.returncode} preflight check(s) failed.\n"
+              "  Each failure above names its remedy. Fix them, or run\n"
+              "  scripts/preflight.py --fix for the automatable ones.")
+        return 1
+    return 0
+
+
 def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
     """Execute stages; RETURN AN EXIT CODE rather than merely printing.
 
@@ -412,6 +440,9 @@ def main():
     if args.plan or not args.run:
         plan(stages, args.profile)
     if args.run:
+        rc = preflight_gate(args.ids or IDS)
+        if rc:
+            return rc
         # Propagate the stage outcome to the process exit status, so a scheduler
         # (or `&&` in a shell) can tell a stopped run from a finished one.
         return run(order(stages, args.frm, args.to), args.profile, args.no_halt,

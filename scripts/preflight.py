@@ -148,14 +148,36 @@ def check_substrate():
 
 # ---------------------------------------------------------------- eprints
 
+# Candidate eprint stores, in precedence order. The default baked into the code
+# (`warp_bib.DEFAULT_EPRINTS`) is a dev-box path that does not exist on every
+# host, so on 2026-08-08 an unset FUTON6_EPRINTS was read as "this machine has no
+# sources" and 16 papers were re-fetched from arXiv that the host already held at
+# ~/data/arxiv-math-ct-eprints. Reporting "unset" is not the same as reporting
+# "absent", and a preflight that cannot tell them apart sends you to the network.
+EPRINT_CANDIDATES = (
+    "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints",  # warp_bib default
+    os.path.join(os.path.expanduser("~"), "data", "arxiv-math-ct-eprints"),
+    os.path.join(ROOT, "data", "arxiv-math-ct-eprints"),
+)
+
+
+def resolve_eprints():
+    """($dir, how) for the first usable eprint store, or (None, reason)."""
+    env = os.environ.get("FUTON6_EPRINTS")
+    if env:
+        return (env, "FUTON6_EPRINTS") if os.path.isdir(env) else (None, f"FUTON6_EPRINTS={env} is not a directory")
+    for cand in EPRINT_CANDIDATES:
+        if os.path.isdir(cand) and os.listdir(cand):
+            return cand, "discovered"
+    return None, "no eprint store found (FUTON6_EPRINTS unset and no known location populated)"
+
+
 def check_eprints(ids_file, sample=25):
-    d = os.environ.get("FUTON6_EPRINTS")
+    d, how = resolve_eprints()
     if not d:
-        return rec("eprints:resolvable", False, "FUTON6_EPRINTS unset",
-                   "export FUTON6_EPRINTS=<your arXiv-math eprint dir>")
-    if not os.path.isdir(d):
-        return rec("eprints:resolvable", False, f"{d} is not a directory",
-                   "point FUTON6_EPRINTS at the eprint store")
+        return rec("eprints:resolvable", False, how,
+                   "export FUTON6_EPRINTS=<your arXiv-math eprint dir>, or fetch with "
+                   "scripts/fetch-arxiv-eprints.py")
     if not os.path.exists(ids_file):
         return rec("eprints:resolvable", False, f"id manifest {ids_file} absent", "check --ids")
     ids = [l.strip() for l in open(ids_file) if l.strip()][:sample]
@@ -164,7 +186,7 @@ def check_eprints(ids_file, sample=25):
                        for ext in (".tar.gz", ".gz", ".tex"))]
     ok = not miss
     return rec("eprints:resolvable", ok,
-               f"{len(ids) - len(miss)}/{len(ids)} sampled ids resolve in {d}",
+               f"{len(ids) - len(miss)}/{len(ids)} sampled ids resolve in {d} ({how})",
                f"id-form mismatch? we look for <id>.tar.gz|.gz|.tex; missing e.g. {miss[:3]}"
                if miss else "")
 
