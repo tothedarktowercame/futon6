@@ -806,6 +806,33 @@ Recorded because the wrong diagnosis was available and cheap: *the model is not
 good enough* would have closed the question and been unfalsifiable. A three-case
 control took one minute and moved the fault out of the model entirely.
 
+## H35 — the "run namespace" scoped the ledger and nothing else
+
+`RUN = "data/runs/$RUN_ID"` is run-scoped. `CAND`, `GRAPHS`, `EXPO`, `CLEAN`,
+`STEPS`, `RUNG3` and `DEMO` were not — they were fixed paths (`.../run`,
+`holes/clean-run`, `data/iatc-candidates-run`) shared by **every run the machine
+has ever done**. So a fresh run namespace produced a fresh ledger and metrics
+that described artifacts sitting in a directory with no corpus identity at all.
+
+This is the mechanism behind the earlier corpus-identity incident: 58 of 98
+graphs came from four papers outside the manifest, left in a shared output
+directory by a top-100 shard. It was diagnosed then as a stray-file problem. It
+was not — it was the directory layout working as written.
+
+It also makes the review's acceptance criterion unreachable **by construction**:
+
+> one fresh run for which the stepper's process status, stage ledger, output
+> paths, replay harness, and paper all refer to the same corpus and agree.
+
+The output paths could not refer to any corpus, so no run could ever satisfy it.
+Found by attempting the rehearsal rather than by reading the code — the stage
+plan prints its commands, and the fixed paths are visible the moment a run id
+is set and nothing in them changes.
+
+All seven are now `$RUN_ID`-scoped, interpolated by the shell each stage command
+runs in. Scripts invoked outside the stepper keep their own `.../run` defaults,
+which are now simply "the run whose id is `run`".
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =

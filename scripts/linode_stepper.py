@@ -58,14 +58,25 @@ def load_stages():
 #   {PY} scripts/metric_harness.py                       (accretion slopes, leave-one-out)
 IDS = "holes/math-ct-200.ids.txt"
 RUN = "data/runs/$RUN_ID"           # set per run; stages emit MetricRecords here
-CAND = "data/iatc-candidates-run"
-GRAPHS = "data/iatc-argument-graphs/run"
-EXPO = "data/expository-scope-graphs/run"
-CLEAN = "holes/clean-run"
-STEPS = "data/cas-select-steps/run"      # S5 rung-3 inputs (H13)
-RUNG3 = "data/rung3-technique/run"
+# Every artifact directory is run-scoped, as RUN is. Until 2026-08-08 only RUN
+# was: a "fresh run namespace" got a fresh ledger while CAND/GRAPHS/EXPO/CLEAN/
+# STEPS/RUNG3/DEMO were fixed paths shared with every previous run. That is the
+# mechanism by which 58 graphs from four papers outside the manifest reached this
+# corpus's counts, and it makes the acceptance criterion -- one run whose ledger,
+# output paths and replay harness all refer to the same corpus -- unreachable by
+# construction, because the output paths referred to no corpus in particular.
+#
+# $RUN_ID is interpolated by the shell each stage command runs in, not by Python.
+# Scripts invoked OUTSIDE the stepper keep their own `.../run` defaults, which
+# are now simply "the run whose id is run".
+CAND = "data/iatc-candidates/$RUN_ID"
+GRAPHS = "data/iatc-argument-graphs/$RUN_ID"
+EXPO = "data/expository-scope-graphs/$RUN_ID"
+CLEAN = "holes/clean/$RUN_ID"
+STEPS = "data/cas-select-steps/$RUN_ID"      # S5 rung-3 inputs (H13)
+RUNG3 = "data/rung3-technique/$RUN_ID"
 PAPERG = "data/iatc-paper-graphs"   # S6 output; RETRIEVE collects <run-id> under this
-DEMO = "data/showcases/clean-run-demo"
+DEMO = "data/showcases/$RUN_ID"
 OPS = {
     "S0": {"boot": True, "note": "<profile.s0> — provision the host + serve the model"},
     "STAGE": {"boot": True, "note": "<profile.stage> — rsync eprints + the ~68MB substrate + futon3 "
