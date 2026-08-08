@@ -340,6 +340,34 @@ def preflight_gate(ids: str) -> int:
     return 0
 
 
+def conformance_gate(ids: str) -> int:
+    """Refuse to start unless the host BEHAVES as the pipeline assumes. 0 = go.
+
+    Runs after preflight because it asks the next question. Preflight settles
+    whether the dependencies are present; this settles whether they act the way
+    the code was written against — which is a different thing on a host whose
+    model-serving stack is not the one we developed on. An endpoint that accepts
+    `response_format: json_schema` and ignores it produces no error at any point:
+    the stages complete, the gates pass, and the artifacts are templates.
+
+    Cheap on purpose (~2 minutes) so that aborting a booked window costs minutes
+    rather than the window.
+    """
+    import subprocess
+    print("conformance (mandatory) ...")
+    cmd = [*PY.split(), os.path.join(ROOT, "scripts", "conformance.py")]
+    if os.environ.get("OPENAI_BASE_URL"):
+        cmd += ["--endpoint", os.environ["OPENAI_BASE_URL"]]
+    if os.environ.get("MODEL"):
+        cmd += ["--model", os.environ["MODEL"]]
+    p = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True)
+    print(p.stdout.rstrip() or p.stderr.rstrip())
+    if p.returncode != 0:
+        print(f"\nREFUSING TO START: {p.returncode} conformance check(s) failed.")
+        return 1
+    return 0
+
+
 def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
     """Execute stages; RETURN AN EXIT CODE rather than merely printing.
 
@@ -440,7 +468,7 @@ def main():
     if args.plan or not args.run:
         plan(stages, args.profile)
     if args.run:
-        rc = preflight_gate(args.ids or IDS)
+        rc = preflight_gate(args.ids or IDS) or conformance_gate(args.ids or IDS)
         if rc:
             return rc
         # Propagate the stage outcome to the process exit status, so a scheduler

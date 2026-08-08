@@ -833,6 +833,45 @@ All seven are now `$RUN_ID`-scoped, interpolated by the shell each stage command
 runs in. Scripts invoked outside the stepper keep their own `.../run` defaults,
 which are now simply "the run whose id is `run`".
 
+## The three gates, and why there are three
+
+Ordered, mandatory, no override on any of them:
+
+| gate | question | when |
+|---|---|---|
+| `preflight.py` | is everything the run needs **present**? | before any stage |
+| `conformance.py` | does this host **behave** as the pipeline assumes? | before any stage |
+| `replay_e2e.py` | did the run produce **sound artifacts**? | during / after |
+
+The middle one was added 2026-08-08 and answers a question the other two cannot.
+Presence is not behaviour. A host can have every dependency installed, every
+path resolvable, and a model served, and still be a host on which this pipeline
+produces confident nonsense — because the **serving stack** differs from the one
+the code was written against.
+
+That is concrete, not hypothetical. Every LLM stage now depends on the endpoint
+honouring `response_format: {"type": "json_schema"}`. llama.cpp binds it. A
+stack that accepts the field and ignores it raises no error anywhere: the model
+answers with its own key names, every lookup misses, each stage falls back to
+its deterministic template, the gates pass, and the window produces a stub
+wearing the model's voice. That is H28, and it cost four passes to see on a host
+we control. On Rob's, with a different serving stack, it would be invisible.
+
+Three of the six checks are **negative** — they assert something correctly
+FAILS. This project has shipped three checks that could not fail (H22
+unexecuted, H25 un-failable floor, H28 fabricated content), so "the gate passed"
+carries no information unless the gate has been seen to refuse something.
+
+**Two false alarms on its first run, both the checker's fault, both instructive.**
+It reported that S3's gate accepts an empty graph — true of `iatc_argcheck`
+alone, which is rung-0 and only tests wiring; `substance_gate` at rung-1 refuses
+degeneracy and the chain does refuse. And it reported artifact paths unscoped by
+comparing two `--plan` outputs under different run ids, which are identical and
+must be: `$RUN_ID` is interpolated by the shell, not by Python. Both now derive
+from `OPS`/the module constants instead of restating them, because **a
+conformance check that duplicates the pipeline's definition will drift from it
+and then raise false alarms about it.**
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =
