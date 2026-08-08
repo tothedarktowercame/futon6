@@ -739,6 +739,31 @@ wrote by copying. A pass can be 100% model-written and 0% informative. Any
 provenance check of this kind needs a second axis: how far the output is from
 what a stub would have produced.
 
+## H34 — the JSON extractor could not parse mathematics
+
+`llm_json` matched object candidates with `\{[^{}]*\}`, which cannot match an
+object whose *string value* contains a brace. Harmless while the residue pass
+emitted generic template questions; fatal the moment it emitted mathematical
+ones:
+
+    {"classification": "real-gap", "question": "Why is \{x : x \in A\} closed?"}
+
+14 of 92 questions fell back to the template for this reason alone. The regex
+had been correct for every input it was ever given, and wrong for the domain it
+was written to serve — LaTeX in a corpus of mathematics is not an edge case.
+
+Now: try the whole payload first (under constrained decoding the entire reply
+*is* the object, so extraction is a fallback rather than the normal route), then
+a brace-balanced scan that tracks string literals and escapes. Handles nesting
+too, which the old one also could not. Seven shapes verified: LaTeX braces, bare
+keys, fenced, trailing comma, two objects, nested, prose-only.
+
+**This is the third defect in one afternoon that was invisible until an earlier
+fix removed what was masking it** (H28 hid behind prompt-and-hope, H33 behind
+the template echo, H34 behind H33). Each repair made the pipeline better *and*
+surfaced the next fault — which is what a hazard ledger is for, but worth
+stating: the count of remaining hazards is not an estimate of remaining work.
+
 ## H33 — `max_tokens` truncates; a schema `maxLength` makes the model finish
 
 Removing the template clause (H31) made the model verbose: questions ran past

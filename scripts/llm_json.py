@@ -34,7 +34,7 @@ import json
 import re
 from typing import Any
 
-_OBJ = re.compile(r"\{[^{}]*\}", re.S)
+_FENCE = re.compile(r"^\s*```(?:json)?\s*|\s*```\s*$", re.I)
 _TRAILING_COMMA = re.compile(r",\s*([}\]])")
 _BARE_KEY = re.compile(r'([{,]\s*)([A-Za-z_][A-Za-z0-9_-]*)(\s*:)')
 
@@ -46,13 +46,62 @@ def _repairs(candidate: str):
     yield _BARE_KEY.sub(r'\1"\2"\3', c)
 
 
+def _objects(text: str) -> list[str]:
+    r"""Brace-balanced object candidates, ignoring braces inside string literals.
+
+    The previous implementation used `\{[^{}]*\}`, which cannot match an object
+    whose *string value* contains a brace. That is fine for generic prose and
+    fatal for mathematics: once the residue prompt started asking for
+    content-specific questions, replies like
+
+        {"classification": "real-gap", "question": "Why is \\{x : x \\in A\\} closed?"}
+
+    stopped parsing, and 14 of 92 fell back to the template. The regex had been
+    correct for every input it had been given and wrong for the domain.
+    """
+    out, depth, start, in_str, esc = [], 0, None, False, False
+    for i, ch in enumerate(text or ""):
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if ch == '"':
+            in_str = True
+        elif ch == "{":
+            if depth == 0:
+                start = i
+            depth += 1
+        elif ch == "}":
+            if depth:
+                depth -= 1
+                if depth == 0 and start is not None:
+                    out.append(text[start:i + 1])
+    return out
+
+
 def parse_object(text: str | None, default: Any = None) -> Any:
-    """Last well-formed JSON object in `text`, repairing near-misses.
+    """Best JSON object in `text`, repairing near-misses. Never raises.
+
+    Tries the whole payload first: under constrained decoding the entire reply
+    IS the object, so the extraction path is a fallback for unconstrained
+    callers rather than the normal route.
 
     Returns a *copy* of `default` when nothing parses, so a caller's sentinel
     dict cannot be mutated by whoever receives it.
     """
-    for candidate in reversed(_OBJ.findall(text or "")):
+    whole = _FENCE.sub("", (text or "").strip())
+    for attempt in _repairs(whole):
+        try:
+            value = json.loads(attempt)
+        except ValueError:
+            continue
+        if isinstance(value, dict):
+            return value
+    for candidate in reversed(_objects(text or "")):
         for attempt in _repairs(candidate):
             try:
                 value = json.loads(attempt)
