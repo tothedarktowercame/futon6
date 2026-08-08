@@ -21,6 +21,8 @@ import json
 import os
 import re
 from pathlib import Path
+
+import llm_json
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -97,24 +99,28 @@ def call_openai(gap: dict[str, Any], move: dict[str, Any] | None, model: str) ->
         '{"classification":"novel-technique"|"real-gap","question":"..."}'
     )
     body = json.dumps(
-        {"model": model, "messages": [{"role": "user", "content": prompt}], "temperature": 0}
+        {"model": model, "messages": [{"role": "user", "content": prompt}],
+         "temperature": 0,
+         # H26: uncapped requests let the model generate to the context limit;
+         # in cas_select that cost ~15 min/call and read as a slow endpoint.
+         "max_tokens": int(os.environ.get("FUTON6_LLM_MAX_TOKENS", "512"))}
     ).encode()
     req = urllib.request.Request(
         f"{base}/chat/completions",
         data=body,
         headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(req, timeout=300) as r:
+    with urllib.request.urlopen(req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as r:
         txt = json.loads(r.read())["choices"][0]["message"]["content"]
-    m = re.search(r"\{.*\}", txt, re.S)
-    try:
-        parsed = json.loads(m.group(0)) if m else {}
-    except json.JSONDecodeError:
-        # A malformed model reply must not kill a corpus pass — degrade this one
-        # gap to the deterministic template (same shape as the stub) and say so.
+    # Shared with cas_select via llm_json: the greedy {.*} here spanned the first
+    # `{` to the LAST `}`, and bare property names (the observed GLM failure) were
+    # not repaired, so a recoverable reply degraded to the deterministic template.
+    # That is worse than a loud failure -- the run still emits a question, but a
+    # template one, which inflates the apparent yield of the LLM pass.
+    parsed = llm_json.parse_object(txt, {})
+    if not parsed:
         print(f"[rung3_residue_llm] unparseable model JSON for step {gap.get('step')}; "
               "falling back to the menu template")
-        parsed = {}
     classification = parsed.get("classification")
     if classification not in CLASSIFICATIONS:
         classification = "real-gap"

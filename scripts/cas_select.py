@@ -14,6 +14,8 @@ import os
 import re
 import sys
 import urllib.request
+
+import llm_json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -222,39 +224,8 @@ NO_MATCH = {"pattern": None, "slot": None, "confidence": 0.0}
 
 
 def _parse_verdict(txt: str) -> dict[str, Any]:
-    r"""Recover a verdict from model prose, and never raise.
-
-    A single malformed response killed a 136-call run outright on 2026-08-07: the
-    greedy `\{.*\}` grabbed a JSON object the model had written with a trailing
-    comma, `json.loads` raised, and the exception unwound through `select_proof`
-    to `main`, discarding every verdict computed up to that point. One bad
-    generation out of a hundred-odd should cost one verdict, not the run.
-
-    Two lessons applied: the greedy match spans from the first `{` to the LAST
-    `}`, so any prose containing two objects yields garbage — prefer the last
-    well-formed object. And an unparseable verdict is a legitimate outcome
-    ("no match"), not an error condition.
-    """
-    def _repairs(c: str):
-        yield c
-        c1 = re.sub(r",\s*([}\]])", r"\1", c)          # trailing comma
-        yield c1
-        # Bare property names -- the actual cause of the 2026-08-07 abort. The
-        # error was "Expecting property name enclosed in double quotes", and a
-        # live response shows why: {"pattern": null, descriptions: "..."}. The
-        # first diagnosis here said trailing comma; that was a guess, and the
-        # endpoint disagreed. Quote unquoted keys and the verdict survives.
-        yield re.sub(r'([{,]\s*)([A-Za-z_][A-Za-z0-9_-]*)(\s*:)', r'\1"\2"\3', c1)
-
-    for cand in reversed(re.findall(r"\{[^{}]*\}", txt or "", re.S)):
-        for attempt in _repairs(cand):
-            try:
-                v = json.loads(attempt)
-            except ValueError:
-                continue
-            if isinstance(v, dict):
-                return v
-    return dict(NO_MATCH)
+    """Recover a verdict from model prose. See llm_json for why this is shared."""
+    return llm_json.parse_object(txt, NO_MATCH)
 
 
 def verify(

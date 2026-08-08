@@ -119,11 +119,15 @@ def call_openai(prompt: str, model: str) -> dict:
     key = os.environ.get("OPENAI_API_KEY", "x")
     body = json.dumps({"model": model,
                        "messages": [{"role": "user", "content": prompt}],
-                       "temperature": 0}).encode()
+                       "temperature": 0,
+                       # H26: uncapped requests let the model generate to the
+                       # context limit. This one returns an array with an entry
+                       # per symbol, so it needs more room than a single verdict.
+                       "max_tokens": int(os.environ.get("FUTON6_LLM_MAX_TOKENS", "1024"))}).encode()
     req = urllib.request.Request(f"{base}/chat/completions", data=body,
                                  headers={"Authorization": f"Bearer {key}",
                                           "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=300) as r:
+    with urllib.request.urlopen(req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as r:
         txt = json.loads(r.read())["choices"][0]["message"]["content"]
     m = re.search(r"\{.*\}", txt, re.S)
     return json.loads(_sanitize_json_escapes(m.group(0))) if m else {"groundings": []}
