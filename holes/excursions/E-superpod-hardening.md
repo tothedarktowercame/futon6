@@ -739,6 +739,27 @@ wrote by copying. A pass can be 100% model-written and 0% informative. Any
 provenance check of this kind needs a second axis: how far the output is from
 what a stub would have produced.
 
+## H33 — `max_tokens` truncates; a schema `maxLength` makes the model finish
+
+Removing the template clause (H31) made the model verbose: questions ran past
+the 256-token cap and were cut off mid-word (*"...has a conver inv"*). Two costs,
+both looking like something else. Every call generated a full 256 tokens, so the
+pass slowed to ~30 min/paper and read as CPU contention; and the truncated JSON
+reappeared as "unparseable", so a fixed hazard looked like it had regressed.
+
+The repair is `"question": {"type": "string", "maxLength": 220}` in the schema,
+not a bigger `max_tokens`. Same input: **13.3s / 65 tokens / `finish=stop`**
+instead of 57.8s / 256 / `finish=length`. A cap is an external guillotine and
+the model does not know about it; a `maxLength` is part of the grammar it is
+decoding against, so it composes a complete answer that fits. `max_tokens`
+remains as a backstop, which is the only job it is good at.
+
+**Diagnostic note.** The slowdown was first attributed to thread
+oversubscription — 30 llama threads pinned onto 20 CPUs, which was real and was
+fixed. But `finish_reason` was the field that actually named the cause, and it
+was one request away the whole time. When a generation is slow, read
+`finish_reason` and `completion_tokens` before theorising about the host.
+
 ## H32 — a degenerate classification that is NOT the model's fault
 
 The same run classified **all 92 residue gaps as `real-gap`, none as

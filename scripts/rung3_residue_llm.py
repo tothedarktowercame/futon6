@@ -57,7 +57,12 @@ RESIDUE_SCHEMA = {
     "type": "object",
     "properties": {
         "classification": {"type": "string", "enum": list(CLASSIFICATIONS)},
-        "question": {"type": "string"},
+        # Bounded in the GRAMMAR, not merely by max_tokens. Asking for
+        # content-specific questions made the model verbose enough to hit a
+        # 256-token cap and truncate mid-word ("...has a conver inv"), which
+        # both slowed every call to a full 256 tokens and reintroduced
+        # unparseable JSON. A cap truncates; a maxLength makes the model finish.
+        "question": {"type": "string", "maxLength": 220},
     },
     "required": ["classification", "question"],
     "additionalProperties": False,
