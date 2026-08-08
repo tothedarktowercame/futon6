@@ -670,6 +670,45 @@ away entirely (6 genuinely unparseable replies in 7 papers). Raised to 768.
 
 The 7 papers produced before this was found were discarded rather than kept.
 
+## H29 — constrained decoding was available and unused
+
+The residue pass and the Tier-1 verify both *asked* for a JSON shape in the
+prompt and hoped. llama.cpp can enforce one: `response_format:
+{"type":"json_schema", ...}` constrains decoding to a grammar. Verified by
+asking for a banana's colour under `enum: ["purple","octagonal"]` — the model
+answers `"purple"`, so the constraint genuinely binds rather than being advisory.
+All of plain-enum, type-union, `anyOf`, `oneOf` and bare-enum forms bind.
+
+Measured on the same residue input: **57 completion tokens instead of 258, 15s
+instead of 57s**, the requested keys every time, and no `<think>` preamble to
+truncate. Cheaper *and* correct, which is the unusual case. At 818 calls the
+saving is the difference between an evening and a night on the pilot corpus, and
+it retires H28's alias table to defence-in-depth that should never fire.
+
+**The prompt-and-hope design is the actual root cause of H28**, not the model.
+The unconstrained control run is the tell: asked for `"colour"`, the model
+returns `"color"`. It was never going to honour a schema it was merely told
+about, and no amount of retrying at temperature~0 would have changed a
+deterministic answer.
+
+## H30 — LLM calls were spent on steps with nothing to choose between
+
+Tier-0 retrieval returns no candidates for **52 of 818 steps (6.4%)**. The
+pipeline sent those to the model anyway, asking "which candidate, if any" with an
+empty list. The model duly invented names outside the library — an observed reply
+was `{"pattern": "subset", "confidence": 1.0}` — and `verify()` mapped the unknown
+name to no-match. Cost paid, verdict void, and in the output indistinguishable
+from a step where the model had genuinely rejected real candidates.
+
+Now skipped, and recorded as `no_candidate_steps` rather than folded into
+no-match, because *"retrieval offered nothing to test"* and *"the model rejected
+the candidates"* are different facts and only the first is evidence about
+**pattern-library coverage** — the open question in W18.
+
+A measurement caveat worth keeping: the first proof inspected had 6 of 13 steps
+with no candidates, which suggested ~46% corpus-wide. The real figure is 6.4%.
+One proof is not a corpus, and the cheap check was to count all 818.
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =

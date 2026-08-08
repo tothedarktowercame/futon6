@@ -52,6 +52,17 @@ QUESTION_MENU: dict[str, dict[str, str]] = {
 MENU_SOURCE = "holes/excursions/rung-3-spec.md#gap-to-arse-question-mapping"
 CLASSIFICATIONS = ("novel-technique", "real-gap")
 
+# Enforced at decode time by llama.cpp, not merely described in the prompt.
+RESIDUE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "classification": {"type": "string", "enum": list(CLASSIFICATIONS)},
+        "question": {"type": "string"},
+    },
+    "required": ["classification", "question"],
+    "additionalProperties": False,
+}
+
 
 def load_gapmap(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text())
@@ -104,7 +115,17 @@ def call_openai(gap: dict[str, Any], move: dict[str, Any] | None, model: str) ->
          "temperature": 0,
          # H26: uncapped requests let the model generate to the context limit;
          # in cas_select that cost ~15 min/call and read as a slow endpoint.
-         "max_tokens": int(os.environ.get("FUTON6_LLM_MAX_TOKENS", "512"))}
+         "max_tokens": int(os.environ.get("FUTON6_LLM_MAX_TOKENS", "512")),
+         # H28's real repair. Asking for a schema in the prompt and hoping is
+         # what produced {"decision", "open_question"} instead of the requested
+         # keys, and thence a run of template questions that reported success.
+         # llama.cpp constrains decoding to a grammar, so the shape is enforced
+         # rather than requested. Measured on the same input: 57 completion
+         # tokens instead of 258, 15s instead of 57s, no <think> preamble to
+         # truncate, and the right keys every time. Cheaper AND correct -- the
+         # alias table below is now defence-in-depth that should never fire.
+         "response_format": {"type": "json_schema", "json_schema": {
+             "name": "residue_verdict", "strict": True, "schema": RESIDUE_SCHEMA}}}
     ).encode()
     req = urllib.request.Request(
         f"{base}/chat/completions",

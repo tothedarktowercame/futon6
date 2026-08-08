@@ -189,7 +189,7 @@ def build_prompt(step: dict[str, Any], candidates: list[dict[str, Any]], pattern
     )
 
 
-def call_openai(prompt: str, model: str) -> dict[str, Any]:
+def call_openai(prompt: str, model: str, allowed: list[str] | None = None) -> dict[str, Any]:
     import json as _json
 
     base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
@@ -205,6 +205,13 @@ def call_openai(prompt: str, model: str) -> dict[str, Any]:
             # put the 98-graph pass on a ~9-day trajectory. The prompt is ~85
             # tokens; the cost was entirely unbounded decode.
             "max_tokens": int(os.environ.get("FUTON6_LLM_MAX_TOKENS", "256")),
+            # Enforced, not requested. Measured on rung3's identical situation:
+            # 57 completion tokens instead of 258 for the same input. At 818
+            # calls that is the difference between an evening and a night, and
+            # it removes the failure mode where the model answers with its own
+            # key names and every lookup silently misses (H28).
+            "response_format": {"type": "json_schema", "json_schema": {
+                "name": "cas_verdict", "strict": True, "schema": verdict_schema(allowed)}},
         }
     ).encode()
     req = urllib.request.Request(
@@ -221,6 +228,37 @@ def call_openai(prompt: str, model: str) -> dict[str, Any]:
 
 
 NO_MATCH = {"pattern": None, "slot": None, "confidence": 0.0}
+
+def verdict_schema(allowed: list[str] | None = None) -> dict[str, Any]:
+    """Constrain `pattern` to THIS step's candidates, plus null for none-of-these.
+
+    Left as a free string, the model invents names: an observed reply gave
+    `{"pattern": "subset", "confidence": 1.0}` for a step whose candidates did
+    not include any such pattern. `verify()` maps unknown names to no-match, so
+    the verdict is discarded silently -- a step the model *did* recognise is
+    recorded as unrecognised, and the corpus-level match count understates.
+
+    Null must stay reachable: an enum without it would force a false positive on
+    every step, which is the opposite failure and harder to detect.
+    """
+    # `{"type": ["string","null"], "enum": [...]}` does NOT constrain under
+    # llama.cpp's schema-to-grammar conversion -- verified live: it still
+    # returned a pattern outside the candidate list. `anyOf` of an enum and a
+    # null does. Worth the note because the union form looks equivalent and
+    # fails silently, which is the whole hazard class this file keeps meeting.
+    pattern_type: dict[str, Any] = {"type": ["string", "null"]}
+    if allowed:
+        pattern_type = {"anyOf": [{"type": "string", "enum": list(allowed)},
+                                  {"type": "null"}]}
+    return {
+        "type": "object",
+        "properties": {
+            "pattern": pattern_type,
+            "slot": {"type": ["string", "null"]},
+            "confidence": {"type": "number"},
+        },
+        "required": ["pattern", "confidence"],
+    }
 
 
 def _parse_verdict(txt: str) -> dict[str, Any]:
@@ -241,7 +279,8 @@ def verify(
     if backend == "stub":
         raw = call_stub(step, candidates, oracle or {})
     else:
-        raw = call_openai(build_prompt(step, candidates, patterns), model)
+        raw = call_openai(build_prompt(step, candidates, patterns), model,
+                          allowed=[c["pattern"] for c in candidates])
     pattern = raw.get("pattern")
     confidence = float(raw.get("confidence", raw.get("score", 0.0)) or 0.0)
     if not pattern or pattern == "NONE" or pattern not in patterns or confidence < confidence_floor:
@@ -306,6 +345,7 @@ def select_proof(
 ) -> dict[str, Any]:
     matches: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
+    matches_skipped: list[str] = []
     induce_queue: list[dict[str, Any]] = []
     for step in steps_doc["steps"]:
         candidates = retrieve(step["text"], patterns, k=k)
@@ -319,6 +359,19 @@ def select_proof(
             oracle_pattern = oracle.get(step["id"], {}).get("pattern")
             if oracle_pattern in patterns and oracle_pattern not in {c["pattern"] for c in candidates}:
                 candidates = [*candidates, {"pattern": oracle_pattern, "score": 1.0, "hits": ["oracle"]}]
+        # No candidates means Tier-0 offered nothing to choose between, so the
+        # question "which candidate, if any" has no answer and the call cannot
+        # succeed. Sending it anyway produced invented pattern names (an observed
+        # reply: {"pattern": "subset", "confidence": 1.0}) which verify() then
+        # discarded silently -- cost paid, verdict void, and indistinguishable in
+        # the output from a genuine no-match. 52 of 818 steps corpus-wide (6.4%).
+        # Recorded as its own outcome because "retrieval found nothing to test"
+        # and "the model rejected the candidates" are different facts, and the
+        # first is evidence about pattern-library coverage.
+        if not candidates:
+            matches_skipped.append(step["id"])
+            continue
+
         # One step's verification must never cost the run. The 2026-08-07 abort
         # unwound a single bad generation all the way to main() and discarded
         # every verdict already computed; a timeout or a 503 from the endpoint
@@ -356,7 +409,9 @@ def select_proof(
                     "reason": "no candidate verified",
                 }
             )
-    return assemble(steps_doc["paper_id"], matches, induce_queue, patterns, errors)
+    doc = assemble(steps_doc["paper_id"], matches, induce_queue, patterns, errors)
+    doc["no_candidate_steps"] = matches_skipped
+    return doc
 
 
 def evaluate(results: dict[str, dict[str, Any]], fixture_dir: Path = DEFAULT_FIXTURES) -> dict[str, Any]:
