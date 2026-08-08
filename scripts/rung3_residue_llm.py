@@ -20,6 +20,7 @@ import argparse
 import json
 import os
 import re
+import time
 from pathlib import Path
 
 import llm_json
@@ -110,8 +111,26 @@ def call_openai(gap: dict[str, Any], move: dict[str, Any] | None, model: str) ->
         data=body,
         headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
     )
-    with urllib.request.urlopen(req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as r:
-        txt = json.loads(r.read())["choices"][0]["message"]["content"]
+    # A transient endpoint error must cost one gap, not the paper. Before this,
+    # an HTTP 500 propagated out of the loop and killed the whole file mid-run
+    # -- the third time this pipeline has lost bulk work to one bad call (H11,
+    # H24). llama-server here runs a single slot, so a concurrent request (even
+    # a diagnostic probe) is enough to produce one.
+    txt = ""
+    attempts = int(os.environ.get("FUTON6_LLM_RETRIES", "3"))
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(
+                    req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as r:
+                txt = json.loads(r.read())["choices"][0]["message"]["content"]
+            break
+        except Exception as e:  # noqa: BLE001 — HTTPError, URLError, timeout, malformed body
+            if attempt == attempts:
+                print(f"[rung3_residue_llm] endpoint failed {attempts}x for step "
+                      f"{gap.get('step')} ({type(e).__name__}: {e}); using the menu template")
+                return {"classification": "real-gap", "rm_pattern": rm_pattern,
+                        "question": template_q, "source": "error"}
+            time.sleep(2 ** attempt)
     # Shared with cas_select via llm_json: the greedy {.*} here spanned the first
     # `{` to the LAST `}`, and bare property names (the observed GLM failure) were
     # not repaired, so a recoverable reply degraded to the deterministic template.
@@ -218,7 +237,8 @@ def questions_for_gapmap(
             # pass that emitted only templates reports the same shape as one the
             # model answered in full.
             "model_written": sum(1 for q in questions if q.get("source") == "model"),
-            "template_fallback": sum(1 for q in questions if q.get("source") != "model"),
+            "template_fallback": sum(1 for q in questions if q.get("source") == "template"),
+            "endpoint_error": sum(1 for q in questions if q.get("source") == "error"),
             "dropped_by_budget": dropped,
         },
     }
