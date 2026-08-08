@@ -107,8 +107,27 @@ def load_graph(path):
             warrant = {kw(k): v for k, v in dict(w).items()} if w is not None else {}
         except (TypeError, ValueError):
             warrant = {}   # 70B sometimes emits a bare keyword as :warrant (passes bb, breaks dict()) -> treat as hole
-        edges.append({"id": ed["id"], "premise": prem, "conclusion": ed["conclusion"],
-                      "warrant": warrant})
+        # A vector :conclusion means the edge establishes SEVERAL claims at once:
+        # a biconditional's two directions (:iff), or a lemma with several
+        # consequences (:implies / :therefore). Six such edges exist corpus-wide.
+        # `premise` was already normalised with as_list; `conclusion` was not, so
+        # cid() received a list, rendered its Python repr into the EDN
+        # (":produces :[Keyword(a), Keyword(b)]") and the file failed
+        # clean_argcheck's G1 "unreadable EDN". Those six proofs were then dropped
+        # from the typed corpus and logged as "not a DAG comb (e.g.
+        # cyclic-equivalence)" — a guessed reason that was wrong in every case,
+        # and which sent a later investigation looking for a cycle disagreement
+        # that did not exist.
+        #
+        # Fanning out preserves both the meaning and the DAG: one inference to N
+        # conclusions is N inferences sharing premises and warrant. Ids are
+        # suffixed only when there is more than one, so the single-conclusion
+        # case — every other edge in the corpus — is byte-identical to before.
+        concl = as_list(ed["conclusion"])
+        for i, c in enumerate(concl):
+            eid = ed["id"] if len(concl) == 1 else f"{ed['id']}__c{i}"
+            edges.append({"id": eid, "premise": prem, "conclusion": c,
+                          "warrant": warrant})
     return nodes, edges
 
 

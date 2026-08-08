@@ -26,6 +26,7 @@ import argparse
 import glob
 import json
 import os
+import subprocess
 import re
 import sys
 import urllib.request
@@ -156,10 +157,21 @@ def main():
         open(outfile, "w").write(itc.render_edn(pid, sk, vacuous) + "\n")
         # gate each CLean individually; cyclic-equivalence proofs aren't DAG combs —
         # log + set aside (G-cyclic: never silently drop, never fail the whole batch)
-        if os.system(f"cd {ROOT} && bb scripts/clean_argcheck.bb {outfile} >/dev/null 2>&1") != 0:
+        # Report the gate that ACTUALLY failed. This used to discard argcheck's
+        # output to /dev/null and print one guessed reason -- "not a DAG comb
+        # (e.g. cyclic-equivalence)" -- for every rejection. It was wrong for six
+        # of the ten rejects in the 98-graph corpus, which failed G1 (unreadable
+        # EDN, from a serialization bug) and had no cycle at all. A wrong reason
+        # is worse than none: it was believed, and it cost an investigation.
+        gate = subprocess.run(["bb", "scripts/clean_argcheck.bb", outfile],
+                              cwd=ROOT, capture_output=True, text=True)
+        if gate.returncode != 0:
             os.remove(outfile)
-            rejected.append(pid)
-            print(f"  REJECT {pid}: not a DAG comb (e.g. cyclic-equivalence) — logged")
+            why = " | ".join(
+                ln.strip() for ln in (gate.stdout + gate.stderr).splitlines()
+                if ln.strip() and ("FAIL" in ln or ln.strip().startswith(("G", "-", "["))))
+            rejected.append({"pid": pid, "reason": why[:300] or f"exit {gate.returncode}"})
+            print(f"  REJECT {pid}: {why[:200] or 'argcheck exit ' + str(gate.returncode)}")
             continue
         typed.append(pid)
         if args.run_dir:  # S4 inline metric emit (non-fatal — never abort the CLean)
@@ -174,10 +186,20 @@ def main():
             except Exception as ee:
                 print(f"    (S4 metric emit skipped: {ee})")
 
-    print(f"\ntyped {len(typed)} / rejected {len(rejected)} (cyclic) / failed {len(failed)} (typing)"
+    # "(cyclic)" was a guess baked into the summary line as well as the per-item
+    # one. Rejections are reported by their actual gate now, and grouped, so a
+    # systematic cause is visible as a cluster instead of being read as a
+    # property of the mathematics.
+    print(f"\ntyped {len(typed)} / rejected {len(rejected)} (gate) / failed {len(failed)} (typing)"
           f"  -> {args.out}  ({'stub' if args.stub else args.model})")
     if rejected:
-        print(f"rejected (cyclic, logged): {rejected}")
+        by_reason = {}
+        for r in rejected:
+            by_reason.setdefault(r["reason"][:80], []).append(r["pid"])
+        print("rejected by gate:")
+        for reason, pids in sorted(by_reason.items(), key=lambda kv: -len(kv[1])):
+            print(f"  [{len(pids)}] {reason}")
+            print(f"      {', '.join(pids)}")
     if failed:
         print(f"typing-failed: {[p for p,_ in failed]}")
     # S4 postcondition gates over the accepted CLeans

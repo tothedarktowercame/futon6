@@ -872,6 +872,45 @@ from `OPS`/the module constants instead of restating them, because **a
 conformance check that duplicates the pipeline's definition will drift from it
 and then raise false alarms about it.**
 
+## H36 — six proofs dropped by a serialization bug, logged as a cycle
+
+S7 typed 88 of 98 graphs and logged the other ten as
+`REJECT: not a DAG comb (e.g. cyclic-equivalence)`. Six of those ten contained
+no cycle at all.
+
+An IATC infer edge may carry a **vector `:conclusion`** when it establishes
+several claims at once — a biconditional's two directions (`:relation :iff`), or
+a lemma with several consequences (`:implies`, `:therefore`). Six edges
+corpus-wide do this, in exactly the six graphs concerned. `load_graph`
+normalised `:premise` through `as_list` and did **not** normalise `:conclusion`,
+so `cid()` received a Python list and rendered its repr into the EDN:
+
+    :produces :[Keyword(rlp-implies-injective), Keyword(injective-implies-rlp)]
+
+which fails `clean_argcheck` at **G1 (unreadable EDN)** — not the DAG-comb gate.
+
+**The log line was the more expensive defect.** It discarded argcheck's
+per-gate output to `/dev/null` and printed one *guessed* reason for every
+rejection. That guess was wrong for six of ten, it was believed, and it led to a
+day's investigation into a supposed disagreement between two cycle detectors
+that does not exist — the two tests are nested, not rival (see
+`holes/TN-cycle-detector-reconciliation.md`). **A wrong reason is worse than no
+reason: no reason prompts a look, a wrong reason ends the enquiry.**
+
+Fixed by fanning out — one inference to N conclusions becomes N inferences
+sharing premises and warrant, preserving both the meaning and the DAG; ids are
+suffixed only when N > 1, so every other edge in the corpus serialises
+byte-identically. And rejections now report the gate that actually failed,
+grouped, so a systematic cause shows up as a cluster rather than reading as a
+property of the mathematics.
+
+    before   typed 88 / rejected 10 ("cyclic")  / failed 0
+    after    typed 94 / rejected  4 (G7 cycle)  / failed 0
+
+The four survivors are exactly the four graphs both detectors independently call
+cyclic, and all four are flattened iff/equivalence structure rather than
+question-begging.
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =
