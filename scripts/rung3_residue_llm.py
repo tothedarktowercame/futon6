@@ -106,9 +106,21 @@ def call_openai(gap: dict[str, Any], move: dict[str, Any] | None, model: str) ->
         f"move: {((move or {}).get('text') or '').strip()}\n\n"
         "Decide whether this is a NOVEL technique the author is genuinely using, or a "
         "REAL GAP that needs more work. Then phrase ONE open question for the author/"
-        f'reader, guided by this template: "{template_q}". Do NOT judge whether the '
-        "mathematics is true. Reply with JSON only: "
-        '{"classification":"novel-technique"|"real-gap","question":"..."}'
+        "reader that refers to the SPECIFIC mathematical content of this move --- name "
+        "the objects, hypotheses or constructions it involves. Do not restate the "
+        "pattern name. Do NOT judge whether the mathematics is true."
+        # The clause here used to read: 'guided by this template: "<template_q>"'.
+        # The model obeyed it too well. Measured over 92 gaps, the median question
+        # was the template VERBATIM (similarity 1.00; 63/92 above 0.90; 57 distinct
+        # strings for 92 gaps), so a pass that reported 88/92 "model-written" was
+        # emitting the deterministic template in the model's voice. An A/B over 10
+        # gaps: median similarity to template 0.70 with the clause, 0.30 without,
+        # and without it the questions name actual objects from the move.
+        #
+        # The lesson generalises past this prompt: `source: model` records
+        # AUTHORSHIP, not ORIGINALITY, and an instrument built to catch fabricated
+        # output will not catch unoriginal output. template_q survives as the
+        # fallback when the endpoint fails, which is the job it should have had.'
     )
     body = json.dumps(
         {"model": model, "messages": [{"role": "user", "content": prompt}],

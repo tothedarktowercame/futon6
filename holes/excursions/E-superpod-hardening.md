@@ -709,6 +709,57 @@ A measurement caveat worth keeping: the first proof inspected had 6 of 13 steps
 with no candidates, which suggested ~46% corpus-wide. The real figure is 6.4%.
 One proof is not a corpus, and the cheap check was to count all 818.
 
+## H31 — the prompt told the model to copy the template, and it did
+
+With H28/H29 fixed the residue pass reported clean: 16/16 papers, 92 gaps,
+**88 model-written, 4 template fallback, 0 endpoint errors**, 20 minutes. The
+provenance field said the model wrote the questions. It had. It had written the
+*template*.
+
+Measured over the 92 questions against the deterministic template each was
+"guided by":
+
+    median similarity to template   1.00   (i.e. the median question IS the template)
+    >= 0.90                         63/92
+    distinct question strings       57 for 92 gaps
+
+The prompt read *"phrase ONE open question, guided by this template: …"*, and the
+model obeyed. A/B over 10 gaps, same inputs, clause removed and replaced with an
+instruction to name the specific objects in the move:
+
+    with the clause      median similarity 0.70
+    without the clause   median similarity 0.30, and the questions name real
+                         objects ("How does the long exact sequence from the
+                         triangle justify …")
+
+**The generalisable lesson is about the instrument, not the prompt.**
+`source: "model"` records **authorship**, not **originality**. It was built to
+catch H28 — output the model never wrote — and it cannot catch output the model
+wrote by copying. A pass can be 100% model-written and 0% informative. Any
+provenance check of this kind needs a second axis: how far the output is from
+what a stub would have produced.
+
+## H32 — a degenerate classification that is NOT the model's fault
+
+The same run classified **all 92 residue gaps as `real-gap`, none as
+`novel-technique`**. The economical reading is that the classifier is broken, or
+that GLM-4.5-Air cannot do the task.
+
+Controls say otherwise. Given a plainly novel move ("we introduce a new
+invariant, the twisted Euler class … no prior work computes this quantity") it
+answers `novel-technique`; given "The result now follows" it answers `real-gap`.
+The discrimination is there.
+
+So the constant output is a fact about the **data or the selection**, not the
+model: either this corpus's residue genuinely contains no novel techniques, or
+`residue_gaps` selects buckets in which a novel technique cannot appear. Those
+are different claims and the run cannot separate them — it needs a labelled set
+in which at least one novel technique is known to be present.
+
+Recorded because the wrong diagnosis was available and cheap: *the model is not
+good enough* would have closed the question and been unfalsifiable. A three-case
+control took one minute and moved the fault out of the model entirely.
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =
