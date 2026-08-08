@@ -34,14 +34,39 @@ def _run(args, env=None):
                           text=True, env=e, timeout=180)
 
 
-def test_blocked_stage_exits_nonzero():
-    """A stage whose upstream has no ledger entry must fail the process."""
+def _stepper():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("linode_stepper", STEPPER)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_preflight_gate_refuses_before_any_stage():
+    """No dependency, no run. The gate is mandatory and has no override."""
     with tempfile.TemporaryDirectory() as d:
-        p = _run(["--run", "--profile", "superpod", "--from", "S5", "--to", "S5",
-                  "--run-dir", d, "--corpus-id", "no-such-corpus",
-                  "--run-id", "exitstatus", "--no-halt"])
-    assert "BLOCKED" in (p.stdout + p.stderr), p.stdout
-    assert p.returncode != 0, "a blocked stage must not report success"
+        p = _run(["--run", "--profile", "superpod", "--from", "S1", "--to", "S1",
+                  "--run-dir", d, "--corpus-id", "x", "--run-id", "x", "--no-halt"],
+                 env={"FUTON6_EPRINTS": "/nonexistent"})
+    out = p.stdout + p.stderr
+    assert "REFUSING TO START" in out, out[-400:]
+    assert p.returncode != 0, "a refused run must not report success"
+
+
+def test_blocked_stage_exits_nonzero():
+    """A stage whose upstream has no ledger entry must fail the process.
+
+    Exercised in-process: `main()` now runs the mandatory preflight first, which
+    on a dev box refuses before this path is ever reached. The gate belongs to
+    main(), the blocking contract belongs to run(), and testing the second
+    through the first would only ever re-test the gate.
+    """
+    mod = _stepper()
+    with tempfile.TemporaryDirectory() as d:
+        stages = [{"id": "S5", "name": "comprehension", "compute": "cpu",
+                   "deps": ["S2", "S3"], "cmd": "true", "halt": False, "go": []}]
+        rc = mod.run(stages, "superpod", True, d, "no-such-corpus", "exitstatus", [])
+    assert rc != 0, "a blocked stage must not report success"
 
 
 def test_plan_exits_zero():
