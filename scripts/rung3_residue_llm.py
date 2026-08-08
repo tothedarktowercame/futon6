@@ -121,11 +121,45 @@ def call_openai(gap: dict[str, Any], move: dict[str, Any] | None, model: str) ->
     if not parsed:
         print(f"[rung3_residue_llm] unparseable model JSON for step {gap.get('step')}; "
               "falling back to the menu template")
-    classification = parsed.get("classification")
-    if classification not in CLASSIFICATIONS:
-        classification = "real-gap"
-    question = parsed.get("question") or template_q
-    return {"classification": classification, "rm_pattern": rm_pattern, "question": question}
+    classification, question, source = _fields(parsed)
+    if question is None:
+        question, source = template_q, "template"
+    return {"classification": classification, "rm_pattern": rm_pattern,
+            "question": question, "source": source}
+
+
+# The prompt asks for {"classification", "question"}; GLM-4.5-Air answers with
+# {"decision": "REAL GAP", "open_question": "..."}. The JSON parsed fine, both
+# lookups missed, and the code substituted the default classification and the
+# TEMPLATE question -- silently, with no warning, because nothing had failed.
+# That is the "reports success without doing the work" hazard class: the run
+# emitted a full set of questions, none of which the model had written.
+# Aliases are cheap; assuming a model honours a requested schema is not.
+_CLASS_KEYS = ("classification", "decision", "verdict", "label")
+_QUESTION_KEYS = ("question", "open_question", "open-question", "q")
+
+
+def _norm_class(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    v = value.strip().lower().replace(" ", "-").replace("_", "-")
+    if v in CLASSIFICATIONS:
+        return v
+    if "novel" in v:
+        return "novel-technique"
+    if "gap" in v:
+        return "real-gap"
+    return None
+
+
+def _fields(parsed: dict[str, Any]) -> tuple[str, str | None, str]:
+    """(classification, question, provenance). Provenance distinguishes a model
+    answer from a template fallback, so a run can report how much of its output
+    the model actually wrote."""
+    cls = next((c for k in _CLASS_KEYS if (c := _norm_class(parsed.get(k)))), None)
+    q = next((str(parsed[k]).strip() for k in _QUESTION_KEYS
+              if isinstance(parsed.get(k), str) and parsed[k].strip()), None)
+    return (cls or "real-gap", q, "model" if q else "template")
 
 
 def questions_for_gapmap(
@@ -155,6 +189,10 @@ def questions_for_gapmap(
                 "classification": res["classification"],
                 "rm_pattern": res["rm_pattern"],
                 "question": res["question"],
+                # Whether the model wrote this question or the template did. A
+                # residue pass that silently emits templates looks identical to
+                # one that worked; this is the field that tells them apart.
+                "source": res.get("source", "template"),
                 # ArSE-ready shape (a typed-bell :query/:ref) — NOT opened here.
                 "ref": f"arse:{paper_id}:{gap.get('step')}",
             }
@@ -176,6 +214,11 @@ def questions_for_gapmap(
             "asked": len(questions),
             "novel": sum(1 for q in questions if q["classification"] == "novel-technique"),
             "gap": sum(1 for q in questions if q["classification"] == "real-gap"),
+            # How much of this document the model actually wrote. Without it, a
+            # pass that emitted only templates reports the same shape as one the
+            # model answered in full.
+            "model_written": sum(1 for q in questions if q.get("source") == "model"),
+            "template_fallback": sum(1 for q in questions if q.get("source") != "model"),
             "dropped_by_budget": dropped,
         },
     }

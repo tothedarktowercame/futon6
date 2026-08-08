@@ -479,6 +479,33 @@ portability (de-hardcode `warp_run.py` + per-script paths) — required for
 any beyond-math.CT domain run; plus an eventual clean dry pass on the
 Superpod profile itself. H5/H7/H8 are documentation and carry no code.
 
+### H22 — S11 reported PASS on every run while half of it had never executed. **FIXED**
+
+Recorded here late: H22 was cited in the stepper's own comments, in the review
+request, and in the capability proof, but had **no entry in this ledger** — so
+the hazard count could not be derived from the ledger, which is the one place it
+should be derivable from. The independent review caught the omission; the number
+`22` was being carried in prose while the ledger held 21.
+
+The hazard itself: S11 chained `def_formulae_extract`, `sfc_struct_canon` and
+`clean_paper_signature` with `;`. `sfc_struct_canon`'s input file had no producer
+anywhere in the pipeline, and the transducer that would build one shells to
+`latexmlmath`, which was absent from the host. The `;` discarded the resulting
+`FileNotFoundError` and the stage recorded PASS on every run.
+
+Three repairs: join with `&&` so a sub-step failure fails the stage;
+`sfc_struct_canon` writes an explicit refusal artifact (`{"measured": false,
+"reason": …}`) rather than dying, on the principle that a durable statement of
+what was *not* measured beats an exception nobody reads; and
+`def_formulae_extract` supplies the missing input from the definition-snippet
+substrate. The canon now runs: 97 definitions to 77 canonical shapes, 0 coverage
+gaps.
+
+**Still open from it** (review finding, not yet fixed): `sfc_struct_canon` can
+emit a refusal artifact *and exit 0*, and no gate distinguishes measured from
+refused. A stage that refuses honestly still reports the same status as one that
+measured.
+
 ## H23 — a gate script invoked bare `python3`, not the venv interpreter
 
 `iatc_semcheck.bb` shelled out to `["python3" "scripts/r2d_concept_coverage.py"]`.
@@ -613,6 +640,35 @@ appended in `sorted(paths)` order, so the proof each belonged to is
 reconstructible, and every one of the 72 reconstructed proof ids agreed with the
 `paper_id` already recorded in its row. 8.5 hours of endpoint time preserved on
 a 72-way check rather than trusted.
+
+## H28 — the residue pass emitted template questions and reported success
+
+The prompt asks for `{"classification", "question"}`. GLM-4.5-Air replies with
+`{"decision": "REAL GAP", "open_question": "..."}`. The JSON parses cleanly, both
+lookups return `None`, and the code substitutes the default classification and
+the **menu template** question — with no warning, because nothing failed.
+
+The run therefore emits a full set of questions, correctly shaped and plausible
+on inspection, **none of which the model wrote**. This is the third member of
+the "reports success without doing the work" class (with H22 and H25), and the
+most deceptive: H22 left a stage unexecuted and H25 mislabelled a rung, but this
+one fabricates content that reads as a result.
+
+Two fixes, and the second matters more than the first:
+
+1. Accept the model's key names as aliases (`decision`/`verdict`/`label`,
+   `open_question`/`q`) and normalise the values. **Assuming a model honours a
+   requested schema is not safe; aliases are cheap.**
+2. Record **provenance per question** (`"source": "model" | "template"`) and
+   count both in the summary. Without it, a pass that emitted only templates
+   reports exactly the same shape as one the model answered in full — which is
+   what makes this hazard class invisible rather than merely wrong.
+
+A separate contributor: the model emits a `<think>` block despite
+`--reasoning-budget 0`, so at `max_tokens=512` the JSON was sometimes truncated
+away entirely (6 genuinely unparseable replies in 7 papers). Raised to 768.
+
+The 7 papers produced before this was found were discarded rather than kept.
 
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
