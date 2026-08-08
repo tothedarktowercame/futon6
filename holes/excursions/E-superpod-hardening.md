@@ -911,6 +911,40 @@ The four survivors are exactly the four graphs both detectors independently call
 cyclic, and all four are flattened iff/equivalence structure rather than
 question-begging.
 
+## H37 — `.attempts/` is not run-scoped, and attempt numbers are not a sequence
+
+The retry loop writes `<pid>.attempt<N>.edn` into a single `.attempts/`
+directory, restarting N at 0 on **every invocation**. The directory therefore
+accumulates files from different runs, and the number in a filename is a
+within-invocation counter, not a position in the sequence that produced the
+final graph. Nothing records which run a given attempt belongs to.
+
+Two consequences, and I hit both while auditing the loop:
+
+**It fabricates evidence of a defect that does not exist.** Sorting a graph's
+attempts by number and treating the highest as "the one that was kept" reported
+two cases where an acceptable graph had apparently been generated and passed
+over. Both were artifacts: the finals are **byte-identical to lower-numbered
+attempts written later** (`0708.1921__p1` final = attempt0 at 06:19:21, while
+attempts 1 and 2 date from 21:47 the previous evening). Corrected, **no passing
+attempt has ever been discarded** in 52 multi-attempt graphs — the loop accepts
+the first attempt that passes and stops, exactly as written.
+
+**It makes the retry rate unreproducible.** `.attempts/` holds 188 files over
+**114 distinct graph names** against a corpus of **98 finals** — 16 names have
+attempts but no final, left by earlier runs over a different paper set (the same
+provenance as the 58-graph corpus-identity incident). Counting "graphs with more
+than one attempt" gives 37/98 (37.8%); restricting to attempts co-temporal with
+their own final gives 36/98 (36.7%); the capability proof states 45.9% (45/98)
+and I cannot reproduce it from the artifacts. **The figure is not wrong so much
+as no longer derivable** — the directory it was measured from has since been
+written to by other runs.
+
+The fix is the H35 fix one level down: `.attempts/` must be run-scoped, and an
+attempt should record its run id. Until then, retry statistics should be quoted
+from the loop's own log rather than reconstructed from the directory, and the
+paper's retry rate wants re-deriving from a clean run.
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =
