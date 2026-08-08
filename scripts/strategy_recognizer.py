@@ -113,10 +113,13 @@ def rung3_score(buckets, thin_credit=0.5):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--vocab", default="holes/clean/tactic-gesture-vocab.edn")
-    ap.add_argument("--steps", default="data/cas-select-steps/loop-run-70b")
+    # Defaults pointed at loop-run-70b, so a bare invocation calibrated against
+    # the previous run rather than the current one -- the same stale-default
+    # defect as render_run's layer modules (H-class, 2026-08-07).
+    ap.add_argument("--steps", default="data/cas-select-steps/run")
     ap.add_argument("--candidates", default=None,
                     help="dir of *.candidate.json — recognize on each source-window PROSE")
-    ap.add_argument("--compare-rung3", default="data/rung3-technique/loop-run-70b")
+    ap.add_argument("--compare-rung3", default="data/rung3-technique/run")
     ap.add_argument("--thin-credit", type=float, default=0.5)
     args = ap.parse_args()
 

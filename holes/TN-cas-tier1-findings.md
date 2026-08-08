@@ -87,3 +87,39 @@ status than either "ready" or "does nothing".
   wall clock across restarts. Exit status `success`, 98 distinct proof ids. An uncapped
   `max_tokens` had made this ~15 min *per call* and put the pass on a ~9-day
   trajectory; see H24/H26 in `excursions/E-superpod-hardening.md`.
+
+---
+
+# Appendix: the deterministic recognizer, calibrated against Tier-1
+
+W8's calibration half. Both instruments run over the **same 818 proof steps** of
+the same 16 papers, so the comparison needs no adjustment:
+
+| instrument | recognized | share | classes |
+|---|---:|---:|---:|
+| deterministic tactic-gesture recognizer (`strategy_recognizer.py`) | 76 | **9.3%** | 5 |
+| LLM Tier-1 pattern verify (`cas_select.py --backend openai`) | 478 | **58.4%** | 26 |
+
+A factor of six in coverage and of five in vocabulary. The deterministic side
+recognizes only `obtain` (54), `suffices` (11), `intro` (5), `apply` (4),
+`wlog` (1) — Lean-style tactic gestures, which is what its vocabulary contains.
+742 of 818 moves are `ungrounded` to it.
+
+Two things follow.
+
+**This is the quantified case for the LLM residue pass.** rung-3 exists to handle
+what the deterministic rungs cannot reach, and "cannot reach" now has a number
+against a shared denominator rather than an impression. It also sets the bar any
+cheaper method has to clear.
+
+**The two instruments disagree about what a proof move even is.** The recognizer
+looks for tactic gestures; Tier-1 looks for reasoning patterns. Neither
+vocabulary is wrong, but 9.3% is not a *recall* figure for the recognizer — it
+is the rate at which CT prose happens to contain Lean-shaped tactic words. Read
+as recall it would badly understate a tool doing something else, and that
+misreading is easy to make from the summary line alone, which prints
+`recognized (grounded+thin) = 76/818 = 9.3%` with no mention of vocabulary.
+
+The honest calibration statement is therefore: *on math.CT prose, tactic-gesture
+recognition covers 9.3% of proof steps, and pattern-level LLM verification
+covers 58.4%; the residue between them is what rung-3 is for.*
