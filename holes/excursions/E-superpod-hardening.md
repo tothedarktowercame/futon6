@@ -579,6 +579,41 @@ under ~10 hours, but it needs `-np 2` on the server, i.e. restarting a shared
 endpoint that other agents on this box are using. That is an operator call, not
 a unilateral one.
 
+## H26 — the Tier-1 verify sent no `max_tokens`
+
+With a 65536-token context and no cap, the model generated until EOS: ~15
+minutes per call and steps exceeding a 1800s timeout, putting the 98-proof pass
+on a ~9-day trajectory. The prompt is ~334 tokens and the verdict is one small
+JSON object, so none of that was input cost. With `max_tokens=256` a real call
+returns `finish_reason: "stop"` at 116 completion tokens, and the pass runs at
+~7 min per proof.
+
+Generalises past this script: **every LLM caller in the pipeline should send a
+cap**, because the failure is silent — an uncapped call that rambles looks
+exactly like a slow endpoint. The diagnostic order that found it in minutes:
+measure the prompt (85–334 tokens, so not prefill), then the completion, then
+queueing. Input cost, output cost, queueing — cheap to tell apart, and worth
+doing before concluding "the CPU is slow".
+
+## H27 — `run_steps_paths` keyed results by paper, not proof
+
+The unit of work is a proof; `results[steps_doc["paper_id"]] = …` collapsed 98
+proof graphs into 16 rows, each paper keeping only its last proof. `0706.1286`
+alone has 25 proof files. Every discarded verdict had been paid for in full.
+
+**Third instance of this exact confusion in one day** — S5's 98-graphs-into-12
+files, `rr_layer_iatc`'s `<pid>.edn` lookup, and now this. The run directory
+names artifacts `<paper>__p<N>`, and any consumer that treats that stem as a
+paper id silently loses the fan-out. It now has a named helper (`_proof_id`)
+rather than an inline expression reinvented per site — the same remedy that
+`paper_ids`, `edn_compat` and `run_artifacts` exist for.
+
+The 72 completed rows were recovered rather than recomputed: rows had been
+appended in `sorted(paths)` order, so the proof each belonged to is
+reconstructible, and every one of the 72 reconstructed proof ids agreed with the
+`paper_id` already recorded in its row. 8.5 hours of endpoint time preserved on
+a 72-way check rather than trusted.
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =

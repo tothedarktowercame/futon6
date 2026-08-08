@@ -435,8 +435,22 @@ def _allowed_patterns(args: argparse.Namespace) -> set[str] | None:
     return all_names - excluded
 
 
+def _proof_id(steps_path: Path) -> str:
+    """`0705.0102__p3.steps.json` -> `0705.0102__p3`.
+
+    The unit of work is a PROOF, not a paper. Keying by `paper_id` silently
+    collapsed 98 proofs into 16 rows -- `0706.1286` alone has 25 proof files, and
+    all but the last were overwritten after being paid for in full. The third
+    instance of this exact confusion (S5's 98-into-12, render_run's <pid>.edn
+    lookup), which is why it now has a named helper instead of an inline
+    expression each time.
+    """
+    return steps_path.name[:-len(".steps.json")] if steps_path.name.endswith(".steps.json") \
+        else steps_path.stem
+
+
 def run_steps_paths(args: argparse.Namespace, paths: list[Path]) -> dict[str, Any]:
-    """Select over many papers, writing each one's result as it lands.
+    """Select over many proofs, writing each one's result as it lands.
 
     Without `--checkpoint` this is a wager on the last call succeeding: the
     payload goes to stdout only at the end, so an abort at paper 97 of 98
@@ -462,12 +476,12 @@ def run_steps_paths(args: argparse.Namespace, paths: list[Path]) -> dict[str, An
                 row = json.loads(line)
             except ValueError:
                 continue                      # a torn final line from a hard kill
-            if isinstance(row, dict) and "paper_id" in row:
-                results[row["paper_id"]] = row
+            if isinstance(row, dict) and row.get("proof_id"):
+                results[row["proof_id"]] = row
         if results:
-            print(f"resuming: {len(results)} paper(s) already in {ckpt}", file=sys.stderr)
+            print(f"resuming: {len(results)} proof(s) already in {ckpt}", file=sys.stderr)
 
-    todo = [q for q in sorted(paths) if load_steps(q)["paper_id"] not in results]
+    todo = [q for q in sorted(paths) if _proof_id(q) not in results]
     for i, steps_path in enumerate(todo, 1):
         steps_doc = load_steps(steps_path)
         row = select_proof(
@@ -479,13 +493,14 @@ def run_steps_paths(args: argparse.Namespace, paths: list[Path]) -> dict[str, An
             k=args.k,
             confidence_floor=args.confidence_floor,
         )
-        results[steps_doc["paper_id"]] = row
+        row["proof_id"] = _proof_id(steps_path)
+        results[row["proof_id"]] = row
         if ckpt:
             with ckpt.open("a") as fh:
                 fh.write(json.dumps(row) + "\n")
                 fh.flush()
                 os.fsync(fh.fileno())         # survive a kill, not just an exit
-        print(f"  [{i}/{len(todo)}] {steps_doc['paper_id']}: "
+        print(f"  [{i}/{len(todo)}] {row['proof_id']}: "
               f"{len(row.get('matches', []))} match(es), {len(row.get('errors', []))} error(s)",
               file=sys.stderr, flush=True)
     return {"results": results}
