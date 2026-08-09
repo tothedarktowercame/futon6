@@ -23,7 +23,29 @@ from typing import Any
 REPO = Path(__file__).resolve().parents[1]
 FUTON3 = Path(os.environ.get("FUTON3_ROOT", "/home/joe/code/futon3"))
 DEFAULT_INDEX = FUTON3 / "resources" / "sigils" / "patterns-index.tsv"
+# The library is splitting from one `math-informal/` family into a core plus
+# topic-specific siblings (`math-informal-core`, `math-informal-ct`, …), so that
+# a round mined from one subfield lands somewhere nameable instead of diluting a
+# single undifferentiated pool. Everything here therefore works over a SET of
+# families matched by prefix, not one directory: adding `math-informal-ct`
+# requires creating the directory and nothing else.
+FAMILY_PREFIX = "math-informal"
 DEFAULT_LIBRARY = FUTON3 / "library" / "math-informal"
+
+
+def family_dirs(root: Path | None = None) -> list[Path]:
+    """Every `math-informal*` family directory, in stable order."""
+    base = (root or (FUTON3 / "library"))
+    if not base.is_dir():
+        return [DEFAULT_LIBRARY]
+    found = sorted(d for d in base.iterdir()
+                   if d.is_dir() and d.name.startswith(FAMILY_PREFIX))
+    return found or [DEFAULT_LIBRARY]
+
+
+def in_family(qualified: str) -> bool:
+    """Is this index row's `family/name` key in the math-informal family set?"""
+    return qualified.split("/", 1)[0].startswith(FAMILY_PREFIX)
 DEFAULT_FIXTURES = REPO / "tests" / "fixtures" / "cas-select"
 
 CHECK_MENU = {
@@ -58,7 +80,7 @@ class Pattern:
 
 def norm_pattern_name(raw: str) -> str:
     raw = raw.strip()
-    if raw.startswith("math-informal/"):
+    if in_family(raw) and "/" in raw:
         return raw.split("/", 1)[1]
     if "/" in raw:
         return raw.rsplit("/", 1)[1]
@@ -78,7 +100,7 @@ def read_index(path: Path = DEFAULT_INDEX) -> dict[str, tuple[str, ...]]:
         if len(cols) < 5:
             continue
         name = norm_pattern_name(cols[0])
-        if not cols[0].startswith("math-informal/"):
+        if not in_family(cols[0]):
             continue
         rows[name] = tuple(w.strip().lower() for w in cols[4].split(",") if w.strip())
     return rows
@@ -126,8 +148,21 @@ def load_patterns(
 ) -> dict[str, Pattern]:
     index = read_index(index_path)
     patterns: dict[str, Pattern] = {}
-    for path in sorted(library_dir.glob("*.flexiarg")):
+    # Read every math-informal* family unless a caller named one explicitly.
+    # Pattern names stay unqualified (the flexiarg stem) so that moving a
+    # pattern between families does not rename it downstream -- the split is a
+    # curation boundary, not a new identifier.
+    dirs = family_dirs() if library_dir == DEFAULT_LIBRARY else [library_dir]
+    files = sorted((f for d in dirs for f in d.glob("*.flexiarg")), key=lambda f: f.stem)
+    seen_in: dict[str, str] = {}
+    for path in files:
         name = path.stem
+        if name in patterns:      # same stem in two families: first wins, loudly
+            print(f"[cas_select] WARNING duplicate pattern {name!r} in "
+                  f"{path.parent.name}; keeping the one in {seen_in[name]}",
+                  file=sys.stderr)
+            continue
+        seen_in[name] = path.parent.name
         if allowed is not None and name not in allowed:
             continue
         hotwords = tuple(
@@ -434,7 +469,7 @@ def run_fixture_dir(args: argparse.Namespace) -> dict[str, Any]:
     allowed = None
     if args.exclude_patterns:
         excluded = set(args.exclude_patterns.split(","))
-        all_names = {p.stem for p in DEFAULT_LIBRARY.glob("*.flexiarg")}
+        all_names = {p.stem for d in family_dirs() for p in d.glob("*.flexiarg")}
         allowed = all_names - excluded
     patterns = load_patterns(index_path=args.index, library_dir=args.library, allowed=allowed)
     results = {}
