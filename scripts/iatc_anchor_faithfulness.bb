@@ -103,6 +103,11 @@
       (.isDirectory f) (->> (file-seq f)
                             (filter #(.isFile %))
                             (filter #(str/ends-with? (.getName %) ".edn"))
+                            ;; H3: .rung2.edn are semcheck REPORTS, not graphs.
+                            ;; Scanning them doubled the corpus (98 -> 196) and
+                            ;; every sidecar failed with "source text not found",
+                            ;; which would have halved the apparent pass rate.
+                            (remove #(str/ends-with? (.getName %) ".rung2.edn"))
                             (remove hidden-attempts-path?)
                             (sort-by #(.getPath %)))
       (str/ends-with? (.getName f) ".edn") [f]
@@ -321,7 +326,29 @@
                            (double (apply min (map :rate results)))
                            (double (apply max (map :rate results)))
                            (double (:floor opts))
-                           (if (every? :pass results) "PASS" "FAIL")))))
+                           (if (every? :pass results) "PASS" "FAIL")))
+          ;; H38 -- FRAME MISMATCH, reported separately from faithfulness.
+          ;; A graph whose EVERY node matches zero key terms is not a graph with
+          ;; bad anchors; it is a graph being scored against the wrong text.
+          ;; Genuine drift yields partial matches (H21: 41% exact, median drift
+          ;; 3 lines). Zero across 3, 4, 6 and 7 key terms simultaneously means
+          ;; the :source line numbers and this checker's source file use
+          ;; different line bases -- on the 98-graph corpus, 25 zero-rate graphs
+          ;; concentrated in 4 papers, 3 of them entirely zero, while other
+          ;; papers scored 1.000. Reporting that as 64.3% "faithfulness" would
+          ;; publish a coordinate-system disagreement as a property of the
+          ;; extraction.
+          (let [dead (filter #(zero? (double (:rate %))) results)]
+            (when (seq dead)
+              (println (format (str "  frame-mismatch SUSPECTED in %d/%d graph(s) "
+                                    "(every node matched 0 key terms).")
+                               (count dead) (count results)))
+              (println (str "  These are NOT counted evidence about faithfulness: "
+                            "a rate of 0.000 across all nodes indicates the graph's "
+                            ":source lines and this checker's source file are on "
+                            "different line bases (H38). Anchor both to the "
+                            "candidate window the model was actually shown before "
+                            "reading any rate as a faithfulness number."))))))
       (System/exit (if (every? :pass results) 0 1)))))
 
 (when (= *file* (System/getProperty "babashka.file"))

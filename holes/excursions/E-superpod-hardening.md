@@ -945,6 +945,56 @@ attempt should record its run id. Until then, retry statistics should be quoted
 from the loop's own log rather than reconstructed from the directory, and the
 paper's retry rate wants re-deriving from a clean run.
 
+## H38 — the anchor checker and the graphs use different line bases
+
+Anchor validation at volume (n=3 → n=98, the pending item from A3′) returns
+**64.3% pass at floor 0.30, mean rate 0.543** — and that number should not be
+published as faithfulness, because most of the failure is a coordinate-system
+disagreement rather than bad anchors.
+
+The distribution is bimodal in a way drift cannot produce: **32 graphs at
+exactly 1.000, 25 at exactly 0.000**, with the zeros concentrated in **4 papers,
+3 of which are entirely zero**. Inspecting one:
+
+    :s-perp-n     [379]     matched 0/3  missing=("right" "orthogonal" "complement")
+    :applied-hom  [384 386] matched 0/7  missing=("applying" "hom" "triangle" …)
+
+Zero of 3, of 4, of 6, of 7 — *simultaneously*. Genuine drift yields partial
+matches (H21 measured 41% exact, median drift 3 lines). Total misses across
+every node mean the checker is reading different text. It is: the candidate
+window for `0705.0102__p0` is lines **378–386**, while the checker resolves the
+same paper to `fable-0705.0102-dp-emacs.json`, whose line 379 is blank and whose
+line 384 is `\subsection{A canonical example}`. The graphs anchor into the
+passage the model was shown; the checker counts lines in a differently-numbered
+artifact.
+
+Excluding the 25 frame-mismatch graphs, the remaining 73 give **86.3% pass,
+mean 0.729, 32 perfect** — which is the honest reading of what the anchors do.
+
+**Fixed here:** the checker now reports frame mismatch as its own finding rather
+than as a rate, so a coordinate disagreement can no longer be quoted as an
+extraction property. It also excludes `.rung2.edn` sidecars — those are semcheck
+*reports*, and scanning them doubled the corpus (98 → 196) with every sidecar
+failing "source text not found", which would have halved the apparent pass rate.
+The real repair — anchoring both sides to the candidate window — remains open.
+
+## Measurements the runner now takes
+
+Both of the numbers this audit could not recover were missing for the same
+reason: **no stage ever measured them**, so each had to be reconstructed after
+the fact. One could not be (H37) and the other was reconstructed wrongly (H38).
+S3 now emits both:
+
+| measurement | artifact | why it must be in-run |
+|---|---|---|
+| first-pass retry rate | `retry-rate-$RUN_ID.json` | mtimes cannot say which invocation wrote which attempt |
+| anchor faithfulness | `data/runs/$RUN_ID/anchor-faithfulness.txt` | frame mismatch is invisible unless reported separately |
+
+Both are **measurements, not gates**. Anchor-faithfulness exits non-zero by
+design while H38 is open, so its `|| true` is deliberate and narrow — a
+known-red measurement must not masquerade as a stage failure, and its output is
+kept rather than discarded.
+
 ## Measurements (Zone, GLM-4.5-Air Q4, 32-core CPU)
 
 - Single-stream decode: **4.1 t/s**. Two concurrent streams: 3.70 + 2.81 =

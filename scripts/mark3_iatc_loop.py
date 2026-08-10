@@ -297,8 +297,25 @@ def run(args) -> int:
     seeds = load_seeds(args.shots)
     outdir = Path(args.out)
     outdir.mkdir(parents=True, exist_ok=True)
-    tmp = outdir / ".attempts"
-    tmp.mkdir(exist_ok=True)
+    # H37: attempts must be RUN-SCOPED. Attempt numbering restarts at 0 on every
+    # invocation, so a shared .attempts/ mixes runs and the number in a filename
+    # is a within-invocation counter rather than a position in the sequence that
+    # produced the final graph. On the 98-paper corpus that directory ended up
+    # holding 188 files over 114 graph names -- 16 of them left by earlier runs
+    # over a different paper set -- which made the first-pass retry rate
+    # unreproducible (the paper had to withdraw a figure it could no longer
+    # derive) and, worse, manufactured a plausible defect: sorting by attempt
+    # number "showed" acceptable graphs being discarded, when the finals were
+    # simply lower-numbered attempts written later.
+    #
+    # A run id per subdirectory makes the retry rate a BYPRODUCT of any run
+    # rather than a separate measurement, which is the whole reason it is here.
+    run_tag = (os.environ.get("RUN_ID") or getattr(args, "run_id", None)
+               or "unscoped")
+    tmp = outdir / ".attempts" / run_tag
+    tmp.mkdir(parents=True, exist_ok=True)
+    (outdir / ".attempts" / run_tag / "RUN").write_text(
+        f"run_id={run_tag}\ncandidates={len(cands)}\nmax_attempts={MAX_ATTEMPTS}\n")
     results = []
     accepted_graphs = []
     # in-flight progress (Rob's ask: periodic snapshots, not just the final
@@ -392,6 +409,26 @@ def run(args) -> int:
         print(f"  [{i}/{n_total}] {pid}: {status} ({last_err[:80]})", flush=True)
         if loss_log_interval and i % loss_log_interval == 0:
             loss_snapshot(i)
+
+    # H37: emit the retry rate HERE, from the loop's own bookkeeping, rather than
+    # leaving it to be reconstructed from the attempt directory later. The figure
+    # is the honesty bound on first-pass quality, and reconstruction is exactly
+    # what stopped working: mtimes cannot say which invocation wrote what.
+    n_first = sum(1 for _, st, err in results
+                  if st == "pass" and "attempt 0;" in (err or ""))
+    n_pass = sum(1 for _, st, _ in results if st == "pass")
+    retry_path = outdir / f"retry-rate-{run_tag}.json"
+    retry_path.write_text(json.dumps({
+        "run_id": run_tag, "candidates": len(cands), "accepted": n_pass,
+        "first_attempt_pass": n_first,
+        "needed_retry": n_pass - n_first,
+        "retry_rate": (round((n_pass - n_first) / n_pass, 4) if n_pass else None),
+        "max_attempts": MAX_ATTEMPTS,
+        "note": "measured in-loop; do not reconstruct from .attempts/ (H37)",
+    }, indent=2) + "\n")
+    if n_pass:
+        print(f"\n[retry] {n_pass - n_first}/{n_pass} accepted graphs needed a retry "
+              f"({100*(n_pass-n_first)/n_pass:.1f}%) -> {retry_path.name}")
 
     # cross-item substance gate over the accepted batch
     print("\n=== batch substance gate (cross-item) ===")
