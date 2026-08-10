@@ -1,7 +1,7 @@
 # Superpod handoff — math.CT structural mining
 
 **For:** Rob · **From:** Joe / claude-4 · **Date:** 2026-08-10
-**Attached:** `capability-proof-arxiv.pdf` — the local workup, 18pp, including a
+**Attached:** `capability-proof-arxiv.pdf` — the local workup, 19pp, including a
 hazard ledger of everything that broke while getting here.
 
 ---
@@ -147,13 +147,16 @@ Stated plainly so nothing surprises you; the attached PDF has the full ledger.
 - **The pipeline has never run end-to-end on a superpod.** This run is the first.
   Every stage has run somewhere; the sequence has not run there.
 - **H38, anchor frame mismatch** — a measurement defect, not a run defect.
-- **CT pattern hotwords are weakly validated** — six new category-theory patterns
-  measure ~2× enriched over chance (p = 0.27, 9 positive labels). Fine as a
-  Tier-0 retrieval prior, which is all they are used as; Tier-1 filters at run
-  time. Not a precision claim.
+- **CT pattern hotwords are weakly validated** — the lexical prior over prose
+  passages ranks the Tier-1-confirmed pattern top-1 6.4% of the time (chance
+  2.6%) and top-3 14.1% (chance 7.7%), converging to chance by top-10; measured
+  on 94 passages / 283 verified matches (futon6 `00a7360`). Real signal at small
+  K only, and the validation is biased *against* the prior — patterns invisible
+  to extraction cannot earn credit. Fine as a Tier-0 retrieval prior, which is
+  all they are used as; Tier-1 filters at run time. Not a precision claim.
 - **A3′ anchors, A8 export counts** — see the PDF; both restated this week
   against re-measured artifacts rather than left as they were.
 
-The attached capability proof is organised around sub-claims A1–A12 with a
+The attached capability proof is organised around sub-claims A1–A14 with a
 warrant column that says `mechanical`, `weak`, or `designed, not run` for each.
 Where something is not established, it says so.

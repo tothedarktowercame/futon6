@@ -14,6 +14,17 @@ Status legend: **OPEN** (needs a fix before the Superpod window) ·
 **DOCUMENTED** (no code change needed; contract now written down) ·
 **ASSET** (not a defect — something the probe made available).
 
+**Count (2026-08-10 audit):** 40 hazards — H1–H38 plus H11b, H12b, H19b; H8 is
+an ASSET, not a hazard. 37 closed. 3 carry an open remainder: **H1** (tier-2
+corpus-fresh substrate rebuild), **H10** (S4 region cap is an out-of-band trim,
+not a flag), **H38** (anchor checker and graphs still use different line
+bases). Some early headings understate closure — H13, H16, H23, H24, H25 all
+had their open remainders closed later; H13 and H16 carry dated addenda, and
+H23/H24/H25's remainders are verified in code (`check_gate_subprocess` in
+`preflight.py`, `--checkpoint` in `cas_select.py`, `:report` status in
+`iatc_semcheck.bb`). This block is the tally the capability proof cites;
+update it when a hazard opens or closes.
+
 ## Findings
 
 ### H1 — S2's stepper command is a stub; corpus-fresh substrate build is not wired in. **TIER-1 FIXED · tier-2 OPEN**
@@ -220,7 +231,7 @@ Now a single module, `scripts/edn_compat.py:edn_safe`, which both loaders
 delegate to. Verified: the unicode graph loads through the iatc path *and*
 the r2d path; S5's comprehension went 97 → **98 graphs covered**.
 
-### H13 — S5's own criterion is unmeetable: rung3-technique is in no stage. **OPEN**
+### H13 — S5's own criterion is unmeetable: rung3-technique is in no stage. **CLOSED (see addendum)**
 
 S5 comprehension = R2d (nouns grounded) ⊕ rung-3 (strategies grounded), and
 its stepper criterion is *"G-comprehension: verdict separates weak-extraction
@@ -243,6 +254,13 @@ traced), or restate S5's criterion to what the pipeline can actually compute.
 **Not attempted here** — it is a scoping question for Joe, and it is the one
 finding in this excursion that changes what a run *means* rather than whether
 it completes.
+
+**Addendum (2026-08-10 count audit): closed since.** The first repair option
+was taken: S5's stepper command now runs `cas_segment.py` →
+`rung3_technique.py` → `clean_comprehension.py` in sequence, all run-scoped
+(visible in `linode_stepper.py --plan`). Measured result: strategy moves
+0 → 202 grounded / 564 thin / 52 ungrounded; verdicts {well-formed 6,
+partial 82, weak-extraction 10} (capability proof A5).
 
 ### H14 — filename id-parsing breaks on one arXiv id family (twice, opposite ways). **FIXED**
 
@@ -290,7 +308,7 @@ should be audited the same way before the window — if the accretion curves
 (learning goal #1) are likewise stdout-only, the sweep's whole product is
 unretrievable. *Audited immediately; see H16 — the answer was yes, worse.*
 
-### H16 — the whole learning layer's product is unretrievable. **S12 FIXED · S11 OPEN**
+### H16 — the whole learning layer's product is unretrievable. **FIXED (S11 half closed too — see addendum)**
 
 Auditing S11/S12 per H15's standing question found the same failure across the
 entire layer the playbook calls the point of the run:
@@ -317,6 +335,13 @@ unlike the lexicon and the curve, the natural artifact shape for a structural
 canon and a whole-paper signature set has not been established here, and
 inventing one risks a format nobody downstream reads. Needs a five-minute
 decision, then the same treatment.
+
+**Addendum (2026-08-10 count audit): S11 half closed since.** The decision was
+made with H22's repairs: `sfc_struct_canon.py` writes
+`structural-canon-defs.json` to `--run-dir` (with an explicit refusal artifact
+when it cannot run), and `clean_paper_signature.py --run-dir` writes
+`structural-canon.json` (its help text cites H16/S11). Counts in capability
+proof A10: 97 definitions over 77 canonical shapes, 0 coverage gaps.
 
 **The pattern behind H15/H16, worth stating for the handoff:** the pipeline was
 developed on a dev box where stdout is a terminal the author is watching, so
