@@ -22,7 +22,12 @@ import re
 import subprocess
 import sys
 import os
-import edn_format as edn
+try:
+    import edn_format as edn
+    _EDN_IMPORT_ERROR = None
+except ImportError as _exc:          # inspectable without it; see _MissingDeps
+    edn = None
+    _EDN_IMPORT_ERROR = _exc
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, "holes", "linode-stepper-contract.md")
@@ -295,7 +300,35 @@ def order(stages, frm, to):
     return stages[i0:i1]
 
 
-DEPS = load_deps()
+class _MissingDeps(dict):
+    """Stand-in for DEPS when edn_format is absent.
+
+    The stepper cannot RUN without edn_format -- it parses the DAG contract from
+    EDN. But conformance imports this module only to read OPS and the path
+    constants, and DEPS is built at import time, so a missing edn_format took
+    down the whole import and left two conformance checks unevaluatable on any
+    host that had not installed it. Documenting that as a limitation was the
+    wrong call: the gate exists to inspect unprepared hosts, so it must work on
+    one.
+
+    Inspection now succeeds; the first attempt to USE dependencies raises with
+    the real cause, so nothing runs on silently-empty dependency data.
+    """
+
+    def _die(self, *_a, **_k):
+        raise RuntimeError(
+            "stage dependencies unavailable: edn_format is not installed, so the "
+            f"DAG contract could not be parsed ({_EDN_IMPORT_ERROR}). "
+            "Run: pip install edn_format") from _EDN_IMPORT_ERROR
+
+    __getitem__ = _die
+    get = _die
+    items = _die
+    keys = _die
+    values = _die
+
+
+DEPS = load_deps() if edn is not None else _MissingDeps()
 
 
 def _boot_note(profile, sid):
