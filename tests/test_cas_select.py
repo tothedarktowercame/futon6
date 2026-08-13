@@ -127,3 +127,31 @@ def test_tier0_retrieve_is_model_free(monkeypatch):
 
     assert candidates
     assert any(row["pattern"] == "reduce-to-known-result" for row in candidates)
+
+
+def test_whole_index_loader_preserves_every_row_and_campaign_patterns():
+    patterns = cas.load_all_patterns()
+
+    assert len(patterns) > 1300
+    assert {
+        "transport-across-an-instance-diamond",
+        "lift-prove-upstairs-reflect-by-injectivity",
+        "close-bijectivity-by-counting-not-inverting",
+        "construct-through-a-finite-correspondence",
+        "probe-the-claimed-property-not-the-acceptance-proxy",
+        "replace-enumeration-with-structural-counting",
+    } <= patterns.keys()
+
+
+def test_whole_index_path_reuses_tier0_retrieve(monkeypatch):
+    sentinel = [{"pattern": "sentinel", "score": 1, "hits": ["x"]}]
+    seen = {}
+
+    def fake_retrieve(text, patterns, k=4):
+        seen.update(text=text, count=len(patterns), k=k)
+        return sentinel
+
+    monkeypatch.setattr(cas, "retrieve", fake_retrieve)
+
+    assert cas.retrieve_all("free text", k=5) == sentinel
+    assert seen == {"text": "free text", "count": len(cas.load_all_patterns()), "k": 5}

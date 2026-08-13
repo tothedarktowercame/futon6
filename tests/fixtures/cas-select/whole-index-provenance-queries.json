@@ -1,0 +1,50 @@
+[
+  {
+    "pattern": "transport-across-an-instance-diamond",
+    "query": "The rational algebra structures on the same carrier are equal by uniqueness, so rewrite IsGalois across that equality."
+  },
+  {
+    "pattern": "transport-across-an-instance-diamond",
+    "query": "After reinstalling the field structure the motive is not type correct; equate the two scalar actions before continuing."
+  },
+  {
+    "pattern": "lift-prove-upstairs-reflect-by-injectivity",
+    "query": "Prove the intersection and generated compositum identities in the cyclotomic field first, then pull the equalities back to the degree-nine fixed field."
+  },
+  {
+    "pattern": "lift-prove-upstairs-reflect-by-injectivity",
+    "query": "Send both sides into the larger intermediate field, simplify the infimum and supremum there, then use one-to-one-ness to return."
+  },
+  {
+    "pattern": "close-bijectivity-by-counting-not-inverting",
+    "query": "A one-to-one map between finite types of equal size is onto."
+  },
+  {
+    "pattern": "close-bijectivity-by-counting-not-inverting",
+    "query": "Show the kernel is trivial and compare the number of elements instead of constructing preimages."
+  },
+  {
+    "pattern": "construct-through-a-finite-correspondence",
+    "query": "Build the degree-nine field from the product of the units modulo seven and nine, then read subfields from fixed groups."
+  },
+  {
+    "pattern": "construct-through-a-finite-correspondence",
+    "query": "Prove the order-four and order-twelve group calculations first and obtain the field degrees from indices."
+  },
+  {
+    "pattern": "probe-the-claimed-property-not-the-acceptance-proxy",
+    "query": "Zero sorries did not imply the main theorem was clean because an imported helper still depended on sorryAx."
+  },
+  {
+    "pattern": "probe-the-claimed-property-not-the-acceptance-proxy",
+    "query": "The file compiled, yet the theorem still depended on compiler evaluation through an imported helper."
+  },
+  {
+    "pattern": "replace-enumeration-with-structural-counting",
+    "query": "GL3 over integers modulo four was reduced modulo two; the fiber had 2^9 elements."
+  },
+  {
+    "pattern": "replace-enumeration-with-structural-counting",
+    "query": "Replace the 86016-state computation by a surjection to GL3 over F2 and multiply image size by fiber size."
+  }
+]

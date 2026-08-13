@@ -31,6 +31,12 @@ DEFAULT_INDEX = FUTON3 / "resources" / "sigils" / "patterns-index.tsv"
 # requires creating the directory and nothing else.
 FAMILY_PREFIX = "math-informal"
 DEFAULT_LIBRARY = FUTON3 / "library" / "math-informal"
+DEFAULT_LIBRARY_ROOT = FUTON3 / "library"
+FUTON3C = Path(os.environ.get("FUTON3C_ROOT", "/home/joe/code/futon3c"))
+DEFAULT_STAGING_DIRS = (
+    FUTON3C / "data" / "pattern-staging" / "slice-1",
+    FUTON3C / "data" / "pattern-staging" / "slice-3",
+)
 
 
 def family_dirs(root: Path | None = None) -> list[Path]:
@@ -43,9 +49,11 @@ def family_dirs(root: Path | None = None) -> list[Path]:
     return found or [DEFAULT_LIBRARY]
 
 
-def in_family(qualified: str) -> bool:
+def in_family(qualified: str, family_prefix: str | None = FAMILY_PREFIX) -> bool:
     """Is this index row's `family/name` key in the math-informal family set?"""
-    return qualified.split("/", 1)[0].startswith(FAMILY_PREFIX)
+    return family_prefix is None or qualified.split("/", 1)[0].startswith(family_prefix)
+
+
 DEFAULT_FIXTURES = REPO / "tests" / "fixtures" / "cas-select"
 
 CHECK_MENU = {
@@ -91,7 +99,11 @@ def tokenize(text: str) -> set[str]:
     return set(re.findall(r"[a-z][a-z0-9-]*", text.lower()))
 
 
-def read_index(path: Path = DEFAULT_INDEX) -> dict[str, tuple[str, ...]]:
+def read_index(
+    path: Path = DEFAULT_INDEX,
+    *,
+    family_prefix: str | None = FAMILY_PREFIX,
+) -> dict[str, tuple[str, ...]]:
     rows: dict[str, tuple[str, ...]] = {}
     for line in path.read_text().splitlines():
         if not line.strip() or line.startswith("#"):
@@ -100,9 +112,25 @@ def read_index(path: Path = DEFAULT_INDEX) -> dict[str, tuple[str, ...]]:
         if len(cols) < 5:
             continue
         name = norm_pattern_name(cols[0])
-        if not in_family(cols[0]):
+        if not in_family(cols[0], family_prefix):
             continue
         rows[name] = tuple(w.strip().lower() for w in cols[4].split(",") if w.strip())
+    return rows
+
+
+def read_index_rows(path: Path = DEFAULT_INDEX) -> list[tuple[str, str, tuple[str, ...]]]:
+    """Read every qualified index row for whole-index Tier-0 retrieval."""
+    rows = []
+    for line in path.read_text().splitlines():
+        if not line.strip() or line.startswith("#"):
+            continue
+        cols = line.split("\t")
+        if len(cols) < 5:
+            continue
+        rationale = cols[3].strip()
+        title = rationale.split(" ->", 1)[0].strip() or cols[0].rsplit("/", 1)[-1]
+        hotwords = tuple(w.strip().lower() for w in cols[4].split(",") if w.strip())
+        rows.append((cols[0], title, hotwords))
     return rows
 
 
@@ -170,6 +198,79 @@ def load_patterns(
         )
         patterns[name] = parse_flexiarg(path, hotwords)
     return patterns
+
+
+def load_all_patterns(
+    *,
+    index_path: Path = DEFAULT_INDEX,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    extra_library_dirs: tuple[Path, ...] = DEFAULT_STAGING_DIRS,
+) -> dict[str, Pattern]:
+    """Load the whole pattern index plus reviewed staging directories.
+
+    The default ``load_patterns`` path remains deliberately scoped to the
+    math-informal curation boundary. This separate loader changes only the
+    candidate pool; Tier-0 scoring remains exactly ``retrieve``.
+
+    Index rows without a local flexiarg still participate using their indexed
+    rationale title and hotwords. Duplicate basenames are qualified so no
+    index row is silently lost; unique names keep their familiar short ID.
+    """
+    indexed = read_index_rows(index_path)
+    stem_counts: dict[str, int] = {}
+    for qualified, _, _ in indexed:
+        stem = qualified.rsplit("/", 1)[-1]
+        stem_counts[stem] = stem_counts.get(stem, 0) + 1
+
+    patterns: dict[str, Pattern] = {}
+    qualified_to_key: dict[str, str] = {}
+    for qualified, title, hotwords in indexed:
+        stem = qualified.rsplit("/", 1)[-1]
+        key = stem if stem_counts[stem] == 1 else qualified
+        qualified_to_key[qualified] = key
+        patterns[key] = Pattern(
+            name=key,
+            title=title,
+            hotwords=tuple(sorted(set(hotwords) | tokenize(stem.replace("-", " ")))),
+            conclusion="",
+            however="",
+        )
+
+    files = sorted(library_root.glob("*/*.flexiarg"))
+    files.extend(sorted(f for d in extra_library_dirs if d.is_dir() for f in d.glob("*.flexiarg")))
+    for path in files:
+        text = path.read_text()
+        declaration = next(
+            (
+                line.split(None, 1)[1].strip()
+                for line in text.splitlines()
+                if line.startswith("@flexiarg ")
+            ),
+            None,
+        )
+        if not declaration:
+            continue
+        stem = declaration.rsplit("/", 1)[-1]
+        key = qualified_to_key.get(declaration, stem)
+        prior = patterns.get(key)
+        parsed = parse_flexiarg(path, prior.hotwords if prior else ())
+        patterns[key] = Pattern(
+            name=key,
+            title=parsed.title,
+            hotwords=parsed.hotwords,
+            conclusion=parsed.conclusion,
+            however=parsed.however,
+        )
+    return patterns
+
+
+def retrieve_all(step_text: str, k: int = 4, **loader_options: Any) -> list[dict[str, Any]]:
+    """Run the real Tier-0 scorer over every indexed pattern.
+
+    ``loader_options`` are forwarded to :func:`load_all_patterns`, primarily
+    so tests and offline consumers can point at a snapshot of the index.
+    """
+    return retrieve(step_text, load_all_patterns(**loader_options), k=k)
 
 
 def retrieve(step_text: str, patterns: dict[str, Pattern], k: int = 4) -> list[dict[str, Any]]:
