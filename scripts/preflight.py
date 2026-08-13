@@ -143,7 +143,24 @@ def check_substrate():
             "../futon3/resources/sigils/patterns-index.tsv"]
     missing = [p for p in need if not os.path.exists(os.path.join(ROOT, p))]
     rec("substrate:present", not missing, f"{len(need) - len(missing)}/{len(need)} substrate files",
-        "extract data/mark7-substrate.tgz -C ~/code/ (dereference symlinks)" if missing else "")
+        "extract data/mark7-ct-substrate.tgz -C ~/code/" if missing else "")
+
+    # The mining reads ONE pattern family group. cas_select filters the index by
+    # FAMILY_PREFIX = "math-informal", so of 1134 library patterns exactly 45 are
+    # reachable by this run; the rest (257 iiching, 64 iching, 58 p4ng, ...) are
+    # noise here. Check the families the run can actually use are present, rather
+    # than checking a 1355-row index exists and calling that substrate.
+    fam_root = os.path.join(ROOT, "..", "futon3", "library")
+    fams, missing_fams = {}, []
+    for fam in ("math-informal", "math-informal-CT"):
+        d = os.path.join(fam_root, fam)
+        n = len(glob.glob(os.path.join(d, "*.flexiarg"))) if os.path.isdir(d) else 0
+        fams[fam] = n
+        if n == 0:
+            missing_fams.append(fam)
+    rec("substrate:ct-patterns", not missing_fams,
+        ", ".join(f"{k}={v}" for k, v in fams.items()),
+        "extract data/mark7-ct-substrate.tgz -C ~/code/" if missing_fams else "")
 
 
 # ---------------------------------------------------------------- eprints
