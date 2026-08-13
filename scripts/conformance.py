@@ -171,11 +171,16 @@ def _stepper():
         return exc
 
 
-def check_gate_refuses_unavailable(exc):
-    """Report an unimportable stepper as a NAMED failure, never a crash."""
+def _stepper_unavailable(check_name, exc):
+    """Report an unimportable stepper as a NAMED failure, never a crash.
+
+    Takes the check name so every caller reports under its own identity: the
+    operator needs to know WHICH check could not be evaluated, not merely that
+    something failed to import.
+    """
     missing = getattr(exc, "name", None)
-    return rec("gate:refuses-bad-input", False,
-               f"cannot load the stepper to read its gate: {type(exc).__name__}"
+    return rec(check_name, False,
+               f"cannot load the stepper: {type(exc).__name__}"
                + (f" (missing module '{missing}')" if missing else ""),
                f"pip install {missing}" if missing
                else "run scripts/linode-postsetup-deps.sh, then re-run")
@@ -199,7 +204,7 @@ def check_gate_refuses():
     """
     mod = _stepper()
     if isinstance(mod, Exception):
-        return check_gate_refuses_unavailable(mod)
+        return _stepper_unavailable("gate:refuses-bad-input", mod)
     gate = (mod.OPS.get("S3") or {}).get("gate")
     if not gate:
         return rec("gate:refuses-bad-input", False, "S3 declares no gate", "")
@@ -247,6 +252,8 @@ def check_run_scoping():
     substitutes the variable.
     """
     mod = _stepper()
+    if isinstance(mod, Exception):
+        return _stepper_unavailable("paths:run-scoped", mod)
     consts = {"CAND": mod.CAND, "GRAPHS": mod.GRAPHS, "CLEAN": mod.CLEAN,
               "STEPS": mod.STEPS, "RUNG3": mod.RUNG3, "DEMO": mod.DEMO,
               "RUN": mod.RUN}
