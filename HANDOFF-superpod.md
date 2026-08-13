@@ -103,44 +103,59 @@ now measured in-loop, so your run produces it for free.
 
 ---
 
-## 2b. These gates were demonstrated, not just written
+## 2b. These gates were demonstrated on three hosts, not just written
 
-You are entitled to ask whether a gate that has only ever run on the authors'
-machine means anything. So both were run on a **second host that is not the dev
-box** — `linode-chicago`, a small server with a clean checkout, no venv, and
-Python 3.8 — and then here, on a prepared one. The contrast is the evidence:
+A gate that has only ever run on the authors' machine is an assurance, not
+evidence. So both were run on **three hosts of deliberately different readiness**,
+all on the same gate code:
 
-| | linode-chicago (unprepared) | dev box (prepared) |
-|---|---|---|
-| `preflight` | **3/11 — DO NOT START** | **11/11 — GO** |
-| `conformance` | **1/6 — ABORT THE WINDOW** | **6/6 — CONFORMS** |
+| host | what it is | `preflight` | `conformance` |
+|---|---|---|---|
+| **linode-chicago** | clean checkout, no venv, py3.8, 2 CPU / 3 GB | **3/11 — DO NOT START** | **3/6 — ABORT** |
+| **zone** | prepared, 32 CPU / 249 GB / 1.4 TB free | **10/11** | **3/6 — ABORT** |
+| **dev box** | prepared, with a live endpoint | **11/11 — GO** | **6/6 — CONFORMS** |
 
-On the unprepared host the failures were specific and each carried a remedy:
-`latexmlmath` absent, `edn_format`/`sentence_transformers` missing, 1/6 substrate
-files, `math-informal=0, math-informal-CT=0`, no eprint store, 27 GB free against
-a 50 GB floor. Nothing vague, nothing that needed us to interpret it.
+The one thing separating `zone` from `GO` is `model:endpoint` — no LLM is served
+there. That is the same check that will be the *first* thing your host answers,
+and it is the reason the middle row is worth showing: a fully-provisioned machine
+with 1.4 TB free and every substrate file present still does not get a GO without
+a model behind it.
 
-**The exercise found a real defect, which is the point of doing it.** Run
-standalone on the clean host, `conformance` died with a nine-frame
-`ModuleNotFoundError: edn_format` traceback instead of reporting — it is
-otherwise stdlib-only, but it imports the stepper to read S3's declared gate, and
-the stepper imports `edn_format`. It exited non-zero, so nothing would have
-proceeded on a false pass; but "the gate could not be evaluated" and "your host
-is broken" are different messages, and during a costly window the difference
-matters. Both call sites now report a named failure with a `pip install` remedy.
-Four passes of local verification had not surfaced it. A foreign host did, in
-one run.
+Read the rows as a discrimination test. On the unprepared host every failure was
+specific and carried a remedy — `latexmlmath` absent, `edn_format` and
+`sentence_transformers` missing, 1/6 substrate files,
+`math-informal=0, math-informal-CT=0`, no eprint store, 27 GB against a 50 GB
+floor. On the prepared ones, those same checks pass and say what they found:
+`39` and `6` patterns, `25/25` sampled eprint ids resolving. Zone's
+`chain:gate-subprocess` even reports *"R2d reports through the composer"* rather
+than the dev box's *"no graphs yet — nothing to exercise"*, because Zone has real
+graphs and the check ran against them.
 
-**`conformance` has also now passed against a serving stack that is not
-llama.cpp.** The 6/6 above was measured against an Ollama endpoint serving
-`qwen2.5-coder`, which binds `response_format: json_schema` correctly — the
-banana check returned "purple". So the schema check is known to discriminate
-between stacks rather than merely to agree with the one it was written on. Its
-throughput reading there was 5.5 tok/s → ~5.0 h for the 818-call cascade, which
-is the same order as our own 4.9 tok/s figure.
+**The exercise found and fixed a real defect, which is the point of doing it.**
+Run standalone on the clean host, `conformance` first died with a nine-frame
+`ModuleNotFoundError: edn_format` traceback, and then — after a first, inadequate
+fix — could not evaluate two of its six checks at all. `conformance` is otherwise
+stdlib-only, but it imports the stepper to read S3's declared gate, and the
+stepper parsed its DAG contract from EDN *at import time*. So the gate whose job
+is inspecting unprepared hosts was blind on exactly those hosts. The stepper is
+now importable without `edn_format` (dependency access raises at point of use
+instead, naming the remedy), and those two checks now return real verdicts on a
+machine with no venv: `gate:refuses-bad-input` and `run:artifact-paths-scoped`
+both pass on linode-chicago. That is the 1/6 → 3/6 improvement in the table.
 
-**What this does not prove.** Neither host ran the pipeline. The gates are
-demonstrated; the run is not. Section 6 stands.
+Four passes of local verification had not surfaced this. One foreign-host run
+did.
+
+**`conformance` has also passed against a serving stack that is not llama.cpp.**
+The 6/6 was measured against an Ollama endpoint serving `qwen2.5-coder`, which
+binds `response_format: json_schema` correctly — the banana check returned
+"purple". So the schema check discriminates between stacks rather than merely
+agreeing with the one it was written on. Its throughput reading there was
+5.5 tok/s → ~5.0 h for the 818-call cascade, the same order as our 4.9 tok/s.
+
+**What this does not prove.** None of the three ran the pipeline. Two of them
+could not — linode-chicago has 2 CPUs and no model, Zone has no model served.
+The gates are demonstrated; the run is not. Section 6 stands.
 
 ---
 
