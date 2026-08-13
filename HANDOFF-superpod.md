@@ -103,6 +103,47 @@ now measured in-loop, so your run produces it for free.
 
 ---
 
+## 2b. These gates were demonstrated, not just written
+
+You are entitled to ask whether a gate that has only ever run on the authors'
+machine means anything. So both were run on a **second host that is not the dev
+box** — `linode-chicago`, a small server with a clean checkout, no venv, and
+Python 3.8 — and then here, on a prepared one. The contrast is the evidence:
+
+| | linode-chicago (unprepared) | dev box (prepared) |
+|---|---|---|
+| `preflight` | **3/11 — DO NOT START** | **11/11 — GO** |
+| `conformance` | **1/6 — ABORT THE WINDOW** | **6/6 — CONFORMS** |
+
+On the unprepared host the failures were specific and each carried a remedy:
+`latexmlmath` absent, `edn_format`/`sentence_transformers` missing, 1/6 substrate
+files, `math-informal=0, math-informal-CT=0`, no eprint store, 27 GB free against
+a 50 GB floor. Nothing vague, nothing that needed us to interpret it.
+
+**The exercise found a real defect, which is the point of doing it.** Run
+standalone on the clean host, `conformance` died with a nine-frame
+`ModuleNotFoundError: edn_format` traceback instead of reporting — it is
+otherwise stdlib-only, but it imports the stepper to read S3's declared gate, and
+the stepper imports `edn_format`. It exited non-zero, so nothing would have
+proceeded on a false pass; but "the gate could not be evaluated" and "your host
+is broken" are different messages, and during a costly window the difference
+matters. Both call sites now report a named failure with a `pip install` remedy.
+Four passes of local verification had not surfaced it. A foreign host did, in
+one run.
+
+**`conformance` has also now passed against a serving stack that is not
+llama.cpp.** The 6/6 above was measured against an Ollama endpoint serving
+`qwen2.5-coder`, which binds `response_format: json_schema` correctly — the
+banana check returned "purple". So the schema check is known to discriminate
+between stacks rather than merely to agree with the one it was written on. Its
+throughput reading there was 5.5 tok/s → ~5.0 h for the 818-call cascade, which
+is the same order as our own 4.9 tok/s figure.
+
+**What this does not prove.** Neither host ran the pipeline. The gates are
+demonstrated; the run is not. Section 6 stands.
+
+---
+
 ## 3. Why there is no override
 
 Both gates are mandatory with no `--skip` flag, and that is the single most
