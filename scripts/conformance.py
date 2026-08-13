@@ -150,12 +150,35 @@ def check_throughput(endpoint, model, tokens=128):
 # --------------------------------------------------- stage-machinery behaviour
 
 def _stepper():
+    """Import the stepper, or return None if its deps are absent.
+
+    conformance is otherwise stdlib-only and is documented as runnable
+    standalone, but the stepper imports edn_format. On a host that has not run
+    the setup yet -- exactly the host this gate exists to inspect -- that raised
+    ModuleNotFoundError and conformance died with a traceback instead of a
+    verdict. Demonstrated on linode-chicago, 2026-08-13: a clean checkout, no
+    venv, and the operator gets a stack trace where the contract promises a
+    named failure and a remedy.
+    """
     import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "linode_stepper", os.path.join(ROOT, "scripts", "linode_stepper.py"))
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    try:
+        spec = importlib.util.spec_from_file_location(
+            "linode_stepper", os.path.join(ROOT, "scripts", "linode_stepper.py"))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    except Exception as exc:
+        return exc
+
+
+def check_gate_refuses_unavailable(exc):
+    """Report an unimportable stepper as a NAMED failure, never a crash."""
+    missing = getattr(exc, "name", None)
+    return rec("gate:refuses-bad-input", False,
+               f"cannot load the stepper to read its gate: {type(exc).__name__}"
+               + (f" (missing module '{missing}')" if missing else ""),
+               f"pip install {missing}" if missing
+               else "run scripts/linode-postsetup-deps.sh, then re-run")
 
 
 def check_gate_refuses():
@@ -175,6 +198,8 @@ def check_gate_refuses():
     until the corpus is wrong.
     """
     mod = _stepper()
+    if isinstance(mod, Exception):
+        return check_gate_refuses_unavailable(mod)
     gate = (mod.OPS.get("S3") or {}).get("gate")
     if not gate:
         return rec("gate:refuses-bad-input", False, "S3 declares no gate", "")
