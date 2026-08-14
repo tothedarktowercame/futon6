@@ -1,0 +1,40 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p7"
+ :clean/source {:iatc "0706.1286__p7"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-def-implies-given :method :reduce-to-known-result
+   :text "F is full (resp. faithful) on vertical categories and each functor D(A,B)->E(FA,FB) is full (resp. faithful)"
+   :consumes [:def-ff]
+   :produces :given-condition}
+  {:id :e-converse-start :method :reduce-to-known-result
+   :text "there is a natural bijection gD(M,N) iso D(M,f*N g*)"
+   :consumes [:lax-framed-functor]
+   :produces :natural-bijection
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "natural-bijection-for-framed-functor"}}
+  {:id :e-vertical-full-faithful :method :reduce-to-known-result
+   :text "F is full and faithful on vertical categories"
+   :consumes [:natural-bijection]
+   :produces :vertical-full-faithful}
+  {:id :e-horizontal-full-faithful :method :reduce-to-known-result
+   :text "each functor D(A,B)->E(FA,FB) is full and faithful"
+   :consumes [:natural-bijection]
+   :produces :horizontal-full-faithful}
+  {:id :e-given-from-vertical-horizontal :method :reduce-to-known-result
+   :text "F is a lax framed functor from D to E"
+   :consumes [:given-condition]
+   :produces :lax-framed-functor
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "full-faithful-on-vertical-and-horizontal-implies-full-faithful"}}]
+ :clean/wires
+ [{:from :e-given-from-vertical-horizontal :to :e-converse-start :carries :lax-framed-functor}
+  {:from :e-converse-start :to :e-vertical-full-faithful :carries :natural-bijection}
+  {:from :e-converse-start :to :e-horizontal-full-faithful :carries :natural-bijection}
+  {:from :e-def-implies-given :to :e-given-from-vertical-horizontal :carries :given-condition}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-converse-start :e-given-from-vertical-horizontal]
+               :discharges-at []}}

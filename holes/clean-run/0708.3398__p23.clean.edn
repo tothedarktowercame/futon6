@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p23"
+ :clean/source {:iatc "0708.3398__p23"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-injective-char :method :reduce-to-known-result
+   :text "a C-comodule is quite C/A-injective if and only if it is a direct summand of a coinduced C-comodule"
+   :consumes [:quite-injective-def]
+   :produces :quite-injective-char
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "characterization-of-quite-injective-via-coinduced"}}
+  {:id :e-projective-def :method :reduce-to-known-result
+   :text "a left C-contramodule P is quite C/A-projective if the functor of C-contramodule homomorphisms from P maps A-split exact triples of left C-contramodules to exac"
+   :consumes [:quite-injective-char]
+   :produces :quite-projective-def
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "analogous-characterization-for-quite-projective"}}]
+ :clean/wires
+ [{:from :e-injective-char :to :e-projective-def :carries :quite-injective-char}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-injective-char :e-projective-def]
+               :discharges-at []}}

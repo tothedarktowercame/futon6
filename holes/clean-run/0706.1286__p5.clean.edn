@@ -1,0 +1,30 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p5"
+ :clean/source {:iatc "0706.1286__p5"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-deferred :method :reduce-to-known-result
+   :text "transformations between oplax functors can be defined similarly"
+   :consumes [:double-transformation]
+   :produces :oplax-transformations
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-double-transformation"}}
+  {:id :e-modification :method :reduce-to-known-result
+   :text "with framed bicategories, we usually have no need for modifications"
+   :consumes [:modifications]
+   :produces :no-need-for-modifications
+   :discharges {:to :this-is-standard-in-bicategory-theory}}
+  {:id :e-structure :method :reduce-to-known-result
+   :text "framed bicategories, framed functors, and framed transformations form a structure"
+   :consumes [:no-need-for-modifications :double-transformation]
+   :produces :framed-bicategory-structure
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "categorical-structure-of-framed-bicategories"}}]
+ :clean/wires
+ [{:from :e-modification :to :e-structure :carries :no-need-for-modifications}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-deferred :e-structure]
+               :discharges-at [:e-modification]}}

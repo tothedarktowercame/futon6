@@ -1,0 +1,53 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p14"
+ :clean/source {:iatc "0806.1324__p14"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-cohomological :method :reduce-to-known-result
+   :text "$\\tilde H$ is cohomological"
+   :consumes [:exact-triangle :filtered-colimit-exact]
+   :produces :tilde-H-cohomological}
+  {:id :e-preserves-coproducts :method :reduce-to-known-result
+   :text "$\\tilde H$ preserves small coproducts"
+   :consumes [:bar-H :bar-H-preserves-coproducts :tilde-HX-colim-formula :kan-corollary-implies-coproducts]
+   :produces :tilde-H-preserves-coproducts}
+  {:id :e-T-prime-triangulated :method :reduce-to-known-result
+   :text "$\\T'$ is a triangulated subcategory"
+   :consumes [:T-prime :tilde-H-cohomological]
+   :produces :T-prime-triangulated
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "cohomological-functors-preserve-triangulated-structure"}}
+  {:id :e-T-prime-closed-coproducts :method :reduce-to-known-result
+   :text "$\\T'$ is closed under small coproducts"
+   :consumes [:T-prime :tilde-H-preserves-coproducts]
+   :produces :T-prime-closed-coproducts
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "functor-preserving-coproducts-closes-under-coproducts"}}
+  {:id :e-T-prime-contains-T-a :method :reduce-to-known-result
+   :text "$\\T'$ contains $\\T^\\a$"
+   :consumes [:T-prime]
+   :produces :T-prime-contains-T-a
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "T-a-objects-satisfy-canon-morphism-isomorphism"}}
+  {:id :e-T-prime-equals-T :method :reduce-to-known-result
+   :text "$\\T'=\\T$"
+   :consumes [:T-prime-triangulated :T-prime-closed-coproducts :T-prime-contains-T-a]
+   :produces :T-prime-equals-T
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "generation-of-T-by-T-a-closed-under-coproducts-and-triangulation"}}
+  {:id :e-canonical-invertible :method :reduce-to-known-result
+   :text "the canonical morphism $\\tilde H\\to H$ is invertible"
+   :consumes [:T-prime-equals-T]
+   :produces :canonical-morphism
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-T-prime-implies-canon-morphism-invertible"}}]
+ :clean/wires
+ [{:from :e-cohomological :to :e-T-prime-triangulated :carries :tilde-H-cohomological}
+  {:from :e-preserves-coproducts :to :e-T-prime-closed-coproducts :carries :tilde-H-preserves-coproducts}
+  {:from :e-T-prime-triangulated :to :e-T-prime-equals-T :carries :T-prime-triangulated}
+  {:from :e-T-prime-closed-coproducts :to :e-T-prime-equals-T :carries :T-prime-closed-coproducts}
+  {:from :e-T-prime-contains-T-a :to :e-T-prime-equals-T :carries :T-prime-contains-T-a}
+  {:from :e-T-prime-equals-T :to :e-canonical-invertible :carries :T-prime-equals-T}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-T-prime-triangulated :e-T-prime-closed-coproducts :e-T-prime-contains-T-a :e-T-prime-equals-T :e-canonical-invertible]
+               :discharges-at []}}

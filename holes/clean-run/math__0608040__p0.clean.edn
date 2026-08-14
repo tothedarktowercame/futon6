@@ -1,0 +1,42 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "math__0608040__p0"
+ :clean/source {:iatc "math__0608040__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-trivial-implies-kan :method :reduce-to-known-result
+   :text "f is a Kan fibration"
+   :consumes [:trivial-fibration]
+   :produces :kan-fibration}
+  {:id :e-left-implies-cocartesian :method :reduce-to-known-result
+   :text "f is a coCartesian fibration"
+   :consumes [:left-fibration]
+   :produces :cocartesian-fibration}
+  {:id :e-right-implies-cartesian :method :reduce-to-known-result
+   :text "f is a Cartesian fibration"
+   :consumes [:right-fibration]
+   :produces :cartesian-fibration}
+  {:id :e-cocartesian-implies-categorical :method :reduce-to-known-result
+   :text "f is a categorical fibration"
+   :consumes [:cocartesian-fibration]
+   :produces :categorical-fibration}
+  {:id :e-cartesian-implies-categorical :method :reduce-to-known-result
+   :text "f is a categorical fibration"
+   :consumes [:cartesian-fibration]
+   :produces :categorical-fibration}
+  {:id :e-categorical-implies-inner :method :reduce-to-known-result
+   :text "f is an inner fibration"
+   :consumes [:categorical-fibration]
+   :produces :inner-fibration}]
+ :clean/wires
+ [{:from :e-left-implies-cocartesian :to :e-cocartesian-implies-categorical :carries :cocartesian-fibration}
+  {:from :e-right-implies-cartesian :to :e-cartesian-implies-categorical :carries :cartesian-fibration}
+  {:from :e-cocartesian-implies-categorical :to :e-categorical-implies-inner :carries :categorical-fibration}
+  {:from :e-cartesian-implies-categorical :to :e-categorical-implies-inner :carries :categorical-fibration}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at []
+               :discharges-at []}}

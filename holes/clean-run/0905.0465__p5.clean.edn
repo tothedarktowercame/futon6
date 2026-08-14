@@ -1,0 +1,40 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p5"
+ :clean/source {:iatc "0905.0465__p5"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-swisher6-to-z0-eta__c0 :method :reduce-to-known-result
+   :text "Z0: Bord_{n-1}^{(X0,ζ0)} → 𝒞 is equivalent to an OO(n-1)-equivariant map OO(n) → 𝒞~"
+   :consumes [:swisher6-application]
+   :produces :z0-equiv-data}
+  {:id :e-swisher6-to-z0-eta__c1 :method :reduce-to-known-result
+   :text "Z is determined by a nondegenerate n-morphism η: 1 → Z0(S^{n-1})"
+   :consumes [:swisher6-application]
+   :produces :nondegenerate-eta}
+  {:id :e-induction-to-equiv-action :method :reduce-to-known-result
+   :text "𝒞~ carries an OO(n-1) action by Theorems swisher3 and swisher5 in dimension n-1"
+   :consumes [:swisher6-induction-hypothesis]
+   :produces :equivariant-map}
+  {:id :e-equiv-to-map :method :reduce-to-known-result
+   :text "Z0: Bord_{n-1}^{(X0,ζ0)} → 𝒞 is equivalent to an OO(n-1)-equivariant map OO(n) → 𝒞~"
+   :consumes [:equivariant-map]
+   :produces :z0-equiv-data
+   :discharges {:to :functor-z0-corresponds-to-equivariant-maps-under}}
+  {:id :e-decomposition :method :reduce-to-known-result
+   :text "OO(n) decomposes as a quotient of (OO(n-1) × [0,1] × OO(n-1)) under OO(n-2) action"
+   :consumes [:equivariant-map :z0-equiv-data]
+   :produces :decomposition
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-induction-to-equiv-action :to :e-equiv-to-map :carries :equivariant-map}
+  {:from :e-induction-to-equiv-action :to :e-decomposition :carries :equivariant-map}
+  {:from :e-swisher6-to-z0-eta__c0 :to :e-decomposition :carries :z0-equiv-data}
+  {:from :e-equiv-to-map :to :e-decomposition :carries :z0-equiv-data}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-decomposition]
+               :discharges-at [:e-equiv-to-map]}}

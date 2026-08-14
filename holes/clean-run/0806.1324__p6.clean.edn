@@ -1,0 +1,29 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p6"
+ :clean/source {:iatc "0806.1324__p6"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-ker-thick :method :reduce-to-known-result
+   :text "if F is exact into triangulated, then Ker F is thick in T"
+   :consumes [:kernel-def]
+   :produces :ker-thick-if-exact
+   :discharges {:to :exact-functors-into-triangulated-categories-have}}
+  {:id :e-intersection-thick :method :reduce-to-known-result
+   :text "if F is cohomological into abelian, then ∩_{n∈ℤ} S^n(Ker F) is thick in T"
+   :consumes [:kernel-def]
+   :produces :ker-intersection-thick-if-cohomological
+   :discharges {:to :cohomological-functors-into-abelian-categories-h}}
+  {:id :e-si-multiplicative :method :reduce-to-known-result
+   :text "Si(Sc) is a multiplicative system compatible with the triangulation of T"
+   :consumes [:si-sc-def]
+   :produces :lemma-si-is-multiplicative}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at []
+               :discharges-at [:e-ker-thick :e-intersection-thick]}}

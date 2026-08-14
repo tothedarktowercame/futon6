@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "math__9810017__p0"
+ :clean/source {:iatc "math__9810017__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-homomorphism :method :reduce-to-known-result
+   :text "F is called a homomorphism"
+   :consumes [:composition-natural-iso :identity-natural-iso]
+   :produces :homomorphism-def
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-homomorphism"}}
+  {:id :e-strict-homomorphism :method :reduce-to-known-result
+   :text "F is called a strict homomorphism"
+   :consumes [:composition-equality :identity-equality]
+   :produces :strict-homomorphism-def
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-strict-homomorphism"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-homomorphism :e-strict-homomorphism]
+               :discharges-at []}}

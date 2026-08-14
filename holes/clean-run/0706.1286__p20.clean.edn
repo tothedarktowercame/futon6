@@ -1,0 +1,44 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p20"
+ :clean/source {:iatc "0706.1286__p20"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-retraction :method :reduce-to-known-result
+   :text "A -> X_+ = X ∐ A -> A is a retraction"
+   :consumes [:object-X]
+   :produces :retraction-sequence
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-retraction"}}
+  {:id :e-disjoint-section :method :reduce-to-known-result
+   :text "(-)_+ adjoins a disjoint section"
+   :consumes [:retraction-sequence]
+   :produces :adjoins-disjoint-section
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-disjoint-section"}}
+  {:id :e-strong-monoidal :method :reduce-to-known-result
+   :text "(-)_+ is a strong monoidal morphism of bifibrations"
+   :consumes [:adjoins-disjoint-section]
+   :produces :strong-monoidal-morphism
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "straightforward-check-of-strong-monoidal-morphism"}}
+  {:id :e-monfib-adjn :method :reduce-to-known-result
+   :text "the pair satisfies monfib-adjn"
+   :consumes [:adjoins-disjoint-section]
+   :produces :satisfies-monfib-adjn
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "straightforward-check-of-monfib-adjn-satisfaction"}}
+  {:id :e-2-natural-transformation :method :reduce-to-known-result
+   :text "forgetful morphisms define a 2-natural transformation"
+   :consumes [:strong-monoidal-morphism :satisfies-monfib-adjn]
+   :produces :forgetful-morphisms
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "construction-of-2-natural-transformation-from-forgetful-morphisms"}}]
+ :clean/wires
+ [{:from :e-retraction :to :e-disjoint-section :carries :retraction-sequence}
+  {:from :e-disjoint-section :to :e-strong-monoidal :carries :adjoins-disjoint-section}
+  {:from :e-disjoint-section :to :e-monfib-adjn :carries :adjoins-disjoint-section}
+  {:from :e-strong-monoidal :to :e-2-natural-transformation :carries :strong-monoidal-morphism}
+  {:from :e-monfib-adjn :to :e-2-natural-transformation :carries :satisfies-monfib-adjn}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-retraction :e-disjoint-section :e-strong-monoidal :e-monfib-adjn :e-2-natural-transformation]
+               :discharges-at []}}

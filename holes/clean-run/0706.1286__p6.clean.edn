@@ -1,0 +1,37 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p6"
+ :clean/source {:iatc "0706.1286__p6"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-span-2functor :method :reduce-to-known-result
+   :text "Span is a 2-functor from (Cat_pullbacks, Funs, NatTrans) to FrBic"
+   :consumes [:span-alpha]
+   :produces :span-2functor
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-span-restricted :method :reduce-to-known-result
+   :text "restricting to pullback-preserving functors, Span lands in FrBi"
+   :consumes [:span-2functor]
+   :produces :span-restricted
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-framed-functor :method :reduce-to-known-result
+   :text "any framed functor induces a pseudo 2-functor between horizontal bicategories"
+   :consumes [:span-restricted]
+   :produces :framed-functor-induces
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-framed-transformations :method :reduce-to-known-result
+   :text "the situation for framed transformations is less clear"
+   :consumes [:framed-functor-induces]
+   :produces :framed-transformations-unclear
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-span-2functor :to :e-span-restricted :carries :span-2functor}
+  {:from :e-span-restricted :to :e-framed-functor :carries :span-restricted}
+  {:from :e-framed-functor :to :e-framed-transformations :carries :framed-functor-induces}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-span-2functor :e-span-restricted :e-framed-functor :e-framed-transformations]
+               :discharges-at []}}

@@ -1,0 +1,47 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p13"
+ :clean/source {:iatc "0905.0465__p13"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-en-action :method :reduce-to-known-result
+   :text "A is an Eₙ-algebra"
+   :consumes [:loop-space :topos-category]
+   :produces :en-algebra
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "loop-space-carries-en-action"}}
+  {:id :e-integral-identification :method :reduce-to-known-result
+   :text "∫ₘ A ≃ C_c(M,X)"
+   :consumes [:en-algebra :n-connective-space]
+   :produces :integral-identification
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "chiral-homology-identification-for-n-connective"}}
+  {:id :e-hochschild :method :reduce-to-known-result
+   :text "∫_{S¹} A is Hochschild homology of A"
+   :consumes [:loop-space :topos-category]
+   :produces :hochschild-homology
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "hochschild-homology-for-s1-integral"}}
+  {:id :e-hochschild-formula :method :reduce-to-known-result
+   :text "Hochschild homology is A ⊗_{A⊗Aᵒᵖ} A"
+   :consumes [:hochschild-homology]
+   :produces :hochschild-formula
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "hochschild-homology-formula"}}
+  {:id :e-commutative-case :method :reduce-to-known-result
+   :text "∫ₘ A is commutative when A is"
+   :consumes [:commutative-algebra]
+   :produces :chiral-algebra
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "chiral-homology-remains-commutative"}}
+  {:id :e-universal-property :method :reduce-to-known-result
+   :text "OHom_CAlg(S)(∫ₘ A, B) ≃ OHom_Cat(∞,0)(M, OHom_CAlg(S)(A,B))"
+   :consumes [:chiral-algebra :commutative-algebra]
+   :produces :universal-property
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "universal-property-of-chiral-homology"}}]
+ :clean/wires
+ [{:from :e-en-action :to :e-integral-identification :carries :en-algebra}
+  {:from :e-hochschild :to :e-hochschild-formula :carries :hochschild-homology}
+  {:from :e-commutative-case :to :e-universal-property :carries :chiral-algebra}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-en-action :e-integral-identification :e-hochschild :e-hochschild-formula :e-commutative-case :e-universal-property]
+               :discharges-at []}}

@@ -1,0 +1,35 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p17"
+ :clean/source {:iatc "0706.1286__p17"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-fib-structure :method :reduce-to-known-result
+   :text "fiberwise smash gives symmetric monoidal structure on C_B"
+   :consumes [:retr-category :retr-functor]
+   :produces :fiberwise-smash-monoidal
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "retractions-form-bifibration"}}
+  {:id :e-smash-monoidal :method :reduce-to-known-result
+   :text "Retr_C is a symmetric monoidal fibration (by locmon->monfib)"
+   :consumes [:pullbacks-preserve-colimits]
+   :produces :retr-fib-is-monfib}
+  {:id :e-bifib :method :reduce-to-known-result
+   :text "Retr_C is actually a monoidal bifibration"
+   :consumes [:retr-fib-is-monfib]
+   :produces :retr-fib-is-bifib
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "monoidal-fibration-is-bifibration-when-total-cartesian"}}
+  {:id :e-external-smash :method :reduce-to-known-result
+   :text "external smash product exsm on Retr(C) induced by Retr_C"
+   :consumes [:retr-fib-is-bifib :fiberwise-smash]
+   :produces :external-smash
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "external-smash-product-induced-by-fibration"}}]
+ :clean/wires
+ [{:from :e-smash-monoidal :to :e-bifib :carries :retr-fib-is-monfib}
+  {:from :e-bifib :to :e-external-smash :carries :retr-fib-is-bifib}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-fib-structure :e-bifib :e-external-smash]
+               :discharges-at []}}

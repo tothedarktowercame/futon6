@@ -1,0 +1,44 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p9"
+ :clean/source {:iatc "0806.1324__p9"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-ga-colocalization :method :reduce-to-known-result
+   :text "Ga is an exact colocalization functor"
+   :consumes [:exact-localization-functor :ga-defined-by-triangle]
+   :produces :ga-exact-colocalization
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "construction-of-ga-from-exact-triangle"}}
+  {:id :e-kernel-image-relations__c0 :method :reduce-to-known-result
+   :text "Ker Ga = Im L"
+   :consumes [:ga-defined-by-triangle]
+   :produces :ker-ga-im-l
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "kernel-image-relations-in-triangulated-categories"}}
+  {:id :e-kernel-image-relations__c1 :method :reduce-to-known-result
+   :text "Im Ga = Ker L"
+   :consumes [:ga-defined-by-triangle]
+   :produces :im-ga-ker-l
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "kernel-image-relations-in-triangulated-categories"}}
+  {:id :e-duality :method :reduce-to-known-result
+   :text "Ga is an exact colocalization functor"
+   :consumes [:dual-statement]
+   :produces :exact-colocalization-functor
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "duality-between-localization-and-colocalization"}}
+  {:id :e-ga-adjoint-form :method :reduce-to-known-result
+   :text "Ga = I ∘ I_r"
+   :consumes [:exact-localization-functor :i-r-right-adjoint]
+   :produces :ga-i-ir
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "representation-of-colocalization-as-adjoint-composition"}}
+  {:id :e-ga-colocalization-corollary :method :reduce-to-known-result
+   :text "Ga is a colocalization functor by Corollary X"
+   :consumes [:ga-i-ir]
+   :produces :ga-colocalization-by-corollary}]
+ :clean/wires
+ [{:from :e-ga-adjoint-form :to :e-ga-colocalization-corollary :carries :ga-i-ir}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-ga-colocalization :e-kernel-image-relations__c0 :e-kernel-image-relations__c1 :e-duality :e-ga-adjoint-form]
+               :discharges-at []}}

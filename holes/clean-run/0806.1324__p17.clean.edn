@@ -1,0 +1,39 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p17"
+ :clean/source {:iatc "0806.1324__p17"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-fx-equiv-fh :method :reduce-to-known-result
+   :text "FX=0 iff f^*h_\\b X=0"
+   :consumes [:fx-zero :fh-zero]
+   :produces :fx-equiv-fh}
+  {:id :e-factorization :method :reduce-to-known-result
+   :text "each morphism C→X with C∈T^b factors through some C→C' in 𝔍"
+   :consumes [:fh-zero]
+   :produces :factorization-claim}
+  {:id :e-sc-subset-ker :method :reduce-to-known-result
+   :text "Sc' ⊆ Ker F"
+   :consumes [:sc-prime-def]
+   :produces :sc-subset-ker
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "localizing-subcategory-generated-by-ker-functor"}}
+  {:id :e-sc-equals-ker :method :reduce-to-known-result
+   :text "Sc' = Ker F"
+   :consumes [:factorization-claim :morphism-factors]
+   :produces :sc-prime-ker-f
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "inductive-sequence-generates-localizing-subcategory"}}
+  {:id :e-morphism-factors :method :reduce-to-known-result
+   :text "each morphism m: C→X with C∈T^b factors through some C→C' in 𝔍"
+   :consumes [:x-in-ker]
+   :produces :morphism-factors
+   :discharges {:to :by-part-1-of-the-proof}}]
+ :clean/wires
+ [{:from :e-factorization :to :e-sc-equals-ker :carries :factorization-claim}
+  {:from :e-morphism-factors :to :e-sc-equals-ker :carries :morphism-factors}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-sc-subset-ker :e-sc-equals-ker]
+               :discharges-at [:e-morphism-factors]}}

@@ -1,0 +1,29 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.2185__p2"
+ :clean/source {:iatc "0708.2185__p2"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-rlp-injective__c0 :method :reduce-to-known-result
+   :text "RLP w.r.t. f implies injectivity in ck-arrow"
+   :consumes [:rlp-iff-injective]
+   :produces :rlp-implies-injective
+   :discharges {:to :by-definition-of-rlp-and-injectivity-in-arrow-ca}}
+  {:id :e-rlp-injective__c1 :method :reduce-to-known-result
+   :text "injectivity in ck-arrow to (f,id_B) implies RLP w.r.t. f"
+   :consumes [:rlp-iff-injective]
+   :produces :injective-implies-rlp
+   :discharges {:to :by-definition-of-rlp-and-injectivity-in-arrow-ca}}
+  {:id :e-accessible-embedding :method :reduce-to-known-result
+   :text "cx-square is an accessible category accessibly embedded in ck-arrow"
+   :consumes [:rlp-iff-injective :small-injectivity-accessible]
+   :produces :cx-square-accessible}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at []
+               :discharges-at [:e-rlp-injective__c0 :e-rlp-injective__c1]}}

@@ -1,0 +1,47 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p9"
+ :clean/source {:iatc "0706.1286__p9"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-1 :method :reduce-to-known-result
+   :text "the given condition implies F is essentially surjective"
+   :consumes [:F-eso-implies-condition]
+   :produces :condition-implies-F-eso}
+  {:id :e-2 :method :reduce-to-known-result
+   :text "there exists M_N: A_C → A_D and globular isomorphism F(M_N) ≅ α_C^* N α_D^*"
+   :consumes [:alpha-C-isos :pullback-of-N]
+   :produces :M-N-exists
+   :discharges {:to :f-is-essentially-surjective-on-vertical-categori}}
+  {:id :e-3 :method :reduce-to-known-result
+   :text "composition gives desired α_M"
+   :consumes [:M-N-exists]
+   :produces :alpha-M-exists
+   :discharges {:to :composition-with-cartesian-2-cell-gives-m}}
+  {:id :e-4 :method :reduce-to-known-result
+   :text "the given condition implies F is essentially surjective"
+   :consumes [:iso-lift-sufficient]
+   :produces :condition-implies-F-eso}
+  {:id :e-5 :method :reduce-to-known-result
+   :text "F is part of an equivalence"
+   :consumes [:dbl-eqv-criteria]
+   :produces :F-part-of-eq
+   :discharges {:to :construction-of-quasi-inverse-proves-equivalence}}
+  {:id :e-6 :method :reduce-to-known-result
+   :text "F is part of an equivalence"
+   :consumes [:framed-eqv-criteria :framed-eqv-induces-vert-eqv]
+   :produces :F-part-of-eq}
+  {:id :e-7 :method :reduce-to-known-result
+   :text "F is part of framed equivalence iff F_0 is an equivalence and each F: 𝒟(A,B) → ℰ(FA,FB) is an equivalence"
+   :consumes [:framed-eqv-induces-vert-eqv]
+   :produces :framed-eqv-criteria}]
+ :clean/wires
+ [{:from :e-2 :to :e-3 :carries :M-N-exists}
+  {:from :e-7 :to :e-6 :carries :framed-eqv-criteria}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at []
+               :discharges-at [:e-2 :e-3 :e-5]}}

@@ -1,0 +1,24 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p11"
+ :clean/source {:iatc "0706.1286__p11"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-dual-pair-preservation :method :reduce-to-known-result
+   :text "(M⊗P, N⊗Q) is a dual pair"
+   :consumes [:strong-functor-preserves-dual-pairs]
+   :produces :tensor-pair-M-P-N-Q
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "strong-framed-functor-preserves-dual-pairs"}}
+  {:id :e-ten-is-functor :method :reduce-to-known-result
+   :text "any strong framed functor preserves dual pairs"
+   :consumes [:ten-is-strong-framed-functor]
+   :produces :strong-functor-preserves-dual-pairs}]
+ :clean/wires
+ [{:from :e-ten-is-functor :to :e-dual-pair-preservation :carries :strong-functor-preserves-dual-pairs}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-dual-pair-preservation]
+               :discharges-at []}}

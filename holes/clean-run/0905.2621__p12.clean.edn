@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.2621__p12"
+ :clean/source {:iatc "0905.2621__p12"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-main-claim :method :reduce-to-known-result
+   :text "Hom_B(L,M) is acyclic"
+   :consumes [:reduction-to-triple]
+   :produces :hom-b-l-m-acyclic
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "hom-functor-preserves-exactness-for-injectives"}}
+  {:id :e-bicomplex :method :reduce-to-known-result
+   :text "Hom_B(L,M) is total complex of bicomplex with rows 0 -> Hom_B(K'',M) -> Hom_B(K,M) -> Hom_B(K',M) -> 0"
+   :consumes [:reduction-to-triple]
+   :produces :hom-b-l-m-bicomplex
+   :discharges {:to :hom-b-m-turns-exact-triples-into-bicomplexes}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-main-claim]
+               :discharges-at [:e-bicomplex]}}

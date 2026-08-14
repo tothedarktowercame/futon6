@@ -1,0 +1,16 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p2"
+ :clean/source {:iatc "0708.3398__p2"}
+ :clean/typing-source :llama
+ :clean/seq []
+ :clean/boxes
+ []
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :construct-exploit-discharge
+               :holes-at []
+               :discharges-at []}}

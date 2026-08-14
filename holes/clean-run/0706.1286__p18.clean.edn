@@ -1,0 +1,42 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p18"
+ :clean/source {:iatc "0706.1286__p18"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-def-xrhd :method :reduce-to-known-result
+   :text "for N∈𝒜_B and Q∈𝒜_{A×B}, N⊳Q = (ε_B)_*(ε_A^*N ⊠ Q)"
+   :consumes [:fibers-closed]
+   :produces :define-xrhd
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-local-adjoints-from-closed-fibers"}}
+  {:id :e-def-xlhd :method :reduce-to-known-result
+   :text "similarly define ⊲"
+   :consumes [:fibers-closed]
+   :produces :define-xlhd
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-local-adjoints-from-closed-fibers"}}
+  {:id :e-def-RHD :method :reduce-to-known-result
+   :text "for N,Q∈𝒜_A, N⊠Q = N ⊳ ((Δ_A)_* Q)"
+   :consumes [:define-xrhd :define-xlhd]
+   :produces :define-RHD
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-global-adjoints-from-local-ones"}}
+  {:id :e-def-LHD :method :reduce-to-known-result
+   :text "similarly define ⊡"
+   :consumes [:define-xrhd :define-xlhd]
+   :produces :define-LHD
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-global-adjoints-from-local-ones"}}
+  {:id :e-suffice :method :reduce-to-known-result
+   :text "these definitions suffice (easy to check using relations between ⊗ and ⊠)"
+   :consumes [:locmon->monfib]
+   :produces :definitions-suffice}]
+ :clean/wires
+ [{:from :e-def-xrhd :to :e-def-RHD :carries :define-xrhd}
+  {:from :e-def-xlhd :to :e-def-RHD :carries :define-xlhd}
+  {:from :e-def-xrhd :to :e-def-LHD :carries :define-xrhd}
+  {:from :e-def-xlhd :to :e-def-LHD :carries :define-xlhd}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-def-xrhd :e-def-xlhd :e-def-RHD :e-def-LHD]
+               :discharges-at []}}

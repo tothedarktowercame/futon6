@@ -1,0 +1,28 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "math__0310337__p0"
+ :clean/source {:iatc "math__0310337__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-proposition-setup :method :reduce-to-known-result
+   :text "Let ca and cb be ai-categories over A and B. Let (f,f-dot) : ca -> cb be a morphism of ai-categories."
+   :consumes [:ca-ai-category :cb-ai-category :morphism-ai-categories]
+   :produces :proposition-statement}
+  {:id :e-f-definition :method :reduce-to-known-result
+   :text "morphism (f,f-dot) between ai-categories ca and cb"
+   :consumes [:f-morphism]
+   :produces :morphism-ai-categories}
+  {:id :e-f-dot-definition :method :reduce-to-known-result
+   :text "morphism (f,f-dot) between ai-categories ca and cb"
+   :consumes [:f-dot-morphism]
+   :produces :morphism-ai-categories}]
+ :clean/wires
+ [{:from :e-f-definition :to :e-proposition-setup :carries :morphism-ai-categories}
+  {:from :e-f-dot-definition :to :e-proposition-setup :carries :morphism-ai-categories}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at []
+               :discharges-at []}}

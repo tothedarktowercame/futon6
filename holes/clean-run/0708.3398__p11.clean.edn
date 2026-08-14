@@ -1,0 +1,31 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p11"
+ :clean/source {:iatc "0708.3398__p11"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-reduction :method :reduce-to-known-result
+   :text "N^• ⊗_C M^• is acyclic"
+   :consumes [:preserves-shifts-cones-sums :coflat-complex]
+   :produces :acyclic-triple-tensor
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-coflat-def-application :method :reduce-to-known-result
+   :text "any complex of coflat C-comodules is coflat"
+   :consumes [:acyclic-triple-tensor]
+   :produces :coflat-implies-coflat
+   :discharges {:to :since-m-is-coacyclic-as-total-complex-of-exact-t}}
+  {:id :e-def-usage :method :reduce-to-known-result
+   :text "N^• ⊗_C M^• is acyclic"
+   :consumes [:coflat-comodules]
+   :produces :acyclic-triple-tensor
+   :discharges {:to :the-definition-of-coflat-applies-to-n-and-m-as-g}}]
+ :clean/wires
+ [{:from :e-reduction :to :e-coflat-def-application :carries :acyclic-triple-tensor}
+  {:from :e-def-usage :to :e-coflat-def-application :carries :acyclic-triple-tensor}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-reduction]
+               :discharges-at [:e-coflat-def-application :e-def-usage]}}

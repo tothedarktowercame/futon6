@@ -1,0 +1,42 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p20"
+ :clean/source {:iatc "0708.3398__p20"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-bar-def :method :reduce-to-known-result
+   :text "bar complex G_j^b: ... -> Hom_A(C⊗A C⊗A U_j P) -> Hom_A(C⊗A U_j P) -> Hom_A(U_j, P)"
+   :consumes [:coh-isomorphism]
+   :produces :bar-complex-def
+   :discharges {:to :definition-of-bar-complex-for-comodules}}
+  {:id :e-homology-zero :method :reduce-to-known-result
+   :text "G_j^n = 0 for n > 0"
+   :consumes [:bar-complex-def]
+   :produces :homology-zero-nonneg
+   :discharges {:to :bar-complex-is-concentrated-in-degree-0}}
+  {:id :e-h0-cohom :method :reduce-to-known-result
+   :text "H^0(G_j^b) = Cohom_C(U_j, P)"
+   :consumes [:bar-complex-def]
+   :produces :h0-cohom
+   :discharges {:to :h-0-of-bar-complex-is-cohomology-by-definition}}
+  {:id :e-h0-lim :method :reduce-to-known-result
+   :text "H^0(lim G_j^b) = Cohom_C(lim U_j, P)"
+   :consumes [:h0-cohom]
+   :produces :h0-lim-complex
+   :discharges {:to :limit-commutes-with-h-0}}
+  {:id :e-coprojective-vanishing :method :reduce-to-known-result
+   :text "H^n(G_{2i}^b) = 0 for n ≠ 0"
+   :consumes [:complex-derivation]
+   :produces :coprojective-vanishing
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "coprojective-comodule-vanishing-cohomology"}}]
+ :clean/wires
+ [{:from :e-bar-def :to :e-homology-zero :carries :bar-complex-def}
+  {:from :e-bar-def :to :e-h0-cohom :carries :bar-complex-def}
+  {:from :e-h0-cohom :to :e-h0-lim :carries :h0-cohom}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-coprojective-vanishing]
+               :discharges-at [:e-bar-def :e-homology-zero :e-h0-cohom :e-h0-lim]}}

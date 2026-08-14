@@ -1,0 +1,63 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+;; NOTE: dropped 5 self-loop inference(s) (vacuous step, X⇒X).
+{:clean/proof "0708.3398__p25"
+ :clean/source {:iatc "0708.3398__p25"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-semiorthogonal-implies-triangle :method :reduce-to-known-result
+   :text "for any complex K^• of C/A-injective C-comodule s, there exists a unique and functorial distinguished triangle L^•→K^•→M^•→L^•[1] in the homotopy category of C-"
+   :consumes [:semiorthogonal-decomp]
+   :produces :distinguished-triangle
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "semiorthogonal-decomposition-implies-distinguished-triangle"}}
+  {:id :e-triangle-implies-maximal :method :reduce-to-known-result
+   :text "subcategory (i) is the maximal subcategory left orthogonal to subcategory (ii) and contains the intersection of the homotopy category of complexes of C/A-inject"
+   :consumes [:distinguished-triangle]
+   :produces :subcategory-i-maximal
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "distinguished-triangle-characterizes-maximal-orthogonal-subcategory"}}
+  {:id :e-injection-exists :method :reduce-to-known-result
+   :text "for each n, there is an injection j^n: K^n → J^n into an injective C-comodule J^n"
+   :consumes [:k-complex]
+   :produces :injection-jn
+   :discharges {:to :every-module-embeds-into-an-injective-module-inj}}
+  {:id :e-e-complex-construction :method :reduce-to-known-result
+   :text "E^•=E(K^•): complex with terms E^n=J^n⊕J^{n+1} and differential d_E^n: E^n→E^{n+1} mapping J^{n+1} by identity and vanishing on J^n and projection to J^{n+2}"
+   :produces :e-complex
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "construction-of-e-complex-from-injective-embeddings"}}
+  {:id :e-natural-injection :method :reduce-to-known-result
+   :text "there is a natural injective morphism of complexes K^•→E^• given by components j^n: K^n→J^n and j^{n+1}d_K^n: K^n→J^{n+1}"
+   :produces :natural-injection
+   :discharges {:to :the-universal-property-of-the-direct-sum-and-the}}
+  {:id :e-iterated-e :method :reduce-to-known-result
+   :text "set ^0E^•=E(K^•), ^1E^•=E(^0E^•/K^•), etc."
+   :consumes [:e-complex :natural-injection]
+   :produces :iterated-e
+   :discharges {:to :iterative-construction-of-e-on-quotients}}
+  {:id :e-injective-dimension-bound :method :reduce-to-known-result
+   :text "the injective dimension of a C/A-injective left C-comodule does not exceed the left homological dimension d of the ring A"
+   :produces :injective-dimension-bound}
+  {:id :e-z-complex :method :reduce-to-known-result
+   :text "Z^•=coker(^{d-2}E^•→^{d-1}E^•): a complex of injective C-comodule s"
+   :produces :z-complex
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "coker-of-truncated-complex-is-injective-complex"}}
+  {:id :e-total-complex-m :method :reduce-to-known-result
+   :text "M^•: total complex of the bicomplex ^0E^•→^1E^•→⋯→^{d-1}E^•→Z^•"
+   :produces :total-complex-m
+   :discharges {:to :total-complex-of-a-bounded-above-complex-of-inje}}
+  {:id :e-cone-l :method :reduce-to-known-result
+   :text "L^•: cone of the morphism K^•→M^•"
+   :consumes [:k-complex :total-complex-m]
+   :produces :cone-l
+   :discharges {:to :cone-of-a-morphism-in-the-homotopy-category}}]
+ :clean/wires
+ [{:from :e-semiorthogonal-implies-triangle :to :e-triangle-implies-maximal :carries :distinguished-triangle}
+  {:from :e-e-complex-construction :to :e-iterated-e :carries :e-complex}
+  {:from :e-natural-injection :to :e-iterated-e :carries :natural-injection}
+  {:from :e-total-complex-m :to :e-cone-l :carries :total-complex-m}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-semiorthogonal-implies-triangle :e-triangle-implies-maximal :e-e-complex-construction :e-z-complex]
+               :discharges-at [:e-injection-exists :e-natural-injection :e-iterated-e :e-total-complex-m :e-cone-l]}}

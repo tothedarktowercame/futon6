@@ -1,0 +1,24 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p1"
+ :clean/source {:iatc "0706.1286__p1"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-motivation :method :reduce-to-known-result
+   :text "it was realized in pht that existing categorical structures were inadequate for describing bicategory with base change operations"
+   :consumes [:motivation-for-framed-bicategories]
+   :produces :pht-realization
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-examples :method :reduce-to-known-result
+   :text "framed bicategories were motivated by the desire to find a good categorical structure for parametrized spectra"
+   :consumes [:examples-from-pht]
+   :produces :motivation-for-framed-bicategories}]
+ :clean/wires
+ [{:from :e-examples :to :e-motivation :carries :motivation-for-framed-bicategories}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-motivation]
+               :discharges-at []}}

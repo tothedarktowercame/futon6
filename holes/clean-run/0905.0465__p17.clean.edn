@@ -1,0 +1,63 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p17"
+ :clean/source {:iatc "0905.0465__p17"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-monoidal :method :reduce-to-known-result
+   :text "Cat_(∞,1) admits a symmetric monoidal structure via Cartesian products"
+   :consumes [:infty1-cat]
+   :produces :cartesian-monoidal
+   :discharges {:to :cartesian-product-of-1-categories-is-symmetric-m}}
+  {:id :e-involution :method :reduce-to-known-result
+   :text "there is a canonical involution on Cat_(∞,1) sending C to C^op"
+   :consumes [:infty1-cat]
+   :produces :opposite-involution
+   :discharges {:to :opposite-category-construction-is-a-canonical-in}}
+  {:id :e-no-duality :method :reduce-to-known-result
+   :text "the involution is not a duality functor in Cat_(∞,1) due to missing ev/coev"
+   :consumes [:opposite-involution :cartesian-monoidal]
+   :produces :no-duality
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-adj-def :method :reduce-to-known-result
+   :text "the (∞,1)-category Cat_(∞,1)^Adj with correspondences as morphisms"
+   :consumes [:no-duality]
+   :produces :adj-enlargement
+   :discharges {:to :enlarging-morphisms-to-correspondences-fixes-the}}
+  {:id :e-correspondence :method :reduce-to-known-result
+   :text "a 1-morphism C→D in Cat^Adj_(∞,1) is a functor C×D^op→Cat_(∞,0)"
+   :consumes [:adj-enlargement]
+   :produces :correspondence-def
+   :discharges {:to :correspondences-are-defined-as-functors-to-cat-0}}
+  {:id :e-ev-coev :method :reduce-to-known-result
+   :text "ev and coev can be defined as correspondences via (C,D)↦OHom_C(C,D)"
+   :consumes [:correspondence-def :adj-enlargement]
+   :produces :ev-coev-candidate
+   :discharges {:to :ohom-c-c-d-defines-natural-ev-coev-correspondenc}}
+  {:id :e-compatibility :method :reduce-to-known-result
+   :text "ev and coev are compatible (not difficult to check)"
+   :consumes [:ev-coev-candidate]
+   :produces :compatibility-check
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-duals :method :reduce-to-known-result
+   :text "Cat^Adj_(∞,1) is a symmetric monoidal (∞,1)-category with duals"
+   :consumes [:compatibility-check :adj-enlargement]
+   :produces :duals-exist
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-involution :to :e-no-duality :carries :opposite-involution}
+  {:from :e-monoidal :to :e-no-duality :carries :cartesian-monoidal}
+  {:from :e-no-duality :to :e-adj-def :carries :no-duality}
+  {:from :e-adj-def :to :e-correspondence :carries :adj-enlargement}
+  {:from :e-correspondence :to :e-ev-coev :carries :correspondence-def}
+  {:from :e-adj-def :to :e-ev-coev :carries :adj-enlargement}
+  {:from :e-ev-coev :to :e-compatibility :carries :ev-coev-candidate}
+  {:from :e-compatibility :to :e-duals :carries :compatibility-check}
+  {:from :e-adj-def :to :e-duals :carries :adj-enlargement}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-no-duality :e-compatibility :e-duals]
+               :discharges-at [:e-monoidal :e-involution :e-adj-def :e-correspondence :e-ev-coev]}}

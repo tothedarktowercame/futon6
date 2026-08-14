@@ -1,0 +1,35 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+;; NOTE: dropped 1 self-loop inference(s) (vacuous step, X⇒X).
+{:clean/proof "0905.2621__p1"
+ :clean/source {:iatc "0905.2621__p1"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-d-formula :method :reduce-to-known-result
+   :text "d(f)(x) = d_M(f(x)) - (-1)^{|f|}f(d_L(x))"
+   :consumes [:f-def]
+   :produces :d-formula
+   :discharges {:to :standard-differential-on-hom-complexes}}
+  {:id :e-d-squared-zero :method :reduce-to-known-result
+   :text "d^2(f) = 0"
+   :consumes [:d-formula :f-def]
+   :produces :d-squared-zero
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-leibniz-rule :method :reduce-to-known-result
+   :text "d(fg) = d(f)g + (-1)^{|f|}fd(g) for composable f,g"
+   :consumes [:f-def]
+   :produces :leibniz-rule
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-hom-complex-def :method :reduce-to-known-result
+   :text "For right DG-modules R,N over A, Hom_A(R,N) uses the same formulas"
+   :produces :hom-complex-def
+   :discharges {:to :definition-extends-to-right-modules-by-same-form}}]
+ :clean/wires
+ [{:from :e-d-formula :to :e-d-squared-zero :carries :d-formula}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-d-squared-zero :e-leibniz-rule]
+               :discharges-at [:e-d-formula :e-hom-complex-def]}}

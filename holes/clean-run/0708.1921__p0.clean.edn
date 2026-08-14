@@ -1,0 +1,24 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.1921__p0"
+ :clean/source {:iatc "0708.1921__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-rS-equality :method :reduce-to-known-result
+   :text "(rS)sσ = (rS)(σS)s by pasting composite equality"
+   :consumes [:pasting-composite-equality :mu-inv]
+   :produces :rS-equality-via-pasting
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "invertible-morphism-equality-via-pasting-composites"}}
+  {:id :e-rS-equality-goal :method :reduce-to-known-result
+   :text "(rS)sσ = (rS)(σS)s"
+   :consumes [:rS-equality-via-pasting]
+   :produces :goal-rS-equality}]
+ :clean/wires
+ [{:from :e-rS-equality :to :e-rS-equality-goal :carries :rS-equality-via-pasting}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-rS-equality]
+               :discharges-at []}}

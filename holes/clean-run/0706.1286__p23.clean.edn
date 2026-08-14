@@ -1,0 +1,20 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p23"
+ :clean/source {:iatc "0706.1286__p23"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-U-functor :method :reduce-to-known-result
+   :text "$U$ is a functor $\\bbPz\\to\\bbPo$"
+   :consumes [:U-factorization]
+   :produces :U-functor
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "functoriality-of-unit-via-unique-factorization"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-U-functor]
+               :discharges-at []}}

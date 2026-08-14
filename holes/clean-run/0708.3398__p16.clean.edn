@@ -1,0 +1,56 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p16"
+ :clean/source {:iatc "0708.3398__p16"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-def-to-quotient :method :reduce-to-known-result
+   :text "the quotient category of the homotopy category of strongly R-semiflat complexes of F-flat S-R-bisemimodules by its intersection with the thick subcategory of C-"
+   :consumes [:strongly-semiflat-def]
+   :produces :quotient-category
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "construction-of-quotient-category-from-strongly-semiflat-complexes"}}
+  {:id :e-quotient-to-analogous :method :reduce-to-known-result
+   :text "the analogous result holds for the homotopy category of strongly S-semiflat and strongly R-semiflat complexes of A-flat and F-flat S-R-bisemimodules"
+   :consumes [:quotient-category]
+   :produces :analogous-result
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "generalization-to-A-flat-and-F-flat-bisemimodules"}}
+  {:id :e-analogous-to-functor :method :reduce-to-known-result
+   :text "the functor G(M)=⨁_{m∈M} A⊗_k F"
+   :consumes [:analogous-result]
+   :produces :functor-G
+   :discharges {:to :using-the-functor-g-m-m-m-a-k-f-in-the-construct}}
+  {:id :e-functor-to-applicable :method :reduce-to-known-result
+   :text "Lemma semitor-definition is applicable to the functor of semitensor product Hot(S⊗_R mod)×Hot(R⊗_T mod) → D^si(S⊗_T mod)"
+   :consumes [:functor-G :analogous-result]
+   :produces :applicable-lemma
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "applicability-of-semitor-definition-to-semitensor-product-functor"}}
+  {:id :e-applicable-to-derived :method :reduce-to-known-result
+   :text "we obtain the desired double-sided derived functor"
+   :consumes [:applicable-lemma]
+   :produces :derived-functor
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "construction-of-double-sided-derived-functor-from-semitor-definition"}}
+  {:id :e-derived-to-associativity :method :reduce-to-known-result
+   :text "(N^u⊗_S^D K^u)⊗_T^D M^u ≅ N^u⊗_S^D (K^u⊗_T^D M^u)"
+   :consumes [:derived-functor]
+   :produces :associativity-isomorphism
+   :discharges {:to :the-associativity-isomorphism-for-the-derived-se}}
+  {:id :e-associativity-to-coflat :method :reduce-to-known-result
+   :text "for derived cotensor product of bicomodules, one does not need strongly coflat complexes; it suffices to consider complexes of C-coflat C-comodules or (C-coflat"
+   :consumes [:associativity-isomorphism]
+   :produces :coflat-complexes
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "simplification-for-cotensor-product-using-coflat-complexes"}}]
+ :clean/wires
+ [{:from :e-def-to-quotient :to :e-quotient-to-analogous :carries :quotient-category}
+  {:from :e-quotient-to-analogous :to :e-analogous-to-functor :carries :analogous-result}
+  {:from :e-analogous-to-functor :to :e-functor-to-applicable :carries :functor-G}
+  {:from :e-quotient-to-analogous :to :e-functor-to-applicable :carries :analogous-result}
+  {:from :e-functor-to-applicable :to :e-applicable-to-derived :carries :applicable-lemma}
+  {:from :e-applicable-to-derived :to :e-derived-to-associativity :carries :derived-functor}
+  {:from :e-derived-to-associativity :to :e-associativity-to-coflat :carries :associativity-isomorphism}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-def-to-quotient :e-quotient-to-analogous :e-functor-to-applicable :e-applicable-to-derived :e-associativity-to-coflat]
+               :discharges-at [:e-analogous-to-functor :e-derived-to-associativity]}}

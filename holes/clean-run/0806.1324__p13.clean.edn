@@ -1,0 +1,40 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p13"
+ :clean/source {:iatc "0806.1324__p13"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-1-2-equiv :method :reduce-to-known-result
+   :text "(1) and (2) are equivalent: Sc0 objects are a-small and (PG2) holds for Sc0 iff Sc objects are a-small and (PG2) holds for Sc"
+   :consumes [:t-triangulated :a-regular :sc0-small :sc-full-subcategory]
+   :produces :equiv-1-2
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "equivalence-of-a-smallness-and-pg2-for-sc0-and-sc"}}
+  {:id :e-2-implies-3 :method :reduce-to-known-result
+   :text "(2) implies (3): if Sc objects are a-small and (PG2) holds for Sc, then H preserves small coproducts"
+   :consumes [:equiv-1-2 :h-functor]
+   :produces :2-implies-3}
+  {:id :e-assume-3 :method :reduce-to-known-result
+   :text "H preserves small coproducts"
+   :consumes [:3-implies-2-assumption]
+   :produces :h-preserves-coproducts}
+  {:id :e-morphism-p :method :reduce-to-known-result
+   :text "(1) and (2) are equivalent: Sc0 objects are a-small and (PG2) holds for Sc0 iff Sc objects are a-small and (PG2) holds for Sc"
+   :consumes [:morphism-p :coprod-colimit-eq]
+   :produces :equiv-1-2
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "decomposition-of-coproduct-as-filtered-colimit"}}
+  {:id :e-colimit-eq :method :reduce-to-known-result
+   :text "(1) and (2) are equivalent: Sc0 objects are a-small and (PG2) holds for Sc0 iff Sc objects are a-small and (PG2) holds for Sc"
+   :consumes [:coprod-colimit-eq]
+   :produces :equiv-1-2
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "expression-of-coproduct-as-a-filtered-colimit"}}]
+ :clean/wires
+ [{:from :e-1-2-equiv :to :e-2-implies-3 :carries :equiv-1-2}
+  {:from :e-morphism-p :to :e-2-implies-3 :carries :equiv-1-2}
+  {:from :e-colimit-eq :to :e-2-implies-3 :carries :equiv-1-2}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-1-2-equiv :e-morphism-p :e-colimit-eq]
+               :discharges-at []}}

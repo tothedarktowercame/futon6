@@ -1,0 +1,30 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.1921__p3"
+ :clean/source {:iatc "0708.1921__p3"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-main :method :reduce-to-known-result
+   :text "the task reduces to showing that the mate of $1_R \\otimes \\tilde t_{1_Y} = 1_R \\otimes 1_{t_Y}$ with respect to the adjunctions $1_X \\otimes t_Y \\laj (1_X \\otim"
+   :consumes [:mate-invertible]
+   :produces :task-reduction}
+  {:id :e-ox-property :method :reduce-to-known-result
+   :text "the mate at issue is $1_R \\otimes 1_{t^*_Y}$"
+   :consumes [:ox-pseudo-functor]
+   :produces :mate-equals-identity
+   :discharges {:to :psedofunctor-preserves-adjunctions-and-mate-oper}}
+  {:id :e-invertibility :method :reduce-to-known-result
+   :text "the mate $\\tilde p^*_{R,1_Y}$ is invertible"
+   :consumes [:mate-equals-identity :product-of-invertibles]
+   :produces :mate-invertible
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-invertibility :to :e-main :carries :mate-invertible}
+  {:from :e-ox-property :to :e-invertibility :carries :mate-equals-identity}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-invertibility]
+               :discharges-at [:e-ox-property]}}

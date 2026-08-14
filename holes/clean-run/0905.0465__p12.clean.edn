@@ -1,0 +1,43 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p12"
+ :clean/source {:iatc "0905.0465__p12"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-condition-star-def :method :reduce-to-known-result
+   :text "f exhibits D as an m-truncation of C"
+   :consumes [:infty-n-category :m-ge-n :functor-f :m-n-category]
+   :produces :exhibits-m-truncation
+   :discharges {:to :definition-of-m-truncation-requires-condition}}
+  {:id :e-universal-property :method :reduce-to-known-result
+   :text "D is universal among (m,n)-categories admitting a functor from C"
+   :consumes [:condition-star]
+   :produces :m-truncation-universal
+   :discharges {:to :condition-is-the-universal-property-for-m-trunca}}
+  {:id :e-existence-uniqueness :method :reduce-to-known-result
+   :text "if C admits an m-truncation D, then τ≤m C exists and is unique up to equivalence"
+   :consumes [:m-truncation-universal :exhibits-m-truncation]
+   :produces :existence-claim
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-notation-intro :method :reduce-to-known-result
+   :text "the m-truncation of C"
+   :consumes [:existence-claim]
+   :produces :notation-tau
+   :discharges {:to :notation-m-c-is-defined-for-the-unique-m-truncat}}
+  {:id :e-construction-mentioned :method :reduce-to-known-result
+   :text "existence of τ≤m C is verified by a recursive construction"
+   :consumes [:existence-claim]
+   :produces :recursive-construction
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-universal-property :to :e-existence-uniqueness :carries :m-truncation-universal}
+  {:from :e-condition-star-def :to :e-existence-uniqueness :carries :exhibits-m-truncation}
+  {:from :e-existence-uniqueness :to :e-notation-intro :carries :existence-claim}
+  {:from :e-existence-uniqueness :to :e-construction-mentioned :carries :existence-claim}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-existence-uniqueness :e-construction-mentioned]
+               :discharges-at [:e-condition-star-def :e-universal-property :e-notation-intro]}}

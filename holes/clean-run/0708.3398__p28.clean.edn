@@ -1,0 +1,35 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p28"
+ :clean/source {:iatc "0708.3398__p28"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-main-goal :method :reduce-to-known-result
+   :text "Cotor^C(N, M) ≃ Ctrtor^C(N, RΨ_C(M))"
+   :consumes [:coring-assumption]
+   :produces :corollary-b
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "derived-functor-adjointness-for-coring-extensions"}}
+  {:id :e-coext-iso1 :method :reduce-to-known-result
+   :text "Coext_C(L, RΨ_C(M)) ≃ Ext_C(L, M)"
+   :consumes [:coring-assumption]
+   :produces :coext-iso1
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "coext-Ext-adjunction-via-Ru03a8"}}
+  {:id :e-coext-iso2 :method :reduce-to-known-result
+   :text "Coext_C(LΦ_C(P), Q) ≃ Ext^C(P, Q)"
+   :consumes [:coring-assumption]
+   :produces :coext-iso2
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "coext-Ext-adjunction-via-Lu03a6"}}
+  {:id :e-cotor-iso :method :reduce-to-known-result
+   :text "Cotor_C(N, LΦ_C(P)) ≃ Ctrtor_C(N, P)"
+   :consumes [:coring-assumption]
+   :produces :cotor-iso
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "cotor-Ctrtor-adjunction-via-Lu03a6"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-main-goal :e-coext-iso1 :e-coext-iso2 :e-cotor-iso]
+               :discharges-at []}}

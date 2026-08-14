@@ -1,0 +1,38 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p24"
+ :clean/source {:iatc "0706.1286__p24"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-framed-bicategory :method :reduce-to-known-result
+   :text "the framed bicategory is symmetric monoidal if Φ is"
+   :consumes [:framed-bicategory-def]
+   :produces :symmetric-if-Phi-symmetric
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "extension-of-framed-bicategory-structure-to-weak-bc-case"}}
+  {:id :e-bad-squares__c0 :method :reduce-to-known-result
+   :text "proving that the unit transformation is an isomorphism used square (eq:bchv-bad-1)"
+   :consumes [:two-bad-squares]
+   :produces :unit-isomorphism-bad-square}
+  {:id :e-bad-squares__c1 :method :reduce-to-known-result
+   :text "proving that ⊙ preserves opcartesian arrows used square (eq:bchv-bad-2)"
+   :consumes [:two-bad-squares]
+   :produces :odot-preserves-opcart-bad-square}
+  {:id :e-opcart-reduction :method :reduce-to-known-result
+   :text "it suffices to show that if M→f_!M is opcartesian then so is M⊙N→f_!M⊙N (and dually)"
+   :consumes [:odot-preserves-opcart-bad-square]
+   :produces :odot-preserves-opcart-reduction
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "reduction-to-preservation-of-opcartesian-arrows-under-tensor"}}
+  {:id :e-opcart-composition :method :reduce-to-known-result
+   :text "the dotted arrow in (eq:odot-pres-opcart) which we want to be opcartesian"
+   :consumes [:odot-preservation-composition]
+   :produces :odot-preserves-opcart-diagram
+   :discharges {:to :opcartesian-arrows-are-stable-under-composition}}]
+ :clean/wires
+ [{:from :e-bad-squares__c1 :to :e-opcart-reduction :carries :odot-preserves-opcart-bad-square}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-framed-bicategory :e-opcart-reduction]
+               :discharges-at [:e-opcart-composition]}}

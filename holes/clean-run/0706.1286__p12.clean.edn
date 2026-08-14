@@ -1,0 +1,29 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p12"
+ :clean/source {:iatc "0706.1286__p12"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-example-structure :method :reduce-to-known-result
+   :text "an involution on a bicategory is a pseudofunctor (-)^op : B^op -> B with a pseudonatural transformation ξ : ((-)^op)^op ≅ Id_B whose 1-cell components are ident"
+   :consumes [:example-ex-involution]
+   :produces :involution-def}
+  {:id :e-strict-to-involution :method :reduce-to-known-result
+   :text "easy to see that any vertically strict involution on D gives rise to an involution on D"
+   :consumes [:vertically-strict-involution]
+   :produces :easy-to-see
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "restriction-of-involution-to-strict-case"}}
+  {:id :e-pullback-action :method :reduce-to-known-result
+   :text "fs*fs*E is only canonically isomorphic to E, by pseudofunctoriality"
+   :consumes [:example-ex-involution]
+   :produces :fs*-fs*-iso
+   :discharges {:to :pullback-along-symmetry-isomorphism-defines-the-}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-strict-to-involution]
+               :discharges-at [:e-pullback-action]}}

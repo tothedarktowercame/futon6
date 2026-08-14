@@ -1,0 +1,30 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0705.0102__p2"
+ :clean/source {:iatc "0705.0102__p2"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-hom-zero-from-iso :method :reduce-to-known-result
+   :text "Hom(S, Σ^i A) = 0 for i < 0 and A ∈ 𝒜"
+   :consumes [:hom-sigma-i-x-to-b-iso]
+   :produces :hom-sigma-i-a-zero
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "five-lemma-on-long-exact-sequence"}}
+  {:id :e-intersection-zero :method :reduce-to-known-result
+   :text "∩_{n∈ℤ} Σ^n 𝒜 = ∩_{n∈ℤ} Σ^n ℬ = {0}"
+   :consumes [:generating-set-sigma-s]
+   :produces :intersection-zero
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "generating-set-implies-intersection-zero"}}
+  {:id :e-non-degenerate :method :reduce-to-known-result
+   :text "(𝒜, ℬ) is a non-degenerate co-t-structure on 𝕋"
+   :consumes [:intersection-zero]
+   :produces :non-degenerate-co-t-structure
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "non-degeneracy-criterion-for-co-t-structures"}}]
+ :clean/wires
+ [{:from :e-intersection-zero :to :e-non-degenerate :carries :intersection-zero}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-hom-zero-from-iso :e-intersection-zero :e-non-degenerate]
+               :discharges-at []}}

@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p3"
+ :clean/source {:iatc "0806.1324__p3"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-factorization :method :reduce-to-known-result
+   :text "P_Si factors through Q_Si via G"
+   :consumes [:P-Si-functor]
+   :produces :P-Si-factors-through-Q-Si
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "localization-functor-factorization-through-localization"}}
+  {:id :e-identity :method :reduce-to-known-result
+   :text "the map on objects and morphisms defined by [a,s] ↦ (Q_Si s)^{-1} ∘ Q_Si a is an isomorphism"
+   :consumes [:P-Si-factors-through-Q-Si :identity-composition]
+   :produces :isomorphism-claim
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "adjoint-inverse-identity"}}]
+ :clean/wires
+ [{:from :e-factorization :to :e-identity :carries :P-Si-factors-through-Q-Si}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-factorization :e-identity]
+               :discharges-at []}}

@@ -1,0 +1,44 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p28"
+ :clean/source {:iatc "0706.1286__p28"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-def-altil_A :method :reduce-to-known-result
+   :text "altil_A = (α_A)^*(U_{GA}) : FA → GA"
+   :consumes [:alpha :A :U_GA]
+   :produces :altil_A
+   :discharges {:to :definition-of-altil-a-via-companion-and-pullback}}
+  {:id :e-def-altil_M :method :reduce-to-known-result
+   :text "altil_M : FM ⊙ altil_B ≅ (FM)(α_B)_! → (α_A)^*(GM) ≅ altil_A ⊙ GM"
+   :consumes [:M :alpha]
+   :produces :altil_M
+   :discharges {:to :definition-of-altil-m-via-globular-2-cell-corres}}
+  {:id :e-correspondence :method :reduce-to-known-result
+   :text "altil_M corresponds to α_M : FM → GM"
+   :consumes [:altil_M]
+   :produces :globular-2-cell
+   :discharges {:to :altil-m-is-defined-to-correspond-to-m}}
+  {:id :e-oplax-natural :method :reduce-to-known-result
+   :text "altil is an oplax natural transformation between pseudo 2-functors induced by F and G"
+   :consumes [:altil_A :altil_M :globular-2-cell]
+   :produces :oplax-natural
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-compat-check :method :reduce-to-known-result
+   :text "compatibility in ℰ with constraints of F and G requires lifting via comp-along-vert"
+   :consumes [:oplax-natural]
+   :produces :compatibility-check
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-def-altil_M :to :e-correspondence :carries :altil_M}
+  {:from :e-def-altil_A :to :e-oplax-natural :carries :altil_A}
+  {:from :e-def-altil_M :to :e-oplax-natural :carries :altil_M}
+  {:from :e-correspondence :to :e-oplax-natural :carries :globular-2-cell}
+  {:from :e-oplax-natural :to :e-compat-check :carries :oplax-natural}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-oplax-natural :e-compat-check]
+               :discharges-at [:e-def-altil_A :e-def-altil_M :e-correspondence]}}

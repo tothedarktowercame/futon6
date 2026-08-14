@@ -1,0 +1,35 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p12"
+ :clean/source {:iatc "0708.3398__p12"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-equiv :method :reduce-to-known-result
+   :text "the localization functor is an equivalence of categories"
+   :consumes [:chain-exists]
+   :produces :equiv-claim
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "localization-equivalence-from-chain-condition"}}
+  {:id :e-surj :method :reduce-to-known-result
+   :text "the functor is surjective on isomorphism classes of objects"
+   :consumes [:chain-exists]
+   :produces :surj-on-obj
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "surjectivity-on-objects-from-chain"}}
+  {:id :e-bij :method :reduce-to-known-result
+   :text "the functor is bijective on morphisms"
+   :consumes [:surj-on-obj]
+   :produces :bijective-on-morphisms
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "bijectivity-on-morphisms-from-chain"}}
+  {:id :e-preserve :method :reduce-to-known-result
+   :text "the functors F_i preserve the class S"
+   :consumes [:chain-exists]
+   :produces :preserve-S
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "functors-preserve-localizing-class"}}]
+ :clean/wires
+ [{:from :e-surj :to :e-bij :carries :surj-on-obj}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-equiv :e-surj :e-bij :e-preserve]
+               :discharges-at []}}

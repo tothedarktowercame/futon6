@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p0"
+ :clean/source {:iatc "0806.1324__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-def-adjunction :method :reduce-to-known-result
+   :text "F and G form an adjoint pair"
+   :consumes [:subcategory-D :theta-X :functor-F :functor-G]
+   :produces :adjoint-pair-claim
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-adjunction-via-bijections"}}
+  {:id :e-bijection :method :reduce-to-known-result
+   :text "the maps D(FX,Y) <-> C(X,GY) given by a |-> G a o eta_X and b |-> theta_Y o F b are mutually inverse"
+   :consumes [:adjoint-pair-claim]
+   :produces :bijection-claim
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "mutually-inverse-bijections-define-adjunction"}}]
+ :clean/wires
+ [{:from :e-def-adjunction :to :e-bijection :carries :adjoint-pair-claim}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-def-adjunction :e-bijection]
+               :discharges-at []}}

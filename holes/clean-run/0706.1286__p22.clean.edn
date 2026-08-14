@@ -1,0 +1,36 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p22"
+ :clean/source {:iatc "0706.1286__p22"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-lifting-to-pentagon :method :reduce-to-known-result
+   :text "there is a unique dotted arrow over 1_C making the pentagon commute"
+   :consumes [:unique-lifting]
+   :produces :pentagon-commutes
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "unique-lifting-through-cartesian-opcartesian-arrows"}}
+  {:id :e-pentagon-to-bchv :method :reduce-to-known-result
+   :text "the dotted arrow is the component of the Beck-Chevalley natural transformation at M"
+   :consumes [:pentagon-commutes]
+   :produces :dotted-arrow-is-bchv
+   :discharges {:to :the-dotted-arrow-is-the-beck-chevalley-transform}}
+  {:id :e-bchv-to-cartesian :method :reduce-to-known-result
+   :text "we have a commuting square of cartesian and opcartesian arrows"
+   :consumes [:bchv-is-iso-implies-cartesian]
+   :produces :cartesian-square
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "isomorphism-of-beck-chevalley-implies-cartesian"}}
+  {:id :e-cartesian-to-bchv-iso :method :reduce-to-known-result
+   :text "given phi, chi, xi lifting h,k,g with chi opcartesian, there is exactly one psi lifting f making eq:bchv-cartsq commute"
+   :consumes [:cartesian-square-implies-bchv-iso]
+   :produces :unique-lifting
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "cartesian-square-implies-beck-chevalley-isomorphism"}}]
+ :clean/wires
+ [{:from :e-cartesian-to-bchv-iso :to :e-lifting-to-pentagon :carries :unique-lifting}
+  {:from :e-lifting-to-pentagon :to :e-pentagon-to-bchv :carries :pentagon-commutes}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-lifting-to-pentagon :e-bchv-to-cartesian :e-cartesian-to-bchv-iso]
+               :discharges-at [:e-pentagon-to-bchv]}}

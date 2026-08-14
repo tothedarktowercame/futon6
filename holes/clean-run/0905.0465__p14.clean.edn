@@ -1,0 +1,78 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p14"
+ :clean/source {:iatc "0905.0465__p14"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-necessity :method :reduce-to-known-result
+   :text "X is fully dualizable in C"
+   :consumes [:dualizable-obj :eval-has-adjoints]
+   :produces :x-fully-dualizable}
+  {:id :e-ev-r-l-def :method :reduce-to-known-result
+   :text "ev_X^R, ev_X^L: 1 → X ⊗ X^∨ exist"
+   :consumes [:eval-has-adjoints]
+   :produces :ev-r-l-adjoints
+   :discharges {:to :definition-of-admitting-both-right-and-left-adjo}}
+  {:id :e-st-morphisms :method :reduce-to-known-result
+   :text "∃ S,T: X → X such that ev_X^R = (S ⊗ id) ∘ coev_X and ev_X^L = (T ⊗ id) ∘ coev_X"
+   :consumes [:ev-r-l-adjoints]
+   :produces :st-morphisms
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "adjoint-morphism-decomposition"}}
+  {:id :e-s-t-inverse :method :reduce-to-known-result
+   :text "S and T are inverse to each other"
+   :consumes [:st-morphisms]
+   :produces :s-t-inverse
+   :discharges {:to :standard-argument-for-inverse-morphisms-from-adj}}
+  {:id :e-s-t-adjoints :method :reduce-to-known-result
+   :text "S and T are adjoints of one another"
+   :consumes [:s-t-inverse]
+   :produces :s-t-adjoints
+   :discharges {:to :inverse-implies-adjoint-in-this-context}}
+  {:id :e-ev-sn-adjoints :method :reduce-to-known-result
+   :text "∀ n, ev_X ∘ (S^n ⊗ id) has right and left adjoints"
+   :consumes [:s-t-adjoints :st-morphisms]
+   :produces :ev-sn-adjoints
+   :discharges {:to :iterating-adjoints-preserves-adjunction}}
+  {:id :e-coev-sn-adjoints :method :reduce-to-known-result
+   :text "(S^n ⊗ id) ∘ coev_X admits both right and left adjoints"
+   :consumes [:ev-sn-adjoints]
+   :produces :coev-sn-adjoints
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "coev-adjoint-from-ev-adjoint"}}
+  {:id :e-c0-subcategory :method :reduce-to-known-result
+   :text "C0 is the largest subcategory where every 1-morphism admits both right and left adjoints"
+   :consumes [:coev-sn-adjoints]
+   :produces :c0-subcategory
+   :discharges {:to :definition-of-largest-subcategory-closed-under-a}}
+  {:id :e-ev-coev-in-c0 :method :reduce-to-known-result
+   :text "ev_X and coev_X belong to C0"
+   :consumes [:c0-subcategory :eval-has-adjoints]
+   :produces :ev-coev-in-c0
+   :discharges {:to :ev-x-and-coev-x-are-in-c0-by-construction}}
+  {:id :e-x-dualizable-in-c0 :method :reduce-to-known-result
+   :text "X is dualizable in C0"
+   :consumes [:ev-coev-in-c0]
+   :produces :x-dualizable-in-c0
+   :discharges {:to :dualizability-in-subcategory-c0}}
+  {:id :e-x-fully-dualizable :method :reduce-to-known-result
+   :text "X is fully dualizable in C"
+   :consumes [:x-dualizable-in-c0]
+   :produces :x-fully-dualizable
+   :discharges {:to :fully-dualizable-in-ambient-category-c}}]
+ :clean/wires
+ [{:from :e-ev-r-l-def :to :e-st-morphisms :carries :ev-r-l-adjoints}
+  {:from :e-st-morphisms :to :e-s-t-inverse :carries :st-morphisms}
+  {:from :e-s-t-inverse :to :e-s-t-adjoints :carries :s-t-inverse}
+  {:from :e-s-t-adjoints :to :e-ev-sn-adjoints :carries :s-t-adjoints}
+  {:from :e-st-morphisms :to :e-ev-sn-adjoints :carries :st-morphisms}
+  {:from :e-ev-sn-adjoints :to :e-coev-sn-adjoints :carries :ev-sn-adjoints}
+  {:from :e-coev-sn-adjoints :to :e-c0-subcategory :carries :coev-sn-adjoints}
+  {:from :e-c0-subcategory :to :e-ev-coev-in-c0 :carries :c0-subcategory}
+  {:from :e-ev-coev-in-c0 :to :e-x-dualizable-in-c0 :carries :ev-coev-in-c0}
+  {:from :e-x-dualizable-in-c0 :to :e-x-fully-dualizable :carries :x-dualizable-in-c0}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-st-morphisms :e-coev-sn-adjoints]
+               :discharges-at [:e-ev-r-l-def :e-s-t-inverse :e-s-t-adjoints :e-ev-sn-adjoints :e-c0-subcategory :e-ev-coev-in-c0 :e-x-dualizable-in-c0 :e-x-fully-dualizable]}}

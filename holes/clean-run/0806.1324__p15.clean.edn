@@ -1,0 +1,34 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p15"
+ :clean/source {:iatc "0806.1324__p15"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-f-star-implies-H-a-prop1 :method :reduce-to-known-result
+   :text "H_a is cohomological to an abelian category with small coproducts and exact a-filtered colimits and preserves small coproducts"
+   :consumes [:f-star-property]
+   :produces :H_a-universal-prop1
+   :discharges {:to :the-adjunction-f-f-and-the-definition-of-h-a-via}}
+  {:id :e-h-a-cohomological :method :reduce-to-known-result
+   :text "H_a is cohomological to an abelian category with small coproducts and exact a-filtered colimits and preserves small coproducts"
+   :consumes [:h_a-cohomological]
+   :produces :H_a-universal-prop1
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-h-a-preserves-coproducts :method :reduce-to-known-result
+   :text "H_a is cohomological to an abelian category with small coproducts and exact a-filtered colimits and preserves small coproducts"
+   :consumes [:h_a-preserves-small-coproducts]
+   :produces :H_a-universal-prop1}
+  {:id :e-H-bar-existence :method :reduce-to-known-result
+   :text "H-bar: A_a(T) -> A defined via H-bar = tilde H restricted to A_a(T)"
+   :consumes [:H_a-universal-prop2]
+   :produces :H-bar-definition
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-h-a-cohomological :e-H-bar-existence]
+               :discharges-at [:e-f-star-implies-H-a-prop1]}}

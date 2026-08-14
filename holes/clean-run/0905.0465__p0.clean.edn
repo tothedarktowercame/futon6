@@ -1,0 +1,43 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p0"
+ :clean/source {:iatc "0905.0465__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-vector-space-dualizable__c0 :method :reduce-to-known-result
+   :text "for any vector space V, we can define a dual space V^∨ and evaluation map ev_V: V ⊗ V^∨ → k"
+   :consumes [:vector-space-dualizable]
+   :produces :dual-space-exists
+   :discharges {:to :finite-dimensionality-is-equivalent-to-existence}}
+  {:id :e-vector-space-dualizable__c1 :method :reduce-to-known-result
+   :text "a compatible coevaluation coev_V: k → V^∨ ⊗ V can only be defined in the finite-dimensional case"
+   :consumes [:vector-space-dualizable]
+   :produces :coevaluation-only-finite-dim
+   :discharges {:to :finite-dimensionality-is-equivalent-to-existence}}
+  {:id :e-dualizable-finiteness :method :reduce-to-known-result
+   :text "dualizability is a natural finiteness condition formulated in categorical terms"
+   :consumes [:dualizable-object-def]
+   :produces :dualizable-finiteness
+   :discharges {:to :dualizability-in-homotopy-category-is-a-categori}}
+  {:id :e-necessary-for-field-theory :method :reduce-to-known-result
+   :text "dualizability is necessary for existence of field theory Z: Bordₙ^fr → 𝒞 with Z(∗) = C"
+   :consumes [:dualizable-object-def :dual-from-orientation]
+   :produces :necessary-for-field-theory}
+  {:id :e-sufficient-for-n=1 :method :reduce-to-known-result
+   :text "when n=1 and 𝒞 is ordinary category, dualizability is sufficient (by Example 1dim)"
+   :consumes [:dualizable-object-def]
+   :produces :sufficient-for-n=1}
+  {:id :e-stronger-condition-for-n>1 :method :reduce-to-known-result
+   :text "for n > 1, a stronger condition is needed to guarantee existence of Z"
+   :consumes [:necessary-for-field-theory]
+   :produces :stronger-condition-for-n>1
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-necessary-for-field-theory :to :e-stronger-condition-for-n>1 :carries :necessary-for-field-theory}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-stronger-condition-for-n>1]
+               :discharges-at [:e-vector-space-dualizable__c0 :e-vector-space-dualizable__c1 :e-dualizable-finiteness]}}

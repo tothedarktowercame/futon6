@@ -1,0 +1,31 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p13"
+ :clean/source {:iatc "0708.3398__p13"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-equiv-from-conditions :method :reduce-to-known-result
+   :text "the induced functor is an equivalence of categories"
+   :consumes [:surjective-on-obj :bijective-on-mor]
+   :produces :equiv-claim
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-surjective-obj :method :reduce-to-known-result
+   :text "the functor is surjective on isomorphism classes of objects"
+   :consumes [:existence-of-map]
+   :produces :surjective-on-obj
+   :discharges {:to :existence-of-maps-in-s-implies-every-object-in-h}}
+  {:id :e-bijective-mor :method :reduce-to-known-result
+   :text "the functor is bijective on morphisms"
+   :consumes [:morphism-representation]
+   :produces :bijective-on-mor
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-surjective-obj :to :e-equiv-from-conditions :carries :surjective-on-obj}
+  {:from :e-bijective-mor :to :e-equiv-from-conditions :carries :bijective-on-mor}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-equiv-from-conditions :e-bijective-mor]
+               :discharges-at [:e-surjective-obj]}}

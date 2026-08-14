@@ -1,0 +1,41 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+;; NOTE: dropped 1 self-loop inference(s) (vacuous step, X⇒X).
+{:clean/proof "2311.05789__p1"
+ :clean/source {:iatc "2311.05789__p1"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-aut-action :method :reduce-to-known-result
+   :text "Aut⊗(Id_C) acts freely on set of pivotal structures"
+   :consumes [:pivotal-def]
+   :produces :aut-action
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "free-action-of-automorphism-group-on-pivotal-structures"}}
+  {:id :e-spherical :method :reduce-to-known-result
+   :text "C is spherical if tr(f*)=tr(f) for any endomorphism f"
+   :consumes [:trace-def]
+   :produces :spherical-def
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-spherical-category-via-trace"}}
+  {:id :e-module-functor-def :method :reduce-to-known-result
+   :text "F:M→N is C-module functor if equipped with module constraints F_{X,M}:F(X)*F(M)→F(X*M)"
+   :consumes [:module-category-def]
+   :produces :module-functor-def
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-module-functor-via-constraints"}}
+  {:id :e-module-natural-trans :method :reduce-to-known-result
+   :text "c:F→G is C-module if diagram similar to eqref{mn} commutes"
+   :produces :module-natural-trans
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-module-natural-transformation"}}
+  {:id :e-endomorphism-monoidal :method :reduce-to-known-result
+   :text "C-module endofunctors and natural transformations form strict monoidal category End_C(M)"
+   :consumes [:module-functor-def :module-natural-trans]
+   :produces :endomorphism-monoidal
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "monoidal-structure-on-module-endofunctors"}}]
+ :clean/wires
+ [{:from :e-module-functor-def :to :e-endomorphism-monoidal :carries :module-functor-def}
+  {:from :e-module-natural-trans :to :e-endomorphism-monoidal :carries :module-natural-trans}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-aut-action :e-spherical :e-module-functor-def :e-module-natural-trans :e-endomorphism-monoidal]
+               :discharges-at []}}

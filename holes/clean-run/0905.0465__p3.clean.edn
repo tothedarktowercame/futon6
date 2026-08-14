@@ -1,0 +1,61 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p3"
+ :clean/source {:iatc "0905.0465__p3"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-basepoint :method :reduce-to-known-result
+   :text "|X| has a canonical basepoint * from X_{0,...,0}"
+   :consumes [:X-definition]
+   :produces :basepoint
+   :discharges {:to :the-empty-set-gives-a-canonical-point-in-x-0-0}}
+  {:id :e-embedding :method :reduce-to-known-result
+   :text "there exists a tangential embedding f: M -> (0,1)^n x R^∞ x BSO(n)"
+   :consumes [:manifold-M]
+   :produces :tangential-embedding}
+  {:id :e-point :method :reduce-to-known-result
+   :text "f determines a point in X_{1,...,1}"
+   :consumes [:tangential-embedding]
+   :produces :point-in-X11
+   :discharges {:to :tangential-embeddings-into-0-1-n-x-r-x-bso-n-cor}}
+  {:id :e-cube-map :method :reduce-to-known-result
+   :text "the point determines a map Δ^1 x ... x Δ^1 -> |X|"
+   :consumes [:point-in-X11]
+   :produces :cube-map
+   :discharges {:to :a-point-in-x-1-1-induces-a-map-from-the-cube-to-}}
+  {:id :e-boundary :method :reduce-to-known-result
+   :text "the map sends the cube's boundary to the basepoint *"
+   :consumes [:cube-map]
+   :produces :boundary-to-basepoint
+   :discharges {:to :the-segal-space-structure-forces-the-boundary-to}}
+  {:id :e-homotopy :method :reduce-to-known-result
+   :text "this defines an element [M] in π_n(|X|, *)"
+   :consumes [:boundary-to-basepoint :cube-map]
+   :produces :homotopy-class
+   :discharges {:to :a-pointed-map-from-the-cube-defines-an-element-o}}
+  {:id :e-independence :method :reduce-to-known-result
+   :text "[M] is independent of the choice of f"
+   :consumes [:homotopy-class]
+   :produces :independence
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-functoriality :method :reduce-to-known-result
+   :text "M ↦ [M] is functorial and works for families"
+   :consumes [:independence :homotopy-class]
+   :produces :functoriality
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-embedding :to :e-point :carries :tangential-embedding}
+  {:from :e-point :to :e-cube-map :carries :point-in-X11}
+  {:from :e-cube-map :to :e-boundary :carries :cube-map}
+  {:from :e-boundary :to :e-homotopy :carries :boundary-to-basepoint}
+  {:from :e-cube-map :to :e-homotopy :carries :cube-map}
+  {:from :e-homotopy :to :e-independence :carries :homotopy-class}
+  {:from :e-independence :to :e-functoriality :carries :independence}
+  {:from :e-homotopy :to :e-functoriality :carries :homotopy-class}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-independence :e-functoriality]
+               :discharges-at [:e-basepoint :e-point :e-cube-map :e-boundary :e-homotopy]}}

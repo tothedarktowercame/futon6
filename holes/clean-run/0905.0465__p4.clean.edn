@@ -1,0 +1,29 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p4"
+ :clean/source {:iatc "0905.0465__p4"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-D-bordism :method :reduce-to-known-result
+   :text "η_x = Z(D^ζ_x) : 1 → Z(S^ζ_x) is a nondegenerate n-morphism"
+   :consumes [:D-zeta-x]
+   :produces :eta-x
+   :discharges {:to :d-x-is-a-bordism-from-to-s-x-by-definition}}
+  {:id :e-thm-equiv :method :reduce-to-known-result
+   :text "Cobordism Hypothesis, Inductive Formulation"
+   :consumes [:equiv-data]
+   :produces :thm-swisher6}
+  {:id :e-eta-from-Z :method :reduce-to-known-result
+   :text "η_x = Z(D^ζ_x) : 1 → Z(S^ζ_x) is a nondegenerate n-morphism"
+   :consumes [:Z]
+   :produces :eta-x
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-eta-from-Z]
+               :discharges-at [:e-D-bordism]}}

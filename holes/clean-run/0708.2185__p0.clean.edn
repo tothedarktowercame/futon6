@@ -1,0 +1,33 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.2185__p0"
+ :clean/source {:iatc "0708.2185__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-accessibility-criterion :method :reduce-to-known-result
+   :text "there exists a regular cardinal λ such that all cl_i are closed under λ-directed colimits and λ-pure subobjects"
+   :consumes [:ar-cite]
+   :produces :lambda-exists}
+  {:id :e-union-closed-under-pure :method :reduce-to-known-result
+   :text "the union cl is closed under λ-pure subobjects"
+   :consumes [:cl_i]
+   :produces :cl-closed-under-pure
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "union-of-subcategories-closed-under-pure-subobjects"}}
+  {:id :e-cofinality-lemma :method :reduce-to-known-result
+   :text "the embedding cd_i → cd is cofinal for some i"
+   :consumes [:kind :text]
+   :produces :cofinal-embedding}
+  {:id :e-colimits-closure :method :reduce-to-known-result
+   :text "cl is closed under λ-directed colimits"
+   :consumes [:pullback-D_i]
+   :produces :cl-closed-under-colimits
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "cofinal-subdiagram-preserves-colimits"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-union-closed-under-pure :e-colimits-closure]
+               :discharges-at []}}

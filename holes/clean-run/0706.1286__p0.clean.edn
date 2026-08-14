@@ -1,0 +1,23 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p0"
+ :clean/source {:iatc "0706.1286__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-problem-pht :method :reduce-to-known-result
+   :text "two CalMod-like bicategories were clearly 'equivalent' but language was missing"
+   :consumes [:problem-pht]
+   :produces :pht-example}
+  {:id :e-similar-problems :method :reduce-to-known-result
+   :text "similar problems arise in many other situations"
+   :consumes [:problem-pht :pht-example]
+   :produces :similar-problems}]
+ :clean/wires
+ [{:from :e-problem-pht :to :e-similar-problems :carries :pht-example}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at []
+               :discharges-at []}}

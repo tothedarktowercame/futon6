@@ -1,0 +1,30 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0705.0102__p1"
+ :clean/source {:iatc "0705.0102__p1"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-summands-A :method :reduce-to-known-result
+   :text "Σ⁻¹A is closed under direct summands"
+   :consumes [:A-closed-under-summands]
+   :produces :Sigma-inv-A-closed-under-summands
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "closure-under-summands-is-preserved-by-inverse-shift"}}
+  {:id :e-summands-B :method :reduce-to-known-result
+   :text "Σ⁻¹B is closed under direct summands"
+   :consumes [:B-closed-under-summands]
+   :produces :Sigma-inv-B-closed-under-summandmands
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "closure-under-summands-is-preserved-by-inverse-shift"}}
+  {:id :e-t-structure-claim :method :reduce-to-known-result
+   :text "(A,B) is a t-structure on T"
+   :consumes [:t-structure-def-X-subset-Sigma-inv-X :t-structure-def-Sigma-inv-Y-subset-Y :t-structure-def-hom-X-Sigma-inv-Y-zero :t-structure-def-triangle]
+   :produces :co-t-structure-is-t-structure
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "interchange-of-A-and-B-yields-t-structure"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-summands-A :e-summands-B :e-t-structure-claim]
+               :discharges-at []}}

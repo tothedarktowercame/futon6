@@ -1,0 +1,37 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p21"
+ :clean/source {:iatc "0706.1286__p21"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-fam-def :method :reduce-to-known-result
+   :text "an object of Fam(V) is a set X with an X-indexed family {A_x}_{x in X} of objects in V"
+   :consumes [:fam-v-def]
+   :produces :fam-v-obj
+   :discharges {:to :by-definition-of-fam-v}}
+  {:id :e-fibration :method :reduce-to-known-result
+   :text "there is a fibration Fam_V : Fam(V) -> Set called naive indexing"
+   :consumes [:fam-v-def :fam-v-obj]
+   :produces :fam-v-fibration
+   :discharges {:to :the-fibration-is-constructed-by-sending-a-family}}
+  {:id :e-fiber :method :reduce-to-known-result
+   :text "the fiber over a set X is the category V^X"
+   :consumes [:fam-v-fibration]
+   :produces :fiber-over-X
+   :discharges {:to :the-fiber-over-x-consists-of-families-indexed-by}}
+  {:id :e-monoidal :method :reduce-to-known-result
+   :text "if V is monoidal, then Fam_V is a monoidal fibration"
+   :consumes [:fiber-over-X :product-def]
+   :produces :fam-v-monoidal
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-fam-def :to :e-fibration :carries :fam-v-obj}
+  {:from :e-fibration :to :e-fiber :carries :fam-v-fibration}
+  {:from :e-fiber :to :e-monoidal :carries :fiber-over-X}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-monoidal]
+               :discharges-at [:e-fam-def :e-fibration :e-fiber]}}

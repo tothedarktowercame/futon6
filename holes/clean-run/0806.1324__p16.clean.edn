@@ -1,0 +1,41 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p16"
+ :clean/source {:iatc "0806.1324__p16"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e1 :method :reduce-to-known-result
+   :text "every morphism T^a(-,C) -> h_a X factors through T^a(-,C') for some C' in C"
+   :consumes [:x-in-sc]
+   :produces :morphisms-factor}
+  {:id :e2 :method :reduce-to-known-result
+   :text "every morphism C -> X with C in T^a factors through some C' in C"
+   :consumes [:morphisms-factor]
+   :produces :morphisms-factor2}
+  {:id :e3 :method :reduce-to-known-result
+   :text "Lemma about triangulated subcategories"
+   :consumes [:j-fully-faithful]
+   :produces :lemma-tria-sub}
+  {:id :e4 :method :reduce-to-known-result
+   :text "exact functor q^* : Add_a((T^a)^op,Ab) -> Add_a((T^a/Sc^a)^op,Ab)"
+   :consumes [:quotient-functor-q]
+   :produces :induced-exact-functor
+   :discharges {:to :quotient-functors-induce-exact-functors-on-addit}}
+  {:id :e5 :method :reduce-to-known-result
+   :text "q^* is left adjoint to q_*"
+   :consumes [:fully-faithful-q-star]
+   :produces :q-star-adjunction}
+  {:id :e6 :method :reduce-to-known-result
+   :text "functor K making the diagram commutative"
+   :consumes [:q-star-compose-h-a-annihilates]
+   :produces :induced-functor-k
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "annihilation-by-localizing-subcategory"}}]
+ :clean/wires
+ [{:from :e1 :to :e2 :carries :morphisms-factor}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e6]
+               :discharges-at [:e4]}}

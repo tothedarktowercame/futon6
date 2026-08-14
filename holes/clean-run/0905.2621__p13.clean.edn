@@ -1,0 +1,60 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.2621__p13"
+ :clean/source {:iatc "0905.2621__p13"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-main-goal :method :reduce-to-known-result
+   :text "the cone of the closed morphism M → I is coacyclic"
+   :consumes [:m-to-j]
+   :produces :cone-coacyclic
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "construction-of-injective-resolution-in-homotopy-category"}}
+  {:id :e-i-from-complex :method :reduce-to-known-result
+   :text "I is the total CDG-module of the complex G⁻(I₀) → G⁻(I₋₁) → ⋯ formed by infinite direct sums"
+   :consumes [:exact-complex]
+   :produces :total-module-i
+   :discharges {:to :infinite-direct-sums-preserve-exactness-and-inje}}
+  {:id :e-cone-coacyclic-from-general-fact :method :reduce-to-known-result
+   :text "the cone of the closed morphism M → I is coacyclic"
+   :consumes [:total-module-i :general-fact]
+   :produces :cone-coacyclic
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "application-of-general-fact-to-mu2192i-cone"}}
+  {:id :e-e-as-limit :method :reduce-to-known-result
+   :text "E is the inductive limit of total CDG-modules Xₙ of finite exact complexes 0 → E₀ → ⋯ → E₋ₙ → K₋ₙ → 0"
+   :consumes [:general-fact]
+   :produces :e-as-inductive-limit
+   :discharges {:to :inductive-limits-of-coacyclic-modules-are-coacyc}}
+  {:id :e-exact-triple :method :reduce-to-known-result
+   :text "there is an exact triple 0 → ⨁ₙ Xₙ → ⨁ₙ Xₙ → E → 0 of CDG-modules and closed morphisms"
+   :consumes [:e-as-inductive-limit]
+   :produces :exact-triple
+   :discharges {:to :the-natural-map-from-x-to-e-fits-into-an-exact-s}}
+  {:id :e-xn-coacyclic :method :reduce-to-known-result
+   :text "each Xₙ is coacyclic"
+   :consumes [:exact-triple]
+   :produces :xn-coacyclic
+   :discharges {:to :finite-truncations-of-exact-complexes-of-injecti}}
+  {:id :e-total-acyclic :method :reduce-to-known-result
+   :text "the total CDG-module of the exact triple is absolutely acyclic by definition"
+   :consumes [:exact-triple :xn-coacyclic]
+   :produces :total-acyclic
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "total-module-of-exact-triple-is-absolutely-acyclic"}}
+  {:id :e-contractible :method :reduce-to-known-result
+   :text "the cone of the closed morphism M → I is coacyclic"
+   :consumes [:exact-triple]
+   :produces :cone-coacyclic
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "splitting-implies-contractibility-in-dg-category"}}]
+ :clean/wires
+ [{:from :e-i-from-complex :to :e-cone-coacyclic-from-general-fact :carries :total-module-i}
+  {:from :e-e-as-limit :to :e-exact-triple :carries :e-as-inductive-limit}
+  {:from :e-exact-triple :to :e-xn-coacyclic :carries :exact-triple}
+  {:from :e-exact-triple :to :e-total-acyclic :carries :exact-triple}
+  {:from :e-xn-coacyclic :to :e-total-acyclic :carries :xn-coacyclic}
+  {:from :e-exact-triple :to :e-contractible :carries :exact-triple}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-main-goal :e-cone-coacyclic-from-general-fact :e-total-acyclic :e-contractible]
+               :discharges-at [:e-i-from-complex :e-e-as-limit :e-exact-triple :e-xn-coacyclic]}}

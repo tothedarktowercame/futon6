@@ -1,0 +1,46 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p2"
+ :clean/source {:iatc "0905.0465__p2"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e1 :method :reduce-to-known-result
+   :text "the functor ϕ is an equivalence of (∞,0)-categories"
+   :consumes [:k-morph-invertible]
+   :produces :phi-equiv
+   :discharges {:to :invertibility-of-k-morphisms-implies-functor-equ}}
+  {:id :e2 :method :reduce-to-known-result
+   :text "α_M: Z(M) → Z'(M) is an isomorphism in the homotopy category hC for every M ∈ Bord_n^fr"
+   :consumes [:alpha-nat-trans]
+   :produces :alpha-m-invertible
+   :discharges {:to :natural-transformations-are-k-morphisms-for-k-1}}
+  {:id :e3 :method :reduce-to-known-result
+   :text "α_{M̄}^∨: Z'(M) → Z(M) defined via duality"
+   :consumes [:mbar-def]
+   :produces :alpha-mbar-vee
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e4 :method :reduce-to-known-result
+   :text "α_{M̄}^∨ is the homotopy inverse to α_M"
+   :consumes [:alpha-mbar-vee :alpha-m-invertible]
+   :produces :alpha-m-inverse
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e5 :method :reduce-to-known-result
+   :text "Fun^⊗(Bord_n^fr, C) classifies fully dualizable objects of C"
+   :consumes [:swisher3-duals]
+   :produces :functor-classifying
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e6 :method :reduce-to-known-result
+   :text "Theorem 1.3 follows from Theorem 1.2 using the above criterion"
+   :consumes [:swisher3-vs-swisher2]
+   :produces :deduce-swisher3-from-swisher2
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e3 :to :e4 :carries :alpha-mbar-vee}
+  {:from :e2 :to :e4 :carries :alpha-m-invertible}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e3 :e4 :e5 :e6]
+               :discharges-at [:e1 :e2]}}

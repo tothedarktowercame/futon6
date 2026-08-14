@@ -1,0 +1,45 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.1921__p2"
+ :clean/source {:iatc "0708.1921__p2"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-diagram-preservation :method :reduce-to-known-result
+   :text "the first unitary coherence equation holds"
+   :consumes [:replace-p-by-r]
+   :produces :first-unitary-coherence
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "diagram-substitution-preservation"}}
+  {:id :e-similar-derivation :method :reduce-to-known-result
+   :text "the second unitary coherence equation holds by similar derivation"
+   :consumes [:first-unitary-coherence]
+   :produces :second-unitary-coherence
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "similar-derivation-for-second-equation"}}
+  {:id :e-oxlax-theorem :method :reduce-to-known-result
+   :text "for precartesian bicategory B, (ox, tilde-ox, ox-degree) form a lax functor BxB -> B"
+   :consumes [:p-r-ox-s :replace-p-by-r]
+   :produces :oxlax-theorem}
+  {:id :e-lax-natural-transformations :method :reduce-to-known-result
+   :text "p and r are components of lax natural transformations (ox, tilde-ox, ox-degree) -> (ox, tilde-ox, ox-degree)"
+   :consumes [:oxlax-theorem]
+   :produces :lax-natural-transformations
+   :discharges {:to :naturality-of-tilde-p-and-tilde-r-plus-definitio}}
+  {:id :e-tilde-d-r-lax-natural :method :reduce-to-known-result
+   :text "for precartesian bicategory B, I with monad structure forms a lax functor 1 -> B"
+   :consumes [:tilde-d-r-lax-natural]
+   :produces :Ilax-proposition
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "lax-naturality-of-d-via-diagonal"}}
+  {:id :e-monad-structure :method :reduce-to-known-result
+   :text "for precartesian bicategory B, I with monad structure forms a lax functor 1 -> B"
+   :consumes [:terminal-object-I :monad-on-I :unique-2-cells :monad-equations-hold]
+   :produces :Ilax-proposition
+   :discharges {:to :terminal-object-and-unique-2-cells-trivially-sat}}]
+ :clean/wires
+ [{:from :e-diagram-preservation :to :e-similar-derivation :carries :first-unitary-coherence}
+  {:from :e-oxlax-theorem :to :e-lax-natural-transformations :carries :oxlax-theorem}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-diagram-preservation :e-similar-derivation :e-tilde-d-r-lax-natural]
+               :discharges-at [:e-lax-natural-transformations :e-monad-structure]}}

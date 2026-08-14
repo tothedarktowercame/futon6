@@ -1,0 +1,43 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.2185__p1"
+ :clean/source {:iatc "0708.2185__p1"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-full-subcategory :method :reduce-to-known-result
+   :text "$\\cl$ is a full subcategory of $\\ck$"
+   :consumes [:ck-split-idempotents]
+   :produces :cl-full-subcategory
+   :discharges {:to :split-idempotents-imply-full-subcategories-are-r}}
+  {:id :e-tilde-cl-def :method :reduce-to-known-result
+   :text "$\\tilde{\\cl}$ is the closure of $\\cl$ under retracts in $\\ck$"
+   :consumes [:cl-full-subcategory]
+   :produces :tilde-cl-retracts
+   :discharges {:to :tilde-cl-is-defined-as-the-retract-closure-of-cl}}
+  {:id :e-diagram-commutes :method :reduce-to-known-result
+   :text "for each subobject $i:X\\to L$, $L\\in\\cl$, split by $p:L\\to X$ and each $f:K\\to X$, there is $g:L_i\\to L$ with $gf_i=if$"
+   :consumes [:cone-reflection-to-cl]
+   :produces :subobject-split
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-factorization :method :reduce-to-known-result
+   :text "$f=pif=pgf_i$"
+   :consumes [:subobject-split]
+   :produces :factorization
+   :discharges {:to :subobject-splitting-and-cone-reflection-imply-f-}}
+  {:id :e-cone-reflection-to-tilde-cl :method :reduce-to-known-result
+   :text "$f_i$ is a cone-reflection of $K$ to $\\tilde{\\cl}$"
+   :consumes [:factorization :tilde-cl-retracts]
+   :produces :cone-reflection-to-tilde-cl
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-full-subcategory :to :e-tilde-cl-def :carries :cl-full-subcategory}
+  {:from :e-diagram-commutes :to :e-factorization :carries :subobject-split}
+  {:from :e-factorization :to :e-cone-reflection-to-tilde-cl :carries :factorization}
+  {:from :e-tilde-cl-def :to :e-cone-reflection-to-tilde-cl :carries :tilde-cl-retracts}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-diagram-commutes :e-cone-reflection-to-tilde-cl]
+               :discharges-at [:e-full-subcategory :e-tilde-cl-def :e-factorization]}}

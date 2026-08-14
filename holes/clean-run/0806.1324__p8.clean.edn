@@ -1,0 +1,20 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p8"
+ :clean/source {:iatc "0806.1324__p8"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-qx-zero-to-x-in-sc :method :reduce-to-known-result
+   :text "X belongs to Sc"
+   :consumes [:qx-zero]
+   :produces :x-in-sc
+   :discharges {:to :qx-0-implies-x-is-in-the-orthogonal-complement-s}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at []
+               :discharges-at [:e-qx-zero-to-x-in-sc]}}

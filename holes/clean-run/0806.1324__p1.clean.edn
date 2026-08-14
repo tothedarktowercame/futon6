@@ -1,0 +1,28 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p1"
+ :clean/source {:iatc "0806.1324__p1"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-adjoint-def :method :reduce-to-known-result
+   :text "F is left adjoint to the inclusion D → C"
+   :consumes [:functor-F]
+   :produces :left-adjoint
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "adjoint-functor-construction-from-bijective-homs"}}
+  {:id :e-localization :method :reduce-to-known-result
+   :text "localization functor L = G ∘ F"
+   :consumes [:right-adjoint :inclusion-G]
+   :produces :localization-L}
+  {:id :e-image :method :reduce-to-known-result
+   :text "Im L = D"
+   :consumes [:localization-L]
+   :produces :image-D}]
+ :clean/wires
+ [{:from :e-localization :to :e-image :carries :localization-L}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-adjoint-def]
+               :discharges-at []}}

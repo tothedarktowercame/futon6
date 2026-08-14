@@ -1,0 +1,30 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0705.0102__p0"
+ :clean/source {:iatc "0705.0102__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-preenvelope-goal :method :reduce-to-known-result
+   :text "for each X ∈ S^{⊥_n}, the map Hom(M_{k+1},X) → Hom(M_k,X) induced by μ_k is surjective"
+   :consumes [:preenvelope-claim]
+   :produces :surjection-goal
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "preenvelope-definition-via-surjective-hom-maps"}}
+  {:id :e-wlog :method :reduce-to-known-result
+   :text "without loss of generality, each μ_k sits in distinguished triangle (triangle_k)"
+   :consumes [:identity-case]
+   :produces :wlog-triangle
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "wlog-reduction-to-triangle-case"}}
+  {:id :e-identity-implies-iso :method :reduce-to-known-result
+   :text "if μ_k = 1_{M_k}, then Hom(M_{k+1},X) → Hom(M_k,X) is an isomorphism for all X ∈ 𝒯"
+   :consumes [:kind :text]
+   :produces :identity-case
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "identity-map-induces-hom-isomorphism"}}]
+ :clean/wires
+ [{:from :e-identity-implies-iso :to :e-wlog :carries :identity-case}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-preenvelope-goal :e-wlog :e-identity-implies-iso]
+               :discharges-at []}}

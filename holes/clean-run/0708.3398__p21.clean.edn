@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p21"
+ :clean/source {:iatc "0708.3398__p21"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-def-A :method :reduce-to-known-result
+   :text "for any exact category A and any thick subcategory T in Hot(A) contained in the thick subcategory of acyclic complexes, containing all bounded acyclic complexes"
+   :consumes [:A-quotient]
+   :produces :universal-A
+   :discharges {:to :quotient-category-construction}}
+  {:id :e-hom-groups :method :reduce-to-known-result
+   :text "the groups of homomorphisms"
+   :consumes [:universal-A]
+   :produces :hom-groups
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-def-A :to :e-hom-groups :carries :universal-A}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-hom-groups]
+               :discharges-at [:e-def-A]}}

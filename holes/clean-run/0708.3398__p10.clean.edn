@@ -1,0 +1,35 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p10"
+ :clean/source {:iatc "0708.3398__p10"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-cotensor-associative :method :reduce-to-known-result
+   :text "all multiple cotensor products of the form $\\bN\\oc_\\C\\S\\oc_\\C\\dsb\\oc_\\C\\S\\oc_\\C\\bK\\oc_\\D\\T\\oc_\\D\\dsb\\oc_\\D\\T\\oc_\\D\\bM$ are associative"
+   :consumes [:cotensor-associative]
+   :produces :multiple-cotensor}
+  {:id :e-map-factorization :method :reduce-to-known-result
+   :text "there is a natural map $\\bN\\os_\\S(\\bK\\oc_\\D\\bM)\\rarrow(\\bN\\os_\\S\\bK)\\oc_\\D\\bM$"
+   :consumes [:map-factorization]
+   :produces :natural-map
+   :discharges {:to :the-map-factorizes-through-the-surjection-by-def}}
+  {:id :e-isomorphism-condition :method :reduce-to-known-result
+   :text "the iterated semitensor product $(\\bN\\os_\\S\\bK)\\os_\\T\\bM$ is defined"
+   :consumes [:isomorphism-condition]
+   :produces :iterated-semitensor-defined
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "isomorphism-condition-implies-iterated-semitensor"}}
+  {:id :e-surjective-map :method :reduce-to-known-result
+   :text "the natural map $\\bN\\oc_\\C\\bK\\oc_\\D\\bM\\rarrow(\\bN\\os_\\S\\bK)\\os_\\T\\bM$ is surjective"
+   :consumes [:iterated-semitensor-defined :natural-map]
+   :produces :surjective-map
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "surjectivity-of-natural-map-when-iterated-semitensor-defined"}}]
+ :clean/wires
+ [{:from :e-isomorphism-condition :to :e-surjective-map :carries :iterated-semitensor-defined}
+  {:from :e-map-factorization :to :e-surjective-map :carries :natural-map}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-isomorphism-condition :e-surjective-map]
+               :discharges-at [:e-map-factorization]}}

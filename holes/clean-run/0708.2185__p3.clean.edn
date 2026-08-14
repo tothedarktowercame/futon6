@@ -1,0 +1,19 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.2185__p3"
+ :clean/source {:iatc "0708.2185__p3"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-corollary-proof :method :reduce-to-known-result
+   :text "cx^square is cone-reflective in ck^to"
+   :consumes [:prop3.4 :prop2.4 :lem2.5]
+   :produces :cx-square-cone-reflective}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at []
+               :discharges-at []}}

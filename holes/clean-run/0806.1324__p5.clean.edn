@@ -1,0 +1,43 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p5"
+ :clean/source {:iatc "0806.1324__p5"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-main-claim :method :reduce-to-known-result
+   :text "the coproduct $\\coprod_iX_i$ in $\\C$ is also a coproduct in $\\C[\\Si^{-1}]$"
+   :consumes [:family-Xi]
+   :produces :coprod-in-C
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "coproduct-in-localization-is-coproduct-in-original"}}
+  {:id :e-bijective :method :reduce-to-known-result
+   :text "the canonical map $\\C[\\Si^{-1}](\\coprod_i X_i,Y)\\lto\\prod_i\\C[\\Si^{-1}](X_i,Y)$ is bijective"
+   :consumes [:coprod-in-C]
+   :produces :canonical-map
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "coproduct-characterized-by-hom-bijection"}}
+  {:id :e-surjectivity :method :reduce-to-known-result
+   :text "the canonical map $\\C[\\Si^{-1}](\\coprod_i X_i,Y)\\lto\\prod_i\\C[\\Si^{-1}](X_i,Y)$ is bijective"
+   :consumes [:left-fractions :lf2-diagram :equivalence-left-fractions]
+   :produces :canonical-map
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "surjectivity-via-left-fractions-and-equivalence"}}
+  {:id :e-diagram :method :reduce-to-known-result
+   :text "using (LF2) we obtain a commutative diagram with $\\coprod_iX_i$, $\\coprod_iZ_i$, $\\coprod_iY$, $Z$, $Y$ and morphisms $\\coprod_i\\a_i$, $\\coprod_i\\s_i$, $\\pi_Y$,"
+   :consumes [:left-fractions]
+   :produces :lf2-diagram
+   :discharges {:to :by-lf2-the-family-of-left-fractions-induces-the-}}
+  {:id :e-equivalence :method :reduce-to-known-result
+   :text "$(X_i\\rightarrow Z\\stackrel{\\s}\\leftarrow Y)\\,\\sim\\,(X_i\\stackrel{\\a_i}\\rightarrow Z_i\\stackrel{\\s_i}\\leftarrow Y)$ for all $i\\in I$"
+   :consumes [:lf2-diagram :left-fractions]
+   :produces :equivalence-left-fractions
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "equivalence-of-left-fractions-in-localization"}}]
+ :clean/wires
+ [{:from :e-main-claim :to :e-bijective :carries :coprod-in-C}
+  {:from :e-diagram :to :e-surjectivity :carries :lf2-diagram}
+  {:from :e-equivalence :to :e-surjectivity :carries :equivalence-left-fractions}
+  {:from :e-diagram :to :e-equivalence :carries :lf2-diagram}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-main-claim :e-bijective :e-surjectivity :e-equivalence]
+               :discharges-at [:e-diagram]}}

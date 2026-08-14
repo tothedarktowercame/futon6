@@ -1,0 +1,65 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+;; NOTE: dropped 1 self-loop inference(s) (vacuous step, X⇒X).
+{:clean/proof "0706.1286__p29"
+ :clean/source {:iatc "0706.1286__p29"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-cartesian-2-cell :method :reduce-to-known-result
+   :text "2-cell ε: f̄ ⊙ M ⊙ g̃ → U_D"
+   :consumes [:m-arrow :f-arrow :g-arrow]
+   :produces :2-cell-ep
+   :discharges {:to :2-cell-defined-by-counit-is-cartesian-easy-to-ch}}
+  {:id :e-opcartesian-2-cell :method :reduce-to-known-result
+   :text "2-cell ε: f̄ ⊙ M ⊙ g̃ → U_D"
+   :consumes [:m-arrow :f-arrow :g-arrow]
+   :produces :2-cell-ep
+   :discharges {:to :opcartesian-2-cells-found-similarly}}
+  {:id :e-counit-iso :method :reduce-to-known-result
+   :text "counit g̃ ⊙ ḡ → U_D is an isomorphism"
+   :consumes [:g-isomorphism]
+   :produces :counit-iso
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-preservation-cartesian :method :reduce-to-known-result
+   :text "horizontal composition along isomorphisms preserves cartesian arrows"
+   :consumes [:counit-iso]
+   :produces :preserves-cartesian
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-preservation-opcartesian :method :reduce-to-known-result
+   :text "horizontal composition along isomorphisms preserves opcartesian arrows"
+   :consumes [:preserves-cartesian]
+   :produces :preserves-opcartesian
+   :discharges {:to :dual-argument-for-opcartesian-arrows}}
+  {:id :e-framed-bicategory :method :reduce-to-known-result
+   :text "𝔻 is a framed bicategory"
+   :consumes [:preserves-cartesian :preserves-opcartesian]
+   :produces :framed-bicategory
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-double-cat-from-equipment :method :reduce-to-known-result
+   :text "equipments give rise to double categories"
+   :produces :double-cat-from-equipment}
+  {:id :e-morphisms-as-double-cat-morphisms :method :reduce-to-known-result
+   :text "morphisms of equipments are defined as morphisms of double categories"
+   :consumes [:double-cat-from-equipment]
+   :produces :morphisms-as-double-cat-morphisms}
+  {:id :e-span-structure :method :reduce-to-known-result
+   :text "the span is a two-sided fibration"
+   :consumes [:l-fibration :r-opfibration :base-change-commute]
+   :produces :two-sided-fibration}
+  {:id :e-starred-pointed-equipment :method :reduce-to-known-result
+   :text "the span is a starred pointed equipment"
+   :consumes [:span-structure :l-fibration :r-opfibration]
+   :produces :starred-pointed-equipment}]
+ :clean/wires
+ [{:from :e-counit-iso :to :e-preservation-cartesian :carries :counit-iso}
+  {:from :e-preservation-cartesian :to :e-preservation-opcartesian :carries :preserves-cartesian}
+  {:from :e-preservation-cartesian :to :e-framed-bicategory :carries :preserves-cartesian}
+  {:from :e-preservation-opcartesian :to :e-framed-bicategory :carries :preserves-opcartesian}
+  {:from :e-double-cat-from-equipment :to :e-morphisms-as-double-cat-morphisms :carries :double-cat-from-equipment}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-counit-iso :e-preservation-cartesian :e-framed-bicategory]
+               :discharges-at [:e-cartesian-2-cell :e-opcartesian-2-cell :e-preservation-opcartesian]}}

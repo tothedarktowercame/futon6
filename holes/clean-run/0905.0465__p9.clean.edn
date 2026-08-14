@@ -1,0 +1,30 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p9"
+ :clean/source {:iatc "0905.0465__p9"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-swisher10-formulation :method :reduce-to-known-result
+   :text "Theorem swisher10 needs careful formulation when n ≤ 1"
+   :consumes [:n-leq-1]
+   :produces :swisher10-needs-care
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "swisher10-needs-careful-formulation-for-n-leq-1"}}
+  {:id :e-reduction-to-sym-monoidal :method :reduce-to-known-result
+   :text "C is a symmetric monoidal (3,2)-category"
+   :consumes [:reduce-to-sym-monoidal-32]
+   :produces :c-is-sym-monoidal-32
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "reduction-technique-from-kumma-section"}}
+  {:id :e-reduction-to-bo-n :method :reduce-to-known-result
+   :text "X = BO(n) is the classifying space for unoriented vector bundles"
+   :consumes [:reduce-to-x-bo-n]
+   :produces :x-is-bo-n
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "reduction-technique-from-slabun-section"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-swisher10-formulation :e-reduction-to-sym-monoidal :e-reduction-to-bo-n]
+               :discharges-at []}}

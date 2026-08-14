@@ -1,0 +1,29 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p26"
+ :clean/source {:iatc "0708.3398__p26"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-weaken-assumption :method :reduce-to-known-result
+   :text "under left Gorenstein and coring flat/projective, coderived and contraderived categories are equivalent"
+   :consumes [:left-gorenstein]
+   :produces :equiv-under-gorenstein
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "gorenstein-implies-derived-correspondence"}}
+  {:id :e-coring-condition :method :reduce-to-known-result
+   :text "under left Gorenstein and coring flat/projective, coderived and contraderived categories are equivalent"
+   :consumes [:coring-flat-projective]
+   :produces :equiv-under-gorenstein
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "flat-projective-coring-enables-derived-correspondence"}}
+  {:id :e-equiv-structure :method :reduce-to-known-result
+   :text "coderived category of left C-comodules is equivalent to contraderived category of left C-contramodules"
+   :consumes [:equiv-to-quotient]
+   :produces :coderived-contraderived-equiv}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-weaken-assumption :e-coring-condition]
+               :discharges-at []}}

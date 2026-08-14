@@ -1,0 +1,40 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p2"
+ :clean/source {:iatc "0706.1286__p2"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-incorporation :method :reduce-to-known-result
+   :text "fibrations incorporate all base change functors f^* and coherence data automatically"
+   :consumes [:fibration-equiv-functor-cat]
+   :produces :fibration-advantage
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "fibration-automatically-includes-base-change-and-coherence"}}
+  {:id :e-non-uniqueness :method :reduce-to-known-result
+   :text "f^* are not uniquely determined by the fibration, only up to iso"
+   :consumes [:fibration-equiv-functor-cat]
+   :produces :f-not-unique
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "base-change-functors-unique-up-to-iso"}}
+  {:id :e-normal-result :method :reduce-to-known-result
+   :text "normal pseudofunctors result from fibrations with normal cleavages"
+   :consumes [:normal-pseudofunctor]
+   :produces :normal-from-fibration
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "normal-pseudofunctors-come-from-normal-cleavages"}}
+  {:id :e-strict-result :method :reduce-to-known-result
+   :text "strict pseudofunctors result from fibrations with split normal cleavages"
+   :consumes [:strict-pseudofunctor]
+   :produces :strict-from-split
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "strict-pseudofunctors-come-from-split-normal-cleavages"}}
+  {:id :e-modify-normal :method :reduce-to-known-result
+   :text "not every fibration admits a split cleavage"
+   :consumes [:cleavage-to-normal]
+   :produces :not-admits-split
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "any-cleavage-modifiable-to-normal"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-incorporation :e-non-uniqueness :e-normal-result :e-strict-result :e-modify-normal]
+               :discharges-at []}}

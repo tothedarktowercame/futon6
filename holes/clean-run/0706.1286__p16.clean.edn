@@ -1,0 +1,20 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p16"
+ :clean/source {:iatc "0706.1286__p16"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-monoidal-bifibration :method :reduce-to-known-result
+   :text "$\\ttArr_\\sC$ is a monoidal bifibration"
+   :consumes [:easy-to-see]
+   :produces :monoidal-bifibration
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "self-indexing-is-monoidal-bifibration-under-cartesian-structure"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-monoidal-bifibration]
+               :discharges-at []}}

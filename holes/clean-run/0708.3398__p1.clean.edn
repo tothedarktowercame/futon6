@@ -1,0 +1,57 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p1"
+ :clean/source {:iatc "0708.3398__p1"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-avoid-dualizing :method :reduce-to-known-result
+   :text "polyvector fields form a quasi-differential coring"
+   :consumes [:duality-intro]
+   :produces :quasi-diff-coring
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "koszul-duality-avoids-vector-space-duals"}}
+  {:id :e-base-coalgebra :method :reduce-to-known-result
+   :text "PBW theorem establishes equivalence for nonhomogeneous Koszul semialgebras"
+   :consumes [:base-coalgebra-duality :koszul-semialgebra-duality]
+   :produces :pbw-theorem
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "base-coalgebra-duality-generalizes-relative-duality"}}
+  {:id :e-derived-equiv :method :reduce-to-known-result
+   :text "semiderived category of semimodules ≅ coderived category of quasi-differential comodules"
+   :consumes [:pbw-theorem]
+   :produces :derived-equivalence-main
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "pbw-theorem-implies-derived-equivalence"}}
+  {:id :e-vector-bundle :method :reduce-to-known-result
+   :text "for vector bundle E with connection ∇, D-modules on E ≅ CDG-modules on Ω(M,End(E))"
+   :consumes [:derived-equivalence-main]
+   :produces :vector-bundle-case}
+  {:id :e-semialgebra-def :method :reduce-to-known-result
+   :text "semialgebra S(𝔤,H)=U(𝔤)⊗_{U(𝔥)}C(H)"
+   :consumes [:harish-chandra-pair]
+   :produces :semialgebra-S
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "harish-chandra-pair-defines-semialgebra"}}
+  {:id :e-category-equiv :method :reduce-to-known-result
+   :text "bimodule E(𝔤,H) of distributions on G supported in H"
+   :consumes [:semialgebra-S :semimodule-category]
+   :produces :bimodule-E
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "semialgebra-defines-harish-chandra-module-category"}}
+  {:id :e-tate-pair :method :reduce-to-known-result
+   :text "Tate Harish-Chandra pair (𝔤,H): 𝔤 Tate Lie algebra, H affine proalgebraic group"
+   :consumes [:harish-chandra-pair]
+   :produces :tate-harish-chandra-pair
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "tate-harish-chandra-pair-generalizes-algebraic-pair"}}
+  {:id :e-central-extension :method :reduce-to-known-result
+   :text "morphism κ:(𝔤',H)→(𝔤,H) with central extension kernel k"
+   :consumes [:tate-harish-chandra-pair]
+   :produces :central-extension-kappa
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "canonical-central-extension-as-morphism"}}]
+ :clean/wires
+ [{:from :e-base-coalgebra :to :e-derived-equiv :carries :pbw-theorem}
+  {:from :e-derived-equiv :to :e-vector-bundle :carries :derived-equivalence-main}
+  {:from :e-semialgebra-def :to :e-category-equiv :carries :semialgebra-S}
+  {:from :e-tate-pair :to :e-central-extension :carries :tate-harish-chandra-pair}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-avoid-dualizing :e-base-coalgebra :e-derived-equiv :e-semialgebra-def :e-category-equiv :e-tate-pair :e-central-extension]
+               :discharges-at []}}

@@ -1,0 +1,36 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0708.3398__p24"
+ :clean/source {:iatc "0708.3398__p24"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-main-claim :method :reduce-to-known-result
+   :text "the complex Hom_A(L^•,M^•) is acyclic"
+   :consumes [:homotopy-category-preserves-triangles :direct-sums-to-products]
+   :produces :hom-complex-acyclic
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "hom-functor-preserves-exactness-in-homotopy-category"}}
+  {:id :e-reduction :method :reduce-to-known-result
+   :text "total complex of an exact triple of complexes of abelian groups"
+   :consumes [:hom-complex-acyclic]
+   :produces :hom-total-complex
+   :discharges {:to :it-suffices-to-check-acyclicity-for-l-total-comp}}
+  {:id :e-total-complex-definition :method :reduce-to-known-result
+   :text "total complex L^• of an exact triple K'^• → K^• → K''^•"
+   :consumes [:exact-triple]
+   :produces :total-complex
+   :discharges {:to :l-is-defined-as-total-complex-of-exact-triple-k-}}
+  {:id :e-hom-total-complex :method :reduce-to-known-result
+   :text "total complex of an exact triple of complexes of abelian groups"
+   :consumes [:total-complex :injective-complex]
+   :produces :hom-total-complex
+   :discharges {:to :hom-a-l-m-is-total-complex-of-exact-triple-of-ab}}]
+ :clean/wires
+ [{:from :e-main-claim :to :e-reduction :carries :hom-complex-acyclic}
+  {:from :e-total-complex-definition :to :e-hom-total-complex :carries :total-complex}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-main-claim]
+               :discharges-at [:e-reduction :e-total-complex-definition :e-hom-total-complex]}}

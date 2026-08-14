@@ -1,0 +1,29 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p8"
+ :clean/source {:iatc "0706.1286__p8"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-def-to-given :method :reduce-to-known-result
+   :text "F is essentially surjective on vertical categories and each functor calD(A,B)->calE(FA,FB) is essentially surjective"
+   :consumes [:def-eso]
+   :produces :given-condition}
+  {:id :e-given-to-iso :method :reduce-to-known-result
+   :text "isomorphisms alpha_C exist because F is essentially surjective on vertical categories"
+   :consumes [:iso-choice]
+   :produces :iso-exists
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "iso-construction-from-vertical-and-distributor-surjectivity"}}
+  {:id :e-iso-to-distributor :method :reduce-to-known-result
+   :text "each functor calD(A,B)->calE(FA,FB) is essentially surjective"
+   :consumes [:distributor-map]
+   :produces :distributor-surj
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "pullback-of-distributor-along-isomorphisms"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-given-to-iso :e-iso-to-distributor]
+               :discharges-at []}}

@@ -1,0 +1,72 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p10"
+ :clean/source {:iatc "0806.1324__p10"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-compact-gen :method :reduce-to-known-result
+   :text "Loc A is compactly generated and (Loc A)^⊥ = K_ac(Mod A)"
+   :consumes [:compact-generator]
+   :produces :loc-a-closed
+   :discharges {:to :a-concentrated-in-degree-0-is-compact-and-genera}}
+  {:id :e-brown-right :method :reduce-to-known-result
+   :text "F: Loc A → K(Mod A) → D(A) is an equivalence by Proposition pr:tria-loc"
+   :consumes [:loc-a-closed :brown-rep-right-adj]
+   :produces :f-equivalence
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "brown-representability-for-right-adjoint"}}
+  {:id :e-right-adjoint-annihilates :method :reduce-to-known-result
+   :text "right adjoint of inclusion Loc A → K(Mod A) annihilates acyclic complexes"
+   :consumes [:brown-rep-right-adj]
+   :produces :right-adjoint-annihilates-acyclic
+   :discharges {:to :right-adjoint-to-localization-inclusion-kills-ac}}
+  {:id :e-d-a-to-loc-a :method :reduce-to-known-result
+   :text "functor D(A) → Loc A induced by right adjoint"
+   :consumes [:right-adjoint-annihilates-acyclic :f-equivalence]
+   :produces :d-a-to-loc-a
+   :discharges {:to :annihilating-acyclics-induces-functor-d-a-loc-a}}
+  {:id :e-q-l-adjoint :method :reduce-to-known-result
+   :text "composite with inclusion is left adjoint Q_λ of Q, takes complex to K-projective resolution"
+   :consumes [:d-a-to-loc-a :loc-a]
+   :produces :q-l-adjoint
+   :discharges {:to :composite-with-inclusion-is-left-adjoint-q-of-q}}
+  {:id :e-perfect-cogenerator :method :reduce-to-known-result
+   :text "smallest thick subcategory Coloc I of K(Mod A) closed under products and containing I"
+   :consumes [:i-perfect-cogenerator]
+   :produces :coloc-i
+   :discharges {:to :hom-z-a-q-z-is-injective-cogenerator-and-perfect}}
+  {:id :e-brown-left :method :reduce-to-known-result
+   :text "G: Coloc I → K(Mod A) → D(A) is an equivalence by Proposition pr:tria-loc"
+   :consumes [:i-perfect-cogenerator :brown-rep-left-adj]
+   :produces :g-equivalence
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "brown-representability-for-left-adjoint"}}
+  {:id :e-left-adjoint-annihilates :method :reduce-to-known-result
+   :text "left adjoint of inclusion Coloc I → K(Mod A) annihilates acyclic complexes"
+   :consumes [:brown-rep-left-adj]
+   :produces :left-adjoint-annihilates-acyclic
+   :discharges {:to :left-adjoint-to-localization-inclusion-kills-acy}}
+  {:id :e-d-a-to-coloc-i :method :reduce-to-known-result
+   :text "functor D(A) → Coloc I induced by left adjoint"
+   :consumes [:left-adjoint-annihilates-acyclic :g-equivalence]
+   :produces :d-a-to-coloc-i
+   :discharges {:to :annihilating-acyclics-induces-functor-d-a-coloc-}}
+  {:id :e-q-r-adjoint :method :reduce-to-known-result
+   :text "composite with inclusion is right adjoint Q_ρ of Q, takes complex to K-injective resolution"
+   :consumes [:d-a-to-coloc-i :coloc-i]
+   :produces :q-r-adjoint
+   :discharges {:to :composite-with-inclusion-is-right-adjoint-q-of-q}}]
+ :clean/wires
+ [{:from :e-compact-gen :to :e-brown-right :carries :loc-a-closed}
+  {:from :e-right-adjoint-annihilates :to :e-d-a-to-loc-a :carries :right-adjoint-annihilates-acyclic}
+  {:from :e-brown-right :to :e-d-a-to-loc-a :carries :f-equivalence}
+  {:from :e-d-a-to-loc-a :to :e-q-l-adjoint :carries :d-a-to-loc-a}
+  {:from :e-left-adjoint-annihilates :to :e-d-a-to-coloc-i :carries :left-adjoint-annihilates-acyclic}
+  {:from :e-brown-left :to :e-d-a-to-coloc-i :carries :g-equivalence}
+  {:from :e-d-a-to-coloc-i :to :e-q-r-adjoint :carries :d-a-to-coloc-i}
+  {:from :e-perfect-cogenerator :to :e-q-r-adjoint :carries :coloc-i}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-brown-right :e-brown-left]
+               :discharges-at [:e-compact-gen :e-right-adjoint-annihilates :e-d-a-to-loc-a :e-q-l-adjoint :e-perfect-cogenerator :e-left-adjoint-annihilates :e-d-a-to-coloc-i :e-q-r-adjoint]}}

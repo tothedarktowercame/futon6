@@ -1,0 +1,50 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p10"
+ :clean/source {:iatc "0706.1286__p10"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-forward :method :reduce-to-known-result
+   :text "the conditions (dbladj-univ-arrow and dbladjs-univ-twocell) are satisfied"
+   :consumes [:g-has-left-adjoint]
+   :produces :conditions-satisfied
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "adjoint-implies-dbladjs-conditions"}}
+  {:id :e-backward__c0 :method :reduce-to-known-result
+   :text "G_0 has a left adjoint F_0"
+   :consumes [:conditions-satisfied]
+   :produces :g0-has-left-adjoint
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "univ-arrow-univ-twocell-imply-adjoints"}}
+  {:id :e-backward__c1 :method :reduce-to-known-result
+   :text "G_1 has a left adjoint F_1"
+   :consumes [:conditions-satisfied]
+   :produces :g1-has-left-adjoint
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "univ-arrow-univ-twocell-imply-adjoints"}}
+  {:id :e-backward__c2 :method :reduce-to-known-result
+   :text "LF_1 is isomorphic to F_0L"
+   :consumes [:conditions-satisfied]
+   :produces :lf1-iso-f0l
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "univ-arrow-univ-twocell-imply-adjoints"}}
+  {:id :e-backward__c3 :method :reduce-to-known-result
+   :text "RF_1 is isomorphic to F_0R"
+   :consumes [:conditions-satisfied]
+   :produces :rf1-iso-f0r
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "univ-arrow-univ-twocell-imply-adjoints"}}
+  {:id :e-redefine :method :reduce-to-known-result
+   :text "F_1 can be redefined by restriction along isomorphisms to satisfy LF_1 = F_0L and RF_1 = F_0R"
+   :consumes [:lf1-iso-f0l :rf1-iso-f0r]
+   :produces :redefine-f1
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "redefinition-of-f1-along-isomorphisms-in-framed-bicategory"}}]
+ :clean/wires
+ [{:from :e-forward :to :e-backward__c0 :carries :conditions-satisfied}
+  {:from :e-forward :to :e-backward__c1 :carries :conditions-satisfied}
+  {:from :e-forward :to :e-backward__c2 :carries :conditions-satisfied}
+  {:from :e-forward :to :e-backward__c3 :carries :conditions-satisfied}
+  {:from :e-backward__c2 :to :e-redefine :carries :lf1-iso-f0l}
+  {:from :e-backward__c3 :to :e-redefine :carries :rf1-iso-f0r}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-forward :e-backward__c0 :e-backward__c1 :e-backward__c2 :e-backward__c3 :e-redefine]
+               :discharges-at []}}

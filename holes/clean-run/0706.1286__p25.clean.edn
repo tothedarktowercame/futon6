@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p25"
+ :clean/source {:iatc "0706.1286__p25"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-main-claim :method :reduce-to-known-result
+   :text "bbFr(Φ) has a vertically strict involution given by identity on objects and M^op = fs* M on 1-cells"
+   :consumes [:frameable-monoidal-bifibration]
+   :produces :bbFr-has-strict-involution
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "construction-of-strict-involution-on-bbFr"}}
+  {:id :e-symmetry-claim :method :reduce-to-known-result
+   :text "if Φ is symmetric, then the involution is symmetric monoidal"
+   :consumes [:frameable-monoidal-bifibration]
+   :produces :symmetric-implies-sym-monoidal
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "symmetry-implies-symmetric-monoidal-involution"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-main-claim :e-symmetry-claim]
+               :discharges-at []}}

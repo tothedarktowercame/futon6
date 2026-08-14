@@ -1,0 +1,24 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "math__9906038__p0"
+ :clean/source {:iatc "math__9906038__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-compatibility-claim :method :reduce-to-known-result
+   :text "Discrete, Simplicial and Bundle Categorification maps C_D, C_S and C_B are functors from the category of groups"
+   :consumes [:bundle-categorification]
+   :produces :compatibility-statement
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "functoriality-of-bundle-categorification"}}
+  {:id :e-theorem-intro :method :reduce-to-known-result
+   :text "Discrete, Simplicial and Bundle Categorification maps C_D, C_S and C_B are functors from the category of groups"
+   :consumes [:theorem-label]
+   :produces :compatibility-statement}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-compatibility-claim]
+               :discharges-at []}}

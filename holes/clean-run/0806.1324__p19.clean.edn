@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p19"
+ :clean/source {:iatc "0806.1324__p19"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-adjoint-implies-natural-iso :method :reduce-to-known-result
+   :text "Hom_{\\widehat\\D}(f^*\\widehat\\C(-,X),G) ≅ Hom_{\\widehat\\C}(\\widehat\\C(-,X),f_*G) for all G"
+   :consumes [:f-left-adjoint]
+   :produces :natural-iso
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "adjoint-functor-natural-isomorphism"}}
+  {:id :e-exactness-from-natural-iso :method :reduce-to-known-result
+   :text "f_* is exact"
+   :consumes [:exactness-in-additive]
+   :produces :exactness-f-star
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "exactness-via-pointwise-sequences-and-colimits"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-adjoint-implies-natural-iso :e-exactness-from-natural-iso]
+               :discharges-at []}}

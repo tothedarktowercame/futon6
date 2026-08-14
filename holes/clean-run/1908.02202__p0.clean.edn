@@ -1,0 +1,39 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "1908.02202__p0"
+ :clean/source {:iatc "1908.02202__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-morphism-coincidence :method :reduce-to-known-result
+   :text "morphisms in lens_{coKl} and lens_{C,⊗} coincide"
+   :consumes [:morphisms-lens-coKl :coKl-f-identity-on-objects :coKl-f-morphism]
+   :produces :morphisms-coincide
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "coKl-f-identity-on-objects-implies-morphism-coincidence"}}
+  {:id :e-identity-coincidence :method :reduce-to-known-result
+   :text "identity morphisms coincide in both categories"
+   :consumes [:morphisms-coincide]
+   :produces :identities-coincide
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "identity-morphisms-coincide-when-morphisms-do"}}
+  {:id :e-composition-coincidence :method :reduce-to-known-result
+   :text "composition formulas coincide in both categories"
+   :consumes [:morphisms-coincide]
+   :produces :composition-coincide
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "composition-formulas-coincide-when-morphisms-do"}}
+  {:id :e-isomorphism :method :reduce-to-known-result
+   :text "lens_{coKl} is isomorphic to lens_{C,⊗}"
+   :consumes [:morphisms-coincide :identities-coincide :composition-coincide]
+   :produces :categories-isomorphic
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "categories-isomorphic-when-objects-morphisms-identities-composition-coincide"}}]
+ :clean/wires
+ [{:from :e-morphism-coincidence :to :e-identity-coincidence :carries :morphisms-coincide}
+  {:from :e-morphism-coincidence :to :e-composition-coincidence :carries :morphisms-coincide}
+  {:from :e-morphism-coincidence :to :e-isomorphism :carries :morphisms-coincide}
+  {:from :e-identity-coincidence :to :e-isomorphism :carries :identities-coincide}
+  {:from :e-composition-coincidence :to :e-isomorphism :carries :composition-coincide}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-morphism-coincidence :e-identity-coincidence :e-composition-coincidence :e-isomorphism]
+               :discharges-at []}}

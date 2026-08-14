@@ -1,0 +1,30 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0706.1286__p13"
+ :clean/source {:iatc "0706.1286__p13"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-span-coeq :method :reduce-to-known-result
+   :text "Mod(Span(C)) is a framed bicategory of internal categories and distributors in C"
+   :consumes [:framed-bicategory-mod-sp]
+   :produces :mod-sp-framed-bicategory
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "local-coequalizers-in-span-category"}}
+  {:id :e-mat-v-coeq :method :reduce-to-known-result
+   :text "Mod(Mat(V)) is isomorphic to Dist(V)"
+   :consumes [:cocomplete-closed-monoidal :mat-v-framed-bicategory]
+   :produces :mod-mat-v-is-dist-v
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "local-coequalizers-in-mat-category"}}
+  {:id :e-graphs-def :method :reduce-to-known-result
+   :text "Mat(V)(A,A) is the category of V-graphs with object set A"
+   :consumes [:mat-v-framed-bicategory]
+   :produces :mat-v-graphs
+   :discharges {:to :mat-v-a-a-is-defined-as-the-category-of-v-graphs}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-span-coeq :e-mat-v-coeq]
+               :discharges-at [:e-graphs-def]}}

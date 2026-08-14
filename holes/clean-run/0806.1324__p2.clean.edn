@@ -1,0 +1,31 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p2"
+ :clean/source {:iatc "0806.1324__p2"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-adjoint-from-bijections :method :reduce-to-known-result
+   :text "F and G form an adjoint pair: F ⊣ G"
+   :consumes [:f-functor :g-functor]
+   :produces :adjoint-pair
+   :discharges {:to :natural-bijections-of-hom-sets-define-an-adjunct}}
+  {:id :e-invertible-from-naturality :method :reduce-to-known-result
+   :text "θ: F∘G → Id is invertible"
+   :consumes [:theta-natural :hom-bijection-1 :hom-bijection-2]
+   :produces :theta-invertible
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}
+  {:id :e-localization-from-adjunction :method :reduce-to-known-result
+   :text "L = G∘F is a localization functor"
+   :consumes [:adjoint-pair :theta-invertible]
+   :produces :l-localization
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "warrant"}}]
+ :clean/wires
+ [{:from :e-adjoint-from-bijections :to :e-localization-from-adjunction :carries :adjoint-pair}
+  {:from :e-invertible-from-naturality :to :e-localization-from-adjunction :carries :theta-invertible}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-invertible-from-naturality :e-localization-from-adjunction]
+               :discharges-at [:e-adjoint-from-bijections]}}

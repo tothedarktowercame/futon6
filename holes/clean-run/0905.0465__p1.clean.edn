@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0905.0465__p1"
+ :clean/source {:iatc "0905.0465__p1"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-determination :method :reduce-to-known-result
+   :text "$\\calC^{\\fd}$ is determined up to equivalence by the properties required by Claim \\ref{swist}"
+   :consumes [:functor-existence]
+   :produces :determination-up-to-equivalence
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "uniqueness-up-to-iso-determines-category-up-to-equivalence"}}
+  {:id :e-example :method :reduce-to-known-result
+   :text "the symmetric monoidal $(\\infty,n)$-category $\\calC^{\\fd}$ has duals"
+   :consumes [:example-intro]
+   :produces :claim-swist
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "example-of-symmetric-monoidal-infty1-category"}}]
+ :clean/wires
+ []
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-determination :e-example]
+               :discharges-at []}}

@@ -1,0 +1,41 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "0806.1324__p7"
+ :clean/source {:iatc "0806.1324__p7"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-unique-triangle :method :reduce-to-known-result
+   :text "the exact triangle $I_\\r X\\xto{\\theta X} X\\to X''\\to S(I_\\r X)$ is uniquely determined by $X$"
+   :consumes [:i-r-def]
+   :produces :exact-triangle
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "uniqueness-of-exact-triangle-from-adjunction"}}
+  {:id :e-i-r-x-in-sc :method :reduce-to-known-result
+   :text "$I_\\r X$ belongs to $\\Sc$"
+   :consumes [:i-r-def]
+   :produces :i-r-x-in-sc
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "right-adjoint-image-in-subcategory"}}
+  {:id :e-hom-bijective :method :reduce-to-known-result
+   :text "$\\T(W,\\theta X)$ is bijective for all $W$ in $\\Sc$"
+   :consumes [:i-r-def]
+   :produces :hom-bijective
+   :discharges {:to :the-adjunction-isomorphism-t-w-i-r-x-cong-sc-w-x}}
+  {:id :e-t-w-x-double-zero :method :reduce-to-known-result
+   :text "$\\T(W,X'')=0$ for all $W$ in $\\Sc$"
+   :consumes [:exact-triangle]
+   :produces :t-w-x-double-zero
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "vanishing-hom-from-subcategory-in-exact-triangle"}}
+  {:id :e-x-double-in-sc-perp :method :reduce-to-known-result
+   :text "$X''$ belongs to $\\Sc^\\perp$"
+   :consumes [:t-w-x-double-zero]
+   :produces :x-double-in-sc-perp
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "definition-of-orthogonal-subcategory"}}]
+ :clean/wires
+ [{:from :e-unique-triangle :to :e-t-w-x-double-zero :carries :exact-triangle}
+  {:from :e-t-w-x-double-zero :to :e-x-double-in-sc-perp :carries :t-w-x-double-zero}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-unique-triangle :e-i-r-x-in-sc :e-t-w-x-double-zero :e-x-double-in-sc-perp]
+               :discharges-at [:e-hom-bijective]}}

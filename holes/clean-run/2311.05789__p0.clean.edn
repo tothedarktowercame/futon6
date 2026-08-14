@@ -1,0 +1,25 @@
+;; CLean produced from an IATC argument-graph by scripts/iatc_to_clean.py.
+;; Mechanical except :method / :clean/shape :macro, which LLaMA types
+;; (see the .prompt.txt). typing-source recorded below.
+{:clean/proof "2311.05789__p0"
+ :clean/source {:iatc "2311.05789__p0"}
+ :clean/typing-source :llama
+ :clean/seq [:reduce-to-known-result :reduce-to-known-result]
+ :clean/boxes
+ [{:id :e-monoidal-def :method :reduce-to-known-result
+   :text "a semi-groupal category C is monoidal if it has a monoidal unit I and natural isomorphisms l_X, r_X satisfying the unit coherence condition"
+   :consumes [:semi-groupal-composition]
+   :produces :monoidal-category-def
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "semi-groupal-composition-is-closed-under-composition"}}
+  {:id :e-coherence :method :reduce-to-known-result
+   :text "the unit coherence diagram for monoidal categories"
+   :consumes [:monoidal-category-def]
+   :produces :unit-coherence-diagram
+   :hole {:kind :sorry :discharge :sorryProof :satiety :payoff :wanted "naturality-and-coherence-for-monoidal-structure"}}]
+ :clean/wires
+ [{:from :e-monoidal-def :to :e-coherence :carries :monoidal-category-def}]
+ :clean/copar [{:reading :informal :is :clean/seq}
+               {:reading :formal   :is [:clean/boxes :clean/wires]}]
+ :clean/shape {:macro :reduce-to-known
+               :holes-at [:e-monoidal-def :e-coherence]
+               :discharges-at []}}
