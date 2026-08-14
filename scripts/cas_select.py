@@ -9,7 +9,9 @@ induce queue, and static check menu.
 from __future__ import annotations
 
 import argparse
+import collections
 import json
+import math
 import os
 import re
 import sys
@@ -49,7 +51,7 @@ def family_dirs(root: Path | None = None) -> list[Path]:
     return found or [DEFAULT_LIBRARY]
 
 
-def in_family(qualified: str, family_prefix: str | None = FAMILY_PREFIX) -> bool:
+def in_family(qualified: str, family_prefix: str | None = None) -> bool:
     """Is this index row's `family/name` key in the math-informal family set?"""
     return family_prefix is None or qualified.split("/", 1)[0].startswith(family_prefix)
 
@@ -102,7 +104,7 @@ def tokenize(text: str) -> set[str]:
 def read_index(
     path: Path = DEFAULT_INDEX,
     *,
-    family_prefix: str | None = FAMILY_PREFIX,
+    family_prefix: str | None = None,
 ) -> dict[str, tuple[str, ...]]:
     rows: dict[str, tuple[str, ...]] = {}
     for line in path.read_text().splitlines():
@@ -114,6 +116,8 @@ def read_index(
         name = norm_pattern_name(cols[0])
         if not in_family(cols[0], family_prefix):
             continue
+        if name in rows:
+            raise ValueError(f"duplicate normalized pattern key {name!r} in {path}")
         rows[name] = tuple(w.strip().lower() for w in cols[4].split(",") if w.strip())
     return rows
 
@@ -174,7 +178,7 @@ def load_patterns(
     library_dir: Path = DEFAULT_LIBRARY,
     allowed: set[str] | None = None,
 ) -> dict[str, Pattern]:
-    index = read_index(index_path)
+    index = read_index(index_path, family_prefix=FAMILY_PREFIX)
     patterns: dict[str, Pattern] = {}
     # Read every math-informal* family unless a caller named one explicitly.
     # Pattern names stay unqualified (the flexiarg stem) so that moving a
@@ -204,9 +208,9 @@ def load_all_patterns(
     *,
     index_path: Path = DEFAULT_INDEX,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
-    extra_library_dirs: tuple[Path, ...] = DEFAULT_STAGING_DIRS,
+    extra_library_dirs: tuple[Path, ...] = (),
 ) -> dict[str, Pattern]:
-    """Load the whole pattern index plus reviewed staging directories.
+    """Load the whole pattern index and any explicitly requested extra dirs.
 
     The default ``load_patterns`` path remains deliberately scoped to the
     math-informal curation boundary. This separate loader changes only the
@@ -223,11 +227,17 @@ def load_all_patterns(
         stem_counts[stem] = stem_counts.get(stem, 0) + 1
 
     patterns: dict[str, Pattern] = {}
-    qualified_to_key: dict[str, str] = {}
+    qualified_counts = collections.Counter(qualified for qualified, _, _ in indexed)
+    qualified_seen: collections.Counter[str] = collections.Counter()
+    qualified_to_keys: dict[str, list[str]] = collections.defaultdict(list)
     for qualified, title, hotwords in indexed:
         stem = qualified.rsplit("/", 1)[-1]
-        key = stem if stem_counts[stem] == 1 else qualified
-        qualified_to_key[qualified] = key
+        qualified_seen[qualified] += 1
+        if qualified_counts[qualified] > 1:
+            key = f"{qualified}#{qualified_seen[qualified]}"
+        else:
+            key = stem if stem_counts[stem] == 1 else qualified
+        qualified_to_keys[qualified].append(key)
         patterns[key] = Pattern(
             name=key,
             title=title,
@@ -251,16 +261,17 @@ def load_all_patterns(
         if not declaration:
             continue
         stem = declaration.rsplit("/", 1)[-1]
-        key = qualified_to_key.get(declaration, stem)
-        prior = patterns.get(key)
-        parsed = parse_flexiarg(path, prior.hotwords if prior else ())
-        patterns[key] = Pattern(
-            name=key,
-            title=parsed.title,
-            hotwords=parsed.hotwords,
-            conclusion=parsed.conclusion,
-            however=parsed.however,
-        )
+        keys = qualified_to_keys.get(declaration, [stem])
+        for key in keys:
+            prior = patterns.get(key)
+            parsed = parse_flexiarg(path, prior.hotwords if prior else ())
+            patterns[key] = Pattern(
+                name=key,
+                title=parsed.title,
+                hotwords=parsed.hotwords,
+                conclusion=parsed.conclusion,
+                however=parsed.however,
+            )
     return patterns
 
 
@@ -274,15 +285,38 @@ def retrieve_all(step_text: str, k: int = 4, **loader_options: Any) -> list[dict
 
 
 def retrieve(step_text: str, patterns: dict[str, Pattern], k: int = 4) -> list[dict[str, Any]]:
-    """Tier 0: deterministic hotword retrieval, model-free."""
+    """Tier 0: corpus-IDF hotword retrieval, model-free.
+
+    Tokens occurring in more than two percent of the candidate pool are
+    corpus stopwords. Remaining hits are weighted by inverse document
+    frequency so widening the pool does not reward generic vocabulary.
+    """
     toks = tokenize(step_text)
+    documents = {
+        pattern.name: set(pattern.hotwords) | tokenize(pattern.title)
+        for pattern in patterns.values()
+    }
+    frequencies = collections.Counter(
+        token for document in documents.values() for token in document
+    )
+    corpus_size = max(1, len(documents))
+    max_frequency = max(1, math.floor(corpus_size * 0.02))
     scored = []
     for pattern in patterns.values():
-        hot = set(pattern.hotwords) | tokenize(pattern.title)
-        hits = toks & hot
+        hot = documents[pattern.name]
+        raw_hits = toks & hot
+        # The legacy curated pool is intentionally tiny; a 2% threshold there
+        # would classify every token occurring twice as a stopword. Preserve
+        # its established scorer while applying corpus statistics at the
+        # whole-index scale where common-token competition is the defect.
+        hits = (raw_hits if corpus_size <= 100 else
+                {token for token in raw_hits if frequencies[token] <= max_frequency})
         if not hits:
             continue
-        score = len(hits) + (len(hits) / max(1, len(hot)))
+        score = (len(hits) + (len(hits) / max(1, len(hot)))
+                 if corpus_size <= 100 else
+                 sum(math.log((corpus_size + 1) / (frequencies[token] + 1)) + 1
+                     for token in hits))
         scored.append({"pattern": pattern.name, "score": round(score, 6), "hits": sorted(hits)})
     scored.sort(key=lambda r: (-r["score"], r["pattern"]))
     return scored[:k]

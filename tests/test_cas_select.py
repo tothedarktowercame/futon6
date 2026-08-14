@@ -94,6 +94,19 @@ def test_tier0_retrieval_recall_is_honest():
     # the irreducible (zero-lexical-overlap) ceiling — needs a non-hotword retriever:
     assert full_pool_misses == {"a93J05/s3", "a96J01/s2", "b97J01/s6"}
 
+    whole_patterns = cas.load_all_patterns()
+    whole_hits = 0
+    for paper_id in ["a93J05", "a96J01", "b97J01", "a96J04"]:
+        steps, _, oracle = load_fixture(paper_id)
+        for step in steps["steps"]:
+            want = oracle[step["id"]]["pattern"]
+            top4 = {
+                row["pattern"]
+                for row in cas.retrieve(step["text"], whole_patterns, k=4)
+            }
+            whole_hits += want in top4
+    assert whole_hits == 15, f"whole-index recall@4 regressed: {whole_hits}/22"
+
 
 def test_assemble_reads_conclusions_and_however_from_flexiarg():
     patterns = cas.load_patterns()
@@ -129,7 +142,7 @@ def test_tier0_retrieve_is_model_free(monkeypatch):
     assert any(row["pattern"] == "reduce-to-known-result" for row in candidates)
 
 
-def test_whole_index_loader_preserves_every_row_and_campaign_patterns():
+def test_whole_index_loader_preserves_every_row_and_excludes_staging_by_default():
     patterns = cas.load_all_patterns()
 
     assert len(patterns) > 1300
@@ -139,8 +152,30 @@ def test_whole_index_loader_preserves_every_row_and_campaign_patterns():
         "close-bijectivity-by-counting-not-inverting",
         "construct-through-a-finite-correspondence",
         "probe-the-claimed-property-not-the-acceptance-proxy",
-        "replace-enumeration-with-structural-counting",
     } <= patterns.keys()
+    assert "replace-enumeration-with-structural-counting" not in patterns
+
+    with_staging = cas.load_all_patterns(extra_library_dirs=cas.DEFAULT_STAGING_DIRS)
+    assert "replace-enumeration-with-structural-counting" in with_staging
+    assert len(with_staging) == len(patterns) + 1
+
+
+def test_index_collision_is_never_silently_last_wins(tmp_path):
+    index = tmp_path / "patterns-index.tsv"
+    index.write_text(
+        "same/name\ta\tx\tFirst -> rationale\tone\n"
+        "same/name\tb\ty\tSecond -> rationale\ttwo\n"
+    )
+
+    try:
+        cas.read_index(index)
+    except ValueError as error:
+        assert "duplicate normalized pattern key 'name'" in str(error)
+    else:
+        raise AssertionError("colliding index rows must fail loudly")
+
+    patterns = cas.load_all_patterns(index_path=index, library_root=tmp_path)
+    assert set(patterns) == {"same/name#1", "same/name#2"}
 
 
 def test_whole_index_path_reuses_tier0_retrieve(monkeypatch):
