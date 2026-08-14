@@ -4,6 +4,21 @@
 Operator: Joe (surface `emacs-repl`). This is the M-diagramprover / APM Lean
 formalization campaign.
 
+> **2026-08-10: ground control moved to `ams-claude-1` on ZONE.** The delta
+> since this README is in
+> `futon3c/holes/excursions/E-ground-control-pass-to-zone.md` (commit
+> `e9201a3f`) — read that alongside this. Corrections applied below are
+> marked with this date. Headlines: the substrate is a standalone
+> `futon1b-server` JVM on **7073** (Zone: `c7-futon1b.service`, store
+> `migration-store-21`; two-JVM standard, I-0 temporarily overridden —
+> futon3c commits `01d42841` `a2f4ce32` `505289d3`), and
+> `substrate/configured-url`'s env-less fallback is now 7073 (`5a36e16c`),
+> so plain-CLI `dispatch_with_recall.clj` reaches the store with no env.
+> On Zone the serving JVM runs under the systemd user unit
+> `futon3c-zone.service` (`ExecStart` = `scripts/dev-zone-env`) — restart
+> with `systemctl --user restart futon3c-zone.service`; remember §5/§7:
+> parks and live `load-string` activations do not survive it.
+
 ---
 
 ## 0. The one thing that will waste your first hour
@@ -933,6 +948,14 @@ handoff would have been re-explaining the seven rejection kinds).
 edit covers both the pilot and the unattended lane. Backup:
 `bridge_packets.py.bak-20260809-claude7` (note: Zone's `futon3c` is **not** a
 git repo — there is no VCS safety net there, take backups).
+
+> **CORRECTION (ams-claude-1, 2026-08-10):** Zone's `futon3c` **is** a git
+> checkout of master (verified; commits have been made from Zone all day).
+> What the line above correctly gestures at: most `apm-driver/` campaign
+> artifacts — including `bridge_packets.py` itself — are **untracked** there,
+> so for those specific files the no-safety-net warning stands and backups
+> remain the right habit. Zone also carries hundreds of *uncommitted
+> deletions* of tracked files; do not `git add -A` on Zone without looking.
 
 - **Tier A** now demands, for `failed-with-statement`: a **search receipt**
   (identifiers grepped, where, and the nearest declaration found with why it
