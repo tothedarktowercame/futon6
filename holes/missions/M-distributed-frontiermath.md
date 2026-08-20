@@ -292,6 +292,34 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   current; the 48 960 entries are left as written, being accurate dated records
   of the pre-symmetry-breaker CNF rather than errors.
 
+## 2026-08-21 Update — n=6 measured; budgeted solves are now reproducible
+
+- **n=6 is hard, not neglected.** Yesterday's note called it "the cheapest open
+  instance" because its only log stopped after 5.14 s. Given a real budget it
+  returned `s UNKNOWN`: kissat 4.0.4, `--time=1200`, **1200.01 s elapsed,
+  12 140 060 conflicts, 60 957 162 decisions**, on a CNF byte-identical to the
+  archived `FM001-n6.cnf`. It belongs with n=7, and my own 2026-08-20 claim is
+  corrected.
+- **New: `scripts/fm001/budgeted_solve.py`.** Every FM-001 solve so far was
+  launched by hand, which is why `FM001-n6.kissat.log` and
+  `FM001b-n8.kissat.log` just stop mid-search with no `s` line: read later, an
+  interrupted run is indistinguishable from a hard instance. The script always
+  records the budget it gave and classifies the outcome as `sat`, `unsat`,
+  `unknown`, `budget-exhausted` or `interrupted` — the last being the case the
+  old logs could not express.
+- **A SAT verdict is not a refutation until the colouring is checked.** On
+  `sat`, the script decodes the model and re-runs the harness's own
+  `verify_assignment` before writing a witness; if verification fails the
+  outcome is recorded as `sat-unverified` and never upgraded.
+- Smoke-tested on n=3: `sat`, witness verified, 0.04 s. Note the witness it
+  produces is **not** byte-identical to the archived `n3-witness.json` and this
+  is expected, not a discrepancy — the archive came from glucose4 via PySAT,
+  this from kissat, and a SAT solver may return any satisfying assignment. Both
+  were re-checked through `verify_assignment` and both pass.
+- Artifacts (gitignored, in the storage harness dir):
+  `FM001-n6.budgeted-1200s.log`, `FM001-n6.result.json`, hashed in
+  `data/frontiermath-pilot/harness/README.md`.
+
 ## 2026-03-20 Update — Ownership Boundary
 
 - FrontierMath-specific local bring-up now belongs to `futon6`, not `futon3c`.

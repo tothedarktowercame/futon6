@@ -95,6 +95,34 @@ the logs on 2026-08-20:
 | `FM001-n7.kissat.30m.log` | n=7 | 81 900 / 202 824 | `s UNKNOWN` | 29 m 59 s | 31 627 515 |
 | `FM001b-n8.kissat.log` | FM-001b n=8 | 146 160 / 353 220 | **none** | log ends at 1502.76 s | — |
 
+### n=6 has now had a real attempt (2026-08-21)
+
+Run with `scripts/fm001/budgeted_solve.py`, which records the budget it gave:
+
+| field | value |
+|---|---|
+| instance | n=6, $K_{22}$, 41 580 vars / 106 280 clauses |
+| CNF | byte-identical to the archived `FM001-n6.cnf` (`cmp` clean) |
+| solver | kissat 4.0.4, `--time=1200` |
+| budget | 1200 s |
+| elapsed | 1200.01 s (`process-time: 19m 57s`) |
+| verdict | `s UNKNOWN` |
+| effort | 12 140 060 conflicts, 60 957 162 decisions |
+| outcome | `budget-exhausted` |
+
+Artifacts, hashed in the same `sha512sum -c` form as the CNFs above:
+
+```
+cda8df616b7c2c021871b681de6e45691456eca82a9eec3620eb947e6614d241194f0c28bed9c88033c038dc879b290e7a4c73e1e1e389c7f52a4892b0dad3da  FM001-n6.budgeted-1200s.log
+23aeb529c4b15ee8fbb53258f40e4a4141a105dc6434d4ac300372f772d838a979ca304c48948b5b7c7c90b88c011cd84a8ec2571683f9d1b9a75206cb74d84d  FM001-n6.result.json
+```
+
+**This changes what n=6 means.** It was previously "never really attempted" — a
+5.14 s interrupted log. It is now measured: twenty minutes of kissat, twelve
+million conflicts, no decision. n=6 is a hard instance, not a neglected one, and
+belongs with n=7 rather than as the cheap next win the 2026-08-20 note called
+it. That was my claim, and this corrects it.
+
 Two distinct kinds of "no answer", which the notes did not separate:
 
 - **Exhausted budget** (n=7, twice): kissat ran to completion of its limit and
@@ -104,9 +132,14 @@ Two distinct kinds of "no answer", which the notes did not separate:
   log simply stops mid-search, at 5.14 s for n=6 and ~25 min for n=8. These runs
   were interrupted; they are evidence about the run, not the instance.
 
-**n=6 has therefore never been given a real attempt** — 5 seconds is not a
-budget. It is the cheapest open instance and the obvious next target, not a
-hard case.
+**Superseded 2026-08-21** — see the budgeted run above. The 5.14 s log was
+indeed an interruption, but n=6 has now had a 1200 s budget and returned
+`s UNKNOWN` after 12.1M conflicts. It is genuinely hard, not merely neglected,
+and it is NOT the cheap next win this note called it.
+
+To avoid re-creating the ambiguity that cost five months here, new solves should
+go through `scripts/fm001/budgeted_solve.py`, which records the budget it gave
+and separates `budget-exhausted` from `interrupted`.
 
 ## Witness verification
 
