@@ -261,6 +261,12 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   rest on checked counterexamples, not on solver say-so.
 - n=6 remains **open**: `FM001-n6.kissat.log` carries no `s` line, and both n=7
   logs are `s UNKNOWN`. Absence of a verdict is not UNSAT.
+- Reconciled with the canonical notes: `FM-001-strategy.md` (the primary status
+  note per the falsify plan) carried the same stale 106 260 figure and has been
+  corrected in place with a dated marker. `FM-001-falsify-plan.md` carries no
+  clause counts. The harness README now holds a table of which figures are
+  current; the 48 960 entries are left as written, being accurate dated records
+  of the pre-symmetry-breaker CNF rather than errors.
 
 ## 2026-03-20 Update — Ownership Boundary
 

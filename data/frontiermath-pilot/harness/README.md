@@ -46,20 +46,15 @@ an orphaned blob.
 
 ## SHA512
 
-    a117d36c467c57f87a1d6106320716a707381fed8885bb24da38310f04b419ac
-    12f3cfad49901ec90c0f8bce085eaf4e5e0bb43de591bb31d055b24d8b4de2e7  FM001-n5.cnf
+Valid `sha512sum` lines — copy into a file and run `sha512sum -c` from the
+storage directory:
 
-    e453c9d1d66107190371c5476430e32cc9be469891ae78da75bef364728ceed9
-    eb5335baed404c7c3b3e4a0761086dea28ada588fb6b25ad0b146c5b2afdd00a  FM001-n6.cnf
-
-    af9d0deadaa72ba55df332ba687e89c64b40167f32c7889460172346058e8083
-    f75fd6c5d4be2b4e66742ea6828348dbca0d48b005956fd493523f153a3f8dbe  FM001-n5.cnf.gz
-
-    95e1883090b9f43ab1237f48fdff0d188714d22d8a0e6dc670931a475aa7fdbf
-    9ca2602ec6cfdfcf0f82ead718ec6a1c5375972402e86ccc8e240812ddf03997  FM001-n6.cnf.gz
-
-(Each hash is one line, wrapped here for width. Verify with `sha512sum` in the
-storage directory.)
+```
+a117d36c467c57f87a1d6106320716a707381fed8885bb24da38310f04b419ac12f3cfad49901ec90c0f8bce085eaf4e5e0bb43de591bb31d055b24d8b4de2e7  FM001-n5.cnf
+e453c9d1d66107190371c5476430e32cc9be469891ae78da75bef364728ceed9eb5335baed404c7c3b3e4a0761086dea28ada588fb6b25ad0b146c5b2afdd00a  FM001-n6.cnf
+af9d0deadaa72ba55df332ba687e89c64b40167f32c7889460172346058e8083f75fd6c5d4be2b4e66742ea6828348dbca0d48b005956fd493523f153a3f8dbe  FM001-n5.cnf.gz
+95e1883090b9f43ab1237f48fdff0d188714d22d8a0e6dc670931a475aa7fdbf9ca2602ec6cfdfcf0f82ead718ec6a1c5375972402e86ccc8e240812ddf03997  FM001-n6.cnf.gz
+```
 
 ## Solver outcomes
 
@@ -94,6 +89,31 @@ All three return `True` on a complete edge set, so the n=3/4/5 refutations rest
 on checked counterexamples rather than on solver say-so.
 
 ## Corrections
+
+### Which figures are current
+
+Two clause counts for n=5 appear across the notes and BOTH are right, for
+different artifacts — this is the coherence trap:
+
+| figure | artifact | status |
+|---|---|---|
+| 48 960 | n=5 CNF **before** the vertex-0 symmetry breaker | historical, correct as dated (2026-03-08) |
+| 48 976 | n=5 CNF **after** the symmetry breaker | **current**, matches the stored artifact |
+| 106 260 | n=6, recorded 2026-03-09 | **stale** — never updated for the breaker |
+| 106 280 | n=6 | **current**, matches `p cnf 41580 106280` |
+
+Canonical notes carrying these figures, and their state as of 2026-08-20:
+
+| note | location | state |
+|---|---|---|
+| `FM-001-strategy.md` — the primary status note per the falsify plan | storage | n6 figure **corrected** to 106 280, with a dated marker |
+| `holes/missions/M-distributed-frontiermath.md` | repo (tracked) | n6 figure **corrected**, dated update section added |
+| `FM-001-falsify-plan.md` | storage | carries no clause counts; nothing to reconcile |
+| this README | repo (tracked) | authoritative for current figures |
+
+The 48 960 entries are deliberately **left as written**: they are dated
+historical records of the pre-breaker CNF, not errors, and rewriting them would
+destroy the evidence that the breaker changed the encoding.
 
 - **n6 clause count.** The 2026-03-09 mission note records
   "41 580 vars / 106 260 clauses". The artifact header is
