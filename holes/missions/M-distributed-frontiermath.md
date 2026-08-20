@@ -316,6 +316,24 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   is expected, not a discrepancy — the archive came from glucose4 via PySAT,
   this from kissat, and a SAT solver may return any satisfying assignment. Both
   were re-checked through `verify_assignment` and both pass.
+- **Hardened after review (codex-7):** the classifier trusted the solver's
+  stdout and its own timing but never its exit code, so an invalid run could be
+  recorded as a successful `budget-exhausted` measurement — the precise
+  false-evidence shape the script exists to prevent. Two holes:
+  `--budget-seconds 0` made `elapsed >= budget * 0.95` vacuously true, and a
+  crashed solver near the end of its budget fell through to `budget-exhausted`,
+  reading as "we measured this and it is hard". Now: budgets must be >= 1 s and
+  the solver must be executable, both refused before anything runs; the exit
+  code gates every path (`10` sat, `20` unsat, `0` indeterminate, anything else
+  `solver-error`); a stdout verdict that disagrees with the exit code is
+  `solver-error` rather than believed. `interrupted`, `solver-error` and
+  `sat-unverified` all exit non-zero.
+- **Durable coverage:** `tests/test_fm001_budgeted_solve.py`, 17 cases, in the
+  repo's own pytest suite. Mutation-checked: removing the budget guard fails 3,
+  removing the no-verdict exit-code check fails 5, both restore to 17 passed.
+  One early guard was *deleted* rather than kept — mutation showed removing it
+  changed no behaviour and no test, i.e. it was unreachable-in-effect, and a
+  branch nothing can distinguish is a branch that rots.
 - Artifacts (gitignored, in the storage harness dir):
   `FM001-n6.budgeted-1200s.log`, `FM001-n6.result.json`, hashed in
   `data/frontiermath-pilot/harness/README.md`.

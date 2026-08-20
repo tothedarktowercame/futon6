@@ -22,6 +22,9 @@ So this script always records the budget it gave, and classifies:
   budget-exhausted - solver hit the wall clock we set. Honest "no answer yet".
   interrupted      - no verdict and the budget was NOT reached: the run died.
                      This is the case the old logs could not express.
+  solver-error     - the solver exited with a code outside {10, 20, 0}, or its
+                     stdout verdict disagrees with its exit code. Nothing was
+                     measured, and it must not be mistaken for a hard instance.
 
 Usage
 -----
@@ -34,7 +37,9 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -65,17 +70,68 @@ def parse_model(stdout: str) -> list[int]:
     return lits
 
 
+# kissat's documented exit codes. Anything else means the solver itself failed
+# (missing/unreadable CNF is 1, signals give 128+n) and its stdout must not be
+# read as a measurement.
+RC_SAT = 10
+RC_UNSAT = 20
+RC_INDETERMINATE = 0
+# Every branch of classify() checks the exit code against one of the three
+# above, so an out-of-range code cannot reach an outcome other than
+# "solver-error". An early `not in INTERPRETABLE_RETURNCODES` guard was removed
+# once mutation testing showed it unreachable-in-effect: deleting it changed no
+# behaviour and no test, which is exactly the kind of branch that rots.
+INTERPRETABLE_RETURNCODES = frozenset({RC_SAT, RC_UNSAT, RC_INDETERMINATE})
+
+MIN_BUDGET_SECONDS = 1
+
+# Outcomes that mean "no trustworthy measurement was produced".
+FAILED_RUN_OUTCOMES = frozenset({"interrupted", "solver-error", "sat-unverified"})
+
+
+def validate_budget(budget: int) -> None:
+    """A budget must be a positive number of seconds.
+
+    Without this, --budget-seconds 0 (or negative) made the exhaustion test
+    `elapsed >= budget * 0.95` vacuously true, so a solver that did nothing at
+    all was recorded as a successful `budget-exhausted` MEASUREMENT — the exact
+    false-evidence shape this script exists to prevent.
+    """
+    if budget < MIN_BUDGET_SECONDS:
+        raise ValueError(
+            f"--budget-seconds must be >= {MIN_BUDGET_SECONDS}, got {budget}: "
+            "a non-positive budget cannot produce a measurement")
+
+
 def classify(returncode: int, stdout: str, elapsed: float, budget: float) -> str:
-    if re.search(r"^s SATISFIABLE", stdout, re.M):
-        return "sat"
-    if re.search(r"^s UNSATISFIABLE", stdout, re.M):
-        return "unsat"
-    if re.search(r"^s UNKNOWN", stdout, re.M):
+    """Outcome from (exit code, stdout, timing). The exit code is consulted
+    FIRST and can veto the stdout verdict.
+
+    A crashed or failed solver near the end of its budget used to fall through
+    to `budget-exhausted`, which reads as "we measured this instance and it is
+    hard" when in fact nothing was measured.
+    """
+    sat_line = bool(re.search(r"^s SATISFIABLE", stdout, re.M))
+    unsat_line = bool(re.search(r"^s UNSATISFIABLE", stdout, re.M))
+    unknown_line = bool(re.search(r"^s UNKNOWN", stdout, re.M))
+
+    # A verdict that disagrees with the exit code is not trustworthy either way.
+    if sat_line and unsat_line:
+        return "solver-error"
+    if sat_line:
+        return "sat" if returncode == RC_SAT else "solver-error"
+    if unsat_line:
+        return "unsat" if returncode == RC_UNSAT else "solver-error"
+    # No verdict: the exit code must be the indeterminate one.
+    if returncode != RC_INDETERMINATE:
+        return "solver-error"
+    exhausted = elapsed >= budget * 0.95
+    if unknown_line:
         # kissat prints UNKNOWN both on its own --time limit and on other
         # non-decisions; the budget comparison is what tells them apart.
-        return "budget-exhausted" if elapsed >= budget * 0.95 else "unknown"
+        return "budget-exhausted" if exhausted else "unknown"
     # No verdict line at all.
-    return "budget-exhausted" if elapsed >= budget * 0.95 else "interrupted"
+    return "budget-exhausted" if exhausted else "interrupted"
 
 
 def main() -> int:
@@ -89,6 +145,14 @@ def main() -> int:
                     help="directory for the cnf, log, witness and result record")
     args = ap.parse_args()
 
+    validate_budget(args.budget_seconds)
+
+    solver = shutil.which(args.kissat) or args.kissat
+    if not (Path(solver).is_file() and os.access(solver, os.X_OK)):
+        raise SystemExit(
+            f"solver not executable: {args.kissat!r}. Refusing to run rather "
+            "than record an uninterpretable outcome.")
+
     harness = load_harness()
     out_dir = args.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -101,7 +165,7 @@ def main() -> int:
     cnf.to_file(str(cnf_path))
     vertex_count = 4 * args.n - 2
 
-    cmd = [args.kissat, f"--time={args.budget_seconds}", str(cnf_path)]
+    cmd = [solver, f"--time={args.budget_seconds}", str(cnf_path)]
     started = time.monotonic()
     proc = subprocess.run(cmd, capture_output=True, text=True)
     elapsed = time.monotonic() - started
@@ -137,9 +201,11 @@ def main() -> int:
     }
     result_path.write_text(json.dumps(record, indent=2) + "\n")
     print(json.dumps(record, indent=2))
-    # Non-zero only when the run itself failed to produce an interpretable
-    # outcome; a truthful "budget-exhausted" is a successful measurement.
-    return 0 if outcome != "interrupted" else 1
+    # Non-zero whenever the run did NOT produce a trustworthy measurement.
+    # A truthful "budget-exhausted" is a successful measurement; a crash, a
+    # died-early run, or a SAT verdict whose colouring failed verification are
+    # not, and must not exit 0.
+    return 0 if outcome not in FAILED_RUN_OUTCOMES else 1
 
 
 if __name__ == "__main__":
