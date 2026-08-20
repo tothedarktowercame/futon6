@@ -236,10 +236,31 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
 ## 2026-03-09 Update — F1-opposite sprint
 
 - Rebuilt the $n=5$ CNF (`[data/frontiermath-pilot/harness/FM001-n5.cnf.gz]`) from `scripts/fm001/ramsey_book_sat.py`. A Glucose4 run via PySAT stalled (>60 s without decision progress), so we are switching to a standalone `kissat-sc2023` build with a 2-hour wall-clock cap to either extract `n5-witness.json` or emit an UNSAT DRAT for ledger logging.
-- Generated the next instance $n=6$ (`[data/frontiermath-pilot/harness/FM001-n6.cnf.gz]`, 41 580 vars / 106 260 clauses) with `--no-solve` so we can immediately queue it once the $n=5$ outcome lands.
+- Generated the next instance $n=6$ (`[data/frontiermath-pilot/harness/FM001-n6.cnf.gz]`, 41 580 vars / 106 280 clauses) with `--no-solve` so we can immediately queue it once the $n=5$ outcome lands.
 - Action items: compile/install `kissat` in the shared toolchain, capture SHA512 hashes for both CNFs in `data/frontiermath-pilot/harness/README.md`, and record every solver outcome in the FM-001 strategy/falsification notes under `data/frontiermath-pilot/`.
 - Added a cheap vertex-order symmetry breaker (monotone incident edges on vertex 0) to the SAT encoding and regenerated the CNFs / SHA512 fingerprints so `kissat` and future solvers work on the reduced orbit space. After this change, `FM001-n5.cnf.gz` is 48 976 clauses (up from 48 960).
 - `kissat 4.0.4 --time=1800 FM001-n5.cnf` finished SAT in 11 s; the log (`[data/frontiermath-pilot/harness/FM001-n5.kissat.log]`) and decoded witness (`[data/frontiermath-pilot/harness/n5-witness.json]`) now live in the harness directory so H-F1(n=5) is marked refuted.
+
+## 2026-08-20 Update — Harness artifacts pinned and one figure corrected
+
+- Wrote the missing `data/frontiermath-pilot/harness/README.md`, discharging the
+  2026-03-09 action item to capture SHA512 hashes for both CNFs and record every
+  solver outcome. It is the one file `.gitignore` whitelists in that directory,
+  and it did not exist.
+- The harness artifacts are NOT in the repo: commit `338a2fa` moved them to
+  `~/code/storage/futon6/data/frontiermath-pilot/harness/`, so the links in the
+  2026-03-09 note do not resolve from a checkout. The new README records the
+  real location.
+- **Corrected:** that note recorded n=6 as 106 260 clauses. The artifact header
+  is `p cnf 41580 106280` and regeneration reproduces 106 280; the figure
+  predates the vertex-0 symmetry breaker, which added +16 clauses to n=5
+  (48 960 -> 48 976) and +20 to n=6. Only the n=5 figure had been updated.
+- Verified rather than restated: both CNFs regenerate **byte-identical** from
+  `scripts/fm001/ramsey_book_sat.py`, and the n3/n4/n5 witnesses all pass the
+  harness's own `verify_assignment` on complete edge sets — so those refutations
+  rest on checked counterexamples, not on solver say-so.
+- n=6 remains **open**: `FM001-n6.kissat.log` carries no `s` line, and both n=7
+  logs are `s UNKNOWN`. Absence of a verdict is not UNSAT.
 
 ## 2026-03-20 Update — Ownership Boundary
 
