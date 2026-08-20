@@ -261,9 +261,33 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   rest on checked counterexamples, not on solver say-so.
 - n=6 remains **open**: `FM001-n6.kissat.log` carries no `s` line, and both n=7
   logs are `s UNKNOWN`. Absence of a verdict is not UNSAT.
+- **Solver loglines the ops rule required and never got.** This mission's own
+  discipline is "every solver run gets a logline in
+  `holes/missions/M-distributed-frontiermath.md` plus SHA512 hashes for
+  CNFs/DRATs". Only n=5 ever got one. The full ledger, read off the logs:
+
+  | run | instance | `s` line | process-time | conflicts |
+  |---|---|---|---|---|
+  | `FM001-n5.kissat.log` | n=5 | `s SATISFIABLE` | 11.06 s | 321 908 |
+  | `FM001-n6.kissat.log` | n=6 | none — log ends at 5.14 s | — | — |
+  | `FM001-n7.kissat.log` | n=7 | `s UNKNOWN` | 59 m 52 s | 48 298 934 |
+  | `FM001-n7.kissat.30m.log` | n=7 | `s UNKNOWN` | 29 m 59 s | 31 627 515 |
+  | `FM001b-n8.kissat.log` | FM-001b n=8 | none — log ends at 1502.76 s | — | — |
+
+  An **n=7 instance exists and was solved against twice** (81 900 vars /
+  202 824 clauses, regenerates byte-identical); the mission log never mentioned
+  n=7 at all.
+- **n=6 has never had a real attempt.** Its log stops after 5.14 s with no `s`
+  line and no summary — an interrupted run, not a hard instance. Distinguish
+  this from n=7, where kissat exhausted a 30- and a 60-minute budget and
+  returned `s UNKNOWN`. n=6 is the cheapest open instance and the obvious next
+  target.
 - Reconciled with the canonical notes: `FM-001-strategy.md` (the primary status
   note per the falsify plan) carried the same stale 106 260 figure and has been
-  corrected in place with a dated marker. `FM-001-falsify-plan.md` carries no
+  corrected in place with a dated marker. A canonical harness README also exists
+  beside the artifacts (`$STORAGE/README.md`); its six SHA512 claims were
+  re-checked and all pass, and the tracked README now defers to it rather than
+  duplicating it. `FM-001-falsify-plan.md` carries no
   clause counts. The harness README now holds a table of which figures are
   current; the 48 960 entries are left as written, being accurate dated records
   of the pre-symmetry-breaker CNF rather than errors.

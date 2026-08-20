@@ -9,6 +9,22 @@ Everything below was **verified on 2026-08-20**, not copied from the mission
 notes. Where a note and an artifact disagreed, the artifact won — see
 [Corrections](#corrections).
 
+## Relationship to the canonical harness README
+
+A harness README already exists **alongside the artifacts** at
+`$STORAGE/README.md` (2026-03-15). It is the canonical per-file hash table and
+is NOT superseded by this file. All six of its SHA512 claims were re-checked on
+2026-08-20 with `sha512sum -c` and every one passes:
+
+    FM001-n5.cnf.gz: OK   n5-witness.json: OK   FM001-n6.cnf.gz: OK
+    FM001-n7.cnf.gz: OK   n3-witness.json: OK   n4-witness.json: OK
+
+This file is the **tracked** counterpart: it exists because the storage copy is
+outside the repo and unreachable from a checkout. It adds what the canonical
+copy lacks — the solver-run ledger below, hashes for the uncompressed CNFs, and
+the current-figures reconciliation — and defers to it for anything it already
+states correctly.
+
 ## Where the artifacts actually are
 
 This directory is tracked but **empty of artifacts by design**: `.gitignore`
@@ -40,8 +56,11 @@ avoids $B_n$? A SAT witness refutes $R(B_{n-1}, B_n) \le 4n-2$ for that $n$.
     cmp /tmp/n5.cnf $STORAGE/FM001-n5.cnf   # -> no output: identical
     cmp /tmp/n6.cnf $STORAGE/FM001-n6.cnf   # -> no output: identical
 
-Confirmed 2026-08-20: the generator is deterministic and still reproduces both
-stored CNFs exactly, so the hashes below pin a rebuildable artifact rather than
+n=7 likewise: `ramsey_book_sat.py 7 --no-solve` reproduces `FM001-n7.cnf`
+(81 900 vars / 202 824 clauses) byte-for-byte.
+
+Confirmed 2026-08-20: the generator is deterministic and still reproduces all
+three stored CNFs exactly, so the hashes below pin a rebuildable artifact rather than
 an orphaned blob.
 
 ## SHA512
@@ -54,24 +73,41 @@ a117d36c467c57f87a1d6106320716a707381fed8885bb24da38310f04b419ac12f3cfad49901ec9
 e453c9d1d66107190371c5476430e32cc9be469891ae78da75bef364728ceed9eb5335baed404c7c3b3e4a0761086dea28ada588fb6b25ad0b146c5b2afdd00a  FM001-n6.cnf
 af9d0deadaa72ba55df332ba687e89c64b40167f32c7889460172346058e8083f75fd6c5d4be2b4e66742ea6828348dbca0d48b005956fd493523f153a3f8dbe  FM001-n5.cnf.gz
 95e1883090b9f43ab1237f48fdff0d188714d22d8a0e6dc670931a475aa7fdbf9ca2602ec6cfdfcf0f82ead718ec6a1c5375972402e86ccc8e240812ddf03997  FM001-n6.cnf.gz
+c9d00b2636d284b1c2c03ab0e977f438eedb1e39247e9cd749158ad4b4a1a33783d9b86207601e0b024f63a4b93d2a7b28c6ca28254fb416ddc8721b563a9eae  FM001-n7.cnf
+4b544f0e3019be329c5cbff944408a77c5c70092a263e8da98a877c483329296588c6affcda6848b74cd09fcfe0ba2747e6e761bfb1eb96a492ae2416ec2b691  FM001b-n8.cnf
 ```
 
-## Solver outcomes
+The `.gz` forms of n5/n6/n7 and the three witnesses are hashed in the canonical
+`$STORAGE/README.md`; the uncompressed CNFs above are hashed only here.
 
-Every log present in the storage directory, reported as found — including the
-ones that did not resolve:
+## Solver outcomes — complete run ledger
 
-| log | `s` line | reading |
-|---|---|---|
-| `FM001-n5.kissat.log` | `s SATISFIABLE` | witness exists; H-F1(n=5) refuted |
-| `FM001-n6.kissat.log` | *no `s` line* | run did not reach a verdict |
-| `FM001-n7.kissat.log` | `s UNKNOWN` | timed out |
-| `FM001-n7.kissat.30m.log` | `s UNKNOWN` | timed out again at 30 min |
-| `FM001b-n8.kissat.log` | — | FM-001b variant, separate instance |
+The mission's own ops rule is "every solver run gets a logline". Only n=5 had
+one. All five runs present in the storage directory are recorded here, read off
+the logs on 2026-08-20:
 
-n=6 is therefore **open**, not negative: absence of an `s` line is not UNSAT.
+| log | instance | vars / clauses | `s` line | process-time | conflicts |
+|---|---|---|---|---|---|
+| `FM001-n5.kissat.log` | n=5 | 18 360 / 48 976 | `s SATISFIABLE` | 11.06 s | 321 908 |
+| `FM001-n6.kissat.log` | n=6 | 41 580 / 106 280 | **none** | log ends at 5.14 s | — |
+| `FM001-n7.kissat.log` | n=7 | 81 900 / 202 824 | `s UNKNOWN` | 59 m 52 s | 48 298 934 |
+| `FM001-n7.kissat.30m.log` | n=7 | 81 900 / 202 824 | `s UNKNOWN` | 29 m 59 s | 31 627 515 |
+| `FM001b-n8.kissat.log` | FM-001b n=8 | 146 160 / 353 220 | **none** | log ends at 1502.76 s | — |
 
-## Witness verification
+Two distinct kinds of "no answer", which the notes did not separate:
+
+- **Exhausted budget** (n=7, twice): kissat ran to completion of its limit and
+  emitted `s UNKNOWN`. Tens of millions of conflicts, no verdict. This is
+  evidence about instance hardness.
+- **Truncated log** (n=6, FM-001b n=8): no `s` line and no closing summary — the
+  log simply stops mid-search, at 5.14 s for n=6 and ~25 min for n=8. These runs
+  were interrupted; they are evidence about the run, not the instance.
+
+**n=6 has therefore never been given a real attempt** — 5 seconds is not a
+budget. It is the cheapest open instance and the obvious next target, not a
+hard case.
+
+## Witness verification## Witness verification
 
 The stored witnesses were checked against the harness's own
 `verify_assignment`, which rejects a colouring if any edge carries $\ge n-1$ red
