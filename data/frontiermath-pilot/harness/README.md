@@ -48,8 +48,9 @@ avoids $B_n$? A SAT witness refutes $R(B_{n-1}, B_n) \le 4n-2$ for that $n$.
 |---|---|---|---|---|
 | `FM001-n5.cnf` | $K_{18}$ | 18 360 | 48 976 | includes the vertex-0 symmetry breaker |
 | `FM001-n6.cnf` | $K_{22}$ | 41 580 | 106 280 | mission note said 106 260 — see Corrections |
+| `FM001-n7.cnf` | $K_{26}$ | 81 900 | 202 824 | attempted twice, `s UNKNOWN` both times |
 
-### Reproduction — both are byte-identical
+### Reproduction — all three are byte-identical
 
     .venv/bin/python scripts/fm001/ramsey_book_sat.py 5 --cnf-out /tmp/n5.cnf --no-solve
     .venv/bin/python scripts/fm001/ramsey_book_sat.py 6 --cnf-out /tmp/n6.cnf --no-solve
@@ -107,7 +108,7 @@ Two distinct kinds of "no answer", which the notes did not separate:
 budget. It is the cheapest open instance and the obvious next target, not a
 hard case.
 
-## Witness verification## Witness verification
+## Witness verification
 
 The stored witnesses were checked against the harness's own
 `verify_assignment`, which rejects a colouring if any edge carries $\ge n-1$ red
@@ -125,6 +126,9 @@ All three return `True` on a complete edge set, so the n=3/4/5 refutations rest
 on checked counterexamples rather than on solver say-so.
 
 ## Corrections
+
+Points where a note and an artifact disagreed, and which way it was
+resolved. In every case the artifact was treated as authoritative.
 
 ### Which figures are current
 
