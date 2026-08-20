@@ -25,6 +25,14 @@ So this script always records the budget it gave, and classifies:
   solver-error     - the solver exited with a code outside {10, 20, 0}, or its
                      stdout verdict disagrees with its exit code. Nothing was
                      measured, and it must not be mistaken for a hard instance.
+  budget-killed    - the solver overran its own --time and WE stopped it at the
+                     wall clock. The budget is enforced here, not merely handed
+                     to the solver and trusted.
+
+`budget-exhausted` requires the solver to SAY it stopped undecided (`s UNKNOWN`).
+A run that printed no verdict at all is `interrupted` no matter how long it ran:
+inferring hardness from the clock alone is the error FM001-n6.kissat.log
+encoded for five months.
 
 Usage
 -----
@@ -86,7 +94,18 @@ INTERPRETABLE_RETURNCODES = frozenset({RC_SAT, RC_UNSAT, RC_INDETERMINATE})
 MIN_BUDGET_SECONDS = 1
 
 # Outcomes that mean "no trustworthy measurement was produced".
-FAILED_RUN_OUTCOMES = frozenset({"interrupted", "solver-error", "sat-unverified"})
+FAILED_RUN_OUTCOMES = frozenset(
+    {"interrupted", "solver-error", "sat-unverified", "budget-killed"})
+
+MIN_GRACE_SECONDS = 30
+
+
+def grace_seconds(budget: int) -> int:
+    """Slack allowed past the budget before we kill the solver ourselves.
+
+    Generous enough that ordinary shutdown and log flushing never trip it, small
+    enough that a solver ignoring its own --time cannot run away."""
+    return max(MIN_GRACE_SECONDS, budget // 10)
 
 
 def validate_budget(budget: int) -> None:
@@ -125,13 +144,43 @@ def classify(returncode: int, stdout: str, elapsed: float, budget: float) -> str
     # No verdict: the exit code must be the indeterminate one.
     if returncode != RC_INDETERMINATE:
         return "solver-error"
-    exhausted = elapsed >= budget * 0.95
     if unknown_line:
         # kissat prints UNKNOWN both on its own --time limit and on other
         # non-decisions; the budget comparison is what tells them apart.
-        return "budget-exhausted" if exhausted else "unknown"
-    # No verdict line at all.
-    return "budget-exhausted" if exhausted else "interrupted"
+        return "budget-exhausted" if elapsed >= budget * 0.95 else "unknown"
+    # No verdict line AT ALL. Elapsed time must not upgrade this: a solver that
+    # printed no `s` line reported nothing, and inferring "we measured this
+    # instance and it is hard" from the clock alone is precisely the mistake
+    # FM001-n6.kissat.log encoded for five months. A genuine budget exhaustion
+    # says so with `s UNKNOWN`; silence is an interrupted run, however long it
+    # ran for.
+    return "interrupted"
+
+
+def run_solver(cmd: list[str], budget: int, grace: int):
+    """Run the solver under OUR wall clock.
+
+    `--time=N` is advisory: it is handed to the solver, which is then trusted to
+    honour it. Extracted and hard-bounded here so that a solver ignoring its own
+    limit cannot run unbounded, and so the enforcement is reachable by a test —
+    while this lived inline in main(), deleting the timeout changed no test.
+
+    Returns (stdout, stderr, returncode, elapsed, killed). `returncode` is None
+    when we killed it; `killed` is the fact the caller must not paper over.
+    """
+    started = time.monotonic()
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True,
+                              timeout=budget + grace)
+        return (proc.stdout, proc.stderr, proc.returncode,
+                time.monotonic() - started, False)
+    except subprocess.TimeoutExpired as exc:
+        def _text(stream):
+            if stream is None:
+                return ""
+            return stream.decode() if isinstance(stream, bytes) else stream
+        return (_text(exc.stdout), _text(exc.stderr), None,
+                time.monotonic() - started, True)
 
 
 def main() -> int:
@@ -166,16 +215,19 @@ def main() -> int:
     vertex_count = 4 * args.n - 2
 
     cmd = [solver, f"--time={args.budget_seconds}", str(cnf_path)]
-    started = time.monotonic()
-    proc = subprocess.run(cmd, capture_output=True, text=True)
-    elapsed = time.monotonic() - started
-    log_path.write_text(proc.stdout + proc.stderr)
+    grace = grace_seconds(args.budget_seconds)
+    stdout, stderr, returncode, elapsed, killed = run_solver(
+        cmd, args.budget_seconds, grace)
+    log_path.write_text(stdout + stderr)
 
-    outcome = classify(proc.returncode, proc.stdout, elapsed, args.budget_seconds)
+    if killed:
+        outcome = "budget-killed"
+    else:
+        outcome = classify(returncode, stdout, elapsed, args.budget_seconds)
 
     witness_path = None
     if outcome == "sat":
-        assignment = harness.decode_model(parse_model(proc.stdout), edges)
+        assignment = harness.decode_model(parse_model(stdout), edges)
         if harness.verify_assignment(args.n, vertex_count, assignment):
             witness_path = out_dir / f"n{args.n}-witness.json"
             harness.write_witness(witness_path, assignment, args.n)
@@ -192,7 +244,8 @@ def main() -> int:
         "solver": "kissat",
         "budget_seconds": args.budget_seconds,
         "elapsed_seconds": round(elapsed, 2),
-        "returncode": proc.returncode,
+        "returncode": returncode,
+        "grace_seconds": grace,
         "outcome": outcome,
         "witness_verified": outcome == "sat",
         "witness": str(witness_path) if witness_path else None,

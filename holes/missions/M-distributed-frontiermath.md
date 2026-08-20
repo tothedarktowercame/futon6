@@ -334,6 +334,25 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   One early guard was *deleted* rather than kept — mutation showed removing it
   changed no behaviour and no test, i.e. it was unreachable-in-effect, and a
   branch nothing can distinguish is a branch that rots.
+- **Hardened again after review (codex-7, round 2).** Two holes remained:
+  - **The budget was advisory.** `--time=N` was handed to the solver and then
+    trusted; nothing bounded the run here. `run_solver` now enforces it with a
+    hard `subprocess` timeout at `budget + grace` (grace =
+    `max(30 s, budget/10)`, so ordinary shutdown never trips it). A solver that
+    overruns is killed and typed `budget-killed`, which is a FAILED run, not a
+    result.
+  - **Silence was being read as hardness.** A verdict-free run with exit code 0
+    became `budget-exhausted` once the clock passed 95% of the budget. It is now
+    `interrupted` *however long it ran*. `budget-exhausted` requires the solver
+    to SAY `s UNKNOWN`. Inferring "we measured this instance and it is hard"
+    from elapsed time alone is precisely the error `FM001-n6.kissat.log`
+    encoded for five months — the script must not reproduce it.
+- The n=6 measurement is unaffected: `s UNKNOWN`, rc 0, 1200.01 s of 1200 s,
+  still `budget-exhausted` under the stricter rules.
+- Coverage is now 28 pytest cases. Note the wall clock had to be **extracted**
+  from `main()` into `run_solver` to be testable at all: while it lived inline,
+  deleting the timeout changed no test. It now fails one, in ~20 s rather than
+  hanging the suite.
 - Artifacts (gitignored, in the storage harness dir):
   `FM001-n6.budgeted-1200s.log`, `FM001-n6.result.json`, hashed in
   `data/frontiermath-pilot/harness/README.md`.
