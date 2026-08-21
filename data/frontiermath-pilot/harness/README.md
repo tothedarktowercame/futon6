@@ -158,6 +158,56 @@ Reproduce by loading a witness, mapping `red_edges`/`blue_edges` through
 All three return `True` on a complete edge set, so the n=3/4/5 refutations rest
 on checked counterexamples rather than on solver say-so.
 
+## Encoding cross-check — what an UNSAT verdict would rest on
+
+Witness verification above covers only the SAT direction, and it covers it
+well: a colouring that passes `verify_assignment` refutes
+$R(B_{n-1}, B_n) \le 4n-2$ whatever the encoder did, because the check never
+consults the CNF.
+
+An UNSAT verdict has no such route, and it is the stronger claim — it says the
+bound *holds*. Its whole weight sits on `ramsey_book_sat.build_instance` being
+**complete**: every valid colouring must be admitted, up to the vertex-0
+symmetry break. An encoder that over-constrains returns UNSAT while colourings
+exist, and UNSAT looks identical either way. Until 2026-08-21 nothing tested
+this.
+
+`scripts/fm001/encoding_cross_check.py` compares the production encoding
+against an independent one that forbids each violating configuration outright —
+no helper variables, no cardinality network, no symmetry breaking — and checks
+three things: that the independent encoder accepts exactly what
+`verify_assignment` accepts; that the production CNF admits a colouring exactly
+when the independent encoder accepts it *and* vertex-0 monotonicity holds; and
+that a valid colouring obtained from the independent encoder alone is admitted
+by the production CNF after canonical relabelling.
+
+| n | vertices | production clauses | independent clauses | samples | valid samples | disagreements | symmetry break | wall clock |
+|---|---|---|---|---|---|---|---|---|
+| 3 | $K_{10}$ | 5 048 | 3 780 | 300 | 27 | 0 | witness admitted after relabelling | 0.2 s |
+| 4 | $K_{14}$ | 18 576 | 65 065 | 200 | 30 | 0 | witness admitted after relabelling | 0.8 s |
+| 5 | $K_{18}$ | 48 976 | 946 764 | 40 | 3 | 0 | witness admitted after relabelling | 6 m 06 s |
+
+The n=5 production clause count is 48 976 — the same figure the table above
+pins for the stored `FM001-n5.cnf`, so the encoder being cross-checked is the
+one that built the archived instance.
+
+In all three the independent witness **violates** vertex-0 monotonicity and is
+correctly rejected by the production CNF, while its relabelling is accepted.
+That is the satisfiability-preservation obligation of the symmetry breaker,
+discharged by example rather than assumed.
+
+Reproduce:
+
+    .venv/bin/python scripts/fm001/encoding_cross_check.py --n 3 --samples 300
+    .venv/bin/python scripts/fm001/encoding_cross_check.py --n 4 --samples 200
+
+Exit status is non-zero on any disagreement. **Scope, stated plainly:** this is
+sampling at small $n$, not a proof for all $n$, and the independent encoder is
+independent of the production *encoding*, not of the *property* — if
+`verify_assignment` is the wrong formalisation of the book condition, both
+agree and both are wrong. No UNSAT verdict has ever been produced by this
+harness; this is the check that would have to pass before one meant anything.
+
 ## Corrections
 
 Points where a note and an artifact disagreed, and which way it was

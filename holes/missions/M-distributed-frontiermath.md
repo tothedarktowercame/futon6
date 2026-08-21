@@ -377,6 +377,69 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   `FM001-n6.budgeted-1200s.log`, `FM001-n6.result.json`, hashed in
   `data/frontiermath-pilot/harness/README.md`.
 
+## 2026-08-21 Update — the UNSAT direction now has a trust root
+
+- **The harness believed its two verdicts very unequally.** A SAT verdict is
+  never taken on the solver's word: `budgeted_solve.py` decodes the model and
+  re-runs `verify_assignment` before it will write `sat`, and an unchecked
+  colouring is recorded as `sat-unverified`. That check is sound because it
+  tests the combinatorial property directly and never consults the CNF. An
+  UNSAT verdict had **no check at all** — and it is the stronger claim, since
+  UNSAT says $R(B_{n-1}, B_n) \le 4n-2$ *holds* for that $n$.
+- **What an UNSAT verdict actually rests on** is that
+  `ramsey_book_sat.build_instance` is *complete*: every valid colouring is
+  admitted, up to the vertex-0 symmetry break. An encoder that over-constrains
+  — a cardinality bound off by one, or a symmetry breaker that is not
+  satisfiability-preserving — returns UNSAT while colourings exist, and reports
+  a theorem that is not there. The failure is silent: UNSAT looks the same
+  either way. Nothing tested it; `build_instance` had no test.
+- **New: `scripts/fm001/encoding_cross_check.py`.** It compares the production
+  encoding against an independent one that forbids each violating configuration
+  outright — no helper variables, no cardinality network, no symmetry breaking,
+  a direct transcription of `verify_assignment`. Three checks: the independent
+  encoder accepts exactly what `verify_assignment` accepts; the production CNF
+  admits a colouring exactly when the independent encoder accepts it **and**
+  vertex-0 monotonicity holds; and a valid colouring obtained from the
+  independent encoder *alone* is admitted by the production CNF after canonical
+  relabelling.
+- **Measured, at three instance sizes, zero disagreements:**
+
+  | n | production clauses | independent clauses | samples | valid samples | disagreements | wall clock |
+  |---|---|---|---|---|---|---|
+  | 3 | 5 048 | 3 780 | 300 | 27 | 0 | 0.2 s |
+  | 4 | 18 576 | 65 065 | 200 | 30 | 0 | 0.8 s |
+  | 5 | 48 976 | 946 764 | 40 | 3 | 0 | 6 m 06 s |
+
+  The n=5 production clause count is 48 976, the figure the harness README pins
+  for the archived `FM001-n5.cnf` — so the encoder under test is the one that
+  built the stored instance.
+- **The symmetry breaker is now discharged by example, not assumed.** At all
+  three n the independent witness violates vertex-0 monotonicity and is
+  correctly rejected by the production CNF, while its canonical relabelling is
+  accepted and still valid. That is exactly the satisfiability-preservation
+  obligation of `add_vertex_zero_monotone_edges`.
+- **A sampler that never draws a valid colouring proves nothing.** The first
+  version of this check sampled uniformly at random; at these sizes *every*
+  such colouring is invalid, so it exercised only the rejection direction and
+  never asked whether the encoder admits what it must. It read as a passing
+  check. Samples are now drawn by perturbing the independent witness, and
+  `samples_accepted_by_property > 0` is pinned by its own test.
+- **Durable coverage:** `tests/test_fm001_encoding_cross_check.py`, 9 cases.
+  Mutation-checked with the file diffed first: making `monotone_zero` vacuous
+  fails 3, making the canonical relabelling the identity fails 2, dropping the
+  symmetry-break result from the `ok` verdict fails 1. All restore to 9 passed.
+  The last of those needed a test run with `samples=0`: with samples the
+  over-constraint was also caught by the sampler, so the deterministic check
+  was not distinguishable — a conjunct nothing can distinguish is a conjunct
+  that rots.
+- **Scope, stated rather than implied.** This is sampling at small $n$, not a
+  proof for all $n$; and the independent encoder is independent of the
+  production *encoding*, not of the *property* — if `verify_assignment` is the
+  wrong formalisation of the book condition, both agree and both are wrong.
+  That question is upstream of this file. No UNSAT verdict has ever been
+  produced by this harness (every run to date is SAT or UNKNOWN); this is the
+  check that would have to pass before one meant anything.
+
 ## 2026-03-20 Update — Ownership Boundary
 
 - FrontierMath-specific local bring-up now belongs to `futon6`, not `futon3c`.
