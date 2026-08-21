@@ -176,13 +176,7 @@ def test_cross_check_detects_an_over_constrained_encoder(
     report = cc.cross_check(N, samples=20, seed=0)
     assert report["ok"] is False
     assert report["symmetry_break"]["relabelled_admitted"] is False
-
-    # With no samples at all, the symmetry-break check is the ONLY thing that
-    # can catch this. Random sampling may or may not draw the excluded
-    # colouring; the deterministic check must not depend on it.
-    blind = cc.cross_check(N, samples=0, seed=0)
-    assert blind["encoding_disagreements"] == []
-    assert blind["ok"] is False
+    assert report["symmetry_break_ok"] is False
 
 
 def test_cross_check_detects_an_encoder_that_constrains_nothing(monkeypatch):
@@ -212,3 +206,114 @@ def test_naive_encoder_forbids_exactly_the_book_configurations(instance):
         len(list(combinations(range(others), N - 1)))
         + len(list(combinations(range(others), N))))
     assert len(independent) == expected
+
+
+# --- vacuous success -------------------------------------------------------
+#
+# Round-2 review finding: a run with zero (or negative) samples found no
+# disagreements and was reported `ok`, exit 0. Absence of disagreement is
+# evidence only when the run could have produced one, and this file is
+# precisely about not letting an unexercised check read as a passing one — the
+# `samples=0` trick an earlier version of these tests used was itself an
+# instance of it.
+
+
+def _synthetic_report(**overrides):
+    report = {
+        "samples": 100,
+        "samples_accepted_by_property": 5,
+        "property_disagreements": [],
+        "encoding_disagreements": [],
+        "symmetry_break": {"relabelled_admitted": True},
+        "symmetry_break_ok": True,
+    }
+    report.update(overrides)
+    report["vacuity"] = overrides.get("vacuity", cc.vacuity_reasons(report))
+    return report
+
+
+@pytest.mark.parametrize("samples", [0, -1, -400])
+def test_non_positive_sample_counts_are_refused(samples):
+    with pytest.raises(ValueError, match="must be >= 1"):
+        cc.validate_samples(samples)
+
+
+@pytest.mark.parametrize("samples", [0, -1])
+def test_cli_refuses_before_running_anything(monkeypatch, samples):
+    """The refusal must come first: running the check and then reporting a
+    vacuous result still prints a report that reads like a measurement."""
+    monkeypatch.setattr(
+        "sys.argv",
+        ["encoding_cross_check.py", "--n", "3", "--samples", str(samples)])
+    monkeypatch.setattr(
+        cc, "cross_check",
+        lambda *a, **k: pytest.fail("cross_check must not run"))
+    with pytest.raises(SystemExit) as excinfo:
+        cc.main()
+    assert "must be >= 1" in str(excinfo.value)
+
+
+def test_zero_samples_is_vacuous_not_ok():
+    """Library callers bypass the CLI guard, so the verdict must refuse too."""
+    report = cc.cross_check(N, samples=0, seed=0)
+    assert report["property_disagreements"] == []
+    assert report["encoding_disagreements"] == []
+    assert "no-samples" in report["vacuity"]
+    assert report["ok"] is False
+
+
+def test_a_run_that_never_samples_a_valid_colouring_is_not_ok(monkeypatch):
+    """The admission direction is the one an UNSAT verdict depends on. A run
+    whose every sample is a colouring the encoder must REJECT checked only the
+    other half and must not report agreement."""
+    # Every edge red: at n=3 a red edge has 8 common red neighbours, far past
+    # the n-1 = 2 the book condition allows, so no sample can be valid.
+    monkeypatch.setattr(cc, "random_colouring",
+                        lambda edges, rng, p: {e: True for e in edges})
+    monkeypatch.setattr(cc, "perturbations",
+                        lambda colouring, rng, flips: {e: True for e in colouring})
+    report = cc.cross_check(N, samples=20, seed=0)
+    assert report["samples_accepted_by_property"] == 0
+    assert report["property_disagreements"] == []
+    assert report["encoding_disagreements"] == []
+    assert "no-valid-samples" in report["vacuity"]
+    assert report["ok"] is False
+
+
+def test_a_missing_independent_witness_is_vacuous_not_ok(monkeypatch):
+    """With no witness the symmetry-break check never runs, and its result was
+    true by absence."""
+    monkeypatch.setattr(cc, "naive_clauses",
+                        lambda harness, n, edges, vertex_count: [[1], [-1]])
+    report = cc.cross_check(N, samples=20, seed=0)
+    assert report["symmetry_break"] is None
+    assert "no-independent-witness" in report["vacuity"]
+    assert report["ok"] is False
+
+
+def test_is_ok_requires_every_conjunct():
+    """Each term isolated on a constructed report. While the verdict was an
+    expression inside cross_check, dropping the symmetry-break term changed no
+    test — the run's own sampler happened to catch the same fault."""
+    assert cc.is_ok(_synthetic_report()) is True
+    assert cc.is_ok(_synthetic_report(
+        property_disagreements=[{"sample": 1}])) is False
+    assert cc.is_ok(_synthetic_report(
+        encoding_disagreements=[{"sample": 1}])) is False
+    assert cc.is_ok(_synthetic_report(symmetry_break_ok=False)) is False
+    assert cc.is_ok(_synthetic_report(samples_accepted_by_property=0)) is False
+    assert cc.is_ok(_synthetic_report(samples=0)) is False
+    assert cc.is_ok(_synthetic_report(symmetry_break=None)) is False
+
+
+def test_vacuity_reasons_names_each_way_a_run_can_check_nothing():
+    assert cc.vacuity_reasons(_synthetic_report()) == []
+    assert cc.vacuity_reasons(
+        {"samples": 0, "samples_accepted_by_property": 3,
+         "symmetry_break": {}}) == ["no-samples"]
+    assert cc.vacuity_reasons(
+        {"samples": 10, "samples_accepted_by_property": 0,
+         "symmetry_break": {}}) == ["no-valid-samples"]
+    assert cc.vacuity_reasons(
+        {"samples": 10, "samples_accepted_by_property": 3,
+         "symmetry_break": None}) == ["no-independent-witness"]

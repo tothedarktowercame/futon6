@@ -201,7 +201,16 @@ Reproduce:
     .venv/bin/python scripts/fm001/encoding_cross_check.py --n 3 --samples 300
     .venv/bin/python scripts/fm001/encoding_cross_check.py --n 4 --samples 200
 
-Exit status is non-zero on any disagreement. **Scope, stated plainly:** this is
+Exit status is non-zero on any disagreement **and on a vacuous run**. A run
+that compared nothing, or whose every sample was a colouring the encoder must
+*reject*, found no disagreement for the uninteresting reason and is reported
+`ok: false` with a typed `vacuity` reason (`no-samples`, `no-valid-samples`,
+`no-independent-witness`) rather than counted as agreement. The three runs
+above are non-vacuous, but note the margin: n=5 drew only **3** valid
+colourings in 40 samples, so a smaller `--samples` there would correctly refuse
+rather than pass.
+
+**Scope, stated plainly:** this is
 sampling at small $n$, not a proof for all $n$, and the independent encoder is
 independent of the production *encoding*, not of the *property* — if
 `verify_assignment` is the wrong formalisation of the book condition, both

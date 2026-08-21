@@ -432,6 +432,27 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   over-constraint was also caught by the sampler, so the deterministic check
   was not distinguishable — a conjunct nothing can distinguish is a conjunct
   that rots.
+- **Hardened after review (codex-7).** The checker reproduced the vacuous-
+  success shape it exists to prevent: `--samples 0` (or a negative count) made
+  the comparison loop empty, so the report came back with no disagreements and
+  the verdict read that as agreement and exited 0. An earlier version of these
+  tests even *used* that as a probe. Now the CLI refuses a non-positive sample
+  count before anything runs, and the verdict carries a typed `vacuity` list —
+  `no-samples`, `no-valid-samples` (every sample was one the encoder must
+  reject, so the admission direction was never exercised), or
+  `no-independent-witness` (no witness, so the symmetry-break check never ran
+  and its result was true by absence). Any of the three makes `ok` false and
+  the exit status non-zero. The verdict itself is now a pure function `is_ok`
+  over the report, so each conjunct is reachable by a test.
+- **The documented measurements are unaffected and non-vacuous**: n=3 (27 valid
+  samples of 300), n=4 (30 of 200), n=5 (3 of 40), all `ok: true` with an empty
+  `vacuity`. The n=5 margin is thin by design — at 40 samples it is 3, and a
+  smaller count there would correctly refuse rather than pass.
+- Coverage is now 19 cases. Mutation-checked with the file diffed first:
+  dropping the vacuity term from the verdict fails 4, dropping
+  `no-valid-samples` fails 3, dropping `no-independent-witness` fails 3,
+  removing the CLI refusal fails 2, making `validate_samples` never raise
+  fails 5. All restore to 19 passed.
 - **Scope, stated rather than implied.** This is sampling at small $n$, not a
   proof for all $n$; and the independent encoder is independent of the
   production *encoding*, not of the *property* — if `verify_assignment` is the

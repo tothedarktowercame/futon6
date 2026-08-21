@@ -187,6 +187,63 @@ def perturbations(colouring, rng: random.Random, flips: int):
     return perturbed
 
 
+MIN_SAMPLES = 1
+
+
+def validate_samples(samples: int) -> None:
+    """A cross-check with no samples is not a cross-check.
+
+    `--samples 0` (or a negative count) made the comparison loop empty, so the
+    report came back with no disagreements — which the verdict then read as
+    agreement and exited 0. That is the vacuous-success shape this whole file
+    exists to prevent, reproduced inside the checker itself.
+    """
+    if samples < MIN_SAMPLES:
+        raise ValueError(
+            f"--samples must be >= {MIN_SAMPLES}, got {samples}: a run that "
+            "compares nothing cannot agree about anything")
+
+
+def vacuity_reasons(report: dict) -> list[str]:
+    """Ways this run could have found nothing to disagree about.
+
+    Absence of disagreement is only evidence when the run could have produced
+    one. Three ways it could not:
+
+      no-samples             nothing was compared at all.
+      no-valid-samples       every sampled colouring was one the encoder must
+                             REJECT, so the admission direction — the direction
+                             an UNSAT verdict depends on — was never exercised.
+                             Uniform random colourings are all invalid at these
+                             sizes, so this is the easy way to a green run that
+                             checked half the property.
+      no-independent-witness the independent encoder produced no colouring, so
+                             the symmetry-break check never ran and its `ok`
+                             was true by absence.
+    """
+    reasons = []
+    if report["samples"] < MIN_SAMPLES:
+        reasons.append("no-samples")
+    if report["samples_accepted_by_property"] == 0:
+        reasons.append("no-valid-samples")
+    if report["symmetry_break"] is None:
+        reasons.append("no-independent-witness")
+    return reasons
+
+
+def is_ok(report: dict) -> bool:
+    """The verdict, as a pure function of the report.
+
+    Separated from cross_check so each conjunct is reachable by a test on a
+    constructed report; while the verdict was an expression inside the run,
+    dropping the symmetry-break term changed no test.
+    """
+    return bool(not report["property_disagreements"]
+                and not report["encoding_disagreements"]
+                and report["symmetry_break_ok"]
+                and not report["vacuity"])
+
+
 def cross_check(n: int, samples: int = 400, seed: int = 0,
                 solver_name: str = "glucose4") -> dict:
     """Run all three checks and report. `ok` is False if ANY disagreement was
@@ -255,7 +312,7 @@ def cross_check(n: int, samples: int = 400, seed: int = 0,
             and symmetry_break["relabelled_monotone"]
             and symmetry_break["relabelled_admitted"]))
 
-    return {
+    report = {
         "n": n,
         "vertex_count": vertex_count,
         "samples": samples,
@@ -267,10 +324,11 @@ def cross_check(n: int, samples: int = 400, seed: int = 0,
         "encoding_disagreements": encoding_disagreements,
         "independent_encoder_sat": independent_sat,
         "symmetry_break": symmetry_break,
-        "ok": (not property_disagreements
-               and not encoding_disagreements
-               and symmetry_break_ok),
+        "symmetry_break_ok": symmetry_break_ok,
     }
+    report["vacuity"] = vacuity_reasons(report)
+    report["ok"] = is_ok(report)
+    return report
 
 
 def main() -> int:
@@ -290,6 +348,10 @@ def main() -> int:
 
     if args.n < 3:
         raise SystemExit("n must be >= 3 for FM-001.")
+    try:
+        validate_samples(args.samples)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
 
     report = cross_check(args.n, args.samples, args.seed, args.solver)
     text = json.dumps(report, indent=2)
@@ -297,8 +359,10 @@ def main() -> int:
     if args.json_out:
         args.json_out.parent.mkdir(parents=True, exist_ok=True)
         args.json_out.write_text(text + "\n")
-    # Non-zero on any disagreement: a mismatch here means an UNSAT verdict from
-    # the production encoding is not evidence for the bound at this n.
+    # Non-zero on any disagreement, and equally on a VACUOUS run: a mismatch
+    # here means an UNSAT verdict from the production encoding is not evidence
+    # for the bound at this n, and a run that could not have found a mismatch
+    # is not evidence that there is none.
     return 0 if report["ok"] else 1
 
 
