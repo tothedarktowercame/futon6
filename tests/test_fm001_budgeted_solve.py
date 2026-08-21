@@ -125,7 +125,8 @@ def test_budget_killed_is_not_a_measurement():
 
 def test_failed_run_outcomes_are_the_non_measurements():
     assert bs.FAILED_RUN_OUTCOMES == {
-        "interrupted", "solver-error", "sat-unverified", "budget-killed"}
+        "interrupted", "solver-error", "sat-unverified", "sat-no-model",
+        "budget-killed"}
     for good in ("sat", "unsat", "unknown", "budget-exhausted"):
         assert good not in bs.FAILED_RUN_OUTCOMES
 
@@ -165,3 +166,79 @@ def test_wall_clock_lets_a_well_behaved_solver_finish(tmp_path):
     assert killed is False
     assert returncode == bs.RC_INDETERMINATE
     assert "s UNKNOWN" in stdout
+
+
+# --- the safety-critical path: a SAT verdict is not yet a refutation --------
+# verify_sat_witness stands between "the solver said SATISFIABLE" and
+# "R(B_{n-1}, B_n) <= 4n-2 is refuted". It was the only outcome with no
+# coverage at all, and it is the one that would let a bogus refutation into
+# the record.
+
+class _FakeHarness:
+    """Stands in for ramsey_book_sat: lets each branch be driven exactly."""
+
+    def __init__(self, verifies: bool):
+        self._verifies = verifies
+        self.decoded = None
+
+    def decode_model(self, literals, edges):
+        self.decoded = list(literals)
+        return {"assignment": tuple(literals)}
+
+    def verify_assignment(self, n, vertex_count, assignment):
+        return self._verifies
+
+
+def test_verified_witness_is_the_only_route_to_sat():
+    harness = _FakeHarness(verifies=True)
+    outcome, assignment = bs.verify_sat_witness(
+        harness, 5, 18, "s SATISFIABLE\nv 1 -2 3 0\n", edges={})
+    assert outcome == "sat"
+    assert assignment is not None
+    assert harness.decoded == [1, -2, 3]
+
+
+def test_emitted_but_invalid_colouring_is_sat_unverified():
+    """The serious case: the solver produced a colouring and it does not hold."""
+    harness = _FakeHarness(verifies=False)
+    outcome, assignment = bs.verify_sat_witness(
+        harness, 5, 18, "s SATISFIABLE\nv 1 -2 3 0\n", edges={})
+    assert outcome == "sat-unverified"
+    assert assignment is None, "no witness file may be written for a bad colouring"
+    assert outcome in bs.FAILED_RUN_OUTCOMES
+
+
+@pytest.mark.parametrize("stdout", ["s SATISFIABLE\n", "s SATISFIABLE\nc done\n"])
+def test_verdict_without_a_model_is_sat_no_model(stdout):
+    """A SAT verdict with no `v` lines gave us nothing to check.
+
+    This used to collapse into sat-unverified, which blames the solver's answer
+    for what is really a gap in how we invoked it (many solvers need
+    -m/--print-model). Different fact, different name.
+    """
+    harness = _FakeHarness(verifies=True)
+    outcome, assignment = bs.verify_sat_witness(harness, 5, 18, stdout, edges={})
+    assert outcome == "sat-no-model"
+    assert assignment is None
+    assert harness.decoded is None, "verification must not run on an empty model"
+    assert outcome in bs.FAILED_RUN_OUTCOMES
+
+
+def test_sat_no_model_is_distinct_from_sat_unverified():
+    assert "sat-no-model" != "sat-unverified"
+    assert {"sat-no-model", "sat-unverified"} <= bs.FAILED_RUN_OUTCOMES
+
+
+def test_result_records_pin_the_instance_by_hash(tmp_path):
+    """A result naming only a path cannot be checked against the CNF solved."""
+    cnf = tmp_path / "x.cnf"
+    cnf.write_bytes(b"p cnf 1 1\n1 0\n")
+    digest = bs.sha512_of(cnf)
+    assert len(digest) == 128 and set(digest) <= set("0123456789abcdef")
+
+    import hashlib
+    assert digest == hashlib.sha512(cnf.read_bytes()).hexdigest()
+
+    other = tmp_path / "y.cnf"
+    other.write_bytes(b"p cnf 1 1\n-1 0\n")
+    assert bs.sha512_of(other) != digest, "different instances must hash apart"

@@ -353,6 +353,26 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   from `main()` into `run_solver` to be testable at all: while it lived inline,
   deleting the timeout changed no test. It now fails one, in ~20 s rather than
   hanging the suite.
+- **The SAT path is now covered, and it was the one that mattered.**
+  `verify_sat_witness` stands between "the solver said SATISFIABLE" and
+  "$R(B_{n-1}, B_n) \le 4n-2$ is refuted", and it had no test at all — the one
+  outcome that could let a bogus refutation into the record. Extracted from
+  `main()` (inline code here has already proved untestable twice) and pinned by
+  9 cases.
+- **`sat-no-model` split out from `sat-unverified`.** A SAT verdict with no `v`
+  lines used to collapse into `sat-unverified`, which blames the solver's answer
+  for what is really a gap in how we invoked it — many solvers emit a model only
+  under `-m`/`--print-model`. Different facts, different names: `sat-no-model`
+  means nothing was produced to check; `sat-unverified` means a colouring was
+  produced and it **fails**. Both are failed runs.
+- **Result records now pin their instance by hash.** `cnf_sha512` is written
+  alongside the path, so a `result.json` can be checked against the CNF actually
+  solved rather than trusting a filename — the same standard the harness README
+  applies to every other artifact. Verified: the recorded digest matches the
+  file on disk.
+- Mutation-checked: collapsing `sat-no-model` back into `sat-unverified` fails
+  2 tests; accepting an unverified colouring as `sat` fails 1; both restore to
+  34 passed.
 - Artifacts (gitignored, in the storage harness dir):
   `FM001-n6.budgeted-1200s.log`, `FM001-n6.result.json`, hashed in
   `data/frontiermath-pilot/harness/README.md`.

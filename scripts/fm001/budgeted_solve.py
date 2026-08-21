@@ -17,6 +17,9 @@ So this script always records the budget it gave, and classifies:
   sat      - `s SATISFIABLE`; the witness is decoded AND re-verified with the
              harness's own verify_assignment before the result is written.
              An unverified witness is reported as `sat-unverified`, never as sat.
+  sat-no-model - `s SATISFIABLE` with no `v` lines: the solver never emitted a
+             colouring to check, so there is nothing to verify. Distinct from
+             sat-unverified, which means a colouring WAS emitted and is wrong.
   unsat    - `s UNSATISFIABLE`; supports R(B_{n-1}, B_n) < 4n-1 for that n.
   unknown  - solver returned without deciding, INSIDE its budget.
   budget-exhausted - solver hit the wall clock we set. Honest "no answer yet".
@@ -43,6 +46,7 @@ Usage
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import os
@@ -95,7 +99,8 @@ MIN_BUDGET_SECONDS = 1
 
 # Outcomes that mean "no trustworthy measurement was produced".
 FAILED_RUN_OUTCOMES = frozenset(
-    {"interrupted", "solver-error", "sat-unverified", "budget-killed"})
+    {"interrupted", "solver-error", "sat-unverified", "sat-no-model",
+     "budget-killed"})
 
 MIN_GRACE_SECONDS = 30
 
@@ -155,6 +160,46 @@ def classify(returncode: int, stdout: str, elapsed: float, budget: float) -> str
     # says so with `s UNKNOWN`; silence is an interrupted run, however long it
     # ran for.
     return "interrupted"
+
+
+def sha512_of(path: Path) -> str:
+    """Hash the instance a result refers to.
+
+    The harness README pins every artifact by sha512; a result record that
+    names only a PATH cannot be checked against the CNF that was actually
+    solved, which is the same unverifiable-evidence problem this mission keeps
+    closing elsewhere."""
+    digest = hashlib.sha512()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def verify_sat_witness(harness, n: int, vertex_count: int, stdout: str, edges):
+    """Turn a SAT verdict into a checked refutation, or say why it is not one.
+
+    A solver saying SATISFIABLE is not a refutation of R(B_{n-1}, B_n) <= 4n-2
+    until the colouring it produced is re-checked. Three outcomes, deliberately
+    distinct because they name different problems:
+
+      ("sat", assignment)      - model emitted and verify_assignment accepts it
+      ("sat-no-model", None)   - verdict but NO `v` lines: the solver never gave
+                                 us a colouring to check. Not the solver being
+                                 wrong; us not having asked for the model (many
+                                 solvers need -m/--print-model). Previously this
+                                 silently became "sat-unverified", which blames
+                                 the answer for a gap in the invocation.
+      ("sat-unverified", None) - model emitted and it FAILS verification. This
+                                 is the serious one.
+    """
+    literals = parse_model(stdout)
+    if not literals:
+        return "sat-no-model", None
+    assignment = harness.decode_model(literals, edges)
+    if harness.verify_assignment(n, vertex_count, assignment):
+        return "sat", assignment
+    return "sat-unverified", None
 
 
 def run_solver(cmd: list[str], budget: int, grace: int):
@@ -227,14 +272,11 @@ def main() -> int:
 
     witness_path = None
     if outcome == "sat":
-        assignment = harness.decode_model(parse_model(stdout), edges)
-        if harness.verify_assignment(args.n, vertex_count, assignment):
+        outcome, assignment = verify_sat_witness(
+            harness, args.n, vertex_count, stdout, edges)
+        if assignment is not None:
             witness_path = out_dir / f"n{args.n}-witness.json"
             harness.write_witness(witness_path, assignment, args.n)
-        else:
-            # A solver saying SAT is not a refutation until the colouring is
-            # independently checked. Never upgrade this to "sat".
-            outcome = "sat-unverified"
 
     record = {
         "n": args.n,
@@ -251,6 +293,7 @@ def main() -> int:
         "witness": str(witness_path) if witness_path else None,
         "log": str(log_path),
         "cnf": str(cnf_path),
+        "cnf_sha512": sha512_of(cnf_path),
     }
     result_path.write_text(json.dumps(record, indent=2) + "\n")
     print(json.dumps(record, indent=2))
