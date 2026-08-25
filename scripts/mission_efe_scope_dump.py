@@ -44,12 +44,11 @@ BINDERS = [
     # anatomy additions (2026-06-10/11): typed gates and their outcomes
     "verify-gate", "certificate", "plain-argument",
 ]
-# futon1b validates `limit` server-side and rejects anything above
-# max-result-limit=5000 with a layer-4 :invalid-limit error (futon1b_server.clj
-# :313).  futon1a had no such cap, so the old 8000 became a hard 400 after the
-# switchover.  5000 is still far above every per-binder population (largest is
-# loose-section) and fetch() asserts non-truncation rather than trusting that.
-LIMIT = 5000
+# futon1b's hyperedge window caps pages at 1000 and advances with
+# `next-cursor`. A larger limit is a hard 400; a single accepted page would
+# silently truncate loose-section. fetch() therefore consumes the complete
+# cursor chain and checks the server's exact count.
+LIMIT = 1000
 FETCH_TIMEOUT_S = int(os.environ.get("EFE_SCOPE_TIMEOUT_S", "180"))
 
 # The dump is an overwrite, and the mission-scope surface in futon1b is only
@@ -61,16 +60,36 @@ SHRINK_FLOOR = 0.75
 
 
 def fetch(binder):
-    q = urllib.parse.urlencode({"type": f"mission-scope/{binder}", "limit": LIMIT})
-    req = urllib.request.Request(f"{BASE}?{q}", headers={"Accept": "application/json"})
-    # futon1b routes these through with-expensive-read!; the largest binder
-    # (loose-section) exceeds the old 30s budget that futon1a met comfortably.
-    with urllib.request.urlopen(req, timeout=FETCH_TIMEOUT_S) as r:
-        hxs = json.load(r).get("hyperedges", [])
-    if len(hxs) >= LIMIT:
+    hxs = []
+    after = None
+    expected = None
+    seen_cursors = set()
+    while True:
+        params = {"type": f"mission-scope/{binder}", "limit": LIMIT}
+        if after:
+            params["after"] = after
+        q = urllib.parse.urlencode(params)
+        req = urllib.request.Request(f"{BASE}?{q}", headers={"Accept": "application/json"})
+        # futon1b routes these through with-expensive-read!; the largest binder
+        # (loose-section) can take tens of seconds per cold page.
+        with urllib.request.urlopen(req, timeout=FETCH_TIMEOUT_S) as r:
+            page = json.load(r)
+        rows = page.get("hyperedges", [])
+        if expected is None and page.get("count-exact?") is True:
+            expected = page.get("count")
+        hxs.extend(rows)
+        cursor = page.get("next-cursor")
+        if not cursor:
+            break
+        if not rows or cursor in seen_cursors:
+            raise SystemExit(f"binder {binder!r} returned a stalled cursor page")
+        seen_cursors.add(cursor)
+        after = cursor
+    if expected is None:
+        raise SystemExit(f"binder {binder!r} did not report an exact total")
+    if len(hxs) != expected:
         raise SystemExit(
-            f"binder {binder!r} returned {len(hxs)} rows at the {LIMIT} cap — "
-            "the result is truncated; paginate before trusting this dump"
+            f"binder {binder!r} pagination mismatch: consumed {len(hxs)} of {expected} rows"
         )
     return hxs
 
