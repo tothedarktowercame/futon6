@@ -125,11 +125,24 @@ Regenerate: <code>futon6/scripts/publish-efe-field.sh</code>.
 <tbody>{''.join(rows)}</tbody></table>
 <p><b>Used-input holes:</b> none. The canonical force-layout coordinate file is shown for clarity but is not an input to this embedding variant and was deliberately not re-solved.</p>
 </details></section>'''
+# The renderer emits a minimal HTML5 document with an IMPLICIT body -- no
+# <body> tag at all, which is valid HTML5 and is true of every
+# mission-efe-field*.html on disk, including the 2026-07-04 static one. The
+# <body>-only anchor therefore refused to publish every time. Anchor on <body>
+# when present, else on the first <header>, which is where the visible page
+# starts and is exactly where the provenance block was meant to land.
+# (claude-13, 2026-08-25.)
 body = page.find("<body")
-body_end = page.find(">", body)
-if body < 0 or body_end < 0:
-    raise SystemExit("FATAL: generated page has no body")
-page = page[:body_end + 1] + provenance + page[body_end + 1:]
+if body >= 0:
+    insert_at = page.find(">", body)
+    if insert_at < 0:
+        raise SystemExit("FATAL: malformed <body> tag")
+    insert_at += 1
+else:
+    insert_at = page.find("<header")
+    if insert_at < 0:
+        raise SystemExit("FATAL: generated page has neither <body> nor <header>")
+page = page[:insert_at] + provenance + page[insert_at:]
 
 if "localhost:7070" in page or "fetch(" in page:
     raise SystemExit("FATAL: published page still contains a browser-time live fetch")
@@ -140,6 +153,10 @@ try:
     with os.fdopen(fd, "w") as handle:
         handle.write(page)
     os.replace(tmp_name, out)
+    # mkstemp creates 0600 and os.replace preserves it, so the published page
+    # was unreadable by nginx and served 403. Match the rest of the docroot.
+    # (claude-13, 2026-08-25.)
+    os.chmod(out, 0o644)
 except BaseException:
     try:
         os.unlink(tmp_name)
