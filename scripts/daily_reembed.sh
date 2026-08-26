@@ -61,12 +61,10 @@ echo "[daily-reembed] regenerated $EMBED_OUT"
 
 cd "$FUTON6"
 echo "[daily-reembed] refreshing pattern attestation (60d rolling, live evidence)"
-scripts/refresh_pattern_attestation.sh \
-  || echo "[daily-reembed] WARNING: attestation refresh failed; keeping previous dump"
+scripts/refresh_pattern_attestation.sh
 
 echo "[daily-reembed] regenerating attestation-weighted pattern roads"
-"$PY" scripts/mission_carpet.py --roads-only \
-  || echo "[daily-reembed] WARNING: roads refresh failed; keeping previous roads"
+"$PY" scripts/mission_carpet.py --roads-only
 
 echo "[daily-reembed] regenerating mission carpet variants"
 "$PY" scripts/mission_carpet_variants.py
