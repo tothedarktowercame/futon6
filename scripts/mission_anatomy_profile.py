@@ -9,8 +9,13 @@
 # Material signal = file paths, commit shas, agent-handoff + survey references.
 import json, re
 from pathlib import Path
+import os
 
-ROOT = Path("/home/joe/code")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOT = _CODE_ROOT / "code"
 LEX = ROOT / "futon6" / "data" / "mission-self-representing-lexicon.json"
 
 FAMILIES = {

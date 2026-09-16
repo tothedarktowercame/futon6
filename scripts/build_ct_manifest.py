@@ -19,6 +19,11 @@ import glob
 import json
 import os
 import sqlite3
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -34,7 +39,7 @@ def warm_ids():
     return ids
 
 
-EPRINT_DIR = "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints"
+EPRINT_DIR = str(_CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints")
 
 
 def _has_eprint(pid):
@@ -86,7 +91,7 @@ def main():
                     help="build a citation-coherent sample + matched random (instead of the 200-draw)")
     ap.add_argument("--hub", help="citation hub id (default = top in-corpus hub with an eprint)")
     ap.add_argument("--neighborhood-n", type=int, default=15)
-    ap.add_argument("--db", default="/home/joe/code/storage/arxiv-manifest/arxiv_manifest.sqlite")
+    ap.add_argument("--db", default=str(_CODE_ROOT / "storage/arxiv-manifest/arxiv_manifest.sqlite"))
     ap.add_argument("--n", type=int, default=200)
     ap.add_argument("--since", default="2007-01-01")
     ap.add_argument("--out", default="holes/math-ct-200.manifest.json")

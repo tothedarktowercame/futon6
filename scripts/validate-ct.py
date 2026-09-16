@@ -30,6 +30,10 @@ import time
 from pathlib import Path
 from collections import Counter
 
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
 # Reuse superpod-job infrastructure
 sys.path.insert(0, str(Path(__file__).parent))
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -389,16 +393,16 @@ def main():
     parser.add_argument("--golden", type=int, default=20,
                         help="Number of golden entries for LLM validation (default: 20)")
     parser.add_argument("--pm-dir", type=str,
-                        default="/home/joe/code/planetmath/18_Category_theory_homological_algebra",
+                        default=str(_CODE_ROOT / "planetmath/18_Category_theory_homological_algebra"),
                         help="PlanetMath CT .tex directory")
     parser.add_argument("--ner-kernel", type=str,
-                        default="/home/joe/code/futon6/data/ner-kernel/terms.tsv",
+                        default=str(Path(__file__).resolve().parent.parent / "data/ner-kernel/terms.tsv"),
                         help="NER kernel TSV path")
     parser.add_argument("--hyperreal", type=str,
-                        default="/home/joe/code/futon6/data/hyperreal.json",
+                        default=str(Path(__file__).resolve().parent.parent / "data/hyperreal.json"),
                         help="nLab hyperreal dictionary path")
     parser.add_argument("--output-dir", type=str,
-                        default="/home/joe/code/futon6/data/ct-validation",
+                        default=str(Path(__file__).resolve().parent.parent / "data/ct-validation"),
                         help="Output directory")
     args = parser.parse_args()
 

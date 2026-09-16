@@ -18,11 +18,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
 
 ROOT = Path(__file__).resolve().parents[1]
 WARP = ROOT / "data" / "warp"
-EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
-ANATOMY = Path("/home/joe/code/storage/futon6/data/ct-anatomy-v0")
+EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
+ANATOMY = _CODE_ROOT / "storage/futon6/data/ct-anatomy-v0"
 GOLDEN = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 BACKGROUND = ROOT / "data" / "background-corpus-index.json"
 MANIFEST = WARP / "warp-manifest.json"

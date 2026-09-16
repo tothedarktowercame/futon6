@@ -16,9 +16,15 @@ import argparse, glob, json, os, re, sys
 from collections import Counter, defaultdict
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from meme_mine_runner import read_asks
+import os
+from pathlib import Path
 
-ROOT = "/home/joe/code/futon6"; OUT = f"{ROOT}/data/meme-mine"
-F3A = "/home/joe/code/futon3a/resources/notions"
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOT = str(_CODE_ROOT / "futon6"); OUT = f"{ROOT}/data/meme-mine"
+F3A = str(_CODE_ROOT / "futon3a/resources/notions")
 FUTONIC = {"composition": "ft/composition", "articulation": "ft/articulation", "salience": "ft/salience",
            "recognition loop": "ft/recognition-loop", "free energy": "ft/free-energy", "precision": "ft/precision",
            "expected free energy": "ft/efe", "cascade": "ft/cascade", "rollout": "ft/rollout",

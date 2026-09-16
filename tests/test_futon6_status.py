@@ -4,6 +4,11 @@ import hashlib
 import importlib.machinery
 import importlib.util
 from pathlib import Path
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 
 def _load_status():
@@ -47,7 +52,7 @@ def test_candidate_delete_records_skips_non_matching_files(tmp_path: Path):
 
     remote = [{
         "name": local.name,
-        "path": "/home/joe/mark2/outbox/results-009.tar.gz",
+        "path": str(_CODE_ROOT / "mark2/outbox/results-009.tar.gz"),
         "size": len(b"remote-data"),
         "sha256": hashlib.sha256(b"remote-data").hexdigest(),
     }]
@@ -61,7 +66,7 @@ def test_build_delete_commands_separates_joe_and_sudo_paths():
     status = _load_status()
     candidates = {
         "mark2": [{
-            "remote": {"path": "/home/joe/mark2/outbox/results-007.tar.gz"},
+            "remote": {"path": str(_CODE_ROOT / "mark2/outbox/results-007.tar.gz")},
             "mirrors": [{"path": "/tmp/results-007.tar.gz", "evidence": ["size", "sha256"]}],
         }],
         "rob": [{
@@ -73,6 +78,6 @@ def test_build_delete_commands_separates_joe_and_sudo_paths():
     commands = status.build_delete_commands("linode-chicago", candidates)
 
     assert "ssh linode-chicago" in commands["joe"]
-    assert "/home/joe/mark2/outbox/results-007.tar.gz" in commands["joe"]
+    assert str(_CODE_ROOT / "mark2/outbox/results-007.tar.gz") in commands["joe"]
     assert "ssh -t linode-chicago" in commands["sudo"]
     assert "/home/rob/superpod-mo-processed.tar.gz" in commands["sudo"]

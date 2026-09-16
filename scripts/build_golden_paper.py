@@ -31,12 +31,17 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 DEFAULT_SAMPLE = ROOT / "data" / "golden-30-sample.json"
-DEFAULT_EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
-DEFAULT_SCOPES = Path("/home/joe/code/storage/mark2/ct-fresh-scopes")
+DEFAULT_EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
+DEFAULT_SCOPES = _CODE_ROOT / "storage/mark2/ct-fresh-scopes"
 DEFAULT_OUT = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 DEFAULT_SUPERPOD = Path("/tmp/futon6-sbs/scripts/superpod-job.py")
 
 from futon6.tex_env_scopes import detect_tex_env_scopes
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 
 def load_module(module_name: str, path: Path):

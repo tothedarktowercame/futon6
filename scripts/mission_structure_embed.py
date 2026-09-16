@@ -30,8 +30,14 @@ Usage: futon6/.venv/bin/python scripts/mission_structure_embed.py [--out DIR]
 import argparse, glob, json, os, re
 from collections import Counter, defaultdict
 import numpy as np
+import os
+from pathlib import Path
 
-ROOT = "/home/joe/code"
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOT = str(_CODE_ROOT / "code")
 F6 = f"{ROOT}/futon6"
 SCOPES = f"{F6}/data/diffsub-scopes.json"
 WHOLE = f"{F6}/data/mission-wholeness.edn"

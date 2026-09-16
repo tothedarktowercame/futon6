@@ -25,8 +25,13 @@ import numpy as np
 from scipy.spatial import procrustes
 from scipy.stats import spearmanr
 from sklearn.manifold import MDS
+import os
 
-ROOT = Path("/home/joe/code")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOT = _CODE_ROOT / "code"
 HERE = Path(__file__).resolve().parent
 
 # ---- mission stems + citation graph, mirrors mission_carpet_variants.py ----

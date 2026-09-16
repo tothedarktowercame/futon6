@@ -40,7 +40,7 @@ import anatomy_v0_sweep as sweep  # SHARED math-span tokenizer (delimiter parity
 # is". Agreeing on the span tokenizer is not an author≠reviewer breach (it's
 # agreeing what a "line" is); the invariant LOGIC below stays independent.
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = Path(__file__).resolve().parent.parent
 GOLDEN_DIR = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 LOSS_DIR = ROOT / "data" / "loss"
 

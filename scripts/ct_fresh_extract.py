@@ -16,12 +16,17 @@ import time
 from collections import Counter
 from multiprocessing import Pool
 from pathlib import Path
+import os
 
-FUTON6 = Path("/home/joe/code/futon6")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+FUTON6 = Path(__file__).resolve().parent.parent
 LOADER_TREE = Path("/tmp/futon6-sbs")
-EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
-INDEX = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl")
-OUT = Path("/home/joe/code/storage/mark2/ct-fresh-scopes")
+EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
+INDEX = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-file-index.jsonl"
+OUT = _CODE_ROOT / "storage/mark2/ct-fresh-scopes"
 OUT.mkdir(exist_ok=True)
 
 _sj = None

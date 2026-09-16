@@ -11,12 +11,17 @@ Each criterion returns {pass, value, note}.  Criteria that can only fail for lac
 reported THIN (not FAIL).  Overall: PASS (all), THIN (only turn-count-limited fail), or FAIL.
 """
 import os, sys, json, glob, subprocess, urllib.request
+from pathlib import Path
 
-F6 = "/home/joe/code/futon6"
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+F6 = str(_CODE_ROOT / "futon6")
 PY = f"{F6}/.venv/bin/python"
 API = "http://localhost:7070"
-PIDX = "/home/joe/code/futon3/resources/sigils/patterns-index.tsv"
-OUTROOT = "/home/joe/code/futon2/holes/reflow"
+PIDX = str(_CODE_ROOT / "futon3/resources/sigils/patterns-index.tsv")
+OUTROOT = str(_CODE_ROOT / "futon2/holes/reflow")
 
 # --- thresholds (tunable) ---
 SIGIL_FRAC = 0.40        # C1: >= this fraction of turns resolve a sigil
@@ -39,8 +44,8 @@ def run(args):
 def derive_anchor(mission):
     if mission.startswith("M-"):
         return mission
-    hits = (glob.glob(f"/home/joe/code/*/holes/{mission}.md")
-            + glob.glob(f"/home/joe/code/*/holes/**/{mission}.md", recursive=True))
+    hits = (glob.glob(f"{_CODE_ROOT}/*/holes/{mission}.md")
+            + glob.glob(f"{_CODE_ROOT}/*/holes/**/{mission}.md", recursive=True))
     if not hits:
         return mission
     repo = hits[0].split("/code/")[1].split("/")[0]

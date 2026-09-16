@@ -4,17 +4,23 @@ Verdict: does the TB sampler concentrate on gold endpoint sets on honest data?
 Run: /home/joe/code/gflownet/.venv/bin/python gfn_seed_v0.py [--selfcheck] [--steps 1200] [--reduced]
 """
 import sys, os, re, json, glob, argparse, collections
-sys.path.insert(0, "/home/joe/code/gflownet")
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[3])
+sys.path.insert(0, str(_CODE_ROOT / "gflownet"))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 SEED = 20260702; BETA = 6.0
-LAB = "/home/joe/code/futon2/holes/labs"
+LAB = str(_CODE_ROOT / "futon2/holes/labs")
 GOLD10 = ["autoclock-in","invariant-queue-unstuck","a-sorry-enterprise","agency-rebuild","f6-ingest",
           "pattern-ingest","patterns-done-right","single-entry-point","state-snapshot-witness","stepper-calibration"]
 
 def load_corpus():
     # CANONICAL loader = claude-11's proper bb->EDN parse (my regex truncated autoclock-in's want-ref
     # at the "]" inside "{missions [...]}"; cross-agent review caught it). Reuse the cached corpus.
-    GC = "/home/joe/code/futon6/data/fold-embed-gfn/gold-corpus.json"
+    GC = str(_CODE_ROOT / "futon6/data/fold-embed-gfn/gold-corpus.json")
     d = json.load(open(GC))
     return {m: list(dict.fromkeys(d[m]["refs"])) for m in GOLD10}
 
@@ -46,7 +52,7 @@ def run(miss, steps, reduced=False):
     import torch, math
     def make_config(n_options, k):
         GlobalHydra.instance().clear()
-        initialize_config_dir(config_dir="/home/joe/code/gflownet/config", version_base="1.1")
+        initialize_config_dir(config_dir=str(_CODE_ROOT / "gflownet/config"), version_base="1.1")
         return compose(config_name="tests", overrides=[
             "env=choices", f"env.n_options={n_options}", f"env.max_selection={k}",
             "env.with_replacement=False", "env.can_select_fewer_than_max=False",
@@ -90,6 +96,6 @@ if __name__=="__main__":
          "mean_cov_lift":round(sum(x["cov_lift"] for x in v.values())/len(v),3),
          "n_with_positive_lift":sum(1 for x in v.values() if x["cov_lift"]>0.05),
          "verdicts":v,"repro":"gflownet/.venv/bin/python futon6/scripts/fold_embed/gfn_seed_v0.py --steps %d%s"%(a.steps," --reduced" if a.reduced else "")}
-    od="/home/joe/code/futon6/data/fold-embed-gfn"; os.makedirs(od,exist_ok=True)
+    od=str(_CODE_ROOT / "futon6/data/fold-embed-gfn"); os.makedirs(od,exist_ok=True)
     rung=("reduced" if a.reduced else "full"); json.dump(out,open(f"{od}/gfn-seed-verdicts-{rung}.json","w"),indent=2)
     print("\nSUMMARY:",json.dumps({k:out[k] for k in ["mean_cov_lift","n_with_positive_lift","reward_range"]}))

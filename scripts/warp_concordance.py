@@ -18,11 +18,16 @@ from pathlib import Path
 from typing import Iterable
 
 import anatomy_v0_sweep as sweep
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
-DEFAULT_ANATOMY = Path("/home/joe/code/storage/futon6/data/ct-anatomy-v0")
+DEFAULT_EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
+DEFAULT_ANATOMY = _CODE_ROOT / "storage/futon6/data/ct-anatomy-v0"
 DEFAULT_DP = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 DEFAULT_OUT = ROOT / "data" / "warp" / "concordance.json"
 

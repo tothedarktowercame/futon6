@@ -10,11 +10,16 @@ import json
 import sys
 from pathlib import Path
 
-HANDOFF = Path("/home/joe/code/storage/mark2/ct-handoff/output")
+HANDOFF = _CODE_ROOT / "storage/mark2/ct-handoff/output"
 SLICES = HANDOFF.parent / "ct-anatomy-slices"
 SLICES.mkdir(exist_ok=True)
 
 import sys
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 if len(sys.argv) > 1 and sys.argv[1] == "--all":
     wanted = None  # slice every paper
     print("slicing ALL papers from scopes.json", flush=True)

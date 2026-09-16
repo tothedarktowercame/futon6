@@ -19,13 +19,18 @@ import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
+import os
 from typing import Any, Iterable
 
 
-DEFAULT_SOURCE = Path(
-    "/home/joe/code/futon6/data/showcases/ct-anatomy/golden"
-)
-DEFAULT_OUT = Path("/home/joe/code/futon6/data/substrate-2a")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+# NOTE: the /home/joe path remaining below is inside a generated markdown EXAMPLE
+# (the ScopeQuery dogfood snippet), not a real path this script opens.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+DEFAULT_SOURCE = _CODE_ROOT / "futon6/data/showcases/ct-anatomy/golden"
+DEFAULT_OUT = _CODE_ROOT / "futon6/data/substrate-2a"
 BASELINE_PAPERS = ("math__0703763", "0704.0502", "2406.09832")
 
 

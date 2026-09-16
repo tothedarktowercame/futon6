@@ -225,7 +225,7 @@ def main():
             "description": "4*F_corner*G_corner vs a11_bar^2*Pmax*Qmax",
         },
     }
-    Path("/home/joe/code/futon6/data/first-proof/p4-path2-A-amgm.json").write_text(json.dumps(out, indent=2))
+    Path(__file__).resolve().parent.parent / "data/first-proof/p4-path2-A-amgm.json".write_text(json.dumps(out, indent=2))
     pr("Wrote results")
 
 

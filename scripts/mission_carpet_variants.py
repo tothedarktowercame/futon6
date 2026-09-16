@@ -16,7 +16,7 @@ from collections import Counter, defaultdict
 import numpy as np
 from sklearn.manifold import MDS
 
-ROOT = Path("/home/joe/code")
+ROOT = _CODE_ROOT / "code"
 ATT = json.load(open(ROOT / "futon6/data/pattern-attestation.json")).get("by_name", {})
 
 # ---- graph (citations + attestation-weighted pattern roads), mirrors mission_carpet.py ----
@@ -145,6 +145,11 @@ D = {n: pdist_vec(variants[n]) for n in names}
 print("\ncross-method pairwise-distance agreement (Spearman ρ over "
       f"{len(emb_stems)} embedded missions):")
 from scipy.stats import spearmanr
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 print("        " + "  ".join(f"{n:>8}" for n in names))
 for a in names:
     row = []

@@ -30,6 +30,11 @@ import os
 import re
 import numpy as np
 import edn_format as edn
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 # ---- the controlled vocabularies (must match clean-method-vocab.edn) ----
 METHOD_VOCAB = [
@@ -250,7 +255,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--clean-dir", default="holes/clean")
     ap.add_argument("--out", default="data/showcases/clean-demo")
-    ap.add_argument("--apm-dir", default="/home/joe/code/futon3c/data/apm-informal-proofs")
+    ap.add_argument("--apm-dir", default=str(_CODE_ROOT / "futon3c/data/apm-informal-proofs"))
     args = ap.parse_args()
 
     files = sorted(glob.glob(os.path.join(args.clean_dir, "*.clean.edn")))

@@ -27,8 +27,13 @@ if str(SCRIPT_DIR) not in sys.path:
 
 import proof_scope_audit
 import proof_tex_audit
+import os
 
-WRITEUP_DIR = Path("/home/joe/code/storage/futon6/data/first-proof")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+WRITEUP_DIR = _CODE_ROOT / "storage/futon6/data/first-proof"
 OUT_DIR = ROOT / "data" / "showcases" / "proof-anatomy"
 
 TYPE_COLORS = {

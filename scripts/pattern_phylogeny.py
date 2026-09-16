@@ -7,7 +7,12 @@
 import re, glob, math, hashlib, json
 from pathlib import Path
 from collections import Counter, defaultdict
-ROOT=Path("/home/joe/code"); OUT=ROOT/"futon6/data/pattern-phylogeny.html"; EDGES=ROOT/"futon6/data/pattern-phylogeny-edges.json"
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+ROOT=_CODE_ROOT / "code"; OUT=ROOT/"futon6/data/pattern-phylogeny.html"; EDGES=ROOT/"futon6/data/pattern-phylogeny-edges.json"
 fx={}
 for f in glob.glob(str(ROOT/'futon*/library/**/*.flexiarg'),recursive=True):
     pr=Path(f).parts

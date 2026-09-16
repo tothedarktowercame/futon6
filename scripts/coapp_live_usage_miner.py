@@ -37,8 +37,13 @@ import sys
 from collections import Counter, defaultdict
 from itertools import combinations
 from pathlib import Path
+import os
 
-ROOT = Path("/home/joe/code")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOT = _CODE_ROOT / "code"
 DEFAULT_DEPOSIT_DIR = ROOT / "futon6/data/fold-turns"
 DEFAULT_PHYLOGENY = ROOT / "futon6/data/pattern-phylogeny-edges.json"
 DEFAULT_OUTPUT = ROOT / "futon6/data/coapp-live-usage.json"

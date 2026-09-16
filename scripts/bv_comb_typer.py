@@ -31,7 +31,7 @@ import glob
 import re
 from pathlib import Path
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = Path(__file__).resolve().parent.parent
 TRIPLES = ROOT / "data" / "mission-triples"
 OUT = ROOT / "holes" / "bv-comb-typing.edn"  # committed (data/ is gitignored)
 

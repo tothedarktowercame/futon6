@@ -45,7 +45,7 @@ import argparse
 import json
 from pathlib import Path
 
-FUTON6 = Path("/home/joe/code/futon6")
+FUTON6 = Path(__file__).resolve().parent.parent
 KAPPA_BOTTLENECK = 0.0    # median kappa < 0 => net-bottlenecked channel
 PREFERS_EPS = 0.10        # a sibling must beat the realized kappa by this margin
 

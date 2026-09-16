@@ -7,6 +7,8 @@
 #
 # Usage: bash scripts/process-all-planetmath.sh
 
+: "${FUTON_CODE_ROOT:=$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-$0}")/../.." && pwd)}"
+# june 2026-09-16: derived code root replaces hardcoded ${FUTON_CODE_ROOT} paths.
 set -euo pipefail
 
 PM_DIR="$HOME/code/planetmath"
@@ -76,7 +78,7 @@ from futon6.latex_terms import extract_terms, extract_xrefs
 from pathlib import Path
 from collections import Counter
 
-pm_root = Path('/home/joe/code/planetmath')
+pm_root = Path('${FUTON_CODE_ROOT}/planetmath')
 
 pat_canonical = re.compile(r'\\pmcanonicalname\{([^}]+)\}')
 pat_title = re.compile(r'\\pmtitle\{([^}]+)\}')

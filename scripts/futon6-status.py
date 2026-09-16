@@ -15,6 +15,10 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
 
 REMOTE_PROBE = r"""
 from __future__ import annotations
@@ -459,7 +463,7 @@ def main() -> int:
         description="Summarize the live futon6/mark2 lane from local and Linode evidence.",
     )
     ap.add_argument("--host", default=os.environ.get("FUTON6_STATUS_HOST", "linode-chicago"))
-    ap.add_argument("--remote-mark2-home", default="/home/joe/mark2")
+    ap.add_argument("--remote-mark2-home", default=str(_CODE_ROOT / "mark2"))
     ap.add_argument("--remote-rob-home", default="/home/rob")
     ap.add_argument("--no-hash", action="store_true", help="Skip sha256 verification and match on size only.")
     ap.add_argument("--json", action="store_true", help="Emit machine-readable JSON.")

@@ -18,9 +18,15 @@ from __future__ import annotations
 import ast, json, os, sys, pathlib
 from collections import Counter
 import numpy as np
+import os
+from pathlib import Path
 
-OUT = pathlib.Path("/home/joe/code/futon6/resources/differentiable-math/code-scope-probe")
-SRC = pathlib.Path("/home/joe/code/futon6/src/futon6")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+OUT = pathlib._CODE_ROOT / "futon6/resources/differentiable-math/code-scope-probe"
+SRC = pathlib._CODE_ROOT / "futon6/src/futon6"
 EMB = OUT / "emb.npy"
 NODES = OUT / "nodes.json"
 

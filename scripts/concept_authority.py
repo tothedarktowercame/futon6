@@ -17,11 +17,19 @@ CLI:  concept_authority.py hom colim "kan extension" ...
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
-DEFAULT_INDEX = Path("/home/joe/code/futon6/data/background-corpus-index.json")
+# june 2026-09-16: was hardcoded to /home/joe/code/futon6/..., which made S1 fail on
+# every host but Joe's. Every sibling script (background_corpus_index.py, dp_enrich.py,
+# proof_scope_audit.py, warp_run.py) already derives this from ROOT; match them.
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_INDEX = Path(
+    os.environ.get("FUTON6_BACKGROUND_CORPUS_INDEX")
+    or ROOT / "data" / "background-corpus-index.json"
+)
 
 # Common math macro/abbreviation -> concept name, where the macro surface
 # differs from the indexed concept term. Kept small and explicit (the macro
@@ -44,13 +52,33 @@ def normalize_term(term: str) -> str:
 
 class ConceptAuthority:
     def __init__(self, index_path: Path = DEFAULT_INDEX):
-        data = json.loads(Path(index_path).read_text())
+        # data/background-corpus-index.json is NOT shipped in mark7-substrate.tgz and is
+        # not reconstructible downstream (it is 80,586 NNexus rows + 20,653 nLab names).
+        # Absent it, degrade to an empty authority rather than killing S1 for all papers -
+        # but say so LOUDLY and mark the object degraded, because a silent authority miss
+        # flattens every role-gap operator name to an atom and nothing downstream errors.
+        path = Path(index_path)
+        if not path.exists():
+            print(
+                f"WARNING: concept authority index missing at {path}; running DEGRADED - "
+                "every resolve() returns None, so role-gap operator names (\\Hom \\End "
+                "\\colim ...) flatten to atoms. Set FUTON6_BACKGROUND_CORPUS_INDEX to a "
+                "real index to restore concept resolution.",
+                file=sys.stderr,
+            )
+            self.terms = {}
+            self.degraded = True
+            self.meta = {"degraded": True, "index-path": str(path), "term-keys": 0}
+            return
+        data = json.loads(path.read_text())
         self.terms: dict = data["terms"]
+        self.degraded = False
         self.meta = {
             "nnexus-rows": data.get("nnexus-row-count"),
             "nlab-names": data.get("nlab-name-count"),
             "ct-prior": data.get("ct-prior-count"),
             "term-keys": len(self.terms),
+            "degraded": False,
         }
 
     def resolve(self, term: str) -> dict | None:

@@ -19,22 +19,23 @@ import statistics
 import tarfile
 from collections import defaultdict
 from pathlib import Path
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BATCHES = [
-    Path("/home/joe/code/storage/mark2/inbox/batch-007.tar.gz"),
-    Path("/home/joe/code/storage/mark2/inbox/batch-008.tar.gz"),
+    _CODE_ROOT / "storage/mark2/inbox/batch-007.tar.gz",
+    _CODE_ROOT / "storage/mark2/inbox/batch-008.tar.gz",
 ]
-DEFAULT_PROOF_SCOPES = Path("/home/joe/code/storage/apm/apm-proof-scopes.json")
-DEFAULT_KEYWORD_SCOPES = Path("/home/joe/code/storage/apm/eprint-scopes.json")
+DEFAULT_PROOF_SCOPES = _CODE_ROOT / "storage/apm/apm-proof-scopes.json"
+DEFAULT_KEYWORD_SCOPES = _CODE_ROOT / "storage/apm/eprint-scopes.json"
 DEFAULT_KEYWORD_HITS = ROOT / "data" / "mark4-batch-keyword-hits.json"
 DEFAULT_TOP_TSV = ROOT / "data" / "mark4-retrieval-top200.tsv"
-DEFAULT_RANDOM_SCOPES = Path(
-    "/home/joe/code/storage/apm/mark4-random-eprint-scopes-seed20260617-n200.json"
-)
-DEFAULT_REPORT = Path(
-    "/home/joe/code/storage/apm/mark4-random-scope-disagreement-seed20260617-n200.json"
-)
+DEFAULT_RANDOM_SCOPES = _CODE_ROOT / "storage/apm/mark4-random-eprint-scopes-seed20260617-n200.json"
+DEFAULT_REPORT = _CODE_ROOT / "storage/apm/mark4-random-scope-disagreement-seed20260617-n200.json"
 DEFAULT_SEED = 20260617
 DEFAULT_SAMPLE_SIZE = 200
 DEFAULT_TAU = 0.05

@@ -7,7 +7,7 @@
 (require '[clojure.edn :as edn]
          '[cheshire.core :as json])
 (let [graph (edn/read-string
-             (slurp "/home/joe/code/futon0/holes/missions/M-capability-star-map.graph.edn"))
+             (slurp (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon0/holes/missions/M-capability-star-map.graph.edn")))
       caps (:capabilities graph)
       ;; Visual coalescing (Joe, 2026-06-12): CLAIMED members of a named
       ;; cluster merge into ONE star on the map; unclaimed members remain

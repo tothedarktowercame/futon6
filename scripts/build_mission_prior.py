@@ -8,10 +8,15 @@
 # Output: futon6/data/mission-term-prior.json  { n_docs, unigram_df, bigram_df }
 import os, re, json
 from collections import Counter
+from pathlib import Path
 
-ROOTS = [f"/home/joe/code/{r}" for r in
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOTS = [f"{_CODE_ROOT}/{r}" for r in
          ["futon0","futon1a","futon2","futon3","futon3c","futon4","futon5","futon5a","futon6","futon7"]]
-OUT = "/home/joe/code/futon6/data/mission-term-prior.json"
+OUT = str(_CODE_ROOT / "futon6/data/mission-term-prior.json")
 WORDS = "/usr/share/dict/words"
 
 RE_FENCE = re.compile(r"```.*?```", re.S)

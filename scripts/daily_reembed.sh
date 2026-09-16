@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
+: "${FUTON_CODE_ROOT:=$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-$0}")/../.." && pwd)}"
+# june 2026-09-16: derived code root replaces hardcoded ${FUTON_CODE_ROOT} paths.
 set -euo pipefail
 
-ROOT=/home/joe/code
+ROOT=${FUTON_CODE_ROOT}
 FUTON6="$ROOT/futon6"
 PY="$FUTON6/.venv/bin/python"
 MISSION_RECORDS="$ROOT/data/notions/mission_records.json"

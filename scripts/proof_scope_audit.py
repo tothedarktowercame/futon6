@@ -18,9 +18,14 @@ from typing import Any
 
 import background_corpus_index as bg
 from nlab_skolem_audit import classify_expr, paragraph_spans
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 ROOT = Path(__file__).resolve().parent.parent
-WRITEUP_DIR = Path("/home/joe/code/storage/futon6/data/first-proof")
+WRITEUP_DIR = _CODE_ROOT / "storage/futon6/data/first-proof"
 OUT_JSON = ROOT / "data" / "first-proof-scope-audit.json"
 OUT_SUMMARY = ROOT / "data" / "first-proof-scope-summary.json"
 BACKGROUND_INDEX = ROOT / "data" / "background-corpus-index.json"

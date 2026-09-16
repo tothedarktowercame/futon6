@@ -16,6 +16,12 @@ shared tags; each turn a leaf scope with its tags. Untyped turns (no tag) are th
 import json, os, re, sys, glob
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from transcript_provenance import classify, raw_text
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 CONCEPTS = ["belly", "C-vector", "mining", "gate", "golden", "correction", "sigil", "Arxana", "flight",
             "fuite", "control layer", "substrate", "PROOF", "Pilot", "weav", "蒲團", "recognition",
@@ -28,8 +34,8 @@ def _known_docs():
     like 'E-mail' (intersect with this set, the way session-mode.el cross-checks)."""
     names = set()
     for pat in ("M-*.md", "E-*.md", "C-*.md"):
-        for f in (glob.glob(f"/home/joe/code/*/holes/{pat}")
-                  + glob.glob(f"/home/joe/code/*/holes/**/{pat}", recursive=True)):
+        for f in (glob.glob(f"{_CODE_ROOT}/*/holes/{pat}")
+                  + glob.glob(f"{_CODE_ROOT}/*/holes/**/{pat}", recursive=True)):
             names.add(os.path.basename(f)[:-3])
     return names
 
@@ -176,7 +182,7 @@ def attach_threads(ops, full_sid):
             rets[t] = b.get("query") or ""
     turn_threads = {}
     try:
-        th = json.load(open("/home/joe/code/futon2/holes/session-threads.json"))
+        th = json.load(open(str(_CODE_ROOT / "futon2/holes/session-threads.json")))
         for h in th.get("thread-hyperedges", []):
             sg = (h["sigil"]["truth"] + h["sigil"]["okipona"]).strip() or "·"
             short = h["pattern"].split("/")[-1]
@@ -379,7 +385,7 @@ def main():
         path = max(cand, key=os.path.getmtime)
     else:
         path = max(glob.glob(os.path.expanduser("~/.claude/projects/*/*.jsonl")), key=os.path.getmtime)
-    out = args[0] if args else "/home/joe/code/futon2/holes/session-scope-view.org"
+    out = args[0] if args else str(_CODE_ROOT / "futon2/holes/session-scope-view.org")
     sess = os.path.basename(path)[:8]
     ops, agents = parse_turns(path)
     here = os.path.dirname(os.path.abspath(__file__))

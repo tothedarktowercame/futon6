@@ -12,11 +12,17 @@ recurrent orbit (a real strange-attractor loop) or as scatter.  Read-only SVG/HT
 """
 import json, os, sys, glob, urllib.request
 import numpy as np
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 API = "http://localhost:7070"
-EMB = "/home/joe/code/futon3a/resources/notions/minilm_pattern_embeddings.json"
-THREADS = "/home/joe/code/futon2/holes/session-threads.json"
-OUT = "/home/joe/code/futon2/holes/session-thread-plot.html"
+EMB = str(_CODE_ROOT / "futon3a/resources/notions/minilm_pattern_embeddings.json")
+THREADS = str(_CODE_ROOT / "futon2/holes/session-threads.json")
+OUT = str(_CODE_ROOT / "futon2/holes/session-thread-plot.html")
 
 
 def fetch_retrievals(sid):

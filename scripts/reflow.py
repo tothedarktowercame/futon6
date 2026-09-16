@@ -11,11 +11,16 @@ hand-fit.
                                             [--thresh 0.30] [--min-turns 2] [--wa PATH]
 """
 import os, sys, json, glob, subprocess
+from pathlib import Path
 
-F6 = "/home/joe/code/futon6"
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+F6 = str(_CODE_ROOT / "futon6")
 PY = f"{F6}/.venv/bin/python"
-OUTROOT = "/home/joe/code/futon2/holes/reflow"
-WA_DIR = "/home/joe/code/futon4/data/webarxana/public/wa"
+OUTROOT = str(_CODE_ROOT / "futon2/holes/reflow")
+WA_DIR = str(_CODE_ROOT / "futon4/data/webarxana/public/wa")
 
 
 def derive_scope_anchor(mission):
@@ -23,8 +28,8 @@ def derive_scope_anchor(mission):
     name <repo>-d/mission/<lower-id>. Find the doc to learn its repo."""
     if mission.startswith("M-"):
         return mission
-    hits = (glob.glob(f"/home/joe/code/*/holes/{mission}.md")
-            + glob.glob(f"/home/joe/code/*/holes/**/{mission}.md", recursive=True))
+    hits = (glob.glob(f"{_CODE_ROOT}/*/holes/{mission}.md")
+            + glob.glob(f"{_CODE_ROOT}/*/holes/**/{mission}.md", recursive=True))
     if not hits:
         return mission
     repo = hits[0].split("/code/")[1].split("/")[0]

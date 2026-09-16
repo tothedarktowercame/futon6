@@ -22,7 +22,7 @@
 import json, glob, argparse
 from pathlib import Path
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = Path(__file__).resolve().parent.parent
 TREES = ROOT / "data" / "mission-scope-trees"
 LEX = ROOT / "data" / "mission-self-representing-lexicon.json"
 

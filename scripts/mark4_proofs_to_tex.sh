@@ -3,14 +3,16 @@
 # keyword extraction. Same recipe as regenerate-full-tex-safe.sh (pandoc + the
 # First Proof pandoc-mathify.lua filter), but NO proof-box / colour layer and
 # driven by the frozen candidate list only. Sources are never mutated.
+: "${FUTON_CODE_ROOT:=$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-$0}")/../.." && pwd)}"
+# june 2026-09-16: derived code root replaces hardcoded ${FUTON_CODE_ROOT} paths.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 FILTER="${REPO_ROOT}/scripts/pandoc-mathify.lua"
 NORMALIZER="${REPO_ROOT}/scripts/normalize-math-prose.py"
-SRC_DIR="/home/joe/code/futon3c/data/apm-informal-proofs"
-FROZEN="/home/joe/code/storage/apm/mark4-frozen-candidates.txt"
-OUT_DIR="/home/joe/code/storage/apm/mark4-tex"
+SRC_DIR="${FUTON_CODE_ROOT}/futon3c/data/apm-informal-proofs"
+FROZEN="${FUTON_CODE_ROOT}/storage/apm/mark4-frozen-candidates.txt"
+OUT_DIR="${FUTON_CODE_ROOT}/storage/apm/mark4-tex"
 
 mkdir -p "${OUT_DIR}"
 tmp_dir="$(mktemp -d)"

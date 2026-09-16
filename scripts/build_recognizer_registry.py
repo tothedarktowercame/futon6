@@ -23,8 +23,12 @@ import json
 import os
 from pathlib import Path
 
-DEFAULT_DIR = Path("/home/joe/code/storage/futon6/data/ct-anatomy-v0")
-DEFAULT_OUT = Path("/home/joe/code/futon6/data/ct-recognizer-registry.json")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+DEFAULT_DIR = _CODE_ROOT / "storage/futon6/data/ct-anatomy-v0"
+DEFAULT_OUT = Path(__file__).resolve().parent.parent / "data/ct-recognizer-registry.json"
 
 
 def build(anatomy_dir: Path, min_papers: int) -> dict:

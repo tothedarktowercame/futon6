@@ -22,7 +22,7 @@ import json
 import time
 from pathlib import Path
 
-DEFECTS_DIR = Path("/home/joe/code/futon6/data/proofread-defects")
+DEFECTS_DIR = Path(__file__).resolve().parent.parent / "data/proofread-defects"
 
 
 def _path(paper: str) -> Path:

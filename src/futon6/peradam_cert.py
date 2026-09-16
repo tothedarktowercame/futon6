@@ -18,10 +18,15 @@ from pathlib import Path
 from typing import Any
 
 import edn_format
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[3])
 
 
-DEFAULT_CERT_DIR = Path("/home/joe/code/futon6/data/peradams")
-DEFAULT_FOLD_TURNS_DIR = Path("/home/joe/code/futon6/data/fold-turns")
+DEFAULT_CERT_DIR = _CODE_ROOT / "futon6/data/peradams"
+DEFAULT_FOLD_TURNS_DIR = _CODE_ROOT / "futon6/data/fold-turns"
 
 
 @dataclass(frozen=True)
@@ -345,7 +350,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Load/refuse peradam certificates without live writes.")
     ap.add_argument("--cert-dir", default=str(DEFAULT_CERT_DIR))
     ap.add_argument("--fold-turns-dir", default=str(DEFAULT_FOLD_TURNS_DIR))
-    ap.add_argument("--repo-root", default="/home/joe/code/futon6")
+    ap.add_argument("--repo-root", default=str(_CODE_ROOT / "futon6"))
     ap.add_argument("--census-fold-turns", action="store_true")
     args = ap.parse_args(argv)
 

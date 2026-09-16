@@ -328,7 +328,7 @@ def main():
             "a Claim 3 analysis (endpoint + concavity/inflection) similar to Claim 2."
         ),
     }
-    out_path = Path("/home/joe/code/futon6/data/first-proof/p4-path2-gap-analysis.json")
+    out_path = Path(__file__).resolve().parent.parent / "data/first-proof/p4-path2-gap-analysis.json"
     out_path.write_text(json.dumps(out, indent=2))
     pr(f"\nWrote {out_path}")
 

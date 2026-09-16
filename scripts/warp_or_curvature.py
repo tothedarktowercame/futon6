@@ -17,10 +17,16 @@ import sys
 import time
 from collections import defaultdict
 
-sys.path.insert(0, "/home/joe/code/futon3c/scripts")
+sys.path.insert(0, str(_CODE_ROOT / "futon3c/scripts"))
 import substrate_metric_e1_curvature as eng
+import os
+from pathlib import Path
 
-W = "/home/joe/code/futon6/data/warp"
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+W = str(_CODE_ROOT / "futon6/data/warp")
 
 
 def main():

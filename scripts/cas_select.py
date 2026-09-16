@@ -22,8 +22,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
 REPO = Path(__file__).resolve().parents[1]
-FUTON3 = Path(os.environ.get("FUTON3_ROOT", "/home/joe/code/futon3"))
+FUTON3 = Path(os.environ.get("FUTON3_ROOT", str(_CODE_ROOT / "futon3")))
 DEFAULT_INDEX = FUTON3 / "resources" / "sigils" / "patterns-index.tsv"
 # The library is splitting from one `math-informal/` family into a core plus
 # topic-specific siblings (`math-informal-core`, `math-informal-ct`, …), so that
@@ -34,7 +38,7 @@ DEFAULT_INDEX = FUTON3 / "resources" / "sigils" / "patterns-index.tsv"
 FAMILY_PREFIX = "math-informal"
 DEFAULT_LIBRARY = FUTON3 / "library" / "math-informal"
 DEFAULT_LIBRARY_ROOT = FUTON3 / "library"
-FUTON3C = Path(os.environ.get("FUTON3C_ROOT", "/home/joe/code/futon3c"))
+FUTON3C = Path(os.environ.get("FUTON3C_ROOT", str(_CODE_ROOT / "futon3c")))
 DEFAULT_STAGING_DIRS = (
     FUTON3C / "data" / "pattern-staging" / "slice-1",
     FUTON3C / "data" / "pattern-staging" / "slice-3",

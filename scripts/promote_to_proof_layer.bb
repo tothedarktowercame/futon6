@@ -13,7 +13,7 @@
 (require '[clojure.edn :as edn] '[clojure.pprint :refer [pprint]]
          '[babashka.http-client :as http] '[cheshire.core :as json])
 
-(def ROOT "/home/joe/code/futon6")
+(def ROOT (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon6"))
 (def OUT (str ROOT "/data/c-vector/candidate-proof-edges.edn"))
 (def MOVES (str ROOT "/data/diffsub-moves-mined.edn"))
 (def MEMES (str ROOT "/data/meme-mine/resolved-memes.openai.json"))

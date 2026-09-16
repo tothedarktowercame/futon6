@@ -22,8 +22,8 @@ import json
 import math
 from pathlib import Path
 
-GOLD = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
-OUT = Path("/home/joe/code/futon6/data/warp/aliveness.json")
+GOLD = Path(__file__).resolve().parent.parent / "data/showcases/ct-anatomy/golden"
+OUT = Path(__file__).resolve().parent.parent / "data/warp/aliveness.json"
 SCOPE_KINDS = {"let-binder"}
 
 

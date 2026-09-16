@@ -27,9 +27,15 @@ from meme_mine_runner import text_of, _sanitize_json_escapes, WRAP, DROP
 from meme_mine_joint import registry, retrieve
 from mission_concept_tag import gazetteer, spot
 from transcript_provenance import is_operator   # the ONE operator/agent/harness test (E-patch leak fix)
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 HOME = os.path.expanduser("~")
-ROOT = "/home/joe/code/futon6"; OUT = f"{ROOT}/data/c-vector"
+ROOT = str(_CODE_ROOT / "futon6"); OUT = f"{ROOT}/data/c-vector"
 # A cheap CPU pre-tag (香 salience, the leading edge of a correction) — a HINT for the LLM, never a gate.
 CORRECTION_CUE = re.compile(r"\b(not only|not just|not that|actually|no,|nope|isn'?t|wrong|instead|"
                             r"rather|i'?d say|let'?s not|don'?t|shouldn'?t|the issue is|too)\b", re.I)

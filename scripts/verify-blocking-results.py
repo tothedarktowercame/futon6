@@ -9,6 +9,12 @@ BR4: Schur-convexity failure: concentrated eigenvalue exceeds uniform.
 
 import json
 import numpy as np
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 print("=" * 80)
 print("BLOCKING RESULT 1: Operator inequality insufficient")
@@ -86,7 +92,7 @@ print("=" * 80)
 
 # Load Codex C4 data for interlacing failures
 try:
-    with open("/home/joe/code/futon6/data/first-proof/problem6-codex-cycle4-results.json") as f:
+    with open(str(_CODE_ROOT / "futon6/data/first-proof/problem6-codex-cycle4-results.json")) as f:
         c4 = json.load(f)
 
     summary = c4["summary"]

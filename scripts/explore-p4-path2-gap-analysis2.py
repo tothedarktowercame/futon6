@@ -265,7 +265,7 @@ def main():
             "new_Q_bound_when_D_le_0": str(sp.factor(new_Q_bound2)),
         },
     }
-    out_path = Path("/home/joe/code/futon6/data/first-proof/p4-path2-gap-analysis2.json")
+    out_path = Path(__file__).resolve().parent.parent / "data/first-proof/p4-path2-gap-analysis2.json"
     out_path.write_text(json.dumps(out, indent=2))
     pr(f"Wrote {out_path}")
 

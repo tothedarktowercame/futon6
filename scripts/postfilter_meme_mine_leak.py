@@ -14,8 +14,14 @@ from collections import Counter
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from transcript_provenance import classify, raw_text, WRAP
 from meme_mine_runner import ASK, DROP
+import os
+from pathlib import Path
 
-HOME = os.path.expanduser("~"); MM = "/home/joe/code/futon6/data/meme-mine"
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+HOME = os.path.expanduser("~"); MM = str(_CODE_ROOT / "futon6/data/meme-mine")
 
 def ask_id(one):
     return "ask-" + hashlib.sha1(one.encode()).hexdigest()[:8]

@@ -29,10 +29,10 @@
 ;; R19-UNIFY: the stated-channel entry logic has ONE source of truth —
 ;; `futon2.aif.c-vector` (the live belly producer; babashka-compatible). This
 ;; script (the snapshot producer) delegates to it so the two cannot drift.
-(cp/add-classpath "/home/joe/code/futon2/src")
+(cp/add-classpath (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon2/src"))
 (require '[futon2.aif.c-vector :as cv])
 
-(def ROOT "/home/joe/code/futon6")
+(def ROOT (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon6"))
 (def WHOLENESS (str ROOT "/data/mission-wholeness.edn"))
 (def SCOPE-TREES (str ROOT "/data/mission-scope-trees"))
 (def OUT-DIR (str ROOT "/data/c-vector"))

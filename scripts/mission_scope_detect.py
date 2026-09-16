@@ -15,9 +15,14 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 
-ROOT = Path("/home/joe/code")
+ROOT = _CODE_ROOT / "code"
 KERNEL = ROOT / "futon6" / "data" / "mission-ner-kernel.json"
 STAR_MAP = ROOT / "futon0" / "holes" / "missions" / "M-capability-star-map.graph.edn"
 OUT_DIR = ROOT / "futon6" / "data" / "mission-scope-trees"

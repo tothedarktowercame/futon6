@@ -243,11 +243,45 @@ def safe_output_name(candidate: dict[str, Any]) -> str:
     return f"{passage}.edn"
 
 
+def _cap_per_paper(paths: list, cap: int) -> list:
+    """Playbook 4: cap S4 so expository does not dominate the window ("sample ~30
+    regions/paper, not all - one paper had 466"). Sampling is EVEN across each
+    paper's sorted regions, not the first N, so we do not bias toward a paper's
+    opening pages. Off by default; set FUTON6_EXPOSITORY_CAP_PER_PAPER to enable."""
+    if cap <= 0:
+        return paths
+    from collections import defaultdict
+    by_paper = defaultdict(list)
+    for p in paths:
+        try:
+            pid = json.loads(p.read_text()).get("paper-id")
+        except Exception:
+            pid = None
+        by_paper[pid or p.name.split(".")[0]].append(p)
+    kept, dropped = [], 0
+    for pid, files in sorted(by_paper.items()):
+        if len(files) <= cap:
+            kept.extend(files)
+            continue
+        step = len(files) / cap
+        keep_idx = {int(i * step) for i in range(cap)}
+        kept.extend(f for i, f in enumerate(files) if i in keep_idx)
+        dropped += len(files) - len(keep_idx)
+    kept.sort()
+    print(f"  [cap] FUTON6_EXPOSITORY_CAP_PER_PAPER={cap}: {len(paths)} candidate(s) "
+          f"-> {len(kept)} kept across {len(by_paper)} paper(s), {dropped} deferred "
+          f"(even sample per paper)", flush=True)
+    return kept
+
+
 def run(args: argparse.Namespace) -> int:
     candidate_paths = sorted(Path(args.candidates).glob("*.candidate.json"))
     if not candidate_paths:
         print("no candidates found", file=sys.stderr)
         return 2
+    candidate_paths = _cap_per_paper(
+        candidate_paths, int(os.environ.get("FUTON6_EXPOSITORY_CAP_PER_PAPER", "0") or 0)
+    )
     if not require_enriched(candidate_paths):
         return 2
 

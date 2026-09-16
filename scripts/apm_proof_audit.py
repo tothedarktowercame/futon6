@@ -18,10 +18,15 @@ from typing import Any
 
 import proof_scope_audit as psa
 from nlab_skolem_audit import classify_expr, paragraph_spans
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 ROOT = Path(__file__).resolve().parent.parent
-APM_PROBLEMS = Path("/home/joe/code/apm-lean/problems")
-APM_LEAN = Path("/home/joe/code/apm-lean/lean-proofs")
+APM_PROBLEMS = _CODE_ROOT / "apm-lean/problems"
+APM_LEAN = _CODE_ROOT / "apm-lean/lean-proofs"
 OUT_JSON = ROOT / "data" / "apm-proof-scope-audit.json"
 OUT_SUMMARY = ROOT / "data" / "apm-proof-scope-summary.json"
 

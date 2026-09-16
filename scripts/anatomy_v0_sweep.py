@@ -20,10 +20,14 @@ import time
 from collections import Counter
 from pathlib import Path
 
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
-DEFAULT_OUT = Path("/home/joe/code/storage/futon6/data/ct-anatomy-v0")
+DEFAULT_EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
+DEFAULT_OUT = _CODE_ROOT / "storage/futon6/data/ct-anatomy-v0"
 ROLE_TSV = ROOT / "holes" / "golden-graphs" / "latexml-math-roles.tsv"
 PLAIN_CSEQ = ROOT / "holes" / "golden-graphs" / "tex-plain-cseq.txt"
 TEXT_EXTS = {

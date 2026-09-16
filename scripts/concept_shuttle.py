@@ -22,7 +22,7 @@ import re
 import subprocess
 from pathlib import Path
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = Path(__file__).resolve().parent.parent
 # prefer the FULL mathlib index (3454 structure/class defs); fall back to the
 # Monoidal-only slice if the broad mine has not been run yet.
 _BROAD = ROOT / "data" / "mathlib-defs.json"

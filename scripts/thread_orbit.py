@@ -10,10 +10,16 @@ mechanics trajectory WebArxana draws on the spiral surface.  Read-only; emits .e
   default: the thread with the most mission-engaging turns -> futon2/holes/thread-orbit.edn
 """
 import json, os, sys
+import os
+from pathlib import Path
 
-THREADS = "/home/joe/code/futon2/holes/session-threads.json"
-COMB = "/home/joe/code/futon2/holes/mission-comb-M-points-de-fuite.json"
-OUT = "/home/joe/code/futon2/holes/thread-orbit.edn"
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+THREADS = str(_CODE_ROOT / "futon2/holes/session-threads.json")
+COMB = str(_CODE_ROOT / "futon2/holes/mission-comb-M-points-de-fuite.json")
+OUT = str(_CODE_ROOT / "futon2/holes/thread-orbit.edn")
 
 
 def to_edn(v, ind=0):
@@ -67,7 +73,7 @@ def main():
     open(OUT, "w").write(";; thread orbit (retracted onto the mission scope-surface) — for WebArxana\n"
                          + to_edn(out) + "\n")
     # also emit JSON into WebArxana's static dir so the client can fetch /wa/thread-orbit.json
-    wa = "/home/joe/code/futon4/data/webarxana/public/wa/thread-orbit.json"
+    wa = str(_CODE_ROOT / "futon4/data/webarxana/public/wa/thread-orbit.json")
     try:
         json.dump(out, open(wa, "w"), ensure_ascii=False)
     except Exception:

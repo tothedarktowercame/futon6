@@ -404,7 +404,7 @@ def main() -> None:
     parser.add_argument(
         "--se-root",
         type=Path,
-        default=Path("/home/joe/code/futon6/se-data"),
+        default=Path(__file__).resolve().parent.parent / "se-data",
         help="Directory containing site dump folders with Posts.xml and Comments.xml",
     )
     parser.add_argument(

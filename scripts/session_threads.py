@@ -12,10 +12,16 @@ evidence (the per-turn embedding pattern retrievals) and emits a hyperedge artif
 """
 import json, os, sys, glob, re, urllib.request
 from collections import defaultdict
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 API = "http://localhost:7070"
-PIDX = "/home/joe/code/futon3/resources/sigils/patterns-index.tsv"
-OUT = "/home/joe/code/futon2/holes/session-threads.json"
+PIDX = str(_CODE_ROOT / "futon3/resources/sigils/patterns-index.tsv")
+OUT = str(_CODE_ROOT / "futon2/holes/session-threads.json")
 
 
 def resolve_session_id(arg):

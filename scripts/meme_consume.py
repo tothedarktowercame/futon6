@@ -12,7 +12,13 @@ not a move-prior for THIS rollout). Per the M-wm-policies declare-don't-guess se
   futon6/.venv/bin/python scripts/meme_consume.py --selftest # + a synthetic mission-resolved meme → move-set
 """
 import argparse, json, re
-ROOT = "/home/joe/code/futon6"; OUT = f"{ROOT}/data/meme-mine"
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+ROOT = str(_CODE_ROOT / "futon6"); OUT = f"{ROOT}/data/meme-mine"
 
 
 def mission_nodes():

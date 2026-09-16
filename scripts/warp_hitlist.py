@@ -21,7 +21,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-W = Path("/home/joe/code/futon6/data/warp")
+W = Path(__file__).resolve().parent.parent / "data/warp"
 DASH = re.compile(r"[‐-―−-]")  # hyphen/en/em/minus variants
 
 

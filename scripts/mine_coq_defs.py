@@ -18,9 +18,14 @@ import argparse
 import json
 import re
 from pathlib import Path
+import os
 
-ROOT = Path("/home/joe/code/storage/futon6/data/formal-sources/math-comp")
-OUT = Path("/home/joe/code/futon6/data/coq-mathcomp-defs.json")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOT = _CODE_ROOT / "storage/futon6/data/formal-sources/math-comp"
+OUT = Path(__file__).resolve().parent.parent / "data/coq-mathcomp-defs.json"
 
 DECL_RE = re.compile(
     r"^\s*(?:Global\s+|Local\s+|#\[[^\]]*\]\s*)?"

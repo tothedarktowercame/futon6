@@ -3,7 +3,7 @@
 # setup-ct-run.sh — one-command setup + invocation for the math.CT NER/structure run.
 #
 # Fetches the consolidated handoff dir from linode-chicago in ONE rsync
-# (/home/joe/ct-handoff/ -> data/ + eprint bundle), verifies + extracts it, and
+# (${FUTON_CODE_ROOT}/ct-handoff/ -> data/ + eprint bundle), verifies + extracts it, and
 # runs the GPU Stage-5/6 pipeline on the math.CT slice.
 #
 # Verified against futon6 @ b9e149a (2026-05-31): every flag below exists in
@@ -18,6 +18,8 @@
 #
 # Prereqs assumed: run from a checkout at ~/code/futon6 ; ssh host 'linode-chicago'
 # configured (HostName 172.236.108.82, port 2222, user rob) ; nnexus at ~/code/nnexus.
+: "${FUTON_CODE_ROOT:=$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-$0}")/../.." && pwd)}"
+# june 2026-09-16: derived code root replaces hardcoded ${FUTON_CODE_ROOT} paths.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -29,7 +31,7 @@ STORE="${STORE:-$HOME/code/storage/futon6/data}"
 REMOTE="${REMOTE:-linode-chicago}"
 # Absolute path on the linode (joe's home), world-readable; does NOT depend on
 # the ssh login user's home resolving anywhere in particular.
-REMOTE_HANDOFF_DIR="${REMOTE_HANDOFF_DIR:-/home/joe/ct-handoff}"
+REMOTE_HANDOFF_DIR="${REMOTE_HANDOFF_DIR:-${FUTON_CODE_ROOT}/ct-handoff}"
 HANDOFF="arxiv-math-ct-handoff-2026-02-20.7z"
 
 MODE="${1:-all}"

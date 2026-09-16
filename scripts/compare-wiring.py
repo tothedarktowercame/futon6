@@ -14,6 +14,11 @@ import re
 import sys
 from pathlib import Path
 from collections import Counter
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 # --- Reuse from validate-ct.py ---
 
@@ -309,8 +314,8 @@ def extract_nlab_body(md_path):
 
 
 def main():
-    pm_dir = Path("/home/joe/code/planetmath/18_Category_theory_homological_algebra")
-    nlab_dir = Path("/home/joe/code/nlab-content/pages")
+    pm_dir = _CODE_ROOT / "planetmath/18_Category_theory_homological_algebra"
+    nlab_dir = _CODE_ROOT / "nlab-content/pages"
 
     # Natural Transformation comparison
     print("\n" + "#"*60)
@@ -343,7 +348,7 @@ def main():
         compare(pm_analysis2, nlab_analysis2)
 
     # Write results
-    outpath = Path("/home/joe/code/futon6/data/ct-validation/comparison.json")
+    outpath = Path(__file__).resolve().parent.parent / "data/ct-validation/comparison.json"
     results = {
         "natural_transformation": {
             "pm": {

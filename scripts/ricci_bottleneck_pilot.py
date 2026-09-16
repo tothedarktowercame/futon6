@@ -27,6 +27,12 @@ import sys, time, pickle, json
 from collections import defaultdict, Counter
 import numpy as np
 from scipy.optimize import linprog
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 Q2TAGS = "/tmp/q2tags.pkl"   # {question_id: [tag,...]} produced by the parse step
 MIN_COOCC = int(sys.argv[1]) if len(sys.argv) > 1 else 30
@@ -117,7 +123,7 @@ def main():
     for k, a, b, w in results[-10:]:
         print(f"  {k:+.3f}  {short(a)} -- {short(b)}  (co-occ {w})")
 
-    out = "/home/joe/code/futon6/resources/differentiable-math/ricci-tag-curvature.json"
+    out = str(_CODE_ROOT / "futon6/resources/differentiable-math/ricci-tag-curvature.json")
     with open(out, "w") as f:
         json.dump({"min_coocc": MIN_COOCC, "max_tags": MAX_TAGS, "alpha": ALPHA,
                    "n_nodes": len(nodes), "n_edges": len(results),

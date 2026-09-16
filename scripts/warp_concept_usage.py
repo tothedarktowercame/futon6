@@ -19,7 +19,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import warp_defined_pass as dp
 
-W = Path("/home/joe/code/futon6/data/warp")
+W = Path(__file__).resolve().parent.parent / "data/warp"
 EPRINTS = dp.EPRINTS
 DASH = re.compile(r"[‐-―−-]")
 STOPW = set("the a an of to in on for and or is are be by with we that this it as at".split())

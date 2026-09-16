@@ -14,7 +14,7 @@ import json
 import numpy as np
 
 # Load the alpha-rho analysis results
-with open("/home/joe/code/futon6/data/first-proof/alpha-rho-analysis.json") as f:
+with open(str(_CODE_ROOT / "futon6/data/first-proof/alpha-rho-analysis.json")) as f:
     results = json.load(f)
 
 print("=" * 100)
@@ -54,7 +54,13 @@ print("\nRecomputing with eigenvalue data...")
 
 # Inline the necessary parts
 import sys
-sys.path.insert(0, "/home/joe/code/futon6/scripts")
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+sys.path.insert(0, str(_CODE_ROOT / "futon6/scripts"))
 
 # Reuse graph generation from compute-alpha-rho
 def edge_key(u, v):

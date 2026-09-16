@@ -33,7 +33,7 @@ def _load_nlab_wiring():
 # eprint store: $FUTON6_EPRINTS overrides the dev default, so the Superpod run can point at
 # Rob's arXiv-math download instead of fetching (mark7 handoff).
 EPRINTS = Path(os.environ.get("FUTON6_EPRINTS", str(sweep.DEFAULT_EPRINTS)))
-GOLDEN_DIR = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
+GOLDEN_DIR = Path(__file__).resolve().parent.parent / "data/showcases/ct-anatomy/golden"
 from dp_capabilities.binders import (
     APPOS_CONJ_RE,
     APPOSITIVE_RE,

@@ -31,7 +31,10 @@ except ImportError as _exc:          # inspectable without it; see _MissingDeps
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, "holes", "linode-stepper-contract.md")
-PY = ".venv/bin/python -u"   # -u: unbuffered → stage output streams live (no buffered black box)
+# -u: unbuffered → stage output streams live (no buffered black box).
+# FUTON6_PYTHON_CMD overrides the interpreter for hosts with no futon6 .venv
+# (e.g. the superpod, which uses a governed conda env). Default unchanged.
+PY = os.environ.get("FUTON6_PYTHON_CMD", ".venv/bin/python -u")
 
 
 def kw(x):

@@ -340,7 +340,7 @@ def main():
         },
     }
 
-    out_path = Path("/home/joe/code/futon6/data/first-proof/p4-path2-codex-results.json")
+    out_path = Path(__file__).resolve().parent.parent / "data/first-proof/p4-path2-codex-results.json"
     out_path.write_text(json.dumps(out, indent=2))
 
     pr("=" * 88)

@@ -33,8 +33,8 @@ import numpy as np
 
 from viz_budget import guard_svg
 
-W = Path("/home/joe/code/futon6/data/warp")
-GOLD = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
+W = Path(__file__).resolve().parent.parent / "data/warp"
+GOLD = Path(__file__).resolve().parent.parent / "data/showcases/ct-anatomy/golden"
 
 
 def kindcol(k):

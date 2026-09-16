@@ -20,7 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import check_invariants as ci
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = Path(__file__).resolve().parent.parent
 LEDGER = ROOT / "holes" / "loss-ledger.md"
 LOGJSONL = ROOT / "data" / "loss" / "loss-log.jsonl"
 

@@ -9,8 +9,8 @@
          '[cheshire.core :as json]
          '[clojure.string :as str])
 
-(def CV "/home/joe/code/futon6/data/c-vector")
-(def DIFFSUB "/home/joe/code/futon6/data/diffsub-moves.edn")
+(def CV (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon6/data/c-vector"))
+(def DIFFSUB (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon6/data/diffsub-moves.edn"))
 
 (defn slurp-edn [p] (edn/read-string (slurp p)))
 

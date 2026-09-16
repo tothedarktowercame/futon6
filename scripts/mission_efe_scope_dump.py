@@ -23,7 +23,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "efe-scopes.json"
 TREES = ROOT / "data" / "mission-scope-trees"
 # Substrate URL resolution, same precedence as futon3c.watcher.multi: the

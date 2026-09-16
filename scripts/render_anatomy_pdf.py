@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from render_mission_pdf import (PREAMBLE, esc, inline, render_body,
                                 vitals_card, table_to_tex, STRIPPED)
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = Path(__file__).resolve().parent.parent
 
 EXCERPT_RE = re.compile(r"<!--\s*excerpt:\s*(\S+)\s*::\s*(.+?)\s*-->")
 VITALS_RE = re.compile(r"<!--\s*vitals:\s*(\S+)\s*-->")

@@ -20,8 +20,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
-CODE_ROOT = Path("/home/joe/code")
+
+CODE_ROOT = _CODE_ROOT / "code"
 ROOT = CODE_ROOT / "futon6"
 OUT_DIR = ROOT / "data" / "mission-triples"
 SCOPE_DETECT = ROOT / "scripts" / "mission_scope_detect.py"

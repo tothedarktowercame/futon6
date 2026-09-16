@@ -297,7 +297,7 @@ def main():
             "min_R_corners": min_R,
         }
     }
-    out_path = Path("/home/joe/code/futon6/data/first-proof/p4-path2-A-structure.json")
+    out_path = Path(__file__).resolve().parent.parent / "data/first-proof/p4-path2-A-structure.json"
     out_path.write_text(json.dumps(out, indent=2))
     pr(f"Wrote {out_path}")
 

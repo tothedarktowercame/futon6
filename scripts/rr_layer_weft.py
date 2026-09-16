@@ -7,7 +7,7 @@ from collections import Counter
 from pathlib import Path
 from rr_compositor import Annotation, Layer, Span, golden_class
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = Path(__file__).resolve().parent.parent
 GOLD = ROOT / "data/showcases/ct-anatomy/golden"
 
 

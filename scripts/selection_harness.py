@@ -15,8 +15,13 @@ import argparse
 import importlib.util
 import json
 from pathlib import Path
+import os
 
-ROOT = Path("/home/joe/code")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOT = _CODE_ROOT / "code"
 FUTON6 = ROOT / "futon6"
 CASCADE_PATH = ROOT / "futon3a/holes/labs/M-memes-arrows/cascade_construct.py"
 DEFAULT_SCOPES = FUTON6 / "data/diffsub-scopes.json"

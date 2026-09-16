@@ -9,8 +9,13 @@
 import json, re, math, subprocess, time, sys
 from pathlib import Path
 from collections import defaultdict
+import os
 
-ROOT = Path("/home/joe/code")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOT = _CODE_ROOT / "code"
 # Optional variant arg (force|embed|springs|seed) selects an alternate mission layout from
 # mission_carpet_variants.py — the projection FAMILY. No arg = the canonical carpet, unchanged.
 _VARIANT = sys.argv[1] if len(sys.argv) > 1 else None

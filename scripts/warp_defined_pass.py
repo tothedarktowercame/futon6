@@ -25,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import anatomy_v0_sweep as sweep
 
 EPRINTS = sweep.DEFAULT_EPRINTS
-OUT = Path("/home/joe/code/futon6/data/warp/defined-index.json")
+OUT = Path(__file__).resolve().parent.parent / "data/warp/defined-index.json"
 
 # emphasized defined-term markers: a term italicised/bolded (the math-paper
 # convention for "this is the definition"). High-recall, cheap.

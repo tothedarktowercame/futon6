@@ -10,8 +10,13 @@ import json, re
 from pathlib import Path
 from collections import defaultdict
 import numpy as np
+import os
 
-ROOT = Path("/home/joe/code")
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
+ROOT = _CODE_ROOT / "code"
 OUT = ROOT / "futon6" / "data" / "mission-pattern-scopes.edn"
 pe = json.load(open(ROOT / "futon3a/resources/notions/minilm_pattern_embeddings.json"))
 me = json.load(open(ROOT / "futon3a/resources/notions/minilm_mission_embeddings.json"))

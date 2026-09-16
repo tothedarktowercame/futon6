@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Any
 
 
-CODE_ROOT = Path("/home/joe/code")
+CODE_ROOT = _CODE_ROOT / "code"
 FUTON6 = CODE_ROOT / "futon6"
 SCRIPT_DIR = FUTON6 / "scripts"
 OUT_DIR = FUTON6 / "data" / "dry-basins"
@@ -29,6 +29,10 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 import mission_triple_miner as triple  # noqa: E402
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 
 PHASES = ["head", "identify", "map", "derive", "argue", "verify", "instantiate", "document"]

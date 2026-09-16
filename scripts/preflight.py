@@ -30,6 +30,11 @@ import os
 import shutil
 import subprocess
 import sys
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 R = []          # (name, ok, detail, remedy)
@@ -172,7 +177,7 @@ def check_substrate():
 # ~/data/arxiv-math-ct-eprints. Reporting "unset" is not the same as reporting
 # "absent", and a preflight that cannot tell them apart sends you to the network.
 EPRINT_CANDIDATES = (
-    "/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints",  # warp_bib default
+    str(_CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"),  # warp_bib default
     os.path.join(os.path.expanduser("~"), "data", "arxiv-math-ct-eprints"),
     os.path.join(ROOT, "data", "arxiv-math-ct-eprints"),
 )

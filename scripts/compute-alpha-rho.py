@@ -16,6 +16,12 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
 import numpy as np
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 
 def edge_key(u: int, v: int) -> Tuple[int, int]:
@@ -341,7 +347,7 @@ def main():
               f"{rk:>5d} {dm:>6d} {dn:>6d} {fpm:>10.4f} {tf:>10.4f}")
 
     # Dump full results
-    with open("/home/joe/code/futon6/data/first-proof/alpha-rho-analysis.json", "w") as f:
+    with open(str(_CODE_ROOT / "futon6/data/first-proof/alpha-rho-analysis.json"), "w") as f:
         json.dump(all_results, f, indent=2)
     print("\nFull results written to data/first-proof/alpha-rho-analysis.json")
 

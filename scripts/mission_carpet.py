@@ -10,7 +10,7 @@ from pathlib import Path
 from collections import Counter, defaultdict
 import numpy as np
 
-ROOT = Path("/home/joe/code")
+ROOT = _CODE_ROOT / "code"
 OUT = ROOT / "futon6" / "data" / "mission-carpet.html"
 sys.path.insert(0, str(Path(__file__).parent))
 from mission_fold import load_sip, load_tree, build  # noqa: E402
@@ -205,6 +205,11 @@ NEIGHBOURHOODS carry Salingaros at the region scale: <b>T = GEOMETRIC density</b
 OUT.write_text(doc)
 # Emit positions so the EFE-field render (D2) can paint onto the real city layout.
 import json as _json
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 _json.dump({s: [round(float(P[idx[s]][0]), 1), round(float(P[idx[s]][1]), 1)] for s in stems},
            open(ROOT / "futon6" / "data" / "mission-carpet-pos.json", "w"))
 # Emit the HGT pattern-roads (attestation-weighted) so the EFE-field render can show the backdrop.

@@ -22,6 +22,11 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 ROOT = Path(__file__).resolve().parents[1]
 GOLD = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
@@ -410,8 +415,7 @@ def fresh_coverage(pid: str) -> dict:
 # Codex-pool-built, checker-PASS .edn argument graphs (warrants + typed holes),
 # line-anchored standoff over the source. We render them as a reasoning panel
 # beneath the source — nothing is restated inline; the panel IS the layer-b view.
-IATC_GRAPH_DIR = Path(
-    "/home/joe/code/futon3c/holes/excursions/close-reading/iatc-clojure")
+IATC_GRAPH_DIR = _CODE_ROOT / "futon3c/holes/excursions/close-reading/iatc-clojure"
 
 
 def _edn_to_py(o):
