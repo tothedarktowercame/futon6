@@ -46,20 +46,31 @@ def instance(schema: dict, seed: int, path: str = ""):
     return None
 
 
-def iatc_document(schema: dict, seed: int) -> dict:
-    """A chain argument that satisfies iatc_json's code checks (for S3 rehearsals)."""
+def nodes_document(schema: dict, seed: int) -> dict:
+    """S3 phase 1: the nodes an argument is made of."""
     line = schema["properties"]["nodes"]["items"]["properties"]["first_line"]
     lo, hi = line["minimum"], line["maximum"]
     n = 2 + seed % 4
-    nodes = [{"kind": "claim", "text": f"rehearsal claim {i} of {seed % 100000}", "citation": "",
-              "first_line": lo + (i * (hi - lo)) // max(n - 1, 1), "last_line": lo + (i * (hi - lo)) // max(n - 1, 1)}
-             for i in range(n)]
+    return {"nodes": [{"kind": "claim", "text": f"rehearsal claim {i} of {seed % 100000}", "citation": "",
+                       "first_line": lo + (i * (hi - lo)) // max(n - 1, 1),
+                       "last_line": lo + (i * (hi - lo)) // max(n - 1, 1)}
+                      for i in range(n)]}
+
+
+def derivations_document(schema: dict, seed: int) -> dict:
+    """S3 phase 2: a chain over the nodes that exist, one derivation per derived node."""
+    properties = schema["properties"]["derivations"]["properties"]
+    nodes = sorted(int(k) for k in properties)
     kinds = ["stated", "citation", "missing"]
-    steps = [{"relation": "implies", "premises": [i], "conclusion": i + 1,
-              "warrant_kind": kinds[(seed + i) % 3], "warrant": f"rehearsal warrant {seed % 100000}-{i}",
-              "first_line": nodes[i - 1]["first_line"], "last_line": nodes[i]["last_line"]}
-             for i in range(1, n)]
-    return {"nodes": nodes, "steps": steps}
+    derivations = {}
+    for i, node in enumerate(nodes[1:], start=1):
+        entry = properties[str(node)]["items"]["properties"]
+        line = entry["first_line"]
+        derivations[str(node)] = [{"relation": "implies", "premises": [nodes[i - 1]],
+                                   "warrant_kind": kinds[(seed + i) % 3],
+                                   "warrant": f"rehearsal warrant {seed % 100000}-{i}",
+                                   "first_line": line["minimum"], "last_line": line["maximum"]}]
+    return {"derivations": derivations}
 
 
 def scopes_document(schema: dict, seed: int) -> dict:
@@ -95,8 +106,10 @@ class Handler(BaseHTTPRequestHandler):
         fmt = (body.get("response_format") or {}).get("json_schema")
         if fmt:
             schema, name = fmt["schema"], fmt.get("name")
-            if name == "iatc_proof":
-                content = iatc_document(schema, seed)
+            if name == "iatc_proof" and "nodes" in schema["properties"]:
+                content = nodes_document(schema, seed)
+            elif name == "iatc_proof":
+                content = derivations_document(schema, seed)
             elif name == "expository_region":
                 content = scopes_document(schema, seed)
             else:
