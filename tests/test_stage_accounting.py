@@ -399,3 +399,38 @@ class AnatomyDetection(unittest.TestCase):
         body = text.index("\\begin{protodefinition}")
         self.assertEqual([m["kind"] for m in self.dpv.detect_tex_environments(text[body:], body, learned)],
                          ["env/definition"])
+
+
+class InferenceGraphGate(unittest.TestCase):
+    """S3 rejects graphs S7 cannot type, while the model can still repair them."""
+
+    BASE = """{:paper/id "9999.0004" :passage/id "9999.0004:p"
+ :nodes [{:id :a :kind :claim :text "A" :source {:lines [1 1]}}
+         {:id :b :kind :claim :text "B" :source {:lines [2 2]}}]
+ :edges [%s]}"""
+
+    def gate(self, edges):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "9999.0004__p0.edn"
+            path.write_text(self.BASE % edges)
+            result = subprocess.run(["bb", str(ROOT / "scripts/iatc_argcheck.bb"), str(path)],
+                                    capture_output=True, text=True)
+        return result.returncode, result.stdout + result.stderr
+
+    def edge(self, eid, premise, conclusion, relation=":implies"):
+        return (f"{{:id {eid} :kind :infer :relation {relation} :premise [{premise}] :conclusion {conclusion} "
+                f":warrant {{:kind :claim :text \"w\"}} :source {{:lines [1 2]}}}}")
+
+    def test_equivalence_as_two_implications_is_rejected_single_iff_edge_passes(self):
+        rc, out = self.gate(self.edge(":e1", ":a", ":b") + " " + self.edge(":e2", ":b", ":a"))
+        self.assertEqual(rc, 1, out)
+        self.assertIn("[inference-cycle]", out)
+        self.assertIn(":relation :iff", out)
+        rc, out = self.gate(self.edge(":e1", ":a", ":b", ":iff"))
+        self.assertEqual(rc, 0, out)
+
+    def test_infer_edge_without_conclusion_is_rejected(self):
+        rc, out = self.gate("{:id :e1 :kind :infer :relation :because :premise [:a] "
+                            ":warrant {:kind :claim :text \"w\"} :source {:lines [1 2]}}")
+        self.assertEqual(rc, 1, out)
+        self.assertIn("[infer-shape]", out)

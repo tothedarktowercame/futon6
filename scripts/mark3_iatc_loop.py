@@ -69,7 +69,10 @@ not holes.
 (2) The map includes a top-level :holes vector, and EVERY edge whose :warrant is \
 {:kind :missing-warrant :wanted X} is mirrored by a matching {:kind :missing-warrant :wanted X} \
 entry in :holes. \
-(3) EVERY :ref node resolves via :label/:target/:citation, or is listed in :holes.
+(3) EVERY :ref node resolves via :label/:target/:citation, or is listed in :holes. \
+(4) EVERY :infer edge has :id and a :conclusion; a step left to the reader is a :holes entry. \
+(5) Premise->conclusion flow has no cycle: prove an equivalence as ONE edge with \
+:relation :iff, never as two implications that feed each other.
 - Output ONLY the EDN map. No prose."""
 
 
