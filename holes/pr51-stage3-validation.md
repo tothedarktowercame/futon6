@@ -138,7 +138,7 @@ write a data format that then needs repair, retries and extra gates.
   as markup headings. Proofs up to 30000 characters are detected; the old 6000-character
   limit dropped longer ones silently. Of the six corpus papers that had no S1 proofs,
   `math/0409598` now has 18 and `math/9810017` has 1. The other four contain no formal
-  proofs. All 16 paper objects are well-formed. The corpus now yields 306+ proof
+  proofs. All 16 paper objects are well-formed. The corpus now yields 324 proof
   candidates, each paired with a statement.
 - `a6fcd08`:
   - one S3 candidate per outermost S1 proof, shown with its statement;
