@@ -22,6 +22,15 @@ from pathlib import Path
 SCHEMA = "futon6-stage-accounting/v1"
 STATUSES = ("accepted", "rejected", "errored", "deferred")
 DIR_ENV = "FUTON6_ACCOUNTING_DIR"
+# stage -> [(producer, inputs)]. Inputs name where the expected item ids come
+# from: the frozen corpus, or the accepted outputs of an earlier producer (in this
+# invocation for the same stage; in the ledgered invocation for another stage).
+STAGES = {
+    "S3": [("extract", "corpus"), ("loop", "S3.extract")],
+    "S4": [("extract", "corpus"), ("select", "S4.extract"), ("loop", "S4.select")],
+    "S6": [("assemble", "corpus")],
+    "S7": [("typing", "S3.loop")],
+}
 INVOCATION_ENV = "FUTON6_STAGE_INVOCATION"
 
 
@@ -202,3 +211,51 @@ def accepted_finals(outdir: Path, pattern: str = "*.edn") -> tuple[list[tuple[st
         else:
             accepted.append((record["item"], final))
     return accepted, refused
+
+
+# ---- stage-level verification shared by the runner and replay ----
+def directory(run_dir: Path, stage: str, invocation: str) -> Path:
+    return Path(run_dir) / "accounting" / stage / invocation
+
+
+def ledgered_invocation(run_dir: Path, stage: str, corpus_id: str) -> str | None:
+    path = Path(run_dir) / "phase-ledger.jsonl"
+    if not path.is_file():
+        return None
+    for line in path.read_text().splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        if row.get("stage") == stage and row.get("corpus_id") == corpus_id and row.get("gate") == "pass":
+            return row.get("invocation")
+    return None
+
+
+def stage_problems(run_dir: Path, stage: str, invocation: str, corpus_id: str):
+    """(problems, per-producer counts) for one invocation's item accounting."""
+    import run_manifest
+    doc = run_manifest.load(Path(run_dir))
+    loaded, counts, found = {}, {}, []
+    for producer, source in STAGES.get(stage, []):
+        try:
+            if source == "corpus":
+                expected = doc["papers"]
+            else:
+                src_stage, src_producer = source.split(".")
+                if src_stage == stage:
+                    upstream = loaded[source]
+                else:
+                    upstream_invocation = ledgered_invocation(run_dir, src_stage, corpus_id)
+                    if not upstream_invocation:
+                        raise ValueError(f"{source}: no ledgered accounting for upstream stage")
+                    upstream = load(directory(run_dir, src_stage, upstream_invocation), src_stage, src_producer)
+                expected = accepted_outputs(upstream)
+            current = load(directory(run_dir, stage, invocation), stage, producer)
+        except (KeyError, ValueError, OSError) as exc:
+            found.append(f"{stage}.{producer}: {exc}")
+            break
+        loaded[f"{stage}.{producer}"] = current
+        counts[producer] = current["counts"]
+        allow_deferred = (stage, producer) == ("S4", "select") and doc["selection"]["expository-cap"] > 0
+        found += problems(current, expected, run_dir=Path(run_dir), allow_deferred=allow_deferred)
+    return found, counts

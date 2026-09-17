@@ -285,3 +285,76 @@ class PaperGraphsAndCleans(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReplayAcceptance(unittest.TestCase):
+    """Replay passes only when accounting shows every item accepted and graphs parse clean."""
+
+    PROOF = """{:paper/id "1111.0001" :source {:lines [1 3] :kind :proof}
+ :nodes [{:kind :claim :id :p :text "premise" :source {:lines [1 1]}}
+         {:id :c :kind :claim :text "conclusion" :source {:lines [2 2]}}]
+ :edges [{:id :e :kind :infer :premise [:p] :conclusion :c :source {:lines [1 2]}
+          :warrant {:kind :claim :text "w"}}]}"""
+
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory()
+        self.addCleanup(self.directory.cleanup)
+        self.base = Path(self.directory.name)
+        self.run_dir = self.base / "run"
+        ids = self.base / "ids"
+        ids.write_text("1111.0001\n")
+        self.addCleanup(patch.stopall)
+        patch.object(manifest, "source_identity", return_value={}).start()
+        patch.object(manifest, "substrate_identity", return_value={}).start()
+        clean = {k: v for k, v in os.environ.items() if not k.startswith("FUTON6_") and k not in ("RUN_ID", "CORPUS")}
+        patch.dict(os.environ, clean, clear=True).start()
+        with manifest.lock(self.run_dir):
+            self.doc = manifest.prepare(self.run_dir, "r", "c", ids)
+        art = lambda key: self.run_dir / self.doc["artifacts"][key]
+        for key, name in (("marks", "fable-1111.0001-dp-emacs.json"), ("loss", "dashboard.json"),
+                          ("candidates", "1111.0001__p0.candidate.json")):
+            art(key).mkdir(parents=True)
+            (art(key) / name).write_text('{"fixture": true}')
+        art("graphs").mkdir(parents=True)
+        self.graph = art("graphs") / "1111.0001__p0.edn"
+        self.graph.write_text(self.PROOF)
+        (self.run_dir / "metrics.jsonl").write_text(json.dumps({"run_id": "r", "corpus_id": "c", "stage": "S1"}) + "\n")
+        stepper.ledger_record(str(self.run_dir), "S1", "c", "r", "S1-a001")
+
+    def s3(self, loop_status, reason=""):
+        adir = self.run_dir / "accounting/S3/S3-a001"
+        extract = accounting.Accounting("S3", "extract", ["1111.0001"], adir)
+        extract.record("1111.0001", "accepted", paper="1111.0001", outputs=["1111.0001__p0"],
+                       artifacts=["artifacts/candidates/1111.0001__p0.candidate.json"])
+        loop = accounting.Accounting("S3", "loop", ["1111.0001__p0"], adir)
+        loop.record("1111.0001__p0", loop_status, reason, paper="1111.0001", outputs=["1111.0001__p0"],
+                    artifacts=["artifacts/graphs/1111.0001__p0.edn"] if loop_status == "accepted" else [])
+        stepper.ledger_record(str(self.run_dir), "S3", "c", "r", "S3-a001")
+
+    def replay(self):
+        result = subprocess.run([sys.executable, str(ROOT / "scripts/replay_e2e.py"), "--run-dir", str(self.run_dir),
+                                 "--through", "S3"], capture_output=True, text=True)
+        return result.returncode, result.stdout + result.stderr
+
+    def test_fully_accepted_prefix_passes_with_key_order_independent_parsing(self):
+        self.s3("accepted")
+        rc, out = self.replay()
+        self.assertEqual(rc, 0, out)
+        self.assertIn("0/2 unresolved", out)
+
+    def test_rejected_item_prevents_a_false_fully_valid_replay(self):
+        # Even if a ledger row were forged over it, the accounting still shows the rejection.
+        self.s3("rejected", "G7: wire graph has a cycle")
+        rc, out = self.replay()
+        self.assertNotEqual(rc, 0, out)
+        self.assertIn("[FAIL] A1-item-accounting", out)
+        self.assertIn("G7", out)
+
+    def test_inline_premise_and_out_of_passage_anchor_fail_with_zero_tolerance(self):
+        self.graph.write_text(self.PROOF.replace("[:p]", '[{:kind :claim :text "inline"}]')
+                                        .replace("{:lines [2 2]}", "{:lines [9 9]}"))
+        self.s3("accepted")
+        rc, out = self.replay()
+        self.assertNotEqual(rc, 0, out)
+        self.assertIn("[FAIL] S2-refs-resolve", out)
+        self.assertIn("[FAIL] S3-anchors-in-passage", out)

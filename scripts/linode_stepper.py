@@ -296,15 +296,7 @@ def ledger_has(run_dir, stage, corpus_id):
 # Every execution of a stage appends one row here, whatever its outcome, so a
 # failed or rejected attempt leaves counts and reasons rather than only log text.
 ATTEMPTS = "stage-attempts.jsonl"
-# stage -> [(producer, inputs)]. Inputs name where the expected item ids come
-# from: the frozen corpus, or the accepted outputs of an earlier producer (in this
-# invocation for the same stage; in the ledgered invocation for another stage).
-ACCOUNTING = {
-    "S3": [("extract", "corpus"), ("loop", "S3.extract")],
-    "S4": [("extract", "corpus"), ("select", "S4.extract"), ("loop", "S4.select")],
-    "S6": [("assemble", "corpus")],
-    "S7": [("typing", "S3.loop")],
-}
+ACCOUNTING = accounting.STAGES
 
 
 def next_invocation(run_dir, stage):
@@ -312,38 +304,8 @@ def next_invocation(run_dir, stage):
     return f"{stage}-a{n + 1:03d}"
 
 
-def accounting_dir(run_dir, stage, invocation):
-    return os.path.join(run_dir, "accounting", stage, invocation)
-
-
 def accounting_problems(run_dir, stage, invocation, corpus_id):
-    """Check a stage's item accounting; return (problems, per-producer counts)."""
-    doc = manifest.load(Path(run_dir))
-    loaded, counts, found = {}, {}, []
-    for producer, source in ACCOUNTING.get(stage, []):
-        try:
-            if source == "corpus":
-                expected = doc["papers"]
-            else:
-                src_stage, src_producer = source.split(".")
-                if src_stage == stage:
-                    upstream = loaded[source]
-                else:
-                    entry = ledger_entry(run_dir, src_stage, corpus_id)
-                    if not entry or not entry.get("invocation"):
-                        raise ValueError(f"{source}: no ledgered accounting for upstream stage")
-                    upstream = accounting.load(accounting_dir(run_dir, src_stage, entry["invocation"]),
-                                               src_stage, src_producer)
-                expected = accounting.accepted_outputs(upstream)
-            current = accounting.load(accounting_dir(run_dir, stage, invocation), stage, producer)
-        except (KeyError, ValueError, OSError) as exc:
-            found.append(f"{stage}.{producer}: {exc}")
-            break
-        loaded[f"{stage}.{producer}"] = current
-        counts[producer] = current["counts"]
-        allow_deferred = (stage, producer) == ("S4", "select") and doc["selection"]["expository-cap"] > 0
-        found += accounting.problems(current, expected, run_dir=Path(run_dir), allow_deferred=allow_deferred)
-    return found, counts
+    return accounting.stage_problems(Path(run_dir), stage, invocation, corpus_id)
 
 
 def completeness_block(stage, deps, run_dir, corpus_id, reuse):
@@ -500,7 +462,7 @@ def attempt(s, run_dir, corpus_id, run_id):
            "started": datetime.now(timezone.utc).isoformat(),
            "command_rc": None, "gate_rc": None, "accounting": None, "problems": []}
     if run_dir:
-        adir = accounting_dir(run_dir, sid, invocation)
+        adir = str(accounting.directory(run_dir, sid, invocation))
         os.makedirs(adir)          # a fresh directory per invocation; never merge histories
         os.environ[accounting.DIR_ENV] = adir
         os.environ[accounting.INVOCATION_ENV] = invocation

@@ -45,7 +45,7 @@ class ManifestTests(unittest.TestCase):
             directory = self.run_dir / doc["artifacts"][key]
             directory.mkdir(parents=True)
             (directory / filename).write_text('{"fixture": true}')
-        (self.run_dir / "metrics.jsonl").write_text(json.dumps({"run_id": "test-run", "corpus_id": "test-corpus"}) + "\n")
+        (self.run_dir / "metrics.jsonl").write_text(json.dumps({"run_id": "test-run", "corpus_id": "test-corpus", "stage": "S1"}) + "\n")
         stepper.ledger_record(str(self.run_dir), "S1", "test-corpus", "test-run")
         return doc
 
