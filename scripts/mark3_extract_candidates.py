@@ -21,6 +21,7 @@ import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parent))
 import futon6_config as config
+import stage_accounting as accounting
 
 
 import argparse
@@ -164,9 +165,14 @@ def extract(paper_id: str) -> dict[str, Any] | None:
         "binder-context": binder_context(marks, starts, hi + 1),
         "enrichment": window_enrichment(marks, starts, win_lines[0], win_lines[1]),
         "source-window": win,
-        "marks-path": str(mf.relative_to(REPO)),
+        "marks-path": _display(mf),
         "schema": SCHEMA,
     }
+
+
+def _display(path: Path) -> str:
+    # Run-owned marks may live outside the checkout (--run-dir /scratch/...).
+    return str(path.relative_to(REPO)) if path.is_relative_to(REPO) else str(path)
 
 
 PROOF_GAP = 40  # proof-moves within this many lines group into one proof region
@@ -223,7 +229,7 @@ def extract_all(paper_id: str) -> list[dict[str, Any]]:
             "binder-context": binder_context(marks, starts, hi + 1),
             "enrichment": window_enrichment(marks, starts, win_lines[0], win_lines[1]),
             "source-window": win,
-            "marks-path": str(mf.relative_to(REPO)),
+            "marks-path": _display(mf),
             "schema": SCHEMA,
         })
     return cands
@@ -254,18 +260,37 @@ def main() -> int:
     papers = a.papers or (a.list and [l.strip() for l in open(a.list) if l.strip()]) or default_papers()
     outdir = Path(a.out)
     outdir.mkdir(parents=True, exist_ok=True)
+    # Every requested paper is accounted for. A paper that cannot be extracted is
+    # an errored item, not a silent omission from the frozen corpus.
+    ledger = accounting.Accounting("S3", "extract", papers)
     manifest = []
     for pid in papers:
-        cands = extract_all(pid) if a.all_proofs else ([c] if (c := extract(pid)) else [])
-        if not cands:
-            print(f"  skip {pid}: no marks or no selectable passage")
+        if not (MARKS_DIR / f"fable-{pid}-dp-emacs.json").exists():
+            ledger.record(pid, "errored", f"no S1 marks at {MARKS_DIR}", paper=pid)
+            print(f"  ERROR {pid}: no marks")
             continue
+        try:
+            cands = extract_all(pid) if a.all_proofs else ([c] if (c := extract(pid)) else [])
+        except Exception as exc:
+            ledger.record(pid, "errored", f"extraction raised {type(exc).__name__}: {exc}", paper=pid)
+            print(f"  ERROR {pid}: {exc}")
+            continue
+        written = []
         for cand in cands:
             fid = cand.get("proof-id", pid)
-            (outdir / f"{fid}.candidate.json").write_text(json.dumps(cand, indent=2))
+            path = outdir / f"{fid}.candidate.json"
+            path.write_text(json.dumps(cand, indent=2))
+            written.append((fid, path))
             manifest.append({"paper-id": pid, "proof-id": cand.get("proof-id", pid),
                              "passage-id": cand["passage-id"], "selection": cand["selection"],
                              "window-lines": cand["window-lines"]})
+        # A paper whose anatomy has no proof region is a legitimate, explicit zero.
+        ledger.record(pid, "accepted", "" if cands else "no proof region in S1 anatomy",
+                      paper=pid, artifacts=[accounting.relative(p) for _, p in written],
+                      outputs=[f for f, _ in written])
+        if not cands:
+            print(f"  {pid}: 0 proofs (no proof region in anatomy)")
+            continue
         print(f"  {pid}: {len(cands)} proof(s)" if a.all_proofs else
               f"  {pid}: {cands[0]['selection']} lines {cands[0]['window-lines']} "
               f"({len(cands[0]['source-window'])} chars, {len(cands[0]['binder-context'])} binders, "
@@ -273,7 +298,7 @@ def main() -> int:
     (outdir / "manifest.json").write_text(json.dumps({"papers": manifest}, indent=2))
     n_papers = len({m["paper-id"] for m in manifest})
     print(f"\n{len(manifest)} candidate(s) from {n_papers}/{len(papers)} papers -> {outdir}")
-    return 0
+    return 1 if ledger.failed() else 0
 
 
 if __name__ == "__main__":

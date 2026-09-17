@@ -29,6 +29,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import futon6_config as config
 import run_manifest as manifest
+import stage_accounting as accounting
 try:
     import edn_format as edn
     _EDN_IMPORT_ERROR = None
@@ -121,7 +122,8 @@ OPS = {
            "--backend openai --model ${{MODEL:-meta-llama/Llama-3.1-8B-Instruct}} "
            f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
            "crit": "expository_argcheck (self-gated in loop)",
-           "note": "ALL regions; capped selection awaits Stage 3 deferred-item accounting"},
+           "note": "all regions unless FUTON6_EXPOSITORY_CAP_PER_PAPER pins a cap in the manifest; "
+                   "then even spacing in source order, with unselected regions accounted as deferred"},
     # S5 now BUILDS its own rung-3 half. Both producers are deterministic (no model):
     # cas_segment turns gated graphs into proof steps, rung3_technique turns those into
     # technique gap maps, and only then does comprehension have a strategy axis to score.
@@ -134,10 +136,10 @@ OPS = {
            f"--steps {STEPS} --rung3 {RUNG3} --run-dir {RUN} "
            "--run-id $RUN_ID --corpus-id $CORPUS",
            "crit": "G-comprehension: verdict separates weak-extraction from weak-proof"},
-    "S6": {"cmd": "while read -r pid; do [ -n \"$pid\" ] || continue; "
-           f"{{PY}} scripts/paper_graph_assemble.py --paper $pid --iatc {GRAPHS} "
-           f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS --out {PAPERG} --marks-dir {MARKS} "
-           "|| exit 1; done < {IDS}",
+    # Every paper is assembled and accounted even when one is malformed; the stage
+    # still fails on any rejected or errored paper object.
+    "S6": {"cmd": f"{{PY}} scripts/paper_graph_assemble.py --list {{IDS}} --iatc {GRAPHS} --expo {EXPO} "
+           f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS --out {PAPERG} --marks-dir {MARKS}",
            "gate": f"test -d {PAPERG} && "
                    f"test $(ls {PAPERG}/*.B.json 2>/dev/null | wc -l) -gt 0",
            "crit": "B wellformed: every proof attaches to a statement; orphans flagged"},
@@ -263,23 +265,85 @@ def _ledger(run_dir):
     return os.path.join(run_dir, "phase-ledger.jsonl")
 
 
-def ledger_record(run_dir, stage, corpus_id, run_id):
-    import json
+def ledger_record(run_dir, stage, corpus_id, run_id, invocation=None):
     os.makedirs(run_dir, exist_ok=True)
-    open(_ledger(run_dir), "a").write(
-        json.dumps({"stage": stage, "corpus_id": corpus_id, "run_id": run_id, "gate": "pass"}) + "\n")
+    with open(_ledger(run_dir), "a") as handle:
+        handle.write(json.dumps({"stage": stage, "corpus_id": corpus_id, "run_id": run_id,
+                                 "gate": "pass", "invocation": invocation}) + "\n")
+
+
+def _rows(path):
+    if not os.path.exists(path):
+        return []
+    with open(path) as handle:
+        return [json.loads(line) for line in handle if line.strip()]
+
+
+def ledger_entry(run_dir, stage, corpus_id):
+    if not run_dir:
+        return None
+    for r in _rows(_ledger(run_dir)):
+        if r.get("stage") == stage and r.get("corpus_id") == corpus_id and r.get("gate") == "pass":
+            return r
+    return None
 
 
 def ledger_has(run_dir, stage, corpus_id):
-    import json
-    p = _ledger(run_dir)
-    if not run_dir or not os.path.exists(p):
-        return False
-    for line in open(p):
-        r = json.loads(line)
-        if r.get("stage") == stage and r.get("corpus_id") == corpus_id and r.get("gate") == "pass":
-            return True
-    return False
+    return ledger_entry(run_dir, stage, corpus_id) is not None
+
+
+# ---- per-invocation attempt history and item accounting (Stage 3) ----
+# Every execution of a stage appends one row here, whatever its outcome, so a
+# failed or rejected attempt leaves counts and reasons rather than only log text.
+ATTEMPTS = "stage-attempts.jsonl"
+# stage -> [(producer, inputs)]. Inputs name where the expected item ids come
+# from: the frozen corpus, or the accepted outputs of an earlier producer (in this
+# invocation for the same stage; in the ledgered invocation for another stage).
+ACCOUNTING = {
+    "S3": [("extract", "corpus"), ("loop", "S3.extract")],
+    "S4": [("extract", "corpus"), ("select", "S4.extract"), ("loop", "S4.select")],
+    "S6": [("assemble", "corpus")],
+    "S7": [("typing", "S3.loop")],
+}
+
+
+def next_invocation(run_dir, stage):
+    n = sum(1 for r in _rows(os.path.join(run_dir, ATTEMPTS)) if r.get("stage") == stage)
+    return f"{stage}-a{n + 1:03d}"
+
+
+def accounting_dir(run_dir, stage, invocation):
+    return os.path.join(run_dir, "accounting", stage, invocation)
+
+
+def accounting_problems(run_dir, stage, invocation, corpus_id):
+    """Check a stage's item accounting; return (problems, per-producer counts)."""
+    doc = manifest.load(Path(run_dir))
+    loaded, counts, found = {}, {}, []
+    for producer, source in ACCOUNTING.get(stage, []):
+        try:
+            if source == "corpus":
+                expected = doc["papers"]
+            else:
+                src_stage, src_producer = source.split(".")
+                if src_stage == stage:
+                    upstream = loaded[source]
+                else:
+                    entry = ledger_entry(run_dir, src_stage, corpus_id)
+                    if not entry or not entry.get("invocation"):
+                        raise ValueError(f"{source}: no ledgered accounting for upstream stage")
+                    upstream = accounting.load(accounting_dir(run_dir, src_stage, entry["invocation"]),
+                                               src_stage, src_producer)
+                expected = accounting.accepted_outputs(upstream)
+            current = accounting.load(accounting_dir(run_dir, stage, invocation), stage, producer)
+        except (KeyError, ValueError, OSError) as exc:
+            found.append(f"{stage}.{producer}: {exc}")
+            break
+        loaded[f"{stage}.{producer}"] = current
+        counts[producer] = current["counts"]
+        allow_deferred = (stage, producer) == ("S4", "select") and doc["selection"]["expository-cap"] > 0
+        found += accounting.problems(current, expected, run_dir=Path(run_dir), allow_deferred=allow_deferred)
+    return found, counts
 
 
 def completeness_block(stage, deps, run_dir, corpus_id, reuse):
@@ -422,11 +486,70 @@ def conformance_gate(ids: str) -> int:
     return 0
 
 
+def attempt(s, run_dir, corpus_id, run_id):
+    """One execution of a computational stage: command, gate, item accounting.
+
+    The attempt row is written whatever happens, so rejected and errored items stay
+    inspectable. Only a zero command status, a zero gate status and accounting with
+    every expected item accepted produce a passing ledger row.
+    """
+    op = OPS.get(s["id"], {})
+    sid = s["id"]
+    invocation = next_invocation(run_dir, sid) if run_dir else None
+    row = {"stage": sid, "run_id": run_id, "corpus_id": corpus_id, "invocation": invocation,
+           "started": datetime.now(timezone.utc).isoformat(),
+           "command_rc": None, "gate_rc": None, "accounting": None, "problems": []}
+    if run_dir:
+        adir = accounting_dir(run_dir, sid, invocation)
+        os.makedirs(adir)          # a fresh directory per invocation; never merge histories
+        os.environ[accounting.DIR_ENV] = adir
+        os.environ[accounting.INVOCATION_ENV] = invocation
+    outcome = 0
+    try:
+        if op.get("cmd"):
+            print(f"$ {op['cmd'].format(PY=PY, IDS=IDS)}")
+            row["command_rc"] = sh(op["cmd"].format(PY=PY, IDS=IDS), os.path.join(run_dir, "logs", sid + ".command.log") if run_dir else None)
+            if row["command_rc"] != 0:
+                print(f"✗ {sid} command FAILED — stopping")
+                outcome = 2
+        if not outcome and op.get("gate"):
+            print(f"[gate] {op['gate'].format(PY=PY, IDS=IDS)}")
+            row["gate_rc"] = sh(op["gate"].format(PY=PY, IDS=IDS), os.path.join(run_dir, "logs", sid + ".gate.log") if run_dir else None)
+            if row["gate_rc"] != 0:
+                print(f"✗ {sid} GATE FAILED ({','.join(s['go'])}) — stopping for fix")
+                outcome = 3
+        if run_dir and sid in ACCOUNTING:
+            # Checked even after a failed command: the counts are the evidence of
+            # what was attempted, and the reasons say why it did not pass.
+            row["problems"], row["accounting"] = accounting_problems(run_dir, sid, invocation, corpus_id)
+            for problem in row["problems"]:
+                print(f"  [accounting] {problem}")
+            if row["problems"] and not outcome:
+                print(f"✗ {sid} ACCOUNTING FAILED — not every item was accepted")
+                outcome = 3
+    finally:
+        os.environ.pop(accounting.DIR_ENV, None)
+        os.environ.pop(accounting.INVOCATION_ENV, None)
+        row["outcome"] = "pass" if not outcome else ("command-failed" if outcome == 2 else "rejected")
+        row["finished"] = datetime.now(timezone.utc).isoformat()
+        if run_dir:
+            with open(os.path.join(run_dir, ATTEMPTS), "a") as handle:
+                handle.write(json.dumps(row) + "\n")
+    if outcome:
+        return outcome
+    if op.get("crit"):  # human criterion, judged at the halt — never a shell command
+        print(f"[crit] {op['crit']}")
+    if run_dir:
+        ledger_record(run_dir, sid, corpus_id, run_id, invocation)
+    print(f"✓ {sid} done" + (f" (ledger: {corpus_id}, {invocation})" if run_dir else ""))
+    return 0
+
+
 def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
     """Execute stages; RETURN AN EXIT CODE rather than merely printing.
 
     0 = ran to completion (or halted deliberately); 1 = refused/blocked;
-    2 = a stage command failed; 3 = a stage gate failed.
+    2 = a stage command failed; 3 = a stage gate or its item accounting failed.
 
     Previously every failure path printed and returned None, and main() exited
     0 regardless — so an outer scheduler recorded success while the stepper had
@@ -465,21 +588,9 @@ def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
         if missing:
             print(f"✗ precondition FAILED — missing input(s): {missing}")
             return 1
-        if op.get("cmd"):
-            print(f"$ {op['cmd'].format(PY=PY, IDS=IDS)}")
-            if sh(op["cmd"].format(PY=PY, IDS=IDS), os.path.join(run_dir, "logs", s["id"] + ".command.log") if run_dir else None) != 0:
-                print(f"✗ {s['id']} command FAILED — stopping")
-                return 2
-        if op.get("gate"):
-            print(f"[gate] {op['gate'].format(PY=PY, IDS=IDS)}")
-            if sh(op["gate"].format(PY=PY, IDS=IDS), os.path.join(run_dir, "logs", s["id"] + ".gate.log") if run_dir else None) != 0:
-                print(f"✗ {s['id']} GATE FAILED ({','.join(s['go'])}) — stopping for fix")
-                return 3
-        if op.get("crit"):  # human criterion, judged at the halt — never a shell command
-            print(f"[crit] {op['crit']}")
-        if run_dir:
-            ledger_record(run_dir, s["id"], corpus_id, run_id)
-        print(f"✓ {s['id']} done" + (f" (ledger: {corpus_id})" if run_dir else ""))
+        rc = attempt(s, run_dir, corpus_id, run_id)
+        if rc:
+            return rc
         if s["halt"] and not no_halt:
             nxt = stages[stages.index(s) + 1]["id"] if stages.index(s) + 1 < len(stages) else "(done)"
             print(f"⏸ HALT — inspect {s['id']} output; resume with --from {nxt}")

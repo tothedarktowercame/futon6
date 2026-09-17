@@ -35,6 +35,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 import edn_format as edn  # noqa: E402
 import iatc_to_clean as itc  # noqa: E402
+import stage_accounting as accounting  # noqa: E402
 
 
 def load_vocab():
@@ -94,32 +95,51 @@ def main():
     ap.add_argument("--model", default="hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4")
     ap.add_argument("--max-retries", type=int, default=3)
     ap.add_argument("--stub", action="store_true")
-    ap.add_argument("--run-dir", help="if set, emit S4 MetricRecords here (INSTANTIATE-GPU)")
+    ap.add_argument("--run-dir", help="if set, emit S7 MetricRecords here (INSTANTIATE-GPU)")
     ap.add_argument("--run-id", default="adhoc")
     ap.add_argument("--corpus-id", default="adhoc")
     args = ap.parse_args()
 
+    if args.run_dir and "adhoc" in (args.run_id, args.corpus_id):
+        ap.error("--run-dir requires explicit --run-id and --corpus-id (records would be tagged adhoc)")
     methods, macros = load_vocab()
     os.makedirs(os.path.join(ROOT, args.out), exist_ok=True)
     typed, failed, rejected = [], [], []
-    # skip sidecar report files (e.g. <pid>.rung2.edn) the IATC loop writes alongside
-    # the proof graphs — they aren't argument graphs.
-    for gf in sorted(g for g in glob.glob(os.path.join(ROOT, args.graphs, "*.edn"))
-                     if not g.endswith(".rung2.edn")):
-        pid = os.path.basename(gf)[:-4]
+    graphs_dir = os.path.join(ROOT, args.graphs)
+    if args.stub:
+        # Plumbing mode reads every final; it has no acceptance provenance to check.
+        finals = [(os.path.basename(g)[:-4], g) for g in sorted(glob.glob(os.path.join(graphs_dir, "*.edn")))
+                  if not g.endswith(".rung2.edn")]
+        refused = []
+    else:
+        # Only S3 finals with verified acceptance provenance are typed; a stale or
+        # foreign final is an errored item, never input to a CLean.
+        accepted, refused = accounting.accepted_finals(graphs_dir)
+        finals = [(item, str(path)) for item, path in accepted]
+    ledger = accounting.Accounting("S7", "typing", [item for item, _ in finals])
+    for name, why in refused:
+        failed.append((name, why))
+        print(f"  FAIL {name}: {why}")
+    for pid, gf in finals:
         try:
-            nodes, edges = itc.load_graph(gf)
+            dropped = []
+            nodes, edges = itc.load_graph(gf, skipped=dropped)
+            if dropped:
+                raise ValueError(f"infer edge(s) without :id/:conclusion cannot become boxes: {dropped[:5]}")
             sk0 = itc.build_skeleton(nodes, edges)
             prompt = itc.emit_prompt(pid, nodes, edges, sk0)
         except Exception as e:   # malformed graph shouldn't abort the whole batch
-            failed.append((pid, f"load error: {type(e).__name__}: {e}"))
-            print(f"  FAIL {pid}: load error — {e}")
+            rejected.append({"pid": pid, "reason": f"load error: {type(e).__name__}: {e}"})
+            ledger.record(pid, "rejected", f"load error: {type(e).__name__}: {e}", paper=pid)
+            print(f"  REJECT {pid}: load error — {e}")
             continue
         typing, why = None, "no attempt"
+        answered = False                      # did the model ever return anything?
         for attempt in range(args.max_retries + 1):
             try:
                 t = stub_typing(sk0) if args.stub else extract_json(
                     query_model(args.endpoint, args.model, prompt))
+                answered = True
                 ok, why = valid(t, sk0, methods, macros) if t is not None else (False, "unparseable")
                 if ok:
                     typing = t
@@ -145,6 +165,7 @@ def main():
                             continue
         if typing is None:
             failed.append((pid, why))
+            ledger.record(pid, "rejected" if answered else "errored", f"typing: {why}", paper=pid)
             print(f"  FAIL {pid}: {why}")
             continue
         # macro is DERIVED from the box methods, not the model's (the 70B over-tags one
@@ -171,9 +192,13 @@ def main():
                 ln.strip() for ln in (gate.stdout + gate.stderr).splitlines()
                 if ln.strip() and ("FAIL" in ln or ln.strip().startswith(("G", "-", "["))))
             rejected.append({"pid": pid, "reason": why[:300] or f"exit {gate.returncode}"})
+            # The gate output is the evidence (e.g. G7); the rejected CLean is not kept
+            # as an output, so record the reason where accounting can see it.
+            ledger.record(pid, "rejected", "clean_argcheck: " + (why[:300] or f"exit {gate.returncode}"), paper=pid)
             print(f"  REJECT {pid}: {why[:200] or 'argcheck exit ' + str(gate.returncode)}")
             continue
         typed.append(pid)
+        ledger.record(pid, "accepted", paper=pid, outputs=[pid], artifacts=[accounting.relative(outfile)])
         if args.run_dir:  # S4 inline metric emit (non-fatal — never abort the CLean)
             try:
                 import metric_harness as mh
@@ -181,10 +206,10 @@ def main():
                 nbox = max(1, len(sk.get("boxes", [])))
                 discharge = max(0, nbox - txt.count(":hole")) / nbox
                 mh.emit_record(args.run_dir, run_id=args.run_id, corpus_id=args.corpus_id,
-                               paper_id=pid, stage="S4", metric="clean-discharge-rate",
+                               paper_id=pid, stage="S7", metric="clean-discharge-rate",
                                axis="completeness", value=round(discharge, 4), computable=True)
             except Exception as ee:
-                print(f"    (S4 metric emit skipped: {ee})")
+                print(f"    (S7 metric emit skipped: {ee})")
 
     # "(cyclic)" was a guess baked into the summary line as well as the per-item
     # one. Rejections are reported by their actual gate now, and grouped, so a
@@ -202,11 +227,21 @@ def main():
             print(f"      {', '.join(pids)}")
     if failed:
         print(f"typing-failed: {[p for p,_ in failed]}")
-    # S4 postcondition gates over the accepted CLeans
+    # A CLean in the output directory that this invocation did not accept is stale
+    # (e.g. its graph lost acceptance provenance); the vocab gate and S8 would read it.
+    stale = sorted(os.path.basename(c)[:-len(".clean.edn")]
+                   for c in glob.glob(os.path.join(ROOT, args.out, "*.clean.edn"))
+                   if os.path.basename(c)[:-len(".clean.edn")] not in set(typed))
+    if stale:
+        print(f"stale CLeans not produced by this invocation: {stale[:5]}")
+        failed.extend((s_, "stale CLean output") for s_ in stale)
+    # S7 postcondition gates over the accepted CLeans
     rc2 = os.system(f"cd {ROOT} && bb scripts/clean_vocab_gate.bb {args.out} >/dev/null 2>&1")
     print(f"[gate] clean_vocab_gate over accepted: {'PASS' if rc2==0 else 'FAIL'}")
-    # success = all graphs either typed or cleanly rejected; no typing failures, vocab clean
-    sys.exit(0 if (not failed and rc2 == 0) else 1)
+    # Success means every graph typed and passed clean_argcheck. A gate rejection
+    # (G1-G8, including a G7 cycle) used to exit 0 as "cleanly rejected", which put
+    # a passing S7 ledger row over a CLean corpus with proofs missing.
+    sys.exit(0 if (not failed and not rejected and rc2 == 0) else 1)
 
 
 if __name__ == "__main__":

@@ -17,6 +17,7 @@ NAME = "run-manifest.json"
 ARTIFACTS = {key: "artifacts/" + key for key in (
     "marks", "loss", "candidates", "graphs", "expo-candidates", "expo",
     "steps", "rung3", "paper-graphs", "clean", "demo")}
+EXPOSITORY_SELECTION = "even-spacing-in-source-order/v1"
 ENV_KEYS = {key: "FUTON6_" + key.upper().replace("-", "_") for key in ARTIFACTS}
 REQUIRED = {
     "marks": (1, "*.json"), "loss": (1, "dashboard.json"),
@@ -117,16 +118,19 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
     papers = [line.strip() for line in raw.decode().splitlines() if line.strip()]
     if not papers or len(papers) != len(set(papers)):
         raise ValueError("corpus manifest must contain nonempty, unique paper IDs")
-    cap = int(os.environ.get("FUTON6_EXPOSITORY_CAP_PER_PAPER", "0") or 0)
-    if cap != 0:
-        raise ValueError("expository cap requires Stage 3 selection/deferred accounting; currently only uncapped runs are supported")
+    cap = os.environ.get("FUTON6_EXPOSITORY_CAP_PER_PAPER", "0") or "0"
+    if not cap.isdigit():
+        raise ValueError("FUTON6_EXPOSITORY_CAP_PER_PAPER must be a nonnegative integer")
+    cap = int(cap)
     pinned = {"run-id": run_id, "corpus-id": corpus_id,
               "corpus-sha256": hashlib.sha256(raw).hexdigest(),
               "code": source_identity(), "substrate": substrate_identity(),
               "host-configuration": config.effective(),
               "model-revision": os.environ.get("FUTON6_MODEL_REVISION"),
               "selection": {"all-proofs": True,
-                            "expository-cap": cap}}
+                            "expository-cap": cap,
+                            # Deferred regions are accounted as deferred, never as accepted.
+                            "expository-selection": EXPOSITORY_SELECTION if cap else "all-regions"}}
     if (run_dir / NAME).exists():
         doc = load(run_dir)
         changed = [key for key, value in pinned.items() if doc.get(key) != value]
@@ -157,7 +161,7 @@ def environment(run_dir: Path, doc: dict) -> dict[str, str]:
 
 
 def validate_records(run_dir: Path, doc: dict):
-    for name in ("phase-ledger.jsonl", "metrics.jsonl"):
+    for name in ("phase-ledger.jsonl", "metrics.jsonl", "stage-attempts.jsonl"):
         path = run_dir / name
         if not path.exists():
             continue

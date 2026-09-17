@@ -35,6 +35,9 @@ import sys
 import time
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import stage_accounting as accounting  # noqa: E402
+
 REPO = Path(__file__).resolve().parent.parent
 # Valid IATC argument-graph seeds only. NB: holes/golden-graphs/ is mostly the
 # "anatomy"/GrCalc string-diagram format (8/9 FAIL iatc_argcheck) — wrong schema
@@ -312,10 +315,18 @@ def run(args) -> int:
     # rather than a separate measurement, which is the whole reason it is here.
     run_tag = (os.environ.get("RUN_ID") or getattr(args, "run_id", None)
                or "unscoped")
-    tmp = outdir / ".attempts" / run_tag
+    # Scoped by runner invocation as well: retrying a stage in the same run must
+    # add to the attempt history, not overwrite attemptN files of the last try.
+    invocation = os.environ.get(accounting.INVOCATION_ENV) or "standalone"
+    tmp = outdir / ".attempts" / run_tag / invocation
+    if invocation != "standalone" and tmp.exists():
+        print(f"attempt history already exists for invocation {invocation}", file=sys.stderr)
+        return 2
     tmp.mkdir(parents=True, exist_ok=True)
-    (outdir / ".attempts" / run_tag / "RUN").write_text(
-        f"run_id={run_tag}\ncandidates={len(cands)}\nmax_attempts={MAX_ATTEMPTS}\n")
+    (tmp / "RUN").write_text(
+        f"run_id={run_tag}\ninvocation={invocation}\ncandidates={len(cands)}\nmax_attempts={MAX_ATTEMPTS}\n")
+    loaded = [json.loads(cf.read_text()) for cf in cands]
+    ledger = accounting.Accounting("S3", "loop", [c.get("proof-id", c["paper-id"]) for c in loaded])
     results = []
     accepted_graphs = []
     # in-flight progress (Rob's ask: periodic snapshots, not just the final
@@ -336,19 +347,33 @@ def run(args) -> int:
               f"pass-rate={n_pass / max(i, 1):.2f} · {rate:.1f} proofs/min · "
               f"ETA {eta_min / 60:.1f}h", flush=True)
 
-    for i, cf in enumerate(cands, 1):
-        cand = json.loads(cf.read_text())
+    for i, (cf, cand) in enumerate(zip(cands, loaded), 1):
         pid = cand.get("proof-id", cand["paper-id"])  # unique per proof (all-proofs); falls back to paper-id
         final = outdir / f"{pid}.edn"
-        if final.exists():                       # resume: skip papers already done
-            results.append((pid, "pass", "(resumed: existing graph)"))
+        rung2_report = outdir / f"{pid}.rung2.edn"
+        if final.exists():                       # resume: keep a verified earlier acceptance
+            carried, why = accounting.carried_acceptance(outdir, pid, final)
+            if carried is None:
+                results.append((pid, "fail", why))
+                ledger.record(pid, "errored", why, paper=cand["paper-id"],
+                              artifacts=[accounting.relative(final)])
+                print(f"  [{i}/{n_total}] {pid}: ERROR ({why})", flush=True)
+                continue
+            results.append((pid, "pass", f"(resumed: {carried.get('invocation')}) attempt {carried.get('attempt')};"))
+            accepted_graphs.append(final)
+            ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid],
+                          artifacts=[accounting.relative(p) for p in (final, rung2_report) if p.exists()],
+                          attempts=[{"carried-from": carried.get("invocation"), "attempt": carried.get("attempt"),
+                                     "path": carried.get("path")}])
             n_resumed += 1
-            print(f"  [{i}/{n_total}] {pid}: pass (resumed)", flush=True)
+            print(f"  [{i}/{n_total}] {pid}: pass (resumed from {carried.get('invocation')})", flush=True)
             if loss_log_interval and i % loss_log_interval == 0:
                 loss_snapshot(i)
             continue
         prompt = build_prompt(cand, seeds)
         status, last_err = "fail", ""
+        history = []                             # every attempt and why it ended
+        endpoint_only = True                     # no model response was ever gated
         for attempt in range(MAX_ATTEMPTS):
             p = prompt if attempt == 0 else prompt + f"\n\n# previous attempt failed the gate:\n{last_err}\n# fix it and re-emit ONLY the EDN."
             if args.backend == "stub":
@@ -358,12 +383,15 @@ def run(args) -> int:
                     resp = call_openai(p, cand, attempt, args.model)
                 except ModelCallError as e:
                     last_err = str(e)
+                    history.append({"attempt": attempt, "result": f"endpoint error: {last_err[:200]}"})
                     if e.code == 400:            # context-overflow/bad request — retry won't help; skip paper
                         break
                     continue
+            endpoint_only = False
             edn = extract_edn(resp)
             if not edn:
                 last_err = "no EDN map found in response"
+                history.append({"attempt": attempt, "result": last_err})
                 continue
             # LaTeX in :text is illegal EDN escaping (\\Phi, \\xi); repair before
             # gating so the bb reader does not reject an otherwise good graph (H18).
@@ -387,14 +415,14 @@ def run(args) -> int:
             ok, err = candidate_check(edn, cand)
             if ok:
                 ok, err = gate_one(ap)
+            ref = accounting.relative(ap)
             if ok:
-                final = outdir / f"{pid}.edn"
-                rung2_report = outdir / f"{pid}.rung2.edn"
                 if args.rung2_gate:
                     attempt_report = tmp / f"{pid}.attempt{attempt}.rung2.edn"
                     r2_ok, r2_msg = run_rung2(ap, attempt_report, gate=True)
                     if not r2_ok:
                         last_err = r2_msg
+                        history.append({"attempt": attempt, "path": ref, "result": last_err[:300]})
                         continue
                 final.write_text(edn)
                 r2_ok, r2_msg = run_rung2(final, rung2_report, gate=False)
@@ -403,9 +431,18 @@ def run(args) -> int:
                 accepted_graphs.append(final)
                 status = "pass"
                 last_err = f"attempt {attempt}; {r2_msg}; report {rung2_report.name}"
+                history.append({"attempt": attempt, "path": ref, "result": "accepted"})
+                accounting.record_acceptance(outdir, pid, final, {"attempt": attempt, "path": ref})
                 break
             last_err = err
+            history.append({"attempt": attempt, "path": ref, "result": (err or "")[:300]})
         results.append((pid, status, last_err))
+        if status == "pass":
+            ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid], attempts=history,
+                          artifacts=[accounting.relative(p) for p in (final, rung2_report) if p.exists()])
+        else:
+            ledger.record(pid, "errored" if endpoint_only else "rejected", last_err or "no attempt made",
+                          paper=cand["paper-id"], attempts=history)
         print(f"  [{i}/{n_total}] {pid}: {status} ({last_err[:80]})", flush=True)
         if loss_log_interval and i % loss_log_interval == 0:
             loss_snapshot(i)

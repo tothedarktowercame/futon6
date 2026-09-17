@@ -140,12 +140,6 @@ class ManifestTests(unittest.TestCase):
             self.assertEqual(stepper.run([stage], "superpod", True, str(self.run_dir), "test-corpus", "test-run", []), 1)
         execute.assert_not_called()
 
-    def test_unimplemented_selection_cap_refuses_manifest(self):
-        with patch.dict(os.environ, {"FUTON6_EXPOSITORY_CAP_PER_PAPER": "30"}):
-            with self.assertRaisesRegex(ValueError, "Stage 3"):
-                self.prepare()
-        self.assertFalse((self.run_dir / manifest.NAME).exists())
-
     def test_manifest_paths_are_disjoint_in_real_shell(self):
         self.assertTrue(conformance.check_run_scoping())
 

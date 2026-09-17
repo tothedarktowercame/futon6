@@ -18,6 +18,9 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import stage_accounting as accounting  # noqa: E402
+
 REPO = Path(__file__).resolve().parent.parent
 ARGCHECK = REPO / "scripts" / "expository_argcheck.bb"
 VOCAB = REPO / "holes" / "excursions" / "expository-superpod-vocab.edn"
@@ -252,16 +255,44 @@ def run(args: argparse.Namespace) -> int:
         return 2
 
     outdir = Path(args.out)
-    attempts = outdir / ".attempts"
-    outdir.mkdir(parents=True, exist_ok=True)
-    attempts.mkdir(exist_ok=True)
+    # Attempts are scoped by run and invocation (as in the IATC loop, H37): a retry
+    # adds to the history instead of overwriting the previous try's attempt files.
+    invocation = os.environ.get(accounting.INVOCATION_ENV) or "standalone"
+    attempts = outdir / ".attempts" / (os.environ.get("RUN_ID") or getattr(args, "run_id", None) or "unscoped") / invocation
+    if invocation != "standalone" and attempts.exists():
+        print(f"attempt history already exists for invocation {invocation}", file=sys.stderr)
+        return 2
+    attempts.mkdir(parents=True, exist_ok=True)
+    loaded = [json.loads(p.read_text(encoding="utf-8")) for p in candidate_paths]
+    ledger = accounting.Accounting("S4", "loop", [c["passage-id"] for c in loaded])
     results = []
     bypaper = {}  # paper-id -> [total, passed], for the S4 expository-coverage emit
-    for candidate_path in candidate_paths:
-        candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+    for candidate_path, candidate in zip(candidate_paths, loaded):
         pid = candidate.get("paper-id") or str(candidate["passage-id"]).split(":")[0]
+        item = candidate["passage-id"]
+        final = outdir / safe_output_name(candidate)
+        rec = bypaper.setdefault(pid, [0, 0])
+        rec[0] += 1
+        if final.exists():
+            # Keep an earlier acceptance from this run rather than resampling it;
+            # an unexplained final is stale output and cannot count as accepted.
+            carried, why = accounting.carried_acceptance(outdir, item, final)
+            if carried is None:
+                results.append((item, "fail", why))
+                ledger.record(item, "errored", why, paper=pid, artifacts=[accounting.relative(final)])
+                print(f"  {item}: ERROR ({why})")
+                continue
+            rec[1] += 1
+            results.append((item, "pass", f"resumed from {carried.get('invocation')}"))
+            ledger.record(item, "accepted", paper=pid, outputs=[item], artifacts=[accounting.relative(final)],
+                          attempts=[{"carried-from": carried.get("invocation"), "attempt": carried.get("attempt"),
+                                     "path": carried.get("path")}])
+            print(f"  {item}: pass (resumed from {carried.get('invocation')})")
+            continue
         prompt = build_prompt(candidate)
         status, last_error = "fail", ""
+        history = []
+        endpoint_only = True
         for attempt in range(MAX_ATTEMPTS):
             attempt_prompt = (
                 prompt
@@ -279,6 +310,7 @@ def run(args: argparse.Namespace) -> int:
                 # contains these). Oversized-context 4xx/5xx: retrying the same
                 # prompt cannot help, so stop attempting this candidate.
                 last_error = f"endpoint error: {e}"
+                history.append({"attempt": attempt, "result": last_error[:200]})
                 if getattr(e, "code", None) in (400, 413, 500):
                     break
                 # Server-down is a SERVER state, not a candidate property
@@ -295,9 +327,11 @@ def run(args: argparse.Namespace) -> int:
                         except Exception:
                             continue
                 continue
+            endpoint_only = False
             edn = extract_edn(response)
             if not edn:
                 last_error = "no EDN map found in response"
+                history.append({"attempt": attempt, "result": last_error})
                 continue
             # LaTeX in :text prose is not legal EDN escaping (\Phi, \xi ...) and the
             # bb gate rejects the whole graph. Repair before gating: H18.
@@ -307,15 +341,23 @@ def run(args: argparse.Namespace) -> int:
             ok, err = candidate_check(edn, candidate)
             if ok:
                 ok, err = gate_one(attempt_path)
+            ref = accounting.relative(attempt_path)
             if ok:
-                (outdir / safe_output_name(candidate)).write_text(edn, encoding="utf-8")
+                final.write_text(edn, encoding="utf-8")
                 status, last_error = "pass", f"attempt {attempt}"
+                history.append({"attempt": attempt, "path": ref, "result": "accepted"})
+                accounting.record_acceptance(outdir, item, final, {"attempt": attempt, "path": ref})
                 break
             last_error = err
-        results.append((candidate["passage-id"], status, last_error))
-        rec = bypaper.setdefault(pid, [0, 0])
-        rec[0] += 1
+            history.append({"attempt": attempt, "path": ref, "result": (err or "")[:300]})
+        results.append((item, status, last_error))
         rec[1] += 1 if status == "pass" else 0
+        if status == "pass":
+            ledger.record(item, "accepted", paper=pid, outputs=[item], attempts=history,
+                          artifacts=[accounting.relative(final)])
+        else:
+            ledger.record(item, "errored" if endpoint_only else "rejected", last_error or "no attempt made",
+                          paper=pid, attempts=history)
         # Show the INFORMATIVE part of a gate failure. `last_error[:100]` was
         # consumed entirely by the long attempt-file path the gate echoes first,
         # so 42 failures were logged with no stated reason (H18 diagnosability).

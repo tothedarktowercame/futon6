@@ -87,7 +87,10 @@ def _edn_safe(text):
     return edn_safe(text)
 
 
-def load_graph(path):
+def load_graph(path, skipped=None):
+    """(nodes, edges). Infer edges that cannot become boxes are appended to
+    `skipped` (when given) so a caller can refuse the graph instead of silently
+    typing a proper subgraph of it."""
     m = edn.loads(_edn_safe(open(path).read()))
     d = {kw(k): v for k, v in dict(m).items()}
     nodes = {}
@@ -100,6 +103,8 @@ def load_graph(path):
         if kw(ed.get("kind")) != "infer":
             continue
         if "id" not in ed or "conclusion" not in ed:
+            if skipped is not None:
+                skipped.append(str(ed.get("id", "<no :id>")))
             continue   # malformed infer-edge: 70B omitted a required field (passes bb, would KeyError) -> skip
         prem = as_list(ed.get("premise"))
         w = ed.get("warrant")
