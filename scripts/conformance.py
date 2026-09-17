@@ -128,6 +128,31 @@ def check_schema_maxlength(endpoint, model):
                "which reads downstream as an unparseable reply (H33)")
 
 
+def check_schema_integer_bounds(endpoint, model):
+    """Integer `minimum`/`maximum` must bind: S3/S4 schemas bound line numbers to
+    the source shown. A stack that ignores them lets anchors escape the passage;
+    code then rejects those items, so a run would fail item by item instead."""
+    schema = {"type": "object", "additionalProperties": False, "required": ["n"],
+              "properties": {"n": {"type": "integer", "minimum": 7, "maximum": 9}}}
+    try:
+        o = _post(endpoint, {"model": model, "temperature": 0, "max_tokens": 32,
+                             "messages": [{"role": "user",
+                                           "content": "Reply with the number 42 as JSON {\"n\": 42}."}],
+                             "response_format": {"type": "json_schema", "json_schema": {
+                                 "name": "b", "strict": True, "schema": schema}}})
+    except Exception as e:  # noqa: BLE001
+        return rec("llm:integer-bounds-bind", False, f"request failed ({type(e).__name__}: {e})", "")
+    txt = (o.get("choices") or [{}])[0].get("message", {}).get("content", "")
+    try:
+        n = json.loads(txt).get("n")
+        ok, detail = isinstance(n, int) and 7 <= n <= 9, f"answered n={n!r} under bounds 7..9"
+    except ValueError:
+        ok, detail = False, f"reply did not parse ({txt[:50]!r})"
+    return rec("llm:integer-bounds-bind", ok, detail,
+               "the S3/S4 line-number bounds are not enforced by this stack; out-of-range anchors "
+               "will be rejected item by item. Use a stack whose grammar honours integer bounds")
+
+
 def check_throughput(endpoint, model, tokens=128):
     """Measure decode rate, so window arithmetic is measured rather than assumed."""
     try:
@@ -289,6 +314,7 @@ def main() -> int:
         else:
             check_schema_binds(a.endpoint, a.model)
             check_schema_maxlength(a.endpoint, a.model)
+            check_schema_integer_bounds(a.endpoint, a.model)
             check_throughput(a.endpoint, a.model)
     check_gate_refuses()
     check_exit_status_propagates()
