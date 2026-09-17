@@ -1,7 +1,7 @@
 # PR #51 Stage 2 validation
 
 Date: 2026-09-17. Branch: `work/pr51-response`, isolated worktree
-`/home/joe/code/futon6-pr51-response`. Builds on Stage 1b `e84e6f6`.
+a sibling worktree of this checkout. Builds on Stage 1b `e84e6f6`.
 
 ## Implemented
 
@@ -32,12 +32,12 @@ reuse overrides. No unrelated Stage 5 portability hunks were imported.
 ## Validation commands and evidence
 
 ```bash
-PYTHONPATH=/tmp/futon6-pr51-test-deps /home/joe/code/futon6/.venv/bin/python -m pytest -q \
+PYTHONPATH=<test-deps> "$PY" -m pytest -q \
   tests/test_run_manifest.py tests/test_mark7_configuration.py \
   tests/test_mark7_authority.py tests/test_stepper_exit_status.py tests/test_warp_run.py
 clj-kondo --lint scripts/iatc_semcheck.bb
 clj-kondo --lint scripts/iatc_anchor_faithfulness.bb
-emacs -Q --batch -l /home/joe/code/futon4/dev/check-parens.el \
+emacs -Q --batch -l "$FUTON_CODE_ROOT"/futon4/dev/check-parens.el \
   --eval '(arxana-check-parens-cli)' -- --no-defaults \
   scripts/iatc_semcheck.bb scripts/iatc_anchor_faithfulness.bb
 git diff --check

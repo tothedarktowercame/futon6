@@ -9,7 +9,7 @@ Reviewed master: `8dd08f49d351cc3808f9bb079db888847a1efb9a`.
 An isolated review checkout exists at `/tmp/futon6-pr51-review`.
 
 Implementation started on branch `work/pr51-response` in
-`/home/joe/code/futon6-pr51-response`. See the
+a sibling worktree of this checkout. See the
 [Stage 0 evidence comparison](holes/pr51-baseline-comparison.md),
 [146-file disposition](holes/pr51-file-disposition.md), and
 [Stage 1a authority provisioning](holes/pr51-authority-provisioning.md).
@@ -242,7 +242,7 @@ Concrete regressions already found at the reviewed PR head:
 
 - `scripts/c_vector.bb:32,35`, `magnet_probe_extract.bb`,
   `promote_to_proof_layer.bb`, and `starmap_to_capability_graph.bb` default to
-  `/users/rjmeyers/darktower`. Replace these with documented configuration and
+  another contributor's home directory. Replace these with documented configuration and
   suitable derived defaults, not another person's absolute path.
 - `scripts/process-all-planetmath.sh:74–81` puts
   `Path('${FUTON_CODE_ROOT}/planetmath')` inside a quoted heredoc, leaving the
@@ -250,7 +250,7 @@ Concrete regressions already found at the reviewed PR head:
   the shell's clone directory, which still uses `$HOME/code/planetmath`.
 - `scripts/setup-ct-run.sh:34` derives a remote path from local
   `FUTON_CODE_ROOT`, changing even Joe's default source from
-  `/home/joe/ct-handoff` to `/home/joe/code/ct-handoff`. Configure the remote
+  one absolute home path to another on the dev box. Configure the remote
   source independently. If this script is part of the chosen Mark7 provisioning
   route, move its repair into Stage 1 rather than waiting for this batch.
 

@@ -4,7 +4,7 @@ Date: 2026-09-17. Branch `work/pr51-response` at `eeac70a`. Author: claude-9,
 taking over from codex-14. Written as discovery before implementation; §6 records
 the decisions taken and corrections found while implementing (see
 [Stage 3 validation](pr51-stage3-validation.md)). Local evidence comes from Joe's historical `mark7z` artifacts in
-`/home/joe/code/futon6`. Rob's raw bundle is still unavailable, so any link to his
+the dev checkout. Rob's raw bundle is still unavailable, so any link to his
 reported counts is a hypothesis until his artifacts are compared.
 
 ## 1. Places where a stage can pass without accounting for every item

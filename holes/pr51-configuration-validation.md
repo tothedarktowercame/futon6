@@ -23,11 +23,11 @@ environment was not modified. From this worktree:
 
 ```bash
 PYTHONPATH=/tmp/futon6-pr51-test-deps \
-  /home/joe/code/futon6/.venv/bin/python -m pytest -q \
+  "$PY" -m pytest -q \
   tests/test_mark7_configuration.py tests/test_mark7_authority.py \
   tests/test_stepper_exit_status.py tests/test_warp_run.py
 clj-kondo --lint scripts/iatc_semcheck.bb
-emacs -Q --batch -l /home/joe/code/futon4/dev/check-parens.el \
+emacs -Q --batch -l "$FUTON_CODE_ROOT"/futon4/dev/check-parens.el \
   --eval '(arxana-check-parens-cli)' -- --no-defaults scripts/iatc_semcheck.bb
 bash -n scripts/linode-4gpu-run.sh
 git diff --check
@@ -59,10 +59,10 @@ unchanged master code using the same sibling pattern library:
 2. `test_tier0_retrieval_recall_is_honest` measures whole-index recall 12/22
    rather than the expected 15/22.
 
-Baseline command, from `/home/joe/code/futon6`:
+Baseline command, from the dev checkout:
 
 ```bash
-PYTHONPATH=/tmp/futon6-pr51-test-deps:/home/joe/code/futon6/scripts \
+PYTHONPATH=<test-deps>:<checkout>/scripts \
   .venv/bin/python -m pytest -q tests/test_cas_select.py
 ```
 

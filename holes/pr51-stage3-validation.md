@@ -1,6 +1,6 @@
 # PR #51 Stage 3 validation
 
-Date: 2026-09-17. Branch `work/pr51-response` in `/home/joe/code/futon6-pr51-response`,
+Date: 2026-09-17. Branch `work/pr51-response`, in a sibling worktree of this checkout,
 building on Stage 2 `eeac70a`. Implemented by claude-9. Discovery, decisions and
 corrections are in [pr51-stage3-discovery.md](pr51-stage3-discovery.md); operator
 behaviour is in [mark7-run-manifest.md](../docs/mark7-run-manifest.md).
@@ -31,14 +31,14 @@ behaviour is in [mark7-run-manifest.md](../docs/mark7-run-manifest.md).
 ## Validation commands
 
 ```bash
-PY=/home/joe/code/futon6/.venv/bin/python
+PY="$(command -v python3)"   # the interpreter the run uses
 PYTHONPATH=/tmp/futon6-pr51-test-deps $PY -m pytest -q \
   tests/test_stage_accounting.py tests/test_run_manifest.py tests/test_mark7_configuration.py \
   tests/test_mark7_authority.py tests/test_stepper_exit_status.py tests/test_warp_run.py \
   tests/test_mark3_iatc_loop_rung2.py tests/test_build_proof_anatomy_viewer.py
 clj-kondo --lint scripts/iatc_argcheck.bb
 clj-kondo --lint scripts/iatc_repair.bb
-emacs -Q --batch -l /home/joe/code/futon4/dev/check-parens.el \
+emacs -Q --batch -l "$FUTON_CODE_ROOT"/futon4/dev/check-parens.el \
   --eval '(arxana-check-parens-cli)' -- --no-defaults scripts/iatc_argcheck.bb scripts/iatc_repair.bb
 git diff --check
 ```
