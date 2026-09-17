@@ -116,7 +116,9 @@ def problems(doc: dict, expected, *, run_dir: Path, allow_deferred: bool = False
     label = f"{doc['stage']}.{doc['producer']}"
     found: list[str] = []
     expected = [str(e) for e in expected]
-    if doc["expected"] != list(dict.fromkeys(expected)):
+    # The same input set, in any order: producers enumerate files, upstream lists
+    # outputs in paper order (e.g. p10 sorts before p2 by file name).
+    if sorted(doc["expected"]) != sorted(set(expected)) or len(doc["expected"]) != len(set(doc["expected"])):
         found.append(f"{label}: declared inputs differ from the upstream inputs "
                      f"({len(doc['expected'])} declared, {len(set(expected))} upstream)")
     ids = [e["id"] for e in doc["items"]]

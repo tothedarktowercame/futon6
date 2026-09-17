@@ -52,7 +52,8 @@ class AccountingRules(unittest.TestCase):
         found = "\n".join(accounting.problems(ledger.document(), ["a", "b", "c"], run_dir=self.base))
         for text in ("1 unaccounted", "outside the inputs", "1 rejected", "G7", "1 deferred", "missing/empty artifact"):
             self.assertIn(text, found)
-        allowed = accounting.problems(ledger.document(), ["a", "b", "c"], run_dir=self.base, allow_deferred=True)
+        allowed = accounting.problems(ledger.document(), ["c", "b", "a"], run_dir=self.base, allow_deferred=True)
+        self.assertFalse(any("declared inputs" in p for p in allowed))       # order does not matter
         self.assertFalse(any("deferred" in p for p in allowed))
 
     def test_acceptance_provenance_refuses_stale_and_edited_finals(self):
