@@ -27,10 +27,10 @@ Pools (chosen to contrast on TOPIC BREADTH within the CT pool we have):
 
 Usage:
     python scripts/p5-production-shakedown.py \\
-        --eprint-dir /home/joe/code/storage/futon6/data/arxiv-math-ct-eprints \\
-        --metadata /home/joe/code/storage/futon6/data/arxiv-math-ct-metadata.jsonl \\
+        --eprint-dir $FUTON6_STORAGE_ROOT/futon6/data/arxiv-math-ct-eprints \\
+        --metadata $FUTON6_STORAGE_ROOT/futon6/data/arxiv-math-ct-metadata.jsonl \\
         --ner-kernel data/ner-kernel-clean.tsv \\
-        --nlab-pages-dir /home/joe/code/nlab-content/pages \\
+        --nlab-pages-dir $FUTON_CODE_ROOT/nlab-content/pages \\
         --msc-prior data/topic-prior-msc.json \\
         --se-corpus-prior data/topic-prior-se-corpus.json \\
         --out data/p5-shakedown-report.json

@@ -12,7 +12,7 @@ Outputs:
   data/first-proof/codex-unified-repair-verification.md
 
 Usage:
-  cd /home/joe/code/futon6
+  cd $FUTON6_CHECKOUT
   python scripts/codex-unified-repair.py [--problems 1 2 8 9] [--seed 42]
 """
 

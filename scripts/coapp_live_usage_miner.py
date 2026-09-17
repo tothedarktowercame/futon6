@@ -37,8 +37,12 @@ import sys
 from collections import Counter, defaultdict
 from itertools import combinations
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 DEFAULT_DEPOSIT_DIR = ROOT / "futon6/data/fold-turns"
 DEFAULT_PHYLOGENY = ROOT / "futon6/data/pattern-phylogeny-edges.json"
 DEFAULT_OUTPUT = ROOT / "futon6/data/coapp-live-usage.json"

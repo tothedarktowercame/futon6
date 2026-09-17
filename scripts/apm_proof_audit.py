@@ -18,10 +18,14 @@ from typing import Any
 
 import proof_scope_audit as psa
 from nlab_skolem_audit import classify_expr, paragraph_spans
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 ROOT = Path(__file__).resolve().parent.parent
-APM_PROBLEMS = Path("/home/joe/code/apm-lean/problems")
-APM_LEAN = Path("/home/joe/code/apm-lean/lean-proofs")
+APM_PROBLEMS = config.sibling("apm-lean") / "problems"
+APM_LEAN = config.sibling("apm-lean") / "lean-proofs"
 OUT_JSON = ROOT / "data" / "apm-proof-scope-audit.json"
 OUT_SUMMARY = ROOT / "data" / "apm-proof-scope-summary.json"
 

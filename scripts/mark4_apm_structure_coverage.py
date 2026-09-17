@@ -15,9 +15,9 @@ the eprint LaTeX.
 
 Usage:
   python scripts/mark4_apm_structure_coverage.py \
-    --proof-scopes  /home/joe/code/storage/apm/apm-proof-scopes.json \
-    --eprint-scopes /home/joe/code/storage/apm/eprint-scopes.json \
-    --out /home/joe/code/storage/apm/mark4-apm-coverage.json
+    --proof-scopes  $FUTON6_STORAGE_ROOT/apm/apm-proof-scopes.json \
+    --eprint-scopes $FUTON6_STORAGE_ROOT/apm/eprint-scopes.json \
+    --out $FUTON6_STORAGE_ROOT/apm/mark4-apm-coverage.json
 """
 from __future__ import annotations
 

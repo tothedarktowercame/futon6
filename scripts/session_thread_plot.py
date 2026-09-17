@@ -12,11 +12,15 @@ recurrent orbit (a real strange-attractor loop) or as scatter.  Read-only SVG/HT
 """
 import json, os, sys, glob, urllib.request
 import numpy as np
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 API = "http://localhost:7070"
-EMB = "/home/joe/code/futon3a/resources/notions/minilm_pattern_embeddings.json"
-THREADS = "/home/joe/code/futon2/holes/session-threads.json"
-OUT = "/home/joe/code/futon2/holes/session-thread-plot.html"
+EMB = str(config.sibling("futon3a") / "resources/notions/minilm_pattern_embeddings.json")
+THREADS = str(config.sibling("futon2") / "holes/session-threads.json")
+OUT = str(config.sibling("futon2") / "holes/session-thread-plot.html")
 
 
 def fetch_retrievals(sid):

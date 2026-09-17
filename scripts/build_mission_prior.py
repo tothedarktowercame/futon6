@@ -8,10 +8,14 @@
 # Output: futon6/data/mission-term-prior.json  { n_docs, unigram_df, bigram_df }
 import os, re, json
 from collections import Counter
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOTS = [f"/home/joe/code/{r}" for r in
+ROOTS = [str(config.code_root() / r) for r in
          ["futon0","futon1a","futon2","futon3","futon3c","futon4","futon5","futon5a","futon6","futon7"]]
-OUT = "/home/joe/code/futon6/data/mission-term-prior.json"
+OUT = str(config.ROOT / "data/mission-term-prior.json")
 WORDS = "/usr/share/dict/words"
 
 RE_FENCE = re.compile(r"```.*?```", re.S)

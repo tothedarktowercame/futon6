@@ -34,11 +34,16 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+import os
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
-SUPERPOD_JOB = Path("/home/joe/code/futon6/scripts/superpod-job.py")
-KERNEL_TSV = Path("/home/joe/code/storage/futon6/data/ner-kernel/terms.tsv")
-ENTITIES_BASE = Path("/home/joe/code/storage/mark2/qc")
+SUPERPOD_JOB = config.ROOT / "scripts/superpod-job.py"
+KERNEL_TSV = config.storage() / "futon6/data/ner-kernel/terms.tsv"
+ENTITIES_BASE = config.storage() / "mark2/qc"
 
 
 def load_superpod_module():
@@ -157,7 +162,7 @@ A smooth $G$-action on a manifold $M$ is said to be of
     print()
 
     # === Real .tex mode (PlanetMath sources) ===
-    pm_tex_dir = Path("/home/joe/tmp-cat18")
+    pm_tex_dir = Path(os.environ.get("PM_TEX_DIR", Path.home() / "tmp-cat18"))
     if pm_tex_dir.is_dir():
         tex_files = sorted(pm_tex_dir.glob("*.tex"))[:2]
         if tex_files:

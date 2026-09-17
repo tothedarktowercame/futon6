@@ -34,8 +34,12 @@ from pathlib import Path
 from typing import Iterable
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 TREES = ROOT / "futon6" / "data" / "mission-scope-trees"
 SUBSTRATE_URL = "http://localhost:7071"
 

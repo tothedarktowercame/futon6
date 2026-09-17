@@ -4,7 +4,7 @@
 # must instead contain the exact live response observed at publication time.
 set -euo pipefail
 
-ROOT="${EFE_CODE_ROOT:-/home/joe/code}"
+ROOT="${EFE_CODE_ROOT:-${FUTON_CODE_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}}"
 F6="${EFE_FUTON6:-$ROOT/futon6}"
 F2="${EFE_FUTON2:-$ROOT/futon2}"
 BASE="${EFE_BASE:-http://localhost:7070}"
@@ -167,7 +167,7 @@ print(f"wrote {out} ({len(page)} bytes), snapshot at {stamp}")
 PY
 
 echo "Updating the shared WIP navigation ..." >&2
-/home/joe/code/p4ng/publish-wip-nav.sh
+"$ROOT"/p4ng/publish-wip-nav.sh
 
 grep -q 'id="snapshot-provenance"' "$OUT"
 grep -q 'futon6/scripts/publish-efe-field.sh' "$OUT"

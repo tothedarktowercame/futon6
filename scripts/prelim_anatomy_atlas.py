@@ -16,9 +16,13 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code/futon6")
-APM_DIR = Path("/home/joe/code/storage/apm")
+ROOT = config.ROOT
+APM_DIR = config.storage() / "apm"
 MANIFEST = APM_DIR / "manifest.edn"
 ATLAS_DIR = ROOT / "data" / "showcases" / "prelim-atlas"
 GOLDEN_DIR = ATLAS_DIR / "golden"

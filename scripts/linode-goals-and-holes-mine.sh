@@ -14,14 +14,14 @@
 #       This HOT-SWAPS onto the box already serving the forward meme run — same model, no teardown.
 #   (b) ON-BOX — only if you must. Do NOT rsync futon6 (~31 GB this run never uses). Copy ONLY these
 #       scripts + ../futon3a/resources/notions/minilm_{pattern,mission}_embeddings.json + ~/.claude/projects/.
-#       NB the .py scripts hardcode /home/joe/code paths, so on-box also needs those paths (or a path fix).
+#       NB the .py scripts hardcode $FUTON_CODE_ROOT paths, so on-box also needs those paths (or a path fix).
 #
 # Prereq: vLLM serving (scripts/linode-4gpu-setup.sh) + the turns present in TURNS_DIR.
 set -euo pipefail
 
 PORT="${PORT:-8000}"
 MODEL="${MODEL:-mark4-70b}"             # the --served-model-name from setup (same box as the forward run)
-# Resolve the repo from THIS script's location, so it is correct on dev (/home/joe/code/futon6) AND on-box.
+# Resolve the repo from THIS script's location, so it is correct on dev ($FUTON6_CHECKOUT) AND on-box.
 DEFAULT_REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." 2>/dev/null && pwd)"
 REPO="${REPO:-${DEFAULT_REPO:-$HOME/futon6}}"
 # Prefer the in-repo venv (dev/tunnel mode); fall back to the box venv. The runner only needs stdlib.

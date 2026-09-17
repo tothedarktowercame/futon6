@@ -15,8 +15,12 @@ import argparse
 import importlib.util
 import json
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 FUTON6 = ROOT / "futon6"
 CASCADE_PATH = ROOT / "futon3a/holes/labs/M-memes-arrows/cascade_construct.py"
 DEFAULT_SCOPES = FUTON6 / "data/diffsub-scopes.json"

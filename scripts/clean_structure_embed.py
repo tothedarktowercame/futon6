@@ -21,7 +21,7 @@ Outputs (default to data/showcases/clean-demo/):
 Usage:
   futon6/.venv/bin/python scripts/clean_structure_embed.py \
       [--clean-dir holes/clean] [--out data/showcases/clean-demo] \
-      [--apm-dir /home/joe/code/futon3c/data/apm-informal-proofs]
+      [--apm-dir $FUTON_CODE_ROOT/futon3c/data/apm-informal-proofs]
 """
 
 import sys as _sys

@@ -15,6 +15,10 @@ import json
 import time
 import numpy as np
 import sympy as sp
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 def pr(*args):
@@ -163,7 +167,7 @@ def main():
             f"a_bar_{k[0]}{k[1]}": v for k, v in sign_counts.items()
         }
     }
-    out_path = Path("/home/joe/code/futon6/data/first-proof/p4-path2-A-taylor.json")
+    out_path = config.ROOT / "data/first-proof/p4-path2-A-taylor.json"
     out_path.write_text(json.dumps(out, indent=2))
     pr(f"Wrote {out_path}")
 

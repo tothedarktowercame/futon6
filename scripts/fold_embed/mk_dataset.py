@@ -4,7 +4,11 @@ Emits to futon6/data/fold-embed/: nodes.jsonl · edges.jsonl · pairs.jsonl · m
 Consumed on the 4-GPU Linode by train_fold_embed.py. Reproducible from substrate-2 + git-sha citations.
 """
 import json,re,os,glob,urllib.request,urllib.parse,time,collections
-OUT="/home/joe/code/futon6/data/fold-embed"; os.makedirs(OUT,exist_ok=True)
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))
+import futon6_config as config
+OUT=str(config.ROOT / "data/fold-embed"); os.makedirs(OUT,exist_ok=True)
 enc=urllib.parse.quote; t0=time.time()
 def get(u): return urllib.request.urlopen(u,timeout=120).read().decode()
 def pull(t,lim=300000,cache=None):
@@ -31,7 +35,7 @@ cb=pull("code/v05/commit",cache="/tmp/_commit.edn"); shas=set(re.findall(r'code/
 c2v=collections.defaultdict(set)
 for sha,var in edits: c2v[sha].add(var)
 doc2v={}
-for d in glob.glob("/home/joe/code/futon*/holes/**/*.md",recursive=True):
+for d in glob.glob(str(config.code_root() / "futon*/holes/**/*.md"),recursive=True):
     leaf=os.path.basename(d)[:-3]
     try: txt=open(d,errors="ignore").read()
     except: continue

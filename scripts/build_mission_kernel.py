@@ -16,9 +16,13 @@ import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Iterable
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 FUTON6 = ROOT / "futon6"
 PRIOR = FUTON6 / "data" / "mission-term-prior.json"
 KERNEL_OUT = FUTON6 / "data" / "mission-ner-kernel.json"
