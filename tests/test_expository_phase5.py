@@ -61,7 +61,7 @@ def test_expository_loop_stub_gates_and_emits(tmp_path):
     assert result.returncode == 0, result.stdout + result.stderr
     emitted = list(out_dir.glob("*.edn"))
     assert len(emitted) == 1
-    assert "expository-loop: 1/1 graphs gated PASS" in result.stdout
+    assert "expository-loop: accepted 1 (carried 0) · rejected 0 · errored 0 of 1" in result.stdout
 
 
 def test_expository_loop_refuses_pre_schema_candidate(tmp_path):

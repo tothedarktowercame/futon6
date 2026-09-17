@@ -80,6 +80,22 @@ accounted for exactly once, with every item accepted (deferred is allowed only f
 S4 selection under a pinned cap) and every accepted artifact present. A paper with
 no proof region, or no expository region, is recorded as an accepted explicit zero.
 
+The model stages S3, S4 and S7 never ask the model to write EDN. Each item gets
+one call at temperature 0 under a strict JSON schema, and the response is kept
+under `.attempts/<run-id>/<invocation>/`:
+- **S3** (`iatc_json`): one call per S1-identified proof, with its statement.
+- **S4** (`expository_json`): one call per selected region. The kind enum is read
+  from the vocabulary with babashka, the reader the gate uses.
+- **S7:** one call per accepted graph. The schema's keys are exactly that graph's
+  box ids and its values are vocabulary methods; code derives the macro.
+
+Code checks what a schema cannot express and writes the EDN artifacts that the
+gates and later stages read. A response that breaks the contract is `rejected`;
+an HTTP failure, truncation at `max_tokens`, or non-JSON despite the schema is
+`errored`. Nothing is repaired, re-prompted, or resampled within an invocation.
+Serving conformance verifies that the stack enforces enum schemas; if it ignored
+integer bounds, out-of-range lines would be rejected by code, not accepted.
+
 A failed stage leaves its artifacts, accounting and attempt row for inspection and
 writes no ledger row, so downstream stages stay blocked. Re-invoking it creates a
 new invocation. The S3 and S4 model loops keep a final accepted by an earlier

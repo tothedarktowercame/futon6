@@ -155,3 +155,20 @@ write a data format that then needs repair, retries and extra gates.
 S4 (`mark3_expository_loop.py`: freeform EDN, escape repair, three attempts) and S7
 (`clean_box_typing.py`: unconstrained JSON found by regex, re-prompted when invalid)
 still use the pattern S3 has dropped.
+
+## S4 and S7 moved to the same contract
+
+- **S4:**
+  - `expository_json` defines the schema: kind enum from the vocabulary with out-of-scope kinds excluded, line numbers bounded to the region, and either `fill` or `held_reason`;
+  - code checks that exactly one of those two is filled and that ranges are ordered, then writes the EDN scope graph with the slot name taken from the vocabulary;
+  - the loop makes one call per region at temperature 0, with no escape repair or three-attempt retry.
+- **Vocabulary loading:** Python `edn_format` misreads keywords with two slashes (`:rationale/telos/organization-roadmap` became `:rationale/telos` plus a stray symbol). It merged two kinds and gave one the other's slot, so the vocabulary is now read with babashka, which the gate also uses. All 16 kinds load.
+- **S7:**
+  - the typing request uses a schema whose required keys are exactly the graph's box ids, each an enum of vocabulary methods;
+  - the model no longer returns `_macro`, which code already overwrote with the derived macro;
+  - there is no regex JSON extraction and no re-prompting; a contract violation rejects the graph, and an endpoint failure errors it;
+  - waiting for a restarting server (connection refused) is kept, because that is server state, not output format.
+- **Tests:** `tests/test_model_json_contracts.py` (6):
+  - S4: nested-kind slots; contract checks; code-written EDN passes `expository_argcheck` including escaped held reasons; loop outcomes and retrying only failures; a schema request at temperature 0;
+  - S7: schema keys match box ids and a valid typing is accepted; a contract violation is rejected and an endpoint failure errored.
+- **Full suite:** 36 failed, 902 passed. Every failure also fails on `eeac70a`; the 2 extractor tests in `test_expository_phase5.py` fail for want of fixture marks.

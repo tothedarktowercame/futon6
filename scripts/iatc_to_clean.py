@@ -223,15 +223,15 @@ def render_box(b):
     return "\n".join(parts) + "}"
 
 
-def emit_prompt(pid, nodes, edges, sk):
+def emit_prompt(pid, nodes, edges, sk, ask_macro=True):
     L = [f"You are typing the reasoning steps of a mathematical proof (arXiv {pid}).",
          "Assign each STEP exactly one METHOD tag from this controlled vocabulary:",
          ""]
     for m, g in VOCAB_GLOSS.items():
         L.append(f"  {m}  — {g}")
-    L += ["", "And assign ONE overall MACRO shape from:",
-          "  " + " | ".join(MACROS), "",
-          "The steps (each is an inference from its premises to its conclusion):", ""]
+    if ask_macro:
+        L += ["", "And assign ONE overall MACRO shape from:", "  " + " | ".join(MACROS)]
+    L += ["", "The steps (each is an inference from its premises to its conclusion):", ""]
     cm = {bid(e["id"]): e for e in edges}
     for b in sk["boxes"]:
         e = cm[b["id"]]
@@ -241,8 +241,11 @@ def emit_prompt(pid, nodes, edges, sk):
         if "hole" in b:
             L.append(f"        (open obligation: {b['hole']['wanted']})")
         L.append("")
-    L += ["Return ONLY JSON: {\"<box-id>\": \"<method-tag>\", ..., \"_macro\": \"<macro>\"}.",
-          "Use only tags from the vocabulary above."]
+    if ask_macro:
+        L += ["Return ONLY JSON: {\"<box-id>\": \"<method-tag>\", ..., \"_macro\": \"<macro>\"}.",
+              "Use only tags from the vocabulary above."]
+    else:
+        L += ["Return JSON mapping every box id to one method tag from the vocabulary above."]
     return "\n".join(L)
 
 
