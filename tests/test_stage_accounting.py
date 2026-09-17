@@ -358,3 +358,44 @@ class ReplayAcceptance(unittest.TestCase):
         self.assertNotEqual(rc, 0, out)
         self.assertIn("[FAIL] S2-refs-resolve", out)
         self.assertIn("[FAIL] S3-anchors-in-passage", out)
+
+
+class AnatomyDetection(unittest.TestCase):
+    """S1 causes of the malformed 0708.1921 / 0708.2185 paper objects."""
+
+    def setUp(self):
+        import dp_paper_view
+        self.dpv = dp_paper_view
+
+    def test_sentence_ending_proof_is_not_a_proof_heading(self):
+        text = ("\\begin{document}\nWe will provide\nthe mi\\-ssing proof. Our argument is short.\n"
+                "and this completes\nthe proof.\n\\frp\n"
+                "\\noindent{\\bf Proof.} A real proof that runs long enough to count.\n\\qed\n"
+                "\\textit{Proof.} Another proof, also long enough to be a region.\n\\qed\n")
+        starts = [text[m.start():m.end()].strip() for m in self.dpv._TEXT_PROOF_START_RE.finditer(text)]
+        self.assertEqual(len(starts), 2, starts)
+        self.assertEqual(len(self.dpv.detect_text_proofs(text)), 2)
+
+    def test_tac_let_aliases_open_statements_and_proofs(self):
+        text = ("\\newtheorem{axiom}{Axiom}\n\\let\\thm\\theorem\n\\let\\lem\\lemma\n\\let\\eth\\endtheorem\n"
+                "\\let\\prf\\proof\n\\let\\frp\\endproof\n\\begin{document}\n"
+                "\\thm\\label{a} Statement A. \\eth\n\\prf Proof of A. \\frp\n"
+                "\\lem Statement B. \\eth\n\\prf Proof of B. \\frp\n")
+        kinds = [(m["kind"], text[m["start"]:m["start"] + 4]) for m in
+                 sorted(self.dpv.detect_macro_environments(text, {}), key=lambda m: m["start"])]
+        self.assertEqual(kinds, [("env/theorem", "\\thm"), ("env/proof", "\\prf"),
+                                 ("env/lemma", "\\lem"), ("env/proof", "\\prf")])
+
+    def test_newcommand_aliases_and_learned_theorem_titles(self):
+        text = ("\\newtheorem{thrm}{Theorem}\n\\newtheorem{protodefinition}{Definition}\n"
+                "\\newenvironment{prf}{\\noindent\\textbf{Proof: }}{$\\Box$}\n"
+                "\\newcommand{\\thm}{\\begin{thrm}}\n\\newcommand{\\ethm}{\\end{thrm}}\n"
+                "\\newcommand{\\pf}{\\begin{prf}}\n\\newcommand{\\epf}{\\end{prf}}\n\\begin{document}\n"
+                "\\thm T \\ethm\n\\pf P \\epf\n\\begin{protodefinition} D \\end{protodefinition}\n")
+        learned = self.dpv.learn_environment_names(text)
+        self.assertEqual(learned, {"thrm": "theorem", "protodefinition": "definition", "prf": "proof"})
+        self.assertEqual(sorted(m["kind"] for m in self.dpv.detect_macro_environments(text, learned)),
+                         ["env/proof", "env/theorem"])
+        body = text.index("\\begin{protodefinition}")
+        self.assertEqual([m["kind"] for m in self.dpv.detect_tex_environments(text[body:], body, learned)],
+                         ["env/definition"])
