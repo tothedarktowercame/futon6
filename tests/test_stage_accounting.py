@@ -434,3 +434,19 @@ class InferenceGraphGate(unittest.TestCase):
                             ":warrant {:kind :claim :text \"w\"} :source {:lines [1 2]}}")
         self.assertEqual(rc, 1, out)
         self.assertIn("[infer-shape]", out)
+
+    def test_inline_map_premise_is_rejected(self):
+        rc, out = self.gate("{:id :e1 :kind :infer :relation :because :premise [{:kind :claim :text \"x\"}] "
+                            ":conclusion :b :warrant {:kind :claim :text \"w\"} :source {:lines [1 2]}}")
+        self.assertEqual(rc, 1, out)
+        self.assertIn("inline maps", out)
+
+    def test_repair_stamps_candidate_passage_and_window_has_no_slack(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "g.edn"
+            path.write_text(self.BASE % self.edge(":e1", ":a", ":b"))
+            subprocess.run(["bb", str(ROOT / "scripts/iatc_repair.bb"), str(path), "--passage", "1", "4"], check=True)
+            self.assertIn(":source {:lines [1 4], :kind :proof}", path.read_text())
+        cand = {"paper-id": "9999.0004", "window-lines": [10, 20]}
+        self.assertTrue(iatc_loop.candidate_check('{:source {:lines [10 20]}}', cand)[0])
+        self.assertFalse(iatc_loop.candidate_check('{:source {:lines [21 21]}}', cand)[0])

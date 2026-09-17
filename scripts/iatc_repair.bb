@@ -13,6 +13,10 @@
 ;;   3. mirror every :missing-warrant edge into the top-level :holes vector with a
 ;;      {:kind :missing-warrant :edge <edge-id> :wanted X} entry — argcheck matches
 ;;      a hole to an edge by :edge/:id/:target == edge :id (not by :wanted alone).
+;;   4. with `--passage LO HI`, set the top-level :source to the candidate window
+;;      {:lines [LO HI] :kind :proof}: the passage is the window the loop showed the
+;;      model, not something the model should restate (10/98 historical graphs
+;;      omitted it, and replay checks every anchor against it).
 ;; Reads + rewrites the EDN file in place. No-op if the text isn't a parseable map
 ;; (after escape-sanitization).
 (require '[clojure.edn :as edn])
@@ -68,7 +72,8 @@
             :else
             (do (.append sb c) (recur (inc i) true))))))))
 
-(let [path (first *command-line-args*)
+(let [[path flag lo hi] *command-line-args*
+      passage (when (= flag "--passage") [(parse-long lo) (parse-long hi)])
       raw  (slurp path)
       text (sanitize-edn-escapes raw)
       ;; persist the escape fix even if the structural parse below still fails for
@@ -104,4 +109,5 @@
                       {:kind :missing-warrant
                        :edge (:id e)
                        :wanted (get-in e [:warrant :wanted])})]
-      (spit path (pr-str (assoc g :nodes nodes :edges edges :holes (into holes new-holes)))))))
+      (spit path (pr-str (cond-> (assoc g :nodes nodes :edges edges :holes (into holes new-holes))
+                           passage (assoc :source {:lines passage :kind :proof})))))))

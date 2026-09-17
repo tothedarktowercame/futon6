@@ -250,7 +250,11 @@ def candidate_check(edn: str, cand: dict) -> tuple[bool, str]:
     if m and m.group(1) != pid:
         return False, f"faithfulness: :paper/id '{m.group(1)}' != candidate '{pid}'"
     lo, hi = cand["window-lines"]
-    slack = 3
+    # No slack: the window already carries CONTEXT_LINES of padding, so a line
+    # outside it is one the model never saw. Replay (H21) checks every anchor
+    # against this same passage; a ±3 tolerance here let graphs pass S3 that
+    # acceptance must refuse.
+    slack = 0
     out = []
     for a, b in re.findall(r':lines\s*\[\s*(\d+)\s+(\d+)\s*\]', edn):
         a, b = int(a), int(b)
@@ -258,7 +262,7 @@ def candidate_check(edn: str, cand: dict) -> tuple[bool, str]:
             out.append([a, b])
     if out:
         return False, (f"faithfulness: {len(out)} :source span(s) outside window "
-                       f"[{lo} {hi}] (±{slack}), e.g. {out[0]}")
+                       f"[{lo} {hi}], e.g. {out[0]}")
     return True, "ok"
 
 
@@ -413,7 +417,9 @@ def run(args) -> int:
             ap.write_text(edn)
             # mechanical canonicalization before gating: mirror missing-warrants
             # into :holes + back-fill edge :source from endpoint nodes (no LLM).
-            subprocess.run(["bb", str(REPAIR), str(ap)], capture_output=True, text=True)
+            lo, hi = cand["window-lines"]
+            subprocess.run(["bb", str(REPAIR), str(ap), "--passage", str(lo), str(hi)],
+                           capture_output=True, text=True)
             edn = ap.read_text()
             ok, err = candidate_check(edn, cand)
             if ok:

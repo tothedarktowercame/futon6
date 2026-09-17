@@ -222,6 +222,13 @@
                (fail-entry :missing-warrant file graph e
                            "missing warrant is not mirrored by {:kind :missing-warrant ...} in :holes"))))
     (doseq [e edges
+            :when (and (infer-edge? e)
+                       (some #(or (map? %) (and (some? %) (not (keyword? %))))
+                             (mapcat seqify [(:premise e) (:conclusion e)])))]
+      (swap! failures conj
+             (fail-entry :infer-shape file graph e
+                         ":infer :premise/:conclusion must name node ids, not inline maps; add the claim as a node")))
+    (doseq [e edges
             :when (and (infer-edge? e) (or (nil? (:id e)) (nil? (:conclusion e))))]
       (swap! failures conj
              (fail-entry :infer-shape file graph e
