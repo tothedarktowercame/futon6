@@ -59,7 +59,9 @@ Rules checked by code; an output that breaks one is rejected:
 - A step's premises may only use nodes that no step concludes, or that an EARLIER
   step concludes. Never let two steps feed each other: prove an equivalence as ONE
   step with relation "iff".
-- A conclusion is a claim or definition node, and never one of its own premises.
+- A step concludes a claim, a definition, or the object it constructs — never a node
+  whose "citation" is filled (you cannot derive a result cited from elsewhere; state
+  what it gives you as a claim), and never one of its own premises.
 - Every node number used must exist, and every line must lie in the given source.
 Reconstruct THIS proof's real argument; the size of the answer follows the proof."""
 

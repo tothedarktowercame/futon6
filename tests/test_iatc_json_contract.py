@@ -50,13 +50,20 @@ class Contract(unittest.TestCase):
         self.assertTrue(iatc_json.problems(out_of_order, 10, 14))
         for bad, text in (({"nodes": [node(), node()], "steps": [step([5], 2)]}, "refers to node"),
                           ({"nodes": [node(), node()], "steps": [step([2], 2)]}, "both premise and conclusion"),
-                          ({"nodes": [node(), node(kind="object")], "steps": [step([1], 2)]}, "not a claim"),
+                          ({"nodes": [node(), node(kind="ref", citation="[AR, 2.36]")], "steps": [step([1], 2)]},
+                           "cannot derive a citation"),
                           ({"nodes": [node(lo=12, hi=11), node()], "steps": [step([1], 2)]}, "ordered range"),
                           ({"nodes": [node(), node()], "steps": [step([1], 2, lo=9)]}, "inside 10-14"),
                           ("not json object", "not an object")):
             self.assertTrue(any(text in p for p in iatc_json.problems(bad, 10, 14)), (bad, text))
         iff = {"nodes": [node(text="A"), node(text="B")], "steps": [step([1], 2, relation="iff")]}
         self.assertEqual(iatc_json.problems(iff, 10, 14), [])
+        # a construction step establishes the object it builds, as 34 steps of the
+        # 98-graph corpus do; an uncited internal pointer may also be concluded
+        construction = {"nodes": [node(text="hypotheses"), node(kind="object", text="the product P"),
+                                  node(kind="ref", text="the claim of (2)")],
+                        "steps": [step([1], 2, relation="by-construction"), step([2], 3)]}
+        self.assertEqual(iatc_json.problems(construction, 10, 14), [])
 
     def test_code_written_edn_passes_gates_and_reads_back(self):
         doc = {"nodes": [node(text='A with \\otimes and "quotes"', lo=12, hi=12),

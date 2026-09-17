@@ -90,8 +90,15 @@ def problems(doc, lo: int, hi: int) -> list[str]:
             continue
         if conclusion in premises:
             found.append(f"{label}: node {conclusion} is both premise and conclusion")
-        if isinstance(nodes[conclusion - 1], dict) and nodes[conclusion - 1].get("kind") not in ("claim", "definition"):
-            found.append(f"{label}: conclusion node {conclusion} is a {nodes[conclusion - 1].get('kind')}, not a claim")
+        target = nodes[conclusion - 1] if isinstance(nodes[conclusion - 1], dict) else {}
+        # A step may establish a claim or a definition, and a construction step
+        # establishes the object it builds (34 such steps in the 98-graph corpus,
+        # e.g. "2-cell ε: f̄ ⊙ M ⊙ g̃ → U_D"). What it cannot establish is a result
+        # cited from elsewhere: that is someone else's theorem, not this argument's.
+        if target.get("kind") == "ref" and str(target.get("citation", "")).strip():
+            found.append(f"{label}: conclusion node {conclusion} is a cited result "
+                         f"({str(target.get('citation'))[:40]!r}); a step cannot derive a citation — "
+                         "state what it gives you as a claim node")
         for p in premises:
             if p in concluded_at and concluded_at[p] >= s_index:
                 found.append(f"{label}: premise node {p} is only concluded by step {concluded_at[p] + 1}; "
