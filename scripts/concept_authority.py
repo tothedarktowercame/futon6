@@ -17,10 +17,12 @@ CLI:  concept_authority.py hom colim "kan extension" ...
 from __future__ import annotations
 
 import json
-import os
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import futon6_config as config
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INDEX = ROOT / "data" / "background-corpus-index.json"
@@ -28,7 +30,7 @@ DEFAULT_INDEX = ROOT / "data" / "background-corpus-index.json"
 
 def configured_index() -> Path:
     """Resolve configuration at use time, including in imported callers."""
-    return Path(os.environ.get("FUTON6_BACKGROUND_CORPUS_INDEX") or DEFAULT_INDEX).expanduser().resolve()
+    return config.authority()
 
 # Common math macro/abbreviation -> concept name, where the macro surface
 # differs from the indexed concept term. Kept small and explicit (the macro

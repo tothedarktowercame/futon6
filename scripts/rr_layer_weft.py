@@ -2,12 +2,18 @@
 """render_run · ① Weft — CPU per-paper anatomy, rendered INLINE and composited so
 nested marks (symbol ⊂ binder ⊂ math scope) all keep their detail."""
 from __future__ import annotations
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import glob, json, re
 from collections import Counter
 from pathlib import Path
 from rr_compositor import Annotation, Layer, Span, golden_class
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = config.ROOT
 GOLD = ROOT / "data/showcases/ct-anatomy/golden"
 
 

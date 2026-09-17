@@ -18,12 +18,18 @@ the exposition), orthogonal to the epistemic tension and the citation curvature.
 
     warp_salingaros.py -> data/warp/aliveness.json {paper: L}
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import math
 from pathlib import Path
 
-GOLD = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
-OUT = Path("/home/joe/code/futon6/data/warp/aliveness.json")
+GOLD = config.ROOT / 'data/showcases/ct-anatomy/golden'
+OUT = config.ROOT / 'data/warp/aliveness.json'
 SCOPE_KINDS = {"let-binder"}
 
 

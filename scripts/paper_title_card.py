@@ -7,12 +7,18 @@ terms), theorem census, per-theorem fingerprints (bound symbols + canon
 concepts within each statement's span, after M-canon-fingerprint-store's
 Billey-Tenner reading), and the environment-flow plot.
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import re
 from collections import Counter
 from pathlib import Path
 
-NER = Path("/home/joe/code/storage/mark2/ct-handoff/output/ner-terms.json")
+NER = config.path("FUTON6_NER_TERMS", config.storage() / "mark2/ct-handoff/output/ner-terms.json")
 _ner_cache = None
 
 

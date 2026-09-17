@@ -8,6 +8,12 @@ all other DP or sweep-classified appearances.
 
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import json
 import re
@@ -21,8 +27,8 @@ import anatomy_v0_sweep as sweep
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
-DEFAULT_ANATOMY = Path("/home/joe/code/storage/futon6/data/ct-anatomy-v0")
+DEFAULT_EPRINTS = config.eprints()
+DEFAULT_ANATOMY = config.anatomy()
 DEFAULT_DP = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 DEFAULT_OUT = ROOT / "data" / "warp" / "concordance.json"
 

@@ -41,11 +41,11 @@ import sys
 import tempfile
 import time
 import urllib.request
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import futon6_config as config
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PY = os.path.join(ROOT, ".venv", "bin", "python")
-if not os.path.exists(PY):
-    PY = sys.executable
+PY = config.python_argv()
 
 R: list[tuple[str, bool, str, str]] = []
 
@@ -212,7 +212,7 @@ def check_gate_refuses():
         with open(os.path.join(d, "broken__p0.edn"), "w") as fh:
             fh.write("{:nodes [] :edges [] :holes []}\n")
         cmd = gate.format(PY=mod.PY, IDS=mod.IDS).replace(mod.GRAPHS, d)
-        p = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True,
+        p = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True, env=config.child_environment(),
                            text=True, timeout=600)
     refused = p.returncode != 0
     return rec("gate:refuses-bad-input", refused,
@@ -229,11 +229,11 @@ def check_exit_status_propagates():
     """
     with tempfile.TemporaryDirectory() as d:
         p = subprocess.run(
-            [PY, os.path.join(ROOT, "scripts", "linode_stepper.py"), "--run",
+            [*PY, os.path.join(ROOT, "scripts", "linode_stepper.py"), "--run",
              "--profile", "superpod", "--from", "S1", "--to", "S1", "--no-halt",
              "--ids", "holes/__does_not_exist__.txt", "--run-dir", d,
              "--corpus-id", "conformance", "--run-id", "conformance"],
-            cwd=ROOT, capture_output=True, text=True, timeout=600)
+            cwd=ROOT, capture_output=True, text=True, timeout=600, env=config.child_environment())
     ok = p.returncode != 0
     return rec("stage:exit-status-propagates", ok,
                f"a failing stage exits {p.returncode}" if ok
@@ -269,12 +269,14 @@ def check_run_scoping():
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--endpoint", default=os.environ.get("OPENAI_BASE_URL"))
-    ap.add_argument("--model", default=os.environ.get("MODEL", "mark4-70b"))
+    ap.add_argument("--endpoint", default=config.endpoint())
+    ap.add_argument("--model", default=config.model())
     ap.add_argument("--json", help="write the report here, for the run record")
     ap.add_argument("--skip-llm", action="store_true",
                     help="stage-machinery checks only (no endpoint required)")
     a = ap.parse_args()
+    os.environ.update(OPENAI_BASE_URL=a.endpoint, MODEL=a.model)
+    os.environ.update(config.child_environment())
 
     if not a.skip_llm:
         if not a.endpoint:

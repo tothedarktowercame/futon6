@@ -22,6 +22,11 @@ import re
 import subprocess
 import sys
 import os
+import json
+import shlex
+from datetime import datetime, timezone
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import futon6_config as config
 try:
     import edn_format as edn
     _EDN_IMPORT_ERROR = None
@@ -31,7 +36,7 @@ except ImportError as _exc:          # inspectable without it; see _MissingDeps
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, "holes", "linode-stepper-contract.md")
-PY = ".venv/bin/python -u"   # -u: unbuffered → stage output streams live (no buffered black box)
+PY = config.python_command()  # configured interpreter, safely quoted for stage shells
 
 
 def kw(x):
@@ -143,7 +148,7 @@ OPS = {
                    f"test $(ls {PAPERG}/$RUN_ID/*.B.json 2>/dev/null | wc -l) -gt 0",
            "crit": "B wellformed: every proof attaches to a statement; orphans flagged"},
     "S7": {"cmd": f"{{PY}} scripts/clean_box_typing.py --graphs {GRAPHS} --out {CLEAN} "
-           "--endpoint http://localhost:$PORT/v1/chat/completions --model ${{MODEL:-mark4-70b}} "
+           '--endpoint "${{OPENAI_BASE_URL%/}}/chat/completions" --model "$MODEL" '
            f"--run-dir {RUN} && "
            f"{{PY}} scripts/clean_structure_embed.py --clean-dir {CLEAN} --out {DEMO}",
            "gate": f"bb scripts/clean_vocab_gate.bb {CLEAN} && {{PY}} scripts/clean_entropy_gate.py "
@@ -199,7 +204,7 @@ OPS = {
 
 
 def sh(cmd):
-    return subprocess.run(cmd, shell=True, cwd=ROOT).returncode
+    return subprocess.run(cmd, shell=True, cwd=ROOT, env=config.child_environment()).returncode
 
 
 # ---- scale profiles (same stage commands; S0 + scale differ — the generalization test) ----
@@ -376,8 +381,8 @@ def preflight_gate(ids: str) -> int:
     import subprocess
     print("preflight (mandatory) ...")
     # PY is a command string with a flag ("... python -u"), not a bare path.
-    p = subprocess.run([*PY.split(), os.path.join(ROOT, "scripts", "preflight.py"), "--ids", ids],
-                       cwd=ROOT, text=True, capture_output=True)
+    p = subprocess.run([*shlex.split(PY), os.path.join(ROOT, "scripts", "preflight.py"), "--ids", ids],
+                       cwd=ROOT, text=True, capture_output=True, env=config.child_environment())
     print(p.stdout.rstrip() or p.stderr.rstrip())
     if p.returncode != 0:
         print(f"\nREFUSING TO START: {p.returncode} preflight check(s) failed.\n"
@@ -402,12 +407,12 @@ def conformance_gate(ids: str) -> int:
     """
     import subprocess
     print("conformance (mandatory) ...")
-    cmd = [*PY.split(), os.path.join(ROOT, "scripts", "conformance.py")]
+    cmd = [*shlex.split(PY), os.path.join(ROOT, "scripts", "conformance.py")]
     if os.environ.get("OPENAI_BASE_URL"):
         cmd += ["--endpoint", os.environ["OPENAI_BASE_URL"]]
     if os.environ.get("MODEL"):
         cmd += ["--model", os.environ["MODEL"]]
-    p = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True)
+    p = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, env=config.child_environment())
     print(p.stdout.rstrip() or p.stderr.rstrip())
     if p.returncode != 0:
         print(f"\nREFUSING TO START: {p.returncode} conformance check(s) failed.")
@@ -489,6 +494,19 @@ def main():
     ap.add_argument("--reuse", nargs="*", default=[], help="upstream stages to accept from --reuse (never S2)")
     ap.add_argument("--mark-done", nargs="*", default=[], help="record boot steps (S0/STAGE) as ledger-passed")
     args = ap.parse_args()
+    # Freeze discovery once, then give every child these same resolved values.
+    os.environ.update(config.child_environment())
+    effective = config.effective()
+    print("host configuration: " + json.dumps(effective, sort_keys=True))
+    if args.run:
+        # Keep every invocation, including refused runs. This is host provenance;
+        # the Stage 2 run manifest will enforce corpus and artifact identities.
+        record_dir = args.run_dir or os.path.join("data", "runs", args.run_id)
+        record_dir = os.path.join(ROOT, record_dir)
+        os.makedirs(record_dir, exist_ok=True)
+        with open(os.path.join(record_dir, "host-config.jsonl"), "a") as handle:
+            handle.write(json.dumps({"recorded-at": datetime.now(timezone.utc).isoformat(),
+                                     "run-id": args.run_id, "configuration": effective}) + "\n")
     if args.ids:
         global IDS
         IDS = args.ids

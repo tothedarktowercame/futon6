@@ -29,7 +29,7 @@ authority itself works in a renamed checkout; other runner path fixes remain.
 
 Default authority: `data/background-corpus-index.json` relative to the actual
 script checkout. Override: `FUTON6_BACKGROUND_CORPUS_INDEX`, resolved at use time
-(relative overrides are relative to the process working directory). Prefer an
+(Stage 1b standardizes relative overrides against the actual checkout). Prefer an
 absolute override in a run configuration. Inspect it without model calls:
 
 ```bash
@@ -87,7 +87,8 @@ Resulting archive hashes:
 - CT: `1dc82258aef7e364aff8f268825d6c061fbe5c998f4cb2dc42f19eb0b9d50456`
 - Legacy: `1ea9a9b27608b1c40584c5506abd2305f793635049a7daf7ae0ebe99e5e99bb9`
 
-Next: finish Stage 1's configured interpreter, sibling/dataset paths and
-effective configuration record; then Stage 2 run identity/replay/retrieval and
-Stage 3 rejection accounting. No new host has been provisioned or model run
-started. Rob's raw run bundle remains needed for defect-specific comparison.
+Stage 1's interpreter, sibling/dataset paths and effective configuration record
+are now implemented in [Stage 1b](pr51-configuration-validation.md). Next are
+Stage 2 run identity/replay/retrieval and Stage 3 rejection accounting. No new
+host has been provisioned or model run started. Rob's raw run bundle remains
+needed for defect-specific comparison.

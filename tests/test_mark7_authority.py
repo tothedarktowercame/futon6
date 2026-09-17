@@ -109,6 +109,7 @@ class AuthorityTests(unittest.TestCase):
             (extracted / "futon6").rename(checkout)
             (checkout / "scripts").mkdir()
             shutil.copyfile(ROOT / "scripts/concept_authority.py", checkout / "scripts/concept_authority.py")
+            shutil.copyfile(ROOT / "scripts/futon6_config.py", checkout / "scripts/futon6_config.py")
             env = dict(os.environ)
             env.pop("FUTON6_BACKGROUND_CORPUS_INDEX", None)
             result = subprocess.run([sys.executable, str(checkout / "scripts/concept_authority.py"),

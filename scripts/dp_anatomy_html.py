@@ -16,6 +16,12 @@ active marks changes, carrying every active class + a combined tooltip.
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import html
 import json
@@ -410,8 +416,7 @@ def fresh_coverage(pid: str) -> dict:
 # Codex-pool-built, checker-PASS .edn argument graphs (warrants + typed holes),
 # line-anchored standoff over the source. We render them as a reasoning panel
 # beneath the source — nothing is restated inline; the panel IS the layer-b view.
-IATC_GRAPH_DIR = Path(
-    "/home/joe/code/futon3c/holes/excursions/close-reading/iatc-clojure")
+IATC_GRAPH_DIR = config.sibling('futon3c') / 'holes/excursions/close-reading/iatc-clojure'
 
 
 def _edn_to_py(o):

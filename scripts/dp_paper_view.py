@@ -11,6 +11,12 @@ golden dir, so `M-x paper-anatomy-open` on "<paper>-dp" overlays it.
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import json
 import re
 import os
@@ -32,8 +38,8 @@ def _load_nlab_wiring():
 
 # eprint store: $FUTON6_EPRINTS overrides the dev default, so the Superpod run can point at
 # Rob's arXiv-math download instead of fetching (mark7 handoff).
-EPRINTS = Path(os.environ.get("FUTON6_EPRINTS", str(sweep.DEFAULT_EPRINTS)))
-GOLDEN_DIR = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
+EPRINTS = config.eprints()
+GOLDEN_DIR = config.ROOT / 'data/showcases/ct-anatomy/golden'
 from dp_capabilities.binders import (
     APPOS_CONJ_RE,
     APPOSITIVE_RE,

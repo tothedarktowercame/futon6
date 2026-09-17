@@ -11,16 +11,22 @@ edge (1 - W1/d), aggregate to per-paper (mean incident edge kappa).
 
     warp_or_curvature.py -> data/warp/or-curvature.json {paper: kappa}
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import statistics
 import sys
 import time
 from collections import defaultdict
 
-sys.path.insert(0, "/home/joe/code/futon3c/scripts")
+sys.path.insert(0, str(config.sibling('futon3c') / 'scripts'))
 import substrate_metric_e1_curvature as eng
 
-W = "/home/joe/code/futon6/data/warp"
+W = str(config.ROOT / 'data/warp')
 
 
 def main():
