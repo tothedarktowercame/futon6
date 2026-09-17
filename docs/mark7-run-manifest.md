@@ -83,7 +83,10 @@ no proof region, or no expository region, is recorded as an accepted explicit ze
 The model stages S3, S4 and S7 never ask the model to write EDN. Each item gets
 one call at temperature 0 under a strict JSON schema, and the response is kept
 under `.attempts/<run-id>/<invocation>/`:
-- **S3** (`iatc_json`): one call per S1-identified proof, with its statement.
+- **S3** (`iatc_json`): two calls per S1-identified proof — first the nodes its
+  argument is made of, then the steps over exactly those nodes. The second schema
+  bounds every node reference to the nodes that now exist, so a step cannot cite a
+  node that was never written (3 of 20 proofs did in the first live run).
 - **S4** (`expository_json`): one call per selected region. The kind enum is read
   from the vocabulary with babashka, the reader the gate uses.
 - **S7:** one call per accepted graph. The schema's keys are exactly that graph's

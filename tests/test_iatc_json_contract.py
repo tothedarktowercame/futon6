@@ -34,11 +34,14 @@ CAND = {"paper-id": "1111.0001", "proof-id": "1111.0001__p0", "passage-id": "111
 
 
 class Contract(unittest.TestCase):
-    def test_schema_bounds_lines_and_vocabularies(self):
-        schema = iatc_json.schema(10, 14)
-        line = schema["properties"]["nodes"]["items"]["properties"]["first_line"]
+    def test_schemas_bound_lines_vocabularies_and_node_references(self):
+        line = iatc_json.nodes_schema(10, 14)["properties"]["nodes"]["items"]["properties"]["first_line"]
         self.assertEqual((line["minimum"], line["maximum"]), (10, 14))
-        self.assertIn("iff", schema["properties"]["steps"]["items"]["properties"]["relation"]["enum"])
+        step = iatc_json.steps_schema(10, 14, 3)["properties"]["steps"]["items"]["properties"]
+        self.assertIn("iff", step["relation"]["enum"])
+        # the second call knows how many nodes exist, so a step cannot cite node 4 of 3
+        self.assertEqual((step["conclusion"]["minimum"], step["conclusion"]["maximum"]), (1, 3))
+        self.assertEqual(step["premises"]["items"]["maximum"], 3)
 
     def test_code_checks_what_the_schema_cannot(self):
         good = {"nodes": [node(text="A"), node(text="B"), node(text="C")],
@@ -50,18 +53,16 @@ class Contract(unittest.TestCase):
         self.assertTrue(iatc_json.problems(out_of_order, 10, 14))
         for bad, text in (({"nodes": [node(), node()], "steps": [step([5], 2)]}, "refers to node"),
                           ({"nodes": [node(), node()], "steps": [step([2], 2)]}, "both premise and conclusion"),
-                          ({"nodes": [node(), node(kind="ref", citation="[AR, 2.36]")], "steps": [step([1], 2)]},
-                           "cannot derive a citation"),
                           ({"nodes": [node(lo=12, hi=11), node()], "steps": [step([1], 2)]}, "ordered range"),
                           ({"nodes": [node(), node()], "steps": [step([1], 2, lo=9)]}, "inside 10-14"),
                           ("not json object", "not an object")):
             self.assertTrue(any(text in p for p in iatc_json.problems(bad, 10, 14)), (bad, text))
         iff = {"nodes": [node(text="A"), node(text="B")], "steps": [step([1], 2, relation="iff")]}
         self.assertEqual(iatc_json.problems(iff, 10, 14), [])
-        # a construction step establishes the object it builds, as 34 steps of the
-        # 98-graph corpus do; an uncited internal pointer may also be concluded
+        # a construction step establishes the object it builds (34 such steps in the
+        # 98-graph corpus), and a proof establishes the paper's own labelled statement
         construction = {"nodes": [node(text="hypotheses"), node(kind="object", text="the product P"),
-                                  node(kind="ref", text="the claim of (2)")],
+                                  node(kind="ref", text="the theorem", citation="Theorem~\\ref{main}")],
                         "steps": [step([1], 2, relation="by-construction"), step([2], 3)]}
         self.assertEqual(iatc_json.problems(construction, 10, 14), [])
 
@@ -128,11 +129,12 @@ class Loop(unittest.TestCase):
         patch.object(loop, "run_rung2", lambda _g, report, gate: (report.write_text("{:pass true}"), (True, "rung2-pass"))[1]).start()
 
     def responses(self, by_proof):
-        def call(_prompt, cand, _model):
+        """Serve each proof's phase answers in order; a bare value answers both."""
+        def call(_prompt, cand, _model, _schema):
             answer = by_proof[cand["proof-id"]]
             if isinstance(answer, Exception):
                 raise answer
-            return answer
+            return answer.pop(0) if isinstance(answer, list) else answer
         return call
 
     def invoke(self, invocation, by_proof):
@@ -145,11 +147,14 @@ class Loop(unittest.TestCase):
         return rc, {e["id"]: e for e in accounting.load(adir, "S3", "loop")["items"]}
 
     def doc(self, text):
-        return json.dumps({"nodes": [node(text=f"{text} hypothesis", lo=12, hi=12), node(text=f"{text} result", lo=14, hi=14)],
-                           "steps": [step([1], 2, warrant=f"{text} argument", lo=12, hi=14)]})
+        """The two phase answers for one proof, in call order."""
+        return [json.dumps({"nodes": [node(text=f"{text} hypothesis", lo=12, hi=12),
+                                      node(text=f"{text} result", lo=14, hi=14)]}),
+                json.dumps({"steps": [step([1], 2, warrant=f"{text} argument", lo=12, hi=14)]})]
 
     def test_rejected_errored_and_accepted_items_then_retry_only_the_failures(self):
-        cycle = json.dumps({"nodes": [node(text="A"), node(text="B")], "steps": [step([1], 2), step([2], 1)]})
+        cycle = [json.dumps({"nodes": [node(text="A"), node(text="B")]}),
+                 json.dumps({"steps": [step([1], 2), step([2], 1)]})]
         rc, items = self.invoke("S3-a001", {"1111.0001__p0": self.doc("first"), "1111.0001__p1": cycle,
                                             "1111.0001__p2": loop.ModelCallError(0, "output truncated at max_tokens=8192")})
         self.assertEqual(rc, 1)
@@ -157,14 +162,15 @@ class Loop(unittest.TestCase):
                          {"1111.0001__p0": "accepted", "1111.0001__p1": "rejected", "1111.0001__p2": "errored"})
         self.assertIn("contract:", items["1111.0001__p1"]["reason"])
         self.assertIn("truncated", items["1111.0001__p2"]["reason"])
-        self.assertTrue((self.out / ".attempts/r/S3-a001/1111.0001__p1.response.json").is_file())
+        self.assertTrue((self.out / ".attempts/r/S3-a001/1111.0001__p1.nodes.json").is_file())
+        self.assertTrue((self.out / ".attempts/r/S3-a001/1111.0001__p1.steps.json").is_file())
         self.assertFalse((self.out / "1111.0001__p1.edn").exists())
 
         calls = []
         answers = {"1111.0001__p1": self.doc("second"), "1111.0001__p2": self.doc("third")}
-        def record(prompt, cand, model):
+        def record(prompt, cand, model, schema):
             calls.append(cand["proof-id"])
-            return answers[cand["proof-id"]]
+            return answers[cand["proof-id"]].pop(0)
         adir = self.base / "accounting" / "S3-a002"
         args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
                                   model="m", rung2_gate=False, loss_log_interval=0)
@@ -172,7 +178,7 @@ class Loop(unittest.TestCase):
                 patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: "S3-a002"}):
             loop.run(args)
         items = {e["id"]: e for e in accounting.load(adir, "S3", "loop")["items"]}
-        self.assertEqual(sorted(calls), ["1111.0001__p1", "1111.0001__p2"])      # accepted item not resampled
+        self.assertEqual(sorted(set(calls)), ["1111.0001__p1", "1111.0001__p2"])  # accepted item not resampled
         self.assertEqual({v["status"] for v in items.values()}, {"accepted"})
         self.assertEqual(items["1111.0001__p0"]["attempts"][0]["carried-from"], "S3-a001")
 
@@ -197,9 +203,9 @@ class Loop(unittest.TestCase):
             seen.update(json.loads(request.data))
             return Response()
         with patch("urllib.request.urlopen", urlopen):
-            loop.call_openai("prompt", CAND, "m")
+            loop.call_openai("prompt", CAND, "m", iatc_json.nodes_schema(10, 14))
         self.assertEqual(seen["temperature"], 0)
-        self.assertEqual(seen["response_format"]["json_schema"]["schema"], iatc_json.schema(10, 14))
+        self.assertEqual(seen["response_format"]["json_schema"]["schema"], iatc_json.nodes_schema(10, 14))
 
 
 if __name__ == "__main__":

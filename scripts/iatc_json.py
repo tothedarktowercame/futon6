@@ -34,28 +34,39 @@ MAX_STEPS = 60
 MAX_PREMISES = 8
 
 
-def schema(lo: int, hi: int) -> dict:
-    """JSON schema for one proof whose numbered source lines are lo..hi."""
+def nodes_schema(lo: int, hi: int) -> dict:
+    """Phase 1: what the proof talks about, in the order the model lists it."""
     line = {"type": "integer", "minimum": lo, "maximum": hi}
-    node_ref = {"type": "integer", "minimum": 1, "maximum": MAX_NODES}
     node = {"type": "object", "additionalProperties": False,
             "required": ["kind", "text", "citation", "first_line", "last_line"],
             "properties": {"kind": {"type": "string", "enum": list(NODE_KINDS)},
                            "text": {"type": "string", "minLength": 1, "maxLength": 300},
                            "citation": {"type": "string", "maxLength": 160},
                            "first_line": line, "last_line": line}}
+    return {"type": "object", "additionalProperties": False, "required": ["nodes"],
+            "properties": {"nodes": {"type": "array", "minItems": 2, "maxItems": MAX_NODES, "items": node}}}
+
+
+def steps_schema(lo: int, hi: int, node_count: int) -> dict:
+    """Phase 2: the argument over nodes 1..node_count.
+
+    Bounding the references to the nodes that now exist is why this is a second
+    call: in one call the count is not yet known, and the first live run had 3 of
+    20 proofs rejected for citing node numbers that were never written.
+    """
+    line = {"type": "integer", "minimum": lo, "maximum": hi}
+    node_ref = {"type": "integer", "minimum": 1, "maximum": max(node_count, 1)}
     step = {"type": "object", "additionalProperties": False,
             "required": ["relation", "premises", "conclusion", "warrant_kind", "warrant",
                          "first_line", "last_line"],
             "properties": {"relation": {"type": "string", "enum": list(RELATIONS)},
-                           "premises": {"type": "array", "maxItems": MAX_PREMISES, "items": node_ref},
+                           "premises": {"type": "array", "minItems": 1, "maxItems": MAX_PREMISES, "items": node_ref},
                            "conclusion": node_ref,
                            "warrant_kind": {"type": "string", "enum": list(WARRANT_KINDS)},
                            "warrant": {"type": "string", "minLength": 1, "maxLength": 240},
                            "first_line": line, "last_line": line}}
-    return {"type": "object", "additionalProperties": False, "required": ["nodes", "steps"],
-            "properties": {"nodes": {"type": "array", "minItems": 2, "maxItems": MAX_NODES, "items": node},
-                           "steps": {"type": "array", "minItems": 1, "maxItems": MAX_STEPS, "items": step}}}
+    return {"type": "object", "additionalProperties": False, "required": ["steps"],
+            "properties": {"steps": {"type": "array", "minItems": 1, "maxItems": MAX_STEPS, "items": step}}}
 
 
 def problems(doc, lo: int, hi: int) -> list[str]:
@@ -90,15 +101,10 @@ def problems(doc, lo: int, hi: int) -> list[str]:
             continue
         if conclusion in premises:
             found.append(f"{label}: node {conclusion} is both premise and conclusion")
-        target = nodes[conclusion - 1] if isinstance(nodes[conclusion - 1], dict) else {}
-        # A step may establish a claim or a definition, and a construction step
-        # establishes the object it builds (34 such steps in the 98-graph corpus,
-        # e.g. "2-cell ε: f̄ ⊙ M ⊙ g̃ → U_D"). What it cannot establish is a result
-        # cited from elsewhere: that is someone else's theorem, not this argument's.
-        if target.get("kind") == "ref" and str(target.get("citation", "")).strip():
-            found.append(f"{label}: conclusion node {conclusion} is a cited result "
-                         f"({str(target.get('citation'))[:40]!r}); a step cannot derive a citation — "
-                         "state what it gives you as a claim node")
+        # No rule on the conclusion's kind. A construction step establishes the object
+        # it builds, and a proof establishes the paper's own labelled statement, which
+        # the model records as a ref carrying that label (`Theorem~\ref{StrongYone}`).
+        # Both were rejected by earlier versions of this contract; neither is a defect.
         for p in premises:
             if p in concluded_at and concluded_at[p] >= s_index:
                 found.append(f"{label}: premise node {p} is only concluded by step {concluded_at[p] + 1}; "

@@ -39,31 +39,34 @@ SEMCHECK = REPO / "scripts" / "iatc_semcheck.bb"
 CANDIDATE_SCHEMA = "iatc-candidate/v3-proof"
 MAX_TOKENS = int(os.environ.get("FUTON6_IATC_MAX_TOKENS", "8192"))
 
-SYSTEM = """You reconstruct the argument of ONE mathematical proof as structured data.
+NODES_TASK = """You read ONE mathematical proof and list what its argument is made of.
 
-Return JSON with two lists.
-- "nodes", numbered 1, 2, 3 … in the order you list them. Each node is something the
-  argument uses or establishes: kind "claim" (an assertion), "object" (a
-  mathematical object introduced), "definition", or "ref" (a cited result; put the
-  citation in "citation", otherwise leave it ""). "text" is a faithful short gloss
-  of the source. "first_line"/"last_line" are the ABSOLUTE line numbers printed on
-  the left of the source.
-- "steps", in the order the proof argues. Each step derives one "conclusion" node
-  from its "premises" (node numbers). "relation" says how. The warrant says why:
-  "stated" when the proof gives the reason, "citation" when it cites one, or
-  "missing" when the proof skips it — then "warrant" names the specific elided
-  fact (e.g. "dimension shift through a short exact sequence"), never a generic
-  word. "first_line"/"last_line" locate the step.
+Return JSON with a list "nodes". Each node is one thing the proof uses or
+establishes: kind "claim" (an assertion), "object" (a mathematical object it
+introduces or constructs), "definition", or "ref" (a result it points to — put the
+label or citation in "citation", e.g. "Theorem~\\ref{main}" or "[AR, 2.36]";
+otherwise leave it ""). "text" is a faithful short gloss of the source.
+"first_line"/"last_line" are the ABSOLUTE line numbers printed on the left.
+
+List them in the order the proof introduces them, hypotheses first and the final
+conclusion last. Include every intermediate claim the argument passes through; the
+number of nodes follows the proof."""
+
+STEPS_TASK = """Now give the argument over the nodes you listed, as JSON with a list
+"steps", in the order the proof argues.
+
+Each step derives one "conclusion" node from its "premises" (node numbers from the
+list above). "relation" says how. The warrant says why: "stated" when the proof
+gives the reason, "citation" when it cites one, or "missing" when the proof skips it
+— then "warrant" names the specific elided fact (e.g. "dimension shift through a
+short exact sequence"), never a generic word. "first_line"/"last_line" locate the step.
 
 Rules checked by code; an output that breaks one is rejected:
 - A step's premises may only use nodes that no step concludes, or that an EARLIER
   step concludes. Never let two steps feed each other: prove an equivalence as ONE
   step with relation "iff".
-- A step concludes a claim, a definition, or the object it constructs — never a node
-  whose "citation" is filled (you cannot derive a result cited from elsewhere; state
-  what it gives you as a claim), and never one of its own premises.
-- Every node number used must exist, and every line must lie in the given source.
-Reconstruct THIS proof's real argument; the size of the answer follows the proof."""
+- A step never concludes one of its own premises.
+- Every line lies in the given source."""
 
 
 def render_enrichment(cand: dict) -> str:
@@ -80,13 +83,18 @@ def numbered_window(cand: dict) -> str:
     return "\n".join(f"{lo + i:5d} | {ln}" for i, ln in enumerate(body.split("\n")))
 
 
-def build_prompt(cand: dict) -> str:
+def build_prompt(cand: dict, task: str, nodes: list | None = None) -> str:
     binders = "\n".join(cand.get("binder-context", [])) or "(none)"
     proved = cand.get("proved")
     statement = (f"The proof establishes this {proved['kind']} (lines {proved['lines'][0]}-{proved['lines'][1]}):\n"
                  f"{proved['text']}" if proved else "No preceding statement was identified for this proof.")
     lo, hi = cand["window-lines"]
-    return f"""{SYSTEM}
+    listing = ""
+    if nodes is not None:
+        rows = "\n".join(f"  {i}. ({n['kind']}) {n['text']}" + (f"  [{n['citation']}]" if n.get("citation") else "")
+                          for i, n in enumerate(nodes, 1))
+        listing = f"\nThe nodes you listed for this proof:\n{rows}\n"
+    return f"""{task}
 
 {statement}
 
@@ -98,7 +106,8 @@ quantifiers, citations — consistent with the text; do not contradict them):
 {render_enrichment(cand)}
 
 Source, lines {lo}-{hi} (ABSOLUTE line numbers on the left):
-{numbered_window(cand)}"""
+{numbered_window(cand)}
+{listing}"""
 
 
 class ModelCallError(Exception):
@@ -109,31 +118,31 @@ class ModelCallError(Exception):
         super().__init__(f"HTTP {code}: {detail}" if code else detail)
 
 
-def call_stub(prompt: str, cand: dict) -> str:
-    """No-GPU plumbing: a minimal valid document anchored at the proof's ends."""
+def call_stub(prompt: str, cand: dict, schema: dict) -> str:
+    """No-GPU plumbing: a minimal valid answer for whichever phase is asked."""
     lo, hi = cand["proof-lines"]
-    return json.dumps({
-        "nodes": [{"kind": "claim", "text": "hypotheses of the statement", "citation": "",
-                   "first_line": lo, "last_line": lo},
-                  {"kind": "claim", "text": "conclusion of the statement", "citation": "",
-                   "first_line": hi, "last_line": hi}],
-        "steps": [{"relation": "implies", "premises": [1], "conclusion": 2, "warrant_kind": "missing",
-                   "warrant": f"argument of {cand['proof-id']}", "first_line": lo, "last_line": hi}]})
+    if "nodes" in schema["properties"]:
+        return json.dumps({"nodes": [{"kind": "claim", "text": "hypotheses of the statement", "citation": "",
+                                      "first_line": lo, "last_line": lo},
+                                     {"kind": "claim", "text": "conclusion of the statement", "citation": "",
+                                      "first_line": hi, "last_line": hi}]})
+    return json.dumps({"steps": [{"relation": "implies", "premises": [1], "conclusion": 2,
+                                  "warrant_kind": "missing", "warrant": f"argument of {cand['proof-id']}",
+                                  "first_line": lo, "last_line": hi}]})
 
 
-def call_openai(prompt: str, cand: dict, model: str) -> str:
+def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> str:
     import urllib.error
     import urllib.request
     base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
     key = os.environ.get("OPENAI_API_KEY", "x")
-    lo, hi = cand["window-lines"]
     body = json.dumps({
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0,
         "max_tokens": MAX_TOKENS,
         "response_format": {"type": "json_schema", "json_schema": {
-            "name": "iatc_proof", "strict": True, "schema": iatc_json.schema(lo, hi)}},
+            "name": "iatc_proof", "strict": True, "schema": schema}},
     }).encode()
     req = urllib.request.Request(f"{base}/chat/completions", data=body,
                                  headers={"Content-Type": "application/json",
@@ -211,21 +220,31 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
     pid = cand["proof-id"]
     lo, hi = cand["window-lines"]
     record: dict = {"attempt": 0}
-    try:
-        raw = (call_stub(build_prompt(cand), cand) if args.backend == "stub"
-               else call_openai(build_prompt(cand), cand, args.model))
-    except ModelCallError as e:
-        record["result"] = str(e)[:300]
-        return "errored", str(e), record
-    raw_path = tmp / f"{pid}.response.json"
-    raw_path.write_text(raw)
-    record["response"] = accounting.relative(raw_path)
-    try:
-        doc = json.loads(raw)
-    except ValueError as e:
-        why = f"endpoint returned non-JSON despite the schema ({e}); check serving conformance"
-        record["result"] = why
-        return "errored", why, record
+    doc: dict = {}
+    for phase, task in (("nodes", NODES_TASK), ("steps", STEPS_TASK)):
+        schema = (iatc_json.nodes_schema(lo, hi) if phase == "nodes"
+                  else iatc_json.steps_schema(lo, hi, len(doc.get("nodes", []))))
+        prompt = build_prompt(cand, task, doc.get("nodes") if phase == "steps" else None)
+        try:
+            raw = (call_stub(prompt, cand, schema) if args.backend == "stub"
+                   else call_openai(prompt, cand, args.model, schema))
+        except ModelCallError as e:
+            record["result"] = f"{phase}: {e}"[:300]
+            return "errored", f"{phase}: {e}", record
+        raw_path = tmp / f"{pid}.{phase}.json"
+        raw_path.write_text(raw)
+        record[f"{phase}-response"] = accounting.relative(raw_path)
+        try:
+            part = json.loads(raw)
+        except ValueError as e:
+            why = f"{phase}: endpoint returned non-JSON despite the schema ({e}); check serving conformance"
+            record["result"] = why
+            return "errored", why, record
+        doc.update(part)
+        if phase == "nodes" and len(doc.get("nodes") or []) < 2:
+            why = f"contract: {len(doc.get('nodes') or [])} node(s); a proof has at least two"
+            record["result"] = why
+            return "rejected", why, record
     found = iatc_json.problems(doc, lo, hi)
     if found:
         why = "contract: " + "; ".join(found[:6])
