@@ -99,10 +99,9 @@ OPS = {
            "crit": "G-coverage: raw coverage rises with corpus-fraction"},
     "S3": {"cmd": f"{{PY}} scripts/mark3_extract_candidates.py --list {{IDS}} --all-proofs --out {CAND} && "
            f"CANDIDATES={CAND} OUT={GRAPHS} bash scripts/linode-4gpu-run.sh && "
-           # MEASUREMENTS, not gates. Both were absent from every stage, so a run
-           # produced no evidence about either and both had to be reconstructed
-           # afterwards -- the retry rate could not be (H37), and the anchor rate
-           # was reconstructed wrongly (H38). `|| true` is deliberate and narrow:
+           # MEASUREMENT, not a gate. Per-proof outcomes are in S3 accounting; the
+           # anchor rate was once reconstructed wrongly after the fact (H38), so it
+           # is measured in the stage. `|| true` is deliberate and narrow:
            # anchor-faithfulness currently exits non-zero BY DESIGN while the
            # frame mismatch is open, and a known-red measurement must not
            # masquerade as a stage failure. Its output is kept, not discarded.
@@ -110,12 +109,10 @@ OPS = {
            f"> {RUN}/anchor-faithfulness.txt 2>&1 || true) && "
            f"tail -3 {RUN}/anchor-faithfulness.txt",
            "gate": f"bb scripts/iatc_argcheck.bb {GRAPHS} && {{PY}} scripts/substance_gate.py {GRAPHS}",
-           "note": "substance gate reads finals only; the run wrapper reuses the enriched "
-                   "candidates S3 just extracted (no silent 10-paper re-extract). "
-                   "Emits two measurements the pipeline previously never took: the "
-                   "in-loop retry rate (retry-rate-$RUN_ID.json, the honesty bound "
-                   "on first-pass quality) and anchor-faithfulness, which reports "
-                   "frame mismatch separately from drift (H38)"},
+           "note": "one candidate per S1-identified proof (with its statement); the model returns "
+                   "schema-constrained JSON and code writes the EDN graph (iatc_json). Nothing is "
+                   "repaired or retried within an invocation; per-proof outcomes are in accounting. "
+                   "Anchor-faithfulness is a measurement, reported separately from drift (H38)"},
     "S4": {"cmd": "{PY} scripts/mark3_extract_expository_candidates.py --list {IDS} "
            f"--out {EXPO_CAND} && {{PY}} scripts/mark3_expository_loop.py "
            f"--candidates {EXPO_CAND} --out {EXPO} "

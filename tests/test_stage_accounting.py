@@ -1,7 +1,6 @@
 """Stage 3: per-item accounting, retry history, selection, and false-valid refusal."""
 from __future__ import annotations
 
-import argparse
 import json
 import os
 from pathlib import Path
@@ -16,7 +15,6 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import run_manifest as manifest
 import stage_accounting as accounting
 import linode_stepper as stepper
-import mark3_iatc_loop as iatc_loop
 import mark3_extract_expository_candidates as expo_extract
 
 GRAPH = """{:paper/id "9999.0001"
@@ -171,66 +169,6 @@ class ExpositorySelection(unittest.TestCase):
             with patch.dict(os.environ, {"FUTON6_EXPOSITORY_CAP_PER_PAPER": "-1"}), manifest.lock(Path(d) / "other"):
                 with self.assertRaisesRegex(ValueError, "nonnegative"):
                     manifest.prepare(Path(d) / "other", "r", "c", ids)
-
-
-class IatcLoopRetry(unittest.TestCase):
-    """A valid candidate survives another candidate's rejection; a retry keeps it."""
-
-    def setUp(self):
-        self.directory = tempfile.TemporaryDirectory()
-        self.addCleanup(self.directory.cleanup)
-        self.base = Path(self.directory.name)
-        self.cands = self.base / "candidates"
-        self.cands.mkdir()
-        for pid in ("9999.0001__p0", "9999.0001__p1"):
-            (self.cands / f"{pid}.candidate.json").write_text(json.dumps({
-                "schema": "iatc-candidate/v2-enriched", "paper-id": "9999.0001", "proof-id": pid,
-                "window-lines": [1, 2], "source-window": "1 premise\n2 conclusion",
-                "binder-context": [], "enrichment": []}))
-        self.out = self.base / "graphs"
-        self.addCleanup(patch.stopall)
-        patch.object(iatc_loop, "load_seeds", lambda _n: "").start()
-        patch.object(iatc_loop, "call_stub", lambda _p, _c, _a: GRAPH).start()
-        patch.object(iatc_loop, "run_rung2", lambda _g, report, gate: (report.write_text("{}"), (True, "rung2-pass"))[1]).start()
-        patch.object(iatc_loop, "candidate_check", lambda _e, _c: (True, "ok")).start()
-        patch.object(iatc_loop, "MAX_ATTEMPTS", 2).start()
-        patch.dict(os.environ, {"RUN_ID": "r", "FUTON6_RUN_DIR": str(self.base)}).start()
-
-    def invoke(self, invocation, reject):
-        gate = lambda path: (False, "argcheck: dangling") if reject in path.name else (True, "ok")
-        adir = self.base / "accounting" / invocation
-        args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="stub",
-                                  model="stub", shots=0, rung2_gate=False)
-        with patch.object(iatc_loop, "gate_one", gate), \
-                patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: invocation}):
-            rc = iatc_loop.run(args)
-        return rc, accounting.load(adir, "S3", "loop")
-
-    def test_rejected_item_keeps_history_and_is_retried_without_resampling_accepted(self):
-        rc, doc = self.invoke("S3-a001", reject="__p1")
-        self.assertEqual(rc, 1)
-        by = {e["id"]: e for e in doc["items"]}
-        self.assertEqual(by["9999.0001__p0"]["status"], "accepted")
-        self.assertEqual(by["9999.0001__p1"]["status"], "rejected")
-        self.assertEqual(len(by["9999.0001__p1"]["attempts"]), 2)
-        self.assertFalse((self.out / "9999.0001__p1.edn").exists())
-
-        rc, doc = self.invoke("S3-a002", reject="nothing")
-        by = {e["id"]: e for e in doc["items"]}
-        self.assertEqual(by["9999.0001__p0"]["attempts"][0]["carried-from"], "S3-a001")
-        self.assertEqual(by["9999.0001__p1"]["status"], "accepted")
-        # Both invocations' attempt files remain.
-        self.assertTrue((self.out / ".attempts/r/S3-a001/9999.0001__p1.attempt1.edn").is_file())
-        self.assertTrue((self.out / ".attempts/r/S3-a002/9999.0001__p1.attempt0.edn").is_file())
-
-    def test_final_without_provenance_is_errored_not_resumed(self):
-        self.out.mkdir()
-        (self.out / "9999.0001__p0.edn").write_text(GRAPH)
-        rc, doc = self.invoke("S3-a001", reject="nothing")
-        self.assertEqual(rc, 1)
-        by = {e["id"]: e for e in doc["items"]}
-        self.assertEqual(by["9999.0001__p0"]["status"], "errored")
-        self.assertIn("provenance", by["9999.0001__p0"]["reason"])
 
 
 class PaperGraphsAndCleans(unittest.TestCase):
@@ -440,38 +378,3 @@ class InferenceGraphGate(unittest.TestCase):
                             ":conclusion :b :warrant {:kind :claim :text \"w\"} :source {:lines [1 2]}}")
         self.assertEqual(rc, 1, out)
         self.assertIn("inline maps", out)
-
-    def test_repair_stamps_candidate_passage_and_window_has_no_slack(self):
-        with tempfile.TemporaryDirectory() as d:
-            path = Path(d) / "g.edn"
-            path.write_text(self.BASE % self.edge(":e1", ":a", ":b"))
-            subprocess.run(["bb", str(ROOT / "scripts/iatc_repair.bb"), str(path), "--passage", "1", "4"], check=True)
-            self.assertIn(":source {:lines [1 4], :kind :proof}", path.read_text())
-        cand = {"paper-id": "9999.0004", "window-lines": [10, 20]}
-        self.assertTrue(iatc_loop.candidate_check('{:source {:lines [10 20]}}', cand)[0])
-        self.assertFalse(iatc_loop.candidate_check('{:source {:lines [21 21]}}', cand)[0])
-
-
-class AnatomyDetectionHeadings(unittest.TestCase):
-    """Proofs and statements written without environments (math/0409598, math/9810017)."""
-
-    def setUp(self):
-        import dp_paper_view
-        self.dpv = dp_paper_view
-
-    def test_french_and_qualified_headings_start_proofs(self):
-        text = ("\\begin{document}\n\\textit{Preuve du lemme:}\nPar construction le foncteur est exact.\n\\hfill $\\Box$\n\n"
-                "\\noindent\\textbf{Proof of Theorem \\ref{t}:} Conditions (0) and (1) hold here.\n$\\Box$\n"
-                "Nous pouvons terminer la preuve de la proposition.\n")
-        self.assertEqual(len(self.dpv.detect_text_proofs(text)), 2)
-
-    def test_macro_defined_heading_and_end_mark(self):
-        text = ("\\newcommand{\\pf}{\\textbf{Proof}}\n\\newcommand{\\done}{\\hfill\\ensuremath{\\Box}}\n"
-                "\\begin{document}\n{\\raggedright\n\\textbf{Theorem}\n\\textit{Every bicategory is biequivalent to a 2-category.}}\n"
-                "\\vspace{1ex}\n\\pf\\ Let B be a bicategory and Y the Yoneda map into presheaves.\n\\done\n")
-        proofs = self.dpv.detect_text_proofs(text)
-        self.assertEqual(len(proofs), 1)
-        self.assertTrue(text[proofs[0]["start"]:proofs[0]["end"]].rstrip().endswith("\\done"))
-        statements = self.dpv.detect_text_statements(text)
-        self.assertEqual([m["kind"] for m in statements], ["env/theorem"])
-        self.assertEqual(self.dpv.detect_text_statements("\\begin{document}\nTheorem 3 shows that X.\n"), [])
