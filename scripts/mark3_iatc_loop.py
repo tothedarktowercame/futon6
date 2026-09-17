@@ -290,11 +290,10 @@ def run(args) -> int:
         status, why, record = attempt_one(cand, args, tmp)
         counts[status] += 1
         if status == "accepted":
-            final.write_bytes((tmp / f"{pid}.edn").read_bytes())
-            _, r2_msg = run_rung2(final, rung2_report, gate=False)
-            record["rung2"] = r2_msg
+            accounting.publish_accepted(outdir, pid, final, (tmp / f"{pid}.edn").read_bytes(),
+                                        {"path": record["graph"]})
+            _, record["rung2"] = run_rung2(final, rung2_report, gate=False)
             accepted_graphs.append(final)
-            accounting.record_acceptance(outdir, pid, final, {"path": record["graph"], "rung2": r2_msg})
             ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid], attempts=[record],
                           artifacts=[accounting.relative(p) for p in (final, rung2_report) if p.exists()])
         else:

@@ -179,6 +179,20 @@ def record_acceptance(outdir: Path, item: str, final: Path, attempt: dict):
                                 "invocation": os.environ.get(INVOCATION_ENV), **attempt}, indent=1) + "\n")
 
 
+def publish_accepted(outdir: Path, item: str, final: Path, data: bytes, attempt: dict):
+    """Write the acceptance record, then the final, so a crash cannot leave a final
+    without provenance (which would block every retry of that item)."""
+    import hashlib
+    path = _provenance_path(outdir, item)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"item": item, "final": Path(final).name,
+                                "sha256": hashlib.sha256(data).hexdigest(),
+                                "invocation": os.environ.get(INVOCATION_ENV), **attempt}, indent=1) + "\n")
+    partial = Path(final).with_name(Path(final).name + ".partial")
+    partial.write_bytes(data)
+    os.replace(partial, final)
+
+
 def carried_acceptance(outdir: Path, item: str, final: Path) -> tuple[dict | None, str]:
     """(provenance, "") when an existing final is a verified earlier acceptance."""
     path = _provenance_path(outdir, item)

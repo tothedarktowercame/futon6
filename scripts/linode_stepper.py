@@ -296,9 +296,35 @@ ATTEMPTS = "stage-attempts.jsonl"
 ACCOUNTING = accounting.STAGES
 
 
-def next_invocation(run_dir, stage):
-    n = sum(1 for r in _rows(os.path.join(run_dir, ATTEMPTS)) if r.get("stage") == stage)
-    return f"{stage}-a{n + 1:03d}"
+def next_invocation(run_dir, stage, run_id=None, corpus_id=None):
+    """Next invocation id, after recording any invocation that was killed.
+
+    A killed runner (SIGKILL, lost host) leaves its accounting directory and
+    checkpointed item counts but never reaches its attempt row. Such an invocation
+    is recorded as `interrupted` before numbering continues past it, so its
+    partial evidence stays in the history instead of blocking the retry.
+    """
+    rows = _rows(os.path.join(run_dir, ATTEMPTS))
+    recorded = {r.get("invocation") for r in rows if r.get("stage") == stage}
+    base = accounting.directory(run_dir, stage, "x").parent
+    existing = sorted(d.name for d in base.iterdir() if d.is_dir()) if base.is_dir() else []
+    for invocation in existing:
+        if invocation in recorded:
+            continue
+        counts = {}
+        for f in sorted((base / invocation).glob(f"{stage}.*.json")):
+            try:
+                counts[f.name[len(stage) + 1:-len(".json")]] = json.loads(f.read_text())["counts"]
+            except (OSError, ValueError, KeyError):
+                counts[f.name] = "unreadable"
+        with open(os.path.join(run_dir, ATTEMPTS), "a") as handle:
+            handle.write(json.dumps({"stage": stage, "run_id": run_id, "corpus_id": corpus_id,
+                                     "invocation": invocation, "outcome": "interrupted",
+                                     "accounting": counts, "problems": ["runner stopped before recording this attempt"],
+                                     "recorded": datetime.now(timezone.utc).isoformat()}) + "\n")
+        recorded.add(invocation)
+    numbers = [int(i.rsplit("-a", 1)[1]) for i in recorded | set(existing) if i and "-a" in i]
+    return f"{stage}-a{max(numbers, default=0) + 1:03d}"
 
 
 def accounting_problems(run_dir, stage, invocation, corpus_id):
@@ -454,7 +480,7 @@ def attempt(s, run_dir, corpus_id, run_id):
     """
     op = OPS.get(s["id"], {})
     sid = s["id"]
-    invocation = next_invocation(run_dir, sid) if run_dir else None
+    invocation = next_invocation(run_dir, sid, run_id, corpus_id) if run_dir else None
     row = {"stage": sid, "run_id": run_id, "corpus_id": corpus_id, "invocation": invocation,
            "started": datetime.now(timezone.utc).isoformat(),
            "command_rc": None, "gate_rc": None, "accounting": None, "problems": []}

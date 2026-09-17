@@ -56,6 +56,15 @@ class AccountingRules(unittest.TestCase):
         self.assertFalse(any("declared inputs" in p for p in allowed))       # order does not matter
         self.assertFalse(any("deferred" in p for p in allowed))
 
+    def test_publish_writes_provenance_before_the_final(self):
+        final = self.base / "q.edn"
+        with patch("os.replace", side_effect=OSError("killed before the final was written")):
+            with self.assertRaises(OSError):
+                accounting.publish_accepted(self.base, "q", final, b"{:ok true}", {"path": "a"})
+        self.assertFalse(final.exists())                    # no final without provenance
+        accounting.publish_accepted(self.base, "q", final, b"{:ok true}", {"path": "a"})
+        self.assertIsNotNone(accounting.carried_acceptance(self.base, "q", final)[0])
+
     def test_acceptance_provenance_refuses_stale_and_edited_finals(self):
         final = self.base / "p.edn"
         final.write_text("{}")
@@ -121,6 +130,17 @@ class StepperAttempts(unittest.TestCase):
         self.assertEqual(stepper.ledger_entry(str(self.run_dir), "S6", "c")["invocation"], "S6-a003")
         # Evidence of the failed attempts is still on disk.
         self.assertTrue((self.run_dir / "accounting/S6/S6-a001/S6.assemble.json").is_file())
+
+    def test_killed_invocation_is_recorded_as_interrupted_and_numbering_continues(self):
+        killed = accounting.Accounting("S6", "assemble", ["1111.0001", "2222.0002"],
+                                       self.run_dir / "accounting/S6/S6-a001")
+        killed.record("1111.0001", "accepted", outputs=["1111.0001"])       # checkpoint, then SIGKILL
+        self.assertEqual(stepper.next_invocation(str(self.run_dir), "S6", "r", "c"), "S6-a002")
+        row = self.attempts()[0]
+        self.assertEqual((row["invocation"], row["outcome"]), ("S6-a001", "interrupted"))
+        self.assertEqual(row["accounting"]["assemble"]["unaccounted"], 1)
+        self.assertEqual(self.stage({"1111.0001": "accepted", "2222.0002": "accepted"}), 0)
+        self.assertEqual([r["invocation"] for r in self.attempts()], ["S6-a001", "S6-a002"])
 
     def test_missing_accounting_cannot_pass_even_with_zero_exit(self):
         with patch.dict(stepper.OPS, {"S6": {"cmd": "true"}}), patch.object(stepper, "DEPS", {"S6": []}):

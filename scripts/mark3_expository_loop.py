@@ -239,9 +239,9 @@ def run(args: argparse.Namespace) -> int:
         status, why, record = attempt_one(candidate, args, kinds, attempts)
         counts[status] += 1
         if status == "accepted":
-            final.write_bytes((attempts / final.name).read_bytes())
+            accounting.publish_accepted(outdir, item, final, (attempts / final.name).read_bytes(),
+                                        {"path": record["graph"]})
             rec[1] += 1
-            accounting.record_acceptance(outdir, item, final, {"path": record["graph"]})
             ledger.record(item, "accepted", paper=pid, outputs=[item], attempts=[record],
                           artifacts=[accounting.relative(final)])
         else:
