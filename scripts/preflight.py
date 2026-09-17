@@ -53,7 +53,7 @@ def sh(cmd, timeout=120):
 def check_binaries(fix=False):
     for exe, remedy in [
         ("bb", "curl -sSL https://raw.githubusercontent.com/babashka/babashka/master/install | bash"),
-        ("latexmlmath", "apt-get install -y latexml  |  conda install -c conda-forge latexml"),
+        ("latexmlmath", "install LaTeXML following https://math.nist.gov/~BMiller/LaTeXML/get.html (see docs/latexml-setup.md); put latexmlmath on PATH"),
     ]:
         have = shutil.which(exe)
         if not have and fix:

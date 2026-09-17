@@ -6,6 +6,13 @@ hazard ledger of everything that broke while getting here.
 
 ---
 
+## Runner dependencies
+
+Mark7 requires the Python project dependencies, babashka (`bb`), and LaTeXML
+(`latexmlmath`) on `PATH`; Conda and libmamba are not runner requirements.
+Follow [LaTeXML setup](docs/latexml-setup.md) for upstream installation and the
+live formula-to-structure check before running preflight.
+
 ## The short version
 
 Start the run. It will refuse to start if the host isn't ready, and it will tell

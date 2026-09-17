@@ -15,6 +15,9 @@
 #
 # Idempotent — safe to re-run; installed deps are skipped.
 #
+# LaTeXML installation: https://math.nist.gov/~BMiller/LaTeXML/get.html
+# Source-build instructions: docs/latexml-setup.md. Conda is not required.
+#
 # Deps:
 #   - babashka (bb): runs iatc_argcheck.bb / iatc_repair.bb / iatc_semcheck.bb
 #     (the driver's per-paper repair + argument/semantic-check gates). The .bb
@@ -46,6 +49,7 @@ if command -v latexmlmath >/dev/null 2>&1; then
   echo "latexmlmath already present: $(latexmlmath --VERSION 2>&1 | head -1)"
 else
   installed=0
+  # Debian/Ubuntu installation documented by LaTeXML upstream.
   if command -v apt-get >/dev/null 2>&1; then
     if [ "$(id -u)" -eq 0 ]; then
       apt-get install -y latexml && installed=1
@@ -53,13 +57,11 @@ else
       sudo apt-get install -y latexml && installed=1
     fi
   fi
-  if [ "$installed" -eq 0 ] && command -v conda >/dev/null 2>&1; then
-    conda install -y -c conda-forge latexml && installed=1
-  fi
   if [ "$installed" -eq 0 ]; then
-    echo "FATAL: latexmlmath not found and could not auto-install (no root/conda)."
-    echo "  Install one of:  apt-get install latexml  |  conda install -c conda-forge latexml"
-    echo "  |  cpanm LaTeXML   — then re-run this script."
+    echo "FATAL: latexmlmath not found; automatic Debian/Ubuntu installation unavailable or failed."
+    echo "  Install LaTeXML using https://math.nist.gov/~BMiller/LaTeXML/get.html"
+    echo "  GitHub source: https://github.com/brucemiller/LaTeXML"
+    echo "  See $REPO/docs/latexml-setup.md; put latexmlmath on PATH and re-run this script."
     echo "  Without it the SFC :structure lift (S11) silently produces nothing."
     exit 1
   fi
