@@ -172,3 +172,39 @@ still use the pattern S3 has dropped.
   - S4: nested-kind slots; contract checks; code-written EDN passes `expository_argcheck` including escaped held reasons; loop outcomes and retrying only failures; a schema request at temperature 0;
   - S7: schema keys match box ids and a valid typing is accepted; a contract violation is rejected and an endpoint failure errored.
 - **Full suite:** 36 failed, 902 passed. Every failure also fails on `eeac70a`; the 2 extractor tests in `test_expository_phase5.py` fail for want of fixture marks.
+
+## Live validation on a fresh Linode (2026-09-17)
+
+Procedure: [`docs/mark7-validation-run.md`](../docs/mark7-validation-run.md). Results and the
+run-by-run defect history are posted on PR #52
+(`https://github.com/tothedarktowercame/futon6/pull/52`).
+
+- **Host:** Linode `g2-gpu-rtx4000a4-s` (4× RTX 4000 Ada, `de-fra-2`, created 18:17 UTC,
+  destroyed 20:44 UTC, ≈$7.30). vLLM 0.23.0, `Meta-Llama-3.1-70B-Instruct-AWQ-INT4`
+  revision `2123003760781134cfc31124aa6560a45b491fdf` served as `mark4-70b`, 28.9 tok/s.
+  Built from this branch, the shipped substrate bundle and 3 eprints only.
+- **Preflight 12/12; conformance 7/7**, including the new integer-bounds check.
+- **Final run `mark7-val3-linode-06` (commit `a4b61fd`):** all 12 stages ledgered and
+  passing; S3 20/20 proofs, S4 15 selected and 69 deferred under the cap of 5,
+  S6 3/3 papers, S7 20/20 CLeans; warrants 280 stated / 60 cited / 165 missing.
+- **Replay 12/12, no warnings.** Archive packed (404 files), copied to the dev machine,
+  and verified + replayed there.
+- **Interruption:** a kill during S3 recorded `S3-a001` as `interrupted`, and `S3-a002`
+  carried the 5 provenance-verified acceptances forward and finished the stage.
+- **Six runs, five defects**, each found by a failing run: three were contract rules of
+  mine that refused valid mathematics (an `object` conclusion, the paper's own labelled
+  statement, steps not listed in dependency order); one was a genuine model defect now
+  unrepresentable in the grammar (a node derived from itself); two were stages passing
+  while producing nothing (S9's empty vocabulary, and a warrant instruction that recorded
+  zero holes in 20 proofs).
+
+### Still open after this validation
+
+- **Faithfulness is unread.** Anchors are in range and graphs are acyclic, but nobody has
+  compared a graph with its proof. That needs a person, and it is the next thing worth doing.
+- Three papers, one model, one serving stack, one cap. Nothing here bounds the full corpus.
+- No acceptance check requires a non-degenerate hole count; run 05 would have passed
+  everything except the missing artifact while recording zero holes.
+- Replay `P3-curve-is-rising` accepts a curve whose rise is 0.0 (run 05 in rehearsal).
+- S4 and S7 have had no equivalent contract iteration: their live rejection rate here was
+  zero, which is weaker evidence than S3's.
