@@ -184,13 +184,18 @@ print(json.dumps(config.effective()))
         import linode_stepper as stepper
         from types import SimpleNamespace
         with tempfile.TemporaryDirectory() as d:
-            with patch.dict(os.environ), \
-                    patch.object(sys, "argv", ["stepper", "--run", "--run-dir", d, "--run-id", "config-test"]), \
+            source = Path(d) / "source.ids"
+            source.write_text("1234.5678\n")
+            run_dir = Path(d) / "run"
+            with patch.dict(os.environ, {"RUN_ID": "config-test", "CORPUS": "config-corpus"}), \
+                    patch.object(sys, "argv", ["stepper", "--run", "--run-dir", str(run_dir),
+                                               "--ids", str(source), "--run-id", "config-test", "--corpus-id", "config-corpus"]), \
                     patch.object(stepper, "load_stages", return_value=[]), \
+                    patch.object(stepper.manifest, "substrate_identity", return_value={"fixture": "hash"}), \
                     patch.object(stepper.subprocess, "run", return_value=SimpleNamespace(
                         returncode=1, stdout="test refusal", stderr="")) as launch:
                 self.assertEqual(stepper.main(), 1)
-            record = json.loads((Path(d) / "host-config.jsonl").read_text())
+            record = json.loads((run_dir / "host-config.jsonl").read_text())
             self.assertEqual(record["run-id"], "config-test")
             self.assertEqual(record["configuration"]["checkout"], str(ROOT))
             sent = launch.call_args.kwargs["env"]

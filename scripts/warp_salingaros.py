@@ -28,7 +28,7 @@ import json
 import math
 from pathlib import Path
 
-GOLD = config.ROOT / 'data/showcases/ct-anatomy/golden'
+GOLD = config.marks()
 OUT = config.ROOT / 'data/warp/aliveness.json'
 SCOPE_KINDS = {"let-binder"}
 

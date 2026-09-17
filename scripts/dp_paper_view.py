@@ -39,7 +39,7 @@ def _load_nlab_wiring():
 # eprint store: $FUTON6_EPRINTS overrides the dev default, so the Superpod run can point at
 # Rob's arXiv-math download instead of fetching (mark7 handoff).
 EPRINTS = config.eprints()
-GOLDEN_DIR = config.ROOT / 'data/showcases/ct-anatomy/golden'
+GOLDEN_DIR = config.marks()
 from dp_capabilities.binders import (
     APPOS_CONJ_RE,
     APPOSITIVE_RE,

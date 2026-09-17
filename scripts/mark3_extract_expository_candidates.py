@@ -7,6 +7,12 @@ or fill scopes; `mark3_expository_loop.py` owns that step.
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+
+
 import argparse
 import json
 import sys
@@ -14,7 +20,7 @@ from pathlib import Path
 from typing import Any
 
 REPO = Path(__file__).resolve().parent.parent
-MARKS_DIR = REPO / "data" / "showcases" / "ct-anatomy" / "golden"
+MARKS_DIR = config.marks()
 VOCAB = REPO / "holes" / "excursions" / "expository-superpod-vocab.edn"
 SCHEMA = "expo-candidate/v1"
 

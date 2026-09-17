@@ -30,9 +30,11 @@ import json
 import os
 import re
 import sys
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
+import run_manifest as manifest
 
 RESULTS: list[tuple[str, bool, str, str, str]] = []   # (id, ok, headline, hazard, needs)
 
@@ -83,7 +85,7 @@ def _stem(p):
 # or an explicit logged reason. Catches silent collapse (H13) and silent drop.
 # --------------------------------------------------------------------------
 
-@check("C1-steps-per-proof", "H13", needs="S3")
+@check("C1-steps-per-proof", "H13", needs="S5")
 def c1(graphs_dir, steps_dir):
     gs = {_stem(g) for g in _graphs(graphs_dir)}
     if not gs:
@@ -255,7 +257,7 @@ def p2(run_dir, corpus_id):
             r = json.loads(ln)
         except Exception:
             continue
-        if r.get("corpus_id") == corpus_id:
+        if r.get("corpus_id") == corpus_id and r.get("gate") == "pass":
             seen.add(r.get("stage"))
     want = {f"S{i}" for i in range(1, 13)}
     missing = sorted(want - seen, key=lambda s: int(s[1:]))
@@ -276,14 +278,13 @@ def p3(run_dir):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--run-dir", default="data/runs/mark7z")
-    ap.add_argument("--graphs", default="data/iatc-argument-graphs/run")
-    ap.add_argument("--steps", default="data/cas-select-steps/run")
-    ap.add_argument("--clean", default="holes/clean-run")
-    ap.add_argument("--ids", default="holes/mark7z-e2e.ids.txt")
-    ap.add_argument("--corpus-id", default="math-ct-e2e-12")
-    ap.add_argument("--logs", nargs="*", default=["mark7z-s7.log", "mark7z-s7-retry.log",
-                                                  "mark7z-s7-sweep.log"])
+    ap.add_argument("--run-dir", required=True)
+    ap.add_argument("--graphs")
+    ap.add_argument("--steps")
+    ap.add_argument("--clean")
+    ap.add_argument("--ids")
+    ap.add_argument("--corpus-id")
+    ap.add_argument("--logs", nargs="*")
     ap.add_argument("--through", default="S12", choices=[f"S{i}" for i in range(1, 13)],
                     help="how far the run has got. Checks needing later stages are "
                          "skipped, so this doubles as a MID-RUN ABORT GATE: mine a "
@@ -291,6 +292,34 @@ def main() -> int:
                          "the run is producing garbage and the window should be "
                          "reclaimed rather than spent.")
     a = ap.parse_args()
+    RESULTS.clear()
+
+    try:
+        run_dir = (Path(ROOT) / a.run_dir).resolve()
+        doc = manifest.load(run_dir)
+        manifest.validate_records(run_dir, doc)
+        manifest.require_artifacts(run_dir, doc, a.through)
+        if a.corpus_id and a.corpus_id != doc["corpus-id"]:
+            raise ValueError("--corpus-id disagrees with run manifest")
+        a.corpus_id = doc["corpus-id"]
+        for key in ("graphs", "steps", "clean"):
+            expected = manifest.contained(run_dir, doc["artifacts"][key])
+            given = getattr(a, key)
+            if given and (Path(ROOT) / given).resolve() != expected.resolve():
+                raise ValueError(f"--{key} disagrees with run manifest")
+            setattr(a, key, str(expected))
+        frozen = run_dir / doc["ids"]
+        if a.ids and manifest.digest((Path(ROOT) / a.ids).resolve()) != doc["corpus-sha256"]:
+            raise ValueError("--ids content disagrees with frozen corpus")
+        a.ids = str(frozen)
+        expected_logs = [str(manifest.contained(run_dir, p)) for p in doc["logs"]]
+        if a.logs is not None and [str((Path(ROOT) / p).resolve()) for p in a.logs] != expected_logs:
+            raise ValueError("--logs disagrees with run manifest")
+        a.logs = expected_logs
+        a.run_dir = str(run_dir)
+    except (OSError, ValueError, KeyError) as exc:
+        print(f"REPLAY TARGET ERROR: {exc}", file=sys.stderr)
+        return 2
 
     def R(p):
         return p if os.path.isabs(p) else os.path.join(ROOT, p)
@@ -334,10 +363,11 @@ def main() -> int:
               "  invariants the rest of the pipeline depends on. Nothing downstream will\n"
               "  repair them, so the remaining window is better spent regenerating after\n"
               "  a fix than continuing. Failing checks name their hazard class above.")
+    elif warns:
+        print("\n  ACCEPTANCE INCOMPLETE — resolve the warnings before accepting this run.")
     else:
-        print("\n  CONTINUE — every artifact invariant checkable at this point holds."
-              + ("  (Warnings above affect provenance, not artifacts.)" if warns else ""))
-    return fails
+        print("\n  CONTINUE — every artifact invariant checkable at this point holds.")
+    return fails + warns
 
 
 if __name__ == "__main__":

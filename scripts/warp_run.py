@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 WARP = ROOT / "data" / "warp"
 EPRINTS = config.eprints()
 ANATOMY = config.anatomy()
-GOLDEN = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
+GOLDEN = config.marks()
 BACKGROUND = config.authority()
 MANIFEST = WARP / "warp-manifest.json"
 

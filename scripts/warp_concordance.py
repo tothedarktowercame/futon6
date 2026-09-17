@@ -29,7 +29,7 @@ import anatomy_v0_sweep as sweep
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EPRINTS = config.eprints()
 DEFAULT_ANATOMY = config.anatomy()
-DEFAULT_DP = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
+DEFAULT_DP = config.marks()
 DEFAULT_OUT = ROOT / "data" / "warp" / "concordance.json"
 
 ROLE_DEFINED = "defined"

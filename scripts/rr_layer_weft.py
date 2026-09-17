@@ -14,7 +14,7 @@ from pathlib import Path
 from rr_compositor import Annotation, Layer, Span, golden_class
 
 ROOT = config.ROOT
-GOLD = ROOT / "data/showcases/ct-anatomy/golden"
+GOLD = config.marks()
 
 
 def load_text(pid: str):

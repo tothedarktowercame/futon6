@@ -23,7 +23,7 @@ export MODEL=<served-model-name>
     --run-id <pick-one> --corpus-id math-ct
 ```
 
-`--run-id` **defaults to `adhoc`** and everything is scoped by it. Pick a real
+`--run-id` (or `RUN_ID`) is required; `adhoc` is refused. Pick a real
 one; two runs sharing an id share directories, which is how one corpus's outputs
 previously landed in another's counts.
 
@@ -179,8 +179,8 @@ automatable failures.
 - **Read the halt message.** 11 stages halt by design; that is not a failure.
 - **`--from S<n> --to S<m>`** resumes a range. The phase ledger in
   `data/runs/<run-id>` records what passed.
-- **`--reuse`** accepts upstream stages from a previous run — never S2, which
-  must match the corpus it is checked against.
+- **`--reuse S0 STAGE`** acknowledges completed boot steps only. Computational
+  stages require passing ledger evidence for this immutable run; S2 cannot be reused.
 - **A blocked stage** (upstream has no ledger entry) exits non-zero and says so
   rather than running on stale inputs.
 

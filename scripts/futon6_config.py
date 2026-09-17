@@ -59,6 +59,11 @@ def authority() -> Path:
     return path("FUTON6_BACKGROUND_CORPUS_INDEX", ROOT / "data/background-corpus-index.json")
 
 
+def marks() -> Path:
+    """The manifest selects run-owned marks; standalone tools retain their default."""
+    return path("FUTON6_MARKS", ROOT / "data/showcases/ct-anatomy/golden")
+
+
 def python_argv() -> list[str]:
     """Interpreter plus flags; shell operators are never interpreted here."""
     command = os.environ.get("FUTON6_PYTHON_CMD")

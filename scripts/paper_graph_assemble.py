@@ -12,6 +12,12 @@ graphs (S4) attach as connective edges in a later pass.
   futon6/.venv/bin/python scripts/paper_graph_assemble.py --paper 0704.0502 \
       --iatc data/iatc-argument-graphs/<run> --run-dir data/runs/<id>
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+
 import argparse
 import bisect
 import glob
@@ -20,7 +26,7 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-GOLDEN = os.path.join(ROOT, "data/showcases/ct-anatomy/golden")
+GOLDEN = str(config.marks())
 
 STMT_KINDS = {"env/theorem", "env/proposition", "env/corollary", "env/lemma"}
 DEF_KINDS = {"definiendum", "env/definition", "bind/define"}

@@ -47,8 +47,8 @@ import anatomy_v0_sweep as sweep  # SHARED math-span tokenizer (delimiter parity
 # agreeing what a "line" is); the invariant LOGIC below stays independent.
 
 ROOT = config.ROOT
-GOLDEN_DIR = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
-LOSS_DIR = ROOT / "data" / "loss"
+GOLDEN_DIR = config.marks()
+LOSS_DIR = config.path("FUTON6_LOSS", ROOT / "data" / "loss")
 
 # marks whose extent is a structural scope (must not straddle math, must nest):
 STRUCTURAL_SCOPE = {"let-binder"}          # dp layer

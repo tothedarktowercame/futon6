@@ -17,6 +17,12 @@ Usage:
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+
+
 import argparse
 import bisect
 import json
@@ -26,7 +32,7 @@ from typing import Any
 
 REPO = Path(__file__).resolve().parent.parent
 GH200_DIR = REPO / "data" / "showcases" / "ct-anatomy" / "gh200"
-MARKS_DIR = REPO / "data" / "showcases" / "ct-anatomy" / "golden"
+MARKS_DIR = config.marks()
 PILOT_DIR = REPO / "data" / "iatc-argument-graphs" / "gh200"
 CONTEXT_LINES = 4  # window padding around the selected passage
 SCHEMA = "iatc-candidate/v2-enriched"  # bumped when the candidate payload changes

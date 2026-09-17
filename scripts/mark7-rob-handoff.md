@@ -36,24 +36,11 @@ You already have the SLURM/GPU authority; mark7 should lean on it rather than st
   (`agent_skills/development/superpod/current-job-gpus.sh`, via `$MFUTON_HOME`) to export
   `CUDA_VISIBLE_DEVICES` for the job's GPUs. Source it (or your usual policy) inside the alloc —
   no new SLURM wiring.
-- **8-GPU throughput — two options:**
-  - *Simplest:* serve the model once with **tensor-parallel across the 8 GPUs** and let the
-    stepper batch against the single endpoint (`OPENAI_BASE_URL`). Good enough for ~28k proofs.
-  - *Higher throughput (data-parallel) — self-service, no round-trip:*
-    ```bash
-    .venv/bin/python scripts/mark7_shard_manifest.py --ids holes/math-ct-full.ids.txt --num-shards 8
-    # per-paper GPU stages, one shard per GPU (gpu-policy sets CUDA_VISIBLE_DEVICES per shard):
-    for k in $(seq 0 7); do CUDA_VISIBLE_DEVICES=$k .venv/bin/python scripts/linode_stepper.py \
-        --run --profile superpod --ids holes/shards/mark7-shard-$k.ids.txt \
-        --from S1 --to S1 --no-halt --run-dir data/runs/mark7 --corpus-id math-ct-full & done; wait
-    # then the corpus-wide stages (S2 substrate, S5, S8-S12) ONCE over the full manifest.
-    ```
-    i.e. shard the **per-paper** stages (S1, S3, S4, S6, S7-boxtype) with `--ids`; run the
-    **corpus-wide** stages once after each shard phase merges. Use `handoff-superpod-all.sh`'s
-    Block-1/Block-2 split + the `NUM_SHARDS`/`LLM_GPU_WORKERS`/`SLURM_CPUS_PER_TASK` knobs for the
-    exact sequencing — the GPU-policy and shard pattern are your existing, proven ones.
-
-Pick TP-serve for a first run (less moving parts); go data-parallel if the window is tight.
+- **8-GPU throughput:** serve one tensor-parallel model endpoint and run one
+  stepper against it. Parallel shards must have distinct run IDs, run directories,
+  and frozen corpus lists. Combining their artifacts needs an explicit merge
+  contract; the former example of concurrent shards sharing one directory is
+  unsupported and now refused. Use a single manifest run for acceptance.
 
 ## SMOKE TEST FIRST (5 min — do NOT skip before a 20h window)
 
@@ -97,11 +84,22 @@ FUTON6_EPRINTS=$YOUR_EPRINTS OPENAI_BASE_URL=$URL OPENAI_API_KEY=x RUN_ID=mark7 
 
 ## Send back (BEFORE you release the alloc — we lost mark6's CLeans this way)
 
-`rsync` these to us:
-- `data/iatc-argument-graphs/mark7` (IATC graphs) · `holes/clean-mark7` (CLeans EDN)
-- `data/iatc-paper-graphs/mark7` (object B) · `data/showcases/clean-mark7-demo` (the structure
-  embedding — your CLean index) · `data/expository-scope-graphs/mark7`
-- `data/runs/mark7` (metrics, ledger, harvested lexicons, accretion curves)
+All outputs are under `--run-dir`, described by `run-manifest.json`.
+Package the completed prefix, copy the archive to durable storage, and verify
+that retrieved copy before releasing the allocation:
 
-That's it. The one thing that needs your eyes before committing the window is the **smoke
-test** — everything else is turnkey.
+```bash
+python3 scripts/retrieve_run.py pack --run-dir data/runs/mark7 --output /scratch/mark7.tgz
+# Transfer /scratch/mark7.tgz to durable storage, then on the receiving host:
+python3 scripts/retrieve_run.py verify /durable/mark7.tgz --extract-to /durable/mark7
+```
+
+The default prefix is S12. Use `--through S<n>` only for an explicitly partial
+run whose S1–S<n> stages passed. Missing outputs, checksum mismatches, and replay
+warnings/failures prevent successful verification. See the
+[manifest/resume/retrieval guide](../docs/mark7-run-manifest.md). A partial
+archive is evidence of that prefix, not acceptance of a complete build.
+
+Smoke tests do not establish a fully valid build. Stage 3 rejection/accounting
+repairs and Stage 4 fresh-host acceptance remain pending in TN-PR51-response.md.
+Preserve partial evidence, but do not count it as full-run success.

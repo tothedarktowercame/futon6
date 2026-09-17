@@ -85,14 +85,14 @@ python3 scripts/linode_stepper.py --plan --profile superpod
 ```
 
 The stepper prints the resolved host configuration and appends it to
-`<run-dir>/host-config.jsonl` before entry gates for every `--run` invocation,
-including one that is refused. It records paths, interpreter argv, model and
+`<run-dir>/host-config.jsonl` after manifest identity validation and before entry gates. A conflicting
+identity is refused without appending a configuration record. It records paths, interpreter argv, model and
 endpoint, not the whole environment or API key. URL userinfo/query/fragment are
 excluded from that record. Preflight prints the same configuration.
 
-This is host provenance, not the Stage 2 corpus/artifact manifest. Stage 2 still
-must reconcile `--run-id`/`RUN_ID`, corpus identity, run directories, replay, and
-retrieval. Do not infer fresh-host readiness from successful configuration tests.
+The [run manifest](mark7-run-manifest.md) freezes this configuration alongside
+corpus, code, substrate, model, and output identity. Do not infer fresh-host
+readiness from successful configuration tests.
 
 ## Provisioning boundary
 

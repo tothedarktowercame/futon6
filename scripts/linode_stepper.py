@@ -25,8 +25,10 @@ import os
 import json
 import shlex
 from datetime import datetime, timezone
+from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import futon6_config as config
+import run_manifest as manifest
 try:
     import edn_format as edn
     _EDN_IMPORT_ERROR = None
@@ -66,35 +68,28 @@ def load_stages():
 # --run-dir $RUN so the run produces the slope report. After S8:
 #   {PY} scripts/metric_harness.py --from-records $RUN   (emitted completeness/quality)
 #   {PY} scripts/metric_harness.py                       (accretion slopes, leave-one-out)
-IDS = "holes/math-ct-200.ids.txt"
-RUN = "data/runs/$RUN_ID"           # set per run; stages emit MetricRecords here
-# Every artifact directory is run-scoped, as RUN is. Until 2026-08-08 only RUN
-# was: a "fresh run namespace" got a fresh ledger while CAND/GRAPHS/EXPO/CLEAN/
-# STEPS/RUNG3/DEMO were fixed paths shared with every previous run. That is the
-# mechanism by which 58 graphs from four papers outside the manifest reached this
-# corpus's counts, and it makes the acceptance criterion -- one run whose ledger,
-# output paths and replay harness all refer to the same corpus -- unreachable by
-# construction, because the output paths referred to no corpus in particular.
-#
-# $RUN_ID is interpolated by the shell each stage command runs in, not by Python.
-# Scripts invoked OUTSIDE the stepper keep their own `.../run` defaults, which
-# are now simply "the run whose id is run".
-CAND = "data/iatc-candidates/$RUN_ID"
-GRAPHS = "data/iatc-argument-graphs/$RUN_ID"
-EXPO = "data/expository-scope-graphs/$RUN_ID"
-CLEAN = "holes/clean/$RUN_ID"
-STEPS = "data/cas-select-steps/$RUN_ID"      # S5 rung-3 inputs (H13)
-RUNG3 = "data/rung3-technique/$RUN_ID"
-PAPERG = "data/iatc-paper-graphs"   # S6 output; RETRIEVE collects <run-id> under this
-DEMO = "data/showcases/$RUN_ID"
+IDS = "holes/mark7-16.ids.txt"
+# Shell variables are installed only from the validated run manifest. All
+# artifacts live inside --run-dir, so copying that directory preserves paths.
+RUN = '"$FUTON6_RUN_DIR"'
+CAND = '"$FUTON6_CANDIDATES"'
+GRAPHS = '"$FUTON6_GRAPHS"'
+EXPO = '"$FUTON6_EXPO"'
+CLEAN = '"$FUTON6_CLEAN"'
+STEPS = '"$FUTON6_STEPS"'
+RUNG3 = '"$FUTON6_RUNG3"'
+PAPERG = '"$FUTON6_PAPER_GRAPHS"'
+DEMO = '"$FUTON6_DEMO"'
+MARKS = '"$FUTON6_MARKS"'
+EXPO_CAND = '"$FUTON6_EXPO_CANDIDATES"'
 OPS = {
     "S0": {"boot": True, "note": "<profile.s0> — provision the host + serve the model"},
     "STAGE": {"boot": True, "note": "<profile.stage> — rsync eprints + the ~68MB substrate + futon3 "
               "patterns onto the host. DEREFERENCE symlinks (rsync -L / tar -h): dev uses a storage/ "
               "overlay, so a naive copy ships dangling links and S2/S5 then can't read the substrate."},
-    "S1": {"cmd": "{PY} scripts/emit_marks.py --list {IDS} --run-dir " + RUN + " --run-id $RUN_ID --corpus-id $CORPUS",
-           "gate": "{PY} scripts/check_invariants.py --corpus",
-           "crit": "wf=0 across the batch — read data/loss/dashboard.json at the halt"},
+    "S1": {"cmd": "{PY} scripts/emit_marks.py --list {IDS} --run-dir " + RUN + " --run-id $RUN_ID --corpus-id $CORPUS --out " + MARKS,
+           "gate": f"{{PY}} scripts/check_invariants.py --corpus --golden-dir {MARKS} --loss-dir \"$FUTON6_LOSS\"",
+           "crit": "wf=0 across the batch — read artifacts/loss/dashboard.json under --run-dir at the halt"},
     "S2": {"cmd": "{PY} scripts/warp_substrate_check.py --ids {IDS} && "
            "{PY} scripts/coverage_inline.py --concepts data/warp/concept-usage.json --field paper_concepts",
            "note": "substrate-corpus match is now a measured gate (E-superpod-hardening H1 tier 1); "
@@ -111,8 +106,8 @@ OPS = {
            # frame mismatch is open, and a known-red measurement must not
            # masquerade as a stage failure. Its output is kept, not discarded.
            f"(bb scripts/iatc_anchor_faithfulness.bb {GRAPHS} "
-           f"> data/runs/$RUN_ID/anchor-faithfulness.txt 2>&1 || true) && "
-           f"tail -3 data/runs/$RUN_ID/anchor-faithfulness.txt",
+           f"> {RUN}/anchor-faithfulness.txt 2>&1 || true) && "
+           f"tail -3 {RUN}/anchor-faithfulness.txt",
            "gate": f"bb scripts/iatc_argcheck.bb {GRAPHS} && {{PY}} scripts/substance_gate.py {GRAPHS}",
            "note": "substance gate reads finals only; the run wrapper reuses the enriched "
                    "candidates S3 just extracted (no silent 10-paper re-extract). "
@@ -121,13 +116,12 @@ OPS = {
                    "on first-pass quality) and anchor-faithfulness, which reports "
                    "frame mismatch separately from drift (H38)"},
     "S4": {"cmd": "{PY} scripts/mark3_extract_expository_candidates.py --list {IDS} "
-           "--out data/expository-candidates-run && {PY} scripts/mark3_expository_loop.py "
-           "--candidates data/expository-candidates-run --out data/expository-scope-graphs/run "
+           f"--out {EXPO_CAND} && {{PY}} scripts/mark3_expository_loop.py "
+           f"--candidates {EXPO_CAND} --out {EXPO} "
            "--backend openai --model ${{MODEL:-meta-llama/Llama-3.1-8B-Instruct}} "
-           f"--run-dir {RUN}",
+           f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
            "crit": "expository_argcheck (self-gated in loop)",
-           "note": "ALL regions by default — cap/sample per paper at archive scale "
-                   "(mark7 playbook: ~30 regions/paper so S4 doesn't dominate the window)"},
+           "note": "ALL regions; capped selection awaits Stage 3 deferred-item accounting"},
     # S5 now BUILDS its own rung-3 half. Both producers are deterministic (no model):
     # cas_segment turns gated graphs into proof steps, rung3_technique turns those into
     # technique gap maps, and only then does comprehension have a strategy axis to score.
@@ -142,14 +136,14 @@ OPS = {
            "crit": "G-comprehension: verdict separates weak-extraction from weak-proof"},
     "S6": {"cmd": "while read -r pid; do [ -n \"$pid\" ] || continue; "
            f"{{PY}} scripts/paper_graph_assemble.py --paper $pid --iatc {GRAPHS} "
-           f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS "
+           f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS --out {PAPERG} --marks-dir {MARKS} "
            "|| exit 1; done < {IDS}",
-           "gate": f"test -d {PAPERG}/$RUN_ID && "
-                   f"test $(ls {PAPERG}/$RUN_ID/*.B.json 2>/dev/null | wc -l) -gt 0",
+           "gate": f"test -d {PAPERG} && "
+                   f"test $(ls {PAPERG}/*.B.json 2>/dev/null | wc -l) -gt 0",
            "crit": "B wellformed: every proof attaches to a statement; orphans flagged"},
     "S7": {"cmd": f"{{PY}} scripts/clean_box_typing.py --graphs {GRAPHS} --out {CLEAN} "
            '--endpoint "${{OPENAI_BASE_URL%/}}/chat/completions" --model "$MODEL" '
-           f"--run-dir {RUN} && "
+           f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS && "
            f"{{PY}} scripts/clean_structure_embed.py --clean-dir {CLEAN} --out {DEMO}",
            "gate": f"bb scripts/clean_vocab_gate.bb {CLEAN} && {{PY}} scripts/clean_entropy_gate.py "
            f"--embed {DEMO}/clean-embed.json"},
@@ -184,7 +178,7 @@ OPS = {
     "S10": {"cmd": f"{{PY}} scripts/iatc_lexicon_harvest.py --graphs {GRAPHS} --run-dir {RUN} "
             "--run-id $RUN_ID --corpus-id $CORPUS && "
             f"{{PY}} scripts/iatc_move_reground.py --graphs {GRAPHS} --candidates {CAND} && "
-            "{PY} scripts/expository_reground.py --scopes data/expository-scope-graphs/run "
+            f"{{PY}} scripts/expository_reground.py --scopes {EXPO} "
             "--measure-ids {IDS}",
             "crit": "move-lexicon harvested (relations+warrants+expository moves); reground lift >= 0"},
     # `;` here swallowed a FileNotFoundError on every run, so S11 reported PASS while
@@ -203,24 +197,30 @@ OPS = {
 }
 
 
-def sh(cmd):
-    return subprocess.run(cmd, shell=True, cwd=ROOT, env=config.child_environment()).returncode
+def sh(cmd, log_path=None):
+    if log_path is None:
+        return subprocess.run(cmd, shell=True, cwd=ROOT, env=config.child_environment()).returncode
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    with open(log_path, "a") as log:
+        with subprocess.Popen(cmd, shell=True, cwd=ROOT, env=config.child_environment(),
+                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True) as process:
+            for line in process.stdout:
+                print(line, end="", flush=True)
+                log.write(line)
+                log.flush()
+            return process.wait()
 
 
 # ---- scale profiles (same stage commands; S0 + scale differ — the generalization test) ----
 _STAGE_MANIFEST = ("eprints (the sample's *.tar.gz) + ~68MB substrate "
                    "(data/warp/{concept-index,def-snippets,defined-index,concept-usage}.json, "
-                   "data/concept-encyclopedia-ct.json) + futon3 patterns "
+                   "data/concept-encyclopedia-ct.json, data/background-corpus-index.json) + futon3 patterns "
                    "(futon3/resources/sigils/patterns-index.tsv, futon3/library)")
 # the RUN OUTPUTS to pull back to dev BEFORE teardown (mark6 lost the CLeans + paper-graphs
 # B by pulling only the embed JSON — never delete the box until all of these are on dev).
-_RETRIEVE_MANIFEST = ("data/iatc-argument-graphs/$RUN_ID (IATC graphs), holes/clean-$RUN_ID "
-                      "(CLeans EDN), data/iatc-paper-graphs/$RUN_ID (object B), "
-                      "data/showcases/clean-$RUN_ID-demo (embed+ingest), "
-                      "data/expository-scope-graphs/$RUN_ID, data/runs/$RUN_ID (metrics+ledger)")
-_RETRIEVE_CMD = ("rsync -avz root@$BOX:'futon6/{data/iatc-argument-graphs,holes/clean,"
-                 "data/iatc-paper-graphs,data/showcases,data/expository-scope-graphs,data/runs}/*$RUN_ID*' "
-                 "<dev>/  # verify counts, THEN teardown")
+_RETRIEVE_MANIFEST = "the manifest, frozen corpus, ledger, metrics, logs and artifacts under --run-dir"
+_RETRIEVE_CMD = ("python scripts/retrieve_run.py pack --run-dir <run-dir> --output <archive.tgz>; "
+                 "copy the archive to durable storage, then verify it there before teardown")
 PROFILES = {
     "linode": {
         "banner": "LINODE — small / single StackScript box (the reduced-scale end-to-end)",
@@ -277,7 +277,7 @@ def ledger_has(run_dir, stage, corpus_id):
         return False
     for line in open(p):
         r = json.loads(line)
-        if r.get("stage") == stage and r.get("corpus_id") == corpus_id:
+        if r.get("stage") == stage and r.get("corpus_id") == corpus_id and r.get("gate") == "pass":
             return True
     return False
 
@@ -290,9 +290,9 @@ def completeness_block(stage, deps, run_dir, corpus_id, reuse):
     for d in deps:
         if ledger_has(run_dir, d, corpus_id):
             continue
-        if d in reuse and d != "S2":
+        if d in reuse and d in ("S0", "STAGE"):
             continue
-        extra = " (S2 must be corpus-fresh — NOT --reuse-able)" if d == "S2" else f" (run it, or --reuse {d})"
+        extra = " (S2 must be corpus-fresh — NOT --reuse-able)" if d == "S2" else (f" (run it, or --reuse {d})" if d in ("S0", "STAGE") else " (run it in this manifest)")
         return (f"✗ {stage} BLOCKED — upstream {d} has no passing ledger entry for "
                 f"corpus '{corpus_id}'{extra}")
     return None
@@ -302,6 +302,8 @@ def order(stages, frm, to):
     ids = [s["id"] for s in stages]
     i0 = ids.index(frm) if frm else 0
     i1 = ids.index(to) + 1 if to else len(ids)
+    if i0 >= i1:
+        raise ValueError("--from must precede or equal --to")
     return stages[i0:i1]
 
 
@@ -432,6 +434,14 @@ def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
     "the run finished" and "the run stopped four hours in and nobody knew".
     """
     print(f"=== {PROFILES[profile]['banner']} | corpus={corpus_id} run={run_id} ===")
+    # A successful stage is immutable within this run. Re-executing it could
+    # invalidate already-passing downstream evidence, even if this attempt fails.
+    completed = [s["id"] for s in stages if not OPS.get(s["id"], {}).get("boot")
+                 and ledger_has(run_dir, s["id"], corpus_id)]
+    if completed:
+        print(f"REFUSING TO RERUN completed stages: {', '.join(completed)}; "
+              "resume at the next stage or start a new run directory")
+        return 1
     for s in stages:
         op = OPS.get(s["id"], {})
         print(f"\n=== {s['id']} {s['name']} [{s['compute']}] ===")
@@ -457,12 +467,12 @@ def run(stages, profile, no_halt, run_dir, corpus_id, run_id, reuse):
             return 1
         if op.get("cmd"):
             print(f"$ {op['cmd'].format(PY=PY, IDS=IDS)}")
-            if sh(op["cmd"].format(PY=PY, IDS=IDS)) != 0:
+            if sh(op["cmd"].format(PY=PY, IDS=IDS), os.path.join(run_dir, "logs", s["id"] + ".command.log") if run_dir else None) != 0:
                 print(f"✗ {s['id']} command FAILED — stopping")
                 return 2
         if op.get("gate"):
             print(f"[gate] {op['gate'].format(PY=PY, IDS=IDS)}")
-            if sh(op["gate"].format(PY=PY, IDS=IDS)) != 0:
+            if sh(op["gate"].format(PY=PY, IDS=IDS), os.path.join(run_dir, "logs", s["id"] + ".gate.log") if run_dir else None) != 0:
                 print(f"✗ {s['id']} GATE FAILED ({','.join(s['go'])}) — stopping for fix")
                 return 3
         if op.get("crit"):  # human criterion, judged at the halt — never a shell command
@@ -489,27 +499,14 @@ def main():
     ap.add_argument("--ids", help="override the run's id-list — threads through every per-paper "
                     "stage (S1/S3/S4/S6); e.g. a shard slice for data-parallel")
     ap.add_argument("--run-dir", help="phase-ledger + emit dir (data/runs/<run-id>)")
-    ap.add_argument("--corpus-id", default="adhoc")
-    ap.add_argument("--run-id", default="adhoc")
-    ap.add_argument("--reuse", nargs="*", default=[], help="upstream stages to accept from --reuse (never S2)")
-    ap.add_argument("--mark-done", nargs="*", default=[], help="record boot steps (S0/STAGE) as ledger-passed")
+    ap.add_argument("--corpus-id")
+    ap.add_argument("--run-id")
+    ap.add_argument("--reuse", nargs="+", action="extend", default=[], choices=["S0", "STAGE"], help="completed boot steps; repeated options accumulate; computational stages require ledger evidence")
+    ap.add_argument("--mark-done", nargs="+", choices=["S0", "STAGE"], default=[], help="terminal boot bookkeeping; cannot combine with --run, --plan, --from, --to or --reuse")
     args = ap.parse_args()
-    # Freeze discovery once, then give every child these same resolved values.
-    os.environ.update(config.child_environment())
-    effective = config.effective()
-    print("host configuration: " + json.dumps(effective, sort_keys=True))
-    if args.run:
-        # Keep every invocation, including refused runs. This is host provenance;
-        # the Stage 2 run manifest will enforce corpus and artifact identities.
-        record_dir = args.run_dir or os.path.join("data", "runs", args.run_id)
-        record_dir = os.path.join(ROOT, record_dir)
-        os.makedirs(record_dir, exist_ok=True)
-        with open(os.path.join(record_dir, "host-config.jsonl"), "a") as handle:
-            handle.write(json.dumps({"recorded-at": datetime.now(timezone.utc).isoformat(),
-                                     "run-id": args.run_id, "configuration": effective}) + "\n")
-    if args.ids:
-        global IDS
-        IDS = args.ids
+    if args.mark_done and (args.run or args.plan or args.frm or args.to or args.reuse or args.no_halt):
+        ap.error("--mark-done is terminal boot bookkeeping; invoke execution separately")
+    global IDS
     stages = load_stages()
     # inject the STAGE bootstrap step right after S0 (rsync substrate -> host; not in the contract EDN)
     ids = [s["id"] for s in stages]
@@ -525,22 +522,46 @@ def main():
     if "RETRIEVE" not in [s["id"] for s in stages]:   # pull outputs before teardown (mark6 lesson)
         stages.append({"id": "RETRIEVE", "name": "pull run outputs", "compute": "io",
                        "halt": True, "go": []})
-    if args.mark_done:
-        for sid in args.mark_done:
-            ledger_record(args.run_dir, sid, args.corpus_id, args.run_id)
-            print(f"ledger: {sid} marked done for corpus {args.corpus_id}")
-        return 0
-    if args.plan or not args.run:
+    if not args.run and not args.mark_done:
+        if args.ids:
+            IDS = shlex.quote(args.ids)
+        print("host configuration: " + json.dumps(config.effective(), sort_keys=True))
         plan(stages, args.profile)
-    if args.run:
-        rc = preflight_gate(args.ids or IDS) or conformance_gate(args.ids or IDS)
-        if rc:
-            return rc
-        # Propagate the stage outcome to the process exit status, so a scheduler
-        # (or `&&` in a shell) can tell a stopped run from a finished one.
-        return run(order(stages, args.frm, args.to), args.profile, args.no_halt,
-                   args.run_dir, args.corpus_id, args.run_id, args.reuse)
-    return 0
+        return 0
+    try:
+        run_id = manifest.identity(args.run_id, "RUN_ID", "--run-id")
+        corpus_id = manifest.identity(args.corpus_id, "CORPUS", "--corpus-id")
+        run_dir = Path(args.run_dir or os.path.join("data", "runs", run_id))
+        run_dir = (Path(ROOT) / run_dir).resolve()
+        if args.ids:
+            source_ids = (Path(ROOT) / args.ids).resolve()
+        elif (run_dir / manifest.NAME).exists():
+            source_ids = run_dir / "corpus.ids.txt"
+        else:
+            source_ids = Path(ROOT) / IDS
+        os.environ.update(config.child_environment())
+        with manifest.lock(run_dir):
+            doc = manifest.prepare(run_dir, run_id, corpus_id, source_ids)
+            os.environ.update(manifest.environment(run_dir, doc))
+            IDS = shlex.quote(str(run_dir / doc["ids"]))
+            effective = doc["host-configuration"]
+            print("host configuration: " + json.dumps(effective, sort_keys=True))
+            with (run_dir / "host-config.jsonl").open("a") as handle:
+                handle.write(json.dumps({"recorded-at": datetime.now(timezone.utc).isoformat(),
+                                         "run-id": run_id, "configuration": effective}) + "\n")
+            if args.mark_done:
+                for sid in args.mark_done:
+                    ledger_record(str(run_dir), sid, corpus_id, run_id)
+                    print(f"ledger: {sid} marked done for corpus {corpus_id}")
+                return 0
+            rc = preflight_gate(str(run_dir / doc["ids"])) or conformance_gate(str(run_dir / doc["ids"]))
+            if rc:
+                return rc
+            return run(order(stages, args.frm, args.to), args.profile, args.no_halt,
+                       str(run_dir), corpus_id, run_id, sorted(set(args.reuse)))
+    except (OSError, ValueError) as exc:
+        print(f"REFUSING TO START: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

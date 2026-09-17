@@ -13,7 +13,7 @@
          '[clojure.string :as str])
 
 (def default-opts
-  {:marks-dir "data/showcases/ct-anatomy/golden"
+  {:marks-dir (or (System/getenv "FUTON6_MARKS") "data/showcases/ct-anatomy/golden")
    :k 2
    :tau 0.45
    :floor 0.30

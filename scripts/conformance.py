@@ -228,43 +228,48 @@ def check_exit_status_propagates():
     stopped hours earlier (the original release blocker).
     """
     with tempfile.TemporaryDirectory() as d:
-        p = subprocess.run(
-            [*PY, os.path.join(ROOT, "scripts", "linode_stepper.py"), "--run",
-             "--profile", "superpod", "--from", "S1", "--to", "S1", "--no-halt",
-             "--ids", "holes/__does_not_exist__.txt", "--run-dir", d,
-             "--corpus-id", "conformance", "--run-id", "conformance"],
-            cwd=ROOT, capture_output=True, text=True, timeout=600, env=config.child_environment())
-    ok = p.returncode != 0
+        # Probe a real failing command in an isolated process. A refusal caused
+        # by missing inputs or conflicting run identity is not this test.
+        probe = ("import sys; sys.path.insert(0, 'scripts'); import linode_stepper as s; "
+                 "s.DEPS = {'PROBE': []}; s.OPS['PROBE'] = {'cmd': 'exit 7'}; "
+                 "sys.exit(s.run([{'id': 'PROBE', 'name': 'exit probe', 'compute': 'cpu', "
+                 "'halt': False, 'go': []}], 'superpod', True, sys.argv[1], 'probe', 'probe', []))")
+        p = subprocess.run([*PY, "-c", probe, d], cwd=ROOT, capture_output=True,
+                           text=True, timeout=30, env=config.child_environment())
+    ok = p.returncode == 2 and "command FAILED" in p.stdout
     return rec("stage:exit-status-propagates", ok,
-               f"a failing stage exits {p.returncode}" if ok
-               else "a FAILING stage exited 0 — a scheduler would record success",
-               "without this an unattended window cannot distinguish finished from stopped")
+               f"a failing stage command exits {p.returncode}" if ok
+               else f"expected command-failure status 2, got {p.returncode}: {p.stderr[-200:]}",
+               "the runner must distinguish failed computation from successful completion")
 
 
 def check_run_scoping():
-    """Artifact paths must carry the run id rather than a shared directory.
-
-    Shared artifact directories are how one corpus's graphs land in another
-    corpus's counts (H35). The paths are interpolated by the SHELL each stage
-    runs in, not by Python, so the test is that `$RUN_ID` appears in them — an
-    earlier version of this check compared two `--plan` outputs under different
-    run ids and called them identical, which they are and must be: Python never
-    substitutes the variable.
-    """
+    """Exercise the runner's shell expressions in two manifest-owned directories."""
+    import run_manifest
+    from pathlib import Path
     mod = _stepper()
     if isinstance(mod, Exception):
         return _stepper_unavailable("paths:run-scoped", mod)
-    consts = {"CAND": mod.CAND, "GRAPHS": mod.GRAPHS, "CLEAN": mod.CLEAN,
-              "STEPS": mod.STEPS, "RUNG3": mod.RUNG3, "DEMO": mod.DEMO,
-              "RUN": mod.RUN}
-    if hasattr(mod, "EXPO"):
-        consts["EXPO"] = mod.EXPO
-    unscoped = sorted(k for k, v in consts.items() if "$RUN_ID" not in v)
-    ok = not unscoped
+    consts = (mod.CAND, mod.GRAPHS, mod.CLEAN, mod.STEPS, mod.RUNG3,
+              mod.DEMO, mod.RUN, mod.EXPO, mod.MARKS, mod.EXPO_CAND, mod.PAPERG)
+    with tempfile.TemporaryDirectory() as directory:
+        observed = []
+        for name in ("first run", "second run"):
+            root = Path(directory) / name
+            doc = {"run-id": name.replace(" ", "-"), "corpus-id": "scope-check",
+                   "artifacts": run_manifest.ARTIFACTS}
+            env = {**os.environ, **run_manifest.environment(root, doc)}
+            result = subprocess.run("printf '%s\\n' " + " ".join(consts), shell=True,
+                                    env=env, capture_output=True, text=True)
+            paths = result.stdout.splitlines()
+            if result.returncode or len(paths) != len(consts) or any(
+                not Path(path).is_relative_to(root) for path in paths
+            ) or len(set(paths)) != len(paths):
+                return rec("run:artifact-paths-scoped", False, "runner paths escape or alias within a run")
+            observed.append(set(paths))
+        ok = observed[0].isdisjoint(observed[1])
     return rec("run:artifact-paths-scoped", ok,
-               f"all {len(consts)} artifact roots carry $RUN_ID" if ok
-               else f"shared across runs: {', '.join(unscoped)}",
-               "shared artifact directories put one corpus's outputs in another's counts (H35)")
+               "two manifests expand to disjoint run-owned artifact paths")
 
 
 def main() -> int:

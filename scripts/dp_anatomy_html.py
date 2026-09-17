@@ -30,8 +30,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-GOLD = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
-LOSS = ROOT / "data" / "loss"
+GOLD = config.marks()
+LOSS = config.path("FUTON6_LOSS", ROOT / "data" / "loss")
 DEFAULT_OUT = ROOT / "data" / "showcases" / "ct-anatomy" / "dp-demo"
 
 # kind (or kind-prefix) -> css class. Order matters: first match wins.

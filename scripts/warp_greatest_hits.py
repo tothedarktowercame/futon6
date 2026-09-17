@@ -40,7 +40,7 @@ import numpy as np
 from viz_budget import guard_svg
 
 W = config.ROOT / 'data/warp'
-GOLD = config.ROOT / 'data/showcases/ct-anatomy/golden'
+GOLD = config.marks()
 
 
 def kindcol(k):

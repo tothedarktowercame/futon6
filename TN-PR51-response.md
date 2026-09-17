@@ -15,8 +15,10 @@ Implementation started on branch `work/pr51-response` in
 [Stage 1a authority provisioning](holes/pr51-authority-provisioning.md).
 The subsequent [Stage 1b configuration work](holes/pr51-configuration-validation.md)
 and [operator settings](docs/mark7-host-configuration.md) cover the remaining
-Mark7 host configuration. Stage 0 still lacks Rob's raw run bundle; Stages 2–3
-and fresh-host acceptance remain outstanding. Two existing CAS tests fail on
+Mark7 host configuration. [Stage 2 validation](holes/pr51-stage2-validation.md)
+and [run operations](docs/mark7-run-manifest.md) now cover immutable identity,
+run-contained outputs, resume, replay, and verified retrieval. Stage 0 still
+lacks Rob's raw run bundle; Stage 3 and fresh-host acceptance remain outstanding. Two existing CAS tests fail on
 both master and this branch; their expectations have not been weakened.
 
 ## Decision and intent
