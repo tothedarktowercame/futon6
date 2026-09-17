@@ -48,32 +48,50 @@ def nodes_schema(lo: int, hi: int) -> dict:
 
 
 def steps_schema(lo: int, hi: int, node_count: int) -> dict:
-    """Phase 2: the argument over nodes 1..node_count.
+    """Phase 2: for each node the proof derives, how it is derived.
 
-    Bounding the references to the nodes that now exist is why this is a second
-    call: in one call the count is not yet known, and the first live run had 3 of
-    20 proofs rejected for citing node numbers that were never written.
+    Two things are structural here rather than checked afterwards. The premises of
+    a derivation are drawn from the nodes that now exist, which is why this is a
+    second call (3 of 20 proofs in the first live run cited nodes never written).
+    And each node's premises are drawn from the OTHER nodes, so a node cannot be
+    derived from itself: that self-loop was every remaining rejection in the third
+    and fourth live runs. Multiple derivations of one node stay expressible (5.4%
+    of concluded nodes in the 98-graph corpus have more than one).
     """
     line = {"type": "integer", "minimum": lo, "maximum": hi}
-    node_ref = {"type": "integer", "minimum": 1, "maximum": max(node_count, 1)}
-    step = {"type": "object", "additionalProperties": False,
-            "required": ["relation", "premises", "conclusion", "warrant_kind", "warrant",
-                         "first_line", "last_line"],
-            "properties": {"relation": {"type": "string", "enum": list(RELATIONS)},
-                           "premises": {"type": "array", "minItems": 1, "maxItems": MAX_PREMISES, "items": node_ref},
-                           "conclusion": node_ref,
-                           "warrant_kind": {"type": "string", "enum": list(WARRANT_KINDS)},
-                           "warrant": {"type": "string", "minLength": 1, "maxLength": 240},
-                           "first_line": line, "last_line": line}}
-    return {"type": "object", "additionalProperties": False, "required": ["steps"],
-            "properties": {"steps": {"type": "array", "minItems": 1, "maxItems": MAX_STEPS, "items": step}}}
+    derivations = {}
+    for node in range(1, max(node_count, 1) + 1):
+        others = [n for n in range(1, max(node_count, 1) + 1) if n != node]
+        derivation = {"type": "object", "additionalProperties": False,
+                      "required": ["relation", "premises", "warrant_kind", "warrant",
+                                   "first_line", "last_line"],
+                      "properties": {"relation": {"type": "string", "enum": list(RELATIONS)},
+                                     "premises": {"type": "array", "minItems": 1, "maxItems": MAX_PREMISES,
+                                                  "items": {"type": "integer", "enum": others or [node]}},
+                                     "warrant_kind": {"type": "string", "enum": list(WARRANT_KINDS)},
+                                     "warrant": {"type": "string", "minLength": 1, "maxLength": 240},
+                                     "first_line": line, "last_line": line}}
+        derivations[str(node)] = {"type": "array", "minItems": 1, "maxItems": 3, "items": derivation}
+    return {"type": "object", "additionalProperties": False, "required": ["derivations"],
+            "properties": {"derivations": {"type": "object", "additionalProperties": False,
+                                           "required": [], "properties": derivations}}}
+
+
+def steps_of(doc: dict) -> list[dict]:
+    """The derivations as steps, in node order — the form the rest of the code uses."""
+    steps = []
+    for node, entries in sorted((doc.get("derivations") or {}).items(), key=lambda kv: int(kv[0])):
+        for entry in entries if isinstance(entries, list) else []:
+            if isinstance(entry, dict):
+                steps.append({**entry, "conclusion": int(node)})
+    return steps
 
 
 def problems(doc, lo: int, hi: int) -> list[str]:
     """Contract violations a JSON schema cannot express (empty = acceptable)."""
     found: list[str] = []
     if not isinstance(doc, dict) or not isinstance(doc.get("nodes"), list) or not isinstance(doc.get("steps"), list):
-        return ["output is not an object with nodes and steps (the endpoint did not enforce the schema)"]
+        return ["output is not an object with nodes and derivations (the endpoint did not enforce the schema)"]
     nodes, steps = doc["nodes"], doc["steps"]
     if len(nodes) < 2 or not steps:
         found.append(f"too small: {len(nodes)} node(s), {len(steps)} step(s)")

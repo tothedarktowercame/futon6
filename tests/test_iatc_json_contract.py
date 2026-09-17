@@ -37,11 +37,23 @@ class Contract(unittest.TestCase):
     def test_schemas_bound_lines_vocabularies_and_node_references(self):
         line = iatc_json.nodes_schema(10, 14)["properties"]["nodes"]["items"]["properties"]["first_line"]
         self.assertEqual((line["minimum"], line["maximum"]), (10, 14))
-        step = iatc_json.steps_schema(10, 14, 3)["properties"]["steps"]["items"]["properties"]
-        self.assertIn("iff", step["relation"]["enum"])
-        # the second call knows how many nodes exist, so a step cannot cite node 4 of 3
-        self.assertEqual((step["conclusion"]["minimum"], step["conclusion"]["maximum"]), (1, 3))
-        self.assertEqual(step["premises"]["items"]["maximum"], 3)
+        derivations = iatc_json.steps_schema(10, 14, 3)["properties"]["derivations"]["properties"]
+        entry = derivations["2"]["items"]["properties"]
+        self.assertIn("iff", entry["relation"]["enum"])
+        # the second call knows which nodes exist, so a derivation cannot cite node 4 of 3,
+        # and node 2's premises exclude node 2: a node cannot be derived from itself
+        self.assertEqual(sorted(derivations), ["1", "2", "3"])
+        self.assertEqual(entry["premises"]["items"]["enum"], [1, 3])
+
+    def test_derivations_become_steps_in_node_order(self):
+        doc = {"derivations": {"3": [{"relation": "implies", "premises": [2], "warrant_kind": "stated",
+                                      "warrant": "w", "first_line": 10, "last_line": 11}],
+                               "2": [{"relation": "implies", "premises": [1], "warrant_kind": "stated",
+                                      "warrant": "w", "first_line": 10, "last_line": 11},
+                                     {"relation": "by-cases", "premises": [1], "warrant_kind": "stated",
+                                      "warrant": "w2", "first_line": 10, "last_line": 11}]}}
+        steps = iatc_json.steps_of(doc)
+        self.assertEqual([(s["conclusion"], s["premises"]) for s in steps], [(2, [1]), (2, [1]), (3, [2])])
 
     def test_code_checks_what_the_schema_cannot(self):
         good = {"nodes": [node(text="A"), node(text="B"), node(text="C")],
@@ -56,7 +68,6 @@ class Contract(unittest.TestCase):
         claim_first = {"nodes": [node(), node(), node()], "steps": [step([2, 3], 1), step([3], 2)]}
         self.assertEqual(iatc_json.problems(claim_first, 10, 14), [])
         for bad, text in (({"nodes": [node(), node()], "steps": [step([5], 2)]}, "refers to node"),
-                          ({"nodes": [node(), node()], "steps": [step([2], 2)]}, "both premise and conclusion"),
                           ({"nodes": [node(lo=12, hi=11), node()], "steps": [step([1], 2)]}, "ordered range"),
                           ({"nodes": [node(), node()], "steps": [step([1], 2, lo=9)]}, "inside 10-14"),
                           ("not json object", "not an object")):
@@ -154,11 +165,15 @@ class Loop(unittest.TestCase):
         """The two phase answers for one proof, in call order."""
         return [json.dumps({"nodes": [node(text=f"{text} hypothesis", lo=12, hi=12),
                                       node(text=f"{text} result", lo=14, hi=14)]}),
-                json.dumps({"steps": [step([1], 2, warrant=f"{text} argument", lo=12, hi=14)]})]
+                json.dumps({"derivations": {"2": [{"relation": "implies", "premises": [1],
+                                                   "warrant_kind": "stated", "warrant": f"{text} argument",
+                                                   "first_line": 12, "last_line": 14}]}})]
 
     def test_rejected_errored_and_accepted_items_then_retry_only_the_failures(self):
+        d = lambda prem: [{"relation": "implies", "premises": prem, "warrant_kind": "stated",
+                           "warrant": "w", "first_line": 12, "last_line": 14}]
         cycle = [json.dumps({"nodes": [node(text="A"), node(text="B")]}),
-                 json.dumps({"steps": [step([1], 2), step([2], 1)]})]
+                 json.dumps({"derivations": {"2": d([1]), "1": d([2])}})]
         rc, items = self.invoke("S3-a001", {"1111.0001__p0": self.doc("first"), "1111.0001__p1": cycle,
                                             "1111.0001__p2": loop.ModelCallError(0, "output truncated at max_tokens=8192")})
         self.assertEqual(rc, 1)

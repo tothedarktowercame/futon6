@@ -52,21 +52,24 @@ List them in the order the proof introduces them, hypotheses first and the final
 conclusion last. Include every intermediate claim the argument passes through; the
 number of nodes follows the proof."""
 
-STEPS_TASK = """Now give the argument over the nodes you listed, as JSON with a list
-"steps", in the order the proof argues.
+STEPS_TASK = """Now give the argument over the nodes you listed, as JSON with an
+object "derivations".
 
-Each step derives one "conclusion" node from its "premises" (node numbers from the
-list above). "relation" says how. The warrant says why: "stated" when the proof
-gives the reason, "citation" when it cites one, or "missing" when the proof skips it
-— then "warrant" names the specific elided fact (e.g. "dimension shift through a
-short exact sequence"), never a generic word. "first_line"/"last_line" locate the step.
+Its keys are the numbers of the nodes the proof DERIVES; a node the proof simply
+assumes, introduces or cites has no entry. Each key's value is a list holding that
+node's derivation — two entries only if the proof really derives it twice, by
+separate routes.
 
-Rules checked by code; an output that breaks one is rejected:
-- The steps must not go in a circle: if node A is used to derive node B, then B
-  (directly or through other steps) must not be used to derive A. Prove an
-  equivalence as ONE step with relation "iff". You may list the steps in the order
-  the proof is written, including stating a conclusion before justifying it.
-- A step never concludes one of its own premises.
+A derivation gives the "premises" it follows from (numbers of OTHER nodes),
+"relation" for how, and the warrant for why: "stated" when the proof gives the
+reason, "citation" when it cites one, or "missing" when the proof skips it — then
+"warrant" names the specific elided fact (e.g. "dimension shift through a short
+exact sequence"), never a generic word. "first_line"/"last_line" locate it.
+
+Checked by code; an output that breaks this is rejected:
+- The derivations must not go in a circle: if node A is used to derive node B, then
+  B must not, directly or through other nodes, be used to derive A. Write an
+  equivalence as ONE derivation with relation "iff".
 - Every line lies in the given source."""
 
 
@@ -127,9 +130,10 @@ def call_stub(prompt: str, cand: dict, schema: dict) -> str:
                                       "first_line": lo, "last_line": lo},
                                      {"kind": "claim", "text": "conclusion of the statement", "citation": "",
                                       "first_line": hi, "last_line": hi}]})
-    return json.dumps({"steps": [{"relation": "implies", "premises": [1], "conclusion": 2,
-                                  "warrant_kind": "missing", "warrant": f"argument of {cand['proof-id']}",
-                                  "first_line": lo, "last_line": hi}]})
+    return json.dumps({"derivations": {"2": [{"relation": "implies", "premises": [1],
+                                              "warrant_kind": "missing",
+                                              "warrant": f"argument of {cand['proof-id']}",
+                                              "first_line": lo, "last_line": hi}]}})
 
 
 def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> str:
@@ -242,6 +246,8 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             record["result"] = why
             return "errored", why, record
         doc.update(part)
+        if phase == "steps":
+            doc["steps"] = iatc_json.steps_of(doc)
         if phase == "nodes" and len(doc.get("nodes") or []) < 2:
             why = f"contract: {len(doc.get('nodes') or [])} node(s); a proof has at least two"
             record["result"] = why
