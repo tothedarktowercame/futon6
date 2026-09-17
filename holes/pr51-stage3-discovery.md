@@ -1,8 +1,9 @@
 # PR #51 Stage 3 discovery: accounting gaps and defect causes
 
 Date: 2026-09-17. Branch `work/pr51-response` at `eeac70a`. Author: claude-9,
-taking over from codex-14. This note covers discovery only. Nothing in it has been
-implemented yet. Local evidence comes from Joe's historical `mark7z` artifacts in
+taking over from codex-14. Written as discovery before implementation; §6 records
+the decisions taken and corrections found while implementing (see
+[Stage 3 validation](pr51-stage3-validation.md)). Local evidence comes from Joe's historical `mark7z` artifacts in
 `/home/joe/code/futon6`. Rob's raw bundle is still unavailable, so any link to his
 reported counts is a hypothesis until his artifacts are compared.
 
@@ -38,8 +39,8 @@ papers is unconfirmed.
   with `\prf … \frp`. `_PROOF_MACRO_PAIRS` knows `prf/eprf`, not `prf/frp`, and
   there is no statement-macro detector, so the paper has zero statements. All of
   its real proofs are missing from the anatomy, not just unattached.
-- S3 `--all-proofs` consumes the same marks. The bogus regions also become IATC
-  candidates, which is a plausible upstream source of bad anchors and graphs in S3.
+- S3 `--all-proofs` does **not** use these proof regions: it groups `proof-move`
+  marks (see §6). The false regions affect S6 and the in-proof reasoning layer.
 
 The fix belongs in S1 detection, with these two papers as fixtures. The S6
 well-formedness rule stays as it is.
@@ -131,21 +132,44 @@ and standalone `--run-id/--corpus-id` defaults of `adhoc` should refuse when
 7. **3g Replay.** Make the replacements in §3.
 8. **3h Biconditionals.** Depends on the representation decision below.
 
-## 5. Decisions needed from Joe
+## 5. Questions raised at discovery
 
-- **Retry in place.** May a failed S3/S4/S7 be re-invoked in the same run
-  directory, keeping accepted items and resampling only rejected ones, with the
-  full attempt history preserved? Or must any rejection start a fresh run?
-  Sampling is non-deterministic (temperature 0.2/0.5), so this determines what
-  "zero final rejections" means.
-- **Biconditional representation.** Should the extraction schema gain an
-  explicit equivalence edge (for example `:relation :iff` with a two-directional
-  conclusion) that the CLean renders as an equivalence box, so G7 stays strict?
-  Or is an iff flattened into a cycle an extraction error to reject and retry?
-- **S6 and S4.** Should the paper graph attach expository scopes now, as the DAG
-  contract says it must, or is that edge removed from the contract for this
-  acceptance scope?
-- **Cap selection rule.** Proposed: per paper, in source order, stratified
-  round-robin by region type up to N; the rest deferred.
-- **Dispatch.** CLAUDE.md defaults to belling Codex for each slice, with claude-9
-  reviewing. Confirm, or say "no bells or whistles".
+Retry in place; biconditional representation; whether S6 consumes S4; the cap
+selection rule; dispatch. Joe asked for the work to proceed without a round of
+questions, so §6 records the choices made and why.
+
+## 6. Decisions taken and corrections (implementation, 2026-09-17)
+
+- **Retry in place: allowed, with history.** The TN requires recording
+  "intermediate rejected attempts and repairs honestly even if the final build is
+  fully valid" and that resume "preserve attempt history". A failed stage is
+  re-invoked as a new invocation; accepted model outputs are kept only with
+  byte-matching acceptance provenance; everything else is resampled. Validity is
+  judged on each stage's final ledgered invocation, with earlier attempts retained.
+- **Biconditionals: G7 stays strict; the cycle is rejected at S3.** The IATC schema
+  already has `:relation :iff`. `iatc_argcheck` now rejects premise→conclusion
+  cycles with a message telling the model to use one `:iff` edge, and the prompt
+  states the rule, so the loop can retry. On the historical 98-graph run this gate
+  flags exactly the four graphs S7 rejected with G7.
+- **S6 consumes S4**, as the DAG contract requires: accepted expository scopes are
+  listed in each paper object, and S3 graphs attach to the proof region their
+  passage overlaps (exact paper-id parsing).
+- **Cap rule: even spacing in source order** (`even-spacing-in-source-order/v1`).
+  This keeps the PR's intent (sample the whole paper, not its opening) but orders
+  by source position rather than filename.
+- **Dispatch:** implemented directly by claude-9.
+
+Corrections to §1–§3:
+- Infer edges without `:conclusion` occur in **12** of the 98 historical graphs, not
+  2; S7 had been dropping all of them silently. The S3 gate now rejects them.
+- Parsed reference check on the 98 graphs: **2/956** unresolved references, both
+  inline-map premises (the regex saw 683 references because it missed nodes and
+  edges in other key orders). Parsed anchor check: 1 anchor outside its passage and
+  10 graphs without a proof passage `:source`. The loop now stamps the passage from
+  the candidate window, drops the ±3 line slack, and the gate rejects inline-map
+  premises.
+- S3 "proofs" are groups of `proof-move` marks, not S1 proof environments. Only
+  **42/98** historical graphs' passages overlap any S1 proof region (0705.0102, for
+  example, has "proof" windows in expository prose around author `\df…\edf`
+  macros). S6 now lists these as `unattached_iatc` but does not fail on them; see
+  outstanding work in the validation note.

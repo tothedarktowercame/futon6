@@ -17,9 +17,14 @@ The subsequent [Stage 1b configuration work](holes/pr51-configuration-validation
 and [operator settings](docs/mark7-host-configuration.md) cover the remaining
 Mark7 host configuration. [Stage 2 validation](holes/pr51-stage2-validation.md)
 and [run operations](docs/mark7-run-manifest.md) now cover immutable identity,
-run-contained outputs, resume, replay, and verified retrieval. Stage 0 still
-lacks Rob's raw run bundle; Stage 3 and fresh-host acceptance remain outstanding. Two existing CAS tests fail on
-both master and this branch; their expectations have not been weakened.
+run-contained outputs, resume, replay, and verified retrieval.
+[Stage 3 discovery](holes/pr51-stage3-discovery.md) and
+[Stage 3 validation](holes/pr51-stage3-validation.md) cover per-item accounting,
+retry history, the declared S4 cap, replay acceptance, and the causes of the
+malformed paper graphs, dangling references and G7 cycles. Stage 0 still lacks
+Rob's raw run bundle; fresh-host acceptance (Stage 4) remains outstanding.
+Tests that already failed before this work still fail; their expectations have
+not been weakened.
 
 ## Decision and intent
 

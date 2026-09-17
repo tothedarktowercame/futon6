@@ -71,8 +71,11 @@ lexicon+reground · S11 structural+whole-paper · S12 accretion-sweep · RETRIEV
 Process **chronologically**; rely on vLLM batch concurrency across 8 GPUs. Rough shares:
 
 - **S3 IATC**, **S4 expository**, and **S7 box-typing** dominate cost. S4 is
-  currently uncapped; one paper had 466 regions. Capped selection must wait for
-  Stage 3 deferred-item accounting; do not silently drop candidates.
+  uncapped by default; one paper had 466 regions. Setting
+  `FUTON6_EXPOSITORY_CAP_PER_PAPER=N` before the run pins a per-paper cap in the
+  manifest: regions are chosen at even spacing in source order, and every
+  unselected region is accounted as `deferred`. A capped run qualifies only that
+  declared scope; deferred regions are not accepted work.
 - **Budget the proof count from measurement, not the old ~6/paper guess** (§7 H4):
   the top-100 most-cited yielded 1,525 all-proofs candidates from 91 contributing
   papers (~15.3/contributing paper). If the head rate held corpus-wide that's

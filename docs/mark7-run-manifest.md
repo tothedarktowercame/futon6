@@ -26,9 +26,10 @@ corpus for a new run is `holes/mark7-16.ids.txt`; pass `--ids` for any other sco
 The runner freezes the exact corpus bytes as `corpus.ids.txt`, rejects empty or
 duplicate IDs, and records its hash, paper list, code fingerprint, substrate
 hashes, effective configuration, model name/revision, and selection policy.
-All proofs and uncapped expository regions are the current selection. A nonzero
-`FUTON6_EXPOSITORY_CAP_PER_PAPER` is refused until Stage 3 implements explicit
-selection and deferred-item accounting. `FUTON6_MODEL_REVISION` records an
+All proofs are selected. Expository regions are uncapped unless
+`FUTON6_EXPOSITORY_CAP_PER_PAPER=N` is set when the run is created; the manifest
+then pins the cap and the algorithm `even-spacing-in-source-order/v1`, and resume
+refuses a different cap. `FUTON6_MODEL_REVISION` records an
 operator-supplied model revision/hash; if absent, the model name alone does not
 prove immutable weights. The runner does not hash the eprint archive collection.
 
@@ -51,8 +52,44 @@ Preflight and serving conformance remain mandatory on every execution. Their
 success is not full-build acceptance. The operator still chooses the resume
 stage after inspecting the halt; the runner does not automatically skip or
 repair stages. Successfully ledgered stages cannot be rerun in place: resume at the next
-stage or start a new run directory. Stage 3 must address richer attempt and
-partial-failure accounting.
+stage or start a new run directory. A stage that failed may be re-invoked with
+`--from` that stage; see the next section.
+
+## Item accounting, attempts, and retry
+
+Every execution of a computational stage appends one row to
+`stage-attempts.jsonl`, whatever its outcome: invocation id (`S3-a002`), command
+and gate exit status, per-producer item counts, and the reasons it did not pass.
+S3, S4, S6 and S7 producers also write per-item accounting to
+`accounting/<stage>/<invocation>/<stage>.<producer>.json`, checkpointed after each
+item:
+
+| Stage | Producers and expected items |
+|---|---|
+| S3 | `extract`: frozen corpus papers → `loop`: proof candidates extracted |
+| S4 | `extract`: frozen corpus papers → `select`: carved regions → `loop`: selected regions |
+| S6 | `assemble`: frozen corpus papers |
+| S7 | `typing`: graphs accepted by the ledgered S3 invocation |
+
+Each item is `accepted`, `rejected` (the output failed a gate), `errored` (no
+output could be judged, for example missing marks or an unreachable endpoint), or
+`deferred` (S4 regions outside a declared cap). Rejected, errored and deferred
+items carry a reason; model items carry their attempt files and results. A stage
+passes only when its command and gate succeed and every expected item is
+accounted for exactly once, with every item accepted (deferred is allowed only for
+S4 selection under a pinned cap) and every accepted artifact present. A paper with
+no proof region, or no expository region, is recorded as an accepted explicit zero.
+
+A failed stage leaves its artifacts, accounting and attempt row for inspection and
+writes no ledger row, so downstream stages stay blocked. Re-invoking it creates a
+new invocation. The S3 and S4 model loops keep a final accepted by an earlier
+invocation only when `.accepted/<item>.json` names that file with matching
+SHA-256, and resample everything else; attempt files live under
+`.attempts/<run-id>/<invocation>/`, so no history is overwritten. A final with no
+matching provenance is recorded as `errored`. S6 and S7 consume only S3/S4
+finals with verified provenance. A fully valid build is one where every stage's
+**final** ledgered invocation has zero rejected and errored items; the earlier
+failed attempts remain part of the evidence.
 
 `--reuse S0 STAGE` acknowledges completed boot steps only; repeated `--reuse`
 options accumulate. Every computational dependency needs a passing ledger row
@@ -67,7 +104,8 @@ combine with execution/planning/range/reuse flags, and cannot mark S1–S12 done
 |---|---|
 | `run-manifest.json`, `corpus.ids.txt` | Frozen identity and corpus |
 | `host-config.jsonl` | Accepted invocation configuration, before entry gates |
-| `phase-ledger.jsonl`, `metrics.jsonl` | Passing stages and emitted measurements |
+| `phase-ledger.jsonl`, `metrics.jsonl` | Passing stages (with their invocation) and emitted measurements |
+| `stage-attempts.jsonl`, `accounting/` | Every stage attempt; per-item accounting per invocation |
 | `logs/S<n>.command.log`, `logs/S<n>.gate.log` | Appended command/gate output; command exit status preserved |
 | `artifacts/marks`, `artifacts/loss` | S1 marks and invariant dashboard |
 | `artifacts/candidates`, `artifacts/graphs` | S3 candidates, graphs, retry report |
@@ -109,7 +147,10 @@ missing required outputs, and replay failures prevent success. Existing archives
 and extraction destinations are not overwritten. Verify the transferred copy
 before teardown; verifying only the source archive is insufficient.
 
-These checks establish identity, transport integrity, and the existing replay
-invariants. Stage 3 still has to close semantic rejection/error accounting and
-existing replay tolerances; neither a prefix fixture nor an archive report proves
-a rejection-free S1–S12 build. Fresh-host acceptance remains Stage 4.
+Replay re-verifies each ledgered item-level stage from its accounting
+(`A1-item-accounting`), requires every S3-accepted graph to be a typed CLean
+(`C2`), compares parsed paper ids with accounted papers (`I3`), fails on `adhoc`
+or stageless metric records (`I2`), and parses graphs for unresolved
+premise/conclusion references and anchors outside the passage with zero
+tolerance (`S2`, `S3`). A prefix fixture or archive report still does not prove a
+rejection-free S1–S12 build on real data; fresh-host acceptance remains Stage 4.
