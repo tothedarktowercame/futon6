@@ -61,10 +61,16 @@ node's derivation — two entries only if the proof really derives it twice, by
 separate routes.
 
 A derivation gives the "premises" it follows from (numbers of OTHER nodes),
-"relation" for how, and the warrant for why: "stated" when the proof gives the
-reason, "citation" when it cites one, or "missing" when the proof skips it — then
-"warrant" names the specific elided fact (e.g. "dimension shift through a short
-exact sequence"), never a generic word. "first_line"/"last_line" locate it.
+"relation" for how, and the warrant for why. Choose the warrant kind by what the
+TEXT does, not by what you can supply:
+- "stated" only when the proof itself gives the reason, in the text;
+- "citation" when it points to a result (give it in "warrant");
+- "missing" when the text asserts the step without saying why — including
+  "clearly", "it is easy to see", "a routine computation", or nothing at all.
+  Then "warrant" names the specific fact the proof elided (e.g. "dimension shift
+  through a short exact sequence"), never a generic word.
+Published proofs elide steps constantly; recording that honestly is the point of
+this layer. "first_line"/"last_line" locate the derivation.
 
 Checked by code; an output that breaks this is rejected:
 - The derivations must not go in a circle: if node A is used to derive node B, then

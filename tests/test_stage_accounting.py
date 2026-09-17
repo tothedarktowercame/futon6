@@ -399,3 +399,20 @@ class InferenceGraphGate(unittest.TestCase):
                             ":conclusion :b :warrant {:kind :claim :text \"w\"} :source {:lines [1 2]}}")
         self.assertEqual(rc, 1, out)
         self.assertIn("inline maps", out)
+
+
+class WarrantVocabularyArtifact(unittest.TestCase):
+    def test_no_holes_still_writes_an_explicit_empty_vocabulary(self):
+        with tempfile.TemporaryDirectory() as d:
+            graphs = Path(d) / "graphs"
+            graphs.mkdir()
+            (graphs / "1111.0001__p0.edn").write_text(
+                '{:paper/id "1111.0001" :nodes [{:id :n1 :kind :claim :text "A"}] '
+                ':edges [{:id :e1 :kind :infer :premise [:n1] :conclusion :n1 '
+                ':warrant {:kind :claim :text "stated in the proof"}}] :holes []}')
+            out = Path(d) / "hole-vocabulary.json"
+            run = subprocess.run([sys.executable, str(ROOT / "scripts/warrant_normalize.py"),
+                                  "--graphs", str(graphs), "--out", str(out)], capture_output=True, text=True)
+            self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+            self.assertTrue(out.is_file(), "S9 passed without writing its artifact; replay fails two stages later")
+            self.assertEqual(json.loads(out.read_text())["wanted"], 0)
