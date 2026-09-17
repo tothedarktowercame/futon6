@@ -127,3 +127,31 @@ marks for `0710.2254` are absent from this machine.
 - Rob's raw bundle is still unavailable, so his G7 rejection and his 2 malformed
   graphs are not confirmed to be the same cases. No push, merge, Linode, or
   message to Rob or GitHub.
+
+## S3 rebuilt on identified proofs (after review with Joe)
+
+Joe's direction: S3 "proofs" must be proofs S1 identified, and the model should not
+write a data format that then needs repair, retries and extra gates.
+
+- `85c6faf`: S1 now detects French and German proof headings, qualified headings
+  ("Proof of Theorem 2:"), macro-defined headings and end marks, and statements given
+  as markup headings. Proofs up to 30000 characters are detected; the old 6000-character
+  limit dropped longer ones silently. Of the six corpus papers that had no S1 proofs,
+  `math/0409598` now has 18 and `math/9810017` has 1. The other four contain no formal
+  proofs. All 16 paper objects are well-formed. The corpus now yields 306+ proof
+  candidates, each paired with a statement.
+- `a6fcd08`:
+  - one S3 candidate per outermost S1 proof, shown with its statement;
+  - the model returns JSON under a strict schema (`iatc_json`) at temperature 0, one call per proof per invocation;
+  - code checks references, that each conclusion is a claim and not its own premise, and step order (which rules out cycles), then writes the EDN graph;
+  - a violation rejects the item with its reasons; truncated or non-JSON responses are errored;
+  - no escape repair, `iatc_repair.bb` call or retry loop remains in S3;
+  - the prompt rules and ±3-line changes from `bb91fc9`/`c95d9ed` are superseded. The `iatc_argcheck` cycle, shape and inline-premise gates remain as independent checks that code-written graphs satisfy;
+  - `mark4_iatc_concurrent.py`, built on the removed EDN functions, is retired.
+- Tests: `tests/test_iatc_json_contract.py` (7). A stub run over 15 real proof
+  candidates writes graphs that pass `iatc_argcheck`. Full suite: 36 failed, 896 passed;
+  every failure also fails on `eeac70a`.
+
+S4 (`mark3_expository_loop.py`: freeform EDN, escape repair, three attempts) and S7
+(`clean_box_typing.py`: unconstrained JSON found by regex, re-prompted when invalid)
+still use the pattern S3 has dropped.
