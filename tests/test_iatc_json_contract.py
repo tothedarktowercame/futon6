@@ -48,9 +48,13 @@ class Contract(unittest.TestCase):
                 "steps": [step([1], 2), step([2], 3)]}
         self.assertEqual(iatc_json.problems(good, 10, 14), [])
         cycle = {"nodes": [node(text="A"), node(text="B")], "steps": [step([1], 2), step([2], 1)]}
-        self.assertTrue(any("EARLIER" in p or "only concluded by step" in p for p in iatc_json.problems(cycle, 10, 14)))
-        out_of_order = {"nodes": [node(), node(), node()], "steps": [step([2], 3), step([1], 2)]}
-        self.assertTrue(iatc_json.problems(out_of_order, 10, 14))
+        self.assertTrue(any("assumes what it proves" in p for p in iatc_json.problems(cycle, 10, 14)))
+        longer = {"nodes": [node(), node(), node()], "steps": [step([1], 2), step([2], 3), step([3], 1)]}
+        self.assertTrue(any("node 1 -> node 2 -> node 3 -> node 1" in p for p in iatc_json.problems(longer, 10, 14)))
+        # a proof may state its conclusion before the steps that justify it: the
+        # requirement is acyclicity, not the order the steps are listed in
+        claim_first = {"nodes": [node(), node(), node()], "steps": [step([2, 3], 1), step([3], 2)]}
+        self.assertEqual(iatc_json.problems(claim_first, 10, 14), [])
         for bad, text in (({"nodes": [node(), node()], "steps": [step([5], 2)]}, "refers to node"),
                           ({"nodes": [node(), node()], "steps": [step([2], 2)]}, "both premise and conclusion"),
                           ({"nodes": [node(lo=12, hi=11), node()], "steps": [step([1], 2)]}, "ordered range"),

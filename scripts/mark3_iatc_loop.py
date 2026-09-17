@@ -62,9 +62,10 @@ gives the reason, "citation" when it cites one, or "missing" when the proof skip
 short exact sequence"), never a generic word. "first_line"/"last_line" locate the step.
 
 Rules checked by code; an output that breaks one is rejected:
-- A step's premises may only use nodes that no step concludes, or that an EARLIER
-  step concludes. Never let two steps feed each other: prove an equivalence as ONE
-  step with relation "iff".
+- The steps must not go in a circle: if node A is used to derive node B, then B
+  (directly or through other steps) must not be used to derive A. Prove an
+  equivalence as ONE step with relation "iff". You may list the steps in the order
+  the proof is written, including stating a conclusion before justifying it.
 - A step never concludes one of its own premises.
 - Every line lies in the given source."""
 

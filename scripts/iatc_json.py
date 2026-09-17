@@ -84,10 +84,7 @@ def problems(doc, lo: int, hi: int) -> list[str]:
         a, b = n.get("first_line"), n.get("last_line")
         if not (isinstance(a, int) and isinstance(b, int) and lo <= a <= b <= hi):
             found.append(f"node {i}: lines {a}-{b} not an ordered range inside {lo}-{hi}")
-    concluded_at: dict[int, int] = {}
-    for s_index, s in enumerate(steps):
-        if isinstance(s, dict) and isinstance(s.get("conclusion"), int):
-            concluded_at.setdefault(s["conclusion"], s_index)
+    derives: dict[int, set] = {}      # premise node -> nodes derived from it
     for s_index, s in enumerate(steps):
         label = f"step {s_index + 1}"
         if not isinstance(s, dict) or s.get("relation") not in RELATIONS or s.get("warrant_kind") not in WARRANT_KINDS:
@@ -106,15 +103,44 @@ def problems(doc, lo: int, hi: int) -> list[str]:
         # the model records as a ref carrying that label (`Theorem~\ref{StrongYone}`).
         # Both were rejected by earlier versions of this contract; neither is a defect.
         for p in premises:
-            if p in concluded_at and concluded_at[p] >= s_index:
-                found.append(f"{label}: premise node {p} is only concluded by step {concluded_at[p] + 1}; "
-                             "steps must follow the order of the argument (an equivalence is one iff step)")
+            derives.setdefault(p, set()).add(conclusion)
         a, b = s.get("first_line"), s.get("last_line")
         if not (isinstance(a, int) and isinstance(b, int) and lo <= a <= b <= hi):
             found.append(f"{label}: lines {a}-{b} not an ordered range inside {lo}-{hi}")
         if not str(s.get("warrant", "")).strip() or (s["warrant_kind"] == "missing" and not slug(s["warrant"])):
             found.append(f"{label}: empty warrant")
+    cycle = find_cycle(derives)
+    if cycle:
+        found.append("the steps derive " + " -> ".join(f"node {n}" for n in cycle)
+                     + ", so the argument assumes what it proves; an equivalence is one iff step")
     return found
+
+
+def find_cycle(derives: dict[int, set]) -> list:
+    """A cycle in premise -> conclusion, or [].
+
+    Acyclicity is the real requirement, not the order the steps are listed in: a
+    proof may state its conclusion and justify it afterwards, which an earlier
+    version of this contract rejected (0708.1921__p7 in the second live run).
+    """
+    state: dict[int, int] = {}
+    def walk(node, path):
+        state[node] = 1
+        for nxt in sorted(derives.get(node, ())):
+            if state.get(nxt) == 1:
+                return path + [node, nxt]
+            if state.get(nxt, 0) == 0:
+                found_here = walk(nxt, path + [node])
+                if found_here:
+                    return found_here
+        state[node] = 2
+        return []
+    for start in sorted(derives):
+        if state.get(start, 0) == 0:
+            cycle = walk(start, [])
+            if cycle:
+                return cycle
+    return []
 
 
 def slug(text: str, limit: int = 60) -> str:
