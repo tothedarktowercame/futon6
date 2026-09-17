@@ -450,3 +450,28 @@ class InferenceGraphGate(unittest.TestCase):
         cand = {"paper-id": "9999.0004", "window-lines": [10, 20]}
         self.assertTrue(iatc_loop.candidate_check('{:source {:lines [10 20]}}', cand)[0])
         self.assertFalse(iatc_loop.candidate_check('{:source {:lines [21 21]}}', cand)[0])
+
+
+class AnatomyDetectionHeadings(unittest.TestCase):
+    """Proofs and statements written without environments (math/0409598, math/9810017)."""
+
+    def setUp(self):
+        import dp_paper_view
+        self.dpv = dp_paper_view
+
+    def test_french_and_qualified_headings_start_proofs(self):
+        text = ("\\begin{document}\n\\textit{Preuve du lemme:}\nPar construction le foncteur est exact.\n\\hfill $\\Box$\n\n"
+                "\\noindent\\textbf{Proof of Theorem \\ref{t}:} Conditions (0) and (1) hold here.\n$\\Box$\n"
+                "Nous pouvons terminer la preuve de la proposition.\n")
+        self.assertEqual(len(self.dpv.detect_text_proofs(text)), 2)
+
+    def test_macro_defined_heading_and_end_mark(self):
+        text = ("\\newcommand{\\pf}{\\textbf{Proof}}\n\\newcommand{\\done}{\\hfill\\ensuremath{\\Box}}\n"
+                "\\begin{document}\n{\\raggedright\n\\textbf{Theorem}\n\\textit{Every bicategory is biequivalent to a 2-category.}}\n"
+                "\\vspace{1ex}\n\\pf\\ Let B be a bicategory and Y the Yoneda map into presheaves.\n\\done\n")
+        proofs = self.dpv.detect_text_proofs(text)
+        self.assertEqual(len(proofs), 1)
+        self.assertTrue(text[proofs[0]["start"]:proofs[0]["end"]].rstrip().endswith("\\done"))
+        statements = self.dpv.detect_text_statements(text)
+        self.assertEqual([m["kind"] for m in statements], ["env/theorem"])
+        self.assertEqual(self.dpv.detect_text_statements("\\begin{document}\nTheorem 3 shows that X.\n"), [])

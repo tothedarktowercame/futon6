@@ -148,9 +148,13 @@ _PROOF_MACRO_PAIRS = [("prf", "eprf"), ("bpf", "epf"), ("bpr", "epr"),
 # of a sentence ("the missing proof.", "completes the proof.") as a proof start;
 # in 0708.1921 and 0708.2185 those false regions preceded every statement and
 # made the S6 paper objects malformed.
+# French and German headings count too ("\\textit{Preuve du lemme:}" in
+# math/0409598), with an optional qualifier ("Proof of Lemma 3.").
+_PROOF_WORD = r"(?:Proof|PROOF|Preuve|PREUVE|D(?:\\'e|\\'\{e\}|é)monstration|Beweis)"
 _TEXT_PROOF_START_RE = re.compile(
-    r"(?m)^[ \t]*(?:(?:\\(?:noindent|medskip|smallskip|bigskip|par|indent)\b|[{]|"
-    r"\\(?:emph|textit|textbf|textsc|it|bf|em|sc)\b)\s*)*(?:Proof|PROOF)\.(?:\s*\})?")
+    r"^[ \t]*(?:(?:\\(?:noindent|medskip|smallskip|bigskip|par|indent)\b|[{]|"
+    r"\\(?:emph|textit|textbf|textsc|it|bf|em|sc)\b)\s*)*" + _PROOF_WORD +
+    r"(?:\s+(?:of|du|de\s+la|de|des|of\s+the|zu|von)\b[^.:\n]{0,60})?\s*[.:](?:\s*\})?", re.M)
 _TEXT_PROOF_END_RE = re.compile(
     r"\\qed\b|\\end\{(?:proof|Proof|thm|theorem|lemma|lem|prop|proposition|"
     r"cor|coro|corollary)\}|\\begin\{(?:thm|theorem|lemma|lem|prop|"
@@ -255,6 +259,58 @@ def detect_proof_macros(text):
     return marks
 
 
+_MACRO_BODY_RE = re.compile(
+    r"\\(?:newcommand|renewcommand|providecommand)\*?\s*\{?\\([A-Za-z]+)\}?\s*(?:\[\d\]\s*)?\{([^\n]*)"
+    r"|\\def\s*\\([A-Za-z]+)\s*\{([^\n]*)")
+TEXT_PROOF_MAX = 30000  # measured proofs reach 24.5k chars; the old 6000 dropped long ones silently
+
+
+def learn_text_proof_macros(text):
+    """(start macros, end macros) that typeset a proof heading or end mark.
+
+    math/9810017 defines \\newcommand{\\pf}{\\textbf{Proof}} and
+    \\newcommand{\\done}{\\hfill\\ensuremath{\\Box}} and writes proofs as \\pf … \\done.
+    """
+    starts, ends = [], []
+    for m in _MACRO_BODY_RE.finditer(_preamble(text)):
+        name, body = (m.group(1), m.group(2)) if m.group(1) else (m.group(3), m.group(4))
+        if "\\begin" in body:
+            continue
+        if re.search(_PROOF_WORD, body):
+            starts.append(name)
+        elif re.search(r"\\(?:Box|qed|square|blacksquare|qedsymbol)\b|□", body):
+            ends.append(name)
+    return starts, ends
+
+
+_STATEMENT_WORDS = {"theorem": "theorem", "lemma": "lemma", "proposition": "proposition",
+                    "corollary": "corollary", "théorème": "theorem", "theoreme": "theorem",
+                    "lemme": "lemma", "corollaire": "corollary", "satz": "theorem"}
+# A statement heading typeset in markup rather than an environment:
+# "\\textbf{Theorem}", "{\\bf Lemma 2.3.}". The markup is required so a line of prose
+# that merely begins "Theorem 3 shows" is not a statement.
+_TEXT_STATEMENT_RE = re.compile(
+    r"^[ \t]*(?:\\noindent\s*)?(?:\\text(?:bf|sc)\s*\{|\{\s*\\(?:bf|sc)\s+)\s*"
+    r"(Theorem|Lemma|Proposition|Corollary|Th(?:\\'e|é)or(?:\\`e|è)me|Lemme|Corollaire|Satz)"
+    r"(?:\s+[\w.\-]{1,12})?\s*[.:]?\s*\}", re.M)
+
+
+def detect_text_statements(text):
+    """Statement regions opened by a markup heading, ending at a blank line."""
+    bd = text.find("\\begin{document}")
+    bs = bd if bd != -1 else 0
+    marks = []
+    for m in _TEXT_STATEMENT_RE.finditer(text, bs):
+        word = m.group(1).lower().replace("\\'e", "e").replace("\\`e", "e")
+        kind = _STATEMENT_WORDS.get(word) or _STATEMENT_WORDS.get(word.replace("é", "e").replace("è", "e"))
+        gap = re.compile(r"\n[ \t]*\n").search(text, m.end())
+        end = min(gap.start() if gap else len(text), m.end() + 3000)
+        if kind and end - m.start() >= 20:
+            marks.append({"start": m.start(), "end": end, "layer": "dp", "kind": "env/" + kind,
+                          "tip": f"statement (text-style {m.group(1)})"})
+    return marks
+
+
 def detect_text_proofs(text):
     """Bare/text-style proof delimiters, e.g. ``Proof. ... \\qed``.
 
@@ -264,14 +320,23 @@ def detect_text_proofs(text):
     """
     bd = text.find("\\begin{document}")
     bs = bd if bd != -1 else 0
+    start_macros, end_macros = learn_text_proof_macros(text)
+    start_re = _TEXT_PROOF_START_RE
+    if start_macros:
+        start_re = re.compile(_TEXT_PROOF_START_RE.pattern + r"|^[ \t]*\\(?:"
+                              + "|".join(map(re.escape, start_macros)) + r")(?![A-Za-z])", re.M)
+    end_re = _TEXT_PROOF_END_RE
+    if end_macros:
+        end_re = re.compile(_TEXT_PROOF_END_RE.pattern + r"|\\(?:"
+                            + "|".join(map(re.escape, end_macros)) + r")(?![A-Za-z])")
     marks = []
-    for m in _TEXT_PROOF_START_RE.finditer(text, bs):
-        tail = text[m.end():m.end() + 6000]
-        end = _TEXT_PROOF_END_RE.search(tail)
+    for m in start_re.finditer(text, bs):
+        tail = text[m.end():m.end() + TEXT_PROOF_MAX]
+        end = end_re.search(tail)
         if not end:
             continue
         ee = m.end() + end.end()
-        if 40 <= ee - m.start() <= 6000:
+        if 40 <= ee - m.start() <= TEXT_PROOF_MAX:
             marks.append({"start": m.start(), "end": ee,
                           "layer": "dp", "kind": "env/proof",
                           "tip": "proof (text-style Proof.)"})
@@ -1038,6 +1103,12 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             counts[mm["kind"]] = counts.get(mm["kind"], 0) + 1
             marks.append(mm)
             seen_starts.add((mm["kind"], mm["start"]))
+    statement_spans = [(m["start"], m["end"]) for m in marks
+                       if m.get("kind") in ("env/theorem", "env/lemma", "env/proposition", "env/corollary")]
+    for sm in detect_text_statements(text):
+        if not any(a <= sm["start"] < b for a, b in statement_spans):
+            counts[sm["kind"]] = counts.get(sm["kind"], 0) + 1
+            marks.append(sm)
     for pm in detect_proof_macros(text):
         counts["env/proof"] = counts.get("env/proof", 0) + 1
         marks.append(pm)
