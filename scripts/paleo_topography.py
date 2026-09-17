@@ -35,9 +35,13 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-FUTON6 = Path("/home/joe/code/futon6")
-sys.path.insert(0, "/home/joe/code/futon3c/scripts")
+FUTON6 = config.ROOT
+sys.path.insert(0, str(config.sibling("futon3c") / "scripts"))
 import edn_format  # noqa: E402
 import substrate_metric_cascade_adapter as adapter  # noqa: E402  (curvature: reused)
 

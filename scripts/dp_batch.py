@@ -17,11 +17,15 @@ import sys
 import time
 from collections import Counter
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = Path(__file__).resolve()
-EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
+EPRINTS = config.storage() / "futon6/data/arxiv-math-ct-eprints"
 GOLDEN_DIR = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 LOG_DIR = ROOT / "data" / "warp" / "logs"
 FLAGS = dict(with_ca=True, with_binders=True, with_scopes=True, with_xref=True)

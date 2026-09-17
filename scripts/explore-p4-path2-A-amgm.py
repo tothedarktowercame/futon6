@@ -16,6 +16,10 @@ import time
 import numpy as np
 import sympy as sp
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 def pr(*args):
@@ -225,7 +229,7 @@ def main():
             "description": "4*F_corner*G_corner vs a11_bar^2*Pmax*Qmax",
         },
     }
-    Path("/home/joe/code/futon6/data/first-proof/p4-path2-A-amgm.json").write_text(json.dumps(out, indent=2))
+    config.ROOT / "data/first-proof/p4-path2-A-amgm.json".write_text(json.dumps(out, indent=2))
     pr("Wrote results")
 
 

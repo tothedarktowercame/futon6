@@ -159,6 +159,37 @@
   (or (and (< a1 b1) (<= b1 a2) (< a2 b2))
       (and (< b1 a1) (<= a1 b2) (< b2 a2))))
 
+;; Inference edges become CLean boxes at S7 (iatc_to_clean): each needs :id and
+;; :conclusion, and premise->conclusion claim flow must be acyclic or S7's G7
+;; rejects the whole proof. Checking both here rejects the graph while the model
+;; can still repair it with the gate message, instead of at S7 where nothing can.
+(defn infer-edge? [edge]
+  (= :infer (:kind edge)))
+
+(defn inference-cycle
+  "A cycle (as a vector of claim ids) in premise->conclusion flow, or nil."
+  [edges]
+  (let [succ (reduce (fn [acc e]
+                       (reduce (fn [acc2 p]
+                                 (update acc2 p (fnil into #{}) (endpoint-ids-from-value (:conclusion e))))
+                               acc (endpoint-ids-from-value (:premise e))))
+                     {} (filter infer-edge? edges))
+        state (atom {})
+        found (atom nil)]
+    (letfn [(visit [n path]
+              (case (get @state n)
+                :done nil
+                :active (reset! found (conj (vec (drop-while #(not= n %) path)) n))
+                (do (swap! state assoc n :active)
+                    (doseq [m (sort-by str (get succ n))
+                            :while (nil? @found)]
+                      (visit m (conj path n)))
+                    (swap! state assoc n :done))))]
+      (doseq [n (sort-by str (keys succ))
+              :while (nil? @found)]
+        (visit n []))
+      @found)))
+
 (defn check-graph [file graph]
   (let [nodes (vec (:nodes graph))
         edges (vec (:edges graph))
@@ -190,6 +221,25 @@
         (swap! failures conj
                (fail-entry :missing-warrant file graph e
                            "missing warrant is not mirrored by {:kind :missing-warrant ...} in :holes"))))
+    (doseq [e edges
+            :when (and (infer-edge? e)
+                       (some #(or (map? %) (and (some? %) (not (keyword? %))))
+                             (mapcat seqify [(:premise e) (:conclusion e)])))]
+      (swap! failures conj
+             (fail-entry :infer-shape file graph e
+                         ":infer :premise/:conclusion must name node ids, not inline maps; add the claim as a node")))
+    (doseq [e edges
+            :when (and (infer-edge? e) (or (nil? (:id e)) (nil? (:conclusion e))))]
+      (swap! failures conj
+             (fail-entry :infer-shape file graph e
+                         (str ":infer edge needs both :id and :conclusion (the claim it establishes); "
+                              "a step left to the reader belongs in :holes, not a conclusion-less edge"))))
+    (when-let [cycle (inference-cycle edges)]
+      (swap! failures conj
+             (fail-entry :inference-cycle file graph {:id (first cycle)}
+                         (str "premise->conclusion cycle " (str/join " -> " cycle)
+                              "; state an equivalence as ONE edge with :relation :iff, "
+                              "not as two implications that feed each other"))))
     (doseq [n nodes
             :when (= :ref (:kind n))]
       (when-not (ref-resolved? holes n)

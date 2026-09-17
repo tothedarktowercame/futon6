@@ -10,10 +10,14 @@ mechanics trajectory WebArxana draws on the spiral surface.  Read-only; emits .e
   default: the thread with the most mission-engaging turns -> futon2/holes/thread-orbit.edn
 """
 import json, os, sys
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-THREADS = "/home/joe/code/futon2/holes/session-threads.json"
-COMB = "/home/joe/code/futon2/holes/mission-comb-M-points-de-fuite.json"
-OUT = "/home/joe/code/futon2/holes/thread-orbit.edn"
+THREADS = str(config.sibling("futon2") / "holes/session-threads.json")
+COMB = str(config.sibling("futon2") / "holes/mission-comb-M-points-de-fuite.json")
+OUT = str(config.sibling("futon2") / "holes/thread-orbit.edn")
 
 
 def to_edn(v, ind=0):
@@ -67,7 +71,7 @@ def main():
     open(OUT, "w").write(";; thread orbit (retracted onto the mission scope-surface) — for WebArxana\n"
                          + to_edn(out) + "\n")
     # also emit JSON into WebArxana's static dir so the client can fetch /wa/thread-orbit.json
-    wa = "/home/joe/code/futon4/data/webarxana/public/wa/thread-orbit.json"
+    wa = str(config.sibling("futon4") / "data/webarxana/public/wa/thread-orbit.json")
     try:
         json.dump(out, open(wa, "w"), ensure_ascii=False)
     except Exception:

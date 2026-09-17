@@ -16,12 +16,16 @@ import time
 from collections import Counter
 from multiprocessing import Pool
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-FUTON6 = Path("/home/joe/code/futon6")
+FUTON6 = config.ROOT
 LOADER_TREE = Path("/tmp/futon6-sbs")
-EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
-INDEX = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl")
-OUT = Path("/home/joe/code/storage/mark2/ct-fresh-scopes")
+EPRINTS = config.storage() / "futon6/data/arxiv-math-ct-eprints"
+INDEX = config.storage() / "futon6/data/arxiv-math-ct-file-index.jsonl"
+OUT = config.storage() / "mark2/ct-fresh-scopes"
 OUT.mkdir(exist_ok=True)
 
 _sj = None

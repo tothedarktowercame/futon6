@@ -15,9 +15,13 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 KERNEL = ROOT / "futon6" / "data" / "mission-ner-kernel.json"
 STAR_MAP = ROOT / "futon0" / "holes" / "missions" / "M-capability-star-map.graph.edn"
 OUT_DIR = ROOT / "futon6" / "data" / "mission-scope-trees"

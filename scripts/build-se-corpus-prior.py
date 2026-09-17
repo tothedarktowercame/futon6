@@ -23,8 +23,8 @@ Algorithm:
 Usage:
     python scripts/build-se-corpus-prior.py \\
         --msc-prior data/topic-prior-msc.json \\
-        --mo-entities /home/joe/code/storage/futon6/mo-processed/entities.json \\
-        --mse-entities /home/joe/code/storage/futon6/se-data/math-processed/entities.json \\
+        --mo-entities $FUTON6_STORAGE_ROOT/futon6/mo-processed/entities.json \\
+        --mse-entities $FUTON6_STORAGE_ROOT/futon6/se-data/math-processed/entities.json \\
         --out data/topic-prior-se-corpus.json
 """
 

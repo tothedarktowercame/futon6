@@ -16,13 +16,19 @@ neither the formal nor the prose layer (a formalisation/definition hole).
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import json
 import re
 import subprocess
 from pathlib import Path
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = config.ROOT
 # prefer the FULL mathlib index (3454 structure/class defs); fall back to the
 # Monoidal-only slice if the broad mine has not been run yet.
 _BROAD = ROOT / "data" / "mathlib-defs.json"

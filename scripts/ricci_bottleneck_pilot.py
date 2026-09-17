@@ -27,6 +27,10 @@ import sys, time, pickle, json
 from collections import defaultdict, Counter
 import numpy as np
 from scipy.optimize import linprog
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 Q2TAGS = "/tmp/q2tags.pkl"   # {question_id: [tag,...]} produced by the parse step
 MIN_COOCC = int(sys.argv[1]) if len(sys.argv) > 1 else 30
@@ -117,7 +121,7 @@ def main():
     for k, a, b, w in results[-10:]:
         print(f"  {k:+.3f}  {short(a)} -- {short(b)}  (co-occ {w})")
 
-    out = "/home/joe/code/futon6/resources/differentiable-math/ricci-tag-curvature.json"
+    out = str(config.ROOT / "resources/differentiable-math/ricci-tag-curvature.json")
     with open(out, "w") as f:
         json.dump({"min_coocc": MIN_COOCC, "max_tags": MAX_TAGS, "alpha": ALPHA,
                    "n_nodes": len(nodes), "n_edges": len(results),

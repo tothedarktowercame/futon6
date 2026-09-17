@@ -12,9 +12,13 @@ This script computes the actual tr(MF), the bound, and the margin.
 
 import json
 import numpy as np
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 # Load the alpha-rho analysis results
-with open("/home/joe/code/futon6/data/first-proof/alpha-rho-analysis.json") as f:
+with open(str(config.ROOT / "data/first-proof/alpha-rho-analysis.json")) as f:
     results = json.load(f)
 
 print("=" * 100)
@@ -54,7 +58,7 @@ print("\nRecomputing with eigenvalue data...")
 
 # Inline the necessary parts
 import sys
-sys.path.insert(0, "/home/joe/code/futon6/scripts")
+sys.path.insert(0, str(config.ROOT / "scripts"))
 
 # Reuse graph generation from compute-alpha-rho
 def edge_key(u, v):

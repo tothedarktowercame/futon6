@@ -29,7 +29,7 @@ supervised, runs on any batch, no gold required.
 Usage:
     python scripts/bayesian-self-improve.py \\
         --gold data/grounding-gold-proofwiki.json \\
-        --ner-kernel /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \\
+        --ner-kernel $FUTON6_STORAGE_ROOT/futon6/data/ner-kernel/terms.tsv \\
         --train-n 600 --unsup-n 800 --test-n 400 \\
         --out data/bayesian-self-improve-report.json
 """

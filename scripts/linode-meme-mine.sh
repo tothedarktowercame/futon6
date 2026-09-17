@@ -13,7 +13,7 @@
 #   (b) ON-BOX — only if you must. Do NOT rsync futon6 (it's ~31 GB of corpora+venv this run never uses).
 #       Copy ONLY: these scripts + data/{diffsub-scopes.json,diffsub-moves-mined.edn,capability-graph.json}
 #       + ../futon3a/resources/notions/minilm_{pattern,mission}_embeddings.json + ~/.claude/projects/ (turns).
-#       NB the .py scripts hardcode /home/joe/code paths, so on-box also needs those paths (or a path fix).
+#       NB the .py scripts hardcode $FUTON_CODE_ROOT paths, so on-box also needs those paths (or a path fix).
 #
 # Prereq: vLLM serving (scripts/linode-4gpu-setup.sh) + the turns present in TURNS_DIR.
 set -euo pipefail

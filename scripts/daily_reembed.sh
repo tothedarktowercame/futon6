@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT=/home/joe/code
+# Repo and code root derive from THIS script's location; override with the
+# documented environment variables rather than editing a path in here.
+REPO="${FUTON6_CHECKOUT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+CODE_ROOT="${FUTON_CODE_ROOT:-$(dirname "$REPO")}"
+STORAGE_ROOT="${FUTON6_STORAGE_ROOT:-$CODE_ROOT/storage}"
+ROOT="$CODE_ROOT"
 FUTON6="$ROOT/futon6"
 PY="$FUTON6/.venv/bin/python"
 MISSION_RECORDS="$ROOT/data/notions/mission_records.json"

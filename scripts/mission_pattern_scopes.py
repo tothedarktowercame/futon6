@@ -10,8 +10,12 @@ import json, re
 from pathlib import Path
 from collections import defaultdict
 import numpy as np
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 OUT = ROOT / "futon6" / "data" / "mission-pattern-scopes.edn"
 pe = json.load(open(ROOT / "futon3a/resources/notions/minilm_pattern_embeddings.json"))
 me = json.load(open(ROOT / "futon3a/resources/notions/minilm_mission_embeddings.json"))

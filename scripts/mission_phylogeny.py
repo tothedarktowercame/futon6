@@ -9,8 +9,12 @@
 import re, math
 from pathlib import Path
 from collections import Counter, defaultdict
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 OUT_HTML = ROOT / "futon6" / "data" / "mission-phylogeny.html"
 OUT_EDN = ROOT / "futon6" / "data" / "mission-phylogeny.edn"
 

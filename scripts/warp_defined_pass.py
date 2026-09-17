@@ -16,6 +16,12 @@ PageRank-style, over the definition-dependency graph).
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import json
 import re
 import sys
@@ -25,7 +31,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import anatomy_v0_sweep as sweep
 
 EPRINTS = sweep.DEFAULT_EPRINTS
-OUT = Path("/home/joe/code/futon6/data/warp/defined-index.json")
+OUT = config.ROOT / 'data/warp/defined-index.json'
 
 # emphasized defined-term markers: a term italicised/bolded (the math-paper
 # convention for "this is the definition"). High-recall, cheap.

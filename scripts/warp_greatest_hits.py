@@ -24,6 +24,12 @@ aggregation below replaced that. If you ever need per-mark detail again, don't
 render it as DOM at this scale: rasterise the flat geometry directly to PNG
 (circles/lines/rects); a browser is the wrong tool at that node count.
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import math
 from collections import Counter
@@ -33,8 +39,8 @@ import numpy as np
 
 from viz_budget import guard_svg
 
-W = Path("/home/joe/code/futon6/data/warp")
-GOLD = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
+W = config.ROOT / 'data/warp'
+GOLD = config.marks()
 
 
 def kindcol(k):

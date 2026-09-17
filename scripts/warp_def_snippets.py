@@ -11,6 +11,12 @@ Capped per concept to bound size.
 
     warp_def_snippets.py [--cap N] -> data/warp/def-snippets.json
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import re
 import sys
@@ -21,7 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import warp_defined_pass as dp   # reuse EMPH/DEFENV/CALL/concept_norm/read_text
 
 EPRINTS = dp.EPRINTS
-OUT = Path("/home/joe/code/futon6/data/warp/def-snippets.json")
+OUT = config.ROOT / 'data/warp/def-snippets.json'
 DASH = re.compile(r"[‐-―−-]")
 
 
@@ -64,7 +70,7 @@ def main(argv=None):
     argv = argv if argv is not None else sys.argv[1:]
     cap = int(argv[argv.index("--cap") + 1]) if "--cap" in argv else 6
     # only capture for hitlist concepts (the set #3 + GPU care about)
-    hl = json.load(open(Path("/home/joe/code/futon6/data/warp/hitlist.json")))
+    hl = json.load(open(config.ROOT / 'data/warp/hitlist.json'))
     keep = {h["concept"] for h in hl["hitlist"]}
     snips = defaultdict(list)
     ids = sorted(p.name[:-len(".tar.gz")] for p in EPRINTS.glob("*.tar.gz"))

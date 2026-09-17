@@ -19,6 +19,10 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,7 +30,7 @@ DEFAULT_GH200 = ROOT / "data" / "warp" / "gh200.txt"
 DEFAULT_GOLDEN = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 DEFAULT_BIB_INDEX = ROOT / "data" / "warp" / "bib-index.json"
 DEFAULT_CITATIONS = ROOT / "data" / "warp" / "citations.json"
-DEFAULT_CORPUS_INDEX = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-file-index.jsonl")
+DEFAULT_CORPUS_INDEX = config.storage() / "futon6/data/arxiv-math-ct-file-index.jsonl"
 DEFAULT_OUT = ROOT / "data" / "warp" / "cite-resolution"
 SCHEMA = "futon6/h7-cite-resolution/v1"
 

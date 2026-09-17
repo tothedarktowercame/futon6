@@ -20,10 +20,10 @@ tagset?" question. Pipeline:
 
 Usage:
     python scripts/eval-arxiv-domain-coherence.py \\
-        --eprint-dir /home/joe/code/storage/futon6/data/arxiv-math-ct-eprints \\
-        --ner-kernel /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \\
+        --eprint-dir $FUTON6_STORAGE_ROOT/futon6/data/arxiv-math-ct-eprints \\
+        --ner-kernel $FUTON6_STORAGE_ROOT/futon6/data/ner-kernel/terms.tsv \\
         --canon-store data/canon-store-pm-pw-wiki-nlab/aggregate.json \\
-        --nlab-pages-dir /home/joe/code/nlab-content/pages \\
+        --nlab-pages-dir $FUTON_CODE_ROOT/nlab-content/pages \\
         --max-papers 50 \\
         --out data/arxiv-coherence-report.json
 """

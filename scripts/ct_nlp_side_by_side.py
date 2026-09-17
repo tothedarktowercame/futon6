@@ -17,11 +17,15 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-FUTON6 = Path("/home/joe/code/futon6")          # today's detectors
+FUTON6 = config.ROOT          # today's detectors
 LOADER_TREE = Path("/tmp/futon6-sbs")            # PR-50 eprint loader
-EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
-SLICES = Path("/home/joe/code/storage/mark2/ct-handoff/ct-anatomy-slices")
+EPRINTS = config.storage() / "futon6/data/arxiv-math-ct-eprints"
+SLICES = config.storage() / "mark2/ct-handoff/ct-anatomy-slices"
 OUT = FUTON6 / "data" / "ct-nlp-sbs.json"
 
 sys.path.insert(0, str(LOADER_TREE / "scripts"))

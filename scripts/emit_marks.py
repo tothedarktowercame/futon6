@@ -11,6 +11,12 @@ Usage:
   futon6/.venv/bin/python scripts/emit_marks.py --list holes/math-ct-200.ids.txt
   futon6/.venv/bin/python scripts/emit_marks.py --papers 0705.4406
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+
 import argparse
 import json
 import os
@@ -20,7 +26,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 import dp_paper_view as dpv  # noqa: E402
 
-GOLDEN = os.path.join(ROOT, "data/showcases/ct-anatomy/golden")
+GOLDEN = str(config.marks())
 
 
 def main():

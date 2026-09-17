@@ -189,10 +189,10 @@ def main():
         try:
             import metric_harness as mh
             mh.emit_record(a.run_dir, run_id=a.run_id, corpus_id=a.corpus_id, paper_id="(corpus)",
-                           stage="S3", metric="inference-lexicon-size", axis="accretion",
+                           stage="S10", metric="inference-lexicon-size", axis="accretion",
                            value=len(lex), computable=True)
             mh.emit_record(a.run_dir, run_id=a.run_id, corpus_id=a.corpus_id, paper_id="(corpus)",
-                           stage="S3", metric="inference-anchor-confidence", axis="quality",
+                           stage="S10", metric="inference-anchor-confidence", axis="quality",
                            value=round(sum(mc(e) for _, e in entries) / max(1, len(entries)), 4), computable=True)
         except Exception as ee:
             print(f"  (metric emit skipped: {ee})")

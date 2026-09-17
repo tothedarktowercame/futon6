@@ -21,12 +21,16 @@ concern label). Higher = the grain groups by concern.
 from __future__ import annotations
 import ast, json, os, sys, pathlib
 import numpy as np
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 
-SRC = pathlib.Path("/home/joe/code/futon6/src/futon6")
-OUT = pathlib.Path("/home/joe/code/futon6/resources/differentiable-math/code-scope-probe")
+SRC = pathlib.config.ROOT / "src/futon6"
+OUT = pathlib.config.ROOT / "resources/differentiable-math/code-scope-probe"
 TOPK = 5
 
 

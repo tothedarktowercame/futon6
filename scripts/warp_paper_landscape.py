@@ -12,6 +12,12 @@ reads as a landscape, not a scatter.
 
 Outputs: data/warp/paper-landscape.json + data/warp/paper-landscape.html
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import math
 import re
@@ -22,7 +28,7 @@ import numpy as np
 
 from viz_budget import guard_svg
 
-W = Path("/home/joe/code/futon6/data/warp")
+W = config.ROOT / 'data/warp'
 DASH = re.compile(r"[‐-―−-]")
 
 

@@ -121,7 +121,14 @@ def main():
 
     slugs = sorted(slug_papers)
     if not slugs:
-        print("no :wanted found"); return
+        # An explicit zero is a result; returning without writing left the stage
+        # "passing" with no artifact, and replay failed on the missing file two
+        # stages later (mark7-val3-linode-05).
+        with open(args.out, "w") as fh:
+            json.dump({"schema": "futon6.hole-vocabulary/v1", "graphs": len(by_pid),
+                       "wanted": 0, "vocabulary": []}, fh, indent=1)
+        print(f"no :wanted found in {len(by_pid)} graph(s) -> wrote empty vocabulary to {args.out}")
+        return
     embs = embed([norm_text(s) for s in slugs])
     clusters = cluster(slugs, embs, args.thresh)
 

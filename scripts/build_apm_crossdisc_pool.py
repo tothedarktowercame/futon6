@@ -30,13 +30,17 @@ from dataclasses import dataclass
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Iterable
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_APM = Path("/home/joe/code/futon3c/data/apm-informal-proofs")
+DEFAULT_APM = config.sibling("futon3c") / "data/apm-informal-proofs"
 DEFAULT_BATCHES = [
-    Path("/home/joe/code/storage/mark2/inbox/batch-007.tar.gz"),
-    Path("/home/joe/code/storage/mark2/inbox/batch-008.tar.gz"),
+    config.storage() / "mark2/inbox/batch-007.tar.gz",
+    config.storage() / "mark2/inbox/batch-008.tar.gz",
 ]
 DEFAULT_OUT = ROOT / "data" / "apm-crossdisc-pool"
 DEFAULT_TARGET_SIZE = 150

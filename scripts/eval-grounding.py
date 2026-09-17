@@ -8,8 +8,8 @@ spot-check.
 
 Usage:
     python scripts/eval-grounding.py \
-        --input-dir /home/joe/code/storage/futon6/data/first-proof/latex \
-        --ner-kernel /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \
+        --input-dir $FUTON6_STORAGE_ROOT/futon6/data/first-proof/latex \
+        --ner-kernel $FUTON6_STORAGE_ROOT/futon6/data/ner-kernel/terms.tsv \
         --out report.json \
         --sample-per-strategy 8
 

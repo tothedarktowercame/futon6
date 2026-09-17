@@ -41,11 +41,11 @@ import sys
 import tempfile
 import time
 import urllib.request
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import futon6_config as config
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PY = os.path.join(ROOT, ".venv", "bin", "python")
-if not os.path.exists(PY):
-    PY = sys.executable
+PY = config.python_argv()
 
 R: list[tuple[str, bool, str, str]] = []
 
@@ -126,6 +126,31 @@ def check_schema_maxlength(endpoint, model):
     return rec("llm:maxlength-binds", ok, detail,
                "without maxLength the model runs to max_tokens and truncates mid-string, "
                "which reads downstream as an unparseable reply (H33)")
+
+
+def check_schema_integer_bounds(endpoint, model):
+    """Integer `minimum`/`maximum` must bind: S3/S4 schemas bound line numbers to
+    the source shown. A stack that ignores them lets anchors escape the passage;
+    code then rejects those items, so a run would fail item by item instead."""
+    schema = {"type": "object", "additionalProperties": False, "required": ["n"],
+              "properties": {"n": {"type": "integer", "minimum": 7, "maximum": 9}}}
+    try:
+        o = _post(endpoint, {"model": model, "temperature": 0, "max_tokens": 32,
+                             "messages": [{"role": "user",
+                                           "content": "Reply with the number 42 as JSON {\"n\": 42}."}],
+                             "response_format": {"type": "json_schema", "json_schema": {
+                                 "name": "b", "strict": True, "schema": schema}}})
+    except Exception as e:  # noqa: BLE001
+        return rec("llm:integer-bounds-bind", False, f"request failed ({type(e).__name__}: {e})", "")
+    txt = (o.get("choices") or [{}])[0].get("message", {}).get("content", "")
+    try:
+        n = json.loads(txt).get("n")
+        ok, detail = isinstance(n, int) and 7 <= n <= 9, f"answered n={n!r} under bounds 7..9"
+    except ValueError:
+        ok, detail = False, f"reply did not parse ({txt[:50]!r})"
+    return rec("llm:integer-bounds-bind", ok, detail,
+               "the S3/S4 line-number bounds are not enforced by this stack; out-of-range anchors "
+               "will be rejected item by item. Use a stack whose grammar honours integer bounds")
 
 
 def check_throughput(endpoint, model, tokens=128):
@@ -212,7 +237,7 @@ def check_gate_refuses():
         with open(os.path.join(d, "broken__p0.edn"), "w") as fh:
             fh.write("{:nodes [] :edges [] :holes []}\n")
         cmd = gate.format(PY=mod.PY, IDS=mod.IDS).replace(mod.GRAPHS, d)
-        p = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True,
+        p = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True, env=config.child_environment(),
                            text=True, timeout=600)
     refused = p.returncode != 0
     return rec("gate:refuses-bad-input", refused,
@@ -228,53 +253,60 @@ def check_exit_status_propagates():
     stopped hours earlier (the original release blocker).
     """
     with tempfile.TemporaryDirectory() as d:
-        p = subprocess.run(
-            [PY, os.path.join(ROOT, "scripts", "linode_stepper.py"), "--run",
-             "--profile", "superpod", "--from", "S1", "--to", "S1", "--no-halt",
-             "--ids", "holes/__does_not_exist__.txt", "--run-dir", d,
-             "--corpus-id", "conformance", "--run-id", "conformance"],
-            cwd=ROOT, capture_output=True, text=True, timeout=600)
-    ok = p.returncode != 0
+        # Probe a real failing command in an isolated process. A refusal caused
+        # by missing inputs or conflicting run identity is not this test.
+        probe = ("import sys; sys.path.insert(0, 'scripts'); import linode_stepper as s; "
+                 "s.DEPS = {'PROBE': []}; s.OPS['PROBE'] = {'cmd': 'exit 7'}; "
+                 "sys.exit(s.run([{'id': 'PROBE', 'name': 'exit probe', 'compute': 'cpu', "
+                 "'halt': False, 'go': []}], 'superpod', True, sys.argv[1], 'probe', 'probe', []))")
+        p = subprocess.run([*PY, "-c", probe, d], cwd=ROOT, capture_output=True,
+                           text=True, timeout=30, env=config.child_environment())
+    ok = p.returncode == 2 and "command FAILED" in p.stdout
     return rec("stage:exit-status-propagates", ok,
-               f"a failing stage exits {p.returncode}" if ok
-               else "a FAILING stage exited 0 — a scheduler would record success",
-               "without this an unattended window cannot distinguish finished from stopped")
+               f"a failing stage command exits {p.returncode}" if ok
+               else f"expected command-failure status 2, got {p.returncode}: {p.stderr[-200:]}",
+               "the runner must distinguish failed computation from successful completion")
 
 
 def check_run_scoping():
-    """Artifact paths must carry the run id rather than a shared directory.
-
-    Shared artifact directories are how one corpus's graphs land in another
-    corpus's counts (H35). The paths are interpolated by the SHELL each stage
-    runs in, not by Python, so the test is that `$RUN_ID` appears in them — an
-    earlier version of this check compared two `--plan` outputs under different
-    run ids and called them identical, which they are and must be: Python never
-    substitutes the variable.
-    """
+    """Exercise the runner's shell expressions in two manifest-owned directories."""
+    import run_manifest
+    from pathlib import Path
     mod = _stepper()
     if isinstance(mod, Exception):
         return _stepper_unavailable("paths:run-scoped", mod)
-    consts = {"CAND": mod.CAND, "GRAPHS": mod.GRAPHS, "CLEAN": mod.CLEAN,
-              "STEPS": mod.STEPS, "RUNG3": mod.RUNG3, "DEMO": mod.DEMO,
-              "RUN": mod.RUN}
-    if hasattr(mod, "EXPO"):
-        consts["EXPO"] = mod.EXPO
-    unscoped = sorted(k for k, v in consts.items() if "$RUN_ID" not in v)
-    ok = not unscoped
+    consts = (mod.CAND, mod.GRAPHS, mod.CLEAN, mod.STEPS, mod.RUNG3,
+              mod.DEMO, mod.RUN, mod.EXPO, mod.MARKS, mod.EXPO_CAND, mod.PAPERG)
+    with tempfile.TemporaryDirectory() as directory:
+        observed = []
+        for name in ("first run", "second run"):
+            root = Path(directory) / name
+            doc = {"run-id": name.replace(" ", "-"), "corpus-id": "scope-check",
+                   "artifacts": run_manifest.ARTIFACTS}
+            env = {**os.environ, **run_manifest.environment(root, doc)}
+            result = subprocess.run("printf '%s\\n' " + " ".join(consts), shell=True,
+                                    env=env, capture_output=True, text=True)
+            paths = result.stdout.splitlines()
+            if result.returncode or len(paths) != len(consts) or any(
+                not Path(path).is_relative_to(root) for path in paths
+            ) or len(set(paths)) != len(paths):
+                return rec("run:artifact-paths-scoped", False, "runner paths escape or alias within a run")
+            observed.append(set(paths))
+        ok = observed[0].isdisjoint(observed[1])
     return rec("run:artifact-paths-scoped", ok,
-               f"all {len(consts)} artifact roots carry $RUN_ID" if ok
-               else f"shared across runs: {', '.join(unscoped)}",
-               "shared artifact directories put one corpus's outputs in another's counts (H35)")
+               "two manifests expand to disjoint run-owned artifact paths")
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--endpoint", default=os.environ.get("OPENAI_BASE_URL"))
-    ap.add_argument("--model", default=os.environ.get("MODEL", "mark4-70b"))
+    ap.add_argument("--endpoint", default=config.endpoint())
+    ap.add_argument("--model", default=config.model())
     ap.add_argument("--json", help="write the report here, for the run record")
     ap.add_argument("--skip-llm", action="store_true",
                     help="stage-machinery checks only (no endpoint required)")
     a = ap.parse_args()
+    os.environ.update(OPENAI_BASE_URL=a.endpoint, MODEL=a.model)
+    os.environ.update(config.child_environment())
 
     if not a.skip_llm:
         if not a.endpoint:
@@ -282,6 +314,7 @@ def main() -> int:
         else:
             check_schema_binds(a.endpoint, a.model)
             check_schema_maxlength(a.endpoint, a.model)
+            check_schema_integer_bounds(a.endpoint, a.model)
             check_throughput(a.endpoint, a.model)
     check_gate_refuses()
     check_exit_status_propagates()

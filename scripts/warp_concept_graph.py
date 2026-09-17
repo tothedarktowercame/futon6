@@ -11,12 +11,18 @@ their errors propagate furthest). The graph is also the EFE-landscape substrate
 
     warp_concept_graph.py  ->  data/warp/concept-graph.json
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import re
 from collections import defaultdict
 from pathlib import Path
 
-W = Path("/home/joe/code/futon6/data/warp")
+W = config.ROOT / 'data/warp'
 DASH = re.compile(r"[‐-―−-]")
 
 

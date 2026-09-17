@@ -19,12 +19,16 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 sys.path.insert(0, str(Path(__file__).parent))
 from render_mission_pdf import (PREAMBLE, esc, inline, render_body,
                                 vitals_card, table_to_tex, STRIPPED)
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = config.ROOT
 
 EXCERPT_RE = re.compile(r"<!--\s*excerpt:\s*(\S+)\s*::\s*(.+?)\s*-->")
 VITALS_RE = re.compile(r"<!--\s*vitals:\s*(\S+)\s*-->")

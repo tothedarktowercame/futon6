@@ -12,10 +12,14 @@ evidence (the per-turn embedding pattern retrievals) and emits a hyperedge artif
 """
 import json, os, sys, glob, re, urllib.request
 from collections import defaultdict
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 API = "http://localhost:7070"
-PIDX = "/home/joe/code/futon3/resources/sigils/patterns-index.tsv"
-OUT = "/home/joe/code/futon2/holes/session-threads.json"
+PIDX = str(config.sibling("futon3") / "resources/sigils/patterns-index.tsv")
+OUT = str(config.sibling("futon2") / "holes/session-threads.json")
 
 
 def resolve_session_id(arg):
