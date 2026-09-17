@@ -8,6 +8,14 @@ Reviewed head: `304beb6bb43f51ceae0f297cdb40a3741a8e1214`.
 Reviewed master: `8dd08f49d351cc3808f9bb079db888847a1efb9a`.
 An isolated review checkout exists at `/tmp/futon6-pr51-review`.
 
+Implementation started on branch `work/pr51-response` in
+`/home/joe/code/futon6-pr51-response`. See the
+[Stage 0 evidence comparison](holes/pr51-baseline-comparison.md),
+[146-file disposition](holes/pr51-file-disposition.md), and
+[Stage 1a authority provisioning](holes/pr51-authority-provisioning.md).
+Stage 0 still lacks Rob's raw run bundle; Stage 1a is the first dependency
+repair, not completion of the configuration stage or fresh-host acceptance.
+
 ## Decision and intent
 
 Do not merge the PR wholesale. It contains useful host-portability changes and
@@ -252,5 +260,5 @@ to Rob/GitHub without Joe's authorization.
 The main checkout already has unrelated/uncommitted edits in handoffs,
 readiness documentation, dependency setup, and `scripts/preflight.py`, plus an
 untracked `docs/` directory. Preserve these and reconcile intentional overlap;
-do not reset or sweep them into this work. This note is the only source change
-made by the review/handoff task.
+do not reset or sweep them into this work. The initial review/handoff task only
+added this note; subsequent implementation lives on the branch identified above.

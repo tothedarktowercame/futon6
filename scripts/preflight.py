@@ -136,7 +136,21 @@ def check_gates():
 
 # ---------------------------------------------------------------- substrate
 
+def check_concept_authority():
+    from concept_authority import ConceptAuthority, configured_index
+    path = configured_index()
+    try:
+        authority = ConceptAuthority(path)
+    except (OSError, ValueError, TypeError) as exc:
+        return rec("substrate:concept-authority", False, str(exc),
+                   "extract the updated Mark7 substrate bundle; optionally set "
+                   "FUTON6_BACKGROUND_CORPUS_INDEX to its schema-2 authority index")
+    return rec("substrate:concept-authority", True,
+               f"{path}: {authority.meta['term-keys']} terms; Hom/End/colim resolve")
+
+
 def check_substrate():
+    check_concept_authority()
     need = ["data/warp/concept-index.json", "data/warp/def-snippets.json",
             "data/warp/defined-index.json", "data/warp/concept-usage.json",
             "data/concept-encyclopedia-ct.json",
