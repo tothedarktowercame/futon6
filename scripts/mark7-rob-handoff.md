@@ -28,6 +28,16 @@ This doc is just **what you do**.
    `export OPENAI_BASE_URL=http://localhost:<port>/v1 OPENAI_API_KEY=x` and pass `--model <id>`.
 3. **Extract the substrate**: `tar -xzf mark7-substrate.tgz -C ~/code/`.
 
+## Runner dependencies
+
+Use the Python environment for `futon6`'s `pyproject.toml` dependencies, plus
+`bb` (babashka) and `latexmlmath` on `PATH`. **Conda and libmamba are not
+required by mark7.** LaTeXML provides the formula-to-structure conversion in S11.
+Install it from upstream GitHub or follow the official LaTeXML installation
+instructions; see [LaTeXML setup](../docs/latexml-setup.md). Run
+`scripts/linode-postsetup-deps.sh` to check the live formula conversion chain,
+and run preflight before starting the job.
+
 ## Cluster setup — reuse your existing superpod stack (don't reconfigure)
 
 You already have the SLURM/GPU authority; mark7 should lean on it rather than stand up new config:
