@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 
@@ -57,6 +58,10 @@ def nodes_document(schema: dict, seed: int) -> dict:
                       for i in range(n)]}
 
 
+# Every Nth proof comes back circular, to rehearse the refusal path. Off by default.
+CYCLE_EVERY = int(os.environ.get("FUTON6_REHEARSAL_CYCLE_EVERY", "0") or "0")
+
+
 def derivations_document(schema: dict, seed: int) -> dict:
     """S3 phase 2: a chain over the nodes that exist, one derivation per derived node."""
     properties = schema["properties"]["derivations"]["properties"]
@@ -70,6 +75,15 @@ def derivations_document(schema: dict, seed: int) -> dict:
                                    "warrant_kind": kinds[(seed + i) % 3],
                                    "warrant": f"rehearsal warrant {seed % 100000}-{i}",
                                    "first_line": line["minimum"], "last_line": line["maximum"]}]
+    if CYCLE_EVERY and len(nodes) > 2 and seed % CYCLE_EVERY == 0:
+        # Derive the first node from the second as well, so the pair is circular.
+        # A double that can only return acceptable output cannot rehearse what the
+        # run does with a refusal, which is the half of the pipeline that failed.
+        first = properties[str(nodes[0])]["items"]["properties"]["first_line"]
+        derivations[str(nodes[0])] = [{"relation": "implies", "premises": [nodes[1]],
+                                       "warrant_kind": "stated",
+                                       "warrant": f"rehearsal cycle {seed % 100000}",
+                                       "first_line": first["minimum"], "last_line": first["maximum"]}]
     return {"derivations": derivations}
 
 

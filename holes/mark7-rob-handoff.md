@@ -160,10 +160,14 @@ warnings/failures prevent successful verification. See the
 [manifest/resume/retrieval guide](../docs/mark7-run-manifest.md). A partial
 archive is evidence of that prefix, not acceptance of a complete build.
 
-Smoke tests do not establish a fully valid build. S3, S4, S6 and S7 now record
-every item as accepted, rejected, errored or deferred, and a stage with any
-rejected or errored item does not pass (see the run guide). A failed stage may be
-re-invoked in the same run directory; earlier accepted outputs are kept and the
-attempt history accumulates. Stage 4 fresh-host acceptance remains pending in
+Smoke tests do not establish a fully valid build. S3, S4, S6 and S7 record every
+item as accepted, rejected, errored or deferred. **A refused item does not stop
+the run**: the stage records it, continues with the items it accepted, and every
+later stage expects only those. A stage stops when its accounting cannot describe
+the corpus, or when the accepted share drops below the run's floor
+(`FUTON6_ITEM_FLOOR`, default 0.75) — see the run guide. So a long window ends
+with a smaller corpus and a written record of what was refused, rather than
+stopping at 3am on one paper. A stopped stage may be re-invoked in the same run
+directory; earlier accepted outputs are kept and the attempt history accumulates. Stage 4 fresh-host acceptance remains pending in
 TN-PR51-response.md. Preserve partial evidence, but do not count it as
 full-run success.

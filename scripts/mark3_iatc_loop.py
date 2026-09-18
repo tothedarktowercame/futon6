@@ -346,7 +346,13 @@ def run(args) -> int:
     print(sub.stdout.strip()[-400:])
     print(f"\nloop: accepted {counts['accepted']} (carried {counts['carried']}) · rejected {counts['rejected']} · "
           f"errored {counts['errored']} of {len(loaded)} · batch-substance {'PASS' if sub.returncode == 0 else 'FAIL'}")
-    return 0 if (counts["accepted"] == len(loaded) and sub.returncode == 0) else 1
+    # Exit status reports whether the LOOP could do its work, not whether every
+    # proof survived the contract. Refused proofs are recorded per item; how many
+    # refusals a run tolerates is the runner's decision, taken against the floor in
+    # the run manifest. Conflating the two stopped a 124-paper window at S3 because
+    # three proofs came back circular. The batch substance gate stays fatal: it is a
+    # property of the whole batch (template collapse, reused warrants), not an item.
+    return 0 if sub.returncode == 0 else 1
 
 
 def main() -> int:

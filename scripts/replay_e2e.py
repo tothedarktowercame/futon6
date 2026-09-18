@@ -124,8 +124,13 @@ def c2(run_dir, corpus_id, clean_dir):
 @check("A1-item-accounting", "Stage 3 accounting", needs="S3")
 def a1(run_dir, corpus_id, through):
     # Re-verify each ledgered item-level stage from its own accounting, on this
-    # (possibly retrieved) copy: all expected items accepted, artifacts present.
-    checked, found = [], []
+    # (possibly retrieved) copy: every expected item accounted for, artifacts
+    # present, accepted share at the floor the manifest pinned for this run.
+    #
+    # Items the contract refused are reported, not failed. This check is also the
+    # mid-window abort gate, and a gate that aborts a 124-paper run over three
+    # refused proofs is telling the operator to throw away the finding.
+    checked, found, refused = [], [], []
     for stage in accounting.STAGES:
         if not _reached(stage, through):
             continue
@@ -133,11 +138,18 @@ def a1(run_dir, corpus_id, through):
         if not invocation:
             found.append(f"{stage}: no ledgered invocation")
             continue
-        problems, _ = accounting.stage_problems(Path(run_dir), stage, invocation, corpus_id)
+        problems, counts, noted = accounting.stage_problems(Path(run_dir), stage, invocation, corpus_id)
         found += problems
-        checked.append(f"{stage}@{invocation}")
-    return (not found, f"{len(checked)} stage(s) fully accepted: {', '.join(checked)}"
-            if not found else f"{len(found)} problem(s): " + " | ".join(found[:3]))
+        refused += noted
+        accepted = sum(c["accepted"] for c in counts.values())
+        expected = sum(c["expected"] for c in counts.values())
+        deferred = sum(c["deferred"] for c in counts.values())
+        checked.append(f"{stage}@{invocation} {accepted}/{expected}"
+                       + (f" ({deferred} deferred)" if deferred else ""))
+    if found:
+        return False, f"{len(found)} problem(s): " + " | ".join(found[:3])
+    return True, f"{len(checked)} stage(s) accounted: {', '.join(checked)}" + (
+        f"; refused: {refused[0][:150]}" if refused else "")
 
 
 # --------------------------------------------------------------------------

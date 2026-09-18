@@ -244,10 +244,15 @@ def main():
     # S7 postcondition gates over the accepted CLeans
     rc2 = os.system(f"cd {ROOT} && bb scripts/clean_vocab_gate.bb {args.out} >/dev/null 2>&1")
     print(f"[gate] clean_vocab_gate over accepted: {'PASS' if rc2==0 else 'FAIL'}")
-    # Success means every graph typed and passed clean_argcheck. A gate rejection
-    # (G1-G8, including a G7 cycle) used to exit 0 as "cleanly rejected", which put
-    # a passing S7 ledger row over a CLean corpus with proofs missing.
-    sys.exit(0 if (not failed and not rejected and rc2 == 0) else 1)
+    # Success means the typing ran and its output is consistent: nothing failed to
+    # type, no stale CLean is lying around, and the vocab gate passes over what was
+    # accepted. A gate rejection (G1-G8, including a G7 cycle) is a finding about one
+    # proof, so it is recorded as a rejected item instead. That used to exit 0 as
+    # "cleanly rejected", which put a passing S7 ledger row over a CLean corpus with
+    # proofs missing; what prevents that now is the accounting, not the exit status -
+    # the rejected proof is named, S7's expected items are S3's accepted outputs, and
+    # replay's C2 compares the two.
+    sys.exit(0 if (not failed and rc2 == 0) else 1)
 
 
 if __name__ == "__main__":

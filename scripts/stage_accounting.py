@@ -7,10 +7,23 @@ invocation, checkpointed after every item so a crash still leaves evidence.
 
     <run>/accounting/<stage>/<invocation>/<stage>.<producer>.json
 
-The runner decides acceptance from these documents: every expected item must be
-accounted for exactly once, and only `accepted` (or `deferred` under a declared
-selection cap) is compatible with a passing stage. Rejected and errored items are
-kept as evidence; they are never converted into success.
+The runner decides acceptance from these documents. Two different things can be
+wrong with one, and conflating them halted a 124-paper mining run over three
+proofs the contract called circular:
+
+  * the accounting is BROKEN - an expected item is unaccounted for, an item is
+    recorded twice, output is claimed for an item nobody asked for, or an
+    accepted item's artifact is missing. Then the evidence does not describe the
+    corpus and nothing downstream can be trusted. This always stops the stage.
+  * the contract REFUSED some items - they are rejected or errored. That is a
+    finding about the data, which is what a mining run is for. It stops the stage
+    only when the accepted share falls below the run's declared floor, because a
+    collapse (mark7-val3 run 01 accepted 0 of 20) means the contract, the prompt
+    or the endpoint is wrong and the remaining window would be spent on nothing.
+
+Rejected and errored items are kept as evidence and are never converted into
+success: they stay rejected in the accounting, in the attempt row and in the
+ledger row, and every downstream stage expects only the items actually accepted.
 """
 from __future__ import annotations
 
@@ -21,6 +34,9 @@ from pathlib import Path
 
 SCHEMA = "futon6-stage-accounting/v1"
 STATUSES = ("accepted", "rejected", "errored", "deferred")
+# Why an accounting does not show every item accepted: the record itself is
+# unusable, or the contract refused items it did record.
+BROKEN, REFUSED = "broken", "refused"
 DIR_ENV = "FUTON6_ACCOUNTING_DIR"
 # stage -> [(producer, inputs)]. Inputs name where the expected item ids come
 # from: the frozen corpus, or the accepted outputs of an earlier producer (in this
@@ -111,30 +127,33 @@ def accepted_outputs(doc: dict) -> list[str]:
     return [o for e in doc["items"] if e["status"] == "accepted" for o in e["outputs"]]
 
 
-def problems(doc: dict, expected, *, run_dir: Path, allow_deferred: bool = False) -> list[str]:
-    """Reasons this accounting does not support a passing stage (empty = pass)."""
+def findings(doc: dict, expected, *, run_dir: Path, allow_deferred: bool = False) -> list[tuple[str, str]]:
+    """[(kind, message)] for one producer; kind is BROKEN or REFUSED (empty = all accepted)."""
     label = f"{doc['stage']}.{doc['producer']}"
-    found: list[str] = []
+    found: list[tuple[str, str]] = []
     expected = [str(e) for e in expected]
     # The same input set, in any order: producers enumerate files, upstream lists
     # outputs in paper order (e.g. p10 sorts before p2 by file name).
     if sorted(doc["expected"]) != sorted(set(expected)) or len(doc["expected"]) != len(set(doc["expected"])):
-        found.append(f"{label}: declared inputs differ from the upstream inputs "
-                     f"({len(doc['expected'])} declared, {len(set(expected))} upstream)")
+        found.append((BROKEN, f"{label}: declared inputs differ from the upstream inputs "
+                              f"({len(doc['expected'])} declared, {len(set(expected))} upstream)"))
     ids = [e["id"] for e in doc["items"]]
     if len(ids) != len(set(ids)):
-        found.append(f"{label}: duplicate item records")
+        found.append((BROKEN, f"{label}: duplicate item records"))
     missing = sorted(set(expected) - set(ids))
     extra = sorted(set(ids) - set(expected))
     if missing:
-        found.append(f"{label}: {len(missing)} unaccounted item(s), e.g. {missing[:3]}")
+        found.append((BROKEN, f"{label}: {len(missing)} unaccounted item(s), e.g. {missing[:3]}"))
     if extra:
-        found.append(f"{label}: {len(extra)} item(s) outside the inputs, e.g. {extra[:3]}")
+        found.append((BROKEN, f"{label}: {len(extra)} item(s) outside the inputs, e.g. {extra[:3]}"))
     for status in ("rejected", "errored") + (() if allow_deferred else ("deferred",)):
         bad = [e for e in doc["items"] if e["status"] == status]
         if bad:
-            found.append(f"{label}: {len(bad)} {status}, e.g. "
-                         + "; ".join(f"{e['id']}: {e['reason'][:120]}" for e in bad[:3]))
+            # Deferred outside a declared cap is a bookkeeping fault, not a finding:
+            # nobody asked for those items to be skipped.
+            kind = REFUSED if status in ("rejected", "errored") else BROKEN
+            found.append((kind, f"{label}: {len(bad)} {status}, e.g. "
+                          + "; ".join(f"{e['id']}: {e['reason'][:120]}" for e in bad[:3])))
     for entry in doc["items"]:
         if entry["status"] != "accepted":
             continue
@@ -142,8 +161,43 @@ def problems(doc: dict, expected, *, run_dir: Path, allow_deferred: bool = False
             path = Path(artifact)
             path = path if path.is_absolute() else Path(run_dir) / path
             if not path.is_file() or not path.stat().st_size:
-                found.append(f"{label}: accepted {entry['id']} has missing/empty artifact {artifact}")
+                found.append((BROKEN, f"{label}: accepted {entry['id']} has missing/empty artifact {artifact}"))
     return found
+
+
+def problems(doc: dict, expected, *, run_dir: Path, allow_deferred: bool = False) -> list[str]:
+    """Every reason this producer did not accept all of its items (strict view)."""
+    return [message for _, message in findings(doc, expected, run_dir=run_dir, allow_deferred=allow_deferred)]
+
+
+def item_yield(doc: dict, allow_deferred: bool = False) -> tuple[int, int]:
+    """(accepted, judged) - items the contract judged, excluding declared deferrals.
+
+    Under a declared cap the deferred regions were never offered to the model, so
+    counting them against the yield would read a 5-of-28 selection as an 82% loss.
+    """
+    judged = [e for e in doc["items"]
+              if not (allow_deferred and e["status"] == "deferred")]
+    return sum(1 for e in judged if e["status"] == "accepted"), len(judged)
+
+
+def blocking(doc: dict, expected, *, run_dir: Path, allow_deferred: bool = False,
+             item_floor: float = 1.0) -> tuple[list[str], list[str]]:
+    """(reasons to stop, findings to record and continue past).
+
+    Refusals are recorded and passed over while the accepted share holds at the
+    run's floor; below it they become one blocking reason, because at that point
+    the stage is evidence about the pipeline rather than about the corpus.
+    """
+    found = findings(doc, expected, run_dir=run_dir, allow_deferred=allow_deferred)
+    stop = [message for kind, message in found if kind == BROKEN]
+    noted = [message for kind, message in found if kind == REFUSED]
+    accepted, judged = item_yield(doc, allow_deferred)
+    if noted and judged and accepted < item_floor * judged:
+        stop.append(f"{doc['stage']}.{doc['producer']}: accepted {accepted}/{judged} "
+                    f"({accepted / judged:.1%}), below this run's floor of {item_floor:.0%}")
+        stop += noted          # stopping for the yield means quoting what was refused
+    return stop, noted
 
 
 def relative(path, run_dir=None) -> str:
@@ -248,10 +302,15 @@ def ledgered_invocation(run_dir: Path, stage: str, corpus_id: str) -> str | None
 
 
 def stage_problems(run_dir: Path, stage: str, invocation: str, corpus_id: str):
-    """(problems, per-producer counts) for one invocation's item accounting."""
+    """(reasons to stop, per-producer counts, refusals to record) for one invocation.
+
+    The floor comes from the run manifest, so the runner and a later replay of the
+    retrieved copy judge the same accounting by the same rule.
+    """
     import run_manifest
     doc = run_manifest.load(Path(run_dir))
-    loaded, counts, found = {}, {}, []
+    floor = run_manifest.item_floor(doc)
+    loaded, counts, found, noted = {}, {}, [], []
     for producer, source in STAGES.get(stage, []):
         try:
             if source == "corpus":
@@ -273,5 +332,8 @@ def stage_problems(run_dir: Path, stage: str, invocation: str, corpus_id: str):
         loaded[f"{stage}.{producer}"] = current
         counts[producer] = current["counts"]
         allow_deferred = (stage, producer) == ("S4", "select") and doc["selection"]["expository-cap"] > 0
-        found += problems(current, expected, run_dir=Path(run_dir), allow_deferred=allow_deferred)
-    return found, counts
+        stop, refused = blocking(current, expected, run_dir=Path(run_dir),
+                                 allow_deferred=allow_deferred, item_floor=floor)
+        found += stop
+        noted += refused
+    return found, counts, noted

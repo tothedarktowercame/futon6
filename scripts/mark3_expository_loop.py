@@ -256,7 +256,9 @@ def run(args: argparse.Namespace) -> int:
             mh.emit_record(args.run_dir, run_id=args.run_id, corpus_id=args.corpus_id,
                            paper_id=pid, stage="S4", metric="expository-coverage",
                            axis="completeness", value=round(ok / max(1, tot), 4), computable=True)
-    return 0 if counts["accepted"] == len(loaded) else 1
+    # Refused regions are recorded per item and weighed by the runner against the
+    # run's floor; the loop itself ran, so it exits 0. See mark3_iatc_loop.py.
+    return 0
 
 
 def main() -> int:

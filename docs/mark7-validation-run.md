@@ -79,8 +79,15 @@ export OPENAI_BASE_URL=http://localhost:8000/v1
 export MODEL=mark4-70b                               # the *served* name, not the HF id
 export FUTON6_MODEL_REVISION=<snapshot hash>
 export FUTON6_EXPOSITORY_CAP_PER_PAPER=5
+export FUTON6_ITEM_FLOOR=1.0                         # validation: read every refusal
 RUN=mark7-val3-<host>-01
 ```
+
+`FUTON6_ITEM_FLOOR` is the accepted share a stage needs to continue, pinned into
+the run manifest. A mining run defaults to 0.75 and carries its refusals forward;
+three papers are few enough to read item by item, so validation demands all of
+them and stops on the first refusal, which is what each of the six runs below
+did.
 
 ## 5. Run
 

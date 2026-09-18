@@ -88,7 +88,7 @@ class ExpositoryContract(unittest.TestCase):
                 return rc, {e["id"]: e for e in accounting.load(adir, "S4", "loop")["items"]}
 
             rc, items = invoke("S4-a001")
-            self.assertEqual(rc, 1)
+            self.assertEqual(rc, 0)  # refused regions are recorded, not a loop failure
             self.assertEqual([items[k]["status"] for k in sorted(items)], ["accepted", "rejected", "errored"])
             self.assertIn("exactly one", items["1111.0001:leaf-0001:L20-24"]["reason"])
             answers["1111.0001:leaf-0001:L20-24"] = json.dumps({"scopes": [scope()]})
