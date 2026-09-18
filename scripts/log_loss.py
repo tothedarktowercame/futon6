@@ -12,6 +12,12 @@ reads first when he's back (grounding % over time + what changed each tick).
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import datetime
 import json
 import sys
@@ -20,7 +26,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import check_invariants as ci
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = config.ROOT
 LEDGER = ROOT / "holes" / "loss-ledger.md"
 LOGJSONL = ROOT / "data" / "loss" / "loss-log.jsonl"
 

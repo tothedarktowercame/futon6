@@ -58,21 +58,15 @@ Given a run directory (ours or yours), the replay harness re-derives the
 accounting from the artifacts:
 
 ```bash
-.venv/bin/python scripts/replay_e2e.py --run-dir data/runs/<run-id> \
-    --ids holes/mark7-16.ids.txt --corpus-id <corpus-id>
+python3 scripts/replay_e2e.py --run-dir data/runs/<run-id>
 ```
 
-Eleven checks in four families — conservation (C1–C2), identity (I1–I3),
-shape (S1–S3), persistence (P1–P3) — each tagged FAIL / WARN / not-yet-
-applicable. **Agreement criterion: exact.** A reproduction of the accounting
-is 11/11 non-FAIL. (Provenance imperfections WARN; artifact corruption
-FAILs. `--through S<n>` scopes the suite to a partial run.)
-
-Pass every path flag explicitly (`--run-dir --graphs --steps --clean --ids
---corpus-id`): the script's built-in defaults refer to the reference host's
-legacy shared directories, an ids file not in this repo, and the pre-I1
-corpus label `math-ct-e2e-12` — relying on them off-Zone will refuse or, worse,
-attest the wrong artifacts.
+Eleven checks cover conservation, identity, shape, and persistence. All
+applicable checks must PASS; FAIL and WARN both return nonzero. `--through S<n>`
+selects a completed stage prefix. Paths and corpus identity come from the run
+manifest; explicit overrides must agree. Legacy unmanifested runs require
+separate historical analysis and are not automatically adopted. See
+[run manifest operations](docs/mark7-run-manifest.md).
 
 ### Tier 1 — environment attestation (~minutes, model, no eprints)
 
@@ -98,11 +92,13 @@ host's methods section.
 export FUTON6_EPRINTS=/path/to/eprints  OPENAI_BASE_URL=...  MODEL=...
 .venv/bin/python scripts/linode_stepper.py --plan --profile <linode|superpod>
 .venv/bin/python scripts/linode_stepper.py --run --profile <profile> \
-    --run-id <fresh-id> --corpus-id math-ct-e2e-16
+    --run-id <fresh-id> --corpus-id math-ct-e2e-16 \
+    --run-dir data/runs/<fresh-id> --ids holes/mark7-16.ids.txt \
+    --from S1 --reuse S0 STAGE
 ```
 
 Preflight and conformance run first, mandatorily. **Agreement criterion:**
-both gates pass; 12/12 stages ledgered; Tier-0 replay 11/11 non-FAIL on the
+both gates pass; 12/12 stages ledgered; Tier-0 replay 11/11 PASS on the
 resulting run directory; counts land near the reference values below.
 
 We have **one** reference observation, so tolerance bands are honestly
@@ -159,12 +155,9 @@ Same list as the handoff, at any tier reached:
 
 ## Cleanups / TODO
 
-1. **Fix `replay_e2e.py`'s defaults.** They currently point at the reference
-   host's legacy shared directories, an ids file not in this repo
-   (`holes/mark7z-e2e.ids.txt`), and the pre-I1 corpus label
-   `math-ct-e2e-12`. Off-Zone they refuse or attest the wrong artifacts;
-   the warning in Tier 0 above papers over what should be a code fix
-   (run-scoped defaults, or no defaults at all — required flags).
+1. **Replay defaults resolved in Stage 2.** `--run-dir` is required and its
+   manifest selects every input. Historical reference results below remain
+   historical evidence, not proof of current rejection-free acceptance.
 2. **Confirm the manifest of record.** This document pins
    `holes/mark7-16.ids.txt` as *the* manifest for `math-ct-e2e-16`. If a
    canonical 16-paper list exists elsewhere (on Zone, or under another

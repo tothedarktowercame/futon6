@@ -26,11 +26,10 @@ from pathlib import Path
 from typing import Dict, Iterator, Optional, Sequence
 
 import numpy as np
-import os
-
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 TOKEN_RE = re.compile(r"[a-z0-9][a-z0-9\-]*")
@@ -820,7 +819,7 @@ def build_trial(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run FrontierMath empirical trial on superpod outputs")
-    parser.add_argument("--outdir", type=Path, default=_CODE_ROOT / "storage/math-processed-gpu")
+    parser.add_argument("--outdir", type=Path, default=config.storage() / "math-processed-gpu")
     parser.add_argument(
         "--frontier-dir",
         type=Path,

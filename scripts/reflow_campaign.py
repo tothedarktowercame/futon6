@@ -10,6 +10,10 @@ unions the per-turn pattern-retrievals across sessions, retracts onto the campai
   futon6/.venv/bin/python scripts/reflow_campaign.py C-cascade-real [--sessions S1 S2 …] [--min-turns 15]
 """
 import os, sys, json, urllib.request, collections
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from session_mission_comb import fetch_scopes
@@ -20,9 +24,9 @@ from pathlib import Path
 _CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 API = "http://localhost:7070"
-PIDX = str(_CODE_ROOT / "futon3/resources/sigils/patterns-index.tsv")
-WA_DIR = str(_CODE_ROOT / "futon4/data/webarxana/public/wa")
-OUTROOT = str(_CODE_ROOT / "futon2/holes/reflow")
+PIDX = str(config.sibling("futon3") / "resources/sigils/patterns-index.tsv")
+WA_DIR = str(config.sibling("futon4") / "data/webarxana/public/wa")
+OUTROOT = str(config.sibling("futon2") / "holes/reflow")
 
 
 def sigils():

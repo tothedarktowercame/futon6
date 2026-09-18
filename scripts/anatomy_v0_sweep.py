@@ -7,6 +7,12 @@ It emits one JSON object per paper under storage/futon6/data/ct-anatomy-v0.
 
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import gzip
 import io
@@ -26,8 +32,8 @@ _CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
-DEFAULT_OUT = _CODE_ROOT / "storage/futon6/data/ct-anatomy-v0"
+DEFAULT_EPRINTS = config.eprints()
+DEFAULT_OUT = config.anatomy()
 ROLE_TSV = ROOT / "holes" / "golden-graphs" / "latexml-math-roles.tsv"
 PLAIN_CSEQ = ROOT / "holes" / "golden-graphs" / "tex-plain-cseq.txt"
 TEXT_EXTS = {

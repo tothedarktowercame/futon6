@@ -22,16 +22,15 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 import numpy as np
-import os
-
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PROPOSALS = _CODE_ROOT / "futon3c/holes/excursions/close-reading/proposals"
-DEFAULT_CLOSE_READING = _CODE_ROOT / "futon3c/holes/excursions/close-reading"
+DEFAULT_PROPOSALS = config.sibling("futon3c") / "holes/excursions/close-reading/proposals"
+DEFAULT_CLOSE_READING = config.sibling("futon3c") / "holes/excursions/close-reading"
 DEFAULT_HIERARCHY = DEFAULT_CLOSE_READING / "expository-scope-hierarchy.edn"
 DEFAULT_GH200 = ROOT / "data" / "showcases" / "ct-anatomy" / "gh200"
 BASELINE_TARGET = 34.72

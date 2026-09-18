@@ -10,12 +10,13 @@
 ;; intermediates under .attempts/.
 
 (require '[babashka.process :as p]
+         '[cheshire.core :as json]
          '[clojure.edn :as edn]
          '[clojure.java.io :as io]
          '[clojure.string :as str])
 
 (def default-opts
-  {:marks-dir "data/showcases/ct-anatomy/golden"
+  {:marks-dir (or (System/getenv "FUTON6_MARKS") "data/showcases/ct-anatomy/golden")
    :anchor-k 2
    :anchor-tau 0.45
    :anchor-floor 0.30
@@ -213,21 +214,25 @@
                  :rate nil
                  :reasons ["N/A: required structure absent at this resolution"]))))
 
-;; Prefer the repo venv's interpreter. Invoking bare "python3" picked up the
-;; system Python, which has no edn_format, so R2d raised ModuleNotFoundError and
-;; the composer reported "R2d concept coverage failed" — rung-2 FAILing on every
-;; graph in the corpus while R2d succeeded when run directly. Same class as the
-;; LaTeXML gap: the dependency exists, but not where the caller looks.
-(def python-bin
-  (let [venv (io/file "/.venv/bin/python")
-        local (io/file ".venv/bin/python")]
-    (cond (.exists local) (.getPath local)
-          (.exists venv) (.getPath venv)
-          :else "python3")))
+;; The runner and preflight pass the selected argv exactly (including flags and
+;; paths with spaces). Standalone callers may supply FUTON6_PYTHON_CMD; otherwise
+;; retain the local-venv/default-Python convention.
+(def python-argv
+  (let [encoded (System/getenv "FUTON6_PYTHON_ARGV_JSON")
+        command (System/getenv "FUTON6_PYTHON_CMD")
+        local (io/file ".venv/bin/python")
+        args (cond encoded (json/parse-string-strict encoded)
+                   command (vec (p/tokenize command))
+                   (.exists local) [(.getPath local)]
+                   :else ["python3"])]
+    (when-not (and (vector? args) (seq args)
+                   (every? #(and (string? %) (not (str/blank? %))) args))
+      (throw (ex-info "Invalid configured Python argv" {})))
+    args))
 
 (defn concept-check-file [file]
-  (let [result @(p/process [python-bin "scripts/r2d_concept_coverage.py"
-                            "--edn" (.getPath (io/file file))]
+  (let [result @(p/process (into python-argv ["scripts/r2d_concept_coverage.py"
+                                            "--edn" (.getPath (io/file file))])
                            {:out :string :err :string})]
     (when-not (zero? (:exit result))
       (throw (ex-info "R2d concept coverage failed"

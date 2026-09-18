@@ -22,6 +22,10 @@ Outputs embed verbatim turn spans → gitignored under data/*. Private transcrip
 """
 import argparse, glob, json, os, re, sys, hashlib, urllib.request
 import concurrent.futures as cf, time
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from meme_mine_runner import text_of, _sanitize_json_escapes, WRAP, DROP
 from meme_mine_joint import registry, retrieve
@@ -35,7 +39,7 @@ from pathlib import Path
 _CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 HOME = os.path.expanduser("~")
-ROOT = str(_CODE_ROOT / "futon6"); OUT = f"{ROOT}/data/c-vector"
+ROOT = str(config.ROOT); OUT = f"{ROOT}/data/c-vector"
 # A cheap CPU pre-tag (香 salience, the leading edge of a correction) — a HINT for the LLM, never a gate.
 CORRECTION_CUE = re.compile(r"\b(not only|not just|not that|actually|no,|nope|isn'?t|wrong|instead|"
                             r"rather|i'?d say|let'?s not|don'?t|shouldn'?t|the issue is|too)\b", re.I)

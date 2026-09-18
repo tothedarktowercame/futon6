@@ -14,6 +14,12 @@ the proofread queue these pages feed.
 
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import html
 import importlib.util
@@ -31,8 +37,8 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 DEFAULT_SAMPLE = ROOT / "data" / "golden-30-sample.json"
-DEFAULT_EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
-DEFAULT_SCOPES = _CODE_ROOT / "storage/mark2/ct-fresh-scopes"
+DEFAULT_EPRINTS = config.eprints()
+DEFAULT_SCOPES = config.path("FUTON6_SCOPES", config.storage() / "mark2/ct-fresh-scopes")
 DEFAULT_OUT = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 DEFAULT_SUPERPOD = Path("/tmp/futon6-sbs/scripts/superpod-job.py")
 

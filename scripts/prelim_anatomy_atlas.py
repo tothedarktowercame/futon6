@@ -16,14 +16,13 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-import os
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
-
-ROOT = Path(__file__).resolve().parent.parent
-APM_DIR = _CODE_ROOT / "storage/apm"
+ROOT = config.ROOT
+APM_DIR = config.storage() / "apm"
 MANIFEST = APM_DIR / "manifest.edn"
 ATLAS_DIR = ROOT / "data" / "showcases" / "prelim-atlas"
 GOLDEN_DIR = ATLAS_DIR / "golden"

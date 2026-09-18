@@ -30,11 +30,9 @@ import os
 import shutil
 import subprocess
 import sys
-from pathlib import Path
-
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+import shlex
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import futon6_config as config
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 R = []          # (name, ok, detail, remedy)
@@ -47,7 +45,8 @@ def rec(name, ok, detail, remedy=""):
 
 def sh(cmd, timeout=120):
     try:
-        p = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=timeout)
+        p = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=timeout,
+                           cwd=ROOT, env=config.child_environment())
         return p.returncode, (p.stdout + p.stderr).strip()
     except Exception as e:
         return 1, str(e)
@@ -62,7 +61,7 @@ def check_binaries(fix=False):
     ]:
         have = shutil.which(exe)
         if not have and fix:
-            sh(f"bash {ROOT}/scripts/linode-postsetup-deps.sh", timeout=1800)
+            sh(f"bash {shlex.quote(ROOT + '/scripts/linode-postsetup-deps.sh')}", timeout=1800)
             have = shutil.which(exe)
         rec(f"binary:{exe}", bool(have), have or "NOT FOUND", remedy)
 
@@ -76,7 +75,7 @@ def check_structure_chain():
     if not shutil.which("bb") or not os.path.exists(script):
         return rec("chain:formula->structure", False, "bb or sfc_def_structure.bb absent",
                    "run scripts/linode-postsetup-deps.sh")
-    code, out = sh(f'printf "%s" "x = y + z" | bb {script} -', timeout=180)
+    code, out = sh(f'printf "%s" "x = y + z" | bb {shlex.quote(script)} -', timeout=180)
     ok = code == 0 and ":structure" in out
     return rec("chain:formula->structure", ok,
                "structure returned" if ok else f"no :structure in output ({out[:80]})",
@@ -106,7 +105,7 @@ def check_gate_subprocess():
     graphs = [g for g in graphs if not g.endswith(".rung2.edn")]
     if not graphs:
         return rec("chain:gate-subprocess", True, "no graphs yet — nothing to exercise")
-    code, out = sh(f'bb {script} {graphs[0]}', timeout=300)
+    code, out = sh(shlex.join(['bb', script, graphs[0]]), timeout=300)
     # PASS or FAIL are both fine; what must not happen is R2d failing to report.
     ok = "R2d" in out and "concept-coverage" in out and "R2d concept coverage failed" not in out
     return rec("chain:gate-subprocess", ok,
@@ -118,12 +117,23 @@ def check_gate_subprocess():
 # ---------------------------------------------------------------- python deps
 
 def check_python():
-    missing = []
-    for mod in ("edn_format", "numpy", "sentence_transformers"):
-        try:
-            __import__(mod)
-        except Exception:
-            missing.append(mod)
+    # Check the interpreter used by stages, even when preflight itself was
+    # launched with another Python. Preserve actual import checks, not find_spec.
+    probe = '''import importlib, json
+missing = []
+for mod in ("edn_format", "numpy", "sentence_transformers"):
+    try:
+        importlib.import_module(mod)
+    except Exception:
+        missing.append(mod)
+print(json.dumps(missing))
+'''
+    result = subprocess.run([*config.python_argv(), "-c", probe], cwd=ROOT,
+                            env=config.child_environment(), capture_output=True, text=True)
+    if result.returncode:
+        return rec("python:modules", False, "configured Python import probe failed: " + result.stderr[-300:],
+                   "check FUTON6_PYTHON_CMD and install the pipeline dependencies there")
+    missing = json.loads(result.stdout.splitlines()[-1])
     rec("python:modules", not missing, "all present" if not missing else f"missing {missing}",
         "pip install " + " ".join(missing) if missing else "")
 
@@ -141,21 +151,35 @@ def check_gates():
 
 # ---------------------------------------------------------------- substrate
 
+def check_concept_authority():
+    from concept_authority import ConceptAuthority, configured_index
+    path = configured_index()
+    try:
+        authority = ConceptAuthority(path)
+    except (OSError, ValueError, TypeError) as exc:
+        return rec("substrate:concept-authority", False, str(exc),
+                   "extract the updated Mark7 substrate bundle; optionally set "
+                   "FUTON6_BACKGROUND_CORPUS_INDEX to its schema-2 authority index")
+    return rec("substrate:concept-authority", True,
+               f"{path}: {authority.meta['term-keys']} terms; Hom/End/colim resolve")
+
+
 def check_substrate():
+    check_concept_authority()
     need = ["data/warp/concept-index.json", "data/warp/def-snippets.json",
             "data/warp/defined-index.json", "data/warp/concept-usage.json",
             "data/concept-encyclopedia-ct.json",
-            "../futon3/resources/sigils/patterns-index.tsv"]
+            str(config.sibling("futon3") / "resources/sigils/patterns-index.tsv")]
     missing = [p for p in need if not os.path.exists(os.path.join(ROOT, p))]
     rec("substrate:present", not missing, f"{len(need) - len(missing)}/{len(need)} substrate files",
-        "extract data/mark7-ct-substrate.tgz -C ~/code/" if missing else "")
+        "extract data/mark7-ct-substrate.tgz at the configured checkout and FUTON3_ROOT" if missing else "")
 
     # The mining reads ONE pattern family group. cas_select filters the index by
     # FAMILY_PREFIX = "math-informal", so of 1134 library patterns exactly 45 are
     # reachable by this run; the rest (257 iiching, 64 iching, 58 p4ng, ...) are
     # noise here. Check the families the run can actually use are present, rather
     # than checking a 1355-row index exists and calling that substrate.
-    fam_root = os.path.join(ROOT, "..", "futon3", "library")
+    fam_root = str(config.sibling("futon3") / "library")
     fams, missing_fams = {}, []
     for fam in ("math-informal", "math-informal-CT"):
         d = os.path.join(fam_root, fam)
@@ -165,33 +189,17 @@ def check_substrate():
             missing_fams.append(fam)
     rec("substrate:ct-patterns", not missing_fams,
         ", ".join(f"{k}={v}" for k, v in fams.items()),
-        "extract data/mark7-ct-substrate.tgz -C ~/code/" if missing_fams else "")
+        "extract data/mark7-ct-substrate.tgz at the configured checkout and FUTON3_ROOT" if missing_fams else "")
 
 
 # ---------------------------------------------------------------- eprints
 
-# Candidate eprint stores, in precedence order. The default baked into the code
-# (`warp_bib.DEFAULT_EPRINTS`) is a dev-box path that does not exist on every
-# host, so on 2026-08-08 an unset FUTON6_EPRINTS was read as "this machine has no
-# sources" and 16 papers were re-fetched from arXiv that the host already held at
-# ~/data/arxiv-math-ct-eprints. Reporting "unset" is not the same as reporting
-# "absent", and a preflight that cannot tell them apart sends you to the network.
-EPRINT_CANDIDATES = (
-    str(_CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"),  # warp_bib default
-    os.path.join(os.path.expanduser("~"), "data", "arxiv-math-ct-eprints"),
-    os.path.join(ROOT, "data", "arxiv-math-ct-eprints"),
-)
-
-
 def resolve_eprints():
-    """($dir, how) for the first usable eprint store, or (None, reason)."""
-    env = os.environ.get("FUTON6_EPRINTS")
-    if env:
-        return (env, "FUTON6_EPRINTS") if os.path.isdir(env) else (None, f"FUTON6_EPRINTS={env} is not a directory")
-    for cand in EPRINT_CANDIDATES:
-        if os.path.isdir(cand) and os.listdir(cand):
-            return cand, "discovered"
-    return None, "no eprint store found (FUTON6_EPRINTS unset and no known location populated)"
+    """Inspect exactly the path the producers use, including an explicit bad override."""
+    location = config.eprints()
+    if location.is_dir():
+        return str(location), "FUTON6_EPRINTS" if os.environ.get("FUTON6_EPRINTS") else "discovered"
+    return None, f"eprint store {location} is not a directory"
 
 
 def check_eprints(ids_file, sample=25):
@@ -219,7 +227,11 @@ def check_endpoint(url, model):
     if not url:
         return rec("model:endpoint", False, "no --endpoint given",
                    "pass --endpoint http://host:port/v1")
-    code, out = sh(f'curl -s --max-time 10 {url}/models', timeout=30)
+    code, out = sh(shlex.join([
+        "curl", "-s", "--max-time", "10", "-H",
+        "Authorization: Bearer " + os.environ.get("OPENAI_API_KEY", "x"),
+        url.rstrip("/") + "/models",
+    ]), timeout=30)
     ok = code == 0 and ("data" in out or "models" in out)
     detail = "reachable" if ok else f"unreachable ({out[:60]})"
     if ok and model:
@@ -242,11 +254,14 @@ def check_disk(min_gb=50):
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", default="holes/math-ct-full.ids.txt")
-    ap.add_argument("--endpoint", default=os.environ.get("OPENAI_BASE_URL"))
-    ap.add_argument("--model", default=os.environ.get("MODEL"))
+    ap.add_argument("--endpoint", default=config.endpoint())
+    ap.add_argument("--model", default=config.model())
     ap.add_argument("--fix", action="store_true", help="attempt the automatable remedies")
     ap.add_argument("--min-disk-gb", type=int, default=50)
     a = ap.parse_args()
+    os.environ.update(OPENAI_BASE_URL=a.endpoint, MODEL=a.model)
+    os.environ.update(config.child_environment())
+    print("host configuration: " + json.dumps(config.effective(), sort_keys=True))
 
     ids = a.ids if os.path.isabs(a.ids) else os.path.join(ROOT, a.ids)
     check_binaries(a.fix)

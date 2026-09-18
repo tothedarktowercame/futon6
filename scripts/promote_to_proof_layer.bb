@@ -12,8 +12,16 @@
 ;;   bb scripts/promote_to_proof_layer.bb
 (require '[clojure.edn :as edn] '[clojure.pprint :refer [pprint]]
          '[babashka.http-client :as http] '[cheshire.core :as json])
+(require '[clojure.java.io])
+;; Roots derive from THIS script's location; the documented environment variables
+;; override them. No absolute path belonging to one host is baked in here.
+(def ^:private repo (.getParentFile (.getParentFile (clojure.java.io/file *file*))))
+(defn- configured [env fallback]
+  (or (System/getenv env) fallback))
+(def ROOT (configured "FUTON6_CHECKOUT" (.getPath repo)))
+(def CODE-ROOT (configured "FUTON_CODE_ROOT" (.getPath (.getParentFile repo))))
 
-(def ROOT (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon6"))
+
 (def OUT (str ROOT "/data/c-vector/candidate-proof-edges.edn"))
 (def MOVES (str ROOT "/data/diffsub-moves-mined.edn"))
 (def MEMES (str ROOT "/data/meme-mine/resolved-memes.openai.json"))

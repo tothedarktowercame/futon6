@@ -2,8 +2,8 @@
 """Build a more representative NNexus-Glasses-style QC viewer over batch-008.
 
 Reads:
-  - /home/joe/code/storage/mark2/inbox/batch-008.tar.gz
-  - /home/joe/code/storage/mark2/outbox/results-008.tar.gz
+  - $FUTON6_STORAGE_ROOT/mark2/inbox/batch-008.tar.gz
+  - $FUTON6_STORAGE_ROOT/mark2/outbox/results-008.tar.gz
 
 Outputs:
   - data/showcases/batch-008-math-ct-qc.html           (index page)

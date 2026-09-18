@@ -17,6 +17,13 @@ Usage:
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+import stage_accounting as accounting
+
+
 import argparse
 import bisect
 import json
@@ -26,7 +33,7 @@ from typing import Any
 
 REPO = Path(__file__).resolve().parent.parent
 GH200_DIR = REPO / "data" / "showcases" / "ct-anatomy" / "gh200"
-MARKS_DIR = REPO / "data" / "showcases" / "ct-anatomy" / "golden"
+MARKS_DIR = config.marks()
 PILOT_DIR = REPO / "data" / "iatc-argument-graphs" / "gh200"
 CONTEXT_LINES = 4  # window padding around the selected passage
 SCHEMA = "iatc-candidate/v2-enriched"  # bumped when the candidate payload changes
@@ -158,42 +165,45 @@ def extract(paper_id: str) -> dict[str, Any] | None:
         "binder-context": binder_context(marks, starts, hi + 1),
         "enrichment": window_enrichment(marks, starts, win_lines[0], win_lines[1]),
         "source-window": win,
-        "marks-path": str(mf.relative_to(REPO)),
+        "marks-path": _display(mf),
         "schema": SCHEMA,
     }
 
 
-PROOF_GAP = 40  # proof-moves within this many lines group into one proof region
+def _display(path: Path) -> str:
+    # Run-owned marks may live outside the checkout (--run-dir /scratch/...).
+    return str(path.relative_to(REPO)) if path.is_relative_to(REPO) else str(path)
 
 
-def all_passages(marks: list[dict[str, Any]], starts: list[int]) -> list[dict[str, Any]]:
-    """ALL proof regions in a paper (whole-paper extraction), not the single best passage.
-    Proof-moves within PROOF_GAP lines group into one proof region; each region -> one
-    passage (premise = nearest assumption before the region, conclusion = last move).
-    Falls back to choose_passage's single conditional/statement passage if no proof-moves."""
-    pms = sorted(marks_of(marks, "proof-move"), key=lambda m: (mark_line(m, starts), m["start"]))
-    if not pms:
-        one = choose_passage(marks, starts)
-        return [one] if one else []
-    groups = [[pms[0]]]
-    for m in pms[1:]:
-        if mark_line(m, starts) - mark_line(groups[-1][-1], starts) <= PROOF_GAP:
-            groups[-1].append(m)
-        else:
-            groups.append([m])
-    out = []
-    for g in groups:
-        first_line = mark_line(g[0], starts)
-        conclusion = g[-1]
-        premises = [m for m in marks if m.get("kind") in {"assume/explicit", "quant/universal"}
-                    and 0 <= first_line - mark_line(m, starts) <= 80]
-        premise = (sorted(premises, key=lambda m: (first_line - mark_line(m, starts), m["start"]))[0]
-                   if premises else g[0])
-        out.append({"selection": ":proof-move", "premise": premise, "conclusion": conclusion, "edge": conclusion})
-    return out
+STATEMENT_KINDS = {"env/theorem", "env/lemma", "env/proposition", "env/corollary"}
+STATEMENT_GAP = 20  # a statement ending further than this above its proof is not shown with it
+SCHEMA_PROOF = "iatc-candidate/v3-proof"  # one candidate per S1-identified proof
+
+
+def proof_regions(marks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Outermost S1 proof regions in source order.
+
+    A proof nested inside another proof is part of that proof's argument, so it is
+    reconstructed with it rather than as a second, overlapping candidate.
+    """
+    proofs = sorted((m for m in marks if m.get("kind") == "env/proof"),
+                    key=lambda m: (m["start"], -m["end"]))
+    outer: list[dict[str, Any]] = []
+    for m in proofs:
+        if outer and m["start"] < outer[-1]["end"]:
+            continue
+        outer.append(m)
+    return outer
 
 
 def extract_all(paper_id: str) -> list[dict[str, Any]]:
+    """One candidate per proof that S1 identified, with the statement it proves.
+
+    This replaced grouping `proof-move` marks ("it is easy to see", "clearly") within
+    40 lines: those groups were not proofs. On the historical 98-graph run only
+    42 of their windows overlapped any proof region, so most model work went into
+    arbitrary stretches of prose. Text outside proofs is exposition (S4).
+    """
     mf = MARKS_DIR / f"fable-{paper_id}-dp-emacs.json"
     if not mf.exists():
         return []
@@ -201,24 +211,37 @@ def extract_all(paper_id: str) -> list[dict[str, Any]]:
     text = data["text"]
     starts = line_starts(text)
     marks = [m for m in data["marks"] if "start" in m and "end" in m]
+    statements = sorted((m for m in marks if m.get("kind") in STATEMENT_KINDS), key=lambda m: m["start"])
     cands = []
-    for i, ch in enumerate(all_passages(marks, starts)):
-        p, c = ch["premise"], ch["conclusion"]
-        lo = min(mark_line(p, starts), mark_line(c, starts))
-        hi = max(mark_line(p, starts), mark_line(c, starts))
-        win, win_lines = window_text(text, starts, lo, hi)
+    for i, proof in enumerate(proof_regions(marks)):
+        p_lo = line_for(starts, proof["start"])
+        p_hi = line_for(starts, max(proof["start"], proof["end"] - 1))
+        before = [m for m in statements if m["start"] <= proof["start"]]
+        statement = before[-1] if before else None
+        lo = p_lo
+        proved = None
+        if statement is not None:
+            s_lo = line_for(starts, statement["start"])
+            s_hi = line_for(starts, max(statement["start"], statement["end"] - 1))
+            proved = {"kind": statement["kind"].split("/", 1)[1], "lines": [s_lo, s_hi],
+                      "text": text[statement["start"]:statement["end"]][:3000]}
+            if p_lo - s_hi <= STATEMENT_GAP:
+                lo = s_lo
+        start_char = starts[lo - 1]
+        end_char = starts[p_hi] if p_hi < len(starts) else len(text)
         cands.append({
             "paper-id": paper_id,
             "proof-id": f"{paper_id}__p{i}",
-            "passage-id": f"{paper_id}:p{i}:{ch['selection'][1:]}:L{win_lines[0]}-{win_lines[1]}",
-            "selection": ch["selection"],
-            "anchor-lines": {"premise": mark_line(p, starts), "conclusion": mark_line(c, starts)},
-            "window-lines": win_lines,
-            "binder-context": binder_context(marks, starts, hi + 1),
-            "enrichment": window_enrichment(marks, starts, win_lines[0], win_lines[1]),
-            "source-window": win,
-            "marks-path": str(mf.relative_to(REPO)),
-            "schema": SCHEMA,
+            "passage-id": f"{paper_id}:proof{i}:L{lo}-{p_hi}",
+            "selection": ":proof",
+            "proof-lines": [p_lo, p_hi],
+            "proved": proved,
+            "window-lines": [lo, p_hi],
+            "binder-context": binder_context(marks, starts, lo),
+            "enrichment": window_enrichment(marks, starts, lo, p_hi),
+            "source-window": text[start_char:end_char].rstrip("\n"),
+            "marks-path": _display(mf),
+            "schema": SCHEMA_PROOF,
         })
     return cands
 
@@ -243,23 +266,42 @@ def main() -> int:
     ap.add_argument("--papers", nargs="*", help="paper ids; default = 10 non-pilot gh200 with marks")
     ap.add_argument("--list", help="file of paper ids, one per line (same as emit_marks --list)")
     ap.add_argument("--all-proofs", action="store_true",
-                    help="extract EVERY proof region per paper (whole-paper), not one passage")
+                    help="one candidate per proof identified by S1 (the Mark7 path), not one legacy passage")
     a = ap.parse_args()
     papers = a.papers or (a.list and [l.strip() for l in open(a.list) if l.strip()]) or default_papers()
     outdir = Path(a.out)
     outdir.mkdir(parents=True, exist_ok=True)
+    # Every requested paper is accounted for. A paper that cannot be extracted is
+    # an errored item, not a silent omission from the frozen corpus.
+    ledger = accounting.Accounting("S3", "extract", papers)
     manifest = []
     for pid in papers:
-        cands = extract_all(pid) if a.all_proofs else ([c] if (c := extract(pid)) else [])
-        if not cands:
-            print(f"  skip {pid}: no marks or no selectable passage")
+        if not (MARKS_DIR / f"fable-{pid}-dp-emacs.json").exists():
+            ledger.record(pid, "errored", f"no S1 marks at {MARKS_DIR}", paper=pid)
+            print(f"  ERROR {pid}: no marks")
             continue
+        try:
+            cands = extract_all(pid) if a.all_proofs else ([c] if (c := extract(pid)) else [])
+        except Exception as exc:
+            ledger.record(pid, "errored", f"extraction raised {type(exc).__name__}: {exc}", paper=pid)
+            print(f"  ERROR {pid}: {exc}")
+            continue
+        written = []
         for cand in cands:
             fid = cand.get("proof-id", pid)
-            (outdir / f"{fid}.candidate.json").write_text(json.dumps(cand, indent=2))
+            path = outdir / f"{fid}.candidate.json"
+            path.write_text(json.dumps(cand, indent=2))
+            written.append((fid, path))
             manifest.append({"paper-id": pid, "proof-id": cand.get("proof-id", pid),
                              "passage-id": cand["passage-id"], "selection": cand["selection"],
                              "window-lines": cand["window-lines"]})
+        # A paper whose anatomy has no proof region is a legitimate, explicit zero.
+        ledger.record(pid, "accepted", "" if cands else "no proof identified by S1",
+                      paper=pid, artifacts=[accounting.relative(p) for _, p in written],
+                      outputs=[f for f, _ in written])
+        if not cands:
+            print(f"  {pid}: 0 proofs identified by S1")
+            continue
         print(f"  {pid}: {len(cands)} proof(s)" if a.all_proofs else
               f"  {pid}: {cands[0]['selection']} lines {cands[0]['window-lines']} "
               f"({len(cands[0]['source-window'])} chars, {len(cands[0]['binder-context'])} binders, "
@@ -267,7 +309,7 @@ def main() -> int:
     (outdir / "manifest.json").write_text(json.dumps({"papers": manifest}, indent=2))
     n_papers = len({m["paper-id"] for m in manifest})
     print(f"\n{len(manifest)} candidate(s) from {n_papers}/{len(papers)} papers -> {outdir}")
-    return 0
+    return 1 if ledger.failed() else 0
 
 
 if __name__ == "__main__":

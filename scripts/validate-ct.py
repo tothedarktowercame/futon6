@@ -21,6 +21,12 @@ Outputs:
         golden/           — golden subset for LLM validation
 """
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import json
 import os
@@ -393,16 +399,16 @@ def main():
     parser.add_argument("--golden", type=int, default=20,
                         help="Number of golden entries for LLM validation (default: 20)")
     parser.add_argument("--pm-dir", type=str,
-                        default=str(_CODE_ROOT / "planetmath/18_Category_theory_homological_algebra"),
+                        default=str(config.sibling('planetmath') / '18_Category_theory_homological_algebra'),
                         help="PlanetMath CT .tex directory")
     parser.add_argument("--ner-kernel", type=str,
-                        default=str(Path(__file__).resolve().parent.parent / "data/ner-kernel/terms.tsv"),
+                        default=str(config.ROOT / 'data/ner-kernel/terms.tsv'),
                         help="NER kernel TSV path")
     parser.add_argument("--hyperreal", type=str,
-                        default=str(Path(__file__).resolve().parent.parent / "data/hyperreal.json"),
+                        default=str(config.ROOT / 'data/hyperreal.json'),
                         help="nLab hyperreal dictionary path")
     parser.add_argument("--output-dir", type=str,
-                        default=str(Path(__file__).resolve().parent.parent / "data/ct-validation"),
+                        default=str(config.ROOT / 'data/ct-validation'),
                         help="Output directory")
     args = parser.parse_args()
 

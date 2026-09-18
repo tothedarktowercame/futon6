@@ -15,18 +15,17 @@ import re
 import tarfile
 from collections import Counter, defaultdict
 from pathlib import Path
-import os
-
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_FROZEN = _CODE_ROOT / "storage/apm/mark4-frozen-candidates.txt"
-DEFAULT_PROOF_DIR = _CODE_ROOT / "futon3c/data/apm-informal-proofs"
+DEFAULT_FROZEN = config.storage() / "apm/mark4-frozen-candidates.txt"
+DEFAULT_PROOF_DIR = config.sibling("futon3c") / "data/apm-informal-proofs"
 DEFAULT_BATCHES = [
-    _CODE_ROOT / "storage/mark2/inbox/batch-007.tar.gz",
-    _CODE_ROOT / "storage/mark2/inbox/batch-008.tar.gz",
+    config.storage() / "mark2/inbox/batch-007.tar.gz",
+    config.storage() / "mark2/inbox/batch-008.tar.gz",
 ]
 DEFAULT_KEYWORDS_OUT = ROOT / "data" / "mark4-proof-keywords.json"
 DEFAULT_HITS_OUT = ROOT / "data" / "mark4-batch-keyword-hits.json"

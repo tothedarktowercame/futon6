@@ -21,15 +21,14 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
-import os
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
-
-FUTON6 = Path(__file__).resolve().parent.parent
+FUTON6 = config.ROOT
 LOADER = Path("/tmp/futon6-sbs/scripts/superpod-job.py")
-EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
+EPRINTS = config.storage() / "futon6/data/arxiv-math-ct-eprints"
 OUT_DIR = FUTON6 / "data" / "showcases" / "ct-anatomy" / "golden"
 
 sys.path.insert(0, str(FUTON6 / "scripts"))
@@ -140,7 +139,7 @@ SUBTERM_COLORS = {"math/typed-arrow": "#008080", "math/membership": "#7851a9",
 
 def load_base_scopes(pid):
     """The existing system's voice: the fresh extraction (stage-5 parity)."""
-    f = _CODE_ROOT / "storage/mark2/ct-fresh-scopes" / (pid.replace("/", "_") + ".json")
+    f = config.storage() / "mark2/ct-fresh-scopes" / (pid.replace("/", "_") + ".json")
     if not f.exists():
         return []
     return json.loads(f.read_text()).get("scopes", [])

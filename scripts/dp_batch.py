@@ -17,16 +17,15 @@ import sys
 import time
 from collections import Counter
 from pathlib import Path
-import os
-
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = Path(__file__).resolve()
-EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
+EPRINTS = config.storage() / "futon6/data/arxiv-math-ct-eprints"
 GOLDEN_DIR = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
 LOG_DIR = ROOT / "data" / "warp" / "logs"
 FLAGS = dict(with_ca=True, with_binders=True, with_scopes=True, with_xref=True)

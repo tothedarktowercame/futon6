@@ -22,7 +22,7 @@ average-strategy precision.
 Usage:
     python scripts/eval-grounding-arbitration.py \\
         --gold data/grounding-gold-proofwiki.json \\
-        --ner-kernel /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \\
+        --ner-kernel $FUTON6_STORAGE_ROOT/futon6/data/ner-kernel/terms.tsv \\
         --train-n 600 --test-n 400 \\
         --match-mode ancestry \\
         --ancestry-index data/canon-ancestry-pm.json \\

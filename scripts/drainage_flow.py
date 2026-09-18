@@ -44,8 +44,12 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-FUTON6 = Path(__file__).resolve().parent.parent
+FUTON6 = config.ROOT
 KAPPA_BOTTLENECK = 0.0    # median kappa < 0 => net-bottlenecked channel
 PREFERS_EPS = 0.10        # a sibling must beat the realized kappa by this margin
 

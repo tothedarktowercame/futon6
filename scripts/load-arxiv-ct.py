@@ -2,7 +2,7 @@
 """arXiv math.CT loader + manifest generator for Tickle.
 
 Phase 1 notes (2026-02-24):
-- Raw eprints live at /home/joe/code/futon6/data/arxiv-math-ct-eprints/ (9,795
+- Raw eprints live at $FUTON6_CHECKOUT/data/arxiv-math-ct-eprints/ (9,795
   gzipped payloads referenced by data/arxiv-math-ct-file-index.jsonl).
 - Each index row (9,916 total) looks like:
   {"id": "math/9503217", "safe_id": "math__9503217", "local_file":

@@ -15,14 +15,13 @@ import math
 import subprocess
 import sys
 from pathlib import Path
-import os
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[3])
-
-LABS = _CODE_ROOT / "futon2/holes/labs"
-DATA = _CODE_ROOT / "futon6/data/fold-embed-gfn"
+LABS = config.sibling("futon2") / "holes/labs"
+DATA = config.ROOT / "data/fold-embed-gfn"
 CACHE = DATA / "gold-corpus.json"
 
 # The canonical 10 (A-next-gold-corpus.md numbering).

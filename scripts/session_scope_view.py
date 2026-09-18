@@ -14,6 +14,10 @@ shared tags; each turn a leaf scope with its tags. Untyped turns (no tag) are th
 "this session" signal the Emacs panel passes (mtime-max ties between concurrently-written peer sessions).
 """
 import json, os, re, sys, glob
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from transcript_provenance import classify, raw_text
 import os
@@ -34,8 +38,8 @@ def _known_docs():
     like 'E-mail' (intersect with this set, the way session-mode.el cross-checks)."""
     names = set()
     for pat in ("M-*.md", "E-*.md", "C-*.md"):
-        for f in (glob.glob(f"{_CODE_ROOT}/*/holes/{pat}")
-                  + glob.glob(f"{_CODE_ROOT}/*/holes/**/{pat}", recursive=True)):
+        for f in (glob.glob(str(config.code_root() / f"*/holes/{pat}"))
+                  + glob.glob(str(config.code_root() / f"*/holes/**/{pat}"), recursive=True)):
             names.add(os.path.basename(f)[:-3])
     return names
 
@@ -182,7 +186,7 @@ def attach_threads(ops, full_sid):
             rets[t] = b.get("query") or ""
     turn_threads = {}
     try:
-        th = json.load(open(str(_CODE_ROOT / "futon2/holes/session-threads.json")))
+        th = json.load(open(str(config.sibling("futon2") / "holes/session-threads.json")))
         for h in th.get("thread-hyperedges", []):
             sg = (h["sigil"]["truth"] + h["sigil"]["okipona"]).strip() or "·"
             short = h["pattern"].split("/")[-1]
@@ -385,7 +389,7 @@ def main():
         path = max(cand, key=os.path.getmtime)
     else:
         path = max(glob.glob(os.path.expanduser("~/.claude/projects/*/*.jsonl")), key=os.path.getmtime)
-    out = args[0] if args else str(_CODE_ROOT / "futon2/holes/session-scope-view.org")
+    out = args[0] if args else str(config.sibling("futon2") / "holes/session-scope-view.org")
     sess = os.path.basename(path)[:8]
     ops, agents = parse_turns(path)
     here = os.path.dirname(os.path.abspath(__file__))

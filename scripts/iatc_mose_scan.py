@@ -25,16 +25,16 @@ import json
 import re
 import sys
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from iatc_alignment_passA import CUES  # single source of truth for the cue lexicon
 import os
 
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
-
-DEFAULT_GLOB = str(_CODE_ROOT / "futon5/data/stackexchange-samples/*.jsonl")
+DEFAULT_GLOB = str(config.sibling("futon5") / "data/stackexchange-samples/*.jsonl")
 
 # audited arXiv Pass A %papers, for the side-by-side gap column
 ARXIV_REF = {

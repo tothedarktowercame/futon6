@@ -22,14 +22,16 @@ import re
 import sys
 from pathlib import Path
 
-# june 2026-09-16: was hardcoded to /home/joe/code/futon6/..., which made S1 fail on
-# every host but Joe's. Every sibling script (background_corpus_index.py, dp_enrich.py,
-# proof_scope_audit.py, warp_run.py) already derives this from ROOT; match them.
-ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_INDEX = Path(
-    os.environ.get("FUTON6_BACKGROUND_CORPUS_INDEX")
-    or ROOT / "data" / "background-corpus-index.json"
-)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import futon6_config as config
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_INDEX = ROOT / "data" / "background-corpus-index.json"
+
+
+def configured_index() -> Path:
+    """Resolve configuration at use time, including in imported callers."""
+    return config.authority()
 
 # Common math macro/abbreviation -> concept name, where the macro surface
 # differs from the indexed concept term. Kept small and explicit (the macro
@@ -51,26 +53,23 @@ def normalize_term(term: str) -> str:
 
 
 class ConceptAuthority:
-    def __init__(self, index_path: Path = DEFAULT_INDEX):
-        # data/background-corpus-index.json is NOT shipped in mark7-substrate.tgz and is
-        # not reconstructible downstream (it is 80,586 NNexus rows + 20,653 nLab names).
-        # Absent it, degrade to an empty authority rather than killing S1 for all papers -
-        # but say so LOUDLY and mark the object degraded, because a silent authority miss
-        # flattens every role-gap operator name to an atom and nothing downstream errors.
-        path = Path(index_path)
-        if not path.exists():
-            print(
-                f"WARNING: concept authority index missing at {path}; running DEGRADED - "
-                "every resolve() returns None, so role-gap operator names (\\Hom \\End "
-                "\\colim ...) flatten to atoms. Set FUTON6_BACKGROUND_CORPUS_INDEX to a "
-                "real index to restore concept resolution.",
-                file=sys.stderr,
-            )
-            self.terms = {}
-            self.degraded = True
-            self.meta = {"degraded": True, "index-path": str(path), "term-keys": 0}
-            return
-        data = json.loads(path.read_text())
+    def __init__(self, index_path: Path | None = None):
+        self.index_path = Path(index_path) if index_path is not None else configured_index()
+        data = json.loads(self.index_path.read_text())
+        if not isinstance(data, dict) or data.get("schema-version") != 2:
+            raise ValueError(f"{self.index_path}: concept authority requires schema-version 2")
+        terms = data.get("terms")
+        if not isinstance(terms, dict) or not terms:
+            raise ValueError(f"{self.index_path}: concept authority has no terms")
+        for term, hits in terms.items():
+            entries = hits if isinstance(hits, list) else [hits]
+            if not isinstance(term, str) or not term.strip() or not entries or any(
+                not isinstance(hit, dict) or any(
+                    not isinstance(hit.get(key), str) or not hit[key].strip()
+                    for key in ("term", "target", "resolution-kind")
+                ) for hit in entries
+            ):
+                raise ValueError(f"{self.index_path}: malformed authority entry for {term!r}")
         self.terms: dict = data["terms"]
         self.degraded = False
         self.meta = {
@@ -78,8 +77,14 @@ class ConceptAuthority:
             "nlab-names": data.get("nlab-name-count"),
             "ct-prior": data.get("ct-prior-count"),
             "term-keys": len(self.terms),
-            "degraded": False,
+            "schema-version": data["schema-version"],
+            "index-path": str(self.index_path),
         }
+        # These operators are required by the S1 role-gap lookup. Check the
+        # actual resolver, so an existing but unsuitable index cannot pass.
+        for query in (r"\Hom", r"\End", r"\colim"):
+            if self.resolve(query) is None:
+                raise ValueError(f"{self.index_path}: required concept {query} does not resolve")
 
     def resolve(self, term: str) -> dict | None:
         """Resolve a term (or macro surface) to its best concept hit, or None.
@@ -95,6 +100,7 @@ class ConceptAuthority:
         norm = normalize_term(term)
         seen = []
         for c in (norm,
+                  norm.lstrip("\\") if norm.startswith("\\") else None,
                   norm[:-1] if norm.endswith("s") and len(norm) > 3 else None,
                   ALIASES.get(norm),
                   ALIASES.get(norm.lstrip("\\"))):

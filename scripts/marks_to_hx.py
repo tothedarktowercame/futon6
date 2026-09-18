@@ -21,16 +21,16 @@ from dataclasses import dataclass
 from pathlib import Path
 import os
 from typing import Any, Iterable
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-# NOTE: the /home/joe path remaining below is inside a generated markdown EXAMPLE
-# (the ScopeQuery dogfood snippet), not a real path this script opens.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
-
-DEFAULT_SOURCE = _CODE_ROOT / "futon6/data/showcases/ct-anatomy/golden"
-DEFAULT_OUT = _CODE_ROOT / "futon6/data/substrate-2a"
+DEFAULT_SOURCE = Path(
+    str(config.ROOT / "data/showcases/ct-anatomy/golden")
+)
+DEFAULT_OUT = config.ROOT / "data/substrate-2a"
 BASELINE_PAPERS = ("math__0703763", "0704.0502", "2406.09832")
 
 
@@ -407,7 +407,7 @@ def render_report(cut_id: dict[str, str | int], imports: list[PaperImport],
             "The existing runtime can load any generated paper EDN with a one-line `GRAPH` change. Example:",
             "",
             "```python",
-            "GRAPH = Path(\"/home/joe/code/futon6/data/substrate-2a/hx/0704.0502.edn\")",
+            "GRAPH = Path(\"<checkout>/data/substrate-2a/hx/0704.0502.edn\")",
             "```",
             "",
             "Then the existing Q1 scope `{:kind :bind (:subject :A) (:concept ?c)}` answers from real filled `:bind` edges when that subject occurs in the selected paper.",

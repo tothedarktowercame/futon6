@@ -14,17 +14,17 @@ model-free routing bridge that strengthens the weak autoclock link the rest of t
 """
 import argparse, glob, json, os, re, sys
 from collections import Counter, defaultdict
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from meme_mine_runner import read_asks
 import os
 from pathlib import Path
 
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
-
-ROOT = str(_CODE_ROOT / "futon6"); OUT = f"{ROOT}/data/meme-mine"
-F3A = str(_CODE_ROOT / "futon3a/resources/notions")
+ROOT = str(config.ROOT); OUT = f"{ROOT}/data/meme-mine"
+F3A = str(config.sibling("futon3a") / "resources/notions")
 FUTONIC = {"composition": "ft/composition", "articulation": "ft/articulation", "salience": "ft/salience",
            "recognition loop": "ft/recognition-loop", "free energy": "ft/free-energy", "precision": "ft/precision",
            "expected free energy": "ft/efe", "cascade": "ft/cascade", "rollout": "ft/rollout",

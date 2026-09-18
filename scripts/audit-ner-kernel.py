@@ -24,8 +24,8 @@ filter.
 
 Usage:
     python scripts/audit-ner-kernel.py \\
-        --ner-kernel /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \\
-        --eprint-dir /home/joe/code/storage/futon6/data/arxiv-math-ct-eprints \\
+        --ner-kernel $FUTON6_STORAGE_ROOT/futon6/data/ner-kernel/terms.tsv \\
+        --eprint-dir $FUTON6_STORAGE_ROOT/futon6/data/arxiv-math-ct-eprints \\
         --max-papers 50 \\
         --out data/ner-kernel-audit.json
 """

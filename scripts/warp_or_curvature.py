@@ -11,22 +11,24 @@ edge (1 - W1/d), aggregate to per-paper (mean incident edge kappa).
 
     warp_or_curvature.py -> data/warp/or-curvature.json {paper: kappa}
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import statistics
 import sys
 import time
 from collections import defaultdict
 
-sys.path.insert(0, str(_CODE_ROOT / "futon3c/scripts"))
+sys.path.insert(0, str(config.sibling('futon3c') / 'scripts'))
 import substrate_metric_e1_curvature as eng
 import os
 from pathlib import Path
 
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
-
-W = str(_CODE_ROOT / "futon6/data/warp")
+W = str(config.ROOT / 'data/warp')
 
 
 def main():

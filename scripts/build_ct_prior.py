@@ -17,17 +17,19 @@ Output: futon6/data/ct-term-prior.json
 Document-frequency (not raw count) is the unit: it matches "how many papers is
 this term in", which is the right denominator for the over-detection comparison.
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import sys, os, re, json, gzip, glob
 from collections import Counter
 import os
 from pathlib import Path
 
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
-
-EPRINT_DIR = str(_CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints")
-OUT = str(_CODE_ROOT / "futon6/data/ct-term-prior.json")
+EPRINT_DIR = str(config.eprints())
+OUT = str(config.ROOT / 'data/ct-term-prior.json')
 
 # Light LaTeX stripping: drop commands, math, braces; keep word tokens.
 RE_COMMENT   = re.compile(r"(?<!\\)%.*")

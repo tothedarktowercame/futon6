@@ -8,6 +8,12 @@ does not attempt symbolic proof of equivalence between variants.
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import json
 import re
@@ -33,7 +39,7 @@ DEFAULT_ENCYCLOPEDIA = ROOT / "data" / "concept-encyclopedia-ct.json"
 DEFAULT_NLAB = ROOT / "data" / "nlab-wiring" / "pages.json"
 DEFAULT_FIXTURE = ROOT / "data" / "warp" / "sfc-adjunction-fixture.json"
 DEFAULT_REPORT = ROOT / "holes" / "excursions" / "sfc-concept-aggregate.md"
-PLANETMATH_DIR = _CODE_ROOT / "planetmath/18_Category_theory_homological_algebra"
+PLANETMATH_DIR = config.sibling('planetmath') / '18_Category_theory_homological_algebra'
 
 NOISE_PREFIXES = {
     "all",

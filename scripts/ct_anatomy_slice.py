@@ -9,8 +9,12 @@ data, never committed); the showcase builder reads them.
 import json
 import sys
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-HANDOFF = _CODE_ROOT / "storage/mark2/ct-handoff/output"
+HANDOFF = config.storage() / "mark2/ct-handoff/output"
 SLICES = HANDOFF.parent / "ct-anatomy-slices"
 SLICES.mkdir(exist_ok=True)
 

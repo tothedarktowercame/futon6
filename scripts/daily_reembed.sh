@@ -3,7 +3,12 @@
 # june 2026-09-16: derived code root replaces hardcoded ${FUTON_CODE_ROOT} paths.
 set -euo pipefail
 
-ROOT=${FUTON_CODE_ROOT}
+# Repo and code root derive from THIS script's location; override with the
+# documented environment variables rather than editing a path in here.
+REPO="${FUTON6_CHECKOUT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+CODE_ROOT="${FUTON_CODE_ROOT:-$(dirname "$REPO")}"
+STORAGE_ROOT="${FUTON6_STORAGE_ROOT:-$CODE_ROOT/storage}"
+ROOT="$CODE_ROOT"
 FUTON6="$ROOT/futon6"
 PY="$FUTON6/.venv/bin/python"
 MISSION_RECORDS="$ROOT/data/notions/mission_records.json"

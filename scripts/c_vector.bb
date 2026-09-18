@@ -29,10 +29,19 @@
 ;; R19-UNIFY: the stated-channel entry logic has ONE source of truth —
 ;; `futon2.aif.c-vector` (the live belly producer; babashka-compatible). This
 ;; script (the snapshot producer) delegates to it so the two cannot drift.
-(cp/add-classpath (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon2/src"))
+(require '[clojure.java.io])
+;; Roots derive from THIS script's location; the documented environment variables
+;; override them. No absolute path belonging to one host is baked in here.
+(def ^:private repo (.getParentFile (.getParentFile (clojure.java.io/file *file*))))
+(defn- configured [env fallback]
+  (or (System/getenv env) fallback))
+(def ROOT (configured "FUTON6_CHECKOUT" (.getPath repo)))
+(def CODE-ROOT (configured "FUTON_CODE_ROOT" (.getPath (.getParentFile repo))))
+(defn- sibling [env name] (configured env (str CODE-ROOT "/" name)))
+(cp/add-classpath (str (sibling "FUTON2_ROOT" "futon2") "/src"))
 (require '[futon2.aif.c-vector :as cv])
 
-(def ROOT (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon6"))
+
 (def WHOLENESS (str ROOT "/data/mission-wholeness.edn"))
 (def SCOPE-TREES (str ROOT "/data/mission-scope-trees"))
 (def OUT-DIR (str ROOT "/data/c-vector"))

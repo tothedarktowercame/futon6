@@ -15,11 +15,16 @@
 # june 2026-09-16: derived code root replaces hardcoded ${FUTON_CODE_ROOT} paths.
 set -euo pipefail
 
-OUT=${FUTON_CODE_ROOT}/futon6/data/pattern-attestation.json
+# Repo and code root derive from THIS script's location; override with the
+# documented environment variables rather than editing a path in here.
+REPO="${FUTON6_CHECKOUT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+CODE_ROOT="${FUTON_CODE_ROOT:-$(dirname "$REPO")}"
+STORAGE_ROOT="${FUTON6_STORAGE_ROOT:-$CODE_ROOT/storage}"
+OUT="$REPO/data/pattern-attestation.json"
 TMP="$(mktemp "$(dirname "$OUT")/.pattern-attestation.XXXXXX.json")"
 trap 'rm -f "$TMP"' EXIT
 
-cd ${FUTON_CODE_ROOT}/futon0
+cd "${FUTON0_ROOT:-$CODE_ROOT/futon0}"
 # Pin to the local serving JVM: an inherited FUTON3C_SERVER can silently point
 # the report at a remote mesh host with a near-empty evidence store (found
 # live 2026-07-05: 172.236.28.208 answered with 5 events vs localhost's 8k).

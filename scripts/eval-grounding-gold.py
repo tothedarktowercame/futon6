@@ -26,7 +26,7 @@ that's a tighter lower bound.
 Usage:
     python scripts/eval-grounding-gold.py \
         --gold data/grounding-gold-pm.json \
-        --ner-kernel /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \
+        --ner-kernel $FUTON6_STORAGE_ROOT/futon6/data/ner-kernel/terms.tsv \
         --out data/grounding-gold-eval.json \
         --max-entries 0    # 0 = all
 """

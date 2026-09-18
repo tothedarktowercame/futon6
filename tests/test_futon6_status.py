@@ -31,7 +31,7 @@ def test_find_local_mirrors_prefers_sha256_verified_match(tmp_path: Path):
 
     remote = {
         "name": mirrored.name,
-        "path": "/home/rob/superpod-math-processed.tar.gz",
+        "path": "/home/peer/superpod-math-processed.tar.gz",
         "size": mirrored.stat().st_size,
         "sha256": hashlib.sha256(b"same-data").hexdigest(),
     }
@@ -52,7 +52,7 @@ def test_candidate_delete_records_skips_non_matching_files(tmp_path: Path):
 
     remote = [{
         "name": local.name,
-        "path": str(_CODE_ROOT / "mark2/outbox/results-009.tar.gz"),
+        "path": "/srv/mark2/outbox/results-009.tar.gz",
         "size": len(b"remote-data"),
         "sha256": hashlib.sha256(b"remote-data").hexdigest(),
     }]
@@ -62,22 +62,22 @@ def test_candidate_delete_records_skips_non_matching_files(tmp_path: Path):
     assert records == []
 
 
-def test_build_delete_commands_separates_joe_and_sudo_paths():
+def test_build_delete_commands_separates_owned_and_sudo_paths():
     status = _load_status()
     candidates = {
         "mark2": [{
-            "remote": {"path": str(_CODE_ROOT / "mark2/outbox/results-007.tar.gz")},
+            "remote": {"path": "/srv/mark2/outbox/results-007.tar.gz"},
             "mirrors": [{"path": "/tmp/results-007.tar.gz", "evidence": ["size", "sha256"]}],
         }],
         "rob": [{
-            "remote": {"path": "/home/rob/superpod-mo-processed.tar.gz"},
+            "remote": {"path": "/home/peer/superpod-mo-processed.tar.gz"},
             "mirrors": [{"path": "/tmp/superpod-mo-processed.tar.gz", "evidence": ["size", "sha256"]}],
         }],
     }
 
-    commands = status.build_delete_commands("linode-chicago", candidates)
+    commands = status.build_delete_commands("linode-chicago", candidates, "/home/peer")
 
-    assert "ssh linode-chicago" in commands["joe"]
-    assert str(_CODE_ROOT / "mark2/outbox/results-007.tar.gz") in commands["joe"]
+    assert "ssh linode-chicago" in commands["owner"]
+    assert "/srv/mark2/outbox/results-007.tar.gz" in commands["owner"]
     assert "ssh -t linode-chicago" in commands["sudo"]
-    assert "/home/rob/superpod-mo-processed.tar.gz" in commands["sudo"]
+    assert "/home/peer/superpod-mo-processed.tar.gz" in commands["sudo"]

@@ -3,6 +3,12 @@
 
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import json
 import re
@@ -14,7 +20,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EPRINTS = _CODE_ROOT / "storage/futon6/data/arxiv-math-ct-eprints"
+DEFAULT_EPRINTS = config.eprints()
 DEFAULT_OUT = ROOT / "data" / "warp"
 
 sys.path.insert(0, str(ROOT / "scripts"))

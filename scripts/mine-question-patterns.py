@@ -17,11 +17,10 @@ from sklearn.metrics import silhouette_score
 from tqdm import tqdm
 
 from sentence_transformers import SentenceTransformer
-import os
-
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 SITUATION_RE = re.compile(r"situation\s*s[^\w]?", re.IGNORECASE)
 SECTION_SPLIT_RE = re.compile(r"\n\s*(?:classify|identify|verify|analysis|question)\b", re.IGNORECASE)
@@ -156,7 +155,7 @@ def summarize_clusters(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Cluster MO situations into candidate question patterns")
-    parser.add_argument("--dataset", type=Path, default=_CODE_ROOT / "storage/mo-processed-gpu/reverse-morphogenesis.json")
+    parser.add_argument("--dataset", type=Path, default=config.storage() / "mo-processed-gpu/reverse-morphogenesis.json")
     parser.add_argument("--output", type=Path, default=Path("data/question-patterns/mo-situation-clusters.json"))
     parser.add_argument("--model", default="BAAI/bge-large-en-v1.5")
     parser.add_argument("--device", default=None)

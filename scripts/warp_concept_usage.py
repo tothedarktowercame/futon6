@@ -11,6 +11,12 @@ landscape.
 
     warp_concept_usage.py -> data/warp/concept-usage.json {paper: [concepts]}
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import re
 import sys
@@ -19,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import warp_defined_pass as dp
 
-W = Path(__file__).resolve().parent.parent / "data/warp"
+W = config.ROOT / 'data/warp'
 EPRINTS = dp.EPRINTS
 DASH = re.compile(r"[‐-―−-]")
 STOPW = set("the a an of to in on for and or is are be by with we that this it as at".split())

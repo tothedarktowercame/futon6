@@ -3,7 +3,7 @@
 # setup-ct-run.sh — one-command setup + invocation for the math.CT NER/structure run.
 #
 # Fetches the consolidated handoff dir from linode-chicago in ONE rsync
-# (${FUTON_CODE_ROOT}/ct-handoff/ -> data/ + eprint bundle), verifies + extracts it, and
+# ($HOME/ct-handoff/ -> data/ + eprint bundle), verifies + extracts it, and
 # runs the GPU Stage-5/6 pipeline on the math.CT slice.
 #
 # Verified against futon6 @ b9e149a (2026-05-31): every flag below exists in
@@ -31,7 +31,7 @@ STORE="${STORE:-$HOME/code/storage/futon6/data}"
 REMOTE="${REMOTE:-linode-chicago}"
 # Absolute path on the linode (joe's home), world-readable; does NOT depend on
 # the ssh login user's home resolving anywhere in particular.
-REMOTE_HANDOFF_DIR="${REMOTE_HANDOFF_DIR:-${FUTON_CODE_ROOT}/ct-handoff}"
+REMOTE_HANDOFF_DIR="${REMOTE_HANDOFF_DIR:-$HOME/ct-handoff}"
 HANDOFF="arxiv-math-ct-handoff-2026-02-20.7z"
 
 MODE="${1:-all}"

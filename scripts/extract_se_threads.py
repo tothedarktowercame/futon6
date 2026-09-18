@@ -23,6 +23,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable, List
 from xml.etree.ElementTree import iterparse
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 SITE_TOPIC_TAGS: Dict[str, Dict[str, str]] = {
@@ -404,7 +408,7 @@ def main() -> None:
     parser.add_argument(
         "--se-root",
         type=Path,
-        default=Path(__file__).resolve().parent.parent / "se-data",
+        default=config.ROOT / "se-data",
         help="Directory containing site dump folders with Posts.xml and Comments.xml",
     )
     parser.add_argument(

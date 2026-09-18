@@ -19,6 +19,10 @@ from pathlib import Path
 
 import numpy as np
 import sympy as sp
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 def pr(*args):
@@ -282,7 +286,7 @@ def main():
         },
     }
 
-    out_path = Path(__file__).resolve().parent.parent / "data/first-proof/p4-path2-codex-cycle3-results.json"
+    out_path = config.ROOT / "data/first-proof/p4-path2-codex-cycle3-results.json"
     out_path.write_text(json.dumps(out, indent=2))
 
     pr("=" * 88)

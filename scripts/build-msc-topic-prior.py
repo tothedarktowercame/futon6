@@ -12,7 +12,7 @@ Stage 5 inference pipeline) via `futon6.topic_prior.MSCTopicPrior`.
 
 Usage:
     python scripts/build-msc-topic-prior.py \\
-        --pm-root /home/joe/code/planetmath \\
+        --pm-root $FUTON_CODE_ROOT/planetmath \\
         --out data/topic-prior-msc.json
 """
 
@@ -23,6 +23,10 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
@@ -63,7 +67,7 @@ def parse_edn_entries(text: str):
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pm-root", type=Path,
-                        default=_CODE_ROOT / "planetmath")
+                        default=config.sibling("planetmath"))
     parser.add_argument("--out", type=Path,
                         default=Path("data/topic-prior-msc.json"))
     return parser.parse_args(argv)

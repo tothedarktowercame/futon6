@@ -6,8 +6,17 @@
 ;; prior JSON for untouched capabilities.
 (require '[clojure.edn :as edn]
          '[cheshire.core :as json])
+(require '[clojure.java.io])
+;; Roots derive from THIS script's location; the documented environment variables
+;; override them. No absolute path belonging to one host is baked in here.
+(def ^:private repo (.getParentFile (.getParentFile (clojure.java.io/file *file*))))
+(defn- configured [env fallback]
+  (or (System/getenv env) fallback))
+(def ROOT (configured "FUTON6_CHECKOUT" (.getPath repo)))
+(def CODE-ROOT (configured "FUTON_CODE_ROOT" (.getPath (.getParentFile repo))))
+(defn- sibling [env name] (configured env (str CODE-ROOT "/" name)))
 (let [graph (edn/read-string
-             (slurp (str (or (System/getenv "FUTON_CODE_ROOT") "/users/rjmeyers/darktower") "/futon0/holes/missions/M-capability-star-map.graph.edn")))
+             (slurp (str (sibling "FUTON0_ROOT" "futon0") "/holes/missions/M-capability-star-map.graph.edn")))
       caps (:capabilities graph)
       ;; Visual coalescing (Joe, 2026-06-12): CLAIMED members of a named
       ;; cluster merge into ONE star on the map; unclaimed members remain

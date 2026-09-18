@@ -11,8 +11,12 @@ wedge the JVM). Output: futon6/data/diffsub-scopes.json
 """
 import json, urllib.request, urllib.parse, sys
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-OUT = Path(__file__).resolve().parent.parent / "data/diffsub-scopes.json"
+OUT = config.ROOT / "data/diffsub-scopes.json"
 BASE = "http://localhost:7071/api/alpha/hyperedges"
 BINDERS = ["eightfold-phase", "loose-section", "mission-scope-in", "mission-scope-out",
            "map-item", "source-material", "relates-to", "capability-scope",

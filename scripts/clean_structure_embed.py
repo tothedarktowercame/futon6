@@ -21,8 +21,14 @@ Outputs (default to data/showcases/clean-demo/):
 Usage:
   futon6/.venv/bin/python scripts/clean_structure_embed.py \
       [--clean-dir holes/clean] [--out data/showcases/clean-demo] \
-      [--apm-dir /home/joe/code/futon3c/data/apm-informal-proofs]
+      [--apm-dir $FUTON_CODE_ROOT/futon3c/data/apm-informal-proofs]
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import argparse
 import glob
 import json
@@ -255,7 +261,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--clean-dir", default="holes/clean")
     ap.add_argument("--out", default="data/showcases/clean-demo")
-    ap.add_argument("--apm-dir", default=str(_CODE_ROOT / "futon3c/data/apm-informal-proofs"))
+    ap.add_argument("--apm-dir", default=str(config.sibling('futon3c') / 'data/apm-informal-proofs'))
     args = ap.parse_args()
 
     files = sorted(glob.glob(os.path.join(args.clean_dir, "*.clean.edn")))

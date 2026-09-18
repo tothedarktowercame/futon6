@@ -19,14 +19,12 @@ Usage: futon6/.venv/bin/python scripts/mission_mine_moves.py
 """
 import json, re
 import numpy as np
-import os
-from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
-# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
-_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
-
-ROOT = str(_CODE_ROOT / "code"); F6 = f"{ROOT}/futon6"
+ROOT = str(config.code_root()); F6 = f"{ROOT}/futon6"
 EMB_DIR = f"{F6}/data/mission-structure-embed"
 SCOPES = f"{F6}/data/diffsub-scopes.json"
 MOVES = f"{F6}/data/diffsub-moves.edn"
