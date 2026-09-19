@@ -141,40 +141,44 @@ def _probe(argv: list[str], timeout: float = 5.0) -> str | None:
     return done.stdout.strip() if done.returncode == 0 else None
 
 
-def _requested_devices() -> tuple[list[str], str]:
-    """Which GPUs this job may use, and on whose authority.
+def _requested_devices() -> tuple[list[str], str, str]:
+    """Which GPUs this job may use, on whose authority, and in whose numbering.
 
-    Rob owns device policy on the superpod, so an explicit pin and his
-    per-job policy script both outrank anything we would infer ourselves.
+    mfuton's surface reads Slurm's allocated GPU IDX from scontrol and
+    deliberately does NOT trust CUDA_VISIBLE_DEVICES (ivan, 2026-09-19), so
+    where that surface exists it outranks the environment variable. Its values
+    are global/physical node indices; CUDA_VISIBLE_DEVICES is masked and
+    process-relative. The two are different numbering schemes, so the record
+    names which one it holds rather than silently mixing them.
     """
-    pinned = os.environ.get("CUDA_VISIBLE_DEVICES")
-    if pinned is not None:
-        listed = [d for d in pinned.split(",") if d != ""]
-        return listed, "CUDA_VISIBLE_DEVICES"
-
     home = os.environ.get("MFUTON_HOME")
     if home:
         policy = Path(home) / "agent_skills/development/superpod/current-job-gpus.sh"
         if policy.is_file():
-            emitted = _probe(["bash", str(policy)])
+            # Default output is JSON; --format ids is the comma-separated form.
+            emitted = _probe(["bash", str(policy), "--format", "ids"])
             if emitted:
-                # The policy prints the same comma-separated form it exports.
-                listed = [d for d in emitted.replace("\n", ",").split(",") if d.strip()]
+                listed = [d.strip() for d in emitted.replace("\n", ",").split(",") if d.strip()]
                 if listed:
-                    return [d.strip() for d in listed], "mfuton current-job-gpus.sh"
+                    return listed, "mfuton current-job-gpus.sh --format ids", "global-physical"
+
+    pinned = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if pinned is not None:
+        listed = [d for d in pinned.split(",") if d != ""]
+        return listed, "CUDA_VISIBLE_DEVICES", "process-visible"
 
     for variable in ("SLURM_JOB_GPUS", "SLURM_STEP_GPUS"):
         allocated = os.environ.get(variable)
         if allocated:
-            return [d for d in allocated.split(",") if d != ""], variable
+            return [d for d in allocated.split(",") if d != ""], variable, "global-physical"
     on_node = os.environ.get("SLURM_GPUS_ON_NODE")
     if on_node and on_node.isdigit():
-        return [str(i) for i in range(int(on_node))], "SLURM_GPUS_ON_NODE"
+        return [str(i) for i in range(int(on_node))], "SLURM_GPUS_ON_NODE", "count-only"
 
     listing = _probe(["nvidia-smi", "-L"])
     if listing:
-        return [str(i) for i, _ in enumerate(listing.splitlines())], "nvidia-smi -L"
-    return [], "none detected"
+        return [str(i) for i, _ in enumerate(listing.splitlines())], "nvidia-smi -L", "process-visible"
+    return [], "none detected", "none"
 
 
 def hardware() -> dict:
@@ -183,7 +187,7 @@ def hardware() -> dict:
     The 0919b probe ran on a fallback box and its rate was later mistaken for
     the pipeline's own, because nothing in the record said what it ran on.
     """
-    requested, authority = _requested_devices()
+    requested, authority, namespace = _requested_devices()
     query = "index,name,memory.total,compute_cap,driver_version"
     csv = _probe(["nvidia-smi", f"--query-gpu={query}", "--format=csv,noheader,nounits"])
     devices = []
@@ -195,6 +199,7 @@ def hardware() -> dict:
                                 "memory-mib": int(fields[2]) if fields[2].isdigit() else fields[2],
                                 "compute-capability": fields[3], "driver": fields[4]})
     return {"device-authority": authority,
+            "device-namespace": namespace,
             "requested": requested,
             "count": len(requested),
             "devices": devices,

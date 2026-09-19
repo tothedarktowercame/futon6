@@ -211,22 +211,53 @@ if __name__ == "__main__":
 class HardwareRecordTests(unittest.TestCase):
     """A run that cannot say what it ran on invites its rate being misread."""
 
-    def test_explicit_pin_outranks_slurm_and_policy(self):
+    def test_explicit_pin_outranks_slurm_when_no_mfuton_surface(self):
         with patch.dict(os.environ, {"CUDA_VISIBLE_DEVICES": "2,3",
                                      "SLURM_JOB_GPUS": "0,1,2,3,4,5,6,7"}, clear=True):
-            devices, authority = config._requested_devices()
+            devices, authority, namespace = config._requested_devices()
             self.assertEqual(devices, ["2", "3"])
             self.assertEqual(authority, "CUDA_VISIBLE_DEVICES")
+            self.assertEqual(namespace, "process-visible")
+
+    def test_mfuton_surface_outranks_cuda_visible_devices(self):
+        """mfuton reads Slurm's IDX from scontrol and does not trust the env var."""
+        with tempfile.TemporaryDirectory() as d:
+            policy = Path(d) / "agent_skills/development/superpod/current-job-gpus.sh"
+            policy.parent.mkdir(parents=True)
+            policy.write_text("#!/bin/bash\necho 4,5,6,7\n")
+            with patch.dict(os.environ, {"MFUTON_HOME": d,
+                                         "CUDA_VISIBLE_DEVICES": "0,1"}, clear=True):
+                devices, authority, namespace = config._requested_devices()
+                self.assertEqual(devices, ["4", "5", "6", "7"])
+                self.assertIn("--format ids", authority)
+                self.assertEqual(namespace, "global-physical")
+
+    def test_policy_is_asked_for_ids_not_its_default_json(self):
+        """A bare call returns JSON, which a comma-split silently reads as nothing."""
+        seen = []
+        def spy(argv, timeout=5.0):
+            seen.append(argv)
+            return "4,5" if "--format" in argv else '{"gpus": [4, 5]}'
+        with tempfile.TemporaryDirectory() as d:
+            policy = Path(d) / "agent_skills/development/superpod/current-job-gpus.sh"
+            policy.parent.mkdir(parents=True)
+            policy.write_text("#!/bin/bash\n")
+            with patch.dict(os.environ, {"MFUTON_HOME": d}, clear=True), \
+                 patch.object(config, "_probe", spy):
+                devices, _, _ = config._requested_devices()
+        self.assertEqual(devices, ["4", "5"])
+        self.assertEqual(seen[0][-2:], ["--format", "ids"])
 
     def test_slurm_allocation_is_used_when_nothing_is_pinned(self):
         with patch.dict(os.environ, {"SLURM_JOB_GPUS": "0,1,2,3"}, clear=True):
-            devices, authority = config._requested_devices()
+            devices, authority, namespace = config._requested_devices()
             self.assertEqual(devices, ["0", "1", "2", "3"])
             self.assertEqual(authority, "SLURM_JOB_GPUS")
+            self.assertEqual(namespace, "global-physical")
 
     def test_gpu_count_on_node_expands_to_indices(self):
         with patch.dict(os.environ, {"SLURM_GPUS_ON_NODE": "8"}, clear=True):
-            devices, authority = config._requested_devices()
+            devices, authority, _ = config._requested_devices()
             self.assertEqual(devices, [str(i) for i in range(8)])
             self.assertEqual(authority, "SLURM_GPUS_ON_NODE")
 

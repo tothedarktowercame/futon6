@@ -181,3 +181,50 @@ run will not merely be faster on different hardware; it may land at different qu
 That is an argument *for* running it, not against: there is currently no pinned quality
 baseline at all, and this run creates the first one. It also means the probe's numbers
 must not be quoted as the pipeline's quality, in either direction.
+
+## Cluster profile and the walltime constraint (ivan, 2026-09-19)
+
+Authoritative, from mfuton's cluster resource profile rather than tooling:
+
+- **20x DGX A100** (`bcm-dgxa100-0001..0020`), **8x A100-80GB per node, 160 total**.
+  The A100-80GB assumption in this document is confirmed.
+- Two Slurm partitions:
+  | partition | nodes | max walltime |
+  |---|---|---|
+  | `short` | 2 | **4 hours** |
+  | `batch` | 18 | 2 days |
+
+**This changes the plan.** The "2 free nodes" is the `short` partition, capped at
+**4 hours** — not the 20h window every estimate above was written against. The
+16-GPU estimates (~3.0h central, ~3.7h upper) do fit inside 4h, but with almost
+no margin, and they are unvalidated estimates rather than measurements. A CT-wide
+run on `short` would be betting the window on an untested number.
+
+The partitions map cleanly onto the two jobs:
+
+- **`short` (2 nodes, 4h) is the calibration lane.** The 200-candidate sweep at
+  concurrency 1/8/32/64 needs well under an hour and wants exactly this shape.
+- **`batch` (18 nodes, 2 days) is where the CT-wide run belongs.** It removes the
+  walltime question entirely, and at 18 nodes the throughput bar per GPU falls by
+  an order of magnitude from the 8-GPU figures tabulated above.
+
+Recommended sequence: calibrate on `short`, use the measured tok/s to size the
+`batch` request, then run CT-wide there.
+
+### Serving contract, still to resolve
+
+ivan reports their env contract pins **`llama3.1:70b`, OpenAI-compatible, on a
+distinct Ollama port** (not 11434, which carries a foreign shared instance).
+That is the probe's configuration, and it is the thing this document argues
+against for the CT run. `serving()` will faithfully record whatever answers, so
+no code change is needed — but if the CT run is to be 70B-AWQ under vLLM, their
+env contract has to move too. Worth raising with Rob alongside the calibration.
+
+### Device authority, corrected
+
+mfuton's surface reads Slurm's allocated GPU IDX from `scontrol` and deliberately
+does **not** trust `CUDA_VISIBLE_DEVICES`; its values are global/physical node
+indices, not job-relative. `_requested_devices()` originally had the precedence
+backwards and called the policy script without `--format ids`, so it parsed the
+default JSON as a comma-separated list and silently got nothing. Both fixed; the
+record now also carries `device-namespace` so the indices can be read correctly.
