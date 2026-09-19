@@ -314,3 +314,44 @@ class ScaleTests(unittest.TestCase):
             self.assertEqual(env["FUTON6_SHARDS"], "8")
             self.assertEqual(env["FUTON6_CONCURRENCY"], "32")
             self.assertEqual(env["CONCURRENCY"], "32")
+
+
+class ServingConformanceTests(unittest.TestCase):
+    """The probe reached S12 against Ollama and nothing objected. It must now."""
+
+    def test_the_0919b_probe_configuration_is_refused(self):
+        probe = {"reachable": True, "stack": "ollama", "stack-version": "0.12.3",
+                 "served-models": ["llama3.1:70b"], "endpoint-is-local": True}
+        with patch.dict(os.environ, {"MODEL": "llama3.1:70b"}, clear=True):
+            verdict = config.serving_conformance(probe)
+        self.assertFalse(verdict["conforms"])
+        joined = " ".join(verdict["deviations"])
+        self.assertIn("ollama", joined)
+        self.assertIn("llama3.1:70b", joined)
+
+    def test_the_specified_configuration_passes(self):
+        good = {"reachable": True, "stack": "vllm", "stack-version": "0.23.0",
+                "served-models": ["mark4-70b"], "endpoint-is-local": True}
+        with patch.dict(os.environ, {"MODEL": "mark4-70b"}, clear=True):
+            verdict = config.serving_conformance(good)
+        self.assertTrue(verdict["conforms"], verdict["deviations"])
+
+    def test_an_unreachable_endpoint_is_not_silently_conformant(self):
+        with patch.dict(os.environ, {"MODEL": "mark4-70b"}, clear=True):
+            verdict = config.serving_conformance(
+                {"reachable": False, "stack": None, "served-models": []})
+        self.assertFalse(verdict["conforms"])
+
+    def test_a_generic_openai_endpoint_does_not_pass_as_vllm(self):
+        vague = {"reachable": True, "stack": "openai-compatible (unidentified)",
+                 "served-models": ["mark4-70b"], "endpoint-is-local": False}
+        with patch.dict(os.environ, {"MODEL": "mark4-70b"}, clear=True):
+            self.assertFalse(config.serving_conformance(vague)["conforms"])
+
+    def test_deliberate_deviation_is_recorded_not_hidden(self):
+        probe = {"reachable": True, "stack": "ollama", "served-models": ["llama3.1:70b"]}
+        with patch.dict(os.environ, {"MODEL": "llama3.1:70b",
+                                     config.DEVIATION_ENV: "1"}, clear=True):
+            verdict = config.serving_conformance(probe)
+        self.assertTrue(verdict["override"])
+        self.assertFalse(verdict["conforms"])     # the override does not launder it

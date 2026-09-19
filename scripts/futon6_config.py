@@ -254,6 +254,54 @@ def serving() -> dict:
     return record
 
 
+# What the pipeline requires of whoever serves it. The compute side runs what the
+# pipeline specifies; this is where the pipeline specifies it (ivan, 2026-09-19).
+# The 0919b probe reached S12 against Ollama serving a 4-bit GGUF under a different
+# tag, and nothing objected — so the requirement is checked, not just written down.
+REQUIRED_SERVING = {
+    "stack": "vllm",
+    "checkpoint": "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4",
+    "served-as": "mark4-70b",
+    "prefix-caching": True,
+    "replicas": "one per GPU",
+    "concurrency": "32-64 per replica",
+    "why": "prefill-dominated workload (5.1:1); the CT-wide quality baseline must be "
+           "pinned to one checkpoint and precision",
+}
+
+DEVIATION_ENV = "FUTON6_ALLOW_SERVING_DEVIATION"
+
+
+def serving_conformance(actual: dict | None = None) -> dict:
+    """Whether the live endpoint is what the pipeline asked for, and how it differs.
+
+    Recorded rather than raised: a deliberate experiment is legitimate, an
+    unnoticed one is not. Preflight decides what to do with `conforms`.
+    """
+    actual = serving() if actual is None else actual
+    deviations = []
+
+    if not actual.get("reachable"):
+        deviations.append("endpoint did not answer; serving stack unverified")
+    elif actual.get("stack") != REQUIRED_SERVING["stack"]:
+        deviations.append(
+            f"serving stack is {actual.get('stack')!r}, pipeline requires "
+            f"{REQUIRED_SERVING['stack']!r} — an Ollama or unidentified endpoint "
+            f"cannot batch and does not pin precision")
+
+    served = [m for m in actual.get("served-models", []) if m]
+    wanted = REQUIRED_SERVING["served-as"]
+    if served and wanted not in served:
+        deviations.append(f"endpoint serves {served}, pipeline requires {wanted!r}")
+    if model() != wanted:
+        deviations.append(f"MODEL is {model()!r}, pipeline requires {wanted!r}")
+
+    return {"conforms": not deviations,
+            "deviations": deviations,
+            "required": REQUIRED_SERVING,
+            "override": bool(os.environ.get(DEVIATION_ENV))}
+
+
 def scale(inventory: dict | None = None) -> dict:
     """Size the run to whatever is free right now.
 
@@ -292,6 +340,7 @@ def scale(inventory: dict | None = None) -> dict:
 
 def effective() -> dict:
     inventory = hardware()
+    live = serving()
     url = urlsplit(endpoint())
     # Credential-bearing userinfo and queries must not enter the run record.
     public_endpoint = urlunsplit((url.scheme, url.netloc.rsplit("@", 1)[-1], url.path, "", ""))
@@ -312,7 +361,8 @@ def effective() -> dict:
         "model": model(),
         "model-revision": os.environ.get("FUTON6_MODEL_REVISION"),
         "hardware": inventory,
-        "serving": serving(),
+        "serving": live,
+        "serving-conformance": serving_conformance(live),
         "scale": scale(inventory),
     }
 
