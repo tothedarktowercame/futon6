@@ -21,10 +21,12 @@ Backends:
 from __future__ import annotations
 
 import argparse
+import concurrent.futures as cf
 import json
 import os
 import subprocess
 import sys
+import threading
 import time
 from pathlib import Path
 
@@ -296,47 +298,87 @@ def run(args) -> int:
     tmp.mkdir(parents=True, exist_ok=True)
     (tmp / "RUN").write_text(f"run_id={run_tag}\ninvocation={invocation}\ncandidates={len(cands)}\n"
                              f"contract={iatc_json.GENERATOR}\nmodel={args.model}\n")
-    loaded = [json.loads(cf.read_text()) for cf in cands]
+    loaded = [json.loads(cf_path.read_text()) for cf_path in cands]
     ledger = accounting.Accounting("S3", "loop", [c["proof-id"] for c in loaded])
     counts = {"accepted": 0, "rejected": 0, "errored": 0, "carried": 0}
     accepted_graphs = []
     t0 = time.time()
     interval = getattr(args, "loss_log_interval", 100)
-    for i, cand in enumerate(loaded, 1):
+    total = len(loaded)
+    done = 0
+    # Accounting.checkpoint() rewrites one file per record; two threads doing that
+    # at once would race on the same .partial. Serialise bookkeeping only — the
+    # model call and rung-2 stay outside, which is the whole point of batching.
+    books = threading.Lock()
+
+    def finish(cand: dict, status: str, why: str, record: dict, *, carried=None):
+        nonlocal done
         pid = cand["proof-id"]
         final = outdir / f"{pid}.edn"
         rung2_report = outdir / f"{pid}.rung2.edn"
-        if final.exists():                       # retry: keep a verified earlier acceptance
-            carried, why = accounting.carried_acceptance(outdir, pid, final)
-            if carried is None:
-                counts["errored"] += 1
-                ledger.record(pid, "errored", why, paper=cand["paper-id"], artifacts=[accounting.relative(final)])
-                print(f"  [{i}/{len(loaded)}] {pid}: ERROR ({why})", flush=True)
-                continue
-            counts["carried"] += 1
-            counts["accepted"] += 1
-            accepted_graphs.append(final)
-            ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid],
-                          artifacts=[accounting.relative(p) for p in (final, rung2_report) if p.exists()],
-                          attempts=[{"carried-from": carried.get("invocation"), "path": carried.get("path")}])
-            print(f"  [{i}/{len(loaded)}] {pid}: accepted (carried from {carried.get('invocation')})", flush=True)
+        artifacts = [accounting.relative(p) for p in (final, rung2_report) if p.exists()]
+        with books:
+            counts[status] += 1
+            if carried is not None:
+                counts["carried"] += 1
+                accepted_graphs.append(final)
+                ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid],
+                              artifacts=artifacts,
+                              attempts=[{"carried-from": carried.get("invocation"),
+                                         "path": carried.get("path")}])
+                note = f"accepted (carried from {carried.get('invocation')})"
+            elif status == "accepted":
+                accepted_graphs.append(final)
+                ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid],
+                              attempts=[record], artifacts=artifacts)
+                note = status
+            elif status == "errored" and record is None:
+                ledger.record(pid, "errored", why, paper=cand["paper-id"], artifacts=artifacts)
+                note = f"ERROR ({why})"
+            else:
+                ledger.record(pid, status, why, paper=cand["paper-id"], attempts=[record])
+                note = status + (f" ({why[:160]})" if why else "")
+            done += 1
+            print(f"  [{done}/{total}] {pid}: {note}", flush=True)
+            if interval and done % interval == 0:
+                rate = done / max(time.time() - t0, 1e-9) * 60
+                print(f"  [{done}/{total}] accepted={counts['accepted']} rejected={counts['rejected']} "
+                      f"errored={counts['errored']} · {rate:.1f} proofs/min", flush=True)
+
+    # A prior acceptance is settled by the filesystem, not the model: resolve those
+    # first so the pool only ever holds real work. This is what makes resume cheap.
+    pending = []
+    for cand in loaded:
+        final = outdir / f"{cand['proof-id']}.edn"
+        if not final.exists():
+            pending.append(cand)
             continue
+        carried, why = accounting.carried_acceptance(outdir, cand["proof-id"], final)
+        if carried is None:
+            finish(cand, "errored", why, None)
+        else:
+            finish(cand, "accepted", "", {}, carried=carried)
+
+    def work(cand: dict):
+        pid = cand["proof-id"]
         status, why, record = attempt_one(cand, args, tmp)
-        counts[status] += 1
         if status == "accepted":
+            final = outdir / f"{pid}.edn"
             accounting.publish_accepted(outdir, pid, final, (tmp / f"{pid}.edn").read_bytes(),
                                         {"path": record["graph"]})
-            _, record["rung2"] = run_rung2(final, rung2_report, gate=False)
-            accepted_graphs.append(final)
-            ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid], attempts=[record],
-                          artifacts=[accounting.relative(p) for p in (final, rung2_report) if p.exists()])
-        else:
-            ledger.record(pid, status, why, paper=cand["paper-id"], attempts=[record])
-        print(f"  [{i}/{len(loaded)}] {pid}: {status}" + (f" ({why[:160]})" if why else ""), flush=True)
-        if interval and i % interval == 0:
-            rate = i / max(time.time() - t0, 1e-9) * 60
-            print(f"  [{i}/{len(loaded)}] accepted={counts['accepted']} rejected={counts['rejected']} "
-                  f"errored={counts['errored']} · {rate:.1f} proofs/min", flush=True)
+            _, record["rung2"] = run_rung2(final, outdir / f"{pid}.rung2.edn", gate=False)
+        finish(cand, status, why, record)
+
+    workers = max(1, int(getattr(args, "concurrency", 1) or 1))
+    if workers == 1 or len(pending) <= 1:
+        for cand in pending:
+            work(cand)
+    else:
+        print(f"== {len(pending)} proof(s) at concurrency {workers} ==", flush=True)
+        with cf.ThreadPoolExecutor(max_workers=workers) as pool:
+            for future in cf.as_completed([pool.submit(work, c) for c in pending]):
+                future.result()       # re-raise in the caller; a dead pool is not a pass
+    accepted_graphs.sort()            # submission order must not reach the gate
 
     # Cross-item substance gate (template collapse, warrant reuse) over accepted graphs.
     print("\n=== batch substance gate (cross-item) ===")
@@ -363,6 +405,11 @@ def main() -> int:
     ap.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct")
     ap.add_argument("--rung2-gate", action="store_true",
                     help="Reject graphs whose rung-2 semantic profile fails; default records it only.")
+    ap.add_argument("--concurrency", type=int,
+                    default=int(os.environ.get("FUTON6_CONCURRENCY")
+                                or os.environ.get("CONCURRENCY") or 1),
+                    help="proofs in flight at once; defaults to FUTON6_CONCURRENCY "
+                         "(set from the detected hardware by futon6_config.scale)")
     ap.add_argument("--loss-log-interval", type=int, default=100,
                     help="print running accepted/rejected/errored counts every N proofs; 0 disables")
     return run(ap.parse_args())

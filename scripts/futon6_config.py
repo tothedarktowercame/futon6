@@ -11,7 +11,10 @@ import os
 from pathlib import Path
 import shlex
 import shutil
+import subprocess
 import sys
+import urllib.error
+import urllib.request
 from urllib.parse import urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -111,6 +114,12 @@ def child_environment() -> dict[str, str]:
         "OPENAI_BASE_URL": endpoint(),
         "MODEL": model(),
     })
+    # Children size themselves from the same decision the run record states,
+    # so a shard cannot batch differently from what the manifest claims.
+    sizing = scale()
+    env.setdefault("FUTON6_SHARDS", str(sizing["shards"]))
+    env.setdefault("FUTON6_CONCURRENCY", str(sizing["concurrency-per-shard"]))
+    env.setdefault("CONCURRENCY", str(sizing["concurrency-per-shard"]))
     for name in ("futon3", "futon3c", "mathlib4", "planetmath", "nlab-content", "nnexus"):
         env[name.upper().replace("-", "_") + "_ROOT"] = str(sibling(name))
     for variable, default in (
@@ -121,7 +130,163 @@ def child_environment() -> dict[str, str]:
     return env
 
 
+def _probe(argv: list[str], timeout: float = 5.0) -> str | None:
+    """Never let inventory fail a run: an absent or slow tool is simply unknown."""
+    if not shutil.which(argv[0]):
+        return None
+    try:
+        done = subprocess.run(argv, capture_output=True, text=True, timeout=timeout)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return done.stdout.strip() if done.returncode == 0 else None
+
+
+def _requested_devices() -> tuple[list[str], str]:
+    """Which GPUs this job may use, and on whose authority.
+
+    Rob owns device policy on the superpod, so an explicit pin and his
+    per-job policy script both outrank anything we would infer ourselves.
+    """
+    pinned = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if pinned is not None:
+        listed = [d for d in pinned.split(",") if d != ""]
+        return listed, "CUDA_VISIBLE_DEVICES"
+
+    home = os.environ.get("MFUTON_HOME")
+    if home:
+        policy = Path(home) / "agent_skills/development/superpod/current-job-gpus.sh"
+        if policy.is_file():
+            emitted = _probe(["bash", str(policy)])
+            if emitted:
+                # The policy prints the same comma-separated form it exports.
+                listed = [d for d in emitted.replace("\n", ",").split(",") if d.strip()]
+                if listed:
+                    return [d.strip() for d in listed], "mfuton current-job-gpus.sh"
+
+    for variable in ("SLURM_JOB_GPUS", "SLURM_STEP_GPUS"):
+        allocated = os.environ.get(variable)
+        if allocated:
+            return [d for d in allocated.split(",") if d != ""], variable
+    on_node = os.environ.get("SLURM_GPUS_ON_NODE")
+    if on_node and on_node.isdigit():
+        return [str(i) for i in range(int(on_node))], "SLURM_GPUS_ON_NODE"
+
+    listing = _probe(["nvidia-smi", "-L"])
+    if listing:
+        return [str(i) for i, _ in enumerate(listing.splitlines())], "nvidia-smi -L"
+    return [], "none detected"
+
+
+def hardware() -> dict:
+    """The actual accelerators, recorded so a run's rate can be read correctly.
+
+    The 0919b probe ran on a fallback box and its rate was later mistaken for
+    the pipeline's own, because nothing in the record said what it ran on.
+    """
+    requested, authority = _requested_devices()
+    query = "index,name,memory.total,compute_cap,driver_version"
+    csv = _probe(["nvidia-smi", f"--query-gpu={query}", "--format=csv,noheader,nounits"])
+    devices = []
+    if csv:
+        for line in csv.splitlines():
+            fields = [f.strip() for f in line.split(",")]
+            if len(fields) == 5:
+                devices.append({"index": fields[0], "name": fields[1],
+                                "memory-mib": int(fields[2]) if fields[2].isdigit() else fields[2],
+                                "compute-capability": fields[3], "driver": fields[4]})
+    return {"device-authority": authority,
+            "requested": requested,
+            "count": len(requested),
+            "devices": devices,
+            "visible-to-this-process": bool(devices),
+            "slurm-job": os.environ.get("SLURM_JOB_ID"),
+            "node": os.uname().nodename}
+
+
+def _endpoint_is_local() -> bool:
+    host = urlsplit(endpoint()).hostname or ""
+    return host in ("localhost", "127.0.0.1", "::1", "", os.uname().nodename)
+
+
+def _json_get(url: str, timeout: float = 5.0):
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as answer:
+            return json.loads(answer.read().decode())
+    except (urllib.error.URLError, OSError, ValueError, json.JSONDecodeError):
+        return None
+
+
+def serving() -> dict:
+    """Which stack is answering, and as what model.
+
+    A bare tag like `llama3.1:70b` does not say whether it was served by vLLM at
+    bf16 or by Ollama at Q4 — and a quality baseline cannot leave that implicit.
+    """
+    base = endpoint()
+    root = base[: -len("/v1")] if base.endswith("/v1") else base
+    record = {"endpoint-is-local": _endpoint_is_local(), "stack": None,
+              "stack-version": None, "served-models": [], "reachable": False}
+
+    version = _json_get(f"{root}/version")            # vLLM
+    if isinstance(version, dict) and version.get("version"):
+        record["stack"] = "vllm"
+        record["stack-version"] = version["version"]
+        record["reachable"] = True
+    else:
+        ollama = _json_get(f"{root}/api/version")     # Ollama
+        if isinstance(ollama, dict) and ollama.get("version"):
+            record["stack"] = "ollama"
+            record["stack-version"] = ollama["version"]
+            record["reachable"] = True
+
+    listed = _json_get(f"{base}/models")
+    if isinstance(listed, dict):
+        record["served-models"] = [entry.get("id") for entry in listed.get("data", [])
+                                   if isinstance(entry, dict)]
+        record["reachable"] = True
+        if record["stack"] is None:
+            record["stack"] = "openai-compatible (unidentified)"
+    return record
+
+
+def scale(inventory: dict | None = None) -> dict:
+    """Size the run to whatever is free right now.
+
+    One shard per GPU is Rob's convention; concurrency is what turns a shard
+    from single-stream into batched, and is the knob the window depends on.
+    Both are overridable, and the basis for each choice is recorded.
+    """
+    inventory = hardware() if inventory is None else inventory
+    gpus = inventory["count"]
+    local = _endpoint_is_local()
+
+    override = os.environ.get("FUTON6_SHARDS")
+    if override and override.isdigit() and int(override) > 0:
+        shards, why = int(override), "FUTON6_SHARDS"
+    elif local and gpus:
+        shards, why = gpus, f"one shard per visible GPU ({inventory['device-authority']})"
+    elif not local:
+        # A remote endpoint may front any number of GPUs; the local count says nothing.
+        shards, why = 1, "single shard: the endpoint is remote, local GPUs do not size it"
+    else:
+        shards, why = 1, "single shard: no GPU detected on this host"
+
+    requested = os.environ.get("FUTON6_CONCURRENCY")
+    if requested and requested.isdigit() and int(requested) > 0:
+        concurrency, basis = int(requested), "FUTON6_CONCURRENCY"
+    elif serving().get("stack") == "ollama":
+        # Ollama serialises by default; more in-flight requests just queue.
+        concurrency, basis = 1, "ollama serialises unless OLLAMA_NUM_PARALLEL is raised"
+    else:
+        concurrency, basis = 32, "default batch concurrency for a batching server"
+
+    return {"shards": shards, "shard-basis": why,
+            "concurrency-per-shard": concurrency, "concurrency-basis": basis,
+            "max-in-flight": shards * concurrency}
+
+
 def effective() -> dict:
+    inventory = hardware()
     url = urlsplit(endpoint())
     # Credential-bearing userinfo and queries must not enter the run record.
     public_endpoint = urlunsplit((url.scheme, url.netloc.rsplit("@", 1)[-1], url.path, "", ""))
@@ -140,6 +305,10 @@ def effective() -> dict:
         "python-argv": python_argv(),
         "endpoint": public_endpoint,
         "model": model(),
+        "model-revision": os.environ.get("FUTON6_MODEL_REVISION"),
+        "hardware": inventory,
+        "serving": serving(),
+        "scale": scale(inventory),
     }
 
 

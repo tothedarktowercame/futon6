@@ -206,3 +206,80 @@ print(json.dumps(config.effective()))
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HardwareRecordTests(unittest.TestCase):
+    """A run that cannot say what it ran on invites its rate being misread."""
+
+    def test_explicit_pin_outranks_slurm_and_policy(self):
+        with patch.dict(os.environ, {"CUDA_VISIBLE_DEVICES": "2,3",
+                                     "SLURM_JOB_GPUS": "0,1,2,3,4,5,6,7"}, clear=True):
+            devices, authority = config._requested_devices()
+            self.assertEqual(devices, ["2", "3"])
+            self.assertEqual(authority, "CUDA_VISIBLE_DEVICES")
+
+    def test_slurm_allocation_is_used_when_nothing_is_pinned(self):
+        with patch.dict(os.environ, {"SLURM_JOB_GPUS": "0,1,2,3"}, clear=True):
+            devices, authority = config._requested_devices()
+            self.assertEqual(devices, ["0", "1", "2", "3"])
+            self.assertEqual(authority, "SLURM_JOB_GPUS")
+
+    def test_gpu_count_on_node_expands_to_indices(self):
+        with patch.dict(os.environ, {"SLURM_GPUS_ON_NODE": "8"}, clear=True):
+            devices, authority = config._requested_devices()
+            self.assertEqual(devices, [str(i) for i in range(8)])
+            self.assertEqual(authority, "SLURM_GPUS_ON_NODE")
+
+    def test_absent_tooling_is_unknown_never_fatal(self):
+        with patch.dict(os.environ, {}, clear=True), \
+             patch.object(config, "_probe", return_value=None):
+            inventory = config.hardware()
+            self.assertEqual(inventory["count"], 0)
+            self.assertEqual(inventory["devices"], [])
+            self.assertEqual(inventory["device-authority"], "none detected")
+
+
+class ScaleTests(unittest.TestCase):
+    """Whatever is free right now has to size the run without a human editing it."""
+
+    def _inventory(self, count):
+        return {"count": count, "device-authority": "SLURM_JOB_GPUS",
+                "requested": [str(i) for i in range(count)], "devices": [],
+                "visible-to-this-process": True, "slurm-job": "1", "node": "n"}
+
+    def test_one_shard_per_gpu_when_the_endpoint_is_local(self):
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:8000/v1"}, clear=True), \
+             patch.object(config, "serving", return_value={"stack": "vllm"}):
+            self.assertEqual(config.scale(self._inventory(8))["shards"], 8)
+            self.assertEqual(config.scale(self._inventory(16))["shards"], 16)
+
+    def test_a_remote_endpoint_is_not_sized_by_local_gpus(self):
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://gpu-node-4:8000/v1"}, clear=True), \
+             patch.object(config, "serving", return_value={"stack": "vllm"}):
+            sizing = config.scale(self._inventory(8))
+            self.assertEqual(sizing["shards"], 1)
+            self.assertIn("remote", sizing["shard-basis"])
+
+    def test_ollama_is_recorded_as_serialising_rather_than_batching(self):
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:11436/v1"}, clear=True), \
+             patch.object(config, "serving", return_value={"stack": "ollama"}):
+            sizing = config.scale(self._inventory(1))
+            self.assertEqual(sizing["concurrency-per-shard"], 1)
+            self.assertIn("ollama", sizing["concurrency-basis"])
+
+    def test_overrides_win_and_say_so(self):
+        with patch.dict(os.environ, {"FUTON6_SHARDS": "4", "FUTON6_CONCURRENCY": "64",
+                                     "OPENAI_BASE_URL": "http://localhost:8000/v1"}, clear=True), \
+             patch.object(config, "serving", return_value={"stack": "vllm"}):
+            sizing = config.scale(self._inventory(8))
+            self.assertEqual((sizing["shards"], sizing["concurrency-per-shard"]), (4, 64))
+            self.assertEqual(sizing["max-in-flight"], 256)
+            self.assertEqual(sizing["shard-basis"], "FUTON6_SHARDS")
+
+    def test_children_inherit_the_sizing_the_record_states(self):
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:8000/v1"}, clear=True), \
+             patch.object(config, "scale", return_value={"shards": 8, "concurrency-per-shard": 32}):
+            env = config.child_environment()
+            self.assertEqual(env["FUTON6_SHARDS"], "8")
+            self.assertEqual(env["FUTON6_CONCURRENCY"], "32")
+            self.assertEqual(env["CONCURRENCY"], "32")
