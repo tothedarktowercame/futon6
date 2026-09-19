@@ -97,6 +97,41 @@ def substrate_identity() -> dict:
     return {name: digest(path) for name, path in sorted(files.items())}
 
 
+# A stage stops for items the contract refused only when the accepted share falls
+# below this. It is not a quality target - every refusal is still recorded and
+# excluded from the corpus - it is the line past which the run is no longer
+# measuring the papers. Below 3/4 accepted, every collapse we have seen (a rule
+# that refused valid mathematics, a stale prompt, an endpoint ignoring the schema)
+# was systematic, and the rest of the window would have produced nothing usable.
+# Validation corpora are small enough to read item by item: set 1.0 there.
+DEFAULT_ITEM_FLOOR = 0.75
+
+
+def declared_item_floor() -> float:
+    """FUTON6_ITEM_FLOOR for a new run, pinned into its manifest at prepare()."""
+    raw = os.environ.get("FUTON6_ITEM_FLOOR")
+    if raw is None or raw == "":
+        return DEFAULT_ITEM_FLOOR
+    try:
+        floor = float(raw)
+    except ValueError:
+        raise ValueError("FUTON6_ITEM_FLOOR must be a fraction between 0 and 1")
+    if not 0.0 <= floor <= 1.0:
+        raise ValueError("FUTON6_ITEM_FLOOR must be a fraction between 0 and 1")
+    return floor
+
+
+def item_floor(doc: dict) -> float:
+    """The floor this run is judged by: whatever its manifest pinned.
+
+    Manifests written before the floor existed are judged by the default rather
+    than by the old refuse-everything rule, so a run halted by a handful of
+    refusals can be resumed in place instead of restarted.
+    """
+    declared = (doc.get("acceptance") or {}).get("item-floor")
+    return DEFAULT_ITEM_FLOOR if declared is None else float(declared)
+
+
 def load(run_dir: Path) -> dict:
     doc = json.loads((run_dir / NAME).read_text())
     if not isinstance(doc, dict) or doc.get("schema-version") != 1 or doc.get("artifacts") != ARTIFACTS or doc.get("ids") != "corpus.ids.txt":
@@ -122,6 +157,7 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
     if not cap.isdigit():
         raise ValueError("FUTON6_EXPOSITORY_CAP_PER_PAPER must be a nonnegative integer")
     cap = int(cap)
+    floor = declared_item_floor()
     pinned = {"run-id": run_id, "corpus-id": corpus_id,
               "corpus-sha256": hashlib.sha256(raw).hexdigest(),
               "code": source_identity(), "substrate": substrate_identity(),
@@ -143,7 +179,7 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
         raise ValueError(f"refusing to adopt artifacts without a run manifest: {occupied[:5]}")
     doc = {"schema-version": 1, **pinned, "created-at": datetime.now(timezone.utc).isoformat(),
            "ids": "corpus.ids.txt", "papers": papers, "artifacts": ARTIFACTS,
-           "logs": ["logs/S7.command.log"]}
+           "acceptance": {"item-floor": floor}, "logs": ["logs/S7.command.log"]}
     (run_dir / doc["ids"]).write_bytes(raw)
     temporary = run_dir / (NAME + ".tmp")
     temporary.write_text(json.dumps(doc, indent=2, sort_keys=True) + "\n")

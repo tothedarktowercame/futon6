@@ -75,10 +75,30 @@ Each item is `accepted`, `rejected` (the output failed a gate), `errored` (no
 output could be judged, for example missing marks or an unreachable endpoint), or
 `deferred` (S4 regions outside a declared cap). Rejected, errored and deferred
 items carry a reason; model items carry their attempt files and results. A stage
-passes only when its command and gate succeed and every expected item is
-accounted for exactly once, with every item accepted (deferred is allowed only for
-S4 selection under a pinned cap) and every accepted artifact present. A paper with
-no proof region, or no expository region, is recorded as an accepted explicit zero.
+passes when its command and gate succeed, every expected item is accounted for
+exactly once, every accepted artifact is present, and the accepted share is at or
+above the run's floor. A paper with no proof region, or no expository region, is
+recorded as an accepted explicit zero.
+
+**Refusals do not stop the run.** A rejected or errored item is a finding about
+one paper, and an unattended mining window that halts on one has spent the rest of
+its allocation on nothing — we lost a 124-paper run at S3 to three proofs the
+contract called circular. What still stops a stage is accounting that cannot
+describe the corpus (an unaccounted item, a duplicate, output for a paper nobody
+asked for, a missing artifact, a deferral outside a declared cap), or a collapse
+of the accepted share below `acceptance.item-floor` in the run manifest — set by
+`FUTON6_ITEM_FLOOR` when the run is prepared, default 0.75. Below that the run is
+measuring the pipeline rather than the papers: the first live S3 run accepted 0 of
+20 because a contract rule refused valid mathematics, and continuing would have
+produced twelve stages of nothing. Set it to `1.0` for a small validation corpus,
+where every item is meant to be read.
+
+Deferred regions under a declared cap are not counted against the share; they were
+never offered to the model. The refused items stay refused - in the accounting, in
+`stage-attempts.jsonl` (outcome `pass-with-refusals`), and in the ledger row, which
+carries the counts and the refusals so a green stage list cannot be read as "every
+paper made it through". Downstream stages expect only the items actually accepted,
+so nothing later silently assumes the refused ones exist.
 
 The model stages S3, S4 and S7 never ask the model to write EDN. Each item gets
 one call at temperature 0 under a strict JSON schema, and the response is kept
@@ -108,7 +128,10 @@ SHA-256, and resample everything else; attempt files live under
 matching provenance is recorded as `errored`. S6 and S7 consume only S3/S4
 finals with verified provenance. A fully valid build is one where every stage's
 **final** ledgered invocation has zero rejected and errored items; the earlier
-failed attempts remain part of the evidence.
+failed attempts remain part of the evidence. A run that passed with refusals is a
+complete run over a smaller corpus, not a fully valid build: read the counts in the
+ledger rows and decide whether the refusals are findings about the papers or a
+defect in the contract.
 
 `--reuse S0 STAGE` acknowledges completed boot steps only; repeated `--reuse`
 options accumulate. Every computational dependency needs a passing ledger row

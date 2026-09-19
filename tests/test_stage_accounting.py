@@ -79,8 +79,10 @@ class AccountingRules(unittest.TestCase):
         self.assertIn("differs", accounting.carried_acceptance(self.base, "p", final)[1])
 
 
-class StepperAttempts(unittest.TestCase):
-    """A rejected item fails the stage but leaves an attempt row; a retry adds history."""
+class StageFixture:
+    """One fixture S6 stage, run through the real stepper, for the cases below."""
+
+    papers = ("1111.0001", "2222.0002")
 
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
@@ -88,7 +90,7 @@ class StepperAttempts(unittest.TestCase):
         self.base = Path(self.directory.name)
         self.run_dir = self.base / "run"
         self.ids = self.base / "ids"
-        self.ids.write_text("1111.0001\n2222.0002\n")
+        self.ids.write_text("".join(f"{paper}\n" for paper in self.papers))
         self.addCleanup(patch.stopall)
         patch.object(manifest, "source_identity", return_value={"code": "fixture"}).start()
         patch.object(manifest, "substrate_identity", return_value={"substrate": "fixture"}).start()
@@ -101,8 +103,8 @@ class StepperAttempts(unittest.TestCase):
     def stage(self, statuses):
         # Write S6 accounting from a real subprocess, the way producers do.
         script = ("import sys; sys.path.insert(0, %r); import stage_accounting as a; "
-                  "l = a.Accounting('S6', 'assemble', ['1111.0001', '2222.0002']); "
-                  % str(ROOT / "scripts"))
+                  "l = a.Accounting('S6', 'assemble', %r); "
+                  % (str(ROOT / "scripts"), list(self.papers)))
         for item, status in statuses.items():
             script += f"l.record({item!r}, {status!r}, 'fixture reason' if {status!r} != 'accepted' else '', outputs=[{item!r}]); "
         command = f"{sys.executable} -c \"{script}\""
@@ -113,13 +115,68 @@ class StepperAttempts(unittest.TestCase):
     def attempts(self):
         return [json.loads(l) for l in (self.run_dir / stepper.ATTEMPTS).read_text().splitlines()]
 
-    def test_rejection_fails_with_evidence_then_retry_passes_with_history(self):
+
+class RefusalsDoNotStopTheRun(StageFixture, unittest.TestCase):
+    """A mining run continues past items the contract refused, and says so.
+
+    Halting a whole run on per-item findings cost a 124-paper window over three
+    proofs the S3 contract called circular; the refusals were the run's output,
+    not its failure. What still stops a stage is accounting that cannot describe
+    the corpus, or a yield collapse that says the contract itself is wrong.
+    """
+    papers = ("1111.0001", "2222.0002", "3333.0003", "4444.0004")
+
+    def test_refusals_within_the_floor_pass_and_are_recorded_everywhere(self):
+        rc = self.stage({"1111.0001": "accepted", "2222.0002": "accepted",
+                         "3333.0003": "accepted", "4444.0004": "rejected"})
+        self.assertEqual(rc, 0)                                  # 3/4 = the 0.75 floor
+        row = self.attempts()[0]
+        self.assertEqual(row["outcome"], "pass-with-refusals")
+        self.assertEqual(row["problems"], [])
+        self.assertTrue(any("fixture reason" in r for r in row["refused"]))
+        entry = stepper.ledger_entry(str(self.run_dir), "S6", "c")
+        self.assertEqual(entry["counts"]["assemble"]["rejected"], 1)
+        self.assertTrue(entry["refused"])                        # the ledger says the corpus shrank
+        self.assertEqual(accounting.stage_problems(self.run_dir, "S6", "S6-a001", "c")[0], [])
+
+    def test_a_yield_collapse_still_stops_and_names_the_floor(self):
+        rc = self.stage({"1111.0001": "accepted", "2222.0002": "accepted",
+                         "3333.0003": "rejected", "4444.0004": "rejected"})
+        self.assertEqual(rc, 3)
+        self.assertFalse(stepper.ledger_has(str(self.run_dir), "S6", "c"))
+        self.assertIn("below this run's floor", " ".join(self.attempts()[0]["problems"]))
+
+    def test_an_unaccounted_item_stops_however_good_the_yield(self):
+        # Everything recorded was accepted, so the yield is 100% - but a paper the
+        # producer never mentioned is the mark6 loss, not a finding about the data.
+        rc = self.stage({"1111.0001": "accepted", "2222.0002": "accepted", "3333.0003": "accepted"})
+        self.assertEqual(rc, 3)
+        self.assertIn("unaccounted", " ".join(self.attempts()[0]["problems"]))
+
+    def test_the_floor_is_the_one_the_manifest_pinned(self):
+        with patch.dict(os.environ, {"FUTON6_ITEM_FLOOR": "1.0"}):
+            floor_run = self.base / "strict"
+            with manifest.lock(floor_run):
+                doc = manifest.prepare(floor_run, "r2", "c2", self.ids)
+        self.assertEqual(doc["acceptance"]["item-floor"], 1.0)
+        self.assertEqual(manifest.item_floor(doc), 1.0)
+        # A manifest written before the floor existed is judged by the default,
+        # so a run halted by a few refusals resumes instead of restarting.
+        self.assertEqual(manifest.item_floor({"run-id": "old"}), manifest.DEFAULT_ITEM_FLOOR)
+
+
+class StepperAttempts(StageFixture, unittest.TestCase):
+    """Attempt history, resume, and refusal of a stage that cannot show its work."""
+
+    def test_collapsed_stage_fails_with_evidence_then_retry_passes_with_history(self):
         self.assertEqual(self.stage({"1111.0001": "accepted", "2222.0002": "rejected"}), 3)
         self.assertFalse(stepper.ledger_has(str(self.run_dir), "S6", "c"))
         first = self.attempts()[0]
         self.assertEqual((first["invocation"], first["outcome"], first["command_rc"]), ("S6-a001", "rejected", 0))
         self.assertEqual(first["accounting"]["assemble"]["rejected"], 1)
-        self.assertTrue(any("fixture reason" in p for p in first["problems"]))
+        # The refusal is evidence about a paper; the reason to stop is the yield.
+        self.assertTrue(any("fixture reason" in r for r in first["refused"]))
+        self.assertTrue(any("below this run's floor" in p for p in first["problems"]))
 
         self.assertEqual(self.stage({"1111.0001": "accepted"}), 3)          # unaccounted paper
         self.assertIn("unaccounted", " ".join(self.attempts()[1]["problems"]))
@@ -222,7 +279,7 @@ class PaperGraphsAndCleans(unittest.TestCase):
         self.assertTrue((self.base / "B/2222.0002.B.json").is_file())
         self.assertTrue((self.base / "B/1111.0001.B.json").is_file())      # inspectable evidence
 
-    def test_g7_rejection_fails_s7_instead_of_counting_as_clean(self):
+    def test_g7_rejection_is_recorded_per_item_not_counted_as_clean(self):
         graphs = self.base / "graphs"
         graphs.mkdir()
         cyclic = """{:paper/id "9999.0002" :nodes [{:id :a :kind :claim :text "A"} {:id :b :kind :claim :text "B"}]
@@ -235,7 +292,10 @@ class PaperGraphsAndCleans(unittest.TestCase):
                                  "--out", str(self.base / "clean"), "--stub"],
                                 cwd=ROOT, capture_output=True, text=True,
                                 env={**os.environ, accounting.DIR_ENV: str(adir)})
-        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        # The typing ran and its output is consistent, so it exits 0; the cyclic proof
+        # is a rejected item, and whether S7 passes is the runner's call against the
+        # run's floor. What must never happen is the proof going missing quietly.
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         by = {e["id"]: e for e in accounting.load(adir, "S7", "typing")["items"]}
         self.assertEqual(by["9999.0002__p0"]["status"], "rejected")
         self.assertIn("G7", by["9999.0002__p0"]["reason"])

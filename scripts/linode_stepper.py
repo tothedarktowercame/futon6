@@ -262,11 +262,18 @@ def _ledger(run_dir):
     return os.path.join(run_dir, "phase-ledger.jsonl")
 
 
-def ledger_record(run_dir, stage, corpus_id, run_id, invocation=None):
+def ledger_record(run_dir, stage, corpus_id, run_id, invocation=None, counts=None, refused=()):
+    """A passing stage records what it accepted, not only that it passed.
+
+    `refused` names the items the contract turned down. Carrying them here means
+    the completeness ledger itself says the corpus is smaller than the manifest,
+    so nobody reads a green stage list as "every paper made it through".
+    """
     os.makedirs(run_dir, exist_ok=True)
     with open(_ledger(run_dir), "a") as handle:
         handle.write(json.dumps({"stage": stage, "corpus_id": corpus_id, "run_id": run_id,
-                                 "gate": "pass", "invocation": invocation}) + "\n")
+                                 "gate": "pass", "invocation": invocation,
+                                 "counts": counts, "refused": list(refused)}) + "\n")
 
 
 def _rows(path):
@@ -475,15 +482,19 @@ def attempt(s, run_dir, corpus_id, run_id):
     """One execution of a computational stage: command, gate, item accounting.
 
     The attempt row is written whatever happens, so rejected and errored items stay
-    inspectable. Only a zero command status, a zero gate status and accounting with
-    every expected item accepted produce a passing ledger row.
+    inspectable. A passing ledger row needs a zero command status, a zero gate
+    status, accounting that accounts for every expected item, and an accepted share
+    at the run's declared floor. Items the contract refused are printed and carried
+    into the row and the ledger; they do not stop the run, because an unattended
+    mining window that stops on the data has spent the rest of the allocation on
+    nothing and told nobody.
     """
     op = OPS.get(s["id"], {})
     sid = s["id"]
     invocation = next_invocation(run_dir, sid, run_id, corpus_id) if run_dir else None
     row = {"stage": sid, "run_id": run_id, "corpus_id": corpus_id, "invocation": invocation,
            "started": datetime.now(timezone.utc).isoformat(),
-           "command_rc": None, "gate_rc": None, "accounting": None, "problems": []}
+           "command_rc": None, "gate_rc": None, "accounting": None, "problems": [], "refused": []}
     if run_dir:
         adir = str(accounting.directory(run_dir, sid, invocation))
         os.makedirs(adir)          # a fresh directory per invocation; never merge histories
@@ -506,16 +517,20 @@ def attempt(s, run_dir, corpus_id, run_id):
         if run_dir and sid in ACCOUNTING:
             # Checked even after a failed command: the counts are the evidence of
             # what was attempted, and the reasons say why it did not pass.
-            row["problems"], row["accounting"] = accounting_problems(run_dir, sid, invocation, corpus_id)
+            row["problems"], row["accounting"], row["refused"] = accounting_problems(
+                run_dir, sid, invocation, corpus_id)
+            for refusal in row["refused"]:
+                print(f"  [items] {refusal}")
             for problem in row["problems"]:
                 print(f"  [accounting] {problem}")
             if row["problems"] and not outcome:
-                print(f"✗ {sid} ACCOUNTING FAILED — not every item was accepted")
+                print(f"✗ {sid} STOPPED — {row['problems'][0]}")
                 outcome = 3
     finally:
         os.environ.pop(accounting.DIR_ENV, None)
         os.environ.pop(accounting.INVOCATION_ENV, None)
-        row["outcome"] = "pass" if not outcome else ("command-failed" if outcome == 2 else "rejected")
+        row["outcome"] = ("command-failed" if outcome == 2 else "rejected") if outcome else (
+            "pass-with-refusals" if row["refused"] else "pass")
         row["finished"] = datetime.now(timezone.utc).isoformat()
         if run_dir:
             with open(os.path.join(run_dir, ATTEMPTS), "a") as handle:
@@ -525,8 +540,9 @@ def attempt(s, run_dir, corpus_id, run_id):
     if op.get("crit"):  # human criterion, judged at the halt — never a shell command
         print(f"[crit] {op['crit']}")
     if run_dir:
-        ledger_record(run_dir, sid, corpus_id, run_id, invocation)
-    print(f"✓ {sid} done" + (f" (ledger: {corpus_id}, {invocation})" if run_dir else ""))
+        ledger_record(run_dir, sid, corpus_id, run_id, invocation, row["accounting"], row["refused"])
+    refused = f", {len(row['refused'])} refusal(s) recorded" if row["refused"] else ""
+    print(f"✓ {sid} done" + (f" (ledger: {corpus_id}, {invocation}{refused})" if run_dir else ""))
     return 0
 
 

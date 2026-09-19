@@ -176,7 +176,7 @@ class Loop(unittest.TestCase):
                  json.dumps({"derivations": {"2": d([1]), "1": d([2])}})]
         rc, items = self.invoke("S3-a001", {"1111.0001__p0": self.doc("first"), "1111.0001__p1": cycle,
                                             "1111.0001__p2": loop.ModelCallError(0, "output truncated at max_tokens=8192")})
-        self.assertEqual(rc, 1)
+        self.assertEqual(rc, 0)      # the loop ran; what it refused is in the accounting
         self.assertEqual({k: v["status"] for k, v in items.items()},
                          {"1111.0001__p0": "accepted", "1111.0001__p1": "rejected", "1111.0001__p2": "errored"})
         self.assertIn("contract:", items["1111.0001__p1"]["reason"])
