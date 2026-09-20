@@ -11,7 +11,11 @@ set -euo pipefail
 
 MODEL="${MODEL:-hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4}"   # ungated AWQ-INT4
 PORT="${PORT:-8000}"
-TP="${TP:-auto}"                          # "auto" = use every visible GPU; or set e.g. TP=2
+# ONE GPU unless asked otherwise. This script may run on a SHARED host where the
+# other cards belong to other people's jobs; taking them because they were merely
+# visible is how you get evicted. TP=<n> to widen deliberately, TP=auto to take
+# everything this job has been allocated.
+TP="${TP:-1}"
 ATTENTION_HEADS="${ATTENTION_HEADS:-64}"  # Llama-3.1-70B; TP must divide this
 VENV="${VENV:-$HOME/mark4-venv}"
 LOG="${LOG:-$HOME/vllm-serve.log}"
@@ -50,30 +54,50 @@ fi
 
 echo "== GPU / driver =="
 nvidia-smi --query-gpu=index,name,memory.total,driver_version --format=csv || { echo "FATAL: no nvidia-smi"; exit 1; }
-NGPU=$(nvidia-smi -L | wc -l)
-[ "$NGPU" -ge 1 ] || { echo "FATAL: no GPUs visible"; exit 1; }
+# nvidia-smi lists every PHYSICAL card on the host and ignores CUDA_VISIBLE_DEVICES,
+# so on a Slurm node its count is the machine's, not the job's. Where a launcher has
+# set CUDA_VISIBLE_DEVICES (mfuton-superpod-gpu-policy.sh does), that is the
+# allocation and it is the only number we are entitled to.
+NPHYS=$(nvidia-smi -L | wc -l)
+if [ -n "${CUDA_VISIBLE_DEVICES:-}" ]; then
+  NGPU=$(tr ',' '\n' <<<"$CUDA_VISIBLE_DEVICES" | grep -c .)
+  echo "GPUs allocated to this job: $NGPU (host has $NPHYS; CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES)"
+else
+  NGPU="$NPHYS"
+  echo "GPUs visible: $NGPU (no CUDA_VISIBLE_DEVICES set)"
+fi
+[ "$NGPU" -ge 1 ] || { echo "FATAL: no GPUs available"; exit 1; }
 
 # vLLM shards attention heads across the tensor-parallel group, so TP must DIVIDE
-# the head count -- a 6-GPU host cannot run TP=6 against 64 heads and fails deep
-# inside model load with an opaque shape error. Pick the largest usable divisor
-# rather than assuming any particular card count.
+# the head count -- a 6-GPU allocation cannot run TP=6 against 64 heads and fails
+# deep inside model load with an opaque shape error.
 if [ "$TP" = "auto" ]; then
   TP="$NGPU"
   while [ "$TP" -gt 1 ] && [ $(( ATTENTION_HEADS % TP )) -ne 0 ]; do
     TP=$(( TP - 1 ))
   done
-  if [ "$TP" -ne "$NGPU" ]; then
-    echo "NOTE: $NGPU GPUs visible, but $ATTENTION_HEADS heads do not divide by $NGPU."
-    echo "      Using TP=$TP; the remaining $(( NGPU - TP )) GPU(s) will sit idle."
-    echo "      Override with TP=<n> if the model's head count differs."
-  fi
+  echo "TP=auto -> $TP of $NGPU allocated GPU(s)$([ "$TP" -ne "$NGPU" ] && echo ", $(( NGPU - TP )) idle ($ATTENTION_HEADS heads do not divide $NGPU)")"
 fi
 
-echo "GPUs visible: $NGPU (serving with TP=$TP)"
+echo "serving with TP=$TP"
 [ "$NGPU" -ge "$TP" ] || { echo "FATAL: TP=$TP requested but only $NGPU GPU(s) visible"; exit 1; }
 [ $(( ATTENTION_HEADS % TP )) -eq 0 ] || {
   echo "FATAL: TP=$TP does not divide $ATTENTION_HEADS attention heads; vLLM will fail at load."
   echo "       Set ATTENTION_HEADS for your model, or choose a TP that divides it."; exit 1; }
+
+# Measured 2026-09-20 on 4x RTX 4000 Ada: 70B-AWQ-INT4 sat at ~18.8GB/card at
+# TP=4, i.e. ~75GB of weights+cache. Say so BEFORE the weight download rather
+# than letting an under-width run OOM after twenty minutes of transfer.
+CARD_MB=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -1)
+NEED_MB="${NEED_MB:-75000}"
+HAVE_MB=$(( CARD_MB * TP ))
+if [ "$HAVE_MB" -lt "$NEED_MB" ]; then
+  echo "WARNING: TP=$TP gives ${HAVE_MB}MB; $MODEL needs ~${NEED_MB}MB."
+  echo "         This will OOM during load. Either raise TP (you have $NGPU GPU(s)"
+  echo "         allocated), pick a smaller MODEL, or set NEED_MB if the estimate is wrong."
+  [ "${ALLOW_UNDERSIZED:-0}" = "1" ] || {
+    echo "         Refusing to start. Re-run with ALLOW_UNDERSIZED=1 to try anyway."; exit 1; }
+fi
 
 echo "== CUDA toolkit (nvcc) detection =="
 EAGER_FLAGS=""
