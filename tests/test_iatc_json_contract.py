@@ -155,7 +155,7 @@ class Loop(unittest.TestCase):
     def invoke(self, invocation, by_proof):
         adir = self.base / "accounting" / invocation
         args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
-                                  model="m", rung2_gate=False, loss_log_interval=0)
+                                  model="m", rung2_gate=False, loss_log_interval=0, gate_retries=0)
         with patch.object(loop, "call_openai", self.responses(by_proof)), \
                 patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: invocation}):
             rc = loop.run(args)
@@ -192,7 +192,7 @@ class Loop(unittest.TestCase):
             return answers[cand["proof-id"]].pop(0)
         adir = self.base / "accounting" / "S3-a002"
         args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
-                                  model="m", rung2_gate=False, loss_log_interval=0)
+                                  model="m", rung2_gate=False, loss_log_interval=0, gate_retries=0)
         with patch.object(loop, "call_openai", record), \
                 patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: "S3-a002"}):
             loop.run(args)
@@ -382,3 +382,43 @@ class ControlCharacterGuard(unittest.TestCase):
         import mark3_iatc_loop as loop
         # quoted_source joins multiple lines with \n; that must stay legal.
         self.assertEqual(loop.control_char_damage({"text": "line one\nline two"}), [])
+
+
+class GateRetry(Loop):
+    """iatc_argcheck writes its refusal AS an instruction; something must act on it."""
+
+    def invoke_retry(self, invocation, by_proof, retries=1):
+        adir = self.base / "accounting" / invocation
+        args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
+                                  model="m", rung2_gate=False, loss_log_interval=0,
+                                  gate_retries=retries)
+        with patch.object(loop, "call_openai", self.responses(by_proof)), \
+                patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: invocation}):
+            loop.run(args)
+        return {e["id"]: e for e in accounting.load(adir, "S3", "loop")["items"]}
+
+    def test_a_refused_graph_is_re_asked_and_the_correction_accepted(self):
+        d = lambda prem: [{"relation": "implies", "premises": prem, "warrant_kind": "stated",
+                           "warrant": "w", "first_line": 12, "last_line": 14}]
+        # First steps answer builds the cycle the checker refuses; the retry answer
+        # states it as the single iff edge the refusal asks for.
+        answers = [json.dumps({"nodes": [node(text="A hypothesis"), node(text="B result")]}),
+                   json.dumps({"derivations": {"2": d([1]), "1": d([2])}}),
+                   json.dumps({"derivations": {"2": [{"relation": "iff", "premises": [1],
+                                                      "warrant_kind": "stated", "warrant": "equivalence",
+                                                      "first_line": 12, "last_line": 14}]}})]
+        items = self.invoke_retry("S3-r1", {"1111.0001__p0": answers,
+                                            "1111.0001__p1": self.doc("second"),
+                                            "1111.0001__p2": self.doc("third")})
+        self.assertEqual(items["1111.0001__p0"]["status"], "accepted",
+                         "the retry's corrected derivation should be accepted")
+
+    def test_with_retries_disabled_the_same_input_is_simply_lost(self):
+        d = lambda prem: [{"relation": "implies", "premises": prem, "warrant_kind": "stated",
+                           "warrant": "w", "first_line": 12, "last_line": 14}]
+        answers = [json.dumps({"nodes": [node(text="A hypothesis"), node(text="B result")]}),
+                   json.dumps({"derivations": {"2": d([1]), "1": d([2])}})]
+        items = self.invoke_retry("S3-r0", {"1111.0001__p0": answers,
+                                            "1111.0001__p1": self.doc("second"),
+                                            "1111.0001__p2": self.doc("third")}, retries=0)
+        self.assertEqual(items["1111.0001__p0"]["status"], "rejected")

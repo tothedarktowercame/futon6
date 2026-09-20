@@ -347,17 +347,21 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             why = f"contract: {len(doc.get('nodes') or [])} node(s); a proof has at least two"
             record["result"] = why
             return "rejected", why, record
-    found = iatc_json.problems(doc, lo, hi)
-    if found:
-        why = "contract: " + "; ".join(found[:6])
-        record["result"] = why[:500]
-        return "rejected", why, record
     graph = tmp / f"{pid}.edn"
-    graph.write_text(iatc_json.to_edn(doc, cand, args.model))
+
+    def judge():
+        """Contract, then gates. Both refuse with a reason a model could act on."""
+        found = iatc_json.problems(doc, lo, hi)
+        if found:
+            return False, "contract: " + "; ".join(found[:6])
+        graph.write_text(iatc_json.to_edn(doc, cand, args.model))
+        good, reason = gate_one(graph)
+        if good and args.rung2_gate:
+            good, reason = run_rung2(graph, tmp / f"{pid}.rung2.edn", gate=True)
+        return good, reason
+
+    ok, why = judge()
     record["graph"] = accounting.relative(graph)
-    ok, why = gate_one(graph)
-    if ok and args.rung2_gate:
-        ok, why = run_rung2(graph, tmp / f"{pid}.rung2.edn", gate=True)
 
     # The gates do not merely refuse; iatc_argcheck writes its refusal AS an
     # instruction — "state an equivalence as ONE edge with :relation :iff, not as
@@ -388,14 +392,7 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
         (tmp / f"{pid}.steps.retry{retry}.json").write_text(raw)
         doc.update(part)
         doc["steps"] = iatc_json.steps_of(doc)
-        found = iatc_json.problems(doc, lo, hi)
-        if found:
-            why = "contract: " + "; ".join(found[:6])
-            continue
-        graph.write_text(iatc_json.to_edn(doc, cand, args.model))
-        ok, why = gate_one(graph)
-        if ok and args.rung2_gate:
-            ok, why = run_rung2(graph, tmp / f"{pid}.rung2.edn", gate=True)
+        ok, why = judge()
         record[f"retry{retry}-result"] = "accepted" if ok else why[:200]
 
     if not ok:
