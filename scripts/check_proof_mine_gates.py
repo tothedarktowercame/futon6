@@ -32,16 +32,21 @@ def gold_files():
 
 
 def _bb_parses(path):
-    """True if `bb` can read the EDN (authoritative), or the loose loader recovers fields (fallback)."""
+    """True if `bb` reads the EDN. A REFUSAL by bb is authoritative and final.
+
+    The loose loader is a fallback for bb being ABSENT, not for bb saying no.
+    Previously any non-zero exit fell through to the regex scrape, so malformed
+    EDN that happened to contain :endpoints or :grades reported as parsing --
+    an authoritative rejection turned into a passing gate. Reproduced: malformed
+    EDN exits 1 and the function returned True.
+    """
     try:
         r = subprocess.run(["bb", "-e", '(clojure.edn/read-string (slurp "%s"))' % path],
                            capture_output=True, text=True, timeout=20)
-        if r.returncode == 0:
-            return True
+        return r.returncode == 0                     # bb ran; its verdict stands, either way
     except (OSError, subprocess.SubprocessError):
-        pass
-    g = _load_edn_loose(path)                                  # fallback: did we recover any fields?
-    return bool(g.get("endpoints") or g.get("grades"))
+        g = _load_edn_loose(path)                    # bb unavailable: degrade, and only here
+        return bool(g.get("endpoints") or g.get("grades"))
 
 
 def run_gates(missions):
