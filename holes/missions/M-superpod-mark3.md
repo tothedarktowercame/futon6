@@ -708,7 +708,7 @@ focused work.
 
 ### tl;dr
 
-- [ ] Mark 3 tags arXiv papers using an arXiv-aware prompt and hierarchical pattern set, with batch coverage and hand-tagging agreement checked against the mission's acceptance criteria.
+- [ ] Mark 3 tags arXiv papers using an arXiv-aware prompt and hierarchical pattern set, with batch coverage and hand-tagging agreement measured and recorded.
 - [ ] Mark 3 uses eprint input by default for rich theorem-and-proof hypergraphs.
 - [ ] Mark 3 reverse-morphogenesis output records failures explicitly instead of null analyses and rejects collapsed situation, salience, and constraint slots.
 - [ ] Mark 3 emits geometry artifacts with tension, unpaired claims, and hypergraph Laplacian summaries for papers and batches.
