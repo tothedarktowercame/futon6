@@ -63,17 +63,25 @@ def _recurring_holes(subctx, ctx):
 def load_concept_index(path, ctx=None):
     if ctx is None:
         ctx = {}
-    ci = json.load(open(path))
+    with open(path) as stream:
+        ci = json.load(stream)
     paper2c, paper2def = defaultdict(set), defaultdict(set)
     for c, rec in ci.items():
+        if "definition_papers" not in rec:
+            raise ValueError(f"definition-provenance-missing: {c}; rebuild concept index")
+        defining = rec["definition_papers"]
+        if not isinstance(defining, list) or not all(isinstance(p, str) and p for p in defining):
+            raise ValueError(f"invalid-definition-provenance: {c}")
         for p in rec.get("papers", []):
             paper2c[p].add(c)
-            if rec.get("defined"):
-                paper2def[p].add(c)
+        # Definition acquisition is independent of usage, and the global
+        # `defined` flag is not evidence that this particular paper defines c.
+        for p in defining:
+            paper2def[p].add(c)
     ctx["paper2c"] = paper2c
     ctx["paper2def"] = paper2def
     ctx["_concept_index"] = ci
-    ctx["substrate_universe"] = sorted(paper2c)
+    ctx["substrate_universe"] = sorted(set(paper2c) | set(paper2def))
     return ctx
 
 
@@ -259,8 +267,74 @@ def print_reports(reports):
                   f"· frac<0.5 {d['frac_below_0.5']}")
 
 
+def self_test_definitions():
+    """F4 producer -> JSON -> real loader -> real prefix metric, no repo data."""
+    import tempfile
+    from pathlib import Path
+    from sfc_concept_index import build_index
+
+    usage = {"paper_concepts": {"p-user": ["category structure"],
+                                "p-definer": ["category structure"]}}
+    index, _ = build_index(usage=usage, def_snippets={},
+                           defined_index={"concept_to_papers": {"category structure": ["p-definer"]}},
+                           encyclopedia={}, min_papers=1)
+    with tempfile.TemporaryDirectory(prefix="metrics-f4-") as root:
+        path = Path(root) / "index.json"
+        path.write_text(json.dumps(index))
+        ctx = load_concept_index(path)
+        values = [_encyclopedia(_subctx(papers, ctx), ctx) for papers in
+                  (["p-user"], ["p-definer"], ["p-user", "p-definer"])]
+        assert values == [0.0, 1.0, 1.0], values
+        print(f"F4 user-only / definer-only / both: PASS {values}")
+
+        # A definition-bearing paper need not appear in the usage list.
+        index["category structure"]["papers"] = ["p-user"]
+        path.write_text(json.dumps(index))
+        ctx = load_concept_index(path)
+        assert "p-definer" in ctx["substrate_universe"]
+        assert _encyclopedia(_subctx(["p-definer"], ctx), ctx) == 1.0
+        assert _encyclopedia(_subctx(["p-user"], ctx), ctx) == 0.0
+        print("F4 independent definition-paper loop: PASS")
+
+        # Global availability without attribution must not create prefix credit.
+        index["category structure"]["definition_papers"] = []
+        path.write_text(json.dumps(index))
+        ctx = load_concept_index(path)
+        assert _encyclopedia(_subctx(["p-user"], ctx), ctx) == 0.0
+        legacy = json.loads(json.dumps(index))
+        del legacy["category structure"]["definition_papers"]
+        assert legacy != index
+        path.write_text(json.dumps(legacy))
+        try:
+            load_concept_index(path)
+        except ValueError as exc:
+            assert "definition-provenance-missing" in str(exc)
+        else:
+            raise AssertionError("legacy globally-defined index accepted")
+        print("F4 legacy provenance missing: PASS (typed ValueError)")
+
+        # Beyond the report's top-500 summary, new definitions still accrete.
+        concepts = ["category " + chr(97 + i // 26) + chr(97 + i % 26) + " structure"
+                    for i in range(601)]
+        usage = {"paper_concepts": {f"p{i}": [c] for i, c in enumerate(concepts)}}
+        large, _ = build_index(
+            usage=usage, def_snippets={}, encyclopedia={},
+            defined_index={"concept_to_papers": {c: [f"p{i}"] for i, c in enumerate(concepts)}})
+        assert len(large) == 601
+        path.write_text(json.dumps(large))
+        ctx = load_concept_index(path)
+        before = _encyclopedia(_subctx([f"p{i}" for i in range(600)], ctx), ctx)
+        after = _encyclopedia(_subctx([f"p{i}" for i in range(601)], ctx), ctx)
+        assert (before, after) == (600.0, 601.0)
+        print("F4 no top-500 harvest cap: PASS (600 -> 601 definitions)")
+    print("self-test-definitions PASS: no repository data required")
+
+
 def self_test():
-    ci = {f"c{i}": {"defined": True, "genuine": True, "papers": [f"p{j:03d}" for j in range(i, i + 5)]}
+    self_test_definitions()
+    ci = {f"c{i}": {"defined": True, "genuine": True,
+                    "definition_papers": [f"p{i:03d}"],
+                    "papers": [f"p{j:03d}" for j in range(i, i + 5)]}
           for i in range(30)}
     import tempfile
     p = tempfile.mktemp(suffix=".json")
@@ -409,7 +483,11 @@ def main():
     ap.add_argument("--out", default="data/metric-harness-report.json")
     ap.add_argument("--from-records", help="aggregate MetricRecords a run emitted (run-dir)")
     ap.add_argument("--self-test", action="store_true")
+    ap.add_argument("--self-test-definitions", action="store_true")
     a = ap.parse_args()
+    if a.self_test_definitions:
+        self_test_definitions()
+        return
     if a.self_test:
         self_test()
         return
