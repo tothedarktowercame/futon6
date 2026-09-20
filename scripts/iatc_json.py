@@ -259,7 +259,19 @@ def to_edn(doc: dict, cand: dict, model: str) -> str:
     lines = lambda x: f'{{:lines [{x["first_line"]} {x["last_line"]}]}}'
     nodes, holes = [], []
     for i, n in enumerate(doc["nodes"], 1):
-        fields = [f":id :n{i}", f":kind :{n['kind']}", f":text {edn_string(n['text'].strip())}"]
+        # :text carries the SOURCE when the node quoted it, because every
+        # downstream reader — semcheck, the substance gate, term extraction —
+        # reads :text and would otherwise be reading the model's prose. The
+        # model's own wording is kept as :gloss, where nothing depends on it.
+        quoted = quoted_source(n, cand)
+        text = quoted if quoted else n["text"].strip()
+        fields = [f":id :n{i}", f":kind :{n['kind']}", f":text {edn_string(text)}"]
+        if quoted:
+            fields.append(f":gloss {edn_string(n['text'].strip())}")
+            fields.append(":quoted true")
+            fields.append(f":quote-lines [{' '.join(str(x) for x in n['quote_lines'])}]")
+        if n.get("symbols"):
+            fields.append(f":symbols [{' '.join(edn_string(x) for x in n['symbols'])}]")
         if n["kind"] == "ref":
             if n.get("citation", "").strip():
                 fields.append(f":citation {edn_string(n['citation'].strip())}")

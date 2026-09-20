@@ -142,13 +142,27 @@ class ModelCallError(Exception):
 
 
 def call_stub(prompt: str, cand: dict, schema: dict) -> str:
-    """No-GPU plumbing: a minimal valid answer for whichever phase is asked."""
+    """No-GPU plumbing: a minimal valid answer for whichever phase is asked.
+
+    Reads the schema it was handed rather than hardcoding the fields, so a
+    contract change cannot leave the no-GPU path silently emitting output the
+    live path would refuse — which is exactly what happened when quote_lines and
+    symbols became required.
+    """
     lo, hi = cand["proof-lines"]
     if "nodes" in schema["properties"]:
-        return json.dumps({"nodes": [{"kind": "claim", "text": "hypotheses of the statement", "citation": "",
-                                      "first_line": lo, "last_line": lo},
-                                     {"kind": "claim", "text": "conclusion of the statement", "citation": "",
-                                      "first_line": hi, "last_line": hi}]})
+        item = schema["properties"]["nodes"]["items"]
+        extra: dict = {}
+        if "quote_lines" in item["properties"]:
+            legal = item["properties"]["quote_lines"]["items"]["enum"]
+            extra["quote_lines"] = [legal[0]]
+        if "symbols" in item["properties"]:
+            extra["symbols"] = []
+        return json.dumps({"nodes": [
+            {"kind": "claim", "text": "hypotheses of the statement", "citation": "",
+             "first_line": lo, "last_line": lo, **extra},
+            {"kind": "claim", "text": "conclusion of the statement", "citation": "",
+             "first_line": hi, "last_line": hi, **extra}]})
     return json.dumps({"derivations": {"2": [{"relation": "implies", "premises": [1],
                                               "warrant_kind": "missing",
                                               "warrant": f"argument of {cand['proof-id']}",
