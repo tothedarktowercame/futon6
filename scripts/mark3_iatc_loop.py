@@ -276,6 +276,33 @@ def require_candidates(cands: list[Path]) -> bool:
     return True
 
 
+
+# No legitimate model answer contains a raw control character. They appear only
+# when the JSON escape alphabet substituted for a LaTeX command the grammar could
+# not spell: \t for \text, \b for \beta, \r for \rightarrow, and — seen in the
+# 0919b probe as $\"mathcal{T}$ — \" for \mathcal, which also injects a stray
+# quote. quote_lines removes the exposure for a node's mathematics, but citation
+# and warrant are still free strings the model types, so the class is only latent
+# there rather than closed. This refuses it wherever it appears.
+CONTROL_CHARS = {"\t": "\\t", "\b": "\\b", "\r": "\\r", "\f": "\\f", "\v": "\\v"}
+
+
+def control_char_damage(value, path: str = "") -> list[str]:
+    """Where a model answer carries a control character, and which escape caused it."""
+    found: list[str] = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            found += control_char_damage(item, f"{path}.{key}" if path else str(key))
+    elif isinstance(value, list):
+        for i, item in enumerate(value):
+            found += control_char_damage(item, f"{path}[{i}]")
+    elif isinstance(value, str):
+        for char, escape in CONTROL_CHARS.items():
+            if char in value:
+                found.append(f"{path or 'value'}: {escape} where a LaTeX command belongs")
+    return found
+
+
 def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
     """(status, reason, attempt record) for one model call on one proof."""
     pid = cand["proof-id"]
@@ -303,6 +330,13 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             why = f"{phase}: endpoint returned non-JSON despite the schema ({e}); check serving conformance"
             record["result"] = why
             return "errored", why, record
+        damage = control_char_damage(part, phase)
+        if damage:
+            why = (f"{phase}: model output carries control characters — "
+                   + "; ".join(damage[:3])
+                   + (f" (+{len(damage) - 3} more)" if len(damage) > 3 else ""))
+            record["result"] = why
+            return "rejected", why, record
         doc.update(part)
         if phase == "steps":
             doc["steps"] = iatc_json.steps_of(doc)

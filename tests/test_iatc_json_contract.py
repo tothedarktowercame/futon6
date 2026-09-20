@@ -342,3 +342,43 @@ class QuotationByReference(unittest.TestCase):
     def test_omitting_lines_leaves_the_old_contract_untouched(self):
         node = iatc_json.nodes_schema(1, 9)["properties"]["nodes"]["items"]
         self.assertNotIn("quote_lines", node["properties"])
+
+
+class ControlCharacterGuard(unittest.TestCase):
+    """The escape alphabet substitutes silently; nothing legitimate is affected."""
+
+    def test_the_real_probe_damage_is_caught_anywhere_in_the_document(self):
+        import mark3_iatc_loop as loop
+        # Reconstructed from 0705.0102__p0: \forall -> \f, \text -> \t, \triangle.
+        doc = {"nodes": [{"kind": "claim", "citation": "",
+                          "text": "$\x0corall X \text{ in } T$"}]}
+        damage = loop.control_char_damage(doc)
+        self.assertTrue(damage)
+        self.assertIn("\\f", " ".join(damage))
+
+    def test_a_citation_is_checked_too_not_just_node_text(self):
+        import mark3_iatc_loop as loop
+        # citation and warrant stay free strings; quote_lines does not cover them.
+        damage = loop.control_char_damage({"nodes": [{"citation": "see \\ref{main}\b"}]})
+        self.assertTrue(damage)
+        self.assertIn("citation", " ".join(damage))
+
+    def test_warrants_nested_in_steps_are_reached(self):
+        import mark3_iatc_loop as loop
+        damage = loop.control_char_damage(
+            {"derivations": {"2": [{"warrant": "by \rightarrow-naturality"}]}})
+        self.assertTrue(damage, "nested model strings must be reached")
+
+    def test_clean_mathematics_is_not_flagged(self):
+        import mark3_iatc_loop as loop
+        clean = {"nodes": [{"kind": "claim",
+                            "text": "(i) For all objects $X$ of $\\T$ there exists an "
+                                    "$\\Sigma^{-1}\\A$-precover $\\alpha$.",
+                            "citation": "[AR, 2.36]", "symbols": ["\\alpha", "X"],
+                            "quote_lines": [352]}]}
+        self.assertEqual(loop.control_char_damage(clean), [])
+
+    def test_a_newline_in_quoted_source_is_not_treated_as_damage(self):
+        import mark3_iatc_loop as loop
+        # quoted_source joins multiple lines with \n; that must stay legal.
+        self.assertEqual(loop.control_char_damage({"text": "line one\nline two"}), [])
