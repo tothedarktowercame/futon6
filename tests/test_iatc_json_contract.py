@@ -306,29 +306,37 @@ class ForcedSubstitutionDetector(unittest.TestCase):
 class QuotationByReference(unittest.TestCase):
     """The mathematics must not pass through the model's output at all."""
 
+    # One LINE holding a hypothesis and the conclusion drawn from it -- the shape
+    # that made 43 of 648 edges read as "this text implies this same text".
     CAND = {"window-lines": [349, 353],
-            "source-window": ("\\prop\n"
-                              "Let $\\T$ be a triangulated category.\n"
-                              "\n"
-                              "(i) there exists an $\\Sigma^{-1}\\A$-precover $\\alpha$.\n"
-                              "\\eprop"),
+            "source-window": "Let $\\T$ be a triangulated category. Then there exists an "
+                             "$\\Sigma^{-1}\\A$-precover $\\alpha$.",
             "enrichment": [{"tip": "bind/typed \u00b7 symbol:\\alpha | type:map"},
-                           {"tip": "definiendum #0: $\\T$"}]}
+                           {"tip": "definiendum #0: $\\T$"}],
+            "spans": [{"kind": "bind/let", "start": 0, "end": 38,
+                       "text": "Let $\\T$ be a triangulated category."},
+                      {"kind": "quant/universal", "start": 39, "end": 96,
+                       "text": "Then there exists an $\\Sigma^{-1}\\A$-precover $\\alpha$."}]}
 
-    def test_blank_lines_are_not_offered_as_anchors(self):
-        self.assertEqual([n for n, _ in iatc_json.source_lines(self.CAND)],
-                         [349, 350, 352, 353])
+    def test_spans_are_offered_as_clause_units_not_lines(self):
+        spans = iatc_json.source_spans(self.CAND)
+        self.assertEqual([sp["id"] for sp in spans], ["s1", "s2"])
+        self.assertEqual(spans[0]["kind"], "bind/let")
 
-    def test_quote_lines_is_an_enumeration_not_a_range(self):
-        nums = [n for n, _ in iatc_json.source_lines(self.CAND)]
-        node = iatc_json.nodes_schema(349, 353, [], nums)["properties"]["nodes"]["items"]
-        self.assertIn("quote_lines", node["required"])
-        self.assertEqual(node["properties"]["quote_lines"]["items"]["enum"], nums)
-        # 351 is blank; a node cannot anchor to it even though it is in range.
-        self.assertNotIn(351, node["properties"]["quote_lines"]["items"]["enum"])
+    def test_a_hypothesis_and_its_conclusion_cannot_be_one_selection(self):
+        node = iatc_json.nodes_schema(349, 353, [],
+                                      iatc_json.spans_of(self.CAND))["properties"]["nodes"]["items"]
+        self.assertIn("quote_spans", node["required"])
+        self.assertEqual(node["properties"]["quote_spans"]["items"]["enum"], ["s1", "s2"])
+        # The whole line is not on offer: there is no id spanning both units, so a
+        # premise and a conclusion cannot resolve to identical text.
+        self.assertEqual(iatc_json.quoted_source({"quote_spans": ["s1"]}, self.CAND),
+                         "Let $\\T$ be a triangulated category.")
+        self.assertNotEqual(iatc_json.quoted_source({"quote_spans": ["s1"]}, self.CAND),
+                            iatc_json.quoted_source({"quote_spans": ["s2"]}, self.CAND))
 
     def test_the_symbols_the_grammar_destroys_survive_quotation(self):
-        node = {"quote_lines": [352]}
+        node = {"quote_spans": ["s2"]}
         quoted = iatc_json.quoted_source(node, self.CAND)
         # These are exactly the commands a JSON escape alphabet cannot spell.
         for command in ("\\Sigma", "\\alpha", "\\A"):
@@ -336,12 +344,12 @@ class QuotationByReference(unittest.TestCase):
         self.assertNotIn("\\triangle", quoted)
 
     def test_text_is_demoted_to_a_gloss_in_the_contract(self):
-        node = iatc_json.nodes_schema(349, 353, [], [349])["properties"]["nodes"]["items"]
+        node = iatc_json.nodes_schema(349, 353, [], ["s1"])["properties"]["nodes"]["items"]
         self.assertIn("NOT the node's mathematics", node["properties"]["text"]["description"])
 
-    def test_omitting_lines_leaves_the_old_contract_untouched(self):
+    def test_omitting_spans_leaves_the_old_contract_untouched(self):
         node = iatc_json.nodes_schema(1, 9)["properties"]["nodes"]["items"]
-        self.assertNotIn("quote_lines", node["properties"])
+        self.assertNotIn("quote_spans", node["properties"])
 
 
 class ControlCharacterGuard(unittest.TestCase):

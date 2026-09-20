@@ -62,7 +62,7 @@ def bound_symbols(candidate: dict) -> list[str]:
 
 
 def nodes_schema(lo: int, hi: int, symbols: "list[str] | tuple[str, ...]" = (),
-                 lines: "list[int] | tuple[int, ...]" = ()) -> dict:
+                 spans: "list[str] | tuple[str, ...]" = ()) -> dict:
     """Phase 1: what the proof talks about, in the order the model lists it.
 
     Two things the model must not retype, because a JSON string grammar cannot
@@ -76,7 +76,7 @@ def nodes_schema(lo: int, hi: int, symbols: "list[str] | tuple[str, ...]" = (),
     So the mathematics arrives by reference:
 
       symbols      which bound objects the node is about, from what S1 bound
-      quote_lines  which source lines carry it, from the window's own numbering
+      quote_spans  which S1-marked clause units carry it, by span id
 
     `text` survives as a PROSE GLOSS and is no longer the record of what the node
     claims; quoted_source() reads that from the source. This is the move
@@ -87,7 +87,7 @@ def nodes_schema(lo: int, hi: int, symbols: "list[str] | tuple[str, ...]" = (),
     properties = {"kind": {"type": "string", "enum": list(NODE_KINDS)},
                   "text": {"type": "string", "minLength": 1, "maxLength": 300,
                            "description": "Prose gloss. NOT the node's mathematics: "
-                                          "quote_lines carries that. Do not retype formulae."},
+                                          "quote_spans carries that. Do not retype formulae."},
                   "citation": {"type": "string", "maxLength": 160},
                   "first_line": line, "last_line": line}
     required = ["kind", "text", "citation", "first_line", "last_line"]
@@ -95,39 +95,54 @@ def nodes_schema(lo: int, hi: int, symbols: "list[str] | tuple[str, ...]" = (),
         properties["symbols"] = {"type": "array", "maxItems": len(symbols),
                                  "items": {"type": "string", "enum": list(symbols)}}
         required.append("symbols")
-    if lines:
-        # An ENUM, not a range: a node drawing on lines 350 and 365 must say so
-        # rather than claim everything between them.
-        properties["quote_lines"] = {"type": "array", "minItems": 1, "maxItems": len(lines),
-                                     "items": {"type": "integer", "enum": list(lines)}}
-        required.append("quote_lines")
+    if spans:
+        # Clause-sized units, not lines. A node cannot select a hypothesis and its
+        # conclusion together unless S1 marked them as one unit, so the vacuous
+        # "X implies X" edge becomes unrepresentable rather than detectable.
+        properties["quote_spans"] = {"type": "array", "minItems": 1, "maxItems": len(spans),
+                                     "items": {"type": "string", "enum": list(spans)}}
+        required.append("quote_spans")
     node = {"type": "object", "additionalProperties": False,
             "required": required, "properties": properties}
     return {"type": "object", "additionalProperties": False, "required": ["nodes"],
             "properties": {"nodes": {"type": "array", "minItems": 2, "maxItems": MAX_NODES, "items": node}}}
 
 
-def source_lines(candidate: dict) -> list[tuple[int, str]]:
-    """The window's non-blank lines, numbered absolutely, in source order.
+SPAN_KINDS = ("bind/let", "assume/explicit", "quant/universal", "constrain/relation",
+              "bind/typed", "definiendum", "definiens", "let-binder",
+              "constrain/such-that", "env/proposition", "env/proof")
 
-    numbered_window already shows the model exactly these numbers — "anchors are
-    read, not counted" (H21). This returns them as data so the schema can make
-    them the only way a node carries mathematics.
+
+def source_spans(candidate: dict) -> list[dict]:
+    """The clause-sized units S1 already marked, in source order.
+
+    Line numbers were the wrong granularity and are gone. A LaTeX line routinely
+    carries a hypothesis AND the conclusion drawn from it -- 0705.0102 line 622
+    holds two hypotheses and a preenvelope claim -- so three different nodes could
+    only cite the same line, and the edge between them read as "this text implies
+    this same text". 43 of 648 edges in the first clean corpus (6.6%) did exactly
+    that. S1 had already segmented that line into bind/let, assume/explicit and
+    quant/universal units with character offsets; the contract simply never
+    offered them.
     """
-    lo = (candidate.get("window-lines") or [1, 1])[0]
-    body = str(candidate.get("source-window", ""))
-    return [(lo + i, line) for i, line in enumerate(body.split("\n")) if line.strip()]
+    return [dict(sp, id=f"s{i}") for i, sp in enumerate(candidate.get("spans") or (), 1)]
+
+
+def spans_of(candidate: dict) -> list[str]:
+    return [sp["id"] for sp in source_spans(candidate)]
 
 
 def quoted_source(node: dict, candidate: dict) -> str:
     """The node's mathematics, taken from the source rather than from the model.
 
-    This is the whole point of quote_lines: the model chooses WHICH lines, code
-    does the extraction, and the LaTeX never passes through a JSON string. A
-    grammar that cannot spell \\Sigma therefore cannot corrupt it.
+    The model chooses WHICH spans; code does the extraction, so the LaTeX never
+    passes through a JSON string and a grammar that cannot spell \\Sigma cannot
+    corrupt it.
     """
-    wanted = set(node.get("quote_lines") or ())
-    return "\n".join(text for number, text in source_lines(candidate) if number in wanted)
+    wanted = set(node.get("quote_spans") or ())
+    by_id = {sp["id"]: sp for sp in source_spans(candidate)}
+    return "\n".join(by_id[i]["text"] for i in
+                      sorted(wanted, key=lambda x: by_id[x]["start"]) if i in by_id)
 
 
 def steps_schema(lo: int, hi: int, node_count: int) -> dict:
@@ -269,7 +284,7 @@ def to_edn(doc: dict, cand: dict, model: str) -> str:
         if quoted:
             fields.append(f":gloss {edn_string(n['text'].strip())}")
             fields.append(":quoted true")
-            fields.append(f":quote-lines [{' '.join(str(x) for x in n['quote_lines'])}]")
+            fields.append(f":quote-spans [{' '.join(edn_string(x) for x in n['quote_spans'])}]")
         if n.get("symbols"):
             fields.append(f":symbols [{' '.join(edn_string(x) for x in n['symbols'])}]")
         if n["kind"] == "ref":

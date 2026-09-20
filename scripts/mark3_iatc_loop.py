@@ -53,9 +53,11 @@ otherwise leave it "").
 
 DO NOT RETYPE MATHEMATICS. Two fields carry it for you, and both are chosen from
 what the source already supplies:
-  "quote_lines" — the ABSOLUTE line numbers whose text states this node. Pick the
-    lines; the formulae are taken from the source verbatim, so you never have to
-    reproduce a symbol. List only the lines this node actually needs.
+  "quote_spans" — the ids of the marked source units that STATE this node. Pick
+    the units; their text is taken from the source verbatim, so you never have to
+    reproduce a symbol. Pick only what this node needs: a hypothesis and the
+    conclusion drawn from it are SEPARATE units and must not be selected together
+    for one node.
   "symbols" — which of the proof's bound symbols this node is about.
 "text" is a short PROSE gloss only — say what the node does in words. Formulae you
 type there are not used and can only be wrong: the JSON escape alphabet cannot
@@ -146,16 +148,16 @@ def call_stub(prompt: str, cand: dict, schema: dict) -> str:
 
     Reads the schema it was handed rather than hardcoding the fields, so a
     contract change cannot leave the no-GPU path silently emitting output the
-    live path would refuse — which is exactly what happened when quote_lines and
+    live path would refuse — which is exactly what happened when quote_spans and
     symbols became required.
     """
     lo, hi = cand["proof-lines"]
     if "nodes" in schema["properties"]:
         item = schema["properties"]["nodes"]["items"]
         extra: dict = {}
-        if "quote_lines" in item["properties"]:
-            legal = item["properties"]["quote_lines"]["items"]["enum"]
-            extra["quote_lines"] = [legal[0]]
+        if "quote_spans" in item["properties"]:
+            legal = item["properties"]["quote_spans"]["items"]["enum"]
+            extra["quote_spans"] = [legal[0]]
         if "symbols" in item["properties"]:
             extra["symbols"] = []
         return json.dumps({"nodes": [
@@ -281,7 +283,7 @@ def require_candidates(cands: list[Path]) -> bool:
 # when the JSON escape alphabet substituted for a LaTeX command the grammar could
 # not spell: \t for \text, \b for \beta, \r for \rightarrow, and — seen in the
 # 0919b probe as $\"mathcal{T}$ — \" for \mathcal, which also injects a stray
-# quote. quote_lines removes the exposure for a node's mathematics, but citation
+# quote. quote_spans removes the exposure for a node's mathematics, but citation
 # and warrant are still free strings the model types, so the class is only latent
 # there rather than closed. This refuses it wherever it appears.
 CONTROL_CHARS = {"\t": "\\t", "\b": "\\b", "\r": "\\r", "\f": "\\f", "\v": "\\v"}
@@ -311,7 +313,7 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
     doc: dict = {}
     for phase, task in (("nodes", NODES_TASK), ("steps", STEPS_TASK)):
         schema = (iatc_json.nodes_schema(lo, hi, iatc_json.bound_symbols(cand),
-                                         [n for n, _ in iatc_json.source_lines(cand)])
+                                         iatc_json.spans_of(cand))
                   if phase == "nodes"
                   else iatc_json.steps_schema(lo, hi, len(doc.get("nodes", []))))
         prompt = build_prompt(cand, task, doc.get("nodes") if phase == "steps" else None)
