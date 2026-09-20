@@ -46,7 +46,12 @@ def _line_starts(text):
 
 def _source_lines(path, kind=None):
     text = open(path, errors="replace").read()
-    tail = rf", :kind :{kind}" if kind else ""
+    # EDN separates map entries with WHITESPACE; commas are optional and to_edn
+    # does not write them. Requiring ", :kind" matched nothing, so every graph
+    # returned None here, took the `else` branch at the call site and was recorded
+    # as unattached. That is how the probe produced 0 attachments and 121
+    # unattached graphs while every graph carried the span it needed.
+    tail = rf"[,\s]+:kind :{kind}" if kind else ""
     m = re.search(r":source \{:lines \[(\d+) (\d+)\]" + tail, text)
     return (int(m.group(1)), int(m.group(2))) if m else None
 

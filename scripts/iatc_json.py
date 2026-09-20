@@ -34,17 +34,115 @@ MAX_STEPS = 60
 MAX_PREMISES = 8
 
 
-def nodes_schema(lo: int, hi: int) -> dict:
-    """Phase 1: what the proof talks about, in the order the model lists it."""
+SYMBOL_RE = re.compile(r"symbol:(\S+)")
+DEFINIENDUM_RE = re.compile(r"definiendum #\d+: \$(.+?)\$")
+
+
+def bound_symbols(candidate: dict) -> list[str]:
+    """The symbols S1 already bound to a meaning in this proof's window.
+
+    S1 emits these as enrichment rows — `bind/typed · symbol:\\alpha |
+    type:\\Sigma^{-1}A\\rightarrow X`, `definiendum #0: $\\T$` — and they are
+    rendered into the S3 prompt as advice. They are advice only: the node schema
+    has one free `text` string and no slot for a symbol, so the model retypes the
+    mathematics by hand. In the 0919b probe that is where the damage happened —
+    361 of 1280 nodes carried control characters from LaTeX the JSON writer never
+    escaped, and 87.5% of those were in proofs whose bindings were already
+    present. Returning them here lets the schema name what the node may refer to.
+    """
+    found: list[str] = []
+    for row in candidate.get("enrichment") or ():
+        tip = row.get("tip", "")
+        for match in (SYMBOL_RE.search(tip), DEFINIENDUM_RE.search(tip)):
+            if match:
+                symbol = match.group(1).strip().strip("$")
+                if symbol and symbol not in found:
+                    found.append(symbol)
+    return found
+
+
+def nodes_schema(lo: int, hi: int, symbols: "list[str] | tuple[str, ...]" = (),
+                 spans: "list[str] | tuple[str, ...]" = ()) -> dict:
+    """Phase 1: what the proof talks about, in the order the model lists it.
+
+    Two things the model must not retype, because a JSON string grammar cannot
+    spell them. It permits only " \\ / b f n r t u after a backslash, so a
+    command starting with any other letter is unwritable: the decoder forces a
+    legal letter and the model completes a different command. Measured over the
+    0919b probe — 8,437 backslash sequences, none illegal, 5,891 of them \\t —
+    that is how \\T, \\Sigma and \\alpha all became \\triangle, and how a
+    source \\in became \\notin.
+
+    So the mathematics arrives by reference:
+
+      symbols      which bound objects the node is about, from what S1 bound
+      quote_spans  which S1-marked clause units carry it, by span id
+
+    `text` survives as a PROSE GLOSS and is no longer the record of what the node
+    claims; quoted_source() reads that from the source. This is the move
+    steps_schema makes with premises, applied twice more: naming something the
+    window never supplied is unrepresentable rather than rejected afterwards.
+    """
     line = {"type": "integer", "minimum": lo, "maximum": hi}
+    properties = {"kind": {"type": "string", "enum": list(NODE_KINDS)},
+                  "text": {"type": "string", "minLength": 1, "maxLength": 300,
+                           "description": "Prose gloss. NOT the node's mathematics: "
+                                          "quote_spans carries that. Do not retype formulae."},
+                  "citation": {"type": "string", "maxLength": 160},
+                  "first_line": line, "last_line": line}
+    required = ["kind", "text", "citation", "first_line", "last_line"]
+    if symbols:
+        properties["symbols"] = {"type": "array", "maxItems": len(symbols),
+                                 "items": {"type": "string", "enum": list(symbols)}}
+        required.append("symbols")
+    if spans:
+        # Clause-sized units, not lines. A node cannot select a hypothesis and its
+        # conclusion together unless S1 marked them as one unit, so the vacuous
+        # "X implies X" edge becomes unrepresentable rather than detectable.
+        properties["quote_spans"] = {"type": "array", "minItems": 1, "maxItems": len(spans),
+                                     "items": {"type": "string", "enum": list(spans)}}
+        required.append("quote_spans")
     node = {"type": "object", "additionalProperties": False,
-            "required": ["kind", "text", "citation", "first_line", "last_line"],
-            "properties": {"kind": {"type": "string", "enum": list(NODE_KINDS)},
-                           "text": {"type": "string", "minLength": 1, "maxLength": 300},
-                           "citation": {"type": "string", "maxLength": 160},
-                           "first_line": line, "last_line": line}}
+            "required": required, "properties": properties}
     return {"type": "object", "additionalProperties": False, "required": ["nodes"],
             "properties": {"nodes": {"type": "array", "minItems": 2, "maxItems": MAX_NODES, "items": node}}}
+
+
+SPAN_KINDS = ("bind/let", "assume/explicit", "quant/universal", "constrain/relation",
+              "bind/typed", "definiendum", "definiens", "let-binder",
+              "constrain/such-that", "env/proposition", "env/proof")
+
+
+def source_spans(candidate: dict) -> list[dict]:
+    """The clause-sized units S1 already marked, in source order.
+
+    Line numbers were the wrong granularity and are gone. A LaTeX line routinely
+    carries a hypothesis AND the conclusion drawn from it -- 0705.0102 line 622
+    holds two hypotheses and a preenvelope claim -- so three different nodes could
+    only cite the same line, and the edge between them read as "this text implies
+    this same text". 43 of 648 edges in the first clean corpus (6.6%) did exactly
+    that. S1 had already segmented that line into bind/let, assume/explicit and
+    quant/universal units with character offsets; the contract simply never
+    offered them.
+    """
+    return [dict(sp, id=f"s{i}") for i, sp in enumerate(candidate.get("spans") or (), 1)]
+
+
+def spans_of(candidate: dict) -> list[str]:
+    return [sp["id"] for sp in source_spans(candidate)]
+
+
+def quoted_source(node: dict, candidate: dict) -> str:
+    """The node's mathematics, taken from the source rather than from the model.
+
+    The model chooses WHICH spans; code does the extraction, so the LaTeX never
+    passes through a JSON string and a grammar that cannot spell \\Sigma cannot
+    corrupt it.
+    """
+    wanted = set(node.get("quote_spans") or ())
+    by_id = {sp["id"]: sp for sp in source_spans(candidate)}
+    return "\n".join(by_id[i]["text"] for i in
+                      sorted(wanted, key=lambda x: by_id[x]["start"]) if i in by_id)
 
 
 def steps_schema(lo: int, hi: int, node_count: int) -> dict:
@@ -176,7 +274,19 @@ def to_edn(doc: dict, cand: dict, model: str) -> str:
     lines = lambda x: f'{{:lines [{x["first_line"]} {x["last_line"]}]}}'
     nodes, holes = [], []
     for i, n in enumerate(doc["nodes"], 1):
-        fields = [f":id :n{i}", f":kind :{n['kind']}", f":text {edn_string(n['text'].strip())}"]
+        # :text carries the SOURCE when the node quoted it, because every
+        # downstream reader — semcheck, the substance gate, term extraction —
+        # reads :text and would otherwise be reading the model's prose. The
+        # model's own wording is kept as :gloss, where nothing depends on it.
+        quoted = quoted_source(n, cand)
+        text = quoted if quoted else n["text"].strip()
+        fields = [f":id :n{i}", f":kind :{n['kind']}", f":text {edn_string(text)}"]
+        if quoted:
+            fields.append(f":gloss {edn_string(n['text'].strip())}")
+            fields.append(":quoted true")
+            fields.append(f":quote-spans [{' '.join(edn_string(x) for x in n['quote_spans'])}]")
+        if n.get("symbols"):
+            fields.append(f":symbols [{' '.join(edn_string(x) for x in n['symbols'])}]")
         if n["kind"] == "ref":
             if n.get("citation", "").strip():
                 fields.append(f":citation {edn_string(n['citation'].strip())}")

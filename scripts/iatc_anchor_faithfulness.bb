@@ -4,7 +4,7 @@
 ;; Usage:
 ;;   bb scripts/iatc_anchor_faithfulness.bb data/iatc-argument-graphs/loop-run-70b
 ;;   bb scripts/iatc_anchor_faithfulness.bb --k 2 --tau 0.45 --floor 0.30 graph.edn
-;;   bb scripts/iatc_anchor_faithfulness.bb --marks-dir data/showcases/ct-anatomy/golden graph.edn
+;;   bb scripts/iatc_anchor_faithfulness.bb --candidates-dir artifacts/candidates graph.edn
 ;;   bb scripts/iatc_anchor_faithfulness.bb --source paper.json graph.edn
 
 (require '[cheshire.core :as json]
@@ -13,8 +13,7 @@
          '[clojure.string :as str])
 
 (def default-opts
-  {:marks-dir (or (System/getenv "FUTON6_MARKS") "data/showcases/ct-anatomy/golden")
-   :k 2
+  {:k 2
    :tau 0.45
    :floor 0.30
    :format :text})
@@ -47,7 +46,7 @@
 
 (defn usage! []
   (binding [*out* *err*]
-    (println "Usage: bb scripts/iatc_anchor_faithfulness.bb [--marks-dir DIR] [--source FILE] [--k N] [--tau X] [--floor X] [--edn] <graph.edn-or-dir> [...]"))
+    (println "Usage: bb scripts/iatc_anchor_faithfulness.bb [--candidates-dir DIR] [--source FILE (explicit 1-based source)] [--k N] [--tau X] [--floor X] [--edn] <graph.edn-or-dir> [...]"))
   (System/exit 2))
 
 (defn parse-int [s flag]
@@ -77,8 +76,9 @@
       {:opts opts :paths paths}
       (let [[x & more] xs]
         (case x
-          "--marks-dir" (do (when (empty? more) (usage!))
-                            (recur (assoc opts :marks-dir (first more)) paths (rest more)))
+          "--marks-dir" (throw (ex-info "Use --candidates-dir for candidate windows, or --source for explicit 1-based source text" {}))
+          "--candidates-dir" (do (when (empty? more) (usage!))
+                                 (recur (assoc opts :candidates-dir (first more)) paths (rest more)))
           "--source" (do (when (empty? more) (usage!))
                          (recur (assoc opts :source (first more)) paths (rest more)))
           "--k" (do (when (empty? more) (usage!))
@@ -128,9 +128,6 @@
       (some-> (:passage/id graph) (str/split #":") first)
       (str/replace (.getName (io/file file)) #"\.edn$" "")))
 
-(defn source-file [marks-dir pid]
-  (io/file marks-dir (str "fable-" pid "-dp-emacs.json")))
-
 (defn read-source-text [source]
   (let [text (slurp source)]
     (if (str/ends-with? (str/lower-case (.getName (io/file source))) ".json")
@@ -139,15 +136,38 @@
             (throw (ex-info "JSON source lacks \"text\" field" {:source source}))))
       text)))
 
+(def coordinate-convention
+  "Inclusive candidate line labels: source-window split on LF; index 0 has window-lines[0]. No reconstructed-file coordinates.")
+
+(defn candidate-context [graph candidate source]
+  (let [[lo hi :as bounds] (:window-lines candidate)
+        text (:source-window candidate)]
+    (when-not (and (= (:paper/id graph) (:paper-id candidate))
+                   (= (:passage/id graph) (:passage-id candidate)))
+      (throw (ex-info "candidate identity does not match graph" {:source source})))
+    (when-not (and (vector? bounds) (= 2 (count bounds))
+                   (every? int? bounds) (<= lo hi) (string? text))
+      (throw (ex-info "candidate lacks valid window-lines/source-window" {:source source})))
+    (let [lines (vec (str/split text #"\n" -1))]
+      (when (> (- hi lo) (dec (count lines)))
+        (throw (ex-info "candidate window bounds exceed source-window" {:source source})))
+      {:paper-id (:paper-id candidate) :source (str source)
+       :line-base lo :line-end hi :lines lines
+       :coordinate-convention coordinate-convention})))
+
 (defn load-lines [graph file opts]
-  (let [pid (paper-id graph file)
-        source (or (:source opts) (.getPath (source-file (:marks-dir opts) pid)))
-        f (io/file source)]
-    (when-not (.exists f)
-      (throw (ex-info "source text not found" {:source source :paper-id pid})))
-    {:paper-id pid
-     :source (.getPath f)
-     :lines (vec (str/split-lines (read-source-text f)))}))
+  (let [pid (paper-id graph file)]
+    (if-let [source (:source opts)]
+      ;; Explicit legacy input only: caller certifies these are 1-based file lines.
+      {:paper-id pid :source (str source) :line-base 1
+       :coordinate-convention "Inclusive 1-based lines in explicitly supplied source"
+       :lines (vec (str/split (read-source-text source) #"\n" -1))}
+      (let [dir (or (:candidates-dir opts)
+                    (io/file (.getParentFile (.getParentFile (io/file file))) "candidates"))
+            candidate (io/file dir (str/replace (.getName (io/file file)) #"\.edn$" ".candidate.json"))]
+        (when-not (.isFile candidate)
+          (throw (ex-info "candidate source-window not found" {:candidate (str candidate)})))
+        (candidate-context graph (json/parse-string (slurp candidate) true) candidate)))))
 
 (defn normalize-token [tok]
   (-> tok
@@ -205,11 +225,16 @@
 
 (defn node-item [ctx opts node]
   (let [src-lines (get-in node [:source :lines])
+        base (or (:line-base ctx) 1)
+        end (or (:line-end ctx) (+ base (dec (count (:lines ctx)))))
+        in-window? (and (valid-lines? src-lines)
+                        (<= base (first src-lines) (second src-lines) end))
+        local-lines (when in-window? (mapv #(+ 1 (- % base)) src-lines))
         terms (text-terms (:text node))
-        exact-text (when (valid-lines? src-lines)
-                     (span-text (:lines ctx) src-lines))
-        source-text (when (valid-lines? src-lines)
-                      (span-text (:lines ctx) src-lines 1))
+        exact-text (when in-window?
+                     (span-text (:lines ctx) local-lines))
+        source-text (when in-window?
+                      (span-text (:lines ctx) local-lines 1))
         exact-terms (set (text-terms exact-text))
         source-terms (set (text-terms source-text))
         matched (vec (filter source-terms terms))
@@ -217,21 +242,22 @@
         n-terms (count terms)
         n-matched (count matched)
         fraction (if (pos? n-terms) (/ n-matched n-terms) 0.0)
-        scorable? (and (valid-lines? src-lines) (>= n-terms (:k opts)))
+        scorable? (or (not in-window?) (>= n-terms (:k opts)))
         exact-matched? (boolean (some exact-terms terms))
-        faithful? (and scorable?
+        faithful? (and in-window? scorable?
                        (or (>= fraction (:tau opts))
                            (and exact-matched?
                                 (<= n-terms (:k opts))
                                 (>= n-matched (:k opts)))))
         status (cond
-                 (not (valid-lines? src-lines)) :na
+                 (not in-window?) :fail
                  (< n-terms (:k opts)) :na
                  faithful? :pass
                  :else :fail)]
     {:id (:id node)
      :kind (:kind node)
      :source {:lines src-lines}
+     :anchor-valid in-window?
      :text (:text node)
      :terms terms
      :matched matched
@@ -247,9 +273,10 @@
   "Return {:check :anchor-faithfulness :pass :rate :reasons :per-item}.
 
   graph may be an EDN map or a graph file. ctx accepts {:paper-id :lines :source};
-  when graph is a file and ctx lacks :lines, the source text is resolved from
-  data/showcases/ct-anatomy/golden/fable-<id>-dp-emacs.json unless overridden.
-  Optional opts: {:k 2 :tau 0.45 :floor 0.30 :marks-dir ... :source ...}."
+  File graphs resolve sibling candidates/<stem>.candidate.json by default.
+  Candidate labels are inclusive; window text index 0 is window-lines[0].
+  In-memory contexts default to inclusive 1-based lines, or specify :line-base.
+  Optional opts: {:k 2 :tau 0.45 :floor 0.30 :candidates-dir ... :source ...}."
   ([graph ctx]
    (check-graph graph ctx default-opts))
   ([graph ctx opts]
@@ -270,15 +297,18 @@
          reasons (mapv (fn [item]
                          {:id (:id item)
                           :source (:source item)
-                          :reason (str "matched " (:n_matched item) "/" (:n_terms item)
+                          :reason (if-not (:anchor-valid item)
+                                    "anchor is outside candidate/source line bounds"
+                                    (str "matched " (:n_matched item) "/" (:n_terms item)
                                        " key terms below v2 faithfulness thresholds"
-                                       " k=" (:k opts) " tau=" (:tau opts))
+                                       " k=" (:k opts) " tau=" (:tau opts)))
                           :missing (:missing item)})
                        flagged)]
      {:check :anchor-faithfulness
       :paper-id (:paper-id ctx)
+      :coordinate-convention (or (:coordinate-convention ctx) "Inclusive 1-based lines in supplied context")
       :source (:source ctx)
-      :pass (>= rate (:floor opts))
+      :pass (and (every? :anchor-valid items) (>= rate (:floor opts)))
       :rate (double rate)
       :reasons reasons
       :per-item items})))
@@ -293,16 +323,17 @@
       {:check :anchor-faithfulness
        :file (.getPath file)
        :pass false
-       :rate 0.0
+       :rate nil
+       :status :input-error
        :reasons [{:reason (.getMessage e)
                   :data (ex-data e)}]
        :per-item []})))
 
 (defn print-result [result]
-  (println (format "%s %s rate=%.3f flagged=%d"
+  (println (format "%s %s rate=%s flagged=%d"
                    (if (:pass result) "PASS" "FAIL")
                    (:file result)
-                   (:rate result)
+                   (if (number? (:rate result)) (format "%.3f" (:rate result)) "unscored")
                    (count (:reasons result))))
   (doseq [{:keys [id source reason missing]} (:reasons result)]
     (println (str "  " id " " (pr-str (:lines source)) " :: " reason
@@ -315,40 +346,21 @@
       (binding [*out* *err*]
         (println "No .edn files found in input paths:" (str/join " " paths)))
       (System/exit 2))
-    (let [results (mapv #(check-file opts %) files)]
+    (let [results (mapv #(check-file opts %) files)
+          rates (keep :rate results)]
       (if (= :edn (:format opts))
         (prn results)
         (do
           (doseq [r results] (print-result r))
           (println)
-          (println (format "anchor-faithfulness: %d graph(s), min=%.3f max=%.3f floor=%.3f -- %s"
-                           (count results)
-                           (double (apply min (map :rate results)))
-                           (double (apply max (map :rate results)))
+          (println (format "anchor-faithfulness: %d graph(s), %d scored, %d input errors, min=%s max=%s floor=%.3f -- %s"
+                           (count results) (count rates) (- (count results) (count rates))
+                           (if (seq rates) (format "%.3f" (double (apply min rates))) "unscored")
+                           (if (seq rates) (format "%.3f" (double (apply max rates))) "unscored")
                            (double (:floor opts))
                            (if (every? :pass results) "PASS" "FAIL")))
-          ;; H38 -- FRAME MISMATCH, reported separately from faithfulness.
-          ;; A graph whose EVERY node matches zero key terms is not a graph with
-          ;; bad anchors; it is a graph being scored against the wrong text.
-          ;; Genuine drift yields partial matches (H21: 41% exact, median drift
-          ;; 3 lines). Zero across 3, 4, 6 and 7 key terms simultaneously means
-          ;; the :source line numbers and this checker's source file use
-          ;; different line bases -- on the 98-graph corpus, 25 zero-rate graphs
-          ;; concentrated in 4 papers, 3 of them entirely zero, while other
-          ;; papers scored 1.000. Reporting that as 64.3% "faithfulness" would
-          ;; publish a coordinate-system disagreement as a property of the
-          ;; extraction.
-          (let [dead (filter #(zero? (double (:rate %))) results)]
-            (when (seq dead)
-              (println (format (str "  frame-mismatch SUSPECTED in %d/%d graph(s) "
-                                    "(every node matched 0 key terms).")
-                               (count dead) (count results)))
-              (println (str "  These are NOT counted evidence about faithfulness: "
-                            "a rate of 0.000 across all nodes indicates the graph's "
-                            ":source lines and this checker's source file are on "
-                            "different line bases (H38). Anchor both to the "
-                            "candidate window the model was actually shown before "
-                            "reading any rate as a faithfulness number."))))))
+          (println "Coordinates: candidate source-window labels (inclusive); explicit --source uses 1-based file lines.")
+          (println "Scores measure token overlap with one neighbor line of tolerance, not exact highlighting.")))
       (System/exit (if (every? :pass results) 0 1)))))
 
 (when (= *file* (System/getProperty "babashka.file"))

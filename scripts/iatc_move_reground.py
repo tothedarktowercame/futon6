@@ -31,7 +31,7 @@ STOP = {"category", "categories", "object", "objects", "morphism", "morphisms", 
         "calmod", "bicategories", "identity", "arrangements", "consisting", "compatible"}
 
 
-def cluster_cues(lex, min_count=2, top=40):
+def cluster_cues(lex, min_count=2, top=None):
     """Data-driven move-cues = recurring content words across harvested move-phrases
     (frequency ≥ min_count), excluding entity/structure words. Each cue is the corpus
     naming a recurring move (functoriality, suffices, construction, naturality, …)."""
@@ -39,10 +39,25 @@ def cluster_cues(lex, min_count=2, top=40):
     for phrase, e in lex.items():
         if (sum(e["conf"]) / len(e["conf"]) if e["conf"] else 0) < 0.3:
             continue  # only confident anchorings contribute cues
-        for w in re.findall(r"[a-z]{5,}", phrase):
+        # Strip LaTeX control words before tokenising. `[a-z]{5,}` over raw source
+        # reads \colon as "colon", \tilde as "tilde" and \rightarrow as
+        # "rightarrow", so notation enters the move vocabulary as if it were
+        # mathematical language. Measured over the probe's 121 graphs, 4 of 176
+        # harvested cues were command names; the previous defence against them was
+        # truncating the vocabulary at 40, which discarded colimit, adjunction,
+        # exactness, compactness and homotopy to suppress four.
+        for w in re.findall(r"[a-z]{5,}", re.sub(r"\\[a-zA-Z]+", " ", phrase)):
             if w not in STOP:
                 tok[w] += e["count"]
-    return [w for w, c in tok.most_common(top) if c >= min_count]
+    # top=None means UNCAPPED. It defaulted to 40, which silently truncated the
+    # vocabulary and — because accretion_curves reads the cue count as evidence of
+    # saturation — manufactured the convergence its docstring claims to observe.
+    # Measured on the probe's 121 graphs: the cap binds from n=30, so the reported
+    # plateau at 0.276 is the constant, not the corpus. Uncapped the same run
+    # reaches 251 cues and 0.401, still rising. Callers that want a bound must ask
+    # for one, and should say why in the call.
+    ranked = tok.most_common(top) if top is not None else tok.most_common()
+    return [w for w, c in ranked if c >= min_count]
 
 
 def score(vocab, windows):

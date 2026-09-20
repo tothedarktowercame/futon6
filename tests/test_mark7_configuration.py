@@ -206,3 +206,152 @@ print(json.dumps(config.effective()))
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HardwareRecordTests(unittest.TestCase):
+    """A run that cannot say what it ran on invites its rate being misread."""
+
+    def test_explicit_pin_outranks_slurm_when_no_mfuton_surface(self):
+        with patch.dict(os.environ, {"CUDA_VISIBLE_DEVICES": "2,3",
+                                     "SLURM_JOB_GPUS": "0,1,2,3,4,5,6,7"}, clear=True):
+            devices, authority, namespace = config._requested_devices()
+            self.assertEqual(devices, ["2", "3"])
+            self.assertEqual(authority, "CUDA_VISIBLE_DEVICES")
+            self.assertEqual(namespace, "process-visible")
+
+    def test_mfuton_surface_outranks_cuda_visible_devices(self):
+        """mfuton reads Slurm's IDX from scontrol and does not trust the env var."""
+        with tempfile.TemporaryDirectory() as d:
+            policy = Path(d) / "agent_skills/development/superpod/current-job-gpus.sh"
+            policy.parent.mkdir(parents=True)
+            policy.write_text("#!/bin/bash\necho 4,5,6,7\n")
+            with patch.dict(os.environ, {"MFUTON_HOME": d,
+                                         "CUDA_VISIBLE_DEVICES": "0,1"}, clear=True):
+                devices, authority, namespace = config._requested_devices()
+                self.assertEqual(devices, ["4", "5", "6", "7"])
+                self.assertIn("--format ids", authority)
+                self.assertEqual(namespace, "global-physical")
+
+    def test_policy_is_asked_for_ids_not_its_default_json(self):
+        """A bare call returns JSON, which a comma-split silently reads as nothing."""
+        seen = []
+        def spy(argv, timeout=5.0):
+            seen.append(argv)
+            return "4,5" if "--format" in argv else '{"gpus": [4, 5]}'
+        with tempfile.TemporaryDirectory() as d:
+            policy = Path(d) / "agent_skills/development/superpod/current-job-gpus.sh"
+            policy.parent.mkdir(parents=True)
+            policy.write_text("#!/bin/bash\n")
+            with patch.dict(os.environ, {"MFUTON_HOME": d}, clear=True), \
+                 patch.object(config, "_probe", spy):
+                devices, _, _ = config._requested_devices()
+        self.assertEqual(devices, ["4", "5"])
+        self.assertEqual(seen[0][-2:], ["--format", "ids"])
+
+    def test_slurm_allocation_is_used_when_nothing_is_pinned(self):
+        with patch.dict(os.environ, {"SLURM_JOB_GPUS": "0,1,2,3"}, clear=True):
+            devices, authority, namespace = config._requested_devices()
+            self.assertEqual(devices, ["0", "1", "2", "3"])
+            self.assertEqual(authority, "SLURM_JOB_GPUS")
+            self.assertEqual(namespace, "global-physical")
+
+    def test_gpu_count_on_node_expands_to_indices(self):
+        with patch.dict(os.environ, {"SLURM_GPUS_ON_NODE": "8"}, clear=True):
+            devices, authority, _ = config._requested_devices()
+            self.assertEqual(devices, [str(i) for i in range(8)])
+            self.assertEqual(authority, "SLURM_GPUS_ON_NODE")
+
+    def test_absent_tooling_is_unknown_never_fatal(self):
+        with patch.dict(os.environ, {}, clear=True), \
+             patch.object(config, "_probe", return_value=None):
+            inventory = config.hardware()
+            self.assertEqual(inventory["count"], 0)
+            self.assertEqual(inventory["devices"], [])
+            self.assertEqual(inventory["device-authority"], "none detected")
+
+
+class ScaleTests(unittest.TestCase):
+    """Whatever is free right now has to size the run without a human editing it."""
+
+    def _inventory(self, count):
+        return {"count": count, "device-authority": "SLURM_JOB_GPUS",
+                "requested": [str(i) for i in range(count)], "devices": [],
+                "visible-to-this-process": True, "slurm-job": "1", "node": "n"}
+
+    def test_one_shard_per_gpu_when_the_endpoint_is_local(self):
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:8000/v1"}, clear=True), \
+             patch.object(config, "serving", return_value={"stack": "vllm"}):
+            self.assertEqual(config.scale(self._inventory(8))["shards"], 8)
+            self.assertEqual(config.scale(self._inventory(16))["shards"], 16)
+
+    def test_a_remote_endpoint_is_not_sized_by_local_gpus(self):
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://gpu-node-4:8000/v1"}, clear=True), \
+             patch.object(config, "serving", return_value={"stack": "vllm"}):
+            sizing = config.scale(self._inventory(8))
+            self.assertEqual(sizing["shards"], 1)
+            self.assertIn("remote", sizing["shard-basis"])
+
+    def test_ollama_is_recorded_as_serialising_rather_than_batching(self):
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:11436/v1"}, clear=True), \
+             patch.object(config, "serving", return_value={"stack": "ollama"}):
+            sizing = config.scale(self._inventory(1))
+            self.assertEqual(sizing["concurrency-per-shard"], 1)
+            self.assertIn("ollama", sizing["concurrency-basis"])
+
+    def test_overrides_win_and_say_so(self):
+        with patch.dict(os.environ, {"FUTON6_SHARDS": "4", "FUTON6_CONCURRENCY": "64",
+                                     "OPENAI_BASE_URL": "http://localhost:8000/v1"}, clear=True), \
+             patch.object(config, "serving", return_value={"stack": "vllm"}):
+            sizing = config.scale(self._inventory(8))
+            self.assertEqual((sizing["shards"], sizing["concurrency-per-shard"]), (4, 64))
+            self.assertEqual(sizing["max-in-flight"], 256)
+            self.assertEqual(sizing["shard-basis"], "FUTON6_SHARDS")
+
+    def test_children_inherit_the_sizing_the_record_states(self):
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:8000/v1"}, clear=True), \
+             patch.object(config, "scale", return_value={"shards": 8, "concurrency-per-shard": 32}):
+            env = config.child_environment()
+            self.assertEqual(env["FUTON6_SHARDS"], "8")
+            self.assertEqual(env["FUTON6_CONCURRENCY"], "32")
+            self.assertEqual(env["CONCURRENCY"], "32")
+
+
+class ServingConformanceTests(unittest.TestCase):
+    """The probe reached S12 against Ollama and nothing objected. It must now."""
+
+    def test_the_0919b_probe_configuration_is_refused(self):
+        probe = {"reachable": True, "stack": "ollama", "stack-version": "0.12.3",
+                 "served-models": ["llama3.1:70b"], "endpoint-is-local": True}
+        with patch.dict(os.environ, {"MODEL": "llama3.1:70b"}, clear=True):
+            verdict = config.serving_conformance(probe)
+        self.assertFalse(verdict["conforms"])
+        joined = " ".join(verdict["deviations"])
+        self.assertIn("ollama", joined)
+        self.assertIn("llama3.1:70b", joined)
+
+    def test_the_specified_configuration_passes(self):
+        good = {"reachable": True, "stack": "vllm", "stack-version": "0.23.0",
+                "served-models": ["mark4-70b"], "endpoint-is-local": True}
+        with patch.dict(os.environ, {"MODEL": "mark4-70b"}, clear=True):
+            verdict = config.serving_conformance(good)
+        self.assertTrue(verdict["conforms"], verdict["deviations"])
+
+    def test_an_unreachable_endpoint_is_not_silently_conformant(self):
+        with patch.dict(os.environ, {"MODEL": "mark4-70b"}, clear=True):
+            verdict = config.serving_conformance(
+                {"reachable": False, "stack": None, "served-models": []})
+        self.assertFalse(verdict["conforms"])
+
+    def test_a_generic_openai_endpoint_does_not_pass_as_vllm(self):
+        vague = {"reachable": True, "stack": "openai-compatible (unidentified)",
+                 "served-models": ["mark4-70b"], "endpoint-is-local": False}
+        with patch.dict(os.environ, {"MODEL": "mark4-70b"}, clear=True):
+            self.assertFalse(config.serving_conformance(vague)["conforms"])
+
+    def test_deliberate_deviation_is_recorded_not_hidden(self):
+        probe = {"reachable": True, "stack": "ollama", "served-models": ["llama3.1:70b"]}
+        with patch.dict(os.environ, {"MODEL": "llama3.1:70b",
+                                     config.DEVIATION_ENV: "1"}, clear=True):
+            verdict = config.serving_conformance(probe)
+        self.assertTrue(verdict["override"])
+        self.assertFalse(verdict["conforms"])     # the override does not launder it

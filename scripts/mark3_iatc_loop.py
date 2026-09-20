@@ -21,10 +21,13 @@ Backends:
 from __future__ import annotations
 
 import argparse
+import concurrent.futures as cf
 import json
 import os
+import re
 import subprocess
 import sys
+import threading
 import time
 from pathlib import Path
 
@@ -45,8 +48,20 @@ Return JSON with a list "nodes". Each node is one thing the proof uses or
 establishes: kind "claim" (an assertion), "object" (a mathematical object it
 introduces or constructs), "definition", or "ref" (a result it points to — put the
 label or citation in "citation", e.g. "Theorem~\\ref{main}" or "[AR, 2.36]";
-otherwise leave it ""). "text" is a faithful short gloss of the source.
+otherwise leave it "").
 "first_line"/"last_line" are the ABSOLUTE line numbers printed on the left.
+
+DO NOT RETYPE MATHEMATICS. Two fields carry it for you, and both are chosen from
+what the source already supplies:
+  "quote_spans" — the ids of the marked source units that STATE this node. Pick
+    the units; their text is taken from the source verbatim, so you never have to
+    reproduce a symbol. Pick only what this node needs: a hypothesis and the
+    conclusion drawn from it are SEPARATE units and must not be selected together
+    for one node.
+  "symbols" — which of the proof's bound symbols this node is about.
+"text" is a short PROSE gloss only — say what the node does in words. Formulae you
+type there are not used and can only be wrong: the JSON escape alphabet cannot
+spell most LaTeX commands, so \\Sigma, \\alpha and \\in come out as other commands.
 
 List them in the order the proof introduces them, hypotheses first and the final
 conclusion last. Include every intermediate claim the argument passes through; the
@@ -129,13 +144,27 @@ class ModelCallError(Exception):
 
 
 def call_stub(prompt: str, cand: dict, schema: dict) -> str:
-    """No-GPU plumbing: a minimal valid answer for whichever phase is asked."""
+    """No-GPU plumbing: a minimal valid answer for whichever phase is asked.
+
+    Reads the schema it was handed rather than hardcoding the fields, so a
+    contract change cannot leave the no-GPU path silently emitting output the
+    live path would refuse — which is exactly what happened when quote_spans and
+    symbols became required.
+    """
     lo, hi = cand["proof-lines"]
     if "nodes" in schema["properties"]:
-        return json.dumps({"nodes": [{"kind": "claim", "text": "hypotheses of the statement", "citation": "",
-                                      "first_line": lo, "last_line": lo},
-                                     {"kind": "claim", "text": "conclusion of the statement", "citation": "",
-                                      "first_line": hi, "last_line": hi}]})
+        item = schema["properties"]["nodes"]["items"]
+        extra: dict = {}
+        if "quote_spans" in item["properties"]:
+            legal = item["properties"]["quote_spans"]["items"]["enum"]
+            extra["quote_spans"] = [legal[0]]
+        if "symbols" in item["properties"]:
+            extra["symbols"] = []
+        return json.dumps({"nodes": [
+            {"kind": "claim", "text": "hypotheses of the statement", "citation": "",
+             "first_line": lo, "last_line": lo, **extra},
+            {"kind": "claim", "text": "conclusion of the statement", "citation": "",
+             "first_line": hi, "last_line": hi, **extra}]})
     return json.dumps({"derivations": {"2": [{"relation": "implies", "premises": [1],
                                               "warrant_kind": "missing",
                                               "warrant": f"argument of {cand['proof-id']}",
@@ -170,6 +199,29 @@ def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> str:
         # A truncated document is not the model's answer; nothing is salvaged from it.
         raise ModelCallError(0, f"output truncated at max_tokens={MAX_TOKENS}")
     return choice["message"]["content"]
+
+
+
+# Legal JSON string escapes. A constrained decoder following a JSON grammar will
+# permit nothing else after a backslash, so a LaTeX command whose first letter is
+# not one of these cannot be written at all — the decoder forces a legal letter
+# and the model completes a DIFFERENT command. Measured over the 0919b probe:
+# 8437 backslash sequences, 0 illegal starts, 5891 of them \t. That is how three
+# distinct symbols (\T, \Sigma, \alpha) all arrived as \triangle, and how a
+# source \in became \notin — a membership claim negated by a serialisation
+# grammar, not by the model's mathematics.
+JSON_ESCAPES = set('"\\/bfnrtu')
+
+
+def invented_commands(text: str, window: str) -> list[str]:
+    """LaTeX commands in the model's text that its source window never contains.
+
+    Not every hit is corruption — a model may legitimately gloss with notation the
+    source spells differently — but a command absent from the window is the only
+    mechanical signal that separates a forced substitution from a faithful one,
+    and it is what catches the runaway arrow nodes.
+    """
+    return sorted({m for m in re.findall(r"\\[a-zA-Z]+", text) if m not in window})
 
 
 def gate_one(path: Path) -> tuple[bool, str]:
@@ -226,6 +278,33 @@ def require_candidates(cands: list[Path]) -> bool:
     return True
 
 
+
+# No legitimate model answer contains a raw control character. They appear only
+# when the JSON escape alphabet substituted for a LaTeX command the grammar could
+# not spell: \t for \text, \b for \beta, \r for \rightarrow, and — seen in the
+# 0919b probe as $\"mathcal{T}$ — \" for \mathcal, which also injects a stray
+# quote. quote_spans removes the exposure for a node's mathematics, but citation
+# and warrant are still free strings the model types, so the class is only latent
+# there rather than closed. This refuses it wherever it appears.
+CONTROL_CHARS = {"\t": "\\t", "\b": "\\b", "\r": "\\r", "\f": "\\f", "\v": "\\v"}
+
+
+def control_char_damage(value, path: str = "") -> list[str]:
+    """Where a model answer carries a control character, and which escape caused it."""
+    found: list[str] = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            found += control_char_damage(item, f"{path}.{key}" if path else str(key))
+    elif isinstance(value, list):
+        for i, item in enumerate(value):
+            found += control_char_damage(item, f"{path}[{i}]")
+    elif isinstance(value, str):
+        for char, escape in CONTROL_CHARS.items():
+            if char in value:
+                found.append(f"{path or 'value'}: {escape} where a LaTeX command belongs")
+    return found
+
+
 def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
     """(status, reason, attempt record) for one model call on one proof."""
     pid = cand["proof-id"]
@@ -233,9 +312,14 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
     record: dict = {"attempt": 0}
     doc: dict = {}
     for phase, task in (("nodes", NODES_TASK), ("steps", STEPS_TASK)):
-        schema = (iatc_json.nodes_schema(lo, hi) if phase == "nodes"
+        schema = (iatc_json.nodes_schema(lo, hi, iatc_json.bound_symbols(cand),
+                                         iatc_json.spans_of(cand))
+                  if phase == "nodes"
                   else iatc_json.steps_schema(lo, hi, len(doc.get("nodes", []))))
         prompt = build_prompt(cand, task, doc.get("nodes") if phase == "steps" else None)
+        if phase == "steps":
+            record["steps-prompt-len"] = len(prompt)
+            steps_ctx = (prompt, schema)
         try:
             raw = (call_stub(prompt, cand, schema) if args.backend == "stub"
                    else call_openai(prompt, cand, args.model, schema))
@@ -251,6 +335,13 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             why = f"{phase}: endpoint returned non-JSON despite the schema ({e}); check serving conformance"
             record["result"] = why
             return "errored", why, record
+        damage = control_char_damage(part, phase)
+        if damage:
+            why = (f"{phase}: model output carries control characters — "
+                   + "; ".join(damage[:3])
+                   + (f" (+{len(damage) - 3} more)" if len(damage) > 3 else ""))
+            record["result"] = why
+            return "rejected", why, record
         doc.update(part)
         if phase == "steps":
             doc["steps"] = iatc_json.steps_of(doc)
@@ -258,17 +349,54 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             why = f"contract: {len(doc.get('nodes') or [])} node(s); a proof has at least two"
             record["result"] = why
             return "rejected", why, record
-    found = iatc_json.problems(doc, lo, hi)
-    if found:
-        why = "contract: " + "; ".join(found[:6])
-        record["result"] = why[:500]
-        return "rejected", why, record
     graph = tmp / f"{pid}.edn"
-    graph.write_text(iatc_json.to_edn(doc, cand, args.model))
+
+    def judge():
+        """Contract, then gates. Both refuse with a reason a model could act on."""
+        found = iatc_json.problems(doc, lo, hi)
+        if found:
+            return False, "contract: " + "; ".join(found[:6])
+        graph.write_text(iatc_json.to_edn(doc, cand, args.model))
+        good, reason = gate_one(graph)
+        if good and args.rung2_gate:
+            good, reason = run_rung2(graph, tmp / f"{pid}.rung2.edn", gate=True)
+        return good, reason
+
+    ok, why = judge()
     record["graph"] = accounting.relative(graph)
-    ok, why = gate_one(graph)
-    if ok and args.rung2_gate:
-        ok, why = run_rung2(graph, tmp / f"{pid}.rung2.edn", gate=True)
+
+    # The gates do not merely refuse; iatc_argcheck writes its refusal AS an
+    # instruction — "state an equivalence as ONE edge with :relation :iff, not as
+    # two implications that feed each other". Nothing consumed it, so a proof the
+    # model could have fixed was simply lost: 7 of 62 on 0806.1324, 11% of the
+    # paper, all of them cycles the schema already had the vocabulary to avoid.
+    # Hand the instruction back and ask again, once.
+    for retry in range(1, max(0, getattr(args, "gate_retries", 1)) + 1):
+        if ok:
+            break
+        record["attempt"] = retry
+        record[f"retry{retry}-because"] = why[:300]
+        prompt, schema = steps_ctx
+        amended = (prompt + "\n\nYour previous answer was REFUSED by the checker:\n"
+                   + why.strip()[-600:]
+                   + "\n\nGive the derivations again, fixing exactly that. Keep every "
+                     "part that was not at fault.")
+        try:
+            raw = (call_stub(amended, cand, schema) if args.backend == "stub"
+                   else call_openai(amended, cand, args.model, schema))
+            part = json.loads(raw)
+        except (ModelCallError, ValueError) as e:
+            record[f"retry{retry}-result"] = f"retry failed: {e}"[:200]
+            break
+        if control_char_damage(part, "steps"):
+            record[f"retry{retry}-result"] = "retry carried control characters"
+            break
+        (tmp / f"{pid}.steps.retry{retry}.json").write_text(raw)
+        doc.update(part)
+        doc["steps"] = iatc_json.steps_of(doc)
+        ok, why = judge()
+        record[f"retry{retry}-result"] = "accepted" if ok else why[:200]
+
     if not ok:
         record["result"] = why[:500]
         return "rejected", why, record
@@ -296,47 +424,87 @@ def run(args) -> int:
     tmp.mkdir(parents=True, exist_ok=True)
     (tmp / "RUN").write_text(f"run_id={run_tag}\ninvocation={invocation}\ncandidates={len(cands)}\n"
                              f"contract={iatc_json.GENERATOR}\nmodel={args.model}\n")
-    loaded = [json.loads(cf.read_text()) for cf in cands]
+    loaded = [json.loads(cf_path.read_text()) for cf_path in cands]
     ledger = accounting.Accounting("S3", "loop", [c["proof-id"] for c in loaded])
     counts = {"accepted": 0, "rejected": 0, "errored": 0, "carried": 0}
     accepted_graphs = []
     t0 = time.time()
     interval = getattr(args, "loss_log_interval", 100)
-    for i, cand in enumerate(loaded, 1):
+    total = len(loaded)
+    done = 0
+    # Accounting.checkpoint() rewrites one file per record; two threads doing that
+    # at once would race on the same .partial. Serialise bookkeeping only — the
+    # model call and rung-2 stay outside, which is the whole point of batching.
+    books = threading.Lock()
+
+    def finish(cand: dict, status: str, why: str, record: dict, *, carried=None):
+        nonlocal done
         pid = cand["proof-id"]
         final = outdir / f"{pid}.edn"
         rung2_report = outdir / f"{pid}.rung2.edn"
-        if final.exists():                       # retry: keep a verified earlier acceptance
-            carried, why = accounting.carried_acceptance(outdir, pid, final)
-            if carried is None:
-                counts["errored"] += 1
-                ledger.record(pid, "errored", why, paper=cand["paper-id"], artifacts=[accounting.relative(final)])
-                print(f"  [{i}/{len(loaded)}] {pid}: ERROR ({why})", flush=True)
-                continue
-            counts["carried"] += 1
-            counts["accepted"] += 1
-            accepted_graphs.append(final)
-            ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid],
-                          artifacts=[accounting.relative(p) for p in (final, rung2_report) if p.exists()],
-                          attempts=[{"carried-from": carried.get("invocation"), "path": carried.get("path")}])
-            print(f"  [{i}/{len(loaded)}] {pid}: accepted (carried from {carried.get('invocation')})", flush=True)
+        artifacts = [accounting.relative(p) for p in (final, rung2_report) if p.exists()]
+        with books:
+            counts[status] += 1
+            if carried is not None:
+                counts["carried"] += 1
+                accepted_graphs.append(final)
+                ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid],
+                              artifacts=artifacts,
+                              attempts=[{"carried-from": carried.get("invocation"),
+                                         "path": carried.get("path")}])
+                note = f"accepted (carried from {carried.get('invocation')})"
+            elif status == "accepted":
+                accepted_graphs.append(final)
+                ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid],
+                              attempts=[record], artifacts=artifacts)
+                note = status
+            elif status == "errored" and record is None:
+                ledger.record(pid, "errored", why, paper=cand["paper-id"], artifacts=artifacts)
+                note = f"ERROR ({why})"
+            else:
+                ledger.record(pid, status, why, paper=cand["paper-id"], attempts=[record])
+                note = status + (f" ({why[:160]})" if why else "")
+            done += 1
+            print(f"  [{done}/{total}] {pid}: {note}", flush=True)
+            if interval and done % interval == 0:
+                rate = done / max(time.time() - t0, 1e-9) * 60
+                print(f"  [{done}/{total}] accepted={counts['accepted']} rejected={counts['rejected']} "
+                      f"errored={counts['errored']} · {rate:.1f} proofs/min", flush=True)
+
+    # A prior acceptance is settled by the filesystem, not the model: resolve those
+    # first so the pool only ever holds real work. This is what makes resume cheap.
+    pending = []
+    for cand in loaded:
+        final = outdir / f"{cand['proof-id']}.edn"
+        if not final.exists():
+            pending.append(cand)
             continue
+        carried, why = accounting.carried_acceptance(outdir, cand["proof-id"], final)
+        if carried is None:
+            finish(cand, "errored", why, None)
+        else:
+            finish(cand, "accepted", "", {}, carried=carried)
+
+    def work(cand: dict):
+        pid = cand["proof-id"]
         status, why, record = attempt_one(cand, args, tmp)
-        counts[status] += 1
         if status == "accepted":
+            final = outdir / f"{pid}.edn"
             accounting.publish_accepted(outdir, pid, final, (tmp / f"{pid}.edn").read_bytes(),
                                         {"path": record["graph"]})
-            _, record["rung2"] = run_rung2(final, rung2_report, gate=False)
-            accepted_graphs.append(final)
-            ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid], attempts=[record],
-                          artifacts=[accounting.relative(p) for p in (final, rung2_report) if p.exists()])
-        else:
-            ledger.record(pid, status, why, paper=cand["paper-id"], attempts=[record])
-        print(f"  [{i}/{len(loaded)}] {pid}: {status}" + (f" ({why[:160]})" if why else ""), flush=True)
-        if interval and i % interval == 0:
-            rate = i / max(time.time() - t0, 1e-9) * 60
-            print(f"  [{i}/{len(loaded)}] accepted={counts['accepted']} rejected={counts['rejected']} "
-                  f"errored={counts['errored']} · {rate:.1f} proofs/min", flush=True)
+            _, record["rung2"] = run_rung2(final, outdir / f"{pid}.rung2.edn", gate=False)
+        finish(cand, status, why, record)
+
+    workers = max(1, int(getattr(args, "concurrency", 1) or 1))
+    if workers == 1 or len(pending) <= 1:
+        for cand in pending:
+            work(cand)
+    else:
+        print(f"== {len(pending)} proof(s) at concurrency {workers} ==", flush=True)
+        with cf.ThreadPoolExecutor(max_workers=workers) as pool:
+            for future in cf.as_completed([pool.submit(work, c) for c in pending]):
+                future.result()       # re-raise in the caller; a dead pool is not a pass
+    accepted_graphs.sort()            # submission order must not reach the gate
 
     # Cross-item substance gate (template collapse, warrant reuse) over accepted graphs.
     print("\n=== batch substance gate (cross-item) ===")
@@ -363,6 +531,14 @@ def main() -> int:
     ap.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct")
     ap.add_argument("--rung2-gate", action="store_true",
                     help="Reject graphs whose rung-2 semantic profile fails; default records it only.")
+    ap.add_argument("--concurrency", type=int,
+                    default=int(os.environ.get("FUTON6_CONCURRENCY")
+                                or os.environ.get("CONCURRENCY") or 1),
+                    help="proofs in flight at once; defaults to FUTON6_CONCURRENCY "
+                         "(set from the detected hardware by futon6_config.scale)")
+    ap.add_argument("--gate-retries", type=int, default=1,
+                    help="Re-ask the model when a gate refuses, feeding its refusal "
+                         "back as the instruction it already is (default 1; 0 disables).")
     ap.add_argument("--loss-log-interval", type=int, default=100,
                     help="print running accepted/rejected/errored counts every N proofs; 0 disables")
     return run(ap.parse_args())

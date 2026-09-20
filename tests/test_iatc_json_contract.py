@@ -155,7 +155,7 @@ class Loop(unittest.TestCase):
     def invoke(self, invocation, by_proof):
         adir = self.base / "accounting" / invocation
         args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
-                                  model="m", rung2_gate=False, loss_log_interval=0)
+                                  model="m", rung2_gate=False, loss_log_interval=0, gate_retries=0)
         with patch.object(loop, "call_openai", self.responses(by_proof)), \
                 patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: invocation}):
             rc = loop.run(args)
@@ -192,7 +192,7 @@ class Loop(unittest.TestCase):
             return answers[cand["proof-id"]].pop(0)
         adir = self.base / "accounting" / "S3-a002"
         args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
-                                  model="m", rung2_gate=False, loss_log_interval=0)
+                                  model="m", rung2_gate=False, loss_log_interval=0, gate_retries=0)
         with patch.object(loop, "call_openai", record), \
                 patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: "S3-a002"}):
             loop.run(args)
@@ -229,3 +229,204 @@ class Loop(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BoundSymbolContract(unittest.TestCase):
+    """The 0919b probe lost the mathematics into an unconstrained text field."""
+
+    CANDIDATE = {"enrichment": [
+        {"line": 350, "kind": "bind/let",
+         "tip": "bind/let · symbol:\\T | type:a triangulated category"},
+        {"line": 350, "kind": "definiendum", "tip": "definiendum #0: $\\T$"},
+        {"line": 352, "kind": "bind/typed",
+         "tip": "bind/typed · symbol:\\alpha | type:\\Sigma^{-1}A\\rightarrow X"},
+        {"line": 353, "kind": "env/proof", "tip": "no symbol here"},
+    ]}
+
+    def test_bindings_are_read_from_enrichment_without_duplication(self):
+        self.assertEqual(iatc_json.bound_symbols(self.CANDIDATE), ["\\T", "\\alpha"])
+
+    def test_a_candidate_with_no_bindings_yields_none(self):
+        self.assertEqual(iatc_json.bound_symbols({"enrichment": []}), [])
+        self.assertEqual(iatc_json.bound_symbols({}), [])
+
+    def test_the_enum_admits_only_symbols_the_window_bound(self):
+        schema = iatc_json.nodes_schema(349, 366, iatc_json.bound_symbols(self.CANDIDATE))
+        enum = schema["properties"]["nodes"]["items"]["properties"]["symbols"]["items"]["enum"]
+        self.assertEqual(enum, ["\\T", "\\alpha"])
+        # The mangling the probe actually produced: three distinct symbols collapsed
+        # to one that the source never bound. It is not in the enum, so under
+        # constrained decoding it cannot be emitted at all.
+        self.assertNotIn("\\triangle", enum)
+
+    def test_declaring_symbols_is_required_but_may_be_empty(self):
+        node = iatc_json.nodes_schema(1, 9, ["\\T"])["properties"]["nodes"]["items"]
+        self.assertIn("symbols", node["required"])
+        self.assertEqual(node["properties"]["symbols"]["items"]["enum"], ["\\T"])
+        self.assertNotIn("minItems", node["properties"]["symbols"])
+
+    def test_omitting_the_argument_leaves_the_old_contract_untouched(self):
+        node = iatc_json.nodes_schema(1, 9)["properties"]["nodes"]["items"]
+        self.assertNotIn("symbols", node["properties"])
+        self.assertNotIn("symbols", node["required"])
+
+
+class ForcedSubstitutionDetector(unittest.TestCase):
+    """A JSON grammar cannot spell most LaTeX, and substitutes silently.
+
+    Measured over the 0919b probe: 8,437 backslash sequences in raw model
+    output, ZERO beginning an illegal JSON escape, 5,891 of them `\\t`. The
+    decoder permits only ", \\, /, b, f, n, r, t, u after a backslash, so a
+    command starting with any other letter is unwritable and the model completes
+    a different one. \\T, \\Sigma and \\alpha all arrived as \\triangle.
+    """
+
+    def test_the_real_negated_membership_is_flagged(self):
+        import mark3_iatc_loop as loop
+        window = r"the canonical map $N^{C}(p)\in Ho(sM)$ is an isomorphism"
+        emitted = r'{"text": "$N^{C}(p)\notin Ho(sM)$"}'
+        self.assertIn(r"\notin", loop.invented_commands(emitted, window))
+        self.assertNotIn(r"\in", loop.invented_commands(emitted, window))
+
+    def test_a_command_the_window_supplies_is_not_flagged(self):
+        import mark3_iatc_loop as loop
+        window = r"a map $f\colon X\to Y$ with $X\in\C$"
+        self.assertEqual(loop.invented_commands(r'{"text": "$X\to Y$"}', window), [])
+
+    def test_only_legal_json_escape_letters_can_follow_a_backslash(self):
+        import mark3_iatc_loop as loop
+        # The grammar's alphabet is the whole reason the substitution happens;
+        # if this set ever grows, the diagnosis in the docstring stops holding.
+        self.assertEqual(loop.JSON_ESCAPES, set('"\\/bfnrtu'))
+        for wanted in (r"\Sigma", r"\alpha", r"\in", r"\cong", r"\coprod"):
+            self.assertNotIn(wanted[1], loop.JSON_ESCAPES,
+                             f"{wanted} would be writable; the substitution story needs revising")
+
+
+class QuotationByReference(unittest.TestCase):
+    """The mathematics must not pass through the model's output at all."""
+
+    # One LINE holding a hypothesis and the conclusion drawn from it -- the shape
+    # that made 43 of 648 edges read as "this text implies this same text".
+    CAND = {"window-lines": [349, 353],
+            "source-window": "Let $\\T$ be a triangulated category. Then there exists an "
+                             "$\\Sigma^{-1}\\A$-precover $\\alpha$.",
+            "enrichment": [{"tip": "bind/typed \u00b7 symbol:\\alpha | type:map"},
+                           {"tip": "definiendum #0: $\\T$"}],
+            "spans": [{"kind": "bind/let", "start": 0, "end": 38,
+                       "text": "Let $\\T$ be a triangulated category."},
+                      {"kind": "quant/universal", "start": 39, "end": 96,
+                       "text": "Then there exists an $\\Sigma^{-1}\\A$-precover $\\alpha$."}]}
+
+    def test_spans_are_offered_as_clause_units_not_lines(self):
+        spans = iatc_json.source_spans(self.CAND)
+        self.assertEqual([sp["id"] for sp in spans], ["s1", "s2"])
+        self.assertEqual(spans[0]["kind"], "bind/let")
+
+    def test_a_hypothesis_and_its_conclusion_cannot_be_one_selection(self):
+        node = iatc_json.nodes_schema(349, 353, [],
+                                      iatc_json.spans_of(self.CAND))["properties"]["nodes"]["items"]
+        self.assertIn("quote_spans", node["required"])
+        self.assertEqual(node["properties"]["quote_spans"]["items"]["enum"], ["s1", "s2"])
+        # The whole line is not on offer: there is no id spanning both units, so a
+        # premise and a conclusion cannot resolve to identical text.
+        self.assertEqual(iatc_json.quoted_source({"quote_spans": ["s1"]}, self.CAND),
+                         "Let $\\T$ be a triangulated category.")
+        self.assertNotEqual(iatc_json.quoted_source({"quote_spans": ["s1"]}, self.CAND),
+                            iatc_json.quoted_source({"quote_spans": ["s2"]}, self.CAND))
+
+    def test_the_symbols_the_grammar_destroys_survive_quotation(self):
+        node = {"quote_spans": ["s2"]}
+        quoted = iatc_json.quoted_source(node, self.CAND)
+        # These are exactly the commands a JSON escape alphabet cannot spell.
+        for command in ("\\Sigma", "\\alpha", "\\A"):
+            self.assertIn(command, quoted)
+        self.assertNotIn("\\triangle", quoted)
+
+    def test_text_is_demoted_to_a_gloss_in_the_contract(self):
+        node = iatc_json.nodes_schema(349, 353, [], ["s1"])["properties"]["nodes"]["items"]
+        self.assertIn("NOT the node's mathematics", node["properties"]["text"]["description"])
+
+    def test_omitting_spans_leaves_the_old_contract_untouched(self):
+        node = iatc_json.nodes_schema(1, 9)["properties"]["nodes"]["items"]
+        self.assertNotIn("quote_spans", node["properties"])
+
+
+class ControlCharacterGuard(unittest.TestCase):
+    """The escape alphabet substitutes silently; nothing legitimate is affected."""
+
+    def test_the_real_probe_damage_is_caught_anywhere_in_the_document(self):
+        import mark3_iatc_loop as loop
+        # Reconstructed from 0705.0102__p0: \forall -> \f, \text -> \t, \triangle.
+        doc = {"nodes": [{"kind": "claim", "citation": "",
+                          "text": "$\x0corall X \text{ in } T$"}]}
+        damage = loop.control_char_damage(doc)
+        self.assertTrue(damage)
+        self.assertIn("\\f", " ".join(damage))
+
+    def test_a_citation_is_checked_too_not_just_node_text(self):
+        import mark3_iatc_loop as loop
+        # citation and warrant stay free strings; quote_lines does not cover them.
+        damage = loop.control_char_damage({"nodes": [{"citation": "see \\ref{main}\b"}]})
+        self.assertTrue(damage)
+        self.assertIn("citation", " ".join(damage))
+
+    def test_warrants_nested_in_steps_are_reached(self):
+        import mark3_iatc_loop as loop
+        damage = loop.control_char_damage(
+            {"derivations": {"2": [{"warrant": "by \rightarrow-naturality"}]}})
+        self.assertTrue(damage, "nested model strings must be reached")
+
+    def test_clean_mathematics_is_not_flagged(self):
+        import mark3_iatc_loop as loop
+        clean = {"nodes": [{"kind": "claim",
+                            "text": "(i) For all objects $X$ of $\\T$ there exists an "
+                                    "$\\Sigma^{-1}\\A$-precover $\\alpha$.",
+                            "citation": "[AR, 2.36]", "symbols": ["\\alpha", "X"],
+                            "quote_lines": [352]}]}
+        self.assertEqual(loop.control_char_damage(clean), [])
+
+    def test_a_newline_in_quoted_source_is_not_treated_as_damage(self):
+        import mark3_iatc_loop as loop
+        # quoted_source joins multiple lines with \n; that must stay legal.
+        self.assertEqual(loop.control_char_damage({"text": "line one\nline two"}), [])
+
+
+class GateRetry(Loop):
+    """iatc_argcheck writes its refusal AS an instruction; something must act on it."""
+
+    def invoke_retry(self, invocation, by_proof, retries=1):
+        adir = self.base / "accounting" / invocation
+        args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
+                                  model="m", rung2_gate=False, loss_log_interval=0,
+                                  gate_retries=retries)
+        with patch.object(loop, "call_openai", self.responses(by_proof)), \
+                patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: invocation}):
+            loop.run(args)
+        return {e["id"]: e for e in accounting.load(adir, "S3", "loop")["items"]}
+
+    def test_a_refused_graph_is_re_asked_and_the_correction_accepted(self):
+        d = lambda prem: [{"relation": "implies", "premises": prem, "warrant_kind": "stated",
+                           "warrant": "w", "first_line": 12, "last_line": 14}]
+        # First steps answer builds the cycle the checker refuses; the retry answer
+        # states it as the single iff edge the refusal asks for.
+        answers = [json.dumps({"nodes": [node(text="A hypothesis"), node(text="B result")]}),
+                   json.dumps({"derivations": {"2": d([1]), "1": d([2])}}),
+                   json.dumps({"derivations": {"2": [{"relation": "iff", "premises": [1],
+                                                      "warrant_kind": "stated", "warrant": "equivalence",
+                                                      "first_line": 12, "last_line": 14}]}})]
+        items = self.invoke_retry("S3-r1", {"1111.0001__p0": answers,
+                                            "1111.0001__p1": self.doc("second"),
+                                            "1111.0001__p2": self.doc("third")})
+        self.assertEqual(items["1111.0001__p0"]["status"], "accepted",
+                         "the retry's corrected derivation should be accepted")
+
+    def test_with_retries_disabled_the_same_input_is_simply_lost(self):
+        d = lambda prem: [{"relation": "implies", "premises": prem, "warrant_kind": "stated",
+                           "warrant": "w", "first_line": 12, "last_line": 14}]
+        answers = [json.dumps({"nodes": [node(text="A hypothesis"), node(text="B result")]}),
+                   json.dumps({"derivations": {"2": d([1]), "1": d([2])}})]
+        items = self.invoke_retry("S3-r0", {"1111.0001__p0": answers,
+                                            "1111.0001__p1": self.doc("second"),
+                                            "1111.0001__p2": self.doc("third")}, retries=0)
+        self.assertEqual(items["1111.0001__p0"]["status"], "rejected")

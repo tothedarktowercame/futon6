@@ -15,7 +15,7 @@ The design decisions this file OWNS (each traceable to a scar in the spec / READ
       the checkpoint counter is by NEW records, not modulo; nullable model-JSON fields are normalized
       (`x = r.get("k") or []`).  [the 2026-06-25 meme_mine_joint total-loss lesson]
   D4  every 10 missions write proof-mine-status.json (done/total, grade dist, grounding, latency, ETA).
-  D5  --rung gold re-mines the 10 A-next gold BLIND and scores vs the sealed *-EMPIRICAL.edn; the
+  D5  --rung gold re-mines the 10 A-next gold WITHOUT LABELED EXEMPLARS and scores vs the sealed *-EMPIRICAL.edn; the
       QUANTIFIED abort band (endpoint precision <0.5 OR grade agreement <0.6 OR verbatim-witness <0.7)
       STOPS the run before any full sweep. The run carries its own yardstick.
   D6  every mission/target ref passes the canonical mission-index bridge BEFORE it is written;
@@ -167,8 +167,8 @@ def _ep_match(pred, gold_list):
 
 
 def gold_few_shot(n=3):
-    """Few-shot exemplars from the sealed gold EMPIRICAL files (priming, NOT the blind set).
-    Uses the LAST few gold missions so the first ones stay clean for a blind sanity check.
+    """Gold exemplars for ordinary sweeps ONLY; never supplied to run_gold.
+    A sweep using these examples must not be called blind on their missions.
     The exemplar dossiers are assembled under a TIGHT budget: three full dossiers (~7.4k tok) as
     few-shot overflowed the 16384 context on big target missions (the 400s). ~500 tok each teaches
     the output format + grading without eating the window."""
@@ -439,36 +439,114 @@ def mine_one(stem, backend, few_shot, model, idx, dossier_budget=8000):
 
 
 def run_gold(backend, model, out_dir, dossier_budget=8000):
-    """D5: re-mine the 10 A-next gold BLIND, score vs sealed EMPIRICAL, enforce abort bands."""
+    """D5: evaluate all ten missions without labeled examples in the prompt.
+
+    Failed cases receive zero credit in the fixed ten-case denominator, and
+    incomplete coverage refuses independently of the numerical bands. This is
+    prompt-level separation, not a claim about the model's training exposure.
+    """
     idx = mission_index()
-    few_shot = gold_few_shot() if backend == "openai" else []
+    few_shot = []
     per, agg = [], {"endpoint_precision": [], "grade_agreement": [], "witness_rate": []}
     for stem in GOLD_MISSIONS:
-        emp = glob.glob("%s/A-next-%s/*-sorry-EMPIRICAL.edn" % (GOLD_DIR, stem))
-        if not emp:
-            print("  ! gold missing EMPIRICAL for %s — skipping" % stem)
-            continue
-        d = assemble(stem, budget_tokens=dossier_budget)
-        record, _q, lat, err = mine_one(stem, backend, few_shot, model, idx, dossier_budget)
-        if err or record is None:
-            print("  ! gold mine failed for %s: %s" % (stem, err))
-            continue
-        scores = score_gold(record, _load_edn_loose(emp[0]), d.get("text", ""))
-        per.append({"stem": stem, "scores": scores})
+        try:
+            emp = glob.glob("%s/A-next-%s/*-sorry-EMPIRICAL.edn" % (GOLD_DIR, stem))
+            if len(emp) != 1:
+                raise ValueError("expected one EMPIRICAL file, found %d" % len(emp))
+            d = assemble(stem, budget_tokens=dossier_budget)
+            if not d.get("doc_found"):
+                raise ValueError("gold dossier missing")
+            record, _q, lat, err = mine_one(stem, backend, few_shot, model, idx, dossier_budget)
+            if err or record is None:
+                raise ValueError("gold mine failed: %s" % (err or "no record"))
+            scores = score_gold(record, _load_edn_loose(emp[0]), d.get("text", ""))
+            per.append({"stem": stem, "status": "scored", "scores": scores})
+            print("  gold %-24s prec=%.2f rec=%.2f grade=%.2f witness=%.2f (%.1fs)"
+                  % (stem, scores["endpoint_precision"], scores["endpoint_recall"],
+                     scores["grade_agreement"], scores["witness_rate"], lat))
+        except Exception as exc:  # retain the failure in the evaluation denominator
+            scores = {k: 0.0 for k in (*agg, "endpoint_recall")}
+            per.append({"stem": stem, "status": "failed", "error": str(exc),
+                        "scores": scores})
+            print("  ! gold %-24s %s" % (stem, exc))
         for k in agg:
             agg[k].append(scores[k])
-        print("  gold %-24s prec=%.2f rec=%.2f grade=%.2f witness=%.2f (%.1fs)"
-              % (stem, scores["endpoint_precision"], scores["endpoint_recall"],
-                 scores["grade_agreement"], scores["witness_rate"], lat))
     mean = {k: round(sum(v) / len(v), 3) if v else 0.0 for k, v in agg.items()}
     mean["endpoint_precision"] = mean.get("endpoint_precision", 0.0)
     ok, reasons = gold_bands(mean)
+    succeeded = sum(row["status"] == "scored" for row in per)
+    if succeeded != len(GOLD_MISSIONS) or not GOLD_MISSIONS:
+        reasons.append("incomplete gold coverage: %d/%d scored" % (succeeded, len(GOLD_MISSIONS)))
+        ok = False
     os.makedirs(out_dir, exist_ok=True)
-    json.dump({"per_mission": per, "mean": mean, "bands_ok": ok, "reasons": reasons},
+    json.dump({"per_mission": per, "mean": mean, "bands_ok": ok, "reasons": reasons,
+               "expected": len(GOLD_MISSIONS), "scored": succeeded,
+               "failed": len(GOLD_MISSIONS) - succeeded,
+               "denominator": "all-expected-missions-failures-zero-credit",
+               "prompt_exemplars": [], "evaluation_missions": list(GOLD_MISSIONS)},
               open(os.path.join(out_dir, "proof-mine-gold-eval.json"), "w"), indent=2)
     print("GOLD MEAN: %s" % mean)
     print("GOLD BANDS: %s%s" % ("PASS" if ok else "FAIL", "" if ok else " — " + "; ".join(reasons)))
     return ok, mean
+
+
+def self_test_gold():
+    """Offline regressions through real run_gold/scoring; external ports replaced."""
+    import contextlib
+    import io
+    from pathlib import Path
+    import tempfile
+    from unittest.mock import patch
+
+    with tempfile.TemporaryDirectory(prefix="proof-mine-gold-test-") as td:
+        for stem in GOLD_MISSIONS:
+            directory = Path(td) / ("A-next-" + stem)
+            directory.mkdir()
+            (directory / "fixture-sorry-EMPIRICAL.edn").write_text(
+                '{:ref "futon2/example" :grade :open}')
+        def dossier(stem, **kwargs):
+            return {"doc_found": True, "mission": stem, "text": "a concrete witness"}
+        seen = []
+        def miner(stem, backend, few_shot, *args):
+            seen.append((stem, list(few_shot)))
+            return ({"endpoints": ["futon2/example"], "discharges": [
+                {"grade": "open", "witness": "a concrete witness"}]}, [], 0, None)
+        module = sys.modules[__name__]
+        with patch.object(module, "GOLD_DIR", td), \
+             patch.object(module, "mission_index", return_value={}), \
+             patch.object(module, "assemble", side_effect=dossier), \
+             patch.object(module, "gold_few_shot", side_effect=AssertionError("gold label leak")), \
+             contextlib.redirect_stdout(io.StringIO()):
+            def run(side_effect):
+                with patch.object(module, "mine_one", side_effect=side_effect):
+                    ok, mean = run_gold("openai", "unused", td)
+                receipt = json.loads((Path(td) / "proof-mine-gold-eval.json").read_text())
+                return ok, mean, receipt
+            ok, mean, receipt = run(miner)
+            assert ok and all(value == 1 for value in mean.values())
+            assert receipt["scored"] == 10 and receipt["failed"] == 0
+            assert len(seen) == 10 and all(not examples for _, examples in seen)
+            assert set(stem for stem, _ in seen) == set(GOLD_MISSIONS)
+            def nine_fail(stem, *args):
+                if stem == GOLD_MISSIONS[0]:
+                    return miner(stem, *args)
+                return None, [], 0, "injected transport failure"
+            ok, mean, receipt = run(nine_fail)
+            assert not ok and all(value == .1 for value in mean.values())
+            assert receipt["failed"] == 9 and len(receipt["per_mission"]) == 10
+            def one_fail(stem, *args):
+                if stem == GOLD_MISSIONS[-1]:
+                    return None, [], 0, "injected failure"
+                return miner(stem, *args)
+            ok, mean, receipt = run(one_fail)
+            assert gold_bands(mean)[0] and not ok  # coverage independently refuses
+            missing = Path(td) / ("A-next-" + GOLD_MISSIONS[-1]) / "fixture-sorry-EMPIRICAL.edn"
+            missing.unlink()
+            ok, mean, receipt = run(miner)
+            assert not ok and receipt["failed"] == 1
+            assert "found 0" in receipt["per_mission"][-1]["error"]
+    print("PASS: 10/10 good; 1 good + 9 failures rejected (means 0.1); "
+          "9 good + 1 failure/missing gold rejected; no labeled exemplars on any of 10 gold calls.")
 
 
 def run_sweep(missions, backend, model, out_dir, resume, dossier_budget=8000, concurrency=8,
@@ -526,6 +604,7 @@ def run_sweep(missions, backend, model, out_dir, resume, dossier_budget=8000, co
 
 def main():
     ap = argparse.ArgumentParser(description="PROOF-MINE runner (discharge-evidence miner).")
+    ap.add_argument("--self-test-gold", action="store_true", help="offline gold coverage/blinding controls")
     ap.add_argument("--rung", choices=["smoke", "gold", "full"], default="smoke")
     ap.add_argument("--backend", choices=["stub", "openai"], default="stub")
     ap.add_argument("--model", default="mark4-70b")
@@ -538,6 +617,10 @@ def main():
                     help="concurrent in-flight requests (vLLM continuous-batches them); the throughput lever")
     ap.add_argument("--missions", nargs="*", help="explicit mission stems (else discover all on disk)")
     a = ap.parse_args()
+
+    if a.self_test_gold:
+        self_test_gold()
+        return
 
     if a.rung == "gold":
         ok, _ = run_gold(a.backend, a.model, a.out, a.dossier_budget)

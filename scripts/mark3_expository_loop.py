@@ -250,12 +250,27 @@ def run(args: argparse.Namespace) -> int:
 
     print(f"\nexpository-loop: accepted {counts['accepted']} (carried {counts['carried']}) · "
           f"rejected {counts['rejected']} · errored {counts['errored']} of {len(loaded)}")
-    if getattr(args, "run_dir", None):  # S4 inline metric: per-paper expository-coverage
+    if getattr(args, "run_dir", None):
         import metric_harness as mh
+        # This is accepted/SELECTED, and the selector caps each paper long before
+        # the loop sees a region. In the 0919b run that made every one of the
+        # twelve records 1.0 while 1,859 of 2,139 discovered regions had been
+        # deferred: a metric named "coverage" on axis "completeness" that could
+        # not report incompleteness, because the deferred regions were removed
+        # from its denominator upstream. It is an acceptance rate; it now says so.
+        regions = Path(args.candidates) / "regions"
         for pid, (tot, ok) in bypaper.items():
             mh.emit_record(args.run_dir, run_id=args.run_id, corpus_id=args.corpus_id,
+                           paper_id=pid, stage="S4", metric="expository-acceptance",
+                           axis="quality", value=round(ok / max(1, tot), 4), computable=True)
+            # Real coverage needs the denominator the selector discarded. Emit it
+            # only when the discovered regions are still on disk; never guess it.
+            found = len(list(regions.glob(f"{pid}*.json"))) if regions.is_dir() else 0
+            mh.emit_record(args.run_dir, run_id=args.run_id, corpus_id=args.corpus_id,
                            paper_id=pid, stage="S4", metric="expository-coverage",
-                           axis="completeness", value=round(ok / max(1, tot), 4), computable=True)
+                           axis="completeness",
+                           value=round(ok / found, 4) if found else None,
+                           computable=bool(found))
     # Refused regions are recorded per item and weighed by the runner against the
     # run's floor; the loop itself ran, so it exits 0. See mark3_iatc_loop.py.
     return 0

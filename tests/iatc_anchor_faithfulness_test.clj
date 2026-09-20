@@ -1,5 +1,7 @@
 (ns iatc-anchor-faithfulness-test
-  (:require [clojure.test :refer [deftest is run-tests]]))
+  (:require [clojure.test :refer [deftest is run-tests]]
+            [clojure.java.io :as io]
+            [cheshire.core :as json]))
 
 (load-file "scripts/iatc_anchor_faithfulness.bb")
 
@@ -69,20 +71,52 @@
 
 (deftest flags-empty-anchor-for-extensional-claim
   (let [result (check-graph*
-                "data/iatc-argument-graphs/loop-run-70b/0709.0248.edn"
-                {}
-                {:k 2 :tau 0.45 :floor 0.30})
-        flagged-ids (set (map :id (:reasons result)))]
-    (is (contains? flagged-ids :extensional-category))
-    (is (some #(= "extensional" %) (:missing (first (filter #(= :extensional-category (:id %))
-                                                             (:per-item result))))))))
+                {:nodes [{:id :extensional-category :text "extensional category"
+                          :source {:lines [1 1]}}]}
+                {:lines ["finite dimensional vector spaces"]} {})]
+    (is (false? (:pass result)))
+    (is (= [:extensional-category] (mapv :id (:reasons result))))))
 
-(deftest scores-0706-high
-  (let [result (check-graph*
-                "data/iatc-argument-graphs/loop-run-70b/0706.1286.edn"
-                {}
-                {:k 2 :tau 0.45 :floor 0.30})]
-    (is (>= (:rate result) 0.85))))
+(deftest candidate-window-coordinates-and-real-file-resolution
+  (let [dir (.toFile (java.nio.file.Files/createTempDirectory
+                      "anchor-faithfulness" (make-array java.nio.file.attribute.FileAttribute 0)))
+        graphs (io/file dir "graphs")
+        candidates (io/file dir "candidates")
+        file (io/file graphs "toy__p0.edn")
+        candidate-file (io/file candidates "toy__p0.candidate.json")
+        graph {:paper/id "toy" :passage/id "toy:proof0:L101-104"
+               :nodes [{:id :claim :text "locally cartesian category"
+                        :source {:lines [101 101]}}]}
+        candidate {:paper-id "toy" :passage-id (:passage/id graph)
+                   :window-lines [101 104]
+                   :source-window "locally cartesian category\n\n\nfinite dimensional vector spaces"}
+        check-file* (script-fn 'check-file)]
+    (try
+      (.mkdirs graphs)
+      (.mkdirs candidates)
+      (spit file (pr-str graph))
+      (spit candidate-file (json/generate-string candidate))
+      ;; The old 1-based file slice looks at line 101 of a four-line window.
+      (is (zero? (:rate (check-graph* graph {:lines ["locally cartesian category" "" "" "finite dimensional vector spaces"]} {}))))
+      (let [good (check-file* {} file)]
+        (is (:pass good))
+        (is (= 1.0 (:rate good)))
+        (is (re-find #"index 0" (:coordinate-convention good))))
+      ;; Same words, genuinely wrong anchor, farther than neighbor tolerance.
+      (spit file (pr-str (assoc-in graph [:nodes 0 :source :lines] [104 104])))
+      (is (false? (:pass (check-file* {} file))))
+      (spit file (pr-str (assoc-in graph [:nodes 0 :source :lines] [100 101])))
+      (is (false? (:pass (check-file* {} file))))
+      (spit file (pr-str graph))
+      (spit candidate-file (json/generate-string (assoc candidate :passage-id "wrong")))
+      (is (re-find #"identity" (get-in (check-file* {} file) [:reasons 0 :reason])))
+      (spit candidate-file (json/generate-string (assoc candidate :window-lines [101 105])))
+      (is (nil? (:rate (check-file* {} file))))
+      (is (re-find #"bounds exceed" (get-in (check-file* {} file) [:reasons 0 :reason])))
+      (.delete candidate-file)
+      (is (re-find #"source-window not found" (get-in (check-file* {} file) [:reasons 0 :reason])))
+      (finally
+        (doseq [f (reverse (file-seq dir))] (.delete f))))))
 
 (let [{:keys [fail error]} (run-tests)]
   (when (pos? (+ fail error))

@@ -11,7 +11,10 @@ import os
 from pathlib import Path
 import shlex
 import shutil
+import subprocess
 import sys
+import urllib.error
+import urllib.request
 from urllib.parse import urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -111,6 +114,12 @@ def child_environment() -> dict[str, str]:
         "OPENAI_BASE_URL": endpoint(),
         "MODEL": model(),
     })
+    # Children size themselves from the same decision the run record states,
+    # so a shard cannot batch differently from what the manifest claims.
+    sizing = scale()
+    env.setdefault("FUTON6_SHARDS", str(sizing["shards"]))
+    env.setdefault("FUTON6_CONCURRENCY", str(sizing["concurrency-per-shard"]))
+    env.setdefault("CONCURRENCY", str(sizing["concurrency-per-shard"]))
     for name in ("futon3", "futon3c", "mathlib4", "planetmath", "nlab-content", "nnexus"):
         env[name.upper().replace("-", "_") + "_ROOT"] = str(sibling(name))
     for variable, default in (
@@ -121,7 +130,217 @@ def child_environment() -> dict[str, str]:
     return env
 
 
+def _probe(argv: list[str], timeout: float = 5.0) -> str | None:
+    """Never let inventory fail a run: an absent or slow tool is simply unknown."""
+    if not shutil.which(argv[0]):
+        return None
+    try:
+        done = subprocess.run(argv, capture_output=True, text=True, timeout=timeout)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return done.stdout.strip() if done.returncode == 0 else None
+
+
+def _requested_devices() -> tuple[list[str], str, str]:
+    """Which GPUs this job may use, on whose authority, and in whose numbering.
+
+    mfuton's surface reads Slurm's allocated GPU IDX from scontrol and
+    deliberately does NOT trust CUDA_VISIBLE_DEVICES (ivan, 2026-09-19), so
+    where that surface exists it outranks the environment variable. Its values
+    are global/physical node indices; CUDA_VISIBLE_DEVICES is masked and
+    process-relative. The two are different numbering schemes, so the record
+    names which one it holds rather than silently mixing them.
+    """
+    home = os.environ.get("MFUTON_HOME")
+    if home:
+        policy = Path(home) / "agent_skills/development/superpod/current-job-gpus.sh"
+        if policy.is_file():
+            # Default output is JSON; --format ids is the comma-separated form.
+            emitted = _probe(["bash", str(policy), "--format", "ids"])
+            if emitted:
+                listed = [d.strip() for d in emitted.replace("\n", ",").split(",") if d.strip()]
+                if listed:
+                    return listed, "mfuton current-job-gpus.sh --format ids", "global-physical"
+
+    pinned = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if pinned is not None:
+        listed = [d for d in pinned.split(",") if d != ""]
+        return listed, "CUDA_VISIBLE_DEVICES", "process-visible"
+
+    for variable in ("SLURM_JOB_GPUS", "SLURM_STEP_GPUS"):
+        allocated = os.environ.get(variable)
+        if allocated:
+            return [d for d in allocated.split(",") if d != ""], variable, "global-physical"
+    on_node = os.environ.get("SLURM_GPUS_ON_NODE")
+    if on_node and on_node.isdigit():
+        return [str(i) for i in range(int(on_node))], "SLURM_GPUS_ON_NODE", "count-only"
+
+    listing = _probe(["nvidia-smi", "-L"])
+    if listing:
+        return [str(i) for i, _ in enumerate(listing.splitlines())], "nvidia-smi -L", "process-visible"
+    return [], "none detected", "none"
+
+
+def hardware() -> dict:
+    """The actual accelerators, recorded so a run's rate can be read correctly.
+
+    The 0919b probe ran on a fallback box and its rate was later mistaken for
+    the pipeline's own, because nothing in the record said what it ran on.
+    """
+    requested, authority, namespace = _requested_devices()
+    query = "index,name,memory.total,compute_cap,driver_version"
+    csv = _probe(["nvidia-smi", f"--query-gpu={query}", "--format=csv,noheader,nounits"])
+    devices = []
+    if csv:
+        for line in csv.splitlines():
+            fields = [f.strip() for f in line.split(",")]
+            if len(fields) == 5:
+                devices.append({"index": fields[0], "name": fields[1],
+                                "memory-mib": int(fields[2]) if fields[2].isdigit() else fields[2],
+                                "compute-capability": fields[3], "driver": fields[4]})
+    return {"device-authority": authority,
+            "device-namespace": namespace,
+            "requested": requested,
+            "count": len(requested),
+            "devices": devices,
+            "visible-to-this-process": bool(devices),
+            "slurm-job": os.environ.get("SLURM_JOB_ID"),
+            "node": os.uname().nodename}
+
+
+def _endpoint_is_local() -> bool:
+    host = urlsplit(endpoint()).hostname or ""
+    return host in ("localhost", "127.0.0.1", "::1", "", os.uname().nodename)
+
+
+def _json_get(url: str, timeout: float = 5.0):
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as answer:
+            return json.loads(answer.read().decode())
+    except (urllib.error.URLError, OSError, ValueError, json.JSONDecodeError):
+        return None
+
+
+def serving() -> dict:
+    """Which stack is answering, and as what model.
+
+    A bare tag like `llama3.1:70b` does not say whether it was served by vLLM at
+    bf16 or by Ollama at Q4 — and a quality baseline cannot leave that implicit.
+    """
+    base = endpoint()
+    root = base[: -len("/v1")] if base.endswith("/v1") else base
+    record = {"endpoint-is-local": _endpoint_is_local(), "stack": None,
+              "stack-version": None, "served-models": [], "reachable": False}
+
+    version = _json_get(f"{root}/version")            # vLLM
+    if isinstance(version, dict) and version.get("version"):
+        record["stack"] = "vllm"
+        record["stack-version"] = version["version"]
+        record["reachable"] = True
+    else:
+        ollama = _json_get(f"{root}/api/version")     # Ollama
+        if isinstance(ollama, dict) and ollama.get("version"):
+            record["stack"] = "ollama"
+            record["stack-version"] = ollama["version"]
+            record["reachable"] = True
+
+    listed = _json_get(f"{base}/models")
+    if isinstance(listed, dict):
+        record["served-models"] = [entry.get("id") for entry in listed.get("data", [])
+                                   if isinstance(entry, dict)]
+        record["reachable"] = True
+        if record["stack"] is None:
+            record["stack"] = "openai-compatible (unidentified)"
+    return record
+
+
+# What the pipeline requires of whoever serves it. The compute side runs what the
+# pipeline specifies; this is where the pipeline specifies it (ivan, 2026-09-19).
+# The 0919b probe reached S12 against Ollama serving a 4-bit GGUF under a different
+# tag, and nothing objected — so the requirement is checked, not just written down.
+REQUIRED_SERVING = {
+    "stack": "vllm",
+    "checkpoint": "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4",
+    "served-as": "mark4-70b",
+    "prefix-caching": True,
+    "replicas": "one per GPU",
+    "concurrency": "32-64 per replica",
+    "why": "prefill-dominated workload (5.1:1); the CT-wide quality baseline must be "
+           "pinned to one checkpoint and precision",
+}
+
+DEVIATION_ENV = "FUTON6_ALLOW_SERVING_DEVIATION"
+
+
+def serving_conformance(actual: dict | None = None) -> dict:
+    """Whether the live endpoint is what the pipeline asked for, and how it differs.
+
+    Recorded rather than raised: a deliberate experiment is legitimate, an
+    unnoticed one is not. Preflight decides what to do with `conforms`.
+    """
+    actual = serving() if actual is None else actual
+    deviations = []
+
+    if not actual.get("reachable"):
+        deviations.append("endpoint did not answer; serving stack unverified")
+    elif actual.get("stack") != REQUIRED_SERVING["stack"]:
+        deviations.append(
+            f"serving stack is {actual.get('stack')!r}, pipeline requires "
+            f"{REQUIRED_SERVING['stack']!r} — an Ollama or unidentified endpoint "
+            f"cannot batch and does not pin precision")
+
+    served = [m for m in actual.get("served-models", []) if m]
+    wanted = REQUIRED_SERVING["served-as"]
+    if served and wanted not in served:
+        deviations.append(f"endpoint serves {served}, pipeline requires {wanted!r}")
+    if model() != wanted:
+        deviations.append(f"MODEL is {model()!r}, pipeline requires {wanted!r}")
+
+    return {"conforms": not deviations,
+            "deviations": deviations,
+            "required": REQUIRED_SERVING,
+            "override": bool(os.environ.get(DEVIATION_ENV))}
+
+
+def scale(inventory: dict | None = None) -> dict:
+    """Size the run to whatever is free right now.
+
+    One shard per GPU is Rob's convention; concurrency is what turns a shard
+    from single-stream into batched, and is the knob the window depends on.
+    Both are overridable, and the basis for each choice is recorded.
+    """
+    inventory = hardware() if inventory is None else inventory
+    gpus = inventory["count"]
+    local = _endpoint_is_local()
+
+    override = os.environ.get("FUTON6_SHARDS")
+    if override and override.isdigit() and int(override) > 0:
+        shards, why = int(override), "FUTON6_SHARDS"
+    elif local and gpus:
+        shards, why = gpus, f"one shard per visible GPU ({inventory['device-authority']})"
+    elif not local:
+        # A remote endpoint may front any number of GPUs; the local count says nothing.
+        shards, why = 1, "single shard: the endpoint is remote, local GPUs do not size it"
+    else:
+        shards, why = 1, "single shard: no GPU detected on this host"
+
+    requested = os.environ.get("FUTON6_CONCURRENCY")
+    if requested and requested.isdigit() and int(requested) > 0:
+        concurrency, basis = int(requested), "FUTON6_CONCURRENCY"
+    elif serving().get("stack") == "ollama":
+        # Ollama serialises by default; more in-flight requests just queue.
+        concurrency, basis = 1, "ollama serialises unless OLLAMA_NUM_PARALLEL is raised"
+    else:
+        concurrency, basis = 32, "default batch concurrency for a batching server"
+
+    return {"shards": shards, "shard-basis": why,
+            "concurrency-per-shard": concurrency, "concurrency-basis": basis,
+            "max-in-flight": shards * concurrency}
+
+
 def effective() -> dict:
+    inventory = hardware()
+    live = serving()
     url = urlsplit(endpoint())
     # Credential-bearing userinfo and queries must not enter the run record.
     public_endpoint = urlunsplit((url.scheme, url.netloc.rsplit("@", 1)[-1], url.path, "", ""))
@@ -140,6 +359,11 @@ def effective() -> dict:
         "python-argv": python_argv(),
         "endpoint": public_endpoint,
         "model": model(),
+        "model-revision": os.environ.get("FUTON6_MODEL_REVISION"),
+        "hardware": inventory,
+        "serving": live,
+        "serving-conformance": serving_conformance(live),
+        "scale": scale(inventory),
     }
 
 
