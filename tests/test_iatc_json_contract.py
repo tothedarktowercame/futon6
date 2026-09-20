@@ -229,3 +229,43 @@ class Loop(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BoundSymbolContract(unittest.TestCase):
+    """The 0919b probe lost the mathematics into an unconstrained text field."""
+
+    CANDIDATE = {"enrichment": [
+        {"line": 350, "kind": "bind/let",
+         "tip": "bind/let · symbol:\\T | type:a triangulated category"},
+        {"line": 350, "kind": "definiendum", "tip": "definiendum #0: $\\T$"},
+        {"line": 352, "kind": "bind/typed",
+         "tip": "bind/typed · symbol:\\alpha | type:\\Sigma^{-1}A\\rightarrow X"},
+        {"line": 353, "kind": "env/proof", "tip": "no symbol here"},
+    ]}
+
+    def test_bindings_are_read_from_enrichment_without_duplication(self):
+        self.assertEqual(iatc_json.bound_symbols(self.CANDIDATE), ["\\T", "\\alpha"])
+
+    def test_a_candidate_with_no_bindings_yields_none(self):
+        self.assertEqual(iatc_json.bound_symbols({"enrichment": []}), [])
+        self.assertEqual(iatc_json.bound_symbols({}), [])
+
+    def test_the_enum_admits_only_symbols_the_window_bound(self):
+        schema = iatc_json.nodes_schema(349, 366, iatc_json.bound_symbols(self.CANDIDATE))
+        enum = schema["properties"]["nodes"]["items"]["properties"]["symbols"]["items"]["enum"]
+        self.assertEqual(enum, ["\\T", "\\alpha"])
+        # The mangling the probe actually produced: three distinct symbols collapsed
+        # to one that the source never bound. It is not in the enum, so under
+        # constrained decoding it cannot be emitted at all.
+        self.assertNotIn("\\triangle", enum)
+
+    def test_declaring_symbols_is_required_but_may_be_empty(self):
+        node = iatc_json.nodes_schema(1, 9, ["\\T"])["properties"]["nodes"]["items"]
+        self.assertIn("symbols", node["required"])
+        self.assertEqual(node["properties"]["symbols"]["items"]["enum"], ["\\T"])
+        self.assertNotIn("minItems", node["properties"]["symbols"])
+
+    def test_omitting_the_argument_leaves_the_old_contract_untouched(self):
+        node = iatc_json.nodes_schema(1, 9)["properties"]["nodes"]["items"]
+        self.assertNotIn("symbols", node["properties"])
+        self.assertNotIn("symbols", node["required"])

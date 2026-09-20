@@ -34,15 +34,57 @@ MAX_STEPS = 60
 MAX_PREMISES = 8
 
 
-def nodes_schema(lo: int, hi: int) -> dict:
-    """Phase 1: what the proof talks about, in the order the model lists it."""
+SYMBOL_RE = re.compile(r"symbol:(\S+)")
+DEFINIENDUM_RE = re.compile(r"definiendum #\d+: \$(.+?)\$")
+
+
+def bound_symbols(candidate: dict) -> list[str]:
+    """The symbols S1 already bound to a meaning in this proof's window.
+
+    S1 emits these as enrichment rows — `bind/typed · symbol:\\alpha |
+    type:\\Sigma^{-1}A\\rightarrow X`, `definiendum #0: $\\T$` — and they are
+    rendered into the S3 prompt as advice. They are advice only: the node schema
+    has one free `text` string and no slot for a symbol, so the model retypes the
+    mathematics by hand. In the 0919b probe that is where the damage happened —
+    361 of 1280 nodes carried control characters from LaTeX the JSON writer never
+    escaped, and 87.5% of those were in proofs whose bindings were already
+    present. Returning them here lets the schema name what the node may refer to.
+    """
+    found: list[str] = []
+    for row in candidate.get("enrichment") or ():
+        tip = row.get("tip", "")
+        for match in (SYMBOL_RE.search(tip), DEFINIENDUM_RE.search(tip)):
+            if match:
+                symbol = match.group(1).strip().strip("$")
+                if symbol and symbol not in found:
+                    found.append(symbol)
+    return found
+
+
+def nodes_schema(lo: int, hi: int, symbols: "list[str] | tuple[str, ...]" = ()) -> dict:
+    """Phase 1: what the proof talks about, in the order the model lists it.
+
+    When the caller supplies the proof's bound symbols, each node must also
+    declare which of them it is about, drawn from that enumeration — the same
+    move steps_schema makes with premises, where naming a node that does not
+    exist is unrepresentable rather than rejected afterwards. A symbol the window
+    never bound cannot be emitted at all, so the free-text field stops being the
+    only record of which object a claim concerns.
+    """
     line = {"type": "integer", "minimum": lo, "maximum": hi}
+    properties = {"kind": {"type": "string", "enum": list(NODE_KINDS)},
+                  "text": {"type": "string", "minLength": 1, "maxLength": 300},
+                  "citation": {"type": "string", "maxLength": 160},
+                  "first_line": line, "last_line": line}
+    required = ["kind", "text", "citation", "first_line", "last_line"]
+    if symbols:
+        # Empty is legitimate: a node may be about no bound symbol. Inventing one
+        # is not, which is what the enum forbids.
+        properties["symbols"] = {"type": "array", "maxItems": len(symbols),
+                                 "items": {"type": "string", "enum": list(symbols)}}
+        required.append("symbols")
     node = {"type": "object", "additionalProperties": False,
-            "required": ["kind", "text", "citation", "first_line", "last_line"],
-            "properties": {"kind": {"type": "string", "enum": list(NODE_KINDS)},
-                           "text": {"type": "string", "minLength": 1, "maxLength": 300},
-                           "citation": {"type": "string", "maxLength": 160},
-                           "first_line": line, "last_line": line}}
+            "required": required, "properties": properties}
     return {"type": "object", "additionalProperties": False, "required": ["nodes"],
             "properties": {"nodes": {"type": "array", "minItems": 2, "maxItems": MAX_NODES, "items": node}}}
 
