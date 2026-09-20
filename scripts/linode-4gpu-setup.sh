@@ -13,8 +13,9 @@ MODEL="${MODEL:-hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4}"   # ungate
 PORT="${PORT:-8000}"
 # ONE GPU unless asked otherwise. This script may run on a SHARED host where the
 # other cards belong to other people's jobs; taking them because they were merely
-# visible is how you get evicted. TP=<n> to widen deliberately, TP=auto to take
-# everything this job has been allocated.
+# visible is how you get evicted. TP=<n> to widen deliberately, TP=all to take
+# everything this job has been allocated. There is deliberately no "auto": taking
+# every GPU is a choice somebody makes, not a default the script arrives at.
 TP="${TP:-1}"
 ATTENTION_HEADS="${ATTENTION_HEADS:-64}"  # Llama-3.1-70B; TP must divide this
 VENV="${VENV:-$HOME/mark4-venv}"
@@ -71,13 +72,22 @@ fi
 # vLLM shards attention heads across the tensor-parallel group, so TP must DIVIDE
 # the head count -- a 6-GPU allocation cannot run TP=6 against 64 heads and fails
 # deep inside model load with an opaque shape error.
-if [ "$TP" = "auto" ]; then
+if [ "$TP" = "all" ]; then
   TP="$NGPU"
   while [ "$TP" -gt 1 ] && [ $(( ATTENTION_HEADS % TP )) -ne 0 ]; do
     TP=$(( TP - 1 ))
   done
-  echo "TP=auto -> $TP of $NGPU allocated GPU(s)$([ "$TP" -ne "$NGPU" ] && echo ", $(( NGPU - TP )) idle ($ATTENTION_HEADS heads do not divide $NGPU)")"
+  echo "TP=all -> $TP of $NGPU allocated GPU(s)$([ "$TP" -ne "$NGPU" ] && echo ", $(( NGPU - TP )) idle ($ATTENTION_HEADS heads do not divide $NGPU)")"
 fi
+
+case "$TP" in
+  *[!0-9]*|"")
+    echo "FATAL: TP=\"$TP\" is not a GPU count."
+    echo "       Use TP=<n> for a specific width, or TP=all for the whole allocation."
+    echo "       (There is no TP=auto: taking every GPU is a choice, not a default.)"
+    exit 1 ;;
+  0) echo "FATAL: TP=0 is not a GPU count."; exit 1 ;;
+esac
 
 echo "serving with TP=$TP"
 [ "$NGPU" -ge "$TP" ] || { echo "FATAL: TP=$TP requested but only $NGPU GPU(s) visible"; exit 1; }
