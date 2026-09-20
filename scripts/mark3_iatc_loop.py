@@ -48,8 +48,18 @@ Return JSON with a list "nodes". Each node is one thing the proof uses or
 establishes: kind "claim" (an assertion), "object" (a mathematical object it
 introduces or constructs), "definition", or "ref" (a result it points to — put the
 label or citation in "citation", e.g. "Theorem~\\ref{main}" or "[AR, 2.36]";
-otherwise leave it ""). "text" is a faithful short gloss of the source.
+otherwise leave it "").
 "first_line"/"last_line" are the ABSOLUTE line numbers printed on the left.
+
+DO NOT RETYPE MATHEMATICS. Two fields carry it for you, and both are chosen from
+what the source already supplies:
+  "quote_lines" — the ABSOLUTE line numbers whose text states this node. Pick the
+    lines; the formulae are taken from the source verbatim, so you never have to
+    reproduce a symbol. List only the lines this node actually needs.
+  "symbols" — which of the proof's bound symbols this node is about.
+"text" is a short PROSE gloss only — say what the node does in words. Formulae you
+type there are not used and can only be wrong: the JSON escape alphabet cannot
+spell most LaTeX commands, so \\Sigma, \\alpha and \\in come out as other commands.
 
 List them in the order the proof introduces them, hypotheses first and the final
 conclusion last. Include every intermediate claim the argument passes through; the
@@ -259,7 +269,8 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
     record: dict = {"attempt": 0}
     doc: dict = {}
     for phase, task in (("nodes", NODES_TASK), ("steps", STEPS_TASK)):
-        schema = (iatc_json.nodes_schema(lo, hi, iatc_json.bound_symbols(cand))
+        schema = (iatc_json.nodes_schema(lo, hi, iatc_json.bound_symbols(cand),
+                                         [n for n, _ in iatc_json.source_lines(cand)])
                   if phase == "nodes"
                   else iatc_json.steps_schema(lo, hi, len(doc.get("nodes", []))))
         prompt = build_prompt(cand, task, doc.get("nodes") if phase == "steps" else None)

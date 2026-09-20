@@ -301,3 +301,44 @@ class ForcedSubstitutionDetector(unittest.TestCase):
         for wanted in (r"\Sigma", r"\alpha", r"\in", r"\cong", r"\coprod"):
             self.assertNotIn(wanted[1], loop.JSON_ESCAPES,
                              f"{wanted} would be writable; the substitution story needs revising")
+
+
+class QuotationByReference(unittest.TestCase):
+    """The mathematics must not pass through the model's output at all."""
+
+    CAND = {"window-lines": [349, 353],
+            "source-window": ("\\prop\n"
+                              "Let $\\T$ be a triangulated category.\n"
+                              "\n"
+                              "(i) there exists an $\\Sigma^{-1}\\A$-precover $\\alpha$.\n"
+                              "\\eprop"),
+            "enrichment": [{"tip": "bind/typed \u00b7 symbol:\\alpha | type:map"},
+                           {"tip": "definiendum #0: $\\T$"}]}
+
+    def test_blank_lines_are_not_offered_as_anchors(self):
+        self.assertEqual([n for n, _ in iatc_json.source_lines(self.CAND)],
+                         [349, 350, 352, 353])
+
+    def test_quote_lines_is_an_enumeration_not_a_range(self):
+        nums = [n for n, _ in iatc_json.source_lines(self.CAND)]
+        node = iatc_json.nodes_schema(349, 353, [], nums)["properties"]["nodes"]["items"]
+        self.assertIn("quote_lines", node["required"])
+        self.assertEqual(node["properties"]["quote_lines"]["items"]["enum"], nums)
+        # 351 is blank; a node cannot anchor to it even though it is in range.
+        self.assertNotIn(351, node["properties"]["quote_lines"]["items"]["enum"])
+
+    def test_the_symbols_the_grammar_destroys_survive_quotation(self):
+        node = {"quote_lines": [352]}
+        quoted = iatc_json.quoted_source(node, self.CAND)
+        # These are exactly the commands a JSON escape alphabet cannot spell.
+        for command in ("\\Sigma", "\\alpha", "\\A"):
+            self.assertIn(command, quoted)
+        self.assertNotIn("\\triangle", quoted)
+
+    def test_text_is_demoted_to_a_gloss_in_the_contract(self):
+        node = iatc_json.nodes_schema(349, 353, [], [349])["properties"]["nodes"]["items"]
+        self.assertIn("NOT the node's mathematics", node["properties"]["text"]["description"])
+
+    def test_omitting_lines_leaves_the_old_contract_untouched(self):
+        node = iatc_json.nodes_schema(1, 9)["properties"]["nodes"]["items"]
+        self.assertNotIn("quote_lines", node["properties"])

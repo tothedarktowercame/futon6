@@ -61,32 +61,73 @@ def bound_symbols(candidate: dict) -> list[str]:
     return found
 
 
-def nodes_schema(lo: int, hi: int, symbols: "list[str] | tuple[str, ...]" = ()) -> dict:
+def nodes_schema(lo: int, hi: int, symbols: "list[str] | tuple[str, ...]" = (),
+                 lines: "list[int] | tuple[int, ...]" = ()) -> dict:
     """Phase 1: what the proof talks about, in the order the model lists it.
 
-    When the caller supplies the proof's bound symbols, each node must also
-    declare which of them it is about, drawn from that enumeration — the same
-    move steps_schema makes with premises, where naming a node that does not
-    exist is unrepresentable rather than rejected afterwards. A symbol the window
-    never bound cannot be emitted at all, so the free-text field stops being the
-    only record of which object a claim concerns.
+    Two things the model must not retype, because a JSON string grammar cannot
+    spell them. It permits only " \\ / b f n r t u after a backslash, so a
+    command starting with any other letter is unwritable: the decoder forces a
+    legal letter and the model completes a different command. Measured over the
+    0919b probe — 8,437 backslash sequences, none illegal, 5,891 of them \\t —
+    that is how \\T, \\Sigma and \\alpha all became \\triangle, and how a
+    source \\in became \\notin.
+
+    So the mathematics arrives by reference:
+
+      symbols      which bound objects the node is about, from what S1 bound
+      quote_lines  which source lines carry it, from the window's own numbering
+
+    `text` survives as a PROSE GLOSS and is no longer the record of what the node
+    claims; quoted_source() reads that from the source. This is the move
+    steps_schema makes with premises, applied twice more: naming something the
+    window never supplied is unrepresentable rather than rejected afterwards.
     """
     line = {"type": "integer", "minimum": lo, "maximum": hi}
     properties = {"kind": {"type": "string", "enum": list(NODE_KINDS)},
-                  "text": {"type": "string", "minLength": 1, "maxLength": 300},
+                  "text": {"type": "string", "minLength": 1, "maxLength": 300,
+                           "description": "Prose gloss. NOT the node's mathematics: "
+                                          "quote_lines carries that. Do not retype formulae."},
                   "citation": {"type": "string", "maxLength": 160},
                   "first_line": line, "last_line": line}
     required = ["kind", "text", "citation", "first_line", "last_line"]
     if symbols:
-        # Empty is legitimate: a node may be about no bound symbol. Inventing one
-        # is not, which is what the enum forbids.
         properties["symbols"] = {"type": "array", "maxItems": len(symbols),
                                  "items": {"type": "string", "enum": list(symbols)}}
         required.append("symbols")
+    if lines:
+        # An ENUM, not a range: a node drawing on lines 350 and 365 must say so
+        # rather than claim everything between them.
+        properties["quote_lines"] = {"type": "array", "minItems": 1, "maxItems": len(lines),
+                                     "items": {"type": "integer", "enum": list(lines)}}
+        required.append("quote_lines")
     node = {"type": "object", "additionalProperties": False,
             "required": required, "properties": properties}
     return {"type": "object", "additionalProperties": False, "required": ["nodes"],
             "properties": {"nodes": {"type": "array", "minItems": 2, "maxItems": MAX_NODES, "items": node}}}
+
+
+def source_lines(candidate: dict) -> list[tuple[int, str]]:
+    """The window's non-blank lines, numbered absolutely, in source order.
+
+    numbered_window already shows the model exactly these numbers — "anchors are
+    read, not counted" (H21). This returns them as data so the schema can make
+    them the only way a node carries mathematics.
+    """
+    lo = (candidate.get("window-lines") or [1, 1])[0]
+    body = str(candidate.get("source-window", ""))
+    return [(lo + i, line) for i, line in enumerate(body.split("\n")) if line.strip()]
+
+
+def quoted_source(node: dict, candidate: dict) -> str:
+    """The node's mathematics, taken from the source rather than from the model.
+
+    This is the whole point of quote_lines: the model chooses WHICH lines, code
+    does the extraction, and the LaTeX never passes through a JSON string. A
+    grammar that cannot spell \\Sigma therefore cannot corrupt it.
+    """
+    wanted = set(node.get("quote_lines") or ())
+    return "\n".join(text for number, text in source_lines(candidate) if number in wanted)
 
 
 def steps_schema(lo: int, hi: int, node_count: int) -> dict:
