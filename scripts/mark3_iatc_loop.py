@@ -24,6 +24,7 @@ import argparse
 import concurrent.futures as cf
 import json
 import os
+import re
 import subprocess
 import sys
 import threading
@@ -174,6 +175,29 @@ def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> str:
     return choice["message"]["content"]
 
 
+
+# Legal JSON string escapes. A constrained decoder following a JSON grammar will
+# permit nothing else after a backslash, so a LaTeX command whose first letter is
+# not one of these cannot be written at all — the decoder forces a legal letter
+# and the model completes a DIFFERENT command. Measured over the 0919b probe:
+# 8437 backslash sequences, 0 illegal starts, 5891 of them \t. That is how three
+# distinct symbols (\T, \Sigma, \alpha) all arrived as \triangle, and how a
+# source \in became \notin — a membership claim negated by a serialisation
+# grammar, not by the model's mathematics.
+JSON_ESCAPES = set('"\\/bfnrtu')
+
+
+def invented_commands(text: str, window: str) -> list[str]:
+    """LaTeX commands in the model's text that its source window never contains.
+
+    Not every hit is corruption — a model may legitimately gloss with notation the
+    source spells differently — but a command absent from the window is the only
+    mechanical signal that separates a forced substitution from a faithful one,
+    and it is what catches the runaway arrow nodes.
+    """
+    return sorted({m for m in re.findall(r"\\[a-zA-Z]+", text) if m not in window})
+
+
 def gate_one(path: Path) -> tuple[bool, str]:
     # --include-attempts: the explicit file lives under .attempts/, which the bb
     # gates otherwise skip in directory scans.
@@ -235,7 +259,8 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
     record: dict = {"attempt": 0}
     doc: dict = {}
     for phase, task in (("nodes", NODES_TASK), ("steps", STEPS_TASK)):
-        schema = (iatc_json.nodes_schema(lo, hi) if phase == "nodes"
+        schema = (iatc_json.nodes_schema(lo, hi, iatc_json.bound_symbols(cand))
+                  if phase == "nodes"
                   else iatc_json.steps_schema(lo, hi, len(doc.get("nodes", []))))
         prompt = build_prompt(cand, task, doc.get("nodes") if phase == "steps" else None)
         try:

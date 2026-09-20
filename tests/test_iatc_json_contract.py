@@ -269,3 +269,35 @@ class BoundSymbolContract(unittest.TestCase):
         node = iatc_json.nodes_schema(1, 9)["properties"]["nodes"]["items"]
         self.assertNotIn("symbols", node["properties"])
         self.assertNotIn("symbols", node["required"])
+
+
+class ForcedSubstitutionDetector(unittest.TestCase):
+    """A JSON grammar cannot spell most LaTeX, and substitutes silently.
+
+    Measured over the 0919b probe: 8,437 backslash sequences in raw model
+    output, ZERO beginning an illegal JSON escape, 5,891 of them `\\t`. The
+    decoder permits only ", \\, /, b, f, n, r, t, u after a backslash, so a
+    command starting with any other letter is unwritable and the model completes
+    a different one. \\T, \\Sigma and \\alpha all arrived as \\triangle.
+    """
+
+    def test_the_real_negated_membership_is_flagged(self):
+        import mark3_iatc_loop as loop
+        window = r"the canonical map $N^{C}(p)\in Ho(sM)$ is an isomorphism"
+        emitted = r'{"text": "$N^{C}(p)\notin Ho(sM)$"}'
+        self.assertIn(r"\notin", loop.invented_commands(emitted, window))
+        self.assertNotIn(r"\in", loop.invented_commands(emitted, window))
+
+    def test_a_command_the_window_supplies_is_not_flagged(self):
+        import mark3_iatc_loop as loop
+        window = r"a map $f\colon X\to Y$ with $X\in\C$"
+        self.assertEqual(loop.invented_commands(r'{"text": "$X\to Y$"}', window), [])
+
+    def test_only_legal_json_escape_letters_can_follow_a_backslash(self):
+        import mark3_iatc_loop as loop
+        # The grammar's alphabet is the whole reason the substitution happens;
+        # if this set ever grows, the diagnosis in the docstring stops holding.
+        self.assertEqual(loop.JSON_ESCAPES, set('"\\/bfnrtu'))
+        for wanted in (r"\Sigma", r"\alpha", r"\in", r"\cong", r"\coprod"):
+            self.assertNotIn(wanted[1], loop.JSON_ESCAPES,
+                             f"{wanted} would be writable; the substitution story needs revising")
