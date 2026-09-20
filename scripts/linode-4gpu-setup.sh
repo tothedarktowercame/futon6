@@ -95,18 +95,24 @@ echo "serving with TP=$TP"
   echo "FATAL: TP=$TP does not divide $ATTENTION_HEADS attention heads; vLLM will fail at load."
   echo "       Set ATTENTION_HEADS for your model, or choose a TP that divides it."; exit 1; }
 
-# Measured 2026-09-20 on 4x RTX 4000 Ada: 70B-AWQ-INT4 sat at ~18.8GB/card at
-# TP=4, i.e. ~75GB of weights+cache. Say so BEFORE the weight download rather
-# than letting an under-width run OOM after twenty minutes of transfer.
+# WEIGHTS only. 70B at INT4 is ~35GB; KV cache is then sized to fill whatever
+# GPU_MEMORY_UTILIZATION leaves, so observed usage says nothing about the floor.
+# The 18.8GB/card measured on 4x 20GB RTX 4000 Ada was 94% of each card -- vLLM
+# taking what it was given, not what the model required. Deriving a 75GB
+# requirement from it would refuse a single 80GB card, which loads this model
+# without trouble.
 CARD_MB=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -1)
-NEED_MB="${NEED_MB:-75000}"
+WEIGHTS_MB="${WEIGHTS_MB:-35000}"
 HAVE_MB=$(( CARD_MB * TP ))
-if [ "$HAVE_MB" -lt "$NEED_MB" ]; then
-  echo "WARNING: TP=$TP gives ${HAVE_MB}MB; $MODEL needs ~${NEED_MB}MB."
-  echo "         This will OOM during load. Either raise TP (you have $NGPU GPU(s)"
-  echo "         allocated), pick a smaller MODEL, or set NEED_MB if the estimate is wrong."
-  [ "${ALLOW_UNDERSIZED:-0}" = "1" ] || {
-    echo "         Refusing to start. Re-run with ALLOW_UNDERSIZED=1 to try anyway."; exit 1; }
+if [ "$HAVE_MB" -lt "$WEIGHTS_MB" ]; then
+  # Advisory only: vLLM decides. This arithmetic has been wrong before and the
+  # cost of a bad refusal (blocking a run that works) exceeds the cost of a bad
+  # warning (a line of text before an error vLLM would have given anyway).
+  echo "NOTE: TP=$TP gives ${HAVE_MB}MB across $TP card(s) of ${CARD_MB}MB."
+  echo "      $MODEL is roughly ${WEIGHTS_MB}MB of weights before any KV cache,"
+  echo "      so this may OOM during load. You have $NGPU GPU(s) allocated;"
+  echo "      TP=$NGPU or TP=all would give $(( CARD_MB * NGPU ))MB."
+  echo "      Proceeding anyway -- set WEIGHTS_MB if this estimate is wrong for your model."
 fi
 
 echo "== CUDA toolkit (nvcc) detection =="
