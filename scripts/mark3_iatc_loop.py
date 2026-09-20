@@ -315,6 +315,9 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
                   if phase == "nodes"
                   else iatc_json.steps_schema(lo, hi, len(doc.get("nodes", []))))
         prompt = build_prompt(cand, task, doc.get("nodes") if phase == "steps" else None)
+        if phase == "steps":
+            record["steps-prompt-len"] = len(prompt)
+            steps_ctx = (prompt, schema)
         try:
             raw = (call_stub(prompt, cand, schema) if args.backend == "stub"
                    else call_openai(prompt, cand, args.model, schema))
@@ -355,6 +358,46 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
     ok, why = gate_one(graph)
     if ok and args.rung2_gate:
         ok, why = run_rung2(graph, tmp / f"{pid}.rung2.edn", gate=True)
+
+    # The gates do not merely refuse; iatc_argcheck writes its refusal AS an
+    # instruction — "state an equivalence as ONE edge with :relation :iff, not as
+    # two implications that feed each other". Nothing consumed it, so a proof the
+    # model could have fixed was simply lost: 7 of 62 on 0806.1324, 11% of the
+    # paper, all of them cycles the schema already had the vocabulary to avoid.
+    # Hand the instruction back and ask again, once.
+    for retry in range(1, max(0, getattr(args, "gate_retries", 1)) + 1):
+        if ok:
+            break
+        record["attempt"] = retry
+        record[f"retry{retry}-because"] = why[:300]
+        prompt, schema = steps_ctx
+        amended = (prompt + "\n\nYour previous answer was REFUSED by the checker:\n"
+                   + why.strip()[-600:]
+                   + "\n\nGive the derivations again, fixing exactly that. Keep every "
+                     "part that was not at fault.")
+        try:
+            raw = (call_stub(amended, cand, schema) if args.backend == "stub"
+                   else call_openai(amended, cand, args.model, schema))
+            part = json.loads(raw)
+        except (ModelCallError, ValueError) as e:
+            record[f"retry{retry}-result"] = f"retry failed: {e}"[:200]
+            break
+        if control_char_damage(part, "steps"):
+            record[f"retry{retry}-result"] = "retry carried control characters"
+            break
+        (tmp / f"{pid}.steps.retry{retry}.json").write_text(raw)
+        doc.update(part)
+        doc["steps"] = iatc_json.steps_of(doc)
+        found = iatc_json.problems(doc, lo, hi)
+        if found:
+            why = "contract: " + "; ".join(found[:6])
+            continue
+        graph.write_text(iatc_json.to_edn(doc, cand, args.model))
+        ok, why = gate_one(graph)
+        if ok and args.rung2_gate:
+            ok, why = run_rung2(graph, tmp / f"{pid}.rung2.edn", gate=True)
+        record[f"retry{retry}-result"] = "accepted" if ok else why[:200]
+
     if not ok:
         record["result"] = why[:500]
         return "rejected", why, record
@@ -494,6 +537,9 @@ def main() -> int:
                                 or os.environ.get("CONCURRENCY") or 1),
                     help="proofs in flight at once; defaults to FUTON6_CONCURRENCY "
                          "(set from the detected hardware by futon6_config.scale)")
+    ap.add_argument("--gate-retries", type=int, default=1,
+                    help="Re-ask the model when a gate refuses, feeding its refusal "
+                         "back as the instruction it already is (default 1; 0 disables).")
     ap.add_argument("--loss-log-interval", type=int, default=100,
                     help="print running accepted/rejected/errored counts every N proofs; 0 disables")
     return run(ap.parse_args())
