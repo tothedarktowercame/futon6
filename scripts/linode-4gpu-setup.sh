@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# mark4 — 4-GPU Linode setup + vLLM serve.
-# Run ON the freshly-provisioned Ubuntu 24.04 box (4x RTX 4000 Ada, 80GB aggregate).
-# Proven last run: 70B-AWQ comes up in ~70s, TP=4 (~18.8GB/card), validated faithful.
+# mark4 — multi-GPU Linode setup + vLLM serve.
+# Run ON a freshly-provisioned Ubuntu 24.04 GPU box.
+# Proven on 4x RTX 4000 Ada (80GB aggregate): 70B-AWQ up in ~70s at TP=4
+# (~18.8GB/card), validated faithful. The GPU count is NOT assumed: TP defaults
+# to what nvidia-smi reports, and any host with enough aggregate memory works.
 #
 # GOAL PATH:  CUDA toolkit (nvcc) on the image  -> flashinfer + torch.compile, full perf.
 # FALLBACK:   driver-only                       -> --enforce-eager + flashinfer sampler off.
@@ -9,7 +11,8 @@ set -euo pipefail
 
 MODEL="${MODEL:-hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4}"   # ungated AWQ-INT4
 PORT="${PORT:-8000}"
-TP="${TP:-4}"
+TP="${TP:-auto}"                          # "auto" = use every visible GPU; or set e.g. TP=2
+ATTENTION_HEADS="${ATTENTION_HEADS:-64}"  # Llama-3.1-70B; TP must divide this
 VENV="${VENV:-$HOME/mark4-venv}"
 LOG="${LOG:-$HOME/vllm-serve.log}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-16384}"
@@ -48,8 +51,29 @@ fi
 echo "== GPU / driver =="
 nvidia-smi --query-gpu=index,name,memory.total,driver_version --format=csv || { echo "FATAL: no nvidia-smi"; exit 1; }
 NGPU=$(nvidia-smi -L | wc -l)
-echo "GPUs visible: $NGPU (need TP=$TP)"
-[ "$NGPU" -ge "$TP" ] || { echo "FATAL: fewer than $TP GPUs"; exit 1; }
+[ "$NGPU" -ge 1 ] || { echo "FATAL: no GPUs visible"; exit 1; }
+
+# vLLM shards attention heads across the tensor-parallel group, so TP must DIVIDE
+# the head count -- a 6-GPU host cannot run TP=6 against 64 heads and fails deep
+# inside model load with an opaque shape error. Pick the largest usable divisor
+# rather than assuming any particular card count.
+if [ "$TP" = "auto" ]; then
+  TP="$NGPU"
+  while [ "$TP" -gt 1 ] && [ $(( ATTENTION_HEADS % TP )) -ne 0 ]; do
+    TP=$(( TP - 1 ))
+  done
+  if [ "$TP" -ne "$NGPU" ]; then
+    echo "NOTE: $NGPU GPUs visible, but $ATTENTION_HEADS heads do not divide by $NGPU."
+    echo "      Using TP=$TP; the remaining $(( NGPU - TP )) GPU(s) will sit idle."
+    echo "      Override with TP=<n> if the model's head count differs."
+  fi
+fi
+
+echo "GPUs visible: $NGPU (serving with TP=$TP)"
+[ "$NGPU" -ge "$TP" ] || { echo "FATAL: TP=$TP requested but only $NGPU GPU(s) visible"; exit 1; }
+[ $(( ATTENTION_HEADS % TP )) -eq 0 ] || {
+  echo "FATAL: TP=$TP does not divide $ATTENTION_HEADS attention heads; vLLM will fail at load."
+  echo "       Set ATTENTION_HEADS for your model, or choose a TP that divides it."; exit 1; }
 
 echo "== CUDA toolkit (nvcc) detection =="
 EAGER_FLAGS=""
@@ -96,7 +120,7 @@ nohup python -m vllm.entrypoints.openai.api_server \
 SERVE_PID=$!
 echo "vLLM serving (pid $SERVE_PID). Tail: tail -f $LOG"
 
-echo "== waiting for readiness (TP=4 shard ~70s) =="
+echo "== waiting for readiness (TP=$TP shard, ~70s at TP=4) =="
 for i in $(seq 1 60); do
   if curl -sf "localhost:$PORT/v1/models" >/dev/null 2>&1; then
     echo "READY after $((i*5))s:"; curl -s "localhost:$PORT/v1/models"; echo
