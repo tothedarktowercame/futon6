@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import os
 from pathlib import Path
@@ -30,7 +31,9 @@ def step(premises, conclusion, relation="implies", kind="stated", warrant="by th
 CAND = {"paper-id": "1111.0001", "proof-id": "1111.0001__p0", "passage-id": "1111.0001:proof0:L10-14",
         "window-lines": [10, 14], "proof-lines": [12, 14], "schema": loop.CANDIDATE_SCHEMA,
         "proved": {"kind": "lemma", "lines": [10, 11], "text": "\\begin{lemma} A iff B \\end{lemma}"},
-        "source-window": "a\nb\nc\nd\ne", "binder-context": [], "enrichment": []}
+        "source-window": "a\nb\nc\nd\ne", "binder-context": [], "enrichment": [],
+        "spans": [{"kind": "bind/let", "start": 0, "end": 1, "text": "a"},
+                  {"kind": "quant/universal", "start": 8, "end": 9, "text": "e"}]}
 
 
 class Contract(unittest.TestCase):
@@ -347,9 +350,18 @@ class QuotationByReference(unittest.TestCase):
         node = iatc_json.nodes_schema(349, 353, [], ["s1"])["properties"]["nodes"]["items"]
         self.assertIn("NOT the node's mathematics", node["properties"]["text"]["description"])
 
-    def test_omitting_spans_leaves_the_old_contract_untouched(self):
-        node = iatc_json.nodes_schema(1, 9)["properties"]["nodes"]["items"]
-        self.assertNotIn("quote_spans", node["properties"])
+    def test_a_candidate_without_spans_is_refused_not_run_under_the_old_contract(self):
+        # mark7probe-20260921: span code present, candidates without spans, and the
+        # loop quietly produced retype graphs. It must stop and say why instead.
+        import run_contract
+        bare = {k: v for k, v in CAND.items() if k != "spans"}
+        self.assertEqual(run_contract.missing_inputs(bare), ["spans"])
+        with tempfile.TemporaryDirectory() as d:
+            Path(d, "x.candidate.json").write_text(json.dumps(bare))
+            err = io.StringIO()
+            with patch("sys.stderr", err):
+                self.assertFalse(loop.require_candidates([Path(d, "x.candidate.json")]))
+        self.assertIn("lacks spans", err.getvalue())
 
 
 class ControlCharacterGuard(unittest.TestCase):

@@ -34,13 +34,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import iatc_json  # noqa: E402
 import stage_accounting as accounting  # noqa: E402
+import run_contract  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 ARGCHECK = REPO / "scripts" / "iatc_argcheck.bb"
 SUBSTANCE = REPO / "scripts" / "substance_gate.py"
 SEMCHECK = REPO / "scripts" / "iatc_semcheck.bb"
-CANDIDATE_SCHEMA = "iatc-candidate/v3-proof"
-MAX_TOKENS = int(os.environ.get("FUTON6_IATC_MAX_TOKENS", "8192"))
+CONTRACT = run_contract.spec()
+CANDIDATE_SCHEMA = CONTRACT["candidates"]["schema"]
+# The contract fixes decoding. The env override stays for experiments, and is
+# recorded as a deviation rather than silently changing what a run means.
+MAX_TOKENS = int(os.environ.get("FUTON6_IATC_MAX_TOKENS") or CONTRACT["decoding"]["max-tokens"])
 
 NODES_TASK = """You read ONE mathematical proof and list what its argument is made of.
 
@@ -179,7 +183,7 @@ def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> str:
     body = json.dumps({
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0,
+        "temperature": CONTRACT["decoding"]["temperature"],
         "max_tokens": MAX_TOKENS,
         "response_format": {"type": "json_schema", "json_schema": {
             "name": "iatc_proof", "strict": True, "schema": schema}},
@@ -268,9 +272,17 @@ def require_candidates(cands: list[Path]) -> bool:
             continue
         if c.get("schema") != CANDIDATE_SCHEMA or not c.get("proof-lines"):
             stale.append((cf.name, f"schema={c.get('schema')!r}"))
+            continue
+        # A contract feature with no input must stop the run, not quietly run the
+        # older contract: mark7probe-20260921 had the span code and produced
+        # retype graphs, because nothing here noticed the spans were absent.
+        missing = run_contract.missing_inputs(c)
+        if missing:
+            stale.append((cf.name, f"lacks {', '.join(missing)} required by "
+                                   f"{run_contract.contract_id()}"))
     if stale:
-        print(f"FATAL: {len(stale)}/{len(cands)} candidate(s) are not S1 proof candidates "
-              f"({CANDIDATE_SCHEMA}). Re-extract: python scripts/mark3_extract_candidates.py "
+        print(f"FATAL: {len(stale)}/{len(cands)} candidate(s) do not meet run contract "
+              f"{run_contract.contract_id()} ({CANDIDATE_SCHEMA}). Re-extract: python scripts/mark3_extract_candidates.py "
               "--all-proofs --out <candidates-dir>", file=sys.stderr)
         for name, why in stale[:10]:
             print(f"  - {name}: {why}", file=sys.stderr)
@@ -424,6 +436,16 @@ def run(args) -> int:
     tmp.mkdir(parents=True, exist_ok=True)
     (tmp / "RUN").write_text(f"run_id={run_tag}\ninvocation={invocation}\ncandidates={len(cands)}\n"
                              f"contract={iatc_json.GENERATOR}\nmodel={args.model}\n")
+    # What this run means, next to its output: the contract by name and hash, and
+    # any term it departed from. Hardware is deliberately absent -- it is recorded
+    # by futon6_config and must not affect what is written here.
+    contract = run_contract.active()
+    contract["deviations"] = run_contract.deviations(
+        {"gate-retries": args.gate_retries, "max-tokens": MAX_TOKENS, "model": args.model})
+    (outdir / "run-contract.json").write_text(json.dumps(contract, indent=2) + "\n")
+    print(f"run contract {contract['id']} sha256:{contract['sha256'][:12]}"
+          + (f" DEVIATING: {'; '.join(contract['deviations'])}" if contract["deviations"] else ""),
+          flush=True)
     loaded = [json.loads(cf_path.read_text()) for cf_path in cands]
     ledger = accounting.Accounting("S3", "loop", [c["proof-id"] for c in loaded])
     counts = {"accepted": 0, "rejected": 0, "errored": 0, "carried": 0}
@@ -528,7 +550,8 @@ def main() -> int:
     ap.add_argument("--candidates", default=str(REPO / "data" / "iatc-candidates"))
     ap.add_argument("--out", default=str(REPO / "data" / "iatc-argument-graphs" / "loop-run"))
     ap.add_argument("--backend", choices=["stub", "openai"], default="stub")
-    ap.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct")
+    ap.add_argument("--model", default=CONTRACT["serving"]["served-as"],
+                    help="served model name; default is the run contract's")
     ap.add_argument("--rung2-gate", action="store_true",
                     help="Reject graphs whose rung-2 semantic profile fails; default records it only.")
     ap.add_argument("--concurrency", type=int,
@@ -536,9 +559,10 @@ def main() -> int:
                                 or os.environ.get("CONCURRENCY") or 1),
                     help="proofs in flight at once; defaults to FUTON6_CONCURRENCY "
                          "(set from the detected hardware by futon6_config.scale)")
-    ap.add_argument("--gate-retries", type=int, default=1,
-                    help="Re-ask the model when a gate refuses, feeding its refusal "
-                         "back as the instruction it already is (default 1; 0 disables).")
+    ap.add_argument("--gate-retries", type=int, default=CONTRACT["gate-retries"],
+                    help="Re-ask the model when a gate refuses, feeding its refusal back "
+                         "as the instruction it already is. Default is the run contract's; "
+                         "any other value is recorded as a deviation.")
     ap.add_argument("--loss-log-interval", type=int, default=100,
                     help="print running accepted/rejected/errored counts every N proofs; 0 disables")
     return run(ap.parse_args())

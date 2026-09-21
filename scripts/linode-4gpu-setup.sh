@@ -20,7 +20,7 @@ TP="${TP:-1}"
 ATTENTION_HEADS="${ATTENTION_HEADS:-64}"  # Llama-3.1-70B; TP must divide this
 VENV="${VENV:-$HOME/mark4-venv}"
 LOG="${LOG:-$HOME/vllm-serve.log}"
-MAX_MODEL_LEN="${MAX_MODEL_LEN:-16384}"
+MAX_MODEL_LEN="${MAX_MODEL_LEN:-16384}"   # >= run contract min-context-tokens; serving_conformance checks it
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.95}"
 ENFORCE_EAGER="${ENFORCE_EAGER:-1}"       # preregistered go-live path; set 0 to allow CUDA graphs.
 INSTALL_LINODE_CLI="${INSTALL_LINODE_CLI:-1}"

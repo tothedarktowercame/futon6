@@ -74,11 +74,9 @@ cs = sorted(glob.glob(f"{d}/*.candidate.json"))
 if not cs:
     sys.exit(f"FATAL: no candidates in {d} — extract on the dev box "
              f"(python scripts/mark3_extract_candidates.py) and rsync them here.")
-stale = [c for c in cs if json.load(open(c)).get("schema") != "iatc-candidate/v3-proof"]
-if stale:
-    sys.exit(f"FATAL: {len(stale)}/{len(cs)} candidates are not S1 proof candidates "
-             f"(iatc-candidate/v3-proof). Re-extract with mark3_extract_candidates.py --all-proofs.")
-print(f"  ok: {len(cs)} proof candidates")
+# The schema and required inputs belong to the run contract; the loop enforces
+# them (require_candidates). A second hardcoded copy here is how the two drift.
+print(f"  found {len(cs)} candidate(s); the loop checks them against the run contract")
 PY
 
 echo "== IATC reconstruction loop (70B) over $CANDIDATES -> $OUT =="

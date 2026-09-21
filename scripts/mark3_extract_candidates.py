@@ -27,6 +27,8 @@ import stage_accounting as accounting
 import argparse
 import bisect
 import json
+
+import candidate_spans
 import re
 from pathlib import Path
 from typing import Any
@@ -177,7 +179,9 @@ def _display(path: Path) -> str:
 
 STATEMENT_KINDS = {"env/theorem", "env/lemma", "env/proposition", "env/corollary"}
 STATEMENT_GAP = 20  # a statement ending further than this above its proof is not shown with it
-SCHEMA_PROOF = "iatc-candidate/v3-proof"  # one candidate per S1-identified proof
+# v4: every candidate carries its S1 clause spans. v3 candidates had none, and
+# a loop given them fell back to the retype contract without saying so.
+SCHEMA_PROOF = "iatc-candidate/v4-proof"  # one candidate per S1-identified proof
 
 
 def proof_regions(marks: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -243,6 +247,7 @@ def extract_all(paper_id: str) -> list[dict[str, Any]]:
             "marks-path": _display(mf),
             "schema": SCHEMA_PROOF,
         })
+        cands[-1]["spans"] = candidate_spans.spans_for(cands[-1], data)
     return cands
 
 

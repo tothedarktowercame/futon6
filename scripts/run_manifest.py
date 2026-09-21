@@ -12,6 +12,7 @@ import subprocess
 from datetime import datetime, timezone
 
 import futon6_config as config
+import run_contract
 
 NAME = "run-manifest.json"
 ARTIFACTS = {key: "artifacts/" + key for key in (
@@ -161,6 +162,9 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
     pinned = {"run-id": run_id, "corpus-id": corpus_id,
               "corpus-sha256": hashlib.sha256(raw).hexdigest(),
               "code": source_identity(), "substrate": substrate_identity(),
+              # Two layers, recorded apart: the contract decides comparability,
+              # the host configuration only explains speed.
+              "run-contract": run_contract.active(),
               "host-configuration": config.effective(),
               "model-revision": os.environ.get("FUTON6_MODEL_REVISION"),
               "selection": {"all-proofs": True,

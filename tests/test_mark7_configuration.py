@@ -95,11 +95,11 @@ class ConfigurationTests(unittest.TestCase):
             checkout = Path(d) / "renamed checkout"
             scripts = checkout / "scripts"
             scripts.mkdir(parents=True)
-            for name in ("linode-4gpu-run.sh", "futon6_config.py"):
+            for name in ("linode-4gpu-run.sh", "futon6_config.py", "run_contract.py"):
                 shutil.copyfile(ROOT / "scripts" / name, scripts / name)
             candidates = checkout / "candidates"
             candidates.mkdir()
-            (candidates / "paper.candidate.json").write_text(json.dumps({"schema": "iatc-candidate/v3-proof"}))
+            (candidates / "paper.candidate.json").write_text(json.dumps({"schema": "iatc-candidate/v4-proof"}))
             # Only the model boundary is stubbed. Run the real shell wrapper,
             # its candidate validation, interpreter selection and environment.
             (scripts / "mark3_iatc_loop.py").write_text(

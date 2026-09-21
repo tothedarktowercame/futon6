@@ -253,6 +253,10 @@ def serving() -> dict:
     if isinstance(listed, dict):
         record["served-models"] = [entry.get("id") for entry in listed.get("data", [])
                                    if isinstance(entry, dict)]
+        # vLLM reports each model's context window; it bounds which proofs fit.
+        windows = [entry.get("max_model_len") for entry in listed.get("data", [])
+                   if isinstance(entry, dict) and isinstance(entry.get("max_model_len"), int)]
+        record["max-model-len"] = min(windows) if windows else None
         record["reachable"] = True
         if record["stack"] is None:
             record["stack"] = "openai-compatible (unidentified)"
@@ -263,15 +267,24 @@ def serving() -> dict:
 # pipeline specifies; this is where the pipeline specifies it (ivan, 2026-09-19).
 # The 0919b probe reached S12 against Ollama serving a 4-bit GGUF under a different
 # tag, and nothing objected — so the requirement is checked, not just written down.
-REQUIRED_SERVING = {
-    "stack": "vllm",
-    "checkpoint": "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4",
-    "served-as": "mark4-70b",
+#
+# The requirement is the run contract's serving section and nothing else: stack,
+# checkpoint, served name and minimum context -- the terms that change results.
+# It used to also carry replicas, concurrency and prefix caching, which change
+# only speed; carried here they made a correct one-GPU run look non-conforming.
+# Those now live in THROUGHPUT_ADVICE, which nothing checks.
+def required_serving() -> dict:
+    # Imported here, not at module level: many tools load this file on its own for
+    # paths and hardware, and none of them should need the contract to do so.
+    import run_contract
+    return {**run_contract.spec()["serving"], "contract": run_contract.contract_id()}
+
+# Machine-side suggestions for a batching server. Advice only: a run on one GPU
+# at concurrency 1 is slower and exactly as valid.
+THROUGHPUT_ADVICE = {
     "prefix-caching": True,
-    "replicas": "one per GPU",
     "concurrency": "32-64 per replica",
-    "why": "prefill-dominated workload (5.1:1); the CT-wide quality baseline must be "
-           "pinned to one checkpoint and precision",
+    "why": "prefill-dominated workload (5.1:1)",
 }
 
 DEVIATION_ENV = "FUTON6_ALLOW_SERVING_DEVIATION"
@@ -284,26 +297,31 @@ def serving_conformance(actual: dict | None = None) -> dict:
     unnoticed one is not. Preflight decides what to do with `conforms`.
     """
     actual = serving() if actual is None else actual
+    required = required_serving()
     deviations = []
 
     if not actual.get("reachable"):
         deviations.append("endpoint did not answer; serving stack unverified")
-    elif actual.get("stack") != REQUIRED_SERVING["stack"]:
+    elif actual.get("stack") != required["stack"]:
         deviations.append(
             f"serving stack is {actual.get('stack')!r}, pipeline requires "
-            f"{REQUIRED_SERVING['stack']!r} — an Ollama or unidentified endpoint "
+            f"{required['stack']!r} — an Ollama or unidentified endpoint "
             f"cannot batch and does not pin precision")
 
     served = [m for m in actual.get("served-models", []) if m]
-    wanted = REQUIRED_SERVING["served-as"]
+    wanted = required["served-as"]
     if served and wanted not in served:
         deviations.append(f"endpoint serves {served}, pipeline requires {wanted!r}")
     if model() != wanted:
         deviations.append(f"MODEL is {model()!r}, pipeline requires {wanted!r}")
+    window, floor = actual.get("max-model-len"), required["min-context-tokens"]
+    if isinstance(window, int) and window < floor:
+        deviations.append(f"endpoint context is {window} tokens, contract requires {floor}: "
+                          f"longer proofs would be refused, changing which items succeed")
 
     return {"conforms": not deviations,
             "deviations": deviations,
-            "required": REQUIRED_SERVING,
+            "required": required,
             "override": bool(os.environ.get(DEVIATION_ENV))}
 
 
