@@ -236,10 +236,230 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
 ## 2026-03-09 Update — F1-opposite sprint
 
 - Rebuilt the $n=5$ CNF (`[data/frontiermath-pilot/harness/FM001-n5.cnf.gz]`) from `scripts/fm001/ramsey_book_sat.py`. A Glucose4 run via PySAT stalled (>60 s without decision progress), so we are switching to a standalone `kissat-sc2023` build with a 2-hour wall-clock cap to either extract `n5-witness.json` or emit an UNSAT DRAT for ledger logging.
-- Generated the next instance $n=6$ (`[data/frontiermath-pilot/harness/FM001-n6.cnf.gz]`, 41 580 vars / 106 260 clauses) with `--no-solve` so we can immediately queue it once the $n=5$ outcome lands.
+- Generated the next instance $n=6$ (`[data/frontiermath-pilot/harness/FM001-n6.cnf.gz]`, 41 580 vars / 106 280 clauses) with `--no-solve` so we can immediately queue it once the $n=5$ outcome lands.
 - Action items: compile/install `kissat` in the shared toolchain, capture SHA512 hashes for both CNFs in `data/frontiermath-pilot/harness/README.md`, and record every solver outcome in the FM-001 strategy/falsification notes under `data/frontiermath-pilot/`.
 - Added a cheap vertex-order symmetry breaker (monotone incident edges on vertex 0) to the SAT encoding and regenerated the CNFs / SHA512 fingerprints so `kissat` and future solvers work on the reduced orbit space. After this change, `FM001-n5.cnf.gz` is 48 976 clauses (up from 48 960).
 - `kissat 4.0.4 --time=1800 FM001-n5.cnf` finished SAT in 11 s; the log (`[data/frontiermath-pilot/harness/FM001-n5.kissat.log]`) and decoded witness (`[data/frontiermath-pilot/harness/n5-witness.json]`) now live in the harness directory so H-F1(n=5) is marked refuted.
+
+## 2026-08-20 Update — Harness artifacts pinned and one figure corrected
+
+- Wrote the missing `data/frontiermath-pilot/harness/README.md`, discharging the
+  2026-03-09 action item to capture SHA512 hashes for both CNFs and record every
+  solver outcome. It is the one file `.gitignore` whitelists in that directory,
+  and it did not exist.
+- The harness artifacts are NOT in the repo: commit `338a2fa` moved them to
+  `~/code/storage/futon6/data/frontiermath-pilot/harness/`, so the links in the
+  2026-03-09 note do not resolve from a checkout. The new README records the
+  real location.
+- **Corrected:** that note recorded n=6 as 106 260 clauses. The artifact header
+  is `p cnf 41580 106280` and regeneration reproduces 106 280; the figure
+  predates the vertex-0 symmetry breaker, which added +16 clauses to n=5
+  (48 960 -> 48 976) and +20 to n=6. Only the n=5 figure had been updated.
+- Verified rather than restated: both CNFs regenerate **byte-identical** from
+  `scripts/fm001/ramsey_book_sat.py`, and the n3/n4/n5 witnesses all pass the
+  harness's own `verify_assignment` on complete edge sets — so those refutations
+  rest on checked counterexamples, not on solver say-so.
+- n=6 remains **open**: `FM001-n6.kissat.log` carries no `s` line, and both n=7
+  logs are `s UNKNOWN`. Absence of a verdict is not UNSAT.
+- **Solver loglines the ops rule required and never got.** This mission's own
+  discipline is "every solver run gets a logline in
+  `holes/missions/M-distributed-frontiermath.md` plus SHA512 hashes for
+  CNFs/DRATs". Only n=5 ever got one. The full ledger, read off the logs:
+
+  | run | instance | `s` line | process-time | conflicts |
+  |---|---|---|---|---|
+  | `FM001-n5.kissat.log` | n=5 | `s SATISFIABLE` | 11.06 s | 321 908 |
+  | `FM001-n6.kissat.log` | n=6 | none — log ends at 5.14 s | — | — |
+  | `FM001-n7.kissat.log` | n=7 | `s UNKNOWN` | 59 m 52 s | 48 298 934 |
+  | `FM001-n7.kissat.30m.log` | n=7 | `s UNKNOWN` | 29 m 59 s | 31 627 515 |
+  | `FM001b-n8.kissat.log` | FM-001b n=8 | none — log ends at 1502.76 s | — | — |
+
+  An **n=7 instance exists and was solved against twice** (81 900 vars /
+  202 824 clauses, regenerates byte-identical); the mission log never mentioned
+  n=7 at all.
+- **n=6 has never had a real attempt.** Its log stops after 5.14 s with no `s`
+  line and no summary — an interrupted run, not a hard instance. Distinguish
+  this from n=7, where kissat exhausted a 30- and a 60-minute budget and
+  returned `s UNKNOWN`. n=6 is the cheapest open instance and the obvious next
+  target.
+- Reconciled with the canonical notes: `FM-001-strategy.md` (the primary status
+  note per the falsify plan) carried the same stale 106 260 figure and has been
+  corrected in place with a dated marker. A canonical harness README also exists
+  beside the artifacts (`$STORAGE/README.md`); its six SHA512 claims were
+  re-checked and all pass, and the tracked README now defers to it rather than
+  duplicating it. `FM-001-falsify-plan.md` carries no
+  clause counts. The harness README now holds a table of which figures are
+  current; the 48 960 entries are left as written, being accurate dated records
+  of the pre-symmetry-breaker CNF rather than errors.
+
+## 2026-08-21 Update — n=6 measured; budgeted solves are now reproducible
+
+- **n=6 is hard, not neglected.** Yesterday's note called it "the cheapest open
+  instance" because its only log stopped after 5.14 s. Given a real budget it
+  returned `s UNKNOWN`: kissat 4.0.4, `--time=1200`, **1200.01 s elapsed,
+  12 140 060 conflicts, 60 957 162 decisions**, on a CNF byte-identical to the
+  archived `FM001-n6.cnf`. It belongs with n=7, and my own 2026-08-20 claim is
+  corrected.
+- **New: `scripts/fm001/budgeted_solve.py`.** Every FM-001 solve so far was
+  launched by hand, which is why `FM001-n6.kissat.log` and
+  `FM001b-n8.kissat.log` just stop mid-search with no `s` line: read later, an
+  interrupted run is indistinguishable from a hard instance. The script always
+  records the budget it gave and classifies the outcome as `sat`, `unsat`,
+  `unknown`, `budget-exhausted` or `interrupted` — the last being the case the
+  old logs could not express.
+- **A SAT verdict is not a refutation until the colouring is checked.** On
+  `sat`, the script decodes the model and re-runs the harness's own
+  `verify_assignment` before writing a witness; if verification fails the
+  outcome is recorded as `sat-unverified` and never upgraded.
+- Smoke-tested on n=3: `sat`, witness verified, 0.04 s. Note the witness it
+  produces is **not** byte-identical to the archived `n3-witness.json` and this
+  is expected, not a discrepancy — the archive came from glucose4 via PySAT,
+  this from kissat, and a SAT solver may return any satisfying assignment. Both
+  were re-checked through `verify_assignment` and both pass.
+- **Hardened after review (codex-7):** the classifier trusted the solver's
+  stdout and its own timing but never its exit code, so an invalid run could be
+  recorded as a successful `budget-exhausted` measurement — the precise
+  false-evidence shape the script exists to prevent. Two holes:
+  `--budget-seconds 0` made `elapsed >= budget * 0.95` vacuously true, and a
+  crashed solver near the end of its budget fell through to `budget-exhausted`,
+  reading as "we measured this and it is hard". Now: budgets must be >= 1 s and
+  the solver must be executable, both refused before anything runs; the exit
+  code gates every path (`10` sat, `20` unsat, `0` indeterminate, anything else
+  `solver-error`); a stdout verdict that disagrees with the exit code is
+  `solver-error` rather than believed. `interrupted`, `solver-error` and
+  `sat-unverified` all exit non-zero.
+- **Durable coverage:** `tests/test_fm001_budgeted_solve.py`, 17 cases, in the
+  repo's own pytest suite. Mutation-checked: removing the budget guard fails 3,
+  removing the no-verdict exit-code check fails 5, both restore to 17 passed.
+  One early guard was *deleted* rather than kept — mutation showed removing it
+  changed no behaviour and no test, i.e. it was unreachable-in-effect, and a
+  branch nothing can distinguish is a branch that rots.
+- **Hardened again after review (codex-7, round 2).** Two holes remained:
+  - **The budget was advisory.** `--time=N` was handed to the solver and then
+    trusted; nothing bounded the run here. `run_solver` now enforces it with a
+    hard `subprocess` timeout at `budget + grace` (grace =
+    `max(30 s, budget/10)`, so ordinary shutdown never trips it). A solver that
+    overruns is killed and typed `budget-killed`, which is a FAILED run, not a
+    result.
+  - **Silence was being read as hardness.** A verdict-free run with exit code 0
+    became `budget-exhausted` once the clock passed 95% of the budget. It is now
+    `interrupted` *however long it ran*. `budget-exhausted` requires the solver
+    to SAY `s UNKNOWN`. Inferring "we measured this instance and it is hard"
+    from elapsed time alone is precisely the error `FM001-n6.kissat.log`
+    encoded for five months — the script must not reproduce it.
+- The n=6 measurement is unaffected: `s UNKNOWN`, rc 0, 1200.01 s of 1200 s,
+  still `budget-exhausted` under the stricter rules.
+- Coverage is now 28 pytest cases. Note the wall clock had to be **extracted**
+  from `main()` into `run_solver` to be testable at all: while it lived inline,
+  deleting the timeout changed no test. It now fails one, in ~20 s rather than
+  hanging the suite.
+- **The SAT path is now covered, and it was the one that mattered.**
+  `verify_sat_witness` stands between "the solver said SATISFIABLE" and
+  "$R(B_{n-1}, B_n) \le 4n-2$ is refuted", and it had no test at all — the one
+  outcome that could let a bogus refutation into the record. Extracted from
+  `main()` (inline code here has already proved untestable twice) and pinned by
+  9 cases.
+- **`sat-no-model` split out from `sat-unverified`.** A SAT verdict with no `v`
+  lines used to collapse into `sat-unverified`, which blames the solver's answer
+  for what is really a gap in how we invoked it — many solvers emit a model only
+  under `-m`/`--print-model`. Different facts, different names: `sat-no-model`
+  means nothing was produced to check; `sat-unverified` means a colouring was
+  produced and it **fails**. Both are failed runs.
+- **Result records now pin their instance by hash.** `cnf_sha512` is written
+  alongside the path, so a `result.json` can be checked against the CNF actually
+  solved rather than trusting a filename — the same standard the harness README
+  applies to every other artifact. Verified: the recorded digest matches the
+  file on disk.
+- Mutation-checked: collapsing `sat-no-model` back into `sat-unverified` fails
+  2 tests; accepting an unverified colouring as `sat` fails 1; both restore to
+  34 passed.
+- Artifacts (gitignored, in the storage harness dir):
+  `FM001-n6.budgeted-1200s.log`, `FM001-n6.result.json`, hashed in
+  `data/frontiermath-pilot/harness/README.md`.
+
+## 2026-08-21 Update — the UNSAT direction now has a trust root
+
+- **The harness believed its two verdicts very unequally.** A SAT verdict is
+  never taken on the solver's word: `budgeted_solve.py` decodes the model and
+  re-runs `verify_assignment` before it will write `sat`, and an unchecked
+  colouring is recorded as `sat-unverified`. That check is sound because it
+  tests the combinatorial property directly and never consults the CNF. An
+  UNSAT verdict had **no check at all** — and it is the stronger claim, since
+  UNSAT says $R(B_{n-1}, B_n) \le 4n-2$ *holds* for that $n$.
+- **What an UNSAT verdict actually rests on** is that
+  `ramsey_book_sat.build_instance` is *complete*: every valid colouring is
+  admitted, up to the vertex-0 symmetry break. An encoder that over-constrains
+  — a cardinality bound off by one, or a symmetry breaker that is not
+  satisfiability-preserving — returns UNSAT while colourings exist, and reports
+  a theorem that is not there. The failure is silent: UNSAT looks the same
+  either way. Nothing tested it; `build_instance` had no test.
+- **New: `scripts/fm001/encoding_cross_check.py`.** It compares the production
+  encoding against an independent one that forbids each violating configuration
+  outright — no helper variables, no cardinality network, no symmetry breaking,
+  a direct transcription of `verify_assignment`. Three checks: the independent
+  encoder accepts exactly what `verify_assignment` accepts; the production CNF
+  admits a colouring exactly when the independent encoder accepts it **and**
+  vertex-0 monotonicity holds; and a valid colouring obtained from the
+  independent encoder *alone* is admitted by the production CNF after canonical
+  relabelling.
+- **Measured, at three instance sizes, zero disagreements:**
+
+  | n | production clauses | independent clauses | samples | valid samples | disagreements | wall clock |
+  |---|---|---|---|---|---|---|
+  | 3 | 5 048 | 3 780 | 300 | 27 | 0 | 0.2 s |
+  | 4 | 18 576 | 65 065 | 200 | 30 | 0 | 0.8 s |
+  | 5 | 48 976 | 946 764 | 40 | 3 | 0 | 6 m 06 s |
+
+  The n=5 production clause count is 48 976, the figure the harness README pins
+  for the archived `FM001-n5.cnf` — so the encoder under test is the one that
+  built the stored instance.
+- **The symmetry breaker is now discharged by example, not assumed.** At all
+  three n the independent witness violates vertex-0 monotonicity and is
+  correctly rejected by the production CNF, while its canonical relabelling is
+  accepted and still valid. That is exactly the satisfiability-preservation
+  obligation of `add_vertex_zero_monotone_edges`.
+- **A sampler that never draws a valid colouring proves nothing.** The first
+  version of this check sampled uniformly at random; at these sizes *every*
+  such colouring is invalid, so it exercised only the rejection direction and
+  never asked whether the encoder admits what it must. It read as a passing
+  check. Samples are now drawn by perturbing the independent witness, and
+  `samples_accepted_by_property > 0` is pinned by its own test.
+- **Durable coverage:** `tests/test_fm001_encoding_cross_check.py`, 9 cases.
+  Mutation-checked with the file diffed first: making `monotone_zero` vacuous
+  fails 3, making the canonical relabelling the identity fails 2, dropping the
+  symmetry-break result from the `ok` verdict fails 1. All restore to 9 passed.
+  The last of those needed a test run with `samples=0`: with samples the
+  over-constraint was also caught by the sampler, so the deterministic check
+  was not distinguishable — a conjunct nothing can distinguish is a conjunct
+  that rots.
+- **Hardened after review (codex-7).** The checker reproduced the vacuous-
+  success shape it exists to prevent: `--samples 0` (or a negative count) made
+  the comparison loop empty, so the report came back with no disagreements and
+  the verdict read that as agreement and exited 0. An earlier version of these
+  tests even *used* that as a probe. Now the CLI refuses a non-positive sample
+  count before anything runs, and the verdict carries a typed `vacuity` list —
+  `no-samples`, `no-valid-samples` (every sample was one the encoder must
+  reject, so the admission direction was never exercised), or
+  `no-independent-witness` (no witness, so the symmetry-break check never ran
+  and its result was true by absence). Any of the three makes `ok` false and
+  the exit status non-zero. The verdict itself is now a pure function `is_ok`
+  over the report, so each conjunct is reachable by a test.
+- **The documented measurements are unaffected and non-vacuous**: n=3 (27 valid
+  samples of 300), n=4 (30 of 200), n=5 (3 of 40), all `ok: true` with an empty
+  `vacuity`. The n=5 margin is thin by design — at 40 samples it is 3, and a
+  smaller count there would correctly refuse rather than pass.
+- Coverage is now 19 cases. Mutation-checked with the file diffed first:
+  dropping the vacuity term from the verdict fails 4, dropping
+  `no-valid-samples` fails 3, dropping `no-independent-witness` fails 3,
+  removing the CLI refusal fails 2, making `validate_samples` never raise
+  fails 5. All restore to 19 passed.
+- **Scope, stated rather than implied.** This is sampling at small $n$, not a
+  proof for all $n$; and the independent encoder is independent of the
+  production *encoding*, not of the *property* — if `verify_assignment` is the
+  wrong formalisation of the book condition, both agree and both are wrong.
+  That question is upstream of this file. No UNSAT verdict has ever been
+  produced by this harness (every run to date is SAT or UNKNOWN); this is the
+  check that would have to pass before one meant anything.
 
 ## 2026-03-20 Update — Ownership Boundary
 
