@@ -181,6 +181,11 @@ def _requested_devices() -> tuple[list[str], str, str]:
     return [], "none detected", "none"
 
 
+# Where the run happened, not what it ran on. Recorded, never pinned: a resume is
+# always a different job and may be a different node.
+VOLATILE_HARDWARE_FIELDS = ("slurm-job", "node")
+
+
 def hardware() -> dict:
     """The actual accelerators, recorded so a run's rate can be read correctly.
 
@@ -360,7 +365,17 @@ def effective() -> dict:
         "endpoint": public_endpoint,
         "model": model(),
         "model-revision": os.environ.get("FUTON6_MODEL_REVISION"),
-        "hardware": inventory,
+        # Hardware CAPABILITY is part of the run's identity; hardware IDENTITY is
+        # not. A resumed run is, by construction, a different Slurm job and may be
+        # on a different node - that is what resuming after an allocation ends
+        # means. Pinning "slurm-job"/"node" made every multi-window run
+        # unresumable: prepare() compares the whole dict, so the job id alone
+        # refused a resume whose GPU model, count, driver and device list were
+        # identical. The volatile fields are still RECORDED, just outside the
+        # pinned comparison, so the run record still says where it ran.
+        # (june, 2026-09-21 - reported upstream.)
+        "hardware": {k: v for k, v in inventory.items() if k not in VOLATILE_HARDWARE_FIELDS},
+        "hardware-placement": {k: inventory.get(k) for k in VOLATILE_HARDWARE_FIELDS},
         "serving": live,
         "serving-conformance": serving_conformance(live),
         "scale": scale(inventory),
