@@ -70,8 +70,12 @@ lexicon+reground · S11 structural+whole-paper · S12 accretion-sweep · RETRIEV
 
 Process **chronologically**; rely on vLLM batch concurrency across 8 GPUs. Rough shares:
 
-- **S3 IATC** and **S7 box-typing** are the cost; **cap S4 expository**
-  (sample ~30 regions/paper, not all — one paper had 466) so it doesn't dominate.
+- **S3 IATC**, **S4 expository**, and **S7 box-typing** dominate cost. S4 is
+  uncapped by default; one paper had 466 regions. Setting
+  `FUTON6_EXPOSITORY_CAP_PER_PAPER=N` before the run pins a per-paper cap in the
+  manifest: regions are chosen at even spacing in source order, and every
+  unselected region is accounted as `deferred`. A capped run qualifies only that
+  declared scope; deferred regions are not accepted work.
 - **Budget the proof count from measurement, not the old ~6/paper guess** (§7 H4):
   the top-100 most-cited yielded 1,525 all-proofs candidates from 91 contributing
   papers (~15.3/contributing paper). If the head rate held corpus-wide that's
@@ -86,10 +90,21 @@ Process **chronologically**; rely on vLLM batch concurrency across 8 GPUs. Rough
 
 ## 5. RETRIEVE manifest (don't lose the EDN)
 
-`data/iatc-argument-graphs/mark7` (graphs) · `holes/clean-mark7` (CLeans EDN) ·
-`data/iatc-paper-graphs/mark7` (object B → unblocks whole-paper canonicalization, todo #17) ·
-`data/showcases/clean-mark7-demo` (embed + ingest for Rob) · `data/expository-scope-graphs/mark7` ·
-`data/runs/mark7` (metrics + ledger + the harvested lexicons + accretion curves).
+All outputs are under `--run-dir`, described by `run-manifest.json`.
+Package the completed prefix, copy the archive to durable storage, and verify
+that retrieved copy before releasing the allocation:
+
+```bash
+python3 scripts/retrieve_run.py pack --run-dir data/runs/mark7 --output /scratch/mark7.tgz
+# Transfer /scratch/mark7.tgz to durable storage, then on the receiving host:
+python3 scripts/retrieve_run.py verify /durable/mark7.tgz --extract-to /durable/mark7
+```
+
+The default prefix is S12. Use `--through S<n>` only for an explicitly partial
+run whose S1–S<n> stages passed. Missing outputs, checksum mismatches, and replay
+warnings/failures prevent successful verification. See the
+[manifest/resume/retrieval guide](../docs/mark7-run-manifest.md). A partial
+archive is evidence of that prefix, not acceptance of a complete build.
 
 ## 6. Learning goals (what the run answers)
 
@@ -121,25 +136,20 @@ A quality-probe run of this exact playbook on a CPU-only 256 GB box (GLM-4.5-Air
 via llama.cpp's OpenAI endpoint, top-100 citation-ranked papers, run-id
 `mark7z`) surfaced three things Rob's window would otherwise hit or want:
 
-1. **S2's stepper command is a stub and fails on any host.** `linode_stepper.py`
-   S2 runs `coverage_inline.py` bare; the script requires `--concepts <json>`
-   and dies with `TypeError: expected str … not NoneType`. The corpus-fresh
-   WARP substrate build the contract demands is NOT wired into the stepper —
-   the mark5 silent-skip lesson can recur as a loud stop (better) but still a
-   stop, mid-window. Fix the S2 cmd (substrate build + `coverage_inline
-   --concepts …`) before booking the slot. The Zone probe proceeded with
-   `--reuse S2` on the shipped substrate (defensible there: top-100 ⊂ the
-   4,616-paper corpus the shipped spine was mined from; NOT defensible for a
-   whole-domain run).
+1. **S2 now checks substrate/corpus compatibility.** The runner executes
+   `warp_substrate_check.py --ids <frozen-corpus>` followed by
+   `coverage_inline.py --concepts data/warp/concept-usage.json --field paper_concepts`.
+   It is not a stub and cannot be reused or manually marked done. A substrate
+   mismatch requires repair before continuing; the historical Zone workaround
+   is not an accepted invocation.
 2. **Hardcoded LLM timeouts assume GPU throughput.** `mark3_iatc_loop.py`,
    `mark3_expository_loop.py` (300 s) and `clean_box_typing.py` (120 s) now
    read `FUTON6_LLM_TIMEOUT` (defaults unchanged). Slow endpoints need it;
    the Superpod won't, but batch congestion might.
-3. **`linode-4gpu-run.sh` is endpoint-agnostic in practice** — with
-   `PORT/MODEL/REPO/VENV/PYTHON` env it drove a llama.cpp CPU endpoint
-   unmodified (it only waits on `/v1/models` and runs the loop). Also: the
-   smoke test + first graphs PASS gates with GLM-4.5-Air, so a model-sensitivity
-   comparison (Air vs the 70B) is available from the mark7z artifacts.
+3. **Serving configuration is shared.** Set `OPENAI_BASE_URL`, `MODEL`, and
+   `FUTON6_PYTHON_CMD` as described in the
+   [host configuration guide](../docs/mark7-host-configuration.md). The runner
+   and S3 wrapper use the same endpoint and interpreter; conformance must pass.
 4. **Census fact:** top-100 citation-ranked papers yield **1,525 all-proofs
    candidates from 91/100 papers** (~15 extractable proofs/paper among the
    most-cited — 2.5× the ~6/paper the 20 h budget in §4 assumed; re-check the

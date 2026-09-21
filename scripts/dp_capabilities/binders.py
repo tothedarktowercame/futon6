@@ -2,9 +2,20 @@
 
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))
+import futon6_config as config
+
+
 import importlib.util as _ilu
 import re
 from pathlib import Path
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[3])
 
 BINDER_RE = re.compile(
     r"\b(?:Let|let)\s+(\$[^$]+\$)\s+(?:be|denote)\s+(?:an?\s+|the\s+)?"
@@ -128,9 +139,9 @@ def _load_xref():
     """Shuttle cross-ref components: mathlib names, PlanetMath finder."""
     import json as _j
     mathlib_names = []
-    mj = Path("/home/joe/code/futon6/data/mathlib-defs.json")
+    mj = config.ROOT / 'data/mathlib-defs.json'
     if not mj.exists():
-        mj = Path("/home/joe/code/futon6/data/mathlib-defs-monoidal.json")
+        mj = config.ROOT / 'data/mathlib-defs-monoidal.json'
     if mj.exists():
         mathlib_names = [d["name"] for d in _j.loads(mj.read_text())]
     pd = _ilu.spec_from_file_location("mpd", Path(__file__).resolve().parents[1] / "mine_prose_def.py")

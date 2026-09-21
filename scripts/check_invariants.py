@@ -7,8 +7,7 @@ typed violation list against the markup invariants. The two are adversaries:
 COVERAGE invariants push tagging UP (every symbol, every $-span, every entity);
 WELL-FORMEDNESS invariants punish sloppy tagging (atomic math, proper nesting,
 no straddle). You can't satisfy coverage by spraying tags (it trips
-well-formedness) or well-formedness by tagging nothing (it trips coverage); the
-fixpoint where BOTH hold is the correct markup. Author != reviewer even in
+well-formedness) or well-formedness by tagging nothing (it trips coverage); passing both is evidence for these checks, not a proof of semantic correctness. Author != reviewer even in
 code: the checker NEVER imports the detector — it reads only the emitted JSON.
 
 Violation schema — the unit the dispatch pool consumes:
@@ -26,6 +25,12 @@ Skuld/DEBT cell, a prose `sorry`); it is recorded, not dispatched.
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import json
 import re
 import sys
@@ -40,23 +45,16 @@ import anatomy_v0_sweep as sweep  # SHARED math-span tokenizer (delimiter parity
 # is". Agreeing on the span tokenizer is not an author≠reviewer breach (it's
 # agreeing what a "line" is); the invariant LOGIC below stays independent.
 
-ROOT = Path("/home/joe/code/futon6")
-GOLDEN_DIR = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
-LOSS_DIR = ROOT / "data" / "loss"
+ROOT = config.ROOT
+GOLDEN_DIR = config.marks()
+LOSS_DIR = config.path("FUTON6_LOSS", ROOT / "data" / "loss")
 
 # marks whose extent is a structural scope (must not straddle math, must nest):
 STRUCTURAL_SCOPE = {"let-binder"}          # dp layer
 STRUCTURAL_ENV_PREFIXES = ("env/",)        # legitimately multi-sentence
 SYMBOL_KINDS = {"symbol", "symbol-grounded", "classified", "concept-typed",
                 "role-gap", "unknown"}      # any tag that "covers" a letter-run
-# NON-MATH tokens that LETTER_RUN catches inside $$ displays but which are NOT
-# math symbols and never could be grounded: length-unit args (cm/pt/em in
-# \hspace/\vspace/\kern), env-names after \begin/\end, and text-mode content
-# (\mbox/\text/\stackrel labels). The DETECTOR classifies these with one of
-# these kinds; the CHECKER then EXCLUDES them from the symbol denominator
-# entirely (not a symbol → neither C-SYM-GROUND debt nor inflated grounding).
-# (claude-3's finding: ~49% of 0809.2517's C-SYM-GROUND was this false floor.)
-# I (claude-1, checker owner) make THIS half so no agent grades its own work.
+# Detector layout/text-mode labels are proposals, never denominator authority.
 NON_SYMBOL_KINDS = {"layout", "text-mode"}
 MATH_KINDS = {"math"}
 LETTER_RUN = re.compile(r"(?<!\\)(?<![A-Za-z])[A-Za-z][A-Za-z0-9]*")
@@ -83,6 +81,54 @@ def _is_structural(m):
     if m.get("layer") == "scope":
         return not k.startswith(STRUCTURAL_ENV_PREFIXES)
     return m.get("layer") == "dp" and k in STRUCTURAL_SCOPE
+
+
+def _source_nonsymbol_regions(text):
+    """Recognize explicit TeX text/layout arguments without consulting marks.
+
+    Deliberately conservative: unknown macros do not remove denominator terms.
+    Nested braces are matched; unterminated arguments are not exemptions.
+    """
+    regions = []
+    commands = re.compile(r"\\(?:text|mbox|textrm|textnormal|label|ref|eqref|cite|begin|end)\s*\{")
+    for match in commands.finditer(text):
+        start, pos, depth = match.end(), match.end(), 1
+        while pos < len(text) and depth:
+            if text[pos] in "{}" and (pos == 0 or text[pos - 1] != "\\"):
+                depth += 1 if text[pos] == "{" else -1
+            pos += 1
+        if depth == 0:
+            regions.append((start, pos - 1))
+    for match in re.finditer(r"\\(?:hspace|vspace)\*?\s*\{\s*[+-]?(?:\d+(?:\.\d*)?|\.\d+)\s*(cm|mm|pt|em|ex|in|pc)\s*\}", text):
+        regions.append(match.span(1))
+    return regions
+
+
+def _source_grounded(text, mark):
+    """Check a narrow, explicit source declaration, not the proposed label.
+
+    Current evidence scope: local Let $x$ be ... binders in the same paragraph,
+    and a term immediately followed by 'is defined as/to be'. Other authority
+    claims remain unverified debt until an independent authority reader exists.
+    """
+    start, end = mark["start"], mark["end"]
+    surface = text[start:end]
+    if mark.get("kind") == "concept":
+        fields = dict(mark.get("fields", []))
+        claim = fields.get("grounded")
+        if not isinstance(claim, str) or not claim.strip():
+            return False
+        return bool(re.fullmatch(r"[A-Za-z][A-Za-z -]*", surface)
+                    and re.match(r"\s*\}?\s+is\s+defined\s+(?:as|to be)\b", text[end:]))
+    if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*|\\[A-Za-z]+", surface):
+        return False
+    paragraph = text.rfind("\n\n", 0, start) + 2
+    paragraph = max(0, paragraph if paragraph >= 2 else 0)
+    binder = re.compile(r"\bLet\s+\$\s*(" + re.escape(surface) + r")\s*\$\s+be\s+(?:an?\s+)?[A-Za-z][A-Za-z -]*", re.I)
+    # Include the binder's own symbol as well as subsequent uses.
+    segment_end = text.find("\n\n", start)
+    segment = text[paragraph:segment_end if segment_end >= 0 else len(text)]
+    return any(paragraph + m.start(1) <= start for m in binder.finditer(segment))
 
 
 def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
@@ -151,8 +197,13 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     # C-SYM-TAGGED / C-SYM-GROUND: every letter-run inside math is tagged;
     # ungrounded tagged symbols are explicit (countable) debt.
     sym_marks = [m for m in marks if m.get("kind") in SYMBOL_KINDS]
-    nonsym_extents = [(m["start"], m["end"]) for m in marks
-                      if m.get("kind") in NON_SYMBOL_KINDS]
+    nonsym_extents = _source_nonsymbol_regions(text)
+    for m in marks:
+        if m.get("kind") in NON_SYMBOL_KINDS and not any(
+                a <= m["start"] and m["end"] <= b for a, b in nonsym_extents):
+            add("W-NONSYM-WITNESS", "error", m["start"], m["end"],
+                "non-symbol claim has no independently recognized source context",
+                "tighten-detector")
     # PIECEWISE coverage (DC-6): a letter-run may be tiled by SEVERAL symbol marks
     # (a split juxtaposition "gf" -> g + f). The run is tagged if every char is
     # under some symbol mark, grounded if every char is under a grounded one. The
@@ -163,15 +214,20 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
         rng = range(m["start"], m["end"])
         tagged_pos.update(rng)
         if m["kind"] in GROUNDED:
-            grounded_pos.update(rng)
+            if _source_grounded(text, m):
+                grounded_pos.update(rng)
+            else:
+                add("C-GROUND-WITNESS", "debt", m["start"], m["end"],
+                    "grounding claim lacks a verified source declaration",
+                    "extend-coverage")
+                if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*|\\[A-Za-z]+", text[m["start"]:m["end"]]):
+                    add("W-GROUND-SPAN", "error", m["start"], m["end"],
+                        "grounding mark is not one symbol", "tighten-detector")
     total_syms = tagged = grounded = nonsym = 0
     for s, e in spans:
         for lm in LETTER_RUN.finditer(text[s:e]):
             ls, le = s + lm.start(), s + lm.end()
-            # EXCLUDE non-math tokens (length units / env-names / text-mode) the
-            # detector classified — they are not symbols, so not in the
-            # denominator (neither debt nor grounding). Math is atomic, layout
-            # is not math.
+            # Only independently parsed source context can exclude a run.
             if any(ms <= ls and me >= le for ms, me in nonsym_extents):
                 nonsym += 1
                 continue
@@ -254,7 +310,7 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     concept_marks_ = [m for m in marks if m.get("kind") == "concept"]
     terms_grounded = 0
     for m in concept_marks_:
-        if any(k == "grounded" for k, _ in m.get("fields", [])):
+        if _source_grounded(text, m):
             terms_grounded += 1
         else:
             add("C-TERM-GROUND", "debt", m["start"], m["end"],
@@ -297,7 +353,9 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     counts = {}
     for v in V:
         counts[v["inv"]] = counts.get(v["inv"], 0) + 1
-    return {"paper": paper, "coverage": coverage, "counts": counts,
+    return {"paper": paper,
+            "grounding_evidence_policy": "source-declarations-v1; unsupported authority claims remain debt",
+            "coverage": coverage, "counts": counts,
             "violations": V}
 
 
@@ -353,10 +411,71 @@ def corpus(golden_dir=GOLDEN_DIR, loss_dir=LOSS_DIR):
     return agg
 
 
+def self_test_grounding():
+    """F1 regression controls using only temporary, source-backed fixtures."""
+    import tempfile
+
+    def mark(kind, start, end, **fields):
+        return dict(kind=kind, start=start, end=end, layer="dp", **fields)
+
+    with tempfile.TemporaryDirectory(prefix="invariants-f1-") as root:
+        def check(text, marks):
+            data = {"text": text, "marks": [mark("math", a, b)
+                    for a, b in _math_spans(text)] + marks}
+            (Path(root) / "fable-probe-dp-emacs.json").write_text(json.dumps(data))
+            return check_paper("probe", golden_dir=Path(root))
+
+        # Exact audit attack: one classified mark spanning all of $x+y$.
+        text = "$x+y$"
+        baseline = check(text, [])
+        attack = [mark("classified", 0, len(text))]
+        assert attack != []
+        bad = check(text, attack)
+        assert baseline["coverage"]["symbols"] == bad["coverage"]["symbols"] == 2
+        assert baseline["coverage"]["best_guess"] == bad["coverage"]["best_guess"] == 0
+        assert bad["counts"].get("W-GROUND-SPAN") == 1
+        print("F1 blanket classified: PASS (grounding 0 -> 0; 2 symbols; W-GROUND-SPAN)")
+
+        # A detector cannot choose its denominator; real TeX text still excludes.
+        for kind in ("layout", "text-mode"):
+            bad = check(text, [mark(kind, 0, len(text))])
+            assert bad["coverage"]["symbols"] == 2
+            assert bad["coverage"]["best_guess"] == 0
+            assert bad["counts"].get("W-NONSYM-WITNESS") == 1
+        layout = r"$x+\text{hello}+\hspace{2cm}$"
+        start = layout.index("hello")
+        good = check(layout, [mark("text-mode", start, start + 5)])
+        assert good["coverage"]["symbols"] == 1
+        assert good["coverage"]["nonsym_excluded"] == 2
+        assert good["coverage"]["wellformed_errors"] == 0
+        print("F1 layout: PASS (blanket cannot exclude; source-backed exclusions pass)")
+
+        # Positive control: this is not a checker that simply rejects everything.
+        text = "Let $x$ be a set. Then $x$."
+        good = check(text, [mark("symbol-grounded", i, i + 1)
+                           for i, ch in enumerate(text) if ch == "x"])
+        assert good["coverage"]["symbols"] == 2
+        assert good["coverage"]["best_guess"] == 1.0
+        assert good["coverage"]["wellformed_errors"] == 0
+        print("F1 source binder: PASS (grounding 1.0; no well-formedness errors)")
+
+        text = "A group is defined as a set with a multiplication."
+        start = text.index("group")
+        for value, expected in ((False, 0.0), ("source:definition", 1.0)):
+            rep = check(text, [mark("concept", start, start + 5,
+                                   fields=[["grounded", value]])])
+            assert rep["coverage"]["term_grounded"] == expected
+        print("F1 concept claim: PASS (false earns 0; source-backed positive earns 1)")
+    print("self-test-grounding PASS: 4 controls; no repository data required")
+    return 0
+
+
 def main(argv=None):
     argv = argv if argv is not None else sys.argv[1:]
+    if argv == ["--self-test-grounding"]:
+        return self_test_grounding()
     if not argv:
-        print("usage: check_invariants.py <paper-id> | --corpus "
+        print("usage: check_invariants.py <paper-id> | --corpus | --self-test-grounding "
               "[--golden-dir DIR] [--loss-dir DIR]")
         return 2
     golden_dir = GOLDEN_DIR
@@ -375,7 +494,7 @@ def main(argv=None):
             i += 1
     argv = rest
     if not argv:
-        print("usage: check_invariants.py <paper-id> | --corpus "
+        print("usage: check_invariants.py <paper-id> | --corpus | --self-test-grounding "
               "[--golden-dir DIR] [--loss-dir DIR]")
         return 2
     if argv[0] == "--corpus":

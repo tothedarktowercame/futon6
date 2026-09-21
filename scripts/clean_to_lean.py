@@ -30,12 +30,12 @@ Two modes:
 Usage:
   futon6/.venv/bin/python scripts/clean_to_lean.py \
       --clean-dir holes/clean --mode real \
-      --out /home/joe/code/mathlib4/DarkTower/CLeanProofs.lean
+      --out $FUTON_CODE_ROOT/mathlib4/DarkTower/CLeanProofs.lean
   futon6/.venv/bin/python scripts/clean_to_lean.py --mode standalone \
       --out /tmp/clean_lean_check.lean
   futon6/.venv/bin/python scripts/clean_to_lean.py --kind experiment \
       --only slice5-confirmation --mode real \
-      --out /home/joe/code/mathlib4/DarkTower/CLeanSlice5Confirmation.lean
+      --out $FUTON_CODE_ROOT/mathlib4/DarkTower/CLeanSlice5Confirmation.lean
 """
 import argparse
 import glob

@@ -31,6 +31,55 @@ def collect_papers_by_concept(paper_concepts: dict[str, list[str]]) -> dict[str,
     return {concept: sorted(papers) for concept, papers in sorted(papers_by_concept.items())}
 
 
+def definition_provenance(def_snippets, defined_index, encyclopedia):
+    """Keep definition-bearing papers separate from papers merely using a term.
+
+    A global gloss without a paper remains global evidence, never an invented
+    per-paper definition. Encyclopedia samples are partial, not all n_papers.
+    """
+    evidence = {}
+
+    def add(concept, paper, source):
+        concept = sfc.normalize_concept(concept)
+        if concept and isinstance(paper, str) and paper:
+            evidence.setdefault(concept, set()).add((paper, source))
+
+    for concept, papers in (defined_index.get("concept_to_papers") or {}).items():
+        for paper in papers:
+            add(concept, paper, "defined-index")
+    for concept, rows in (def_snippets.get("snippets") or {}).items():
+        for row in rows:
+            if isinstance(row, dict) and row.get("snippet"):
+                add(concept, row.get("paper"), "def-snippets")
+    for entry in encyclopedia.get("entries") or []:
+        if not isinstance(entry, dict) or not entry.get("concept"):
+            continue
+        gloss = entry.get("gloss")
+        if isinstance(gloss, dict) and gloss.get("text"):
+            add(entry["concept"], gloss.get("paper"), "concept-encyclopedia:gloss")
+        defined_in = entry.get("defined_in") or {}
+        for paper in defined_in.get("papers", []):
+            add(entry["concept"], paper, "concept-encyclopedia:defined-in")
+        for paper in defined_in.get("sample", []):
+            add(entry["concept"], paper, "concept-encyclopedia:sample")
+    return {concept: [{"paper": paper, "source": source}
+                      for paper, source in sorted(rows)]
+            for concept, rows in evidence.items()}
+
+
+def definitions_for_papers(index, papers):
+    """Definition-ingestion metric: credit only observed defining-paper IDs.
+
+    Consumers must use definition_papers, not the global `defined` flag.
+    Legacy indices lack the evidence needed for a prefix claim and refuse.
+    """
+    papers = set(papers)
+    if any("definition_papers" not in row for row in index.values()):
+        raise ValueError("definition-provenance-missing: rebuild concept index")
+    return {concept for concept, row in index.items()
+            if papers.intersection(row["definition_papers"])}
+
+
 def build_index(
     *,
     usage: dict[str, Any],
@@ -47,6 +96,7 @@ def build_index(
     ranked = sfc.attach_coverage(ranked_raw, definition_sources)
     genuine = {row.concept for row in ranked}
 
+    provenance = definition_provenance(def_snippets, defined_index, encyclopedia)
     index: dict[str, dict[str, Any]] = {}
     for concept in sorted(df):
         papers = papers_by_concept.get(concept, [])
@@ -55,7 +105,13 @@ def build_index(
             "df": int(df[concept]),
             "papers": papers,
             "genuine": concept in genuine,
+            # Global availability only; never a prefix-ingestion assertion.
             "defined": bool(sources),
+            "definition_papers": sorted({r["paper"] for r in provenance.get(concept, [])}),
+            "definition_evidence": provenance.get(concept, []),
+            "definition_provenance_status": (
+                "paper-attributed" if provenance.get(concept) else
+                "global-only" if sources else "absent"),
             "sources": sources,
         }
     return index, ranked
@@ -69,6 +125,10 @@ def validate_index(index: dict[str, dict[str, Any]], usage: dict[str, Any]) -> N
         raise ValueError(f"concept key mismatch missing={missing} extra={extra}")
     for concept, count in df.items():
         row = index[concept]
+        if "definition_papers" not in row:
+            raise ValueError(f"definition-provenance-missing for {concept}")
+        if set(row["definition_papers"]) != {r["paper"] for r in row["definition_evidence"]}:
+            raise ValueError(f"definition provenance mismatch for {concept}")
         if row["df"] != count:
             raise ValueError(f"df mismatch for {concept}: {row['df']} != {count}")
         if len(row["papers"]) != count:
@@ -141,6 +201,9 @@ def render_report(
             "## Scope",
             "",
             "This is the D3 shuffle only: concept -> paper-list plus SFC1 flags. "
+            "Definition paper provenance is retained separately from usage. The `defined` flag "
+            "means global availability; prefix-ingestion consumers must use `definition_papers`. "
+            "Encyclopedia samples provide only the listed paper IDs, not all reported n_papers. "
             "It does not build per-paper grounded instances or the genus/variant-axis reduce.",
             "",
         ]

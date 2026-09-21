@@ -15,9 +15,13 @@ import math
 import subprocess
 import sys
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-LABS = Path("/home/joe/code/futon2/holes/labs")
-DATA = Path("/home/joe/code/futon6/data/fold-embed-gfn")
+LABS = config.sibling("futon2") / "holes/labs"
+DATA = config.ROOT / "data/fold-embed-gfn"
 CACHE = DATA / "gold-corpus.json"
 
 # The canonical 10 (A-next-gold-corpus.md numbering).

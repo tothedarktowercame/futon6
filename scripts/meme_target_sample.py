@@ -10,10 +10,16 @@ to that mission → bridge to a move → ΔG with real provenance.
   --mission <stem> [--k N]   dump the targeted ask sample for one mission
 """
 import argparse, json, os, re, sys
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from meme_mine_runner import read_asks  # the auto-excluding, thread-windowed ask reader
+import os
+from pathlib import Path
 
-ROOT = "/home/joe/code/futon6"
+ROOT = str(config.ROOT)
 STOP = {"the", "and", "for", "with", "from", "into", "mission", "futon", "code", "scoping", "review", "via"}
 
 

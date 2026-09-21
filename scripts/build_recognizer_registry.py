@@ -16,6 +16,12 @@ subject class and you get that class's registry. Usage:
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import collections
 import glob
@@ -23,8 +29,8 @@ import json
 import os
 from pathlib import Path
 
-DEFAULT_DIR = Path("/home/joe/code/storage/futon6/data/ct-anatomy-v0")
-DEFAULT_OUT = Path("/home/joe/code/futon6/data/ct-recognizer-registry.json")
+DEFAULT_DIR = config.anatomy()
+DEFAULT_OUT = config.ROOT / 'data/ct-recognizer-registry.json'
 
 
 def build(anatomy_dir: Path, min_papers: int) -> dict:

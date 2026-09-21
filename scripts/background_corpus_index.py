@@ -8,6 +8,12 @@ materialized for requested candidate terms so audit-time lookup stays fast.
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import json
 import re
@@ -15,13 +21,18 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Any
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 ROOT = Path(__file__).resolve().parent.parent
-NLAB_NAME_ROOT = Path("/home/joe/code/nlab-content/pages")
+NLAB_NAME_ROOT = config.sibling('nlab-content') / 'pages'
 NLAB_WIRING = ROOT / "data" / "nlab-wiring" / "pages.json"
 CT_TERM_PRIOR = ROOT / "data" / "ct-term-prior.json"
 DEFAULT_INDEX = ROOT / "data" / "background-corpus-index.json"
-NNEXUS_DUMP = Path("/home/joe/code/nnexus/archive/snapshot-1-2014.sqlite")
+NNEXUS_DUMP = config.sibling('nnexus') / 'archive/snapshot-1-2014.sqlite'
 
 
 def normalize_term(term: str) -> str:

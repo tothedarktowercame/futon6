@@ -30,9 +30,12 @@ import json
 import os
 import re
 import sys
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
+import run_manifest as manifest
+import stage_accounting as accounting
 
 RESULTS: list[tuple[str, bool, str, str, str]] = []   # (id, ok, headline, hazard, needs)
 
@@ -83,7 +86,7 @@ def _stem(p):
 # or an explicit logged reason. Catches silent collapse (H13) and silent drop.
 # --------------------------------------------------------------------------
 
-@check("C1-steps-per-proof", "H13", needs="S3")
+@check("C1-steps-per-proof", "H13", needs="S5")
 def c1(graphs_dir, steps_dir):
     gs = {_stem(g) for g in _graphs(graphs_dir)}
     if not gs:
@@ -98,22 +101,55 @@ def c1(graphs_dir, steps_dir):
 
 
 @check("C2-clean-accounting", "S7 accounting", needs="S7")
-def c2(graphs_dir, clean_dir, logs):
-    gs = {_stem(g) for g in _graphs(graphs_dir)}
-    cl = {os.path.basename(p)[:-len(".clean.edn")]
-          for p in glob.glob(os.path.join(clean_dir, "*.clean.edn"))}
-    unaccounted = set()
-    logtext = ""
-    for lg in logs:
-        if os.path.exists(lg):
-            logtext += open(lg, errors="replace").read()
-    for g in gs - cl:
-        if g not in logtext:            # neither typed nor mentioned as rejected/failed
-            unaccounted.add(g)
-    return (not unaccounted,
-            f"{len(cl)} typed, {len(gs - cl)} untyped of {len(gs)}; "
-            f"{len(unaccounted)} unaccounted"
-            + (f" e.g. {sorted(unaccounted)[:3]}" if unaccounted else ""))
+def c2(run_dir, corpus_id, clean_dir):
+    # Every S3-accepted graph must be a typed, gated CLean. A graph merely
+    # mentioned in a log (rejected, failed) used to count as accounted for, so a
+    # G7 rejection could sit inside a replay PASS.
+    s3 = accounting.ledgered_invocation(run_dir, "S3", corpus_id)
+    s7 = accounting.ledgered_invocation(run_dir, "S7", corpus_id)
+    if not (s3 and s7):
+        return False, "S3/S7 have no ledgered accounting invocation"
+    graphs = set(accounting.accepted_outputs(accounting.load(accounting.directory(run_dir, "S3", s3), "S3", "loop")))
+    typing = accounting.load(accounting.directory(run_dir, "S7", s7), "S7", "typing")
+    typed = {e["id"] for e in typing["items"] if e["status"] == "accepted"}
+    files = {os.path.basename(p)[:-len(".clean.edn")] for p in glob.glob(os.path.join(clean_dir, "*.clean.edn"))}
+    not_typed = sorted(graphs - typed)
+    mismatch = sorted(typed ^ files)
+    return (not not_typed and not mismatch,
+            f"{len(typed)}/{len(graphs)} accepted graphs typed"
+            + (f"; not typed e.g. {not_typed[:3]}" if not_typed else "")
+            + (f"; CLean files disagree with accounting e.g. {mismatch[:3]}" if mismatch else ""))
+
+
+@check("A1-item-accounting", "Stage 3 accounting", needs="S3")
+def a1(run_dir, corpus_id, through):
+    # Re-verify each ledgered item-level stage from its own accounting, on this
+    # (possibly retrieved) copy: every expected item accounted for, artifacts
+    # present, accepted share at the floor the manifest pinned for this run.
+    #
+    # Items the contract refused are reported, not failed. This check is also the
+    # mid-window abort gate, and a gate that aborts a 124-paper run over three
+    # refused proofs is telling the operator to throw away the finding.
+    checked, found, refused = [], [], []
+    for stage in accounting.STAGES:
+        if not _reached(stage, through):
+            continue
+        invocation = accounting.ledgered_invocation(run_dir, stage, corpus_id)
+        if not invocation:
+            found.append(f"{stage}: no ledgered invocation")
+            continue
+        problems, counts, noted = accounting.stage_problems(Path(run_dir), stage, invocation, corpus_id)
+        found += problems
+        refused += noted
+        accepted = sum(c["accepted"] for c in counts.values())
+        expected = sum(c["expected"] for c in counts.values())
+        deferred = sum(c["deferred"] for c in counts.values())
+        checked.append(f"{stage}@{invocation} {accepted}/{expected}"
+                       + (f" ({deferred} deferred)" if deferred else ""))
+    if found:
+        return False, f"{len(found)} problem(s): " + " | ".join(found[:3])
+    return True, f"{len(checked)} stage(s) accounted: {', '.join(checked)}" + (
+        f"; refused: {refused[0][:150]}" if refused else "")
 
 
 # --------------------------------------------------------------------------
@@ -137,36 +173,46 @@ def i2(run_dir, corpus_id):
     p = os.path.join(run_dir, "metrics.jsonl")
     if not os.path.exists(p):
         return False, "metrics.jsonl absent"
-    tags, adhoc = set(), 0
+    tags, untagged, malformed = set(), 0, 0
     for ln in open(p):
+        if not ln.strip():
+            continue
         try:
             r = json.loads(ln)
         except Exception:
+            malformed += 1
             continue
-        c = r.get("corpus_id")
-        tags.add(c)
-        if c == "adhoc":
-            adhoc += 1
+        tags.add(r.get("corpus_id"))
+        if "adhoc" in (r.get("corpus_id"), r.get("run_id")) or r.get("stage") not in STAGE_ORDER:
+            untagged += 1
     if corpus_id not in tags:
         return False, f"NO records for {corpus_id}; tags present: {sorted(t for t in tags if t)[:3]}"
-    if adhoc:
-        # Untagged records mean some stage is not threading its ids (the H15
-        # secondary defect) — worth seeing, but it corrupts provenance, not
-        # artifacts, so it must never be the reason a cluster window is abandoned.
-        return "warn", f"{adhoc} records tagged 'adhoc' (a stage is not threading --run-id/--corpus-id)"
-    return True, f"all records tagged; corpora present: {sorted(t for t in tags if t)[:3]}"
+    # Provenance is part of acceptance: an `adhoc` or stageless record means some
+    # producer did not thread identities, so the metrics cannot be attributed.
+    return (not untagged and not malformed,
+            f"all records tagged for {corpus_id}" if not (untagged or malformed)
+            else f"{untagged} adhoc/stageless and {malformed} malformed record(s)")
 
 
 @check("I3-id-families", "H14/H19b", needs="S3")
-def i3(graphs_dir):
+def i3(graphs_dir, run_dir, corpus_id):
+    # Parsed paper ids must be exactly the papers that S3 accounting says produced
+    # accepted graphs. Requiring both old- and new-style ids was a property of one
+    # historical corpus; a single-family corpus is valid, a collapsed id is not.
     from paper_ids import proof_pid_from_graph_name
-    pids = {proof_pid_from_graph_name(g) for g in _graphs(graphs_dir)}
-    old = {p for p in pids if "__" in p}
-    new = {p for p in pids if "__" not in p}
-    bare = {p for p in pids if p in ("math", "cond-mat", "alg-geom", "")}
-    return (not bare and old and new,
-            f"{len(old)} old-style + {len(new)} new-style ids parsed"
-            + ("; COLLAPSED ids present: " + str(sorted(bare)) if bare else ""))
+    invocation = accounting.ledgered_invocation(run_dir, "S3", corpus_id)
+    if not invocation:
+        return False, "S3 has no ledgered accounting invocation"
+    doc = accounting.load(accounting.directory(run_dir, "S3", invocation), "S3", "loop")
+    want = {e["paper"] for e in doc["items"] if e["status"] == "accepted"}
+    seen = {proof_pid_from_graph_name(g) for g in _graphs(graphs_dir)}
+    bare = {p for p in seen if p in ("math", "cond-mat", "alg-geom", "", None)}
+    old = {p for p in seen if p and "__" in p}
+    return (not bare and seen == want,
+            f"{len(old)} old-style + {len(seen - old)} new-style paper ids parse to the accounted papers"
+            if not bare and seen == want else
+            f"parsed {sorted(map(str, seen ^ want))[:4]} disagree with accounting"
+            + ("; COLLAPSED ids present: " + str(sorted(map(str, bare))) if bare else ""))
 
 
 # --------------------------------------------------------------------------
@@ -190,38 +236,56 @@ def s1(graphs_dir):
             + (f"; e.g. {bad[:2]}" if bad else ""))
 
 
+def _parsed(graphs_dir):
+    import r2d_concept_coverage as r2d
+    for g in _graphs(graphs_dir):
+        yield os.path.basename(g), r2d.load_edn(Path(g))
+
+
+def _refs(value):
+    return value if isinstance(value, list) else ([] if value is None else [value])
+
+
 @check("S2-refs-resolve", "R6a/R6b", needs="S3")
 def s2(graphs_dir):
-    dangling = 0
-    total = 0
-    for g in _graphs(graphs_dir):
-        t = open(g, errors="replace").read()
-        ids = set(re.findall(r"\{:id :([a-zA-Z0-9-]+), :kind :(?:object|claim|ref)", t))
-        for m in re.finditer(r":(?:premise|conclusion) :([a-zA-Z0-9-]+)", t):
-            total += 1
-            if m.group(1) not in ids:
-                dangling += 1
-    pct = 100.0 * dangling / total if total else 0
-    return (pct < 5.0, f"{dangling}/{total} dangling premise/conclusion refs ({pct:.1f}%)")
+    # Parsed, not regex-matched: the regex required `{:id :x, :kind :claim` in that
+    # key order and ASCII ids, so it reported 19/683 dangling on the 98-graph run
+    # where the parsed graphs have none missing. Acceptance tolerance is zero.
+    total, bad = 0, []
+    for name, g in _parsed(graphs_dir):
+        ids = {n.get("id") for n in g.get("nodes", [])}
+        for e in g.get("edges", []):
+            for field in ("premise", "conclusion"):
+                for ref in _refs(e.get(field)):
+                    total += 1
+                    if isinstance(ref, dict):
+                        bad.append(f"{name} {e.get('id')} {field} is an inline map, not a node id")
+                    elif ref not in ids:
+                        bad.append(f"{name} {e.get('id')} {field} {ref} is not a node")
+    return (not bad, f"{len(bad)}/{total} unresolved premise/conclusion refs"
+            + (f"; e.g. {bad[:2]}" if bad else ""))
 
 
 @check("S3-anchors-in-passage", "H21", needs="S3")
 def s3(graphs_dir):
-    out = 0
-    total = 0
-    for g in _graphs(graphs_dir):
-        t = open(g, errors="replace").read()
-        pm = re.search(r":source \{:lines \[(\d+) (\d+)\], :kind :proof\}", t)
-        if not pm:
+    # Every node and edge anchor lies inside its graph's own :kind :proof passage.
+    total, bad, unanchored = 0, [], []
+    for name, g in _parsed(graphs_dir):
+        source = g.get("source") or {}
+        if source.get("kind") != ":proof" or len(source.get("lines") or []) != 2:
+            unanchored.append(name)
             continue
-        lo, hi = int(pm.group(1)), int(pm.group(2))
-        for m in re.finditer(r":source \{:lines \[(\d+) (\d+)\]\}", t):
-            a, b = int(m.group(1)), int(m.group(2))
+        lo, hi = source["lines"]
+        for part in (*g.get("nodes", []), *g.get("edges", [])):
+            lines = (part.get("source") or {}).get("lines")
+            if not lines:
+                continue
             total += 1
-            if a < lo or b > hi:
-                out += 1
-    pct = 100.0 * out / total if total else 0
-    return (pct < 5.0, f"{out}/{total} node anchors outside their own passage ({pct:.1f}%)")
+            if len(lines) != 2 or lines[0] < lo or lines[1] > hi:
+                bad.append(f"{name} {part.get('id')} {lines} outside [{lo} {hi}]")
+    return (not bad and not unanchored,
+            f"{len(bad)}/{total} anchors outside their passage; {len(unanchored)} graph(s) without a proof passage"
+            + (f"; e.g. {(bad or unanchored)[:2]}" if bad or unanchored else ""))
 
 
 # --------------------------------------------------------------------------
@@ -255,7 +319,7 @@ def p2(run_dir, corpus_id):
             r = json.loads(ln)
         except Exception:
             continue
-        if r.get("corpus_id") == corpus_id:
+        if r.get("corpus_id") == corpus_id and r.get("gate") == "pass":
             seen.add(r.get("stage"))
     want = {f"S{i}" for i in range(1, 13)}
     missing = sorted(want - seen, key=lambda s: int(s[1:]))
@@ -276,14 +340,13 @@ def p3(run_dir):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--run-dir", default="data/runs/mark7z")
-    ap.add_argument("--graphs", default="data/iatc-argument-graphs/run")
-    ap.add_argument("--steps", default="data/cas-select-steps/run")
-    ap.add_argument("--clean", default="holes/clean-run")
-    ap.add_argument("--ids", default="holes/mark7z-e2e.ids.txt")
-    ap.add_argument("--corpus-id", default="math-ct-e2e-12")
-    ap.add_argument("--logs", nargs="*", default=["mark7z-s7.log", "mark7z-s7-retry.log",
-                                                  "mark7z-s7-sweep.log"])
+    ap.add_argument("--run-dir", required=True)
+    ap.add_argument("--graphs")
+    ap.add_argument("--steps")
+    ap.add_argument("--clean")
+    ap.add_argument("--ids")
+    ap.add_argument("--corpus-id")
+    ap.add_argument("--logs", nargs="*")
     ap.add_argument("--through", default="S12", choices=[f"S{i}" for i in range(1, 13)],
                     help="how far the run has got. Checks needing later stages are "
                          "skipped, so this doubles as a MID-RUN ABORT GATE: mine a "
@@ -291,16 +354,45 @@ def main() -> int:
                          "the run is producing garbage and the window should be "
                          "reclaimed rather than spent.")
     a = ap.parse_args()
+    RESULTS.clear()
+
+    try:
+        run_dir = (Path(ROOT) / a.run_dir).resolve()
+        doc = manifest.load(run_dir)
+        manifest.validate_records(run_dir, doc)
+        manifest.require_artifacts(run_dir, doc, a.through)
+        if a.corpus_id and a.corpus_id != doc["corpus-id"]:
+            raise ValueError("--corpus-id disagrees with run manifest")
+        a.corpus_id = doc["corpus-id"]
+        for key in ("graphs", "steps", "clean"):
+            expected = manifest.contained(run_dir, doc["artifacts"][key])
+            given = getattr(a, key)
+            if given and (Path(ROOT) / given).resolve() != expected.resolve():
+                raise ValueError(f"--{key} disagrees with run manifest")
+            setattr(a, key, str(expected))
+        frozen = run_dir / doc["ids"]
+        if a.ids and manifest.digest((Path(ROOT) / a.ids).resolve()) != doc["corpus-sha256"]:
+            raise ValueError("--ids content disagrees with frozen corpus")
+        a.ids = str(frozen)
+        expected_logs = [str(manifest.contained(run_dir, p)) for p in doc["logs"]]
+        if a.logs is not None and [str((Path(ROOT) / p).resolve()) for p in a.logs] != expected_logs:
+            raise ValueError("--logs disagrees with run manifest")
+        a.logs = expected_logs
+        a.run_dir = str(run_dir)
+    except (OSError, ValueError, KeyError) as exc:
+        print(f"REPLAY TARGET ERROR: {exc}", file=sys.stderr)
+        return 2
 
     def R(p):
         return p if os.path.isabs(p) else os.path.join(ROOT, p)
 
     T = a.through
     c1(R(a.graphs), R(a.steps), through=T)
-    c2(R(a.graphs), R(a.clean), [R(x) for x in a.logs], through=T)
+    a1(R(a.run_dir), a.corpus_id, T, through=T)
+    c2(R(a.run_dir), a.corpus_id, R(a.clean), through=T)
     i1(R(a.graphs), R(a.ids), through=T)
     i2(R(a.run_dir), a.corpus_id, through=T)
-    i3(R(a.graphs), through=T)
+    i3(R(a.graphs), R(a.run_dir), a.corpus_id, through=T)
     s1(R(a.graphs), through=T)
     s2(R(a.graphs), through=T)
     s3(R(a.graphs), through=T)
@@ -326,7 +418,7 @@ def main() -> int:
         else:
             tag = "PASS"
         print(f"  [{tag}] {cid:<{width}}  {msg}   ({hz})")
-    skipped = 11 - len(RESULTS)
+    skipped = 12 - len(RESULTS)
     print(f"\n{len(RESULTS) - fails - warns}/{len(RESULTS)} pass, {warns} warn, {fails} fail"
           + (f"  ({skipped} not yet applicable)" if skipped else ""))
     if fails:
@@ -334,10 +426,11 @@ def main() -> int:
               "  invariants the rest of the pipeline depends on. Nothing downstream will\n"
               "  repair them, so the remaining window is better spent regenerating after\n"
               "  a fix than continuing. Failing checks name their hazard class above.")
+    elif warns:
+        print("\n  ACCEPTANCE INCOMPLETE — resolve the warnings before accepting this run.")
     else:
-        print("\n  CONTINUE — every artifact invariant checkable at this point holds."
-              + ("  (Warnings above affect provenance, not artifacts.)" if warns else ""))
-    return fails
+        print("\n  CONTINUE — every artifact invariant checkable at this point holds.")
+    return fails + warns
 
 
 if __name__ == "__main__":

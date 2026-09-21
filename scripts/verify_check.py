@@ -11,12 +11,16 @@ Each criterion returns {pass, value, note}.  Criteria that can only fail for lac
 reported THIN (not FAIL).  Overall: PASS (all), THIN (only turn-count-limited fail), or FAIL.
 """
 import os, sys, json, glob, subprocess, urllib.request
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-F6 = "/home/joe/code/futon6"
+F6 = str(config.ROOT)
 PY = f"{F6}/.venv/bin/python"
 API = "http://localhost:7070"
-PIDX = "/home/joe/code/futon3/resources/sigils/patterns-index.tsv"
-OUTROOT = "/home/joe/code/futon2/holes/reflow"
+PIDX = str(config.sibling("futon3") / "resources/sigils/patterns-index.tsv")
+OUTROOT = str(config.sibling("futon2") / "holes/reflow")
 
 # --- thresholds (tunable) ---
 SIGIL_FRAC = 0.40        # C1: >= this fraction of turns resolve a sigil
@@ -39,8 +43,8 @@ def run(args):
 def derive_anchor(mission):
     if mission.startswith("M-"):
         return mission
-    hits = (glob.glob(f"/home/joe/code/*/holes/{mission}.md")
-            + glob.glob(f"/home/joe/code/*/holes/**/{mission}.md", recursive=True))
+    hits = (glob.glob(str(config.code_root() / f"*/holes/{mission}.md"))
+            + glob.glob(str(config.code_root() / f"*/holes/**/{mission}.md"), recursive=True))
     if not hits:
         return mission
     repo = hits[0].split("/code/")[1].split("/")[0]

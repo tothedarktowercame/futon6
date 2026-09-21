@@ -18,10 +18,14 @@ from pathlib import Path
 from typing import Any
 
 import edn_format
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
-DEFAULT_CERT_DIR = Path("/home/joe/code/futon6/data/peradams")
-DEFAULT_FOLD_TURNS_DIR = Path("/home/joe/code/futon6/data/fold-turns")
+DEFAULT_CERT_DIR = config.ROOT / "data/peradams"
+DEFAULT_FOLD_TURNS_DIR = config.ROOT / "data/fold-turns"
 
 
 @dataclass(frozen=True)
@@ -345,7 +349,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Load/refuse peradam certificates without live writes.")
     ap.add_argument("--cert-dir", default=str(DEFAULT_CERT_DIR))
     ap.add_argument("--fold-turns-dir", default=str(DEFAULT_FOLD_TURNS_DIR))
-    ap.add_argument("--repo-root", default="/home/joe/code/futon6")
+    ap.add_argument("--repo-root", default=str(config.ROOT))
     ap.add_argument("--census-fold-turns", action="store_true")
     args = ap.parse_args(argv)
 

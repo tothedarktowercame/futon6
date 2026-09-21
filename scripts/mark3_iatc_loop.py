@@ -1,203 +1,232 @@
 #!/usr/bin/env python3
-"""mark3 IATC model loop — the GPU/LLM half of the validated reconstruction path.
+"""S3 IATC model loop: one schema-constrained model call per S1-identified proof.
 
-Per candidate (from mark3_extract_candidates.py):
-  build few-shot prompt (seed graphs + the source window) -> call LLM ->
-  parse EDN -> self-gate (iatc_argcheck.bb AND substance_gate.py) ->
-  retry with the gate errors fed back -> emit on PASS. Finally re-run the
-  substance gate over the whole batch (cross-item template/warrant checks).
+Per candidate (from mark3_extract_candidates.py --all-proofs):
+  prompt with the statement and the numbered proof -> the model returns JSON under
+  the iatc_json schema -> code checks what the schema cannot (references, step
+  order, line ranges) -> code writes the EDN graph -> iatc_argcheck + substance
+  gate -> rung-2 profile -> accept. Finally the substance gate runs over the batch.
+
+The model never writes EDN, and nothing is repaired or retried to fix a format.
+An output that breaks the contract is a rejected item with its reasons. Each
+item gets one call per stage invocation, at temperature 0, so the result is a
+measurement of the prompt, model and contract rather than of resampling luck;
+re-invoking a failed stage retries only the items that were not accepted.
 
 Backends:
-  --backend stub    : no GPU; returns varied seed graphs to validate the plumbing
-                      (prompt build -> EDN parse -> gates -> emit/retry).
-  --backend openai  : OpenAI-compatible HTTP (works against a vLLM server on the
-                      Linode's GPU). Reads OPENAI_BASE_URL + OPENAI_API_KEY; --model.
-
-This is the owner-authored harness; the Linode supplies only the model endpoint.
-Gate = checker PASS + substance PASS; final acceptance is owner review.
-
-Usage (local plumbing check):
-  python scripts/mark3_iatc_loop.py --candidates data/iatc-candidates \
-      --out data/iatc-argument-graphs/loop-run --backend stub
-Usage (on the Linode):
-  OPENAI_BASE_URL=http://localhost:8000/v1 OPENAI_API_KEY=x \
-  python scripts/mark3_iatc_loop.py --candidates data/iatc-candidates \
-      --out data/iatc-argument-graphs/loop-run --backend openai --model <hf-id>
+  --backend stub    : no GPU; a small deterministic JSON document per candidate.
+  --backend openai  : OpenAI-compatible HTTP with response_format json_schema.
+                      Reads OPENAI_BASE_URL + OPENAI_API_KEY; --model.
 """
 from __future__ import annotations
 
 import argparse
+import concurrent.futures as cf
 import json
 import os
 import re
 import subprocess
 import sys
+import threading
 import time
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import iatc_json  # noqa: E402
+import stage_accounting as accounting  # noqa: E402
+
 REPO = Path(__file__).resolve().parent.parent
-# Valid IATC argument-graph seeds only. NB: holes/golden-graphs/ is mostly the
-# "anatomy"/GrCalc string-diagram format (8/9 FAIL iatc_argcheck) — wrong schema
-# for few-shot here; use the checker's golden fixtures + the accepted pilot.
-SEED_DIRS = [REPO / "holes" / "iatc-argcheck" / "fixtures" / "golden",
-             REPO / "data" / "iatc-argument-graphs" / "gh200"]
 ARGCHECK = REPO / "scripts" / "iatc_argcheck.bb"
 SUBSTANCE = REPO / "scripts" / "substance_gate.py"
 SEMCHECK = REPO / "scripts" / "iatc_semcheck.bb"
-REPAIR = REPO / "scripts" / "iatc_repair.bb"
-MAX_ATTEMPTS = 3
+CANDIDATE_SCHEMA = "iatc-candidate/v3-proof"
+MAX_TOKENS = int(os.environ.get("FUTON6_IATC_MAX_TOKENS", "8192"))
 
-SYSTEM = """You reconstruct the warranted argument DAG of a single mathematical \
-proof passage as an IATC graph in EDN. Rules:
-- Standoff: every node/edge carries :source {:lines [a b]} into the given window. \
-Do not invent line numbers outside the window.
-- Recover the REAL premises, intermediate claims, objects, and conclusion of THIS \
-passage — not a fixed template. Graphs vary in size with the argument.
-- :nodes have :kind :object|:claim|:ref and :text (a faithful short gloss of the \
-source claim). :edges are :kind :infer with :relation, :premise, :conclusion, and \
-either a real :warrant {:kind :claim/:citation ...} or :warrant {:kind :missing-warrant ...}.
-- A :missing-warrant's :wanted must NAME the SPECIFIC elided justification for THAT \
-step (what fact/lemma/computation the prose skipped), e.g. \
-:dimension-shift-through-short-exact-sequence. Never a generic bucket.
-- Cited justifications ("by [3]", "according to Thm 1.4") are :warrant {:kind :citation ...}, \
-not holes.
-- CRITICAL — the validator REJECTS the graph unless ALL of these hold: \
-(1) EVERY :edges entry carries :source {:lines [a b]} (not only :nodes). \
-(2) The map includes a top-level :holes vector, and EVERY edge whose :warrant is \
-{:kind :missing-warrant :wanted X} is mirrored by a matching {:kind :missing-warrant :wanted X} \
-entry in :holes. \
-(3) EVERY :ref node resolves via :label/:target/:citation, or is listed in :holes.
-- Output ONLY the EDN map. No prose."""
+NODES_TASK = """You read ONE mathematical proof and list what its argument is made of.
 
+Return JSON with a list "nodes". Each node is one thing the proof uses or
+establishes: kind "claim" (an assertion), "object" (a mathematical object it
+introduces or constructs), "definition", or "ref" (a result it points to — put the
+label or citation in "citation", e.g. "Theorem~\\ref{main}" or "[AR, 2.36]";
+otherwise leave it "").
+"first_line"/"last_line" are the ABSOLUTE line numbers printed on the left.
 
-def load_seeds(n: int = 3) -> str:
-    out, seen = [], 0
-    for d in SEED_DIRS:
-        for f in sorted(d.glob("*.edn")):
-            if "canon-links" in f.name:
-                continue
-            out.append(f"% example ({f.name})\n{f.read_text().strip()}")
-            seen += 1
-            if seen >= n:
-                return "\n\n".join(out)
-    return "\n\n".join(out)
+DO NOT RETYPE MATHEMATICS. Two fields carry it for you, and both are chosen from
+what the source already supplies:
+  "quote_spans" — the ids of the marked source units that STATE this node. Pick
+    the units; their text is taken from the source verbatim, so you never have to
+    reproduce a symbol. Pick only what this node needs: a hypothesis and the
+    conclusion drawn from it are SEPARATE units and must not be selected together
+    for one node.
+  "symbols" — which of the proof's bound symbols this node is about.
+"text" is a short PROSE gloss only — say what the node does in words. Formulae you
+type there are not used and can only be wrong: the JSON escape alphabet cannot
+spell most LaTeX commands, so \\Sigma, \\alpha and \\in come out as other commands.
+
+List them in the order the proof introduces them, hypotheses first and the final
+conclusion last. Include every intermediate claim the argument passes through; the
+number of nodes follows the proof."""
+
+STEPS_TASK = """Now give the argument over the nodes you listed, as JSON with an
+object "derivations".
+
+Its keys are the numbers of the nodes the proof DERIVES; a node the proof simply
+assumes, introduces or cites has no entry. Each key's value is a list holding that
+node's derivation — two entries only if the proof really derives it twice, by
+separate routes.
+
+A derivation gives the "premises" it follows from (numbers of OTHER nodes),
+"relation" for how, and the warrant for why. Choose the warrant kind by what the
+TEXT does, not by what you can supply:
+- "stated" only when the proof itself gives the reason, in the text;
+- "citation" when it points to a result (give it in "warrant");
+- "missing" when the text asserts the step without saying why — including
+  "clearly", "it is easy to see", "a routine computation", or nothing at all.
+  Then "warrant" names the specific fact the proof elided (e.g. "dimension shift
+  through a short exact sequence"), never a generic word.
+Published proofs elide steps constantly; recording that honestly is the point of
+this layer. "first_line"/"last_line" locate the derivation.
+
+Checked by code; an output that breaks this is rejected:
+- The derivations must not go in a circle: if node A is used to derive node B, then
+  B must not, directly or through other nodes, be used to derive A. Write an
+  equivalence as ONE derivation with relation "iff".
+- Every line lies in the given source."""
 
 
 def render_enrichment(cand: dict) -> str:
     rows = cand.get("enrichment") or []
     if not rows:
-        return "(no deterministic anatomy detected in this window)"
+        return "(no deterministic anatomy detected in this proof)"
     return "\n".join(f"L{r['line']} ({r['kind']}) {r['tip']}" for r in rows)
 
 
 def numbered_window(cand: dict) -> str:
-    """Render the source window with ABSOLUTE line numbers.
-
-    The window used to be handed over as bare text with only its bounds stated,
-    so the model had to COUNT lines to produce :source {:lines [a b]} anchors —
-    and it miscounted: measured over the e2e corpus, only 41% of node anchors
-    covered the line their own text came from (median drift 3 lines, 72% within
-    3). Numbering turns counting into reading (E-superpod-hardening H21).
-    """
+    """Source with ABSOLUTE line numbers, so anchors are read, not counted (H21)."""
     lo = (cand.get("window-lines") or [1, 1])[0]
     body = str(cand.get("source-window", ""))
     return "\n".join(f"{lo + i:5d} | {ln}" for i, ln in enumerate(body.split("\n")))
 
 
-def build_prompt(cand: dict, seeds: str) -> str:
+def build_prompt(cand: dict, task: str, nodes: list | None = None) -> str:
     binders = "\n".join(cand.get("binder-context", [])) or "(none)"
-    anatomy = render_enrichment(cand)
-    return f"""{SYSTEM}
+    proved = cand.get("proved")
+    statement = (f"The proof establishes this {proved['kind']} (lines {proved['lines'][0]}-{proved['lines'][1]}):\n"
+                 f"{proved['text']}" if proved else "No preceding statement was identified for this proof.")
+    lo, hi = cand["window-lines"]
+    listing = ""
+    if nodes is not None:
+        rows = "\n".join(f"  {i}. ({n['kind']}) {n['text']}" + (f"  [{n['citation']}]" if n.get("citation") else "")
+                          for i, n in enumerate(nodes, 1))
+        listing = f"\nThe nodes you listed for this proof:\n{rows}\n"
+    return f"""{task}
 
-# Few-shot examples (the target form):
-{seeds}
+{statement}
 
-# Now reconstruct the graph for this passage.
-paper-id: {cand['paper-id']}
-window-lines: {cand['window-lines']}
-binder-context (variable typings established earlier):
+Variable typings established earlier in the paper:
 {binders}
 
-deterministic anatomy detected IN this window (symbol typings, definitions,
-quantifiers, proof-moves, citations — anchor to these; do not contradict them):
-{anatomy}
+Deterministic anatomy detected in this source (symbol typings, definitions,
+quantifiers, citations — consistent with the text; do not contradict them):
+{render_enrichment(cand)}
 
-source-window (ABSOLUTE line numbers on the left; use them verbatim in
-every :source {{:lines [a b]}} — do not count lines yourself):
+Source, lines {lo}-{hi} (ABSOLUTE line numbers on the left):
 {numbered_window(cand)}
-
-EDN graph:"""
-
-
-# --- backends ---
-
-def call_stub(prompt: str, cand: dict, attempt: int) -> str:
-    """No-GPU plumbing stub: return a real, varied seed graph (cycles by paper)."""
-    seeds = []
-    for d in SEED_DIRS:
-        seeds += sorted(f for f in d.glob("*.edn") if "canon-links" not in f.name)
-    idx = (abs(hash(cand["paper-id"])) + attempt) % len(seeds)
-    return seeds[idx].read_text()
+{listing}"""
 
 
 class ModelCallError(Exception):
-    """A vLLM/HTTP call failed (e.g. 400 context-overflow) — surfaced so the run
-    loop can skip the paper instead of crashing the whole batch."""
+    """The endpoint could not produce a judgeable answer (HTTP error, truncation)."""
+
     def __init__(self, code, detail):
         self.code = code
-        super().__init__(f"HTTP {code}: {detail}")
+        super().__init__(f"HTTP {code}: {detail}" if code else detail)
 
 
-def call_openai(prompt: str, cand: dict, attempt: int, model: str) -> str:
-    import urllib.request
+def call_stub(prompt: str, cand: dict, schema: dict) -> str:
+    """No-GPU plumbing: a minimal valid answer for whichever phase is asked.
+
+    Reads the schema it was handed rather than hardcoding the fields, so a
+    contract change cannot leave the no-GPU path silently emitting output the
+    live path would refuse — which is exactly what happened when quote_spans and
+    symbols became required.
+    """
+    lo, hi = cand["proof-lines"]
+    if "nodes" in schema["properties"]:
+        item = schema["properties"]["nodes"]["items"]
+        extra: dict = {}
+        if "quote_spans" in item["properties"]:
+            legal = item["properties"]["quote_spans"]["items"]["enum"]
+            extra["quote_spans"] = [legal[0]]
+        if "symbols" in item["properties"]:
+            extra["symbols"] = []
+        return json.dumps({"nodes": [
+            {"kind": "claim", "text": "hypotheses of the statement", "citation": "",
+             "first_line": lo, "last_line": lo, **extra},
+            {"kind": "claim", "text": "conclusion of the statement", "citation": "",
+             "first_line": hi, "last_line": hi, **extra}]})
+    return json.dumps({"derivations": {"2": [{"relation": "implies", "premises": [1],
+                                              "warrant_kind": "missing",
+                                              "warrant": f"argument of {cand['proof-id']}",
+                                              "first_line": lo, "last_line": hi}]}})
+
+
+def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> str:
     import urllib.error
+    import urllib.request
     base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
     key = os.environ.get("OPENAI_API_KEY", "x")
     body = json.dumps({
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.2 if attempt == 0 else 0.5,
-        "max_tokens": 2048,
+        "temperature": 0,
+        "max_tokens": MAX_TOKENS,
+        "response_format": {"type": "json_schema", "json_schema": {
+            "name": "iatc_proof", "strict": True, "schema": schema}},
     }).encode()
     req = urllib.request.Request(f"{base}/chat/completions", data=body,
                                  headers={"Content-Type": "application/json",
                                           "Authorization": f"Bearer {key}"})
     try:
         with urllib.request.urlopen(
-                req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as r:
-            return json.loads(r.read())["choices"][0]["message"]["content"]
+                req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "600"))) as r:
+            choice = json.loads(r.read())["choices"][0]
     except urllib.error.HTTPError as e:
-        detail = e.read().decode("utf-8", "replace")[:300]
-        raise ModelCallError(e.code, detail)
+        raise ModelCallError(e.code, e.read().decode("utf-8", "replace")[:300])
     except urllib.error.URLError as e:
         raise ModelCallError(0, str(e.reason))
+    if choice.get("finish_reason") == "length":
+        # A truncated document is not the model's answer; nothing is salvaged from it.
+        raise ModelCallError(0, f"output truncated at max_tokens={MAX_TOKENS}")
+    return choice["message"]["content"]
 
 
-def extract_edn(resp: str) -> str | None:
-    if "```" in resp:
-        seg = resp.split("```", 2)
-        if len(seg) >= 2:
-            resp = seg[1].split("\n", 1)[-1] if seg[1].lower().startswith("edn") else seg[1]
-    i = resp.find("{")
-    if i < 0:
-        return None
-    depth = 0
-    for j in range(i, len(resp)):
-        if resp[j] == "{":
-            depth += 1
-        elif resp[j] == "}":
-            depth -= 1
-            if depth == 0:
-                return resp[i:j + 1]
-    return None
+
+# Legal JSON string escapes. A constrained decoder following a JSON grammar will
+# permit nothing else after a backslash, so a LaTeX command whose first letter is
+# not one of these cannot be written at all — the decoder forces a legal letter
+# and the model completes a DIFFERENT command. Measured over the 0919b probe:
+# 8437 backslash sequences, 0 illegal starts, 5891 of them \t. That is how three
+# distinct symbols (\T, \Sigma, \alpha) all arrived as \triangle, and how a
+# source \in became \notin — a membership claim negated by a serialisation
+# grammar, not by the model's mathematics.
+JSON_ESCAPES = set('"\\/bfnrtu')
+
+
+def invented_commands(text: str, window: str) -> list[str]:
+    """LaTeX commands in the model's text that its source window never contains.
+
+    Not every hit is corruption — a model may legitimately gloss with notation the
+    source spells differently — but a command absent from the window is the only
+    mechanical signal that separates a forced substitution from a faithful one,
+    and it is what catches the runaway arrow nodes.
+    """
+    return sorted({m for m in re.findall(r"\\[a-zA-Z]+", text) if m not in window})
 
 
 def gate_one(path: Path) -> tuple[bool, str]:
-    # `path` is the single explicit file we want gated (during the retry loop it lives
-    # under .attempts/ as <pid>.attemptN.edn). The bb gates' default skips attempt-named
-    # files — that exclusion is meant for *directory* scans, not an explicitly-named file.
-    # Pass --include-attempts so the file we hand it is actually checked (else argcheck
-    # reports "No .edn files found" and every paper fails the gate). See run_rung2 twin.
+    # --include-attempts: the explicit file lives under .attempts/, which the bb
+    # gates otherwise skip in directory scans.
     chk = subprocess.run(["bb", str(ARGCHECK), "--include-attempts", str(path)], capture_output=True, text=True)
     if chk.returncode != 0:
         return False, "checker: " + (chk.stdout + chk.stderr).strip()[-500:]
@@ -214,14 +243,7 @@ def rung2_passed(report_path: Path) -> bool:
 
 
 def run_rung2(graph_path: Path, report_path: Path, *, gate: bool) -> tuple[bool, str]:
-    """Run rung-2 as a description-first sidecar.
-
-    Soft mode records the profile/verdict without rejecting the graph. Hard mode
-    passes `--gate` through to the checker so semantic failures force a retry.
-    """
-    # --include-attempts: in hard-gate mode graph_path is an attempt file (.attempts/…),
-    # which semcheck's default would skip (dir-scan exclusion). Harmless for the soft-mode
-    # final-graph path (not attempt-named). Twin of the gate_one fix.
+    """Rung-2 semantic profile; with gate=True a failing profile rejects the graph."""
     cmd = ["bb", str(SEMCHECK), "--include-attempts", "--out", str(report_path)]
     if gate:
         cmd.append("--gate")
@@ -235,56 +257,151 @@ def run_rung2(graph_path: Path, report_path: Path, *, gate: bool) -> tuple[bool,
     return passed, "rung2-pass" if passed else "rung2-soft-fail"
 
 
-def candidate_check(edn: str, cand: dict) -> tuple[bool, str]:
-    """Candidate-aware faithfulness: the graph must be about THIS paper and anchor
-    only into the given window. A small model hallucinates the paper/passage id and
-    cites :source lines outside the window it was shown (observed 2026-06-16)."""
-    pid = cand["paper-id"]
-    m = re.search(r':paper/id\s+"([^"]+)"', edn)
-    if m and m.group(1) != pid:
-        return False, f"faithfulness: :paper/id '{m.group(1)}' != candidate '{pid}'"
-    lo, hi = cand["window-lines"]
-    slack = 3
-    out = []
-    for a, b in re.findall(r':lines\s*\[\s*(\d+)\s+(\d+)\s*\]', edn):
-        a, b = int(a), int(b)
-        if a < lo - slack or b > hi + slack:
-            out.append([a, b])
-    if out:
-        return False, (f"faithfulness: {len(out)} :source span(s) outside window "
-                       f"[{lo} {hi}] (±{slack}), e.g. {out[0]}")
-    return True, "ok"
-
-
-CANDIDATE_SCHEMA = "iatc-candidate/v2-enriched"
-
-
-def require_enriched(cands: list[Path]) -> bool:
-    """Hard precondition gate: refuse to run the model stage on candidates that do
-    not carry the inlined deterministic anatomy. Without this, the loop silently
-    feeds the model raw source + binders only (the enrichment-bypass liability) and
-    a whole GPU run is wasted before anyone notices."""
+def require_candidates(cands: list[Path]) -> bool:
+    """Refuse candidates from any other extraction contract (e.g. proof-move groups)."""
     stale = []
     for cf in cands:
         try:
             c = json.loads(cf.read_text())
-        except Exception as e:
+        except ValueError as e:
             stale.append((cf.name, f"unreadable: {e}"))
             continue
-        if c.get("schema") != CANDIDATE_SCHEMA or "enrichment" not in c:
-            stale.append((cf.name, f"schema={c.get('schema')!r}, enrichment={'enrichment' in c}"))
+        if c.get("schema") != CANDIDATE_SCHEMA or not c.get("proof-lines"):
+            stale.append((cf.name, f"schema={c.get('schema')!r}"))
     if stale:
-        print(f"FATAL: {len(stale)}/{len(cands)} candidate(s) are pre-enrichment — "
-              f"the deterministic anatomy would never reach the model "
-              f"(the silent-bypass liability). Refusing to run the model stage.",
-              file=sys.stderr)
+        print(f"FATAL: {len(stale)}/{len(cands)} candidate(s) are not S1 proof candidates "
+              f"({CANDIDATE_SCHEMA}). Re-extract: python scripts/mark3_extract_candidates.py "
+              "--all-proofs --out <candidates-dir>", file=sys.stderr)
         for name, why in stale[:10]:
             print(f"  - {name}: {why}", file=sys.stderr)
-        print(f"Expected schema '{CANDIDATE_SCHEMA}' with an 'enrichment' field. "
-              f"Re-extract: python scripts/mark3_extract_candidates.py --out <candidates-dir>",
-              file=sys.stderr)
         return False
     return True
+
+
+
+# No legitimate model answer contains a raw control character. They appear only
+# when the JSON escape alphabet substituted for a LaTeX command the grammar could
+# not spell: \t for \text, \b for \beta, \r for \rightarrow, and — seen in the
+# 0919b probe as $\"mathcal{T}$ — \" for \mathcal, which also injects a stray
+# quote. quote_spans removes the exposure for a node's mathematics, but citation
+# and warrant are still free strings the model types, so the class is only latent
+# there rather than closed. This refuses it wherever it appears.
+CONTROL_CHARS = {"\t": "\\t", "\b": "\\b", "\r": "\\r", "\f": "\\f", "\v": "\\v"}
+
+
+def control_char_damage(value, path: str = "") -> list[str]:
+    """Where a model answer carries a control character, and which escape caused it."""
+    found: list[str] = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            found += control_char_damage(item, f"{path}.{key}" if path else str(key))
+    elif isinstance(value, list):
+        for i, item in enumerate(value):
+            found += control_char_damage(item, f"{path}[{i}]")
+    elif isinstance(value, str):
+        for char, escape in CONTROL_CHARS.items():
+            if char in value:
+                found.append(f"{path or 'value'}: {escape} where a LaTeX command belongs")
+    return found
+
+
+def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
+    """(status, reason, attempt record) for one model call on one proof."""
+    pid = cand["proof-id"]
+    lo, hi = cand["window-lines"]
+    record: dict = {"attempt": 0}
+    doc: dict = {}
+    for phase, task in (("nodes", NODES_TASK), ("steps", STEPS_TASK)):
+        schema = (iatc_json.nodes_schema(lo, hi, iatc_json.bound_symbols(cand),
+                                         iatc_json.spans_of(cand))
+                  if phase == "nodes"
+                  else iatc_json.steps_schema(lo, hi, len(doc.get("nodes", []))))
+        prompt = build_prompt(cand, task, doc.get("nodes") if phase == "steps" else None)
+        if phase == "steps":
+            record["steps-prompt-len"] = len(prompt)
+            steps_ctx = (prompt, schema)
+        try:
+            raw = (call_stub(prompt, cand, schema) if args.backend == "stub"
+                   else call_openai(prompt, cand, args.model, schema))
+        except ModelCallError as e:
+            record["result"] = f"{phase}: {e}"[:300]
+            return "errored", f"{phase}: {e}", record
+        raw_path = tmp / f"{pid}.{phase}.json"
+        raw_path.write_text(raw)
+        record[f"{phase}-response"] = accounting.relative(raw_path)
+        try:
+            part = json.loads(raw)
+        except ValueError as e:
+            why = f"{phase}: endpoint returned non-JSON despite the schema ({e}); check serving conformance"
+            record["result"] = why
+            return "errored", why, record
+        damage = control_char_damage(part, phase)
+        if damage:
+            why = (f"{phase}: model output carries control characters — "
+                   + "; ".join(damage[:3])
+                   + (f" (+{len(damage) - 3} more)" if len(damage) > 3 else ""))
+            record["result"] = why
+            return "rejected", why, record
+        doc.update(part)
+        if phase == "steps":
+            doc["steps"] = iatc_json.steps_of(doc)
+        if phase == "nodes" and len(doc.get("nodes") or []) < 2:
+            why = f"contract: {len(doc.get('nodes') or [])} node(s); a proof has at least two"
+            record["result"] = why
+            return "rejected", why, record
+    graph = tmp / f"{pid}.edn"
+
+    def judge():
+        """Contract, then gates. Both refuse with a reason a model could act on."""
+        found = iatc_json.problems(doc, lo, hi)
+        if found:
+            return False, "contract: " + "; ".join(found[:6])
+        graph.write_text(iatc_json.to_edn(doc, cand, args.model))
+        good, reason = gate_one(graph)
+        if good and args.rung2_gate:
+            good, reason = run_rung2(graph, tmp / f"{pid}.rung2.edn", gate=True)
+        return good, reason
+
+    ok, why = judge()
+    record["graph"] = accounting.relative(graph)
+
+    # The gates do not merely refuse; iatc_argcheck writes its refusal AS an
+    # instruction — "state an equivalence as ONE edge with :relation :iff, not as
+    # two implications that feed each other". Nothing consumed it, so a proof the
+    # model could have fixed was simply lost: 7 of 62 on 0806.1324, 11% of the
+    # paper, all of them cycles the schema already had the vocabulary to avoid.
+    # Hand the instruction back and ask again, once.
+    for retry in range(1, max(0, getattr(args, "gate_retries", 1)) + 1):
+        if ok:
+            break
+        record["attempt"] = retry
+        record[f"retry{retry}-because"] = why[:300]
+        prompt, schema = steps_ctx
+        amended = (prompt + "\n\nYour previous answer was REFUSED by the checker:\n"
+                   + why.strip()[-600:]
+                   + "\n\nGive the derivations again, fixing exactly that. Keep every "
+                     "part that was not at fault.")
+        try:
+            raw = (call_stub(amended, cand, schema) if args.backend == "stub"
+                   else call_openai(amended, cand, args.model, schema))
+            part = json.loads(raw)
+        except (ModelCallError, ValueError) as e:
+            record[f"retry{retry}-result"] = f"retry failed: {e}"[:200]
+            break
+        if control_char_damage(part, "steps"):
+            record[f"retry{retry}-result"] = "retry carried control characters"
+            break
+        (tmp / f"{pid}.steps.retry{retry}.json").write_text(raw)
+        doc.update(part)
+        doc["steps"] = iatc_json.steps_of(doc)
+        ok, why = judge()
+        record[f"retry{retry}-result"] = "accepted" if ok else why[:200]
+
+    if not ok:
+        record["result"] = why[:500]
+        return "rejected", why, record
+    record["result"] = "accepted"
+    return "accepted", "", record
 
 
 def run(args) -> int:
@@ -292,155 +409,118 @@ def run(args) -> int:
     if not cands:
         print("no candidates found", file=sys.stderr)
         return 2
-    if not require_enriched(cands):
+    if not require_candidates(cands):
         return 2
-    seeds = load_seeds(args.shots)
     outdir = Path(args.out)
     outdir.mkdir(parents=True, exist_ok=True)
-    # H37: attempts must be RUN-SCOPED. Attempt numbering restarts at 0 on every
-    # invocation, so a shared .attempts/ mixes runs and the number in a filename
-    # is a within-invocation counter rather than a position in the sequence that
-    # produced the final graph. On the 98-paper corpus that directory ended up
-    # holding 188 files over 114 graph names -- 16 of them left by earlier runs
-    # over a different paper set -- which made the first-pass retry rate
-    # unreproducible (the paper had to withdraw a figure it could no longer
-    # derive) and, worse, manufactured a plausible defect: sorting by attempt
-    # number "showed" acceptable graphs being discarded, when the finals were
-    # simply lower-numbered attempts written later.
-    #
-    # A run id per subdirectory makes the retry rate a BYPRODUCT of any run
-    # rather than a separate measurement, which is the whole reason it is here.
-    run_tag = (os.environ.get("RUN_ID") or getattr(args, "run_id", None)
-               or "unscoped")
-    tmp = outdir / ".attempts" / run_tag
+    # Attempts are scoped by run and runner invocation (H37), so a retried stage
+    # adds to the history instead of overwriting the previous try's evidence.
+    run_tag = os.environ.get("RUN_ID") or getattr(args, "run_id", None) or "unscoped"
+    invocation = os.environ.get(accounting.INVOCATION_ENV) or "standalone"
+    tmp = outdir / ".attempts" / run_tag / invocation
+    if invocation != "standalone" and tmp.exists():
+        print(f"attempt history already exists for invocation {invocation}", file=sys.stderr)
+        return 2
     tmp.mkdir(parents=True, exist_ok=True)
-    (outdir / ".attempts" / run_tag / "RUN").write_text(
-        f"run_id={run_tag}\ncandidates={len(cands)}\nmax_attempts={MAX_ATTEMPTS}\n")
-    results = []
+    (tmp / "RUN").write_text(f"run_id={run_tag}\ninvocation={invocation}\ncandidates={len(cands)}\n"
+                             f"contract={iatc_json.GENERATOR}\nmodel={args.model}\n")
+    loaded = [json.loads(cf_path.read_text()) for cf_path in cands]
+    ledger = accounting.Accounting("S3", "loop", [c["proof-id"] for c in loaded])
+    counts = {"accepted": 0, "rejected": 0, "errored": 0, "carried": 0}
     accepted_graphs = []
-    # in-flight progress (Rob's ask: periodic snapshots, not just the final
-    # summary — same pattern as superpod-job.py's stage-5 loss snapshots).
-    n_total = len(cands)
     t0 = time.time()
-    n_resumed = n_rung2_soft = 0
-    # tolerate callers that build their own args Namespace (tests, mark4_iatc_concurrent)
-    loss_log_interval = getattr(args, "loss_log_interval", 100)
+    interval = getattr(args, "loss_log_interval", 100)
+    total = len(loaded)
+    done = 0
+    # Accounting.checkpoint() rewrites one file per record; two threads doing that
+    # at once would race on the same .partial. Serialise bookkeeping only — the
+    # model call and rung-2 stay outside, which is the whole point of batching.
+    books = threading.Lock()
 
-    def loss_snapshot(i):
-        done = i - n_resumed  # freshly processed this session
-        rate = done / max(time.time() - t0, 1e-9) * 60
-        n_pass = sum(1 for _, s, _ in results if s == "pass")
-        eta_min = (n_total - i) / max(rate, 1e-9)
-        print(f"  [{i}/{n_total}] loss snapshot: pass={n_pass} fail={i - n_pass} "
-              f"resumed={n_resumed} rung2-soft-fail={n_rung2_soft} · "
-              f"pass-rate={n_pass / max(i, 1):.2f} · {rate:.1f} proofs/min · "
-              f"ETA {eta_min / 60:.1f}h", flush=True)
-
-    for i, cf in enumerate(cands, 1):
-        cand = json.loads(cf.read_text())
-        pid = cand.get("proof-id", cand["paper-id"])  # unique per proof (all-proofs); falls back to paper-id
+    def finish(cand: dict, status: str, why: str, record: dict, *, carried=None):
+        nonlocal done
+        pid = cand["proof-id"]
         final = outdir / f"{pid}.edn"
-        if final.exists():                       # resume: skip papers already done
-            results.append((pid, "pass", "(resumed: existing graph)"))
-            n_resumed += 1
-            print(f"  [{i}/{n_total}] {pid}: pass (resumed)", flush=True)
-            if loss_log_interval and i % loss_log_interval == 0:
-                loss_snapshot(i)
-            continue
-        prompt = build_prompt(cand, seeds)
-        status, last_err = "fail", ""
-        for attempt in range(MAX_ATTEMPTS):
-            p = prompt if attempt == 0 else prompt + f"\n\n# previous attempt failed the gate:\n{last_err}\n# fix it and re-emit ONLY the EDN."
-            if args.backend == "stub":
-                resp = call_stub(p, cand, attempt)
-            else:
-                try:
-                    resp = call_openai(p, cand, attempt, args.model)
-                except ModelCallError as e:
-                    last_err = str(e)
-                    if e.code == 400:            # context-overflow/bad request — retry won't help; skip paper
-                        break
-                    continue
-            edn = extract_edn(resp)
-            if not edn:
-                last_err = "no EDN map found in response"
-                continue
-            # LaTeX in :text is illegal EDN escaping (\\Phi, \\xi); repair before
-            # gating so the bb reader does not reject an otherwise good graph (H18).
-            try:
-                import os as _os
-                import sys as _sys
-                _h = _os.path.dirname(_os.path.abspath(__file__))
-                if _h not in _sys.path:
-                    _sys.path.insert(0, _h)
-                from edn_compat import repair_string_escapes as _rse
-                edn = _rse(edn)
-            except Exception:
-                pass
-            ap = tmp / f"{pid}.attempt{attempt}.edn"
-            ap.parent.mkdir(parents=True, exist_ok=True)
-            ap.write_text(edn)
-            # mechanical canonicalization before gating: mirror missing-warrants
-            # into :holes + back-fill edge :source from endpoint nodes (no LLM).
-            subprocess.run(["bb", str(REPAIR), str(ap)], capture_output=True, text=True)
-            edn = ap.read_text()
-            ok, err = candidate_check(edn, cand)
-            if ok:
-                ok, err = gate_one(ap)
-            if ok:
-                final = outdir / f"{pid}.edn"
-                rung2_report = outdir / f"{pid}.rung2.edn"
-                if args.rung2_gate:
-                    attempt_report = tmp / f"{pid}.attempt{attempt}.rung2.edn"
-                    r2_ok, r2_msg = run_rung2(ap, attempt_report, gate=True)
-                    if not r2_ok:
-                        last_err = r2_msg
-                        continue
-                final.write_text(edn)
-                r2_ok, r2_msg = run_rung2(final, rung2_report, gate=False)
-                if not r2_ok:
-                    n_rung2_soft += 1
+        rung2_report = outdir / f"{pid}.rung2.edn"
+        artifacts = [accounting.relative(p) for p in (final, rung2_report) if p.exists()]
+        with books:
+            counts[status] += 1
+            if carried is not None:
+                counts["carried"] += 1
                 accepted_graphs.append(final)
-                status = "pass"
-                last_err = f"attempt {attempt}; {r2_msg}; report {rung2_report.name}"
-                break
-            last_err = err
-        results.append((pid, status, last_err))
-        print(f"  [{i}/{n_total}] {pid}: {status} ({last_err[:80]})", flush=True)
-        if loss_log_interval and i % loss_log_interval == 0:
-            loss_snapshot(i)
+                ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid],
+                              artifacts=artifacts,
+                              attempts=[{"carried-from": carried.get("invocation"),
+                                         "path": carried.get("path")}])
+                note = f"accepted (carried from {carried.get('invocation')})"
+            elif status == "accepted":
+                accepted_graphs.append(final)
+                ledger.record(pid, "accepted", paper=cand["paper-id"], outputs=[pid],
+                              attempts=[record], artifacts=artifacts)
+                note = status
+            elif status == "errored" and record is None:
+                ledger.record(pid, "errored", why, paper=cand["paper-id"], artifacts=artifacts)
+                note = f"ERROR ({why})"
+            else:
+                ledger.record(pid, status, why, paper=cand["paper-id"], attempts=[record])
+                note = status + (f" ({why[:160]})" if why else "")
+            done += 1
+            print(f"  [{done}/{total}] {pid}: {note}", flush=True)
+            if interval and done % interval == 0:
+                rate = done / max(time.time() - t0, 1e-9) * 60
+                print(f"  [{done}/{total}] accepted={counts['accepted']} rejected={counts['rejected']} "
+                      f"errored={counts['errored']} · {rate:.1f} proofs/min", flush=True)
 
-    # H37: emit the retry rate HERE, from the loop's own bookkeeping, rather than
-    # leaving it to be reconstructed from the attempt directory later. The figure
-    # is the honesty bound on first-pass quality, and reconstruction is exactly
-    # what stopped working: mtimes cannot say which invocation wrote what.
-    n_first = sum(1 for _, st, err in results
-                  if st == "pass" and "attempt 0;" in (err or ""))
-    n_pass = sum(1 for _, st, _ in results if st == "pass")
-    retry_path = outdir / f"retry-rate-{run_tag}.json"
-    retry_path.write_text(json.dumps({
-        "run_id": run_tag, "candidates": len(cands), "accepted": n_pass,
-        "first_attempt_pass": n_first,
-        "needed_retry": n_pass - n_first,
-        "retry_rate": (round((n_pass - n_first) / n_pass, 4) if n_pass else None),
-        "max_attempts": MAX_ATTEMPTS,
-        "note": "measured in-loop; do not reconstruct from .attempts/ (H37)",
-    }, indent=2) + "\n")
-    if n_pass:
-        print(f"\n[retry] {n_pass - n_first}/{n_pass} accepted graphs needed a retry "
-              f"({100*(n_pass-n_first)/n_pass:.1f}%) -> {retry_path.name}")
+    # A prior acceptance is settled by the filesystem, not the model: resolve those
+    # first so the pool only ever holds real work. This is what makes resume cheap.
+    pending = []
+    for cand in loaded:
+        final = outdir / f"{cand['proof-id']}.edn"
+        if not final.exists():
+            pending.append(cand)
+            continue
+        carried, why = accounting.carried_acceptance(outdir, cand["proof-id"], final)
+        if carried is None:
+            finish(cand, "errored", why, None)
+        else:
+            finish(cand, "accepted", "", {}, carried=carried)
 
-    # cross-item substance gate over the accepted batch
+    def work(cand: dict):
+        pid = cand["proof-id"]
+        status, why, record = attempt_one(cand, args, tmp)
+        if status == "accepted":
+            final = outdir / f"{pid}.edn"
+            accounting.publish_accepted(outdir, pid, final, (tmp / f"{pid}.edn").read_bytes(),
+                                        {"path": record["graph"]})
+            _, record["rung2"] = run_rung2(final, outdir / f"{pid}.rung2.edn", gate=False)
+        finish(cand, status, why, record)
+
+    workers = max(1, int(getattr(args, "concurrency", 1) or 1))
+    if workers == 1 or len(pending) <= 1:
+        for cand in pending:
+            work(cand)
+    else:
+        print(f"== {len(pending)} proof(s) at concurrency {workers} ==", flush=True)
+        with cf.ThreadPoolExecutor(max_workers=workers) as pool:
+            for future in cf.as_completed([pool.submit(work, c) for c in pending]):
+                future.result()       # re-raise in the caller; a dead pool is not a pass
+    accepted_graphs.sort()            # submission order must not reach the gate
+
+    # Cross-item substance gate (template collapse, warrant reuse) over accepted graphs.
     print("\n=== batch substance gate (cross-item) ===")
     sub_paths = [str(p) for p in accepted_graphs] or [str(outdir)]
     sub = subprocess.run([sys.executable, str(SUBSTANCE), *sub_paths, "--kind", "iatc"],
                          capture_output=True, text=True)
     print(sub.stdout.strip()[-400:])
-    n_pass = sum(1 for _, s, _ in results if s == "pass")
-    print(f"\nloop: {n_pass}/{len(results)} graphs gated PASS · batch-substance "
-          f"{'PASS' if sub.returncode == 0 else 'FAIL'}")
-    print("Next: OWNER REVIEW — spot-check faithfulness against source at the anchors.")
-    return 0 if (n_pass == len(results) and sub.returncode == 0) else 1
+    print(f"\nloop: accepted {counts['accepted']} (carried {counts['carried']}) · rejected {counts['rejected']} · "
+          f"errored {counts['errored']} of {len(loaded)} · batch-substance {'PASS' if sub.returncode == 0 else 'FAIL'}")
+    # Exit status reports whether the LOOP could do its work, not whether every
+    # proof survived the contract. Refused proofs are recorded per item; how many
+    # refusals a run tolerates is the runner's decision, taken against the floor in
+    # the run manifest. Conflating the two stopped a 124-paper window at S3 because
+    # three proofs came back circular. The batch substance gate stays fatal: it is a
+    # property of the whole batch (template collapse, reused warrants), not an item.
+    return 0 if sub.returncode == 0 else 1
 
 
 def main() -> int:
@@ -449,12 +529,18 @@ def main() -> int:
     ap.add_argument("--out", default=str(REPO / "data" / "iatc-argument-graphs" / "loop-run"))
     ap.add_argument("--backend", choices=["stub", "openai"], default="stub")
     ap.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct")
-    ap.add_argument("--shots", type=int, default=3)
     ap.add_argument("--rung2-gate", action="store_true",
-                    help="Hard-gate rung-2 semantic failures; default records the profile/verdict only.")
+                    help="Reject graphs whose rung-2 semantic profile fails; default records it only.")
+    ap.add_argument("--concurrency", type=int,
+                    default=int(os.environ.get("FUTON6_CONCURRENCY")
+                                or os.environ.get("CONCURRENCY") or 1),
+                    help="proofs in flight at once; defaults to FUTON6_CONCURRENCY "
+                         "(set from the detected hardware by futon6_config.scale)")
+    ap.add_argument("--gate-retries", type=int, default=1,
+                    help="Re-ask the model when a gate refuses, feeding its refusal "
+                         "back as the instruction it already is (default 1; 0 disables).")
     ap.add_argument("--loss-log-interval", type=int, default=100,
-                    help="print an in-flight loss snapshot every N proofs (pass/fail/rate/ETA); "
-                         "0 disables. Same pattern as superpod-job.py stage 5.")
+                    help="print running accepted/rejected/errored counts every N proofs; 0 disables")
     return run(ap.parse_args())
 
 

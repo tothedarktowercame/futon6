@@ -7,6 +7,8 @@
 #
 # Usage: bash scripts/process-all-planetmath.sh
 
+: "${FUTON_CODE_ROOT:=$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-$0}")/../.." && pwd)}"
+# june 2026-09-16: derived code root replaces hardcoded ${FUTON_CODE_ROOT} paths.
 set -euo pipefail
 
 PM_DIR="$HOME/code/planetmath"
@@ -69,14 +71,19 @@ echo "" | tee -a "$LOG_FILE"
 echo "=== Extracting terms from all repos ===" | tee -a "$LOG_FILE"
 
 cd "$FUTON6_DIR"
+# The heredoc below is QUOTED, so the shell does not expand anything inside it and
+# a piped script has no __file__: export the root here and read it from the
+# environment in Python. (PR #51 put a literal ${FUTON_CODE_ROOT} inside this
+# quoted heredoc, which reached Python as eight characters of text.)
+export PLANETMATH_ROOT="${PLANETMATH_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/planetmath}"
 python3 << 'PYEOF'
-import re, json, sys
+import os, re, json, sys
 sys.path.insert(0, 'src')
 from futon6.latex_terms import extract_terms, extract_xrefs
 from pathlib import Path
 from collections import Counter
 
-pm_root = Path('/home/joe/code/planetmath')
+pm_root = Path(os.environ['PLANETMATH_ROOT'])
 
 pat_canonical = re.compile(r'\\pmcanonicalname\{([^}]+)\}')
 pat_title = re.compile(r'\\pmtitle\{([^}]+)\}')

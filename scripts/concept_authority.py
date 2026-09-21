@@ -17,11 +17,21 @@ CLI:  concept_authority.py hom colim "kan extension" ...
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
-DEFAULT_INDEX = Path("/home/joe/code/futon6/data/background-corpus-index.json")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import futon6_config as config
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_INDEX = ROOT / "data" / "background-corpus-index.json"
+
+
+def configured_index() -> Path:
+    """Resolve configuration at use time, including in imported callers."""
+    return config.authority()
 
 # Common math macro/abbreviation -> concept name, where the macro surface
 # differs from the indexed concept term. Kept small and explicit (the macro
@@ -43,15 +53,38 @@ def normalize_term(term: str) -> str:
 
 
 class ConceptAuthority:
-    def __init__(self, index_path: Path = DEFAULT_INDEX):
-        data = json.loads(Path(index_path).read_text())
+    def __init__(self, index_path: Path | None = None):
+        self.index_path = Path(index_path) if index_path is not None else configured_index()
+        data = json.loads(self.index_path.read_text())
+        if not isinstance(data, dict) or data.get("schema-version") != 2:
+            raise ValueError(f"{self.index_path}: concept authority requires schema-version 2")
+        terms = data.get("terms")
+        if not isinstance(terms, dict) or not terms:
+            raise ValueError(f"{self.index_path}: concept authority has no terms")
+        for term, hits in terms.items():
+            entries = hits if isinstance(hits, list) else [hits]
+            if not isinstance(term, str) or not term.strip() or not entries or any(
+                not isinstance(hit, dict) or any(
+                    not isinstance(hit.get(key), str) or not hit[key].strip()
+                    for key in ("term", "target", "resolution-kind")
+                ) for hit in entries
+            ):
+                raise ValueError(f"{self.index_path}: malformed authority entry for {term!r}")
         self.terms: dict = data["terms"]
+        self.degraded = False
         self.meta = {
             "nnexus-rows": data.get("nnexus-row-count"),
             "nlab-names": data.get("nlab-name-count"),
             "ct-prior": data.get("ct-prior-count"),
             "term-keys": len(self.terms),
+            "schema-version": data["schema-version"],
+            "index-path": str(self.index_path),
         }
+        # These operators are required by the S1 role-gap lookup. Check the
+        # actual resolver, so an existing but unsuitable index cannot pass.
+        for query in (r"\Hom", r"\End", r"\colim"):
+            if self.resolve(query) is None:
+                raise ValueError(f"{self.index_path}: required concept {query} does not resolve")
 
     def resolve(self, term: str) -> dict | None:
         """Resolve a term (or macro surface) to its best concept hit, or None.
@@ -67,6 +100,7 @@ class ConceptAuthority:
         norm = normalize_term(term)
         seen = []
         for c in (norm,
+                  norm.lstrip("\\") if norm.startswith("\\") else None,
                   norm[:-1] if norm.endswith("s") and len(norm) > 3 else None,
                   ALIASES.get(norm),
                   ALIASES.get(norm.lstrip("\\"))):

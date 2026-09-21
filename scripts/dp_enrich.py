@@ -19,6 +19,12 @@ is still writing there).
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+
+
 import json
 import os
 import re
@@ -30,7 +36,7 @@ import anatomy_v0_sweep as sweep  # SHARED math-span tokenizer — the same one 
 # checker uses, so detector/checker agree exactly on "where math is" (runbook).
 
 ROOT = Path(__file__).resolve().parents[1]
-GOLD = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
+GOLD = config.marks()
 
 # Leading words that are never part of the noun phrase — articles, determiners,
 # quantifiers, conjunctions, prepositions, light verbs, discourse glue. We trim

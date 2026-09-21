@@ -14,13 +14,20 @@ is the backward (prose) fallback for the long tail of working terms like
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import importlib.util as ilu
 import json
 import re
 from pathlib import Path
+import os
 
-PLANETMATH = Path("/home/joe/code/planetmath")
+PLANETMATH = config.sibling('planetmath')
 NW_PATH = Path(__file__).resolve().parent / "nlab-wiring.py"
 
 

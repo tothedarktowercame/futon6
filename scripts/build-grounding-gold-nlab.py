@@ -11,7 +11,7 @@ So this extractor mostly cribs from build-grounding-gold.py (the PM
 extractor) but uses the Wikipedia-shaped link regex from
 build-grounding-gold-wikipedia.py.
 
-Source: /home/joe/code/nlab-content/pages/**/content.md — sourced
+Source: $FUTON_CODE_ROOT/nlab-content/pages/**/content.md — sourced
 from the nLab content git mirror, ~41K pages.
 
 In the M-canon-fingerprint-store.md framing, nLab is the HELD-OUT
@@ -26,7 +26,7 @@ eval-grounding-arbitration.py can consume it via --gold.
 
 Usage:
     python scripts/build-grounding-gold-nlab.py \
-        --pages-dir /home/joe/code/nlab-content/pages \
+        --pages-dir $FUTON_CODE_ROOT/nlab-content/pages \
         --out data/grounding-gold-nlab.json
 """
 

@@ -25,6 +25,12 @@ The extractor prefers recall for expository spans over perfect LaTeX fidelity.
 
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+
+
 import argparse
 import json
 import re
@@ -35,7 +41,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-GOLDEN_DIR = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
+GOLDEN_DIR = config.marks()
 
 SECTION_LEVELS = {
     "part": 0,

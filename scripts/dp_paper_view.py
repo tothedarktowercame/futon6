@@ -11,6 +11,12 @@ golden dir, so `M-x paper-anatomy-open` on "<paper>-dp" overlays it.
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import json
 import re
 import os
@@ -32,8 +38,8 @@ def _load_nlab_wiring():
 
 # eprint store: $FUTON6_EPRINTS overrides the dev default, so the Superpod run can point at
 # Rob's arXiv-math download instead of fetching (mark7 handoff).
-EPRINTS = Path(os.environ.get("FUTON6_EPRINTS", str(sweep.DEFAULT_EPRINTS)))
-GOLDEN_DIR = Path("/home/joe/code/futon6/data/showcases/ct-anatomy/golden")
+EPRINTS = config.eprints()
+GOLDEN_DIR = config.marks()
 from dp_capabilities.binders import (
     APPOS_CONJ_RE,
     APPOSITIVE_RE,
@@ -137,14 +143,107 @@ _ENV_CANON = {
 _PROOF_MACRO_PAIRS = [("prf", "eprf"), ("bpf", "epf"), ("bpr", "epr"),
                       ("beginproof", "endproof"), ("proofof", "endproof"),
                       ("proof", "qed")]
+# A text-style proof heading is a capitalised "Proof." opening its line, after
+# optional layout/font markup. Case-insensitive, unanchored matching read the end
+# of a sentence ("the missing proof.", "completes the proof.") as a proof start;
+# in 0708.1921 and 0708.2185 those false regions preceded every statement and
+# made the S6 paper objects malformed.
+# French and German headings count too ("\\textit{Preuve du lemme:}" in
+# math/0409598), with an optional qualifier ("Proof of Lemma 3.").
+_PROOF_WORD = r"(?:Proof|PROOF|Preuve|PREUVE|D(?:\\'e|\\'\{e\}|é)monstration|Beweis)"
 _TEXT_PROOF_START_RE = re.compile(
-    r"(?<![A-Za-z])(?:\\(?:emph|textit|textbf)\s*\{\s*)?Proof\.(?:\s*\})?",
-    re.I)
+    r"^[ \t]*(?:(?:\\(?:noindent|medskip|smallskip|bigskip|par|indent)\b|[{]|"
+    r"\\(?:emph|textit|textbf|textsc|it|bf|em|sc)\b)\s*)*" + _PROOF_WORD +
+    r"(?:\s+(?:of|du|de\s+la|de|des|of\s+the|zu|von)\b[^.:\n]{0,60})?\s*[.:](?:\s*\})?", re.M)
 _TEXT_PROOF_END_RE = re.compile(
     r"\\qed\b|\\end\{(?:proof|Proof|thm|theorem|lemma|lem|prop|proposition|"
     r"cor|coro|corollary)\}|\\begin\{(?:thm|theorem|lemma|lem|prop|"
     r"proposition|cor|coro|corollary|defn|definition|remark|section)\}|"
     r"\\section\b|\\subsection\b|\\paragraph\b|□|\\Box\b")
+
+
+_NEWTHEOREM_RE = re.compile(r"\\newtheorem\*?\s*\{([A-Za-z]+)\}\s*(?:\[[^\]]*\]\s*)?\{([^}]*)\}")
+_NEWENV_RE = re.compile(r"\\newenvironment\s*\{([A-Za-z]+)\}\s*(?:\[[^\]]*\]\s*)?\{([^\n]*)")
+_LET_RE = re.compile(r"\\let\s*\\([A-Za-z]+)\s*=?\s*\\(end)?([A-Za-z]+)\b")
+_MACRO_ENV_RE = re.compile(
+    r"\\(?:newcommand|renewcommand|providecommand)\*?\s*\{?\\([A-Za-z]+)\}?\s*(?:\[\d\]\s*)?"
+    r"\{\s*\\(begin|end)\s*\{([A-Za-z]+\*?)\}"
+    r"|\\def\s*\\([A-Za-z]+)\s*(?:#\d)*\s*\{\s*\\(begin|end)\s*\{([A-Za-z]+\*?)\}")
+_STATEMENT_CANON = {"theorem", "lemma", "proposition", "corollary", "definition",
+                    "remark", "example", "claim", "conjecture", "note"}
+
+
+def _preamble(text):
+    bd = text.find("\\begin{document}")
+    return text[:bd] if bd != -1 else ""
+
+
+def learn_environment_names(text):
+    """Author environment names resolved from the preamble: {name: canon}.
+
+    `\\newtheorem{thrm}{Theorem}` makes `thrm` a theorem; an environment whose
+    definition prints "Proof" is a proof. Without this, author names outside
+    _ENV_CANON (thrm, prp, corr, dfn …) produced kinds no consumer recognises, so
+    a paper's statements were invisible to S6.
+    """
+    pre = _preamble(text)
+    learned = {}
+    for name, title in _NEWTHEOREM_RE.findall(pre):
+        words = re.findall(r"[A-Za-z]+", title)
+        canon = _ENV_CANON.get(words[0].lower()) if words else None
+        if canon:
+            learned[name.lower()] = canon
+    for name, body in _NEWENV_RE.findall(pre):
+        if name.lower() not in _ENV_CANON and re.search(r"\bProof\b", body):
+            learned[name.lower()] = "proof"
+    return learned
+
+
+def _canon(name, learned):
+    key = name.rstrip("*").lower()
+    return learned.get(key) or _ENV_CANON.get(key, key)
+
+
+def detect_macro_environments(text, learned):
+    """Statement/proof scopes delimited by author macros that alias environments.
+
+    Handles `\\let\\thm\\theorem … \\let\\eth\\endtheorem` (TAC style, where one
+    `\\eth` closes \\thm, \\lem, \\prp …) and `\\newcommand{\\pf}{\\begin{prf}}` /
+    `\\def\\epf{\\end{prf}}`. Macros are learned from the preamble only.
+    """
+    pre = _preamble(text)
+    if not pre:
+        return []
+    macros = {}
+    for name, end, env in _LET_RE.findall(pre):
+        macros[name] = ("end" if end else "begin", env)
+    for m in _MACRO_ENV_RE.finditer(pre):
+        name, kind, env = (m.group(1), m.group(2), m.group(3)) if m.group(1) else (m.group(4), m.group(5), m.group(6))
+        macros[name] = (kind, env)
+    # keep only macros that open/close a recognised statement or proof environment
+    macros = {k: (kind, _canon(env, learned)) for k, (kind, env) in macros.items()
+              if _canon(env, learned) in _STATEMENT_CANON | {"proof"}}
+    if not macros:
+        return []
+    token = re.compile(r"\\(" + "|".join(sorted(map(re.escape, macros), key=len, reverse=True)) + r")(?![A-Za-z])")
+    body_start = len(pre)
+    marks, stack = [], []
+    for m in token.finditer(text, body_start):
+        kind, canon = macros[m.group(1)]
+        if kind == "begin":
+            stack.append((canon, m.start(), m.group(1)))
+            continue
+        # close the latest matching open scope; a generic statement closer
+        # (\endtheorem in TAC) closes the latest open statement of any kind
+        for i in range(len(stack) - 1, -1, -1):
+            open_canon = stack[i][0]
+            if open_canon == canon or (canon in _STATEMENT_CANON and open_canon in _STATEMENT_CANON):
+                open_canon, start, opener = stack.pop(i)
+                del stack[i:]
+                marks.append({"start": start, "end": m.end(), "layer": "dp", "kind": "env/" + open_canon,
+                              "tip": f"environment via author macros \\{opener}…\\{m.group(1)}"})
+                break
+    return marks
 
 
 def detect_proof_macros(text):
@@ -160,6 +259,58 @@ def detect_proof_macros(text):
     return marks
 
 
+_MACRO_BODY_RE = re.compile(
+    r"\\(?:newcommand|renewcommand|providecommand)\*?\s*\{?\\([A-Za-z]+)\}?\s*(?:\[\d\]\s*)?\{([^\n]*)"
+    r"|\\def\s*\\([A-Za-z]+)\s*\{([^\n]*)")
+TEXT_PROOF_MAX = 30000  # measured proofs reach 24.5k chars; the old 6000 dropped long ones silently
+
+
+def learn_text_proof_macros(text):
+    """(start macros, end macros) that typeset a proof heading or end mark.
+
+    math/9810017 defines \\newcommand{\\pf}{\\textbf{Proof}} and
+    \\newcommand{\\done}{\\hfill\\ensuremath{\\Box}} and writes proofs as \\pf … \\done.
+    """
+    starts, ends = [], []
+    for m in _MACRO_BODY_RE.finditer(_preamble(text)):
+        name, body = (m.group(1), m.group(2)) if m.group(1) else (m.group(3), m.group(4))
+        if "\\begin" in body:
+            continue
+        if re.search(_PROOF_WORD, body):
+            starts.append(name)
+        elif re.search(r"\\(?:Box|qed|square|blacksquare|qedsymbol)\b|□", body):
+            ends.append(name)
+    return starts, ends
+
+
+_STATEMENT_WORDS = {"theorem": "theorem", "lemma": "lemma", "proposition": "proposition",
+                    "corollary": "corollary", "théorème": "theorem", "theoreme": "theorem",
+                    "lemme": "lemma", "corollaire": "corollary", "satz": "theorem"}
+# A statement heading typeset in markup rather than an environment:
+# "\\textbf{Theorem}", "{\\bf Lemma 2.3.}". The markup is required so a line of prose
+# that merely begins "Theorem 3 shows" is not a statement.
+_TEXT_STATEMENT_RE = re.compile(
+    r"^[ \t]*(?:\\noindent\s*)?(?:\\text(?:bf|sc)\s*\{|\{\s*\\(?:bf|sc)\s+)\s*"
+    r"(Theorem|Lemma|Proposition|Corollary|Th(?:\\'e|é)or(?:\\`e|è)me|Lemme|Corollaire|Satz)"
+    r"(?:\s+[\w.\-]{1,12})?\s*[.:]?\s*\}", re.M)
+
+
+def detect_text_statements(text):
+    """Statement regions opened by a markup heading, ending at a blank line."""
+    bd = text.find("\\begin{document}")
+    bs = bd if bd != -1 else 0
+    marks = []
+    for m in _TEXT_STATEMENT_RE.finditer(text, bs):
+        word = m.group(1).lower().replace("\\'e", "e").replace("\\`e", "e")
+        kind = _STATEMENT_WORDS.get(word) or _STATEMENT_WORDS.get(word.replace("é", "e").replace("è", "e"))
+        gap = re.compile(r"\n[ \t]*\n").search(text, m.end())
+        end = min(gap.start() if gap else len(text), m.end() + 3000)
+        if kind and end - m.start() >= 20:
+            marks.append({"start": m.start(), "end": end, "layer": "dp", "kind": "env/" + kind,
+                          "tip": f"statement (text-style {m.group(1)})"})
+    return marks
+
+
 def detect_text_proofs(text):
     """Bare/text-style proof delimiters, e.g. ``Proof. ... \\qed``.
 
@@ -169,22 +320,32 @@ def detect_text_proofs(text):
     """
     bd = text.find("\\begin{document}")
     bs = bd if bd != -1 else 0
+    start_macros, end_macros = learn_text_proof_macros(text)
+    start_re = _TEXT_PROOF_START_RE
+    if start_macros:
+        start_re = re.compile(_TEXT_PROOF_START_RE.pattern + r"|^[ \t]*\\(?:"
+                              + "|".join(map(re.escape, start_macros)) + r")(?![A-Za-z])", re.M)
+    end_re = _TEXT_PROOF_END_RE
+    if end_macros:
+        end_re = re.compile(_TEXT_PROOF_END_RE.pattern + r"|\\(?:"
+                            + "|".join(map(re.escape, end_macros)) + r")(?![A-Za-z])")
     marks = []
-    for m in _TEXT_PROOF_START_RE.finditer(text, bs):
-        tail = text[m.end():m.end() + 6000]
-        end = _TEXT_PROOF_END_RE.search(tail)
+    for m in start_re.finditer(text, bs):
+        tail = text[m.end():m.end() + TEXT_PROOF_MAX]
+        end = end_re.search(tail)
         if not end:
             continue
         ee = m.end() + end.end()
-        if 40 <= ee - m.start() <= 6000:
+        if 40 <= ee - m.start() <= TEXT_PROOF_MAX:
             marks.append({"start": m.start(), "end": ee,
                           "layer": "dp", "kind": "env/proof",
                           "tip": "proof (text-style Proof.)"})
     return marks
 
 
-def detect_tex_environments(ftext, base):
+def detect_tex_environments(ftext, base, learned=None):
     """\\begin{NAME}…\\end{NAME} scopes, delimiters included, nesting-safe."""
+    learned = learned or {}
     marks, stacks = [], {}
     for m in _ENV_RE.finditer(ftext):
         kw, name = m.group(1), m.group(2)
@@ -195,7 +356,7 @@ def detect_tex_environments(ftext, base):
             stacks.setdefault(name, []).append(m.start())
         elif stacks.get(name):
             s = stacks[name].pop()
-            canon = "env/" + _ENV_CANON.get(key, key)
+            canon = "env/" + _canon(name, learned)
             marks.append({"start": base + s, "end": base + m.end(),
                           "layer": "dp", "kind": canon,
                           "tip": f"environment: {name}"})
@@ -595,6 +756,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
         cursor += len(f["text"]) + 1
         parts.append("\n")
     text = "".join(parts)
+    learned_envs = learn_environment_names(text)
     # R6 (claude-3): bare symbols display-defined by "X := ..." ground to that
     # definition. Harvested once over the whole text (global offsets), consumed
     # as a fallback at the ground() seam below.
@@ -800,7 +962,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             counts["implies"] = counts.get("implies", 0) + 1
             marks.append(imark)
         # DC-9: LaTeX environment scopes (\begin..\end, delimiters included).
-        for emark in detect_tex_environments(ftext, base):
+        for emark in detect_tex_environments(ftext, base, learned_envs):
             counts[emark["kind"]] = counts.get(emark["kind"], 0) + 1
             marks.append(emark)
         # REFERENCE GRAPH (Joe): \label/\ref/\cite harvest — the in-paper
@@ -935,6 +1097,18 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     # never break the mine, so it degrades to "no concept marks", not a crash.
     # Author proof-delimiter macros (\prf…\eprf) → proof regions, BEFORE the
     # inference pass (which is proof-restricted).
+    seen_starts = {(m["kind"], m["start"]) for m in marks}
+    for mm in detect_macro_environments(text, learned_envs):
+        if (mm["kind"], mm["start"]) not in seen_starts:
+            counts[mm["kind"]] = counts.get(mm["kind"], 0) + 1
+            marks.append(mm)
+            seen_starts.add((mm["kind"], mm["start"]))
+    statement_spans = [(m["start"], m["end"]) for m in marks
+                       if m.get("kind") in ("env/theorem", "env/lemma", "env/proposition", "env/corollary")]
+    for sm in detect_text_statements(text):
+        if not any(a <= sm["start"] < b for a, b in statement_spans):
+            counts[sm["kind"]] = counts.get(sm["kind"], 0) + 1
+            marks.append(sm)
     for pm in detect_proof_macros(text):
         counts["env/proof"] = counts.get("env/proof", 0) + 1
         marks.append(pm)

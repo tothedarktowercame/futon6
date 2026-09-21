@@ -7,7 +7,11 @@
 import re, glob, math, hashlib, json
 from pathlib import Path
 from collections import Counter, defaultdict
-ROOT=Path("/home/joe/code"); OUT=ROOT/"futon6/data/pattern-phylogeny.html"; EDGES=ROOT/"futon6/data/pattern-phylogeny-edges.json"
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+ROOT=config.code_root(); OUT=ROOT/"futon6/data/pattern-phylogeny.html"; EDGES=ROOT/"futon6/data/pattern-phylogeny-edges.json"
 fx={}
 for f in glob.glob(str(ROOT/'futon*/library/**/*.flexiarg'),recursive=True):
     pr=Path(f).parts

@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+import subprocess
 from collections import Counter
 from pathlib import Path
 
@@ -114,6 +115,36 @@ def check_concept_item(path: Path, text: str) -> list[str]:
     return fails
 
 
+# Read exactly one EDN form, preserving keyword identity and collection types.
+# Graph text travels on stdin, never through shell interpolation.
+SELF_LOOP_FORM = r"""
+(require '[clojure.edn :as edn])
+(let [r (java.io.PushbackReader. *in*)
+      graph (edn/read {:eof ::eof} r)
+      tail (edn/read {:eof ::eof} r)
+      tokens (fn [x] (if (sequential? x) x [x]))]
+  (when-not (and (map? graph) (= ::eof tail))
+    (throw (ex-info "expected exactly one EDN graph map" {})))
+  (let [edges (filter #(and (some? (:premise %)) (some? (:conclusion %)))
+                      (:edges graph))
+        loops (filter (fn [edge]
+                        (some (set (tokens (:premise edge)))
+                              (tokens (:conclusion edge))))
+                      edges)]
+    (println (count loops) (count edges))))
+"""
+
+
+def self_loop_counts(text: str) -> tuple[int, int]:
+    """Count self-loops without assumptions about edge IDs or map key order."""
+    proc = subprocess.run(["bb", "-e", SELF_LOOP_FORM], input=text,
+                          capture_output=True, text=True, timeout=30)
+    if proc.returncode:
+        raise ValueError(proc.stderr.strip() or f"bb exited {proc.returncode}")
+    loops, edges = map(int, proc.stdout.split())
+    return loops, edges
+
+
 def check_iatc_item(path: Path, text: str, feats: dict) -> list[str]:
     fails = []
     for pat, why in FILLER_PATTERNS:
@@ -126,20 +157,13 @@ def check_iatc_item(path: Path, text: str, feats: dict) -> list[str]:
     # Degenerate self-loop edges (:premise == :conclusion) are vacuous "X infers X"
     # reasoning — the structural checker accepts them (refs resolve) but they carry
     # no argument. A small model that can't recover the real DAG defaults to these.
-    edges_seg = text[text.find(":edges"): text.rfind(":holes")] if ":holes" in text else text[text.find(":edges"):]
-    self_loops, n_edges = 0, 0
-    for blk in re.split(r"\{:id :e", edges_seg)[1:]:
-        # :premise may be a single keyword OR a [vector] of tokens. Read ALL of
-        # them: a self-loop is the conclusion appearing among ANY premise token
-        # (e.g. :premise [:F-functor :F-pitchfork] :conclusion :F-pitchfork — the
-        # conclusion is the 2nd premise; reading only the first token misses it).
-        pm = re.search(r":premise\s+(\[[^\]]*\]|:[\w./-]+)", blk)
-        conc = re.search(r":conclusion\s+\[?\s*(:[\w./-]+)", blk)
-        if pm and conc:
-            n_edges += 1
-            premises = re.findall(r":[\w./-]+", pm.group(1))
-            if conc.group(1) in premises:
-                self_loops += 1
+    # Use the same EDN runtime as the structural gates. No optional Python
+    # package or regex fallback: both interpreters inspect identical edge data.
+    try:
+        self_loops, n_edges = self_loop_counts(text)
+    except (OSError, subprocess.SubprocessError, ValueError) as exc:
+        fails.append(f"self-loop check could not read graph: {exc}")
+        self_loops, n_edges = 0, 0
     if self_loops:
         fails.append(f"degenerate: {self_loops}/{n_edges} edges are self-loops "
                      f"(:conclusion is one of the :premise tokens) — vacuous X⊢X reasoning, not a DAG")
@@ -269,6 +293,15 @@ def self_check() -> int:
         all_ok = all_ok and good
         print(f"  {sub:14} expect={'PASS' if expect_pass else 'FAIL'} "
               f"got={'PASS' if ok else 'FAIL'}  {'OK' if good else '*** WRONG ***'}")
+    for edge_id in (":e1", ":step1", ":proof/derive+"):
+        for premise, expected in ((":B", False), ("[:A :B]", False), ("[:A]", True)):
+            text = ('{:nodes [{:id :A} {:id :B}] :edges [{:kind :infer '
+                    ':conclusion :B :warrant {:text "nested {:id :e fake}"} '
+                    ':id ' + edge_id + ' :premise ' + premise + '}] :holes []}')
+            ok = not check_iatc_item(Path("self-loop.edn"), text, iatc_features(text))
+            good = ok == expected
+            all_ok = all_ok and good
+            print(f"  self-loop {edge_id} {premise}: {'OK' if good else 'WRONG'}")
     print("SELF-CHECK", "PASS" if all_ok else "FAIL")
     return 0 if all_ok else 1
 

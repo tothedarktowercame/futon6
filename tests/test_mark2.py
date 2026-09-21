@@ -10,6 +10,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
 
 def _load_mark2():
     root = Path(__file__).parent.parent
@@ -26,14 +30,14 @@ def test_default_mark2_home_uses_env(monkeypatch, tmp_path: Path):
     mark2 = _load_mark2()
     monkeypatch.setenv("MARK2_HOME", str(tmp_path))
 
-    assert mark2.default_mark2_home("/home/joe/mark2/mark2") == tmp_path
+    assert mark2.default_mark2_home(str(_CODE_ROOT / "mark2/mark2")) == tmp_path
 
 
 def test_default_mark2_home_uses_deployed_script_directory(monkeypatch):
     mark2 = _load_mark2()
     monkeypatch.delenv("MARK2_HOME", raising=False)
 
-    assert mark2.default_mark2_home("/home/joe/mark2/mark2") == Path("/home/joe/mark2")
+    assert mark2.default_mark2_home(str(_CODE_ROOT / "mark2/mark2")) == _CODE_ROOT / "mark2"
 
 
 def test_default_mark2_home_repo_copy_keeps_user_home(monkeypatch, tmp_path: Path):
@@ -41,7 +45,7 @@ def test_default_mark2_home_repo_copy_keeps_user_home(monkeypatch, tmp_path: Pat
     monkeypatch.delenv("MARK2_HOME", raising=False)
     monkeypatch.setattr(Path, "home", lambda: tmp_path)
 
-    assert mark2.default_mark2_home("/home/joe/code/futon6/scripts/mark2") == tmp_path / "mark2"
+    assert mark2.default_mark2_home(str(_CODE_ROOT / "futon6/scripts/mark2")) == tmp_path / "mark2"
 
 
 def test_pulled_missing_batch_reports_state_path(tmp_path: Path):

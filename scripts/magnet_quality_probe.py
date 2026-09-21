@@ -16,11 +16,21 @@ Anchors (from E-have-want-pairs.md 1b, hand-curated meme phrasing, the ceiling w
 Reads: /tmp/magnet_probe_inputs.json (from magnet_probe_extract.bb). Sim-only; no writes to :7071.
 
 Run:  cd ~/code/futon3a && .venv/bin/python3 \
-        /home/joe/code/futon6/scripts/magnet_quality_probe.py /tmp/magnet_probe_inputs.json
+        $FUTON6_CHECKOUT/scripts/magnet_quality_probe.py /tmp/magnet_probe_inputs.json
 """
 import json, re, sys, statistics
-sys.path.insert(0, "/home/joe/code/futon3a/holes/labs/M-memes-arrows")
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+sys.path.insert(0, str(config.sibling("futon3a") / "holes/labs/M-memes-arrows"))
 from cascade_construct import construct_cascade, pattern_stem
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 STOP = {
     "m", "the", "a", "an", "of", "to", "and", "or", "for", "in", "on", "at", "by",
@@ -157,7 +167,7 @@ def main():
                            "M_havewant": {"psi": r["M_havewant"]["psi"], "F": r["M_havewant"]["F"], "size": r["M_havewant"]["size"], "stems": r["M_havewant"]["stems"], "on_topic": r["M_havewant"]["on_topic"]}})
     scorecard["sample"] = sample
 
-    out = "/home/joe/code/futon6/data/c-vector/magnet-quality-scorecard.json"
+    out = str(config.ROOT / "data/c-vector/magnet-quality-scorecard.json")
     json.dump({"scorecard": scorecard, "rows": rows}, open(out, "w"), indent=1)
     print(json.dumps(scorecard, indent=1))
     print(f"\nwrote {out}", file=sys.stderr)

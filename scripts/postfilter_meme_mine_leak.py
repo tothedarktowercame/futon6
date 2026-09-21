@@ -11,11 +11,17 @@ Keep operator-authored records only. Originals backed up to *.pre-f1.json (rever
 """
 import glob, hashlib, json, os, re, sys
 from collections import Counter
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from transcript_provenance import classify, raw_text, WRAP
 from meme_mine_runner import ASK, DROP
+import os
+from pathlib import Path
 
-HOME = os.path.expanduser("~"); MM = "/home/joe/code/futon6/data/meme-mine"
+HOME = os.path.expanduser("~"); MM = str(config.ROOT / "data/meme-mine")
 
 def ask_id(one):
     return "ask-" + hashlib.sha1(one.encode()).hexdigest()[:8]

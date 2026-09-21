@@ -12,11 +12,21 @@ current, no GPU mining.
 """
 import json, os, sys, glob, urllib.request
 import numpy as np
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from session_scope_view import parse_turns, _norm
+import os
+from pathlib import Path
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 API = "http://localhost:7070"
-OUTDIR = "/home/joe/code/futon2/holes"
+OUTDIR = str(config.sibling("futon2") / "holes")
 
 
 def fetch_retrievals(sid):

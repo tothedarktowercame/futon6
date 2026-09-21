@@ -15,6 +15,10 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
 
 REMOTE_PROBE = r"""
 from __future__ import annotations
@@ -176,6 +180,10 @@ result = {
 print(json.dumps(result))
 """
 
+DEFAULT_MARK2_HOME = "~/mark2"
+DEFAULT_PEER_HOME = ""                # no second account unless one is configured
+
+
 
 def load_script_module(script_path: Path, module_name: str):
     loader = importlib.machinery.SourceFileLoader(module_name, str(script_path))
@@ -211,7 +219,7 @@ def local_search_roots() -> list[Path]:
         workspace_root() / "storage",
         workspace_root() / "_linode_reclaimed",
         Path.home() / "LenovoBackup",
-        Path("/media/joe/LenovoBackup"),
+        Path("/media/$USER/LenovoBackup"),
         Path("/mnt/LenovoBackup"),
     ]
     return [root for root in roots if root.exists()]
@@ -376,7 +384,7 @@ def render_report(report: dict[str, Any]) -> str:
     any_candidates = False
     for section_name, records in (
         ("mark2 live lane", report["delete_candidates"]["mark2"]),
-        ("rob-home transfer archives", report["delete_candidates"]["rob"]),
+        ("peer-home transfer archives", report["delete_candidates"]["rob"]),
     ):
         lines.append(f"{section_name}:")
         if not records:
@@ -385,7 +393,9 @@ def render_report(report: dict[str, Any]) -> str:
         any_candidates = True
         for record in records:
             remote_file = record["remote"]
-            privilege = "sudo/rob required" if remote_file["path"].startswith("/home/rob/") else "joe can remove"
+            peer = (report.get("peer_home") or "").rstrip("/")
+            under_peer = bool(peer) and remote_file["path"].startswith(peer + "/")
+            privilege = "sudo required" if under_peer else "removable by the run owner"
             lines.append(f"- {render_file_line(remote_file)} [{privilege}]")
             for mirror in record["mirrors"]:
                 evidence = "+".join(mirror["evidence"])
@@ -396,36 +406,39 @@ def render_report(report: dict[str, Any]) -> str:
     delete_commands = report["delete_commands"]
     lines.append("")
     lines.append("Delete Commands")
-    if delete_commands["joe"]:
-        lines.append(f"- joe: {delete_commands['joe']}")
+    if delete_commands["owner"]:
+        lines.append(f"- owner: {delete_commands['owner']}")
     if delete_commands["sudo"]:
         lines.append(f"- sudo: {delete_commands['sudo']}")
-    if not delete_commands["joe"] and not delete_commands["sudo"]:
+    if not delete_commands["owner"] and not delete_commands["sudo"]:
         lines.append("- none")
 
     return "\n".join(lines)
 
 
-def build_delete_commands(host: str, delete_candidates: dict[str, list[dict[str, Any]]]) -> dict[str, str | None]:
-    joe_paths: list[str] = []
+def build_delete_commands(host: str, delete_candidates: dict[str, list[dict[str, Any]]],
+                          peer_home: str = DEFAULT_PEER_HOME) -> dict[str, str | None]:
+    """Paths under the peer's home need sudo; the rest we own. The peer's home is
+    configuration (--remote-peer-home / FUTON6_REMOTE_PEER_HOME), not a literal, and
+    with none configured nothing is attributed to a second account."""
+    owned: list[str] = []
     sudo_paths: list[str] = []
+    peer_prefix = peer_home.rstrip("/") + "/" if peer_home.strip() else None
     for records in delete_candidates.values():
         for record in records:
             remote_path = record["remote"]["path"]
-            if remote_path.startswith("/home/rob/"):
-                sudo_paths.append(remote_path)
-            else:
-                joe_paths.append(remote_path)
+            under_peer = bool(peer_prefix) and remote_path.startswith(peer_prefix)
+            (sudo_paths if under_peer else owned).append(remote_path)
 
-    joe_cmd = None
+    owned_cmd = None
     sudo_cmd = None
-    if joe_paths:
-        joined = " ".join(shlex.quote(path) for path in joe_paths)
-        joe_cmd = f"ssh {shlex.quote(host)} rm -v -- {joined}"
+    if owned:
+        joined = " ".join(shlex.quote(path) for path in owned)
+        owned_cmd = f"ssh {shlex.quote(host)} rm -v -- {joined}"
     if sudo_paths:
         joined = " ".join(shlex.quote(path) for path in sudo_paths)
         sudo_cmd = f"ssh -t {shlex.quote(host)} sudo rm -v -- {joined}"
-    return {"joe": joe_cmd, "sudo": sudo_cmd}
+    return {"owner": owned_cmd, "sudo": sudo_cmd}
 
 
 def build_report(args: argparse.Namespace) -> dict[str, Any]:
@@ -449,7 +462,8 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "remote": remote,
         "batch_summary": batch_summary,
         "delete_candidates": delete_candidates,
-        "delete_commands": build_delete_commands(args.host, delete_candidates),
+        "peer_home": args.remote_rob_home,
+        "delete_commands": build_delete_commands(args.host, delete_candidates, args.remote_rob_home),
     }
 
 
@@ -459,8 +473,11 @@ def main() -> int:
         description="Summarize the live futon6/mark2 lane from local and Linode evidence.",
     )
     ap.add_argument("--host", default=os.environ.get("FUTON6_STATUS_HOST", "linode-chicago"))
-    ap.add_argument("--remote-mark2-home", default="/home/joe/mark2")
-    ap.add_argument("--remote-rob-home", default="/home/rob")
+    ap.add_argument("--remote-mark2-home",
+                    default=os.environ.get("FUTON6_REMOTE_MARK2_HOME", DEFAULT_MARK2_HOME))
+    ap.add_argument("--remote-peer-home", dest="remote_rob_home",
+                    default=os.environ.get("FUTON6_REMOTE_PEER_HOME", DEFAULT_PEER_HOME),
+                    help="home of the other account on the remote host; its files need sudo to remove")
     ap.add_argument("--no-hash", action="store_true", help="Skip sha256 verification and match on size only.")
     ap.add_argument("--json", action="store_true", help="Emit machine-readable JSON.")
     args = ap.parse_args()

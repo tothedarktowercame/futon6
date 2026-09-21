@@ -18,9 +18,13 @@ import argparse
 import json
 import re
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code/storage/futon6/data/formal-sources/math-comp")
-OUT = Path("/home/joe/code/futon6/data/coq-mathcomp-defs.json")
+ROOT = config.storage() / "futon6/data/formal-sources/math-comp"
+OUT = config.ROOT / "data/coq-mathcomp-defs.json"
 
 DECL_RE = re.compile(
     r"^\s*(?:Global\s+|Local\s+|#\[[^\]]*\]\s*)?"

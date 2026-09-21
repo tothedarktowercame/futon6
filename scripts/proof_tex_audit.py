@@ -17,10 +17,14 @@ from pathlib import Path
 from typing import Any
 
 import proof_scope_audit
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 ROOT = Path(__file__).resolve().parent.parent
-FULL_TEX_DIR = Path("/home/joe/code/storage/futon6/data/first-proof/latex/full")
+FULL_TEX_DIR = config.storage() / "futon6/data/first-proof/latex/full"
 
 MACRO_TYPES = {
     "mNumber": "number",

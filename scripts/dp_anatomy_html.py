@@ -16,16 +16,27 @@ active marks changes, carrying every active class + a combined tooltip.
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import html
 import json
 import subprocess
 import sys
 from pathlib import Path
+import os
+
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
 ROOT = Path(__file__).resolve().parents[1]
-GOLD = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
-LOSS = ROOT / "data" / "loss"
+GOLD = config.marks()
+LOSS = config.path("FUTON6_LOSS", ROOT / "data" / "loss")
 DEFAULT_OUT = ROOT / "data" / "showcases" / "ct-anatomy" / "dp-demo"
 
 # kind (or kind-prefix) -> css class. Order matters: first match wins.
@@ -410,8 +421,7 @@ def fresh_coverage(pid: str) -> dict:
 # Codex-pool-built, checker-PASS .edn argument graphs (warrants + typed holes),
 # line-anchored standoff over the source. We render them as a reasoning panel
 # beneath the source — nothing is restated inline; the panel IS the layer-b view.
-IATC_GRAPH_DIR = Path(
-    "/home/joe/code/futon3c/holes/excursions/close-reading/iatc-clojure")
+IATC_GRAPH_DIR = config.sibling('futon3c') / 'holes/excursions/close-reading/iatc-clojure'
 
 
 def _edn_to_py(o):

@@ -9,8 +9,12 @@
 # Material signal = file paths, commit shas, agent-handoff + survey references.
 import json, re
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 LEX = ROOT / "futon6" / "data" / "mission-self-representing-lexicon.json"
 
 FAMILIES = {

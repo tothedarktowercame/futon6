@@ -14,6 +14,10 @@ import re
 import sys
 from pathlib import Path
 from collections import Counter
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 # --- Reuse from validate-ct.py ---
 
@@ -309,8 +313,8 @@ def extract_nlab_body(md_path):
 
 
 def main():
-    pm_dir = Path("/home/joe/code/planetmath/18_Category_theory_homological_algebra")
-    nlab_dir = Path("/home/joe/code/nlab-content/pages")
+    pm_dir = config.sibling("planetmath") / "18_Category_theory_homological_algebra"
+    nlab_dir = config.sibling("nlab-content") / "pages"
 
     # Natural Transformation comparison
     print("\n" + "#"*60)
@@ -343,7 +347,7 @@ def main():
         compare(pm_analysis2, nlab_analysis2)
 
     # Write results
-    outpath = Path("/home/joe/code/futon6/data/ct-validation/comparison.json")
+    outpath = config.ROOT / "data/ct-validation/comparison.json"
     results = {
         "natural_transformation": {
             "pm": {

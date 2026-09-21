@@ -9,19 +9,22 @@ Reviewed master: `8dd08f49d351cc3808f9bb079db888847a1efb9a`.
 An isolated review checkout exists at `/tmp/futon6-pr51-review`.
 
 Implementation started on branch `work/pr51-response` in
-`/home/joe/code/futon6-pr51-response`. That checkout contains the Stage 0 evidence
-comparison (`holes/pr51-baseline-comparison.md`), all 146 file dispositions
-(`holes/pr51-file-disposition.md`), and the first Stage 1 dependency repair
-(`holes/pr51-authority-provisioning.md`). The authority is now packaged and
-validated on that branch. Stage 1b's shared Mark7 configuration is now implemented
-and documented in `docs/mark7-host-configuration.md`, with validation in
-`holes/pr51-configuration-validation.md` (31 targeted tests passed; two existing
-CAS failures reproduce on master). Stage 2 is implemented in commit `eeac70a`
-on that branch: immutable run manifest, scoped outputs, guarded resume,
-manifest-derived replay, and checksummed retrieval with replay after extraction.
-See `docs/mark7-run-manifest.md` and `holes/pr51-stage2-validation.md` in that
-worktree (45 tests and 6 subtests passed; Babashka lint/parens clean). Stage 3
-and the fresh-host test remain outstanding. Rob's raw run bundle remains unavailable.
+a sibling worktree of this checkout. See the
+[Stage 0 evidence comparison](holes/pr51-baseline-comparison.md),
+[146-file disposition](holes/pr51-file-disposition.md), and
+[Stage 1a authority provisioning](holes/pr51-authority-provisioning.md).
+The subsequent [Stage 1b configuration work](holes/pr51-configuration-validation.md)
+and [operator settings](docs/mark7-host-configuration.md) cover the remaining
+Mark7 host configuration. [Stage 2 validation](holes/pr51-stage2-validation.md)
+and [run operations](docs/mark7-run-manifest.md) now cover immutable identity,
+run-contained outputs, resume, replay, and verified retrieval.
+[Stage 3 discovery](holes/pr51-stage3-discovery.md) and
+[Stage 3 validation](holes/pr51-stage3-validation.md) cover per-item accounting,
+retry history, the declared S4 cap, replay acceptance, and the causes of the
+malformed paper graphs, dangling references and G7 cycles. Stage 0 still lacks
+Rob's raw run bundle; fresh-host acceptance (Stage 4) remains outstanding.
+Tests that already failed before this work still fail; their expectations have
+not been weakened.
 
 ## Decision and intent
 
@@ -239,7 +242,7 @@ Concrete regressions already found at the reviewed PR head:
 
 - `scripts/c_vector.bb:32,35`, `magnet_probe_extract.bb`,
   `promote_to_proof_layer.bb`, and `starmap_to_capability_graph.bb` default to
-  `/users/rjmeyers/darktower`. Replace these with documented configuration and
+  another contributor's home directory. Replace these with documented configuration and
   suitable derived defaults, not another person's absolute path.
 - `scripts/process-all-planetmath.sh:74–81` puts
   `Path('${FUTON_CODE_ROOT}/planetmath')` inside a quoted heredoc, leaving the
@@ -247,7 +250,7 @@ Concrete regressions already found at the reviewed PR head:
   the shell's clone directory, which still uses `$HOME/code/planetmath`.
 - `scripts/setup-ct-run.sh:34` derives a remote path from local
   `FUTON_CODE_ROOT`, changing even Joe's default source from
-  `/home/joe/ct-handoff` to `/home/joe/code/ct-handoff`. Configure the remote
+  one absolute home path to another on the dev box. Configure the remote
   source independently. If this script is part of the chosen Mark7 provisioning
   route, move its repair into Stage 1 rather than waiting for this batch.
 
@@ -267,5 +270,5 @@ to Rob/GitHub without Joe's authorization.
 The main checkout already has unrelated/uncommitted edits in handoffs,
 readiness documentation, dependency setup, and `scripts/preflight.py`, plus an
 untracked `docs/` directory. Preserve these and reconcile intentional overlap;
-do not reset or sweep them into this work. This note is the only source change
-made by the review/handoff task.
+do not reset or sweep them into this work. The initial review/handoff task only
+added this note; subsequent implementation lives on the branch identified above.

@@ -28,7 +28,7 @@ when both refer to the same family of structures.
 
 Usage:
     python scripts/build-canon-ancestry-pm.py \
-        --pm-root /home/joe/code/planetmath \
+        --pm-root $FUTON_CODE_ROOT/planetmath \
         --out data/canon-ancestry-pm.json
 """
 

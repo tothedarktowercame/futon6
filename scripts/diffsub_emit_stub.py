@@ -12,8 +12,12 @@
 import json, re, math, time
 from pathlib import Path
 from collections import defaultdict
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 SCOPES = json.load(open("/tmp/scopes.json"))
 CAPS = json.load(open(ROOT / "futon6/data/capability-graph.json"))
 CLS = dict(re.findall(r':mission "M-([^"]+)" :class :(\w+)',

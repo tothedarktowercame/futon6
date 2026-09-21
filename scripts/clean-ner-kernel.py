@@ -25,8 +25,8 @@ always dropped regardless of score.
 
 Usage:
     python scripts/clean-ner-kernel.py \\
-        --input /home/joe/code/storage/futon6/data/ner-kernel/terms.tsv \\
-        --output /home/joe/code/futon6/data/ner-kernel-clean.tsv \\
+        --input $FUTON6_STORAGE_ROOT/futon6/data/ner-kernel/terms.tsv \\
+        --output $FUTON6_CHECKOUT/data/ner-kernel-clean.tsv \\
         --whitelist data/ner-kernel-whitelist.txt
 """
 

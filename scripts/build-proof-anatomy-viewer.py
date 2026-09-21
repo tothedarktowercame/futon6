@@ -18,6 +18,10 @@ import sys
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,8 +31,9 @@ if str(SCRIPT_DIR) not in sys.path:
 
 import proof_scope_audit
 import proof_tex_audit
+import os
 
-WRITEUP_DIR = Path("/home/joe/code/storage/futon6/data/first-proof")
+WRITEUP_DIR = config.storage() / "futon6/data/first-proof"
 OUT_DIR = ROOT / "data" / "showcases" / "proof-anatomy"
 
 TYPE_COLORS = {

@@ -9,8 +9,12 @@
 import json, re, math, subprocess, time, sys
 from pathlib import Path
 from collections import defaultdict
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 # Optional variant arg (force|embed|springs|seed) selects an alternate mission layout from
 # mission_carpet_variants.py — the projection FAMILY. No arg = the canonical carpet, unchanged.
 _VARIANT = sys.argv[1] if len(sys.argv) > 1 else None

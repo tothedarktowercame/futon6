@@ -18,9 +18,13 @@ from __future__ import annotations
 import ast, json, os, sys, pathlib
 from collections import Counter
 import numpy as np
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-OUT = pathlib.Path("/home/joe/code/futon6/resources/differentiable-math/code-scope-probe")
-SRC = pathlib.Path("/home/joe/code/futon6/src/futon6")
+OUT = pathlib.config.ROOT / "resources/differentiable-math/code-scope-probe"
+SRC = pathlib.config.ROOT / "src/futon6"
 EMB = OUT / "emb.npy"
 NODES = OUT / "nodes.json"
 

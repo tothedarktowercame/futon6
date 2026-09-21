@@ -21,8 +21,12 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code")
+ROOT = config.code_root()
 HERE = ROOT / "futon6"
 OUTDIR = HERE / "resources/differentiable-substrate"
 MOVES = HERE / "data/diffsub-moves.edn"

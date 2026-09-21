@@ -29,7 +29,7 @@ Output JSON shape:
 
 Usage:
     python scripts/build-grounding-gold.py \
-        --pm-root /home/joe/code/planetmath \
+        --pm-root $FUTON_CODE_ROOT/planetmath \
         --out data/grounding-gold-pm.json \
         --max-entries 0       # 0 = no cap
 """

@@ -22,8 +22,12 @@ import os
 import urllib.parse
 import urllib.request
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = config.ROOT
 OUT = ROOT / "data" / "efe-scopes.json"
 TREES = ROOT / "data" / "mission-scope-trees"
 # Substrate URL resolution, same precedence as futon3c.watcher.multi: the

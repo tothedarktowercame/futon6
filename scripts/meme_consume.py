@@ -12,7 +12,11 @@ not a move-prior for THIS rollout). Per the M-wm-policies declare-don't-guess se
   futon6/.venv/bin/python scripts/meme_consume.py --selftest # + a synthetic mission-resolved meme → move-set
 """
 import argparse, json, re
-ROOT = "/home/joe/code/futon6"; OUT = f"{ROOT}/data/meme-mine"
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
+ROOT = str(config.ROOT); OUT = f"{ROOT}/data/meme-mine"
 
 
 def mission_nodes():

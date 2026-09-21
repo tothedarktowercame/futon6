@@ -13,8 +13,12 @@ dossier is useful, it both justifies an ingest AND specifies its shape (the join
 this demo performs). Usage: mission_dossier.py M-capability-star-map
 """
 import json, sys, urllib.request, collections
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-MINE = "/home/joe/code/futon6/data/meme-mine/joint-memes.openai.json"
+MINE = str(config.ROOT / "data/meme-mine/joint-memes.openai.json")
 FUTON1A = "http://localhost:7071"
 
 
@@ -55,8 +59,8 @@ def canonical_mission_ep(mission):
     (claude-2's contract) by locating the mission doc; excludes *-desktop-save."""
     import glob
     stem = mission[2:] if mission.startswith("M-") else mission
-    for base in (glob.glob("/home/joe/code/*/holes/missions/M-%s.md" % stem) +
-                 glob.glob("/home/joe/code/*/holes/M-%s.md" % stem)):
+    for base in (glob.glob(str(config.code_root() / ("*/holes/missions/M-%s.md" % stem))) +
+                 glob.glob(str(config.code_root() / ("*/holes/M-%s.md" % stem)))):
         if "desktop-save" in base:
             continue
         parts = base.split("/")

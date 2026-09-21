@@ -7,6 +7,12 @@ own or rebuild downstream SFC-D3/SFC-AGG artifacts under data/warp.
 
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import hashlib
 import json
@@ -18,13 +24,17 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+# june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
+# (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
+_CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
+
 
 ROOT = Path(__file__).resolve().parents[1]
 WARP = ROOT / "data" / "warp"
-EPRINTS = Path("/home/joe/code/storage/futon6/data/arxiv-math-ct-eprints")
-ANATOMY = Path("/home/joe/code/storage/futon6/data/ct-anatomy-v0")
-GOLDEN = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
-BACKGROUND = ROOT / "data" / "background-corpus-index.json"
+EPRINTS = config.eprints()
+ANATOMY = config.anatomy()
+GOLDEN = config.marks()
+BACKGROUND = config.authority()
 MANIFEST = WARP / "warp-manifest.json"
 
 GUARDED_OUTPUTS = {
@@ -639,8 +649,8 @@ def run_stage(stage: Stage, dry_run: bool = False) -> str:
     if dry_run:
         return "would-run"
     assert stage.command is not None
-    command = [sys.executable, *stage.command]
-    subprocess.run(command, cwd=ROOT, check=True)
+    command = [*config.python_argv(), *stage.command]
+    subprocess.run(command, cwd=ROOT, check=True, env=config.child_environment())
     return "built"
 
 

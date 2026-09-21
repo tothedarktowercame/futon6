@@ -13,12 +13,19 @@ against the formal text, not by guessing.
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
+
 import argparse
 import json
 import re
 from pathlib import Path
+import os
 
-MATHLIB = Path("/home/joe/code/mathlib4")
+MATHLIB = config.sibling('mathlib4')
 DECL_RE = re.compile(
     r"^(?P<kw>structure|class|def|abbrev|inductive)\s+(?P<name>[A-Za-z_][\w'.]*)"
     r"(?P<rest>.*)$")

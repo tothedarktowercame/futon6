@@ -13,6 +13,12 @@ Inputs:  data/warp/hitlist.json (variants), def-snippets.json (scope-shapes),
 Outputs: data/warp/concept-embed.npy  (N x k)
          data/warp/concept-carpet-pos.json  (concept -> [x,y], the EFE layout)
 """
+
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
+import futon6_config as config
+
 import json
 import re
 from collections import defaultdict
@@ -21,7 +27,7 @@ from pathlib import Path
 
 import numpy as np
 
-W = Path("/home/joe/code/futon6/data/warp")
+W = config.ROOT / 'data/warp'
 DASH = re.compile(r"[‐-―−-]")
 STOPTOK = set("the a an of to in on for and or is are be by with we have there "
               "exists every some any all that this it its as at from".split())

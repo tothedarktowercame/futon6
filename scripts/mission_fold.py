@@ -21,8 +21,12 @@
 # operator folds any mission (and is the default render for the mined corpus).
 import json, glob, argparse
 from pathlib import Path
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent))
+import futon6_config as config
 
-ROOT = Path("/home/joe/code/futon6")
+ROOT = config.ROOT
 TREES = ROOT / "data" / "mission-scope-trees"
 LEX = ROOT / "data" / "mission-self-representing-lexicon.json"
 
