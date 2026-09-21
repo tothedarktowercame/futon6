@@ -550,7 +550,7 @@ def main() -> int:
     ap.add_argument("--candidates", default=str(REPO / "data" / "iatc-candidates"))
     ap.add_argument("--out", default=str(REPO / "data" / "iatc-argument-graphs" / "loop-run"))
     ap.add_argument("--backend", choices=["stub", "openai"], default="stub")
-    ap.add_argument("--model", default=CONTRACT["serving"]["served-as"],
+    ap.add_argument("--model", default=CONTRACT["model"]["served-as"],
                     help="served model name; default is the run contract's")
     ap.add_argument("--rung2-gate", action="store_true",
                     help="Reject graphs whose rung-2 semantic profile fails; default records it only.")

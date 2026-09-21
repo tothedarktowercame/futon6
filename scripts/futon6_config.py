@@ -268,16 +268,21 @@ def serving() -> dict:
 # The 0919b probe reached S12 against Ollama serving a 4-bit GGUF under a different
 # tag, and nothing objected — so the requirement is checked, not just written down.
 #
-# The requirement is the run contract's serving section and nothing else: stack,
-# checkpoint, served name and minimum context -- the terms that change results.
-# It used to also carry replicas, concurrency and prefix caching, which change
-# only speed; carried here they made a correct one-GPU run look non-conforming.
-# Those now live in THROUGHPUT_ADVICE, which nothing checks.
+#
+# Serving is machine configuration and stays here, out of the run contract. The
+# contract names only the model (checkpoint, served name); this checks that the
+# endpoint serves that model on a stack that pins precision, with a context long
+# enough that proofs are not refused for length.
+SERVING_STACK = "vllm"
+SERVING_MIN_CONTEXT_TOKENS = 16384
+
+
 def required_serving() -> dict:
     # Imported here, not at module level: many tools load this file on its own for
     # paths and hardware, and none of them should need the contract to do so.
     import run_contract
-    return {**run_contract.spec()["serving"], "contract": run_contract.contract_id()}
+    return {"stack": SERVING_STACK, "min-context-tokens": SERVING_MIN_CONTEXT_TOKENS,
+            **run_contract.spec()["model"], "contract": run_contract.contract_id()}
 
 # Machine-side suggestions for a batching server. Advice only: a run on one GPU
 # at concurrency 1 is slower and exactly as valid.

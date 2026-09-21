@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 """The run contract: everything that decides WHAT a Mark7 run produces.
 
-Two runs are comparable exactly when their contract hashes match, whatever
-hardware they ran on. The machine side -- GPU count, tensor parallelism, CPUs,
-concurrency, shards, paths, Slurm placement -- lives in futon6_config and may be
-changed freely per run, because none of it may change a result. Nothing here
-names a GPU, a card size, a count or a host, and nothing in the machine layer
-may switch a behaviour on or off.
+Two runs are comparable exactly when their contract hashes match. Machine and
+serving configuration, advisory or required, is not part of this file: it lives
+in futon6_config, and nothing there may switch a behaviour on or off.
 
 Why this is its own module: mark7probe-20260921 ran on code that contained the
 span-quotation contract and produced graphs under the ORIGINAL retype contract,
@@ -37,14 +34,9 @@ CONTRACTS: dict[str, dict] = {
     # v3: nodes select S1's clause-sized marked spans; the text is taken from
     #     the source by offset, never typed by the model.
     "mark7-v3": {
-        "serving": {
-            "stack": "vllm",
+        "model": {
             "checkpoint": "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4",
             "served-as": "mark4-70b",
-            # A context shorter than this rejects long proofs outright, so it
-            # changes WHICH items succeed. It is a contract term even though
-            # the number is set on the serving command line.
-            "min-context-tokens": 16384,
         },
         "decoding": {"temperature": 0, "max-tokens": 8192},
         "candidates": {"schema": "iatc-candidate/v4-proof", "requires": ["spans"]},
@@ -88,8 +80,8 @@ def deviations(actual: dict, cid: str | None = None) -> list[str]:
         out.append(f"gate-retries {actual['gate-retries']} (contract {want['gate-retries']})")
     if "max-tokens" in actual and actual["max-tokens"] != want["decoding"]["max-tokens"]:
         out.append(f"max-tokens {actual['max-tokens']} (contract {want['decoding']['max-tokens']})")
-    if "model" in actual and actual["model"] != want["serving"]["served-as"]:
-        out.append(f"model {actual['model']!r} (contract {want['serving']['served-as']!r})")
+    if "model" in actual and actual["model"] != want["model"]["served-as"]:
+        out.append(f"model {actual['model']!r} (contract {want['model']['served-as']!r})")
     return out
 
 
