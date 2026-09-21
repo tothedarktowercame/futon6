@@ -33,7 +33,7 @@ the `FM-001b-sat/` seeds). The CNF/log/witness files were moved out of the repo
 by commit `338a2fa` ("Move data/* and se-data/math-processed/* outputs to
 ~/code/storage/") and now live at:
 
-    /home/joe/code/storage/futon6/data/frontiermath-pilot/harness/
+    <storage-root>/futon6/data/frontiermath-pilot/harness/
 
 The mission doc still links them as if they were repo-relative, so those links
 do not resolve from a checkout. Read the paths there as storage-relative.

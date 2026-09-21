@@ -40,7 +40,7 @@ encoded for five months.
 Usage
 -----
     .venv/bin/python scripts/fm001/budgeted_solve.py 6 --budget-seconds 1200 \
-        --kissat /home/joe/code/kissat/build/kissat --out-dir <harness-dir>
+        --kissat <path-to-kissat-binary> --out-dir <harness-dir>
 """
 
 from __future__ import annotations
