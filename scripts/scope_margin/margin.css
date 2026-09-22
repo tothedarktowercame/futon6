@@ -1,0 +1,40 @@
+/* Mark7 margin notes: the run's reading of the paper, beside the passage it reads. */
+:root{--m7-ink:#2b2b2b;--m7-soft:#6b6b63;--m7-rule:#d8d6c8;--m7-ok:#2f7d4f;--m7-warn:#b5651d;--m7-bad:#b03a2e;--m7-hole:#7a4fa3;--m7-cite:#2d6a9f;--m7-stated:#5a5a52}
+.m7-rail{position:absolute;top:0;left:0;width:0;height:0;z-index:40}
+.m7-note{position:absolute;box-sizing:border-box;font:13px/1.45 system-ui,-apple-system,sans-serif;color:var(--m7-ink);
+  background:#fffff8;border-left:3px solid var(--m7-rule);padding:.35rem .6rem .45rem;transition:border-color .15s}
+.m7-note.proof{border-left-color:#8aa8c4}.m7-note.region{border-left-color:#c9b27c}
+.m7-note:hover,.m7-note.m7-active{border-left-color:#287b9c;background:#fbfaf0;z-index:41}
+.m7-note h4{margin:0 0 .15rem;font:600 13px/1.3 system-ui,sans-serif}
+.m7-note h4 .m7-where{font-weight:400;color:var(--m7-soft)}
+.m7-note p{margin:.15rem 0;width:auto;font-size:13px;line-height:1.45 !important}
+.m7-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:.3rem 0 .15rem;background:#eee}
+.m7-bar span{display:block;height:100%}
+.m7-legend{color:var(--m7-soft);font-size:12px}
+.m7-legend b{font-weight:600}
+.m7-pill{display:inline-block;border-radius:9px;padding:0 .45em;font-size:11.5px;line-height:1.6;margin:0 .2em .1em 0;border:1px solid currentColor;white-space:nowrap}
+.m7-ok{color:var(--m7-ok)}.m7-warn{color:var(--m7-warn)}.m7-bad{color:var(--m7-bad)}.m7-hole{color:var(--m7-hole)}.m7-cite{color:var(--m7-cite)}.m7-stated{color:var(--m7-stated)}
+.m7-note details{margin:.25rem 0 0}.m7-note summary{cursor:pointer;color:#287b9c;font-size:12.5px;list-style:none}
+.m7-note summary::-webkit-details-marker{display:none}.m7-note summary::before{content:"▸ ";}.m7-note details[open]>summary::before{content:"▾ ";}
+.m7-step{margin:.3rem 0;padding:.25rem 0 .25rem .5rem;border-left:2px solid #eee}
+.m7-step .m7-rel{font-style:italic;color:var(--m7-soft)}
+.m7-node{margin:.35rem 0;padding:.3rem .45rem;background:#f6f5ec;border-radius:3px}
+.m7-node .m7-k{font-size:11px;color:var(--m7-soft);text-transform:uppercase;letter-spacing:.04em}
+.m7-q{font:12px/1.45 ui-monospace,monospace;color:#444;overflow-wrap:anywhere;white-space:pre-wrap;display:block;margin-top:.15rem}
+.m7-prop{border-top:1px dashed var(--m7-ok);margin-top:.25rem;padding-top:.2rem}
+.m7-scope{margin:.3rem 0;padding-left:.5rem;border-left:2px solid #eee}
+.m7-covered{box-shadow:-10px 0 0 -7px var(--m7-rule)}
+.m7-lit{background:#e8f2f7 !important;box-shadow:-10px 0 0 -7px #287b9c}
+.m7-lit-node{background:#fbe7b8 !important;outline:1px solid #d9a441}
+.m7-banner{font:13.5px/1.5 system-ui,sans-serif;color:var(--m7-ink);background:#fffff8;border:1px solid var(--m7-rule);
+  border-radius:4px;padding:.8rem 1rem;margin:0 0 2rem;width:55%;box-sizing:border-box}
+.m7-banner h2{font:600 16px/1.3 system-ui,sans-serif;margin:0 0 .4rem}
+.m7-banner p{width:auto;font-size:13.5px;line-height:1.5 !important;margin:.3rem 0}
+.m7-banner label{margin-right:1rem;white-space:nowrap}
+.m7-hidden{display:none !important}
+.m7-inline .m7-rail{position:static;width:auto;height:auto}
+.m7-inline .m7-note{position:static;width:auto !important;margin:.6rem 0 1rem}
+.m7-inline .m7-banner{width:auto}
+.m7-mockline{display:none}
+.m7-mock .m7-mockline{display:block}
+.m7-mock p.m7-mockline{display:block}
