@@ -44,6 +44,7 @@ window yields the *whole* improve-as-we-run curve for every tier — not just en
 | **S1b strategies**: bindings + defined terms per window, with the rule that chose each | `markup_strategies`, fed through both candidate extractors |
 | **S4 regions carved from S1's environments** (author macros included) | `expository_region_extract(..., marks)` |
 | **S4 cap spends exposition first**, in-proof prose only if room is left | `select_even` |
+| **S4 cap scales per paper** (`FUTON6_EXPOSITORY_CAP_PER_PAPER=scaled`) | `run_manifest.scaled_cap` |
 
 ## 2a. What changed after the 20260921 run (read before reusing artifacts)
 
@@ -59,6 +60,14 @@ The last run's own output showed three things worth fixing before the next windo
   carry no ids rather than falling back to positional ones; re-run
   `mark3_extract_candidates.py`. Reusing a 20260921 candidate directory will stop the
   run and say so.
+- **One cap for every paper.** 30 regions was the budget for a six-page note and for
+  a 40,000-line book alike: 0806.1324 carves 209 regions and S4 read 30, while
+  0708.2185 carves 27 and lost nothing. Set
+  `FUTON6_EXPOSITORY_CAP_PER_PAPER=scaled` and each paper gets
+  `round(6*sqrt(regions))`, clamped to [12, 120]. Over the 12-paper run that reads
+  674 regions of 1,370 where the fixed cap read 354; a short paper is read whole and
+  no single paper can take more than 120 calls. The rule, and the cap each paper got,
+  are recorded in the manifest and in the S4 selection accounting.
 - **S4 was reading almost nothing.** Regions came from a fixed list of `\begin{...}`
   names, so a paper whose environments are author macros (`\df`, `\prf`) yielded one
   region: 0705.0102 gave 33 of 690 body lines. Carving from S1's environments gives 71

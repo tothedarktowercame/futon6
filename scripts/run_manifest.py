@@ -5,6 +5,7 @@ from contextlib import contextmanager
 import fcntl
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -20,7 +21,37 @@ ARTIFACTS = {key: "artifacts/" + key for key in (
     "steps", "rung3", "paper-graphs", "clean", "demo")}
 # v2: exposition first, then prose inside proofs if the cap leaves room (S3 reads
 # proofs); v1 spaced every region evenly, which had no in-proof regions to spend on.
-EXPOSITORY_SELECTION = "exposition-first-even-spacing/v2"
+# v3: the cap itself scales with the number of regions the paper carved, so a note and
+# a book are not given the same budget (mark3_extract_expository_candidates.scaled_cap).
+EXPOSITORY_SELECTION = "exposition-first-scaled-cap/v3"
+
+# A cap of 30 per paper was the same number for a six-page note and for a 40,000-line
+# book: 0806.1324 carves 209 regions and S4 read 30, while 0708.2185 carves 27 and lost
+# nothing (Joe, 2026-09-22). The cap scales with what the paper has to read. Regions,
+# not lines: LaTeX line length varies so much that lines are a poor measure of content
+# (0705.0102 has 71 regions in 690 lines, math/0310337 has 247 in 15,103), and regions
+# are what is sampled. Sublinear, so one long paper cannot spend the whole window; the
+# floor keeps a short paper worth reading. On the 12-paper run this reads 674 regions
+# of 1,370 where the fixed 30 read 354.
+SCALED = "scaled"
+CAP_SCALE, CAP_FLOOR, CAP_CEILING = 6, 12, 120
+
+
+def scaled_cap(region_count: int) -> int:
+    """How many regions to read from a paper that carved `region_count` of them."""
+    return max(CAP_FLOOR, min(CAP_CEILING, round(CAP_SCALE * math.sqrt(max(0, region_count)))))
+
+
+def cap_for(setting, region_count: int) -> int:
+    """The cap in force: the scaled rule, a pinned number, or 0 for every region."""
+    if setting == SCALED:
+        return scaled_cap(region_count)
+    return int(setting or 0)
+
+
+def cap_rule(setting) -> dict | None:
+    return ({"scale": CAP_SCALE, "floor": CAP_FLOOR, "ceiling": CAP_CEILING, "of": "regions"}
+            if setting == SCALED else None)
 ENV_KEYS = {key: "FUTON6_" + key.upper().replace("-", "_") for key in ARTIFACTS}
 REQUIRED = {
     "marks": (1, "*.json"), "loss": (1, "dashboard.json"),
@@ -157,9 +188,10 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
     if not papers or len(papers) != len(set(papers)):
         raise ValueError("corpus manifest must contain nonempty, unique paper IDs")
     cap = os.environ.get("FUTON6_EXPOSITORY_CAP_PER_PAPER", "0") or "0"
-    if not cap.isdigit():
-        raise ValueError("FUTON6_EXPOSITORY_CAP_PER_PAPER must be a nonnegative integer")
-    cap = int(cap)
+    if cap != SCALED:
+        if not cap.isdigit():
+            raise ValueError(f"FUTON6_EXPOSITORY_CAP_PER_PAPER must be '{SCALED}' or a nonnegative integer")
+        cap = int(cap)
     floor = declared_item_floor()
     pinned = {"run-id": run_id, "corpus-id": corpus_id,
               "corpus-sha256": hashlib.sha256(raw).hexdigest(),
@@ -172,6 +204,7 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
               "selection": {"all-proofs": True,
                             "expository-cap": cap,
                             # Deferred regions are accounted as deferred, never as accepted.
+                            "expository-cap-rule": cap_rule(cap),
                             "expository-selection": EXPOSITORY_SELECTION if cap else "all-regions"}}
     if (run_dir / NAME).exists():
         doc = load(run_dir)

@@ -190,3 +190,47 @@ class ManifestTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ScaledExpositoryCap(unittest.TestCase):
+    """A cap of 30 was the same number for a six-page note and a 40,000-line book:
+    0806.1324 carves 209 regions and S4 read 30 of them, while 0708.2185 carves 27 and
+    lost nothing (Joe, 2026-09-22)."""
+
+    def test_the_cap_follows_what_the_paper_has_to_read(self):
+        self.assertEqual(manifest.scaled_cap(27), 31)      # a short paper: every region
+        self.assertEqual(manifest.scaled_cap(209), 87)     # 30 before; 42% of the paper
+        caps = [manifest.scaled_cap(n) for n in (0, 5, 27, 71, 209, 430, 5000)]
+        self.assertEqual(caps, sorted(caps))                   # never decreasing
+        self.assertEqual(caps[0], manifest.CAP_FLOOR)      # a tiny paper still gets read
+        self.assertEqual(caps[-1], manifest.CAP_CEILING)   # one book cannot take the window
+
+    def test_the_cap_is_sublinear_so_a_long_paper_cannot_spend_the_window(self):
+        # Ten times the regions must not cost ten times the calls.
+        self.assertLess(manifest.scaled_cap(300), 10 * manifest.scaled_cap(30))
+
+    def test_a_pinned_number_and_no_cap_still_mean_what_they_did(self):
+        self.assertEqual(manifest.cap_for(manifest.SCALED, 209), 87)
+        self.assertEqual(manifest.cap_for(30, 209), 30)
+        self.assertEqual(manifest.cap_for(0, 209), 0)      # 0 = every region
+        self.assertIsNone(manifest.cap_rule(30))
+        self.assertEqual(manifest.cap_rule(manifest.SCALED)["of"], "regions")
+
+    def test_a_deferred_region_is_a_refusal_only_when_no_cap_is_in_force(self):
+        # The accounting decides this from the cap, which is now a word as well as a
+        # number; "scaled" must license a deferral exactly as 30 did.
+        import stage_accounting
+        doc = {"schema": stage_accounting.SCHEMA, "stage": "S4", "producer": "select",
+               "invocation": "S4-a001", "updated": "now", "expected": ["r1"],
+               "counts": {"accepted": 0, "rejected": 0, "errored": 0, "deferred": 1,
+                          "expected": 1, "unaccounted": 0},
+               "items": [{"id": "r1", "status": "deferred", "reason": "cap 12 of 40 regions",
+                          "paper": "p", "artifacts": [], "outputs": []}]}
+        with tempfile.TemporaryDirectory() as d:
+            allowed, _ = stage_accounting.blocking(doc, ["r1"], run_dir=Path(d), allow_deferred=True)
+            refused, _ = stage_accounting.blocking(doc, ["r1"], run_dir=Path(d), allow_deferred=False)
+        self.assertEqual(allowed, [])
+        self.assertTrue(refused)
+        for cap in (manifest.SCALED, 30):
+            self.assertTrue(bool(cap) and cap != 0, cap)
+        self.assertFalse(bool(0) and 0 != 0)

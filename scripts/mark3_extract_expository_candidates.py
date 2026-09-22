@@ -17,6 +17,7 @@ import stage_accounting as accounting
 
 import argparse
 import json
+import math
 import os
 import sys
 from pathlib import Path
@@ -92,6 +93,14 @@ def safe_name(candidate: dict[str, Any]) -> str:
     return f"{candidate['paper-id']}.{region}.candidate.json"
 
 
+# The cap rule lives with the selection it belongs to (run_manifest), which the loop
+# and the manifest both read; these are names for it here.
+SCALED = run_manifest.SCALED
+CAP_SCALE, CAP_FLOOR, CAP_CEILING = run_manifest.CAP_SCALE, run_manifest.CAP_FLOOR, run_manifest.CAP_CEILING
+scaled_cap = run_manifest.scaled_cap
+cap_for = run_manifest.cap_for
+
+
 def select_even(candidates: list[dict[str, Any]], cap: int) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Per-paper selection named in the run manifest (even spacing in source order).
 
@@ -126,12 +135,16 @@ def main() -> int:
     parser.add_argument("--out", default=str(REPO / "data" / "expository-candidates"))
     parser.add_argument("--papers", nargs="*", help="paper ids; default = dp-demo papers")
     parser.add_argument("--list", help="file of paper ids, one per line (same as emit_marks --list)")
-    parser.add_argument("--cap-per-paper", type=int,
-                        default=int(os.environ.get("FUTON6_EXPOSITORY_CAP_PER_PAPER", "0") or 0),
-                        help="select at most N regions per paper; the rest are accounted as deferred")
+    parser.add_argument("--cap-per-paper",
+                        default=os.environ.get("FUTON6_EXPOSITORY_CAP_PER_PAPER", "0") or "0",
+                        help=f"'{SCALED}' (round({CAP_SCALE}*sqrt(regions)), clamped to "
+                             f"[{CAP_FLOOR}, {CAP_CEILING}]), or a number of regions per paper, "
+                             "or 0 for every region; the rest are accounted as deferred")
     args = parser.parse_args()
-    if args.cap_per_paper < 0:
-        parser.error("--cap-per-paper must be nonnegative")
+    if args.cap_per_paper != SCALED:
+        if not str(args.cap_per_paper).isdigit():
+            parser.error(f"--cap-per-paper must be '{SCALED}' or a nonnegative integer")
+        args.cap_per_paper = int(args.cap_per_paper)
 
     papers = args.papers or (args.list and [l.strip() for l in open(args.list) if l.strip()]) or default_papers()
     outdir = Path(args.out)
@@ -165,8 +178,11 @@ def main() -> int:
     by_paper: dict[str, list[dict[str, Any]]] = {}
     for candidate in carved:
         by_paper.setdefault(candidate["paper-id"], []).append(candidate)
+    caps: dict[str, int] = {}
     for paper_id, candidates in by_paper.items():
-        selected, deferred = select_even(candidates, args.cap_per_paper)
+        cap = cap_for(args.cap_per_paper, len(candidates))
+        caps[paper_id] = cap
+        selected, deferred = select_even(candidates, cap)
         for candidate in selected:
             path = outdir / safe_name(candidate)
             path.write_text(json.dumps(candidate, indent=2), encoding="utf-8")
@@ -178,10 +194,11 @@ def main() -> int:
                              "enrichment": len(candidate["enrichment"])})
         for candidate in deferred:
             select_ledger.record(candidate["passage-id"], "deferred",
-                                 f"cap {args.cap_per_paper} per paper; not selected by "
+                                 f"cap {cap} of {len(candidates)} regions for this paper; not selected by "
                                  f"{run_manifest.EXPOSITORY_SELECTION}", paper=paper_id)
         if deferred:
-            print(f"  {paper_id}: selected {len(selected)}, deferred {len(deferred)} (cap {args.cap_per_paper})")
+            print(f"  {paper_id}: selected {len(selected)}, deferred {len(deferred)} "
+                  f"(cap {cap} of {len(candidates)} regions)")
     stale = sorted(p.name for p in outdir.glob("*.candidate.json") if p.name not in selected_names)
     if stale:
         # A selected candidate left by another selection would be modelled as if chosen now.
@@ -189,6 +206,8 @@ def main() -> int:
         return 2
     (outdir / "manifest.json").write_text(json.dumps({"candidates": manifest,
                                                       "cap-per-paper": args.cap_per_paper,
+                                                      "cap-rule": run_manifest.cap_rule(args.cap_per_paper),
+                                                      "cap-by-paper": caps,
                                                       "selection": run_manifest.EXPOSITORY_SELECTION
                                                       if args.cap_per_paper else "all-regions"}, indent=2),
                                           encoding="utf-8")

@@ -138,9 +138,11 @@ OPS = {
            "crit": "expository_argcheck (self-gated in loop)",
            "note": "regions are carved from S1's environments, so author-macro theorems and proofs "
                    "bound the prose (0705.0102: 1 region -> 71). All regions unless "
-                   "FUTON6_EXPOSITORY_CAP_PER_PAPER pins a cap; then exposition is spent first and "
-                   "prose inside proofs only if the cap leaves room (S3 reads proofs), the rest "
-                   "accounted as deferred"},
+                   "FUTON6_EXPOSITORY_CAP_PER_PAPER is set: a number pins one cap for every paper, "
+                   "'scaled' gives each paper round(6*sqrt(regions)) clamped to [12, 120], so a note "
+                   "is read whole and a book is sampled. Exposition is spent before prose inside "
+                   "proofs (S3 reads proofs); the rest is accounted as deferred, with the cap and the "
+                   "paper's region count in the reason"},
     # S5 now BUILDS its own rung-3 half. Both producers are deterministic (no model):
     # cas_segment turns gated graphs into proof steps, rung3_technique turns those into
     # technique gap maps, and only then does comprehension have a strategy axis to score.

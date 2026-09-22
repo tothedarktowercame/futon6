@@ -331,7 +331,10 @@ def stage_problems(run_dir: Path, stage: str, invocation: str, corpus_id: str):
             break
         loaded[f"{stage}.{producer}"] = current
         counts[producer] = current["counts"]
-        allow_deferred = (stage, producer) == ("S4", "select") and doc["selection"]["expository-cap"] > 0
+        # The cap is a number, or "scaled" (a rule over each paper's region count):
+        # either way a nonzero cap is what makes a deferred region legitimate.
+        cap = doc["selection"]["expository-cap"]
+        allow_deferred = (stage, producer) == ("S4", "select") and bool(cap) and cap != 0
         stop, refused = blocking(current, expected, run_dir=Path(run_dir),
                                  allow_deferred=allow_deferred, item_floor=floor)
         found += stop
