@@ -104,7 +104,20 @@ SCOPE_REGEXES = [
     ("is-denoted-by", r"\b([^.\n]{1,160}?)\s+is denoted by\s+\$([^$]+)\$"),
     ("choose-binding", r"\bChoose\s+\$([^$]+)\$"),
     ("choose-work-in", r"\b(?:We\s+)?choose\s+to\s+work\s+in\s+([^.,\n]+)"),
-    ("exists-binding", r"\bThere\s+(?:is|exists)\s+\$([^$]+)\$"),
+    # "There exists $X$" was the only existential this saw: the symbol had to follow the
+    # words immediately, and "There" had to be capitalised. Mathematics is rarely written
+    # that way -- "There exists a cohomological functor $H\colon\T\to\A$ ...", "for all
+    # objects $X$ there exists an $\Sigma^{-1}\A$-precover $\alpha$" -- so all 12 of
+    # 0806.1324's existential claims went unmarked (Joe, 2026-09-22).
+    ("exists-binding", r"\b[Tt]here\s+(?:is|are|exists?|exist)\s+"
+                       r"(?:(?:an?|some|no|at\s+least\s+one|exactly\s+one|a\s+unique)\s+)?"
+                       # a described object may itself carry math ("an $S^{\\perp_n}$-preenvelope
+                       # $\\mu:M\\to\\bar M$"): the symbol bound is the last formula, not the first
+                       r"((?:(?!for\s)(?:[a-z][\w-]*|\$[^$\n]{1,40}\$-?[a-z][\w-]*)\s+){0,6})"
+                       r"\$([^$\n]{1,80})\$"),
+    ("exists-claim", r"\b[Tt]here\s+(?:is|are|exists?|exist)\s+"
+                     r"(?:(?:an?|some|no|at\s+least\s+one|exactly\s+one|a\s+unique)\s+)?"
+                     r"([a-z][^.$\n]{2,60}?)\s+(?:such\s+that|for\s+which|with\s+the\s+property\s+that)\b"),
     ("here-denotes", r"\b(?:Here\s+)?\$([^$]+)\$\s+denotes\s+([^.,$]+)"),
     ("is-called", r"\$([^$]+)\$\s+is\s+(?:called|defined as)\s+([^.,$]+)"),
     ("display-typed-arrow", r"\\\[\s*([A-Za-z\\][^:\n]{0,80}?)\s*:\s*([^\]]{1,220}?\\(?:to|ra|la|lra|rightarrow|leftarrow|leftrightarrow|longrightarrow|hookleftarrow|hookrightarrow|twoheadleftarrow|twoheadrightarrow|mapsto)[^\]]{0,160}?)\s*\\\]"),
@@ -152,6 +165,7 @@ CLASSICAL_TO_METATHEORY = {
     "choose-binding": "assume/consider",
     "choose-work-in": "assume/consider",
     "exists-binding": "quant/existential",
+    "exists-claim": "quant/existential",
     "typed-arrow": "bind/typed",
     "display-typed-arrow": "bind/typed",
     "arrow-expression": "bind/typed",
@@ -1296,7 +1310,14 @@ def detect_scopes(entity_id, text, parent_env_id=None):
                 ends.append({"role": "object", "text": m.group(1).strip()[:120]})
             elif stype == "exists-binding":
                 ends.append({"role": "quantifier", "text": "there exists"})
-                ends.append({"role": "symbol", "latex": m.group(1).strip()})
+                ends.append({"role": "symbol", "latex": m.group(2).strip()})
+                described = (m.group(1) or "").strip()
+                if described:
+                    ends.append({"role": "type", "text": described[:80]})
+            elif stype == "exists-claim":
+                # An existential with no symbol of its own: what is said to exist.
+                ends.append({"role": "quantifier", "text": "there exists"})
+                ends.append({"role": "object", "text": m.group(1).strip()[:120]})
             elif stype == "assume":
                 ends.append({"role": "condition", "latex": m.group(3).strip()})
             elif stype == "assume-that-prose":

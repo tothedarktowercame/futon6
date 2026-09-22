@@ -1030,3 +1030,42 @@ class TestProcessPage:
         result = nlab_wiring.process_page("193", "adjunction", ADJUNCTION_SNIPPET)
         # Should not raise
         json.dumps(result, ensure_ascii=False)
+
+
+# ============================================================
+# Existential claims (Joe, 2026-09-22: "There exists" went unmarked)
+# ============================================================
+
+class TestExistentialScopes:
+    """The detector saw only "There exists $X$": the symbol had to follow the words
+    immediately and "There" had to be capitalised. Mathematics writes the object
+    first -- "There exists a cohomological functor $H\\colon\\T\\to\\A$ ..." -- so
+    0806.1324's 12 existential claims were all missed."""
+
+    def detect(self, text):
+        import re
+        pats = dict(nlab_wiring.SCOPE_REGEXES)
+        out = []
+        for name in ("exists-binding", "exists-claim"):
+            for m in re.finditer(pats[name], text):
+                out.append((name, [g and g.strip() for g in m.groups()]))
+        return out
+
+    def test_the_object_may_be_described_before_its_symbol(self):
+        got = self.detect(r"(3) There exists a cohomological functor $H\colon\T\to\A$ into a category.")
+        assert got == [("exists-binding", ["cohomological functor", r"H\colon\T\to\A"])]
+
+    def test_the_symbol_bound_is_the_last_formula_not_the_first(self):
+        # "an $S^{\perp_n}$-preenvelope $\mu:M\to\bar M$" binds mu, not S.
+        got = self.detect(r"there exists an $S^{\perp_{n}}$-preenvelope $\mu:M\rightarrow \bar{M}$.")
+        assert got[0][1] == [r"$S^{\perp_{n}}$-preenvelope", r"\mu:M\rightarrow \bar{M}"]
+
+    def test_a_lowercase_there_exists_inside_a_universal_is_found(self):
+        got = self.detect(r"For all objects $X$ of $\T$ there exists an $\Sigma^{-1}\A$-precover $\alpha: \Sigma^{-1}A\rightarrow X$.")
+        assert any(name == "exists-binding" and g[1].startswith(r"\alpha") for name, g in got)
+
+    def test_an_existential_with_no_symbol_needs_a_real_delimiter(self):
+        assert self.detect("there exists a unique choice such that the diagram commutes") == [
+            ("exists-claim", ["unique choice"])]
+        # "satisfying" as a delimiter matched adjectives: "there is a much more satisfying ..."
+        assert self.detect("there is a much more satisfying account") == []
