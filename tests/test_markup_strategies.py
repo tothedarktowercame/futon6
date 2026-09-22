@@ -180,3 +180,54 @@ def test_a_parametrised_macro_is_not_substituted_into_another_body():
     # Substituting a body that expects an argument would say something false.
     table = ms.macro_table(MACROS + "\n" + r"\newcommand{\arrowy}{A \lto B}")
     assert table["arrowy"]["expands-to"] == r"A \lto B"
+
+
+EMPH_PROSE = "\n".join([
+    r"\begin{document}",
+    r"Let $\Delta$ the {\em quiver of categories and functors} defined by the above categories.",
+    r"The {\em nerve} $N\C{C}$ of the category $\C{C}$ is the value on $\C{C}$ of $Hom(\Delta,\cdot)$.",
+    r"We use the nerve twice: the nerve of a category is a simplicial set.",
+    r"\begin{definition} A category is {\em small} if its objects form a set. \end{definition}",
+    r"\begin{thebibliography}{9}",
+    r"\bibitem{Se} G. Segal, {\em Publ. math. I.H.E.S} {\bf 34} (1968).",
+    r"\bibitem{ML} S. Mac Lane, {\em Springer-Verlag}, {\em Lecture Notes in Mathematics}.",
+    r"\end{thebibliography}",
+    r"\end{document}",
+])
+EMPH_MARKS = [{"kind": "env/definition", "start": EMPH_PROSE.index(r"\begin{definition}"),
+               "end": EMPH_PROSE.index(r"\end{definition}") + 16},
+              {"kind": "env/thebibliography", "start": EMPH_PROSE.index(r"\begin{thebibliography}"),
+               "end": len(EMPH_PROSE)}]
+
+
+def test_emphasis_in_running_prose_is_a_definition():
+    # "The {\em nerve} $N\C$ of the category $\C$ is ..." is the commonest shape
+    # mathematics uses, and matched nothing: emphasis was read only inside a definition
+    # environment or after "is called" (Joe, 2026-09-22).
+    terms = {t["term"]: t for t in ms.defined_terms(EMPH_PROSE, EMPH_MARKS)}
+    assert "nerve" in terms
+    assert terms["nerve"]["how-found"] == "emphasised at its first use"
+    assert "is the value on" in terms["nerve"]["definition"]
+    assert len(terms["nerve"]["uses"]) == 3            # the definition and both later uses
+    assert "quiver of categories and functors" in terms
+
+
+def test_a_definition_environment_outranks_bare_emphasis():
+    terms = {t["term"]: t for t in ms.defined_terms(EMPH_PROSE, EMPH_MARKS)}
+    assert terms["small"]["how-found"] == "in a definition environment"
+
+
+def test_italicised_journals_and_publishers_are_not_defined_terms():
+    # A bibliography italicises journal and publisher names; none of them is a term.
+    terms = {t["term"] for t in ms.defined_terms(EMPH_PROSE, EMPH_MARKS)}
+    for not_a_term in ("Publ. math. I.H.E.S", "Springer-Verlag", "Lecture Notes in Mathematics"):
+        assert not_a_term not in terms
+    assert ms.bibliographic("preprint math.QA/9802029")
+    assert ms.bibliographic("J. Math. Phys.")
+    assert not ms.bibliographic("quiver of categories and functors")
+
+
+def test_the_references_are_found_without_a_mark_to_point_at_them():
+    # The run's marks may not carry env/thebibliography; the source still says where.
+    assert ms.bibliography_at(EMPH_PROSE, []) == EMPH_PROSE.index(r"\begin{thebibliography}")
+    assert ms.bibliography_at("no references here", []) == len("no references here")

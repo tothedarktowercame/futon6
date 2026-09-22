@@ -123,30 +123,62 @@ def term_pattern(term: str) -> tuple[str, bool]:
     return "".join(out).replace(r"\ ", r"\s+") + "s?", param
 
 
+# Emphasis is also how a bibliography sets journal and publisher names, and this paper
+# emphasises 21 of them ("J. Math. Phys.", "Springer-Verlag", "preprint math.QA/9802029").
+# None of them is a term the paper defines.
+BIBLIOGRAPHIC = re.compile(r"\d|\b[A-Z][a-z]{0,4}\.|\b(?:preprint|Press|Verlag|Notes|Ann(?:als)?|Bull|Soc|Publ|Adv|Inc)\b")
+
+
+def bibliographic(term: str) -> bool:
+    """A journal, publisher or preprint number set in italics, not a defined term."""
+    return bool(BIBLIOGRAPHIC.search(term)) or len(term) > 80 or len(term.split()) > 8
+
+
+def bibliography_at(text: str, marks: list[dict]) -> int:
+    """Where the references begin; emphasis after this point is a citation."""
+    for m in marks:
+        if m["kind"] == "env/thebibliography":
+            return m["start"]
+    at = text.find("\\begin{thebibliography}")
+    return at if at >= 0 else len(text)
+
+
 def defined_terms(text: str, marks: list[dict]) -> list[dict]:
     """Every term the paper defines, with its definition site and every use."""
     starts = _line_starts(text)
     body = max(0, text.find("\\begin{document}"))
-    found: dict[str, tuple[int, dict | None]] = {}
+    # How each term was found is part of what is known about it: emphasis in running
+    # prose is weaker evidence than a definition environment, and a reader can weigh
+    # them only if the page says which.
+    found: dict[str, tuple[int, dict | None, str]] = {}
     defs = [m for m in marks if m["kind"] == "env/definition"]
     for m in defs:
         for e in EMPH.finditer(text, m["start"], m["end"]):
             if emphasised(e):
-                found.setdefault(emphasised(e), (e.start(), m))
+                found.setdefault(emphasised(e), (e.start(), m, "in a definition environment"))
     # Terms defined in prose: "... is called \emph{X}", "we call ... {\em X}".
     for e in CALLED.finditer(text, body):
         if emphasised(e):
-            found.setdefault(emphasised(e), (e.start(), None))
+            found.setdefault(emphasised(e), (e.start(), None, "called by name"))
+    # Emphasis in running prose IS the definition, in the commonest shape mathematics
+    # uses: "The {\em nerve} $N\C$ of the category $\C$ is the value on ...". Reading
+    # emphasis only inside a definition environment or after "is called" found 10 of
+    # math/9906038's terms and missed 20, nerve among them, though the paper italicises
+    # every one of them at its first use (Joe, 2026-09-22).
+    for e in EMPH.finditer(text, body):
+        term = emphasised(e)
+        if term and not bibliographic(term) and e.start() < bibliography_at(text, marks):
+            found.setdefault(term, (e.start(), None, "emphasised at its first use"))
     import build_golden_paper                         # S1's own miner: "the \textit{heart} of"
     for d in build_golden_paper.mine_definitions(text):
         for e in EMPH.finditer(d.term):
             env = next((m for m in defs if m["start"] <= d.position < m["end"]), None)
             if emphasised(e):
-                found.setdefault(emphasised(e), (d.position, env))
+                found.setdefault(emphasised(e), (d.position, env, "named by a definition pattern"))
     concepts = [m for m in marks if m["kind"] == "concept"]
     taken: list[tuple[int, int]] = []
     out = []
-    for term, (at, env) in sorted(found.items(), key=lambda kv: -len(kv[0])):   # longest first
+    for term, (at, env, how_found) in sorted(found.items(), key=lambda kv: -len(kv[0])):  # longest first
         pat, has_param = term_pattern(term)
         pats = [(pat, has_param)]
         head = re.sub(r"^\$[^$]*\$-", "", term)
@@ -184,7 +216,7 @@ def defined_terms(text: str, marks: list[dict]) -> list[dict]:
             after = re.search(r"[.!?](\s|$)", text[at:])
             where = {"start": body + (before[-1] if before else 0),
                      "end": at + (after.end() if after else 300)}
-        out.append({"term": term, "at": at, "line": _line(starts, at),
+        out.append({"term": term, "at": at, "line": _line(starts, at), "how-found": how_found,
                     "definition": re.sub(r"\s+", " ", text[where["start"]:where["end"]])[:600],
                     "definition-span": [where["start"], where["end"]], "uses": uses})
     out.sort(key=lambda t: t["at"])

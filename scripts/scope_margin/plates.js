@@ -311,6 +311,9 @@
     const o = occs.find(o => o.a < u.b && u.a < o.b);
     if (o) { const d = el('div', 'm7-read-sec', null, read); el('b', null, 'Defined term: ', d);
       d.append(`${o.t.term} (defined L${o.t.line}) — ${o.status}${o.how ? ': ' + o.how : ''}`);
+      // How the term was found is evidence of different strength: emphasis in running
+      // prose is how most papers define, and is weaker than a definition environment.
+      if (o.t['how-found']) el('div', 'm7-legend', `found: ${o.t['how-found']}`, d);
       el('div', 'm7-q', o.t.definition.slice(0, 300) + (o.t.definition.length > 300 ? ' …' : ''), d); }
     const c = el('div', 'm7-read-sec m7-read-c', null, read); el('b', null, 'C · S1 source marks', c);
     const ms = marksAt(u.a, u.b).sort((x, y) => (MARKS[x][1] - MARKS[x][0]) - (MARKS[y][1] - MARKS[y][0]));
