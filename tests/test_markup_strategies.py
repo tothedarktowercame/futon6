@@ -118,3 +118,30 @@ def test_a_symbol_inside_the_name_of_a_defined_term_is_not_a_loose_variable():
     loose = {"kind": "symbol", "start": TEXT.index(r"$\Sigma^{i}S$") + 1, "end": TEXT.index(r"$\Sigma^{i}S$") + 7}
     names = {e["name"] for e in ms.symbol_hypergraph(TEXT, MARKS + [inside, loose])}
     assert "\\F" not in names and "\\Sigma" in names
+
+
+PROSE = "\n".join([
+    r"\begin{document}",
+    r"A category $\C$ is called \emph{small} if its objects form a set.",
+    r"A functor is called a {\em localization functor} if it is idempotent.",
+    r"We shall call such a map \textit{cartesian\/} when it lifts.",
+    r"Every small category has a localization functor; a cartesian map is small.",
+    r"\end{document}",
+])
+
+
+def test_terms_defined_in_prose_are_found_without_a_definition_environment():
+    # 0806.1324 has no definition environment at all and names 25 terms this way.
+    terms = {t["term"]: t for t in ms.defined_terms(PROSE, [])}
+    assert set(terms) == {"small", "localization functor", "cartesian"}
+    assert [PROSE[u["start"]:u["end"]] for u in terms["small"]["uses"]] == ["small", "small", "small"]
+    assert terms["localization functor"]["definition"].startswith("A functor is called")
+
+
+def test_an_emphasis_that_is_not_a_term_is_not_taken_for_one():
+    import re as _re
+    grab = lambda text: ms.emphasised(_re.search(ms.EMPH, text))
+    assert grab("{\\em small\nsets}") == "small sets"          # a line break is not part of the term
+    assert grab(r"\emph{map\/}") == "map"                      # nor an italic correction
+    assert grab(r"\emph{1}") == ""                             # nor is a bare numeral a term
+    assert grab(r"\emph{lment tordant (tensorielle}") == "lment tordant"

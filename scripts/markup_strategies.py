@@ -49,7 +49,30 @@ SYMBOL_KINDS = ("symbol", "symbol-grounded")
 MACRO_SYMBOL = re.compile(r"·\s*author-defined\s*·\s*ID\b")
 ENV_KINDS = {"theorem", "lemma", "proposition", "corollary", "definition", "remark", "example",
              "proof", "question", "conjecture", "claim", "notation"}
-EMPH = re.compile(r"\\(?:emph|textbf|textit)\{((?:[^{}]|\{[^{}]*\})*)\}")
+# Emphasis in either spelling: \emph{...} and the older {\em ...}.
+EMPH = re.compile(r"\\(?:emph|textbf|textit)\{((?:[^{}]|\{[^{}]*\})*)\}"
+                  r"|\{\\(?:em|it|bf|sl)\s+([^{}]*)\}")
+# A paper need not have definition environments: many define in running prose, and
+# 0806.1324 (Krause) has no definition environment at all while calling 25 terms by
+# name ("A category $\C$ is called \emph{small} if ...").
+CALLED = re.compile(r"\b(?:is|are|will\s+be|shall\s+be)\s+called\s+(?:an?\s+|the\s+)?"
+                    r"(?:\\(?:emph|textbf|textit)\{([^{}]{2,80})\}|\{\\(?:em|it|bf|sl)\s+([^{}]{2,80})\})"
+                    r"|\b[Ww]e\s+(?:shall\s+|will\s+|now\s+)?call\s+[^.]{0,60}?"
+                    r"(?:\\(?:emph|textbf|textit)\{([^{}]{2,80})\}|\{\\(?:em|it|bf|sl)\s+([^{}]{2,80})\})")
+
+
+def emphasised(match: re.Match) -> str:
+    r"""The emphasised text, whichever spelling matched, as a term or "" if it is not one.
+
+    Emphasis carries line breaks ("small\nsets"), italic corrections (map\/) and
+    occasionally a fragment with an unclosed bracket; a term also needs a letter.
+    """
+    raw = next(g for g in match.groups() if g is not None)
+    term = re.sub(r"\s+", " ", raw).strip()
+    term = re.sub(r"\\/$", "", term).strip(" ,;:.-")
+    if term.count("(") != term.count(")"):
+        term = term.split("(")[0].strip()
+    return term if len(term) >= 3 and re.search(r"[A-Za-z]{2}", term) else ""
 APPOSITION = re.compile(r"\b(?:[Aa]n?|[Tt]he|[Aa]ny|[Ee]very|[Ss]ome)\s+((?:[a-z][a-z-]*\s+){0,4}?[a-z][a-z-]*)\s+"
                         r"\$([^$]{1,24})\$((?:\s+(?:of|in|on)\s+\$[^$]{1,30}\$)?)(?![-\w])")
 QUANTIFIED = re.compile(r"\bfor\s+(?:all|each|every|any)\s+\$([^$]{1,12})\$(?![-\w])")
@@ -108,12 +131,18 @@ def defined_terms(text: str, marks: list[dict]) -> list[dict]:
     defs = [m for m in marks if m["kind"] == "env/definition"]
     for m in defs:
         for e in EMPH.finditer(text, m["start"], m["end"]):
-            found.setdefault(e.group(1), (e.start(1), m))
+            if emphasised(e):
+                found.setdefault(emphasised(e), (e.start(), m))
+    # Terms defined in prose: "... is called \emph{X}", "we call ... {\em X}".
+    for e in CALLED.finditer(text, body):
+        if emphasised(e):
+            found.setdefault(emphasised(e), (e.start(), None))
     import build_golden_paper                         # S1's own miner: "the \textit{heart} of"
     for d in build_golden_paper.mine_definitions(text):
         for e in EMPH.finditer(d.term):
             env = next((m for m in defs if m["start"] <= d.position < m["end"]), None)
-            found.setdefault(e.group(1), (d.position, env))
+            if emphasised(e):
+                found.setdefault(emphasised(e), (d.position, env))
     concepts = [m for m in marks if m["kind"] == "concept"]
     taken: list[tuple[int, int]] = []
     out = []
@@ -145,7 +174,16 @@ def defined_terms(text: str, marks: list[dict]) -> list[dict]:
                     use["parameter"] = o.group(1)
                 uses.append(use)
         uses.sort(key=lambda u: u["start"])
-        where = env or {"start": at, "end": min(len(text), at + 300)}
+        # Without an environment, the definition shown is the sentence that names the
+        # term: from the end of the previous sentence to the end of this one. A
+        # sentence may end at a newline as readily as at a space.
+        if env:
+            where = env
+        else:
+            before = [m.end() for m in re.finditer(r"[.!?]\s", text[body:at])]
+            after = re.search(r"[.!?](\s|$)", text[at:])
+            where = {"start": body + (before[-1] if before else 0),
+                     "end": at + (after.end() if after else 300)}
         out.append({"term": term, "at": at, "line": _line(starts, at),
                     "definition": re.sub(r"\s+", " ", text[where["start"]:where["end"]])[:600],
                     "definition-span": [where["start"], where["end"]], "uses": uses})
