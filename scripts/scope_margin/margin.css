@@ -38,3 +38,30 @@
 .m7-mockline{display:none}
 .m7-mock .m7-mockline{display:block}
 .m7-mock p.m7-mockline{display:block}
+.m7-undef{outline:2px dashed #b03a2e}
+/* plates */
+.m7-plates{border-top:1px solid var(--m7-rule);border-bottom:1px solid var(--m7-rule);margin:.4rem 0 .6rem;padding:.3rem 0 .5rem}
+.m7-plates h3{font:600 14px/1.3 system-ui,sans-serif;margin:.2rem 0}
+.m7-plate-row label{display:inline-block;margin:.1rem 1rem .1rem 0}
+.m7-plate-row select{font:12.5px system-ui,sans-serif;margin-left:.3rem}
+.m7-sw{display:inline-block;width:1.1em;height:.9em;vertical-align:-.1em;border:1px solid #bbb;border-radius:2px}
+.m7-sw-term{border:0;border-bottom:2.5px solid #999;border-radius:0}
+.m7-legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:.1rem .8rem;font-size:12px;color:var(--m7-soft);margin:.3rem 0}
+.m7-u{border-radius:2px}
+math{border-radius:2px}
+.m7-t-def{box-shadow:inset 0 -2.5px 0 #2f7d4f}
+.m7-t-gen{box-shadow:inset 0 -2.5px 0 #d08a2e}
+.m7-t-none{box-shadow:inset 0 -2.5px 0 #c0392b;outline:1px dashed #c0392b}
+.m7-sw-term.m7-t-def{border-bottom-color:#2f7d4f;box-shadow:none}.m7-sw-term.m7-t-gen{border-bottom-color:#d08a2e;box-shadow:none}
+.m7-sw-term.m7-t-none{border-bottom-color:#c0392b;box-shadow:none;outline:0}
+table.m7-terms{border-collapse:collapse;font-size:12px;margin:.3rem 0;width:100%}
+table.m7-terms th,table.m7-terms td{text-align:left;padding:.1rem .4rem;border-bottom:1px solid #eee;vertical-align:top}
+table.m7-terms td:first-child{cursor:help}
+dl.m7-gloss{font-size:12px;margin:.2rem 0 .5rem;display:grid;grid-template-columns:max-content 1fr;gap:.1rem .7rem}
+dl.m7-gloss dt{font-family:ui-monospace,monospace;color:var(--m7-ink)}dl.m7-gloss dd{margin:0;color:var(--m7-soft)}
+.m7-plates h4{font:600 12.5px system-ui,sans-serif;margin:.5rem 0 .1rem}
+.m7-read{position:fixed;right:12px;bottom:12px;width:min(30rem,calc(100vw - 24px));max-height:45vh;overflow:auto;z-index:60;
+  font:12.5px/1.45 system-ui,sans-serif;background:#fffff8;border:1px solid var(--m7-rule);border-radius:4px;padding:.5rem .7rem;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.m7-read-h code{font:12px ui-monospace,monospace}
+.m7-read-sec{margin-top:.35rem;padding-left:.45rem;border-left:4px solid #ccc}
+.m7-read-c{border-left-color:rgb(148,255,255)}.m7-read-m{border-left-color:rgb(255,148,255)}.m7-read-y{border-left-color:rgb(255,255,115)}

@@ -17,6 +17,14 @@ What the notes check is what a run can get wrong while every gate passes:
   scopes        the expository_scope_audit flags (echo, unanchored, bare-noun)
                 and whether the kind is a bare parent with specific children.
 
+All three layers also show at once, as ink plates (scope_margin/plates.js): S1 marks
+on cyan, S3 proof-graph quotes on magenta, S4 scope lines on yellow, placed on each
+word and formula by its offset in the run's source, so overlaps mix like ink. Every
+label the page shows is defined in one glossary (MARK_KINDS, NODE_MEANING,
+WARRANT_MEANING, the S4 vocabulary, PAGE_TERMS); an S1 kind without a definition
+stops the build. The terms the paper itself defines are underlined by how S1 tagged
+each use: as the paper's defined term, only as a generic lexicon word, or not at all.
+
 Usage: scripts/render_scope_margin.py RUN PAPER TYPESET_DIR OUTPUT
 TYPESET_DIR must contain PAPER.tex, PAPER-tufte.html and conversion.log.
 """
@@ -34,6 +42,7 @@ import sys
 from pathlib import Path
 
 import expository_scope_audit as scope_audit
+import iatc_json
 
 ALIGNED = 0.5            # share of a gloss's content words found in a quote
 BETTER = 0.25            # how much better another unit must match to be proposed
@@ -49,6 +58,178 @@ CHILD_CUES = {
     "connection/transfer": r"analog|thought of as|behav(?:e|ing) like|\bdual\b",
     "rationale/telos/organization-roadmap": r"\bsections?\b|\bwe (?:shall|will)\b|\bin section\b",
 }
+
+
+# What each S1 mark kind means, read from the code that emits it (dp_paper_view.build
+# and the detectors it calls). The group says which cyan plate draws it: "term" marks
+# name one symbol or word, "clause" marks a phrase or sentence, "region" a whole
+# environment or display, and "structure" is bookkeeping no plate draws. A kind the
+# run emits and this table does not define stops the build: an undefined label on
+# the page is exactly what the page exists to rule out.
+MARK_KINDS = {
+    "symbol": ("term", "a letter or identifier inside math for which S1 found no binding or other grounding"),
+    "symbol-grounded": ("term", "a letter or identifier inside math that S1 tied to a meaning: the nearest earlier "
+                        "binding (Let $X$ be ..., $X$ is a ...), its base symbol, an X := display, or a known operator name"),
+    "classified": ("term", "a control sequence inside math with a known role: a macro the paper itself defines "
+                   "(author-defined), a LaTeXML standard-math command, or plain TeX"),
+    "unknown": ("term", "a control sequence inside math S1 could not identify (here mostly xymatrix diagram commands)"),
+    "role-gap": ("term", "a macro the paper defines whose role S1 could not work out"),
+    "concept-typed": ("term", "a macro the paper defines, typed as a concept"),
+    "concept": ("term", "a prose term, never overlapping math: a match in the background lexicon (the only source "
+                "with a grounding target), an emphasised phrase, a term the paper defines, or an undefined noun phrase"),
+    "definiendum": ("term", "the $symbol$ introduced by a Let $X$ be ... or $X$ is a ... sentence; prose terms "
+                    "are never definienda"),
+    "definiens": ("clause", "the phrase that says what a definiendum is (the 'a triangulated category' of Let $T$ be "
+                  "a triangulated category)"),
+    "cite": ("term", "a \\cite command; its target is the bibliography"),
+    "ref": ("term", "a \\ref-style command; in-paper if its label exists in the paper, otherwise dangling"),
+    "label": ("structure", "a \\label command, or an enumerate item label, with the environment it names"),
+    "anaphor": ("term", "a phrase that refers back to something bound earlier"),
+    "let-binder": ("clause", "a whole Let $X$ be/denote ... or $X$ is a ... sentence"),
+    "bind/let": ("clause", "a scope opened by Let $X$ be ..., Fix $X$, Take x = ..."),
+    "bind/define": ("clause", "a scope opened by Define ..., denote by $X$, write $X$ for, $X$ is called ..."),
+    "bind/typed": ("clause", "a formula containing an arrow (f : A -> B); the symbol before the colon is bound"),
+    "assume/explicit": ("clause", "Assume/Suppose (that) ..., or If $...$, with the condition recorded"),
+    "assume/consider": ("clause", "Consider ..., Choose $X$"),
+    "quant/universal": ("clause", "For all/each/every/any ... $x$ (in $S$), or \\forall inside math"),
+    "constrain/relation": ("clause", "a formula containing a relation (=, <, \\in, \\subseteq, \\cong, ...)"),
+    "constrain/such-that": ("clause", "a formula containing \\in (set membership); overlaps constrain/relation"),
+    "constrain/where": ("clause", "where $x$ is/denotes ... or where x = ..."),
+    "implies": ("clause", "two consecutive sentences Let/Given/Suppose ... . Then/Hence/Thus ... ."),
+    "kw-hyp": ("term", "the Let/Given/Suppose/Assume keyword of an implies span"),
+    "kw-con": ("term", "the Then/Hence/Thus/Therefore keyword of an implies span"),
+    "inference": ("term", "a connective word (implies, follows from, iff, Thus, Hence, the then of If ..., then); "
+                  "deductive inside a statement or proof, body elsewhere"),
+    "claim": ("clause", "the subject or object clause of an inference connective"),
+    "proof-move": ("clause", "a hedging phrase: clearly, it is easy to see, left to the reader, it suffices to show, "
+                   "without loss of generality"),
+    "math": ("region", "a whole $...$ span or display environment"),
+    "exposition": ("region", "a prose region picked out for S4, with its section title"),
+    "text-mode": ("structure", "letters inside \\text/\\mbox/\\textit within math: prose, not symbols"),
+    "layout": ("structure", "letters inside math that are environment names, units, label keys or column specs"),
+}
+ENV_MEANING = ("region", "a whole \\begin{NAME}...\\end{NAME} environment (or the author's macro for one), "
+               "named by its canonical kind")
+
+# S3's node kinds and warrant kinds, in the words of the S3 prompt (mark3_iatc_loop).
+NODE_MEANING = {"claim": "an assertion", "object": "a mathematical object the proof introduces or constructs",
+                "definition": "a definition the proof uses or makes", "ref": "a result the proof points to"}
+WARRANT_MEANING = {"claim": "stated: the proof itself gives the reason, in the text",
+                   "citation": "cited: the step points to a result",
+                   "missing-warrant": "missing: the text asserts the step without saying why (including "
+                                      "'clearly' or 'a routine computation'); the elided fact is a hole S9 mines"}
+
+# Labels this page adds of its own, keyed as they appear (margin.js strips a leading
+# count and "mock: "); a label the page shows without an entry here is flagged on it.
+PAGE_TERMS = {
+    "stated": WARRANT_MEANING["claim"], "cited": WARRANT_MEANING["citation"],
+    "missing": WARRANT_MEANING["missing-warrant"],
+    "quote matches gloss": "at least half the gloss's content words, and at least two, appear in the text the node quotes",
+    "quotes match": "nodes whose quote matches their gloss (see: quote matches gloss)",
+    "quote is another clause": "the node's quote does not match its gloss, and another clause offered to S3 does",
+    "quote another clause": "nodes whose quote is another clause (see: quote is another clause)",
+    "no clause matches": "neither the node's quote nor any offered clause shares enough words with the gloss",
+    "formula: can't check": "the gloss has fewer than two content words, so a word check cannot judge it",
+    "formula-only": "nodes with a mostly-formula gloss (see: formula: can't check)",
+    "cite sᵢ in order": "node i cites clause unit s_i: the citations follow the order of the list, not the text",
+    "pass the checks": "S4 scopes with no mechanical flag",
+    "generic kind": "an S4 scope kind that has more specific children in the vocabulary",
+    "flagged": "an S4 scope that fails a mechanical check (the three below)",
+    "repeats its slot definition": "echo: the fill restates the definition of its slot instead of the passage",
+    "not in the lines it cites": "unanchored: the fill's words are not in the source lines the scope cites",
+    "a bare noun phrase": "bare-noun: the fill is a noun phrase that says little about what the passage does",
+    "kept": "mock: the output stands",
+    "re-anchored": "mock: the node's quote is replaced by the clause its gloss describes",
+    "unanchored": "mock: the node keeps its gloss and loses its quote",
+    "retyped": "mock: the scope takes the specific child kind its own wording points to",
+    "held": "mock: the scope is held with a reason",
+    "rejected": "mock: the scope is dropped",
+    "defined term": "a term the paper typesets (\\textit, \\emph, \\textbf) as the thing being defined, inside one "
+                    "of S1's definition environments or a phrase S1's definition miner found",
+    "tagged as defined": "an occurrence S1 marked as a concept the paper defines",
+    "tagged generically": "an occurrence S1 marked only as a background-lexicon word or phrase "
+                          "(e.g. co-t-structure as lexicon:structure)",
+    "untagged": "an occurrence of a defined term that no S1 concept mark touches",
+}
+
+
+def mark_kind(kind: str) -> tuple[str, str]:
+    if kind in MARK_KINDS:
+        return MARK_KINDS[kind]
+    if kind.startswith("env/"):
+        return ENV_MEANING
+    raise ValueError(f"S1 mark kind {kind!r} has no definition in MARK_KINDS")
+
+
+def grounded(mark: dict) -> bool:
+    """Whether S1 tied this mark to a meaning, rather than only tagging it."""
+    fields = dict(mark.get("fields") or [])
+    if mark["kind"] == "concept":
+        return bool(fields.get("grounded")) or fields.get("source") == "defined-in-paper"
+    if mark["kind"] == "ref":
+        return "dangling" not in (mark.get("tip") or "")
+    return mark["kind"] not in ("symbol", "unknown", "role-gap")
+
+
+EMPH = re.compile(r"\\(?:emph|textbf|textit)\{((?:[^{}]|\{[^{}]*\})*)\}")
+
+
+def term_pattern(term: str) -> str:
+    """A leading parameter such as $\\F$- or $n$- stands for any symbol; the rest is literal."""
+    parts = re.split(r"(\$[^$]*\$)", term)
+    out = []
+    for i, part in enumerate(parts):
+        param = part.startswith("$") and i == 1 and not parts[0] and (part[1:-1] == "n" or
+                                                                      part[1:-1].startswith("\\F"))
+        out.append(r"\$[^$]{1,40}\$" if param else re.escape(part))
+    return "".join(out).replace(r"\ ", r"\s+") + "s?"
+
+
+def defined_terms(text: str, marks: list[dict], starts: list[int]) -> list[dict]:
+    """Terms the paper defines, and how S1's concept marks treat every occurrence."""
+    body = text.find("\\begin{document}")
+    found = {}
+    for m in marks:
+        if m["kind"] == "env/definition":
+            for e in EMPH.finditer(text, m["start"], m["end"]):
+                found.setdefault(e.group(1), (e.start(1), m))
+    # S1's own miner catches phrasings outside the environments ("the \\textit{heart} of").
+    import build_golden_paper
+    for d in build_golden_paper.mine_definitions(text):
+        for e in EMPH.finditer(d.term):
+            env = next((m for m in marks if m["kind"] == "env/definition" and m["start"] <= d.position < m["end"]), None)
+            found.setdefault(e.group(1), (d.position, env))
+    concepts = [m for m in marks if m["kind"] == "concept"]
+    taken, terms = [], []
+    for term, (at, env) in sorted(found.items(), key=lambda kv: -len(kv[0])):   # longest first
+        pats = [term_pattern(term)]
+        head = re.sub(r"^\$[^$]*\$-", "", term)
+        if head != term and head not in found:
+            pats.append(re.escape(head) + "s?")
+        occ = []
+        for pat in pats:
+            for o in re.finditer(r"(?<![A-Za-z-])" + pat + r"(?![A-Za-z])", text[body:], re.I):
+                a, b = o.start() + body, o.end() + body
+                if any(a < y and x < b for x, y in taken):
+                    continue
+                taken.append((a, b))
+                over = [c for c in concepts if c["start"] < b and a < c["end"]]
+                src = [dict(c.get("fields") or []) for c in over]
+                if any(f.get("source") == "defined-in-paper" for f in src):
+                    status, how = "tagged as defined", ""
+                elif over:
+                    status = "tagged generically"
+                    how = ", ".join(sorted({f.get("grounded") or f.get("source") or "concept" for f in src}))
+                else:
+                    status, how = "untagged", ""
+                occ.append([a, b, status, how])
+        occ.sort()
+        where = env or {"start": at, "end": min(len(text), at + 300)}
+        terms.append({"term": term, "at": at, "line": line_of(starts, at),
+                      "definition": re.sub(r"\s+", " ", text[where["start"]:where["end"]])[:600],
+                      "occurrences": occ})
+    terms.sort(key=lambda t: t["at"])
+    return terms
 
 
 def read_edn(paths):
@@ -105,6 +286,7 @@ def proof_note(graph: dict, candidate: dict | None, starts: list[int]) -> dict:
         if (best and best["id"] not in cited and hits(gloss, best["text"]) >= 2
                 and best_score >= ALIGNED and best_score >= own + BETTER):
             proposal = {"span": best["id"], "text": best["text"], "kind": best.get("kind"),
+                        "at": [best["start"], best["end"]],
                         "line": line_of(starts, best["start"]), "match": round(best_score, 2)}
         # Fewer than two content words (mostly formulae: "Hom(S,ΣM_0)=0") and a word
         # check cannot judge either way - say so rather than count it as a failure.
@@ -118,6 +300,7 @@ def proof_note(graph: dict, candidate: dict | None, starts: list[int]) -> dict:
                 "uncheckable": ("kept", "a mostly-formula gloss: this check cannot judge it")}[verdict]
         nodes.append({"id": n["id"], "kind": n.get("kind"), "gloss": n.get("gloss", ""),
                       "quote": n.get("text", ""), "cites": cited, "lines": n["source"]["lines"],
+                      "at": [[by_id[c]["start"], by_id[c]["end"]] for c in cited if c in by_id],
                       "sequential": cited == [f"s{i}"], "match": round(own, 2),
                       "verdict": verdict, "proposal": proposal,
                       "mock": {"verdict": mock[0], "reason": mock[1]}})
@@ -210,7 +393,29 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
                                   for v in ("kept", "re-anchored", "unanchored")},
                         "scopes": {v: sum(x["mock"]["verdict"] == v for x in scopes)
                                    for v in ("kept", "retyped", "held", "rejected")}}}
-    payload = {"file": source_file_index(typeset, paper), "summary": summary, "notes": notes}
+    body = source.find("\\begin{document}")
+    kinds = sorted({m["kind"] for m in marks["marks"]})
+    kind_ix = {k: i for i, k in enumerate(kinds)}
+    terms = defined_terms(source, marks["marks"], starts)
+    s4_used = sorted({s["kind"] for s in scopes} | {s["mock"].get("suggest") for s in scopes if s["mock"].get("suggest")})
+    glossary = {
+        "S1 mark kinds": {k: mark_kind(k)[1] for k in kinds},
+        "S3 node kinds": NODE_MEANING,
+        "S3 warrants": WARRANT_MEANING,
+        "S4 scope kinds": {k: definitions[k] for k in s4_used},
+        "This page": PAGE_TERMS,
+    }
+    if set(NODE_MEANING) != set(iatc_json.NODE_KINDS) or set(WARRANT_MEANING) != set(iatc_json.WARRANT_KINDS.values()):
+        raise ValueError("S3's node or warrant kinds changed; update NODE_MEANING / WARRANT_MEANING")
+    summary["terms"] = {"defined": len(terms), "occurrences": sum(len(t["occurrences"]) for t in terms),
+                        **{st: sum(o[2] == st for t in terms for o in t["occurrences"])
+                           for st in ("tagged as defined", "tagged generically", "untagged")}}
+    payload = {"file": source_file_index(typeset, paper), "summary": summary, "notes": notes,
+               "starts": starts, "body": body,
+               "kinds": [[k, *mark_kind(k)] for k in kinds],
+               "marks": [[m["start"], m["end"], kind_ix[m["kind"]], int(grounded(m)), m.get("tip") or ""]
+                         for m in marks["marks"]],
+               "terms": terms, "glossary": glossary}
     page = (typeset / f"{paper}-tufte.html").read_text()
     if "data-sourcepos=" not in page:
         raise ValueError("typeset page has no source positions")
@@ -218,7 +423,10 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
     data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
     page = page.replace("</head>", "<style>" + (assets / "margin.css").read_text() + "</style></head>", 1)
     page = page.replace("</body>", '<script id="m7-data" type="application/json">' + data
-                        + "</script><script>" + (assets / "margin.js").read_text() + "</script></body>", 1)
+                        + "</script><script>" + (assets / "margin.js").read_text()
+                        + '</script><script id="m7-source" type="application/json">'
+                        + json.dumps(source, ensure_ascii=False).replace("<", "\\u003c")
+                        + "</script><script>" + (assets / "plates.js").read_text() + "</script></body>", 1)
     return page, summary
 
 

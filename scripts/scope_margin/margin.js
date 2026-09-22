@@ -9,7 +9,15 @@
     if (parent) parent.append(e);
     return e;
   };
-  const pill = (text, cls, parent, title) => { const p = el('span', 'm7-pill ' + cls, text, parent); if (title) p.title = title; return p; };
+  // Every label is defined in data.glossary; one that is not is marked on the page, not hidden.
+  const DEFINE = Object.assign({}, ...Object.values(data.glossary));
+  const define = text => DEFINE[text.replace(/^mock:\s*/, '').replace(/^[\d/]+\s+/, '')];
+  const pill = (text, cls, parent, title) => {
+    const p = el('span', 'm7-pill ' + cls, text, parent), meaning = define(text);
+    p.title = meaning ? meaning + (title ? ' — ' + title : '') : 'UNDEFINED LABEL' + (title ? ' — ' + title : '');
+    if (!meaning) p.classList.add('m7-undef');
+    return p;
+  };
   const pct = (a, b) => b ? Math.round(100 * a / b) + '%' : '–';
 
   // Source blocks of THIS file, by the line they start on.
@@ -122,7 +130,8 @@
     el('summary', null, 'each node: gloss against the text it quotes', nodes);
     p.nodes.forEach(n => {
       const box = el('div', 'm7-node', null, nodes);
-      el('div', 'm7-k', `${n.id} · ${n.kind} · L${n.lines[0]}${n.lines[1] !== n.lines[0] ? '–' + n.lines[1] : ''}`, box);
+      el('div', 'm7-k', `${n.id} · ${n.kind} · L${n.lines[0]}${n.lines[1] !== n.lines[0] ? '–' + n.lines[1] : ''}`, box)
+        .title = n.kind + ': ' + (data.glossary['S3 node kinds'][n.kind] || 'UNDEFINED');
       el('div', null, n.gloss, box);
       const [label, cls] = VERDICT[n.verdict];
       const v = el('div', 'm7-legend', null, box); pill(label, cls, v); v.append(`quotes ${n.cites.join(', ')}`);
