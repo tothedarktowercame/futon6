@@ -777,6 +777,40 @@ def detect_enumerate_anaphora(text):
     return marks
 
 
+def expand_macro(cs: str, macros: dict, depth: int = 4) -> str:
+    r"""What an author macro says, chased through the macros it is written with.
+
+    \a is \alpha and \T is \mathcal{T}; a run records where each was defined and
+    what LaTeXML role it has, which says nothing about what it means. The body is
+    already collected (anatomy_v0_sweep.collect_macros keeps `rhs`), so the chase is
+    a lookup: substitute each single-token macro in the body, up to `depth` rounds,
+    and stop at a body that takes arguments (#1) or does not settle.
+    """
+    entry = macros.get(cs)
+    if not isinstance(entry, dict):
+        return ""
+    body = (entry.get("rhs") or "").strip()
+    if not body:
+        return ""
+    # A macro that takes an argument still says what it means: \lto is
+    # \stackrel{#1}{\longrightarrow}, a labelled long arrow. Its body is shown as
+    # written; only nested substitution is skipped for such a macro, since
+    # substituting a body that expects an argument would say something false.
+    seen = {cs}
+    for _ in range(depth):
+        nested = [m for m in re.findall(r"\\([A-Za-z@]+)", body)
+                  if m in macros and m not in seen and isinstance(macros[m], dict)
+                  and macros[m].get("rhs") and "#" not in macros[m]["rhs"]]
+        if not nested:
+            break
+        for name in nested:
+            seen.add(name)
+            # a lambda: the body is LaTeX, and \m in a replacement string is an escape
+            rhs = macros[name]["rhs"].strip()
+            body = re.sub(r"\\" + re.escape(name) + r"(?![A-Za-z])", lambda _m: rhs, body)
+    return body[:80]
+
+
 def build(paper: str, with_ca: bool = False, with_binders: bool = False,
           with_scopes: bool = False, with_xref: bool = False) -> dict:
     ca = None
@@ -1149,6 +1183,13 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                 g = base + body_off + m.start()
                 tip = (f"\\{cs} · {cls['class']} · {cls['role']}"
                        + (f" · {cls.get('source','')}" if cls.get("source") else ""))
+                # An author macro was named and located but never read: the page said
+                # "\a · author-defined · ID · paper.tex:106" and stopped there, so a
+                # reader could not tell that \a is alpha and \T is the triangulated
+                # category (Joe, 2026-09-22). Chase the definition to what it says.
+                expansion = expand_macro(cs, macros)
+                if expansion:
+                    tip += f" · expands to {expansion}"
                 if concept:
                     tip += f" · concept: {concept}"
                 marks.append({

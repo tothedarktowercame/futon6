@@ -133,7 +133,12 @@ SCOPE_REGEXES = [
     ("for-in", r"\bFor\s+(?:a|an|the|each|every)\s+[^$.]{0,80}?\$([^$]+)\$\s+in\s+\$([^$]+)\$"),
     ("for-list-binding", r"\bFor\s+([A-Za-z][A-Za-z0-9_]*(?:\s*,\s*[A-Za-z][A-Za-z0-9_]*)+(?:\s*,?\s*(?:and\s+)?[A-Za-z][A-Za-z0-9_]*)?)\s+in\s+([^.,\n]+)"),
     ("for-prose-binding", r"\bFor\s+(?:a|an|the|each|every)\s+([^.,:\n]{0,100}?)\s+([A-Za-z][A-Za-z0-9_]*(?:\([^)\n]{0,80}\))?)(?=\s*(?:[:;,.)]|in\b|of\b|with\b))"),
-    ("for-any-entity", r"\b(?:for\s+)?(any|every|each|all)\s+[^$.]{1,80}?\$([^$]+)\$"),
+    # Same shape as exists-binding: the object is described first and its symbol comes
+    # last ("for each $\\lambda$-presentable object $X$" binds X, not lambda). The
+    # description is greedy and a word of it may carry math.
+    ("for-any-entity", r"\b(?:for\s+)?(any|every|each|all)\s+"
+                       r"((?:(?!for\s)(?:[a-z][\w-]*|\$[^$\n]{1,40}\$-?[a-z][\w-]*)\s+){1,6})"
+                       r"\$([^$\n]{1,80})\$"),
     ("for-any", r"\b(?:for\s+)?(any|every|each|all)\s+\$([^$]+)\$"),
     ("where-binding", r"\bwhere\s+\$([^$]+)\$\s+(is|denotes|represents)\s+([^.,$]+)"),
     ("where-ascii-binding", r"\bwhere\s+([A-Za-z][A-Za-z0-9_]*(?:\([^)\n]{0,80}\))?)\s*(?:=|is|denotes|represents)\s*([^.,\n]+)"),
@@ -197,6 +202,22 @@ BINDER_TYPE_BY_COMMAND = {
     "bigcup": "bind/big-union",
     "bigcap": "bind/big-intersection",
 }
+
+# "for all $i>0$" binds i and states a condition on it; "for every $X\\in\\C$" binds X
+# and gives its domain. Storing the whole relation as the symbol made 62 of the run's
+# 482 universal scopes bind something that is not a symbol at all.
+RELATION_RE = re.compile(r"\s*(?:=|\\ne|\\neq|<|>|\\leq|\\geq|\\le|\\ge|\\in|\\subset|"
+                         r"\\subseteq|\\supseteq|\\equiv|\\cong|\\sim|\\colon|:)")
+
+
+def _symbol_and_constraint(latex: str) -> tuple[str, str]:
+    """(the symbol bound, the whole expression) when a quantifier carries a relation."""
+    text = (latex or "").strip()
+    m = RELATION_RE.search(text)
+    if m and m.start() > 0:
+        return text[:m.start()].strip(), text
+    return text, ""
+
 
 SYMBOL_RE = re.compile(r"[A-Za-z](?:_[A-Za-z0-9]+)?")
 DECORATED_SYMBOL_RE = re.compile(
@@ -1310,7 +1331,10 @@ def detect_scopes(entity_id, text, parent_env_id=None):
                 ends.append({"role": "object", "text": m.group(1).strip()[:120]})
             elif stype == "exists-binding":
                 ends.append({"role": "quantifier", "text": "there exists"})
-                ends.append({"role": "symbol", "latex": m.group(2).strip()})
+                symbol, constraint = _symbol_and_constraint(m.group(2))
+                ends.append({"role": "symbol", "latex": symbol})
+                if constraint:
+                    ends.append({"role": "condition", "latex": constraint})
                 described = (m.group(1) or "").strip()
                 if described:
                     ends.append({"role": "type", "text": described[:80]})
@@ -1344,10 +1368,17 @@ def detect_scopes(entity_id, text, parent_env_id=None):
                 ends.append({"role": "domain", "text": m.group(2).strip()[:80]})
             elif stype == "for-any-entity":
                 ends.append({"role": "quantifier", "text": m.group(1)})
-                ends.append({"role": "symbol", "latex": m.group(2).strip()})
+                symbol, constraint = _symbol_and_constraint(m.group(3))
+                ends.append({"role": "symbol", "latex": symbol})
+                ends.append({"role": "type", "text": m.group(2).strip()[:80]})
+                if constraint:
+                    ends.append({"role": "condition", "latex": constraint})
             elif stype == "for-any":
                 ends.append({"role": "quantifier", "text": m.group(1)})
-                ends.append({"role": "symbol", "latex": m.group(2).strip()})
+                symbol, constraint = _symbol_and_constraint(m.group(2))
+                ends.append({"role": "symbol", "latex": symbol})
+                if constraint:
+                    ends.append({"role": "condition", "latex": constraint})
             elif stype == "display-typed-arrow":
                 ends.append({"role": "symbol", "latex": m.group(1).strip()})
                 ends.append({"role": "type", "text": m.group(2).strip()[:80]})

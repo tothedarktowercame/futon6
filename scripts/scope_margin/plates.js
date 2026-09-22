@@ -305,7 +305,15 @@
     if (!ms.length) el('div', 'm7-legend', 'no mark here', c);
     ms.forEach(i => { const [a, b, k, g, tip] = MARKS[i], d = el('div', null, null, c);
       const kk = el('span', 'm7-pill ' + (g ? 'm7-ok' : 'm7-warn'), KINDS[k][0], d); kk.title = KINDS[k][2];
-      d.append(' ' + (tip || excerpt(a, b).slice(0, 80)).slice(0, 140)); });
+      d.append(' ' + (tip || excerpt(a, b).slice(0, 80)).slice(0, 140));
+      // "author-defined" names a macro and stops. Say what the paper defined it as.
+      const macro = /\\([A-Za-z@]+)/.exec(excerpt(a, b));
+      const def = macro && STRAT.macros && STRAT.macros[macro[1]];
+      if (def) {
+        const line = el('div', 'm7-legend m7-macro', null, d);
+        el('code', null, '\\' + macro[1] + ' → ' + def['expands-to'], line);
+        line.append(` · defined L${def.line}${def['takes-argument'] ? ' · takes an argument' : ''}`);
+      } });
     const m = el('div', 'm7-read-sec m7-read-m', null, read); el('b', null, 'M · S3 proof graphs', m);
     const mock = document.body.classList.contains('m7-mock');
     const qs = quotes(mock).filter(q => q[0] < u.b && u.a < q[1]);

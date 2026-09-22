@@ -318,6 +318,60 @@ def symbol_hypergraph(text: str, marks: list[dict]) -> list[dict]:
     return out
 
 
+MACRO_DEF = re.compile(r"\\(?:re)?newcommand\s*\*?\s*(?:\{\\([A-Za-z@]+)\}|\\([A-Za-z@]+))"
+                       r"\s*(?:\[(\d)\])?\s*(?:\[[^\]]*\])?\s*\{")
+DEF_DEF = re.compile(r"\\def\s*\\([A-Za-z@]+)\s*(?:#\d)*\s*\{")
+
+
+def _braced(text: str, open_at: int) -> str:
+    """The balanced { ... } starting at open_at, without its braces."""
+    depth, i = 0, open_at
+    while i < len(text):
+        if text[i] == "\\":
+            i += 2
+            continue
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[open_at + 1:i]
+        i += 1
+    return ""
+
+
+def macro_table(text: str) -> dict[str, dict]:
+    r"""What each macro the paper defines says, chased through the macros it uses.
+
+    A run records that \a is author-defined with role ID and where it was defined,
+    which says nothing about what it means: \a is \alpha, \T is {\mathcal T}. The
+    definitions are in the paper's own preamble, so this is a read, not a guess.
+    """
+    out: dict[str, dict] = {}
+    for pattern in (MACRO_DEF, DEF_DEF):
+        for m in pattern.finditer(text):
+            name = next((g for g in m.groups()[:2] if g), None) if pattern is MACRO_DEF else m.group(1)
+            if not name:
+                continue
+            body = _braced(text, m.end() - 1).strip()
+            if body:
+                out[name] = {"body": body, "line": _line(_line_starts(text), m.start()),
+                             "takes-argument": "#" in body}
+    for name, entry in out.items():
+        body, seen = entry["body"], {name}
+        for _ in range(4):
+            nested = [x for x in re.findall(r"\\([A-Za-z@]+)", body)
+                      if x in out and x not in seen and not out[x]["takes-argument"]]
+            if not nested:
+                break
+            for x in nested:
+                seen.add(x)
+                rhs = out[x]["body"]
+                body = re.sub(r"\\" + re.escape(x) + r"(?![A-Za-z])", lambda _m: rhs, body)
+        entry["expands-to"] = body[:80]
+    return out
+
+
 def strategies(text: str, marks: list[dict]) -> dict:
     terms = defined_terms(text, marks)
     symbols = symbol_hypergraph(text, marks)
@@ -325,10 +379,12 @@ def strategies(text: str, marks: list[dict]) -> dict:
     rules = {r: sum(o["rule"] == r for o in occ)
              for r in ("in-environment", "proved-statement", "in-section", "in-paper", "unbound")}
     judged = [o for o in occ if o["s1-agrees"] is not None]
-    return {"schema": "markup-strategies/v1", "terms": terms, "symbols": symbols,
+    macros = macro_table(text)
+    return {"schema": "markup-strategies/v1", "terms": terms, "symbols": symbols, "macros": macros,
             "summary": {"terms": len(terms), "term-uses": sum(len(t["uses"]) for t in terms),
                         "symbols": len(symbols), "occurrences": len(occ),
                         "binding-sites": sum(len(e["binders"]) for e in symbols), "rules": rules,
+                        "macros": len(macros),
                         "s1-compared": len(judged), "s1-agrees": sum(o["s1-agrees"] for o in judged)}}
 
 

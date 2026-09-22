@@ -783,14 +783,16 @@ class TestDiscourseWiring:
         assert c["end"] <= len(text)
 
     def test_for_any_entity_detected(self):
+        # The quantifier binds the symbol and states a condition on it; it does not
+        # bind "e \in E" as though the membership were the variable's name.
         text = r"For every edge $e \in E$ such that $f(e)=e$, we proceed."
         scopes = nlab_wiring.detect_scopes("t-9", text)
-        assert any(
-            s["hx/type"] == "quant/universal"
-            and any(e.get("role") == "symbol" and e.get("latex") == r"e \in E"
-                    for e in s.get("hx/ends", []))
-            for s in scopes
-        )
+        universal = [s for s in scopes if s["hx/type"] == "quant/universal"]
+        assert universal
+        ends = [e for s in universal for e in s.get("hx/ends", [])]
+        assert any(e.get("role") == "symbol" and e.get("latex") == "e" for e in ends)
+        assert any(e.get("role") == "condition" and e.get("latex") == r"e \in E" for e in ends)
+        assert any(e.get("role") == "type" and "edge" in e.get("text", "") for e in ends)
 
     def test_typed_arrow_scope_detected(self):
         text = r"We have $f : A \to B$ and $g : B \to C$."
@@ -1069,3 +1071,33 @@ class TestExistentialScopes:
             ("exists-claim", ["unique choice"])]
         # "satisfying" as a delimiter matched adjectives: "there is a much more satisfying ..."
         assert self.detect("there is a much more satisfying account") == []
+
+
+class TestUniversalScopes:
+    """The universal patterns had the existential's defect and one of its own: the
+    symbol was the FIRST formula after the quantifier, and a relation was stored whole
+    as if it were a symbol (62 of the run's 482 universal scopes bound something that
+    is not a symbol)."""
+
+    def detect(self, text):
+        import re
+        pats = dict(nlab_wiring.SCOPE_REGEXES)
+        for name in ("for-any-entity", "for-any"):
+            m = re.search(pats[name], text)
+            if m:
+                return name, [g and g.strip() for g in m.groups()]
+        return None, []
+
+    def test_the_symbol_is_the_one_the_description_ends_with(self):
+        name, g = self.detect(r"for each $\lambda$-presentable object $X$ in $\ck$")
+        assert (name, g) == ("for-any-entity", ["each", r"$\lambda$-presentable object", "X"])
+
+    def test_a_quantifier_over_a_relation_binds_the_symbol_and_keeps_the_relation(self):
+        assert nlab_wiring._symbol_and_constraint("i>0") == ("i", "i>0")
+        assert nlab_wiring._symbol_and_constraint(r"X\in\mathcal{C}") == ("X", r"X\in\mathcal{C}")
+        assert nlab_wiring._symbol_and_constraint(r"\beta : X\rightarrow B")[0] == r"\beta"
+        assert nlab_wiring._symbol_and_constraint("X") == ("X", "")      # nothing to split
+
+    def test_a_described_object_carrying_math_still_yields_its_own_symbol(self):
+        _, g = self.detect(r"For any $\mathcal{B}$-preenvelope $\beta : X\rightarrow B$")
+        assert nlab_wiring._symbol_and_constraint(g[-1])[0] == r"\beta"

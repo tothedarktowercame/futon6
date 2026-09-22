@@ -145,3 +145,38 @@ def test_an_emphasis_that_is_not_a_term_is_not_taken_for_one():
     assert grab(r"\emph{map\/}") == "map"                      # nor an italic correction
     assert grab(r"\emph{1}") == ""                             # nor is a bare numeral a term
     assert grab(r"\emph{lment tordant (tensorielle}") == "lment tordant"
+
+
+MACROS = "\n".join([
+    r"\newcommand{\a}{\alpha}",
+    r"\newcommand{\T}{{\mathcal T}}",
+    r"\newcommand{\Ta}{\T_{\a}}",
+    r"\newcommand{\lto}[1][{}]{\stackrel{#1}{\longrightarrow}}",
+    r"\def\Sc{{\mathcal S}}",
+    r"\begin{document}",
+    r"Let $\Ta$ be a category and $H_\a\colon\T\lto\Sc$ a functor.",
+    r"\end{document}",
+])
+
+
+def test_an_author_macro_is_chased_to_what_it_says():
+    # A run records "\a · author-defined · ID · paper.tex:106" and stops, which does
+    # not say that \a is alpha (Joe, 2026-09-22).
+    table = ms.macro_table(MACROS)
+    assert table["a"]["expands-to"] == r"\alpha"
+    assert table["T"]["expands-to"] == r"{\mathcal T}"
+    assert table["Sc"]["expands-to"] == r"{\mathcal S}"          # \def, not \newcommand
+    assert table["Ta"]["expands-to"] == r"{\mathcal T}_{\alpha}"  # chased two deep
+
+
+def test_a_macro_taking_an_argument_shows_its_body_and_says_so():
+    table = ms.macro_table(MACROS)
+    assert table["lto"]["expands-to"] == r"\stackrel{#1}{\longrightarrow}"
+    assert table["lto"]["takes-argument"] is True
+    assert table["a"]["takes-argument"] is False
+
+
+def test_a_parametrised_macro_is_not_substituted_into_another_body():
+    # Substituting a body that expects an argument would say something false.
+    table = ms.macro_table(MACROS + "\n" + r"\newcommand{\arrowy}{A \lto B}")
+    assert table["arrowy"]["expands-to"] == r"A \lto B"
