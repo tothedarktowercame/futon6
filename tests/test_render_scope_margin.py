@@ -86,3 +86,25 @@ def test_a_page_pinned_light_must_restore_the_converter_s_own_colours():
         assert "invisible in dark mode" in str(e)
     else:
         raise AssertionError("a light-pinned page with inverted diagram colours was accepted")
+
+
+def test_a_refused_proof_is_read_from_the_run_s_own_accounting(tmp_path):
+    # 0806.1324's lemma B.7 was read by S3 and its graph rejected for circularity;
+    # the margin was blank beside it, which reads as "nobody tried" (Joe, 2026-09-22).
+    import json as _json
+    run = tmp_path
+    (run / "accounting/S3/S3-a001").mkdir(parents=True)
+    (run / "accounting/S3/S3-a001/S3.loop.json").write_text(_json.dumps({"items": [
+        {"id": "p:__p60", "paper": "p", "status": "rejected", "attempts": [{"attempt": 1}],
+         "reason": "contract: the steps derive node 5 -> node 6 -> node 5"},
+        {"id": "p:__p59", "paper": "p", "status": "accepted", "reason": ""},
+        {"id": "q:__p1", "paper": "q", "status": "rejected", "reason": "another paper"}]}))
+    (run / "accounting/S4/S4-a001").mkdir(parents=True)
+    (run / "accounting/S4/S4-a001/S4.select.json").write_text(_json.dumps({"items": [
+        {"id": "p:p-inflight-0002:L259-265", "status": "deferred", "reason": "cap 30 per paper"},
+        {"id": "p:p-leaf-0001:L292-305", "status": "accepted", "reason": ""}]}))
+    got = margin.stage_outcomes(run, "p")
+    assert list(got["proofs"]) == ["p:__p60"]                       # accepted and other papers left out
+    assert got["proofs"]["p:__p60"]["attempts"] == 1
+    assert got["regions"] == [{"id": "p-inflight-0002", "lines": [259, 265],
+                               "status": "deferred", "why": "cap 30 per paper"}]

@@ -141,6 +141,8 @@
   const INK = {c: 0.42, m: 0.42, y: 0.55};
   const color = (c, m, y) => `rgb(${Math.round(255 * (1 - INK.c * c))},${Math.round(255 * (1 - INK.m * m))},${Math.round(255 * (1 - INK.y * y))})`;
   const proofs = data.notes.filter(n => n.type === 'proof'), regions = data.notes.filter(n => n.type === 'region');
+  const refused = data.notes.filter(n => n.type === 'refused');
+  const deferredAt = line => (data.deferred || []).find(r => r.lines[0] <= line && line <= r.lines[1]);
   const hit = (a, b, rs) => rs.some(([x, y]) => x < b && a < y);
   let ctl;
   const carvedAt = line => data.carved.find(r => r.lines[0] <= line && line <= r.lines[1]);
@@ -162,6 +164,7 @@
     if (ctl.m.checked) {
       if (qs.some(q => q[0] < u.b && u.a < q[1])) m = 1;
       else if (proofs.some(p => p.lo <= line && line <= p.hi)) m = 0.3;
+      else if (refused.some(p => p.lo <= line && line <= p.hi)) m = 0.12;   // read, refused
     }
     let y = 0;
     if (ctl.y.checked) {
@@ -219,6 +222,7 @@
   sw(color(0.5, 0, 0), 'S1 tagged it but found no meaning');
   sw(color(0, 1, 0), 'a proof-graph node quotes it');
   sw(color(0, 0.3, 0), 'inside a proof S3 read, not quoted');
+  sw(color(0, 0.12, 0), 'a proof S3 read whose graph was refused');
   sw(color(0, 0, 1), 'an S4 scope cites this line');
   sw(color(0, 0, 0.3), 'a region S4 would read now, no scope in this run');
   sw(color(0, 0, 0.14), 'prose inside a proof, carved as an in-proof region');
@@ -233,6 +237,14 @@
   [ctl.c, ctl.m, ctl.y, ctl.t].forEach(c => c.addEventListener('change', paint));
   document.querySelectorAll('.m7-banner input').forEach(c => c.addEventListener('change', paint));
 
+  const SUM = data.summary;
+  if (SUM['refused-proofs'] || SUM['deferred-regions']) {
+    const rp = el('p', null, null, box);
+    el('b', null, 'What the run refused or never reached: ', rp);
+    rp.append(`${SUM['refused-proofs']} proof graph(s) rejected by a code check after the model answered, and ` +
+              `${SUM['deferred-regions']} region(s) never read because the per-paper cap was reached. ` +
+              'Both show as a blank margin unless they are said out loud, which is what the notes below do.');
+  }
   const K = data.summary.carving, cp = el('p', null, null, box);
   el('b', null, 'Where S4 reads: ', cp);
   cp.append(`this run carved ${K.run.regions} region(s), ${K.run.expository_lines} of ${K.run.body_lines} body lines (${K.run.pct}%). ` +
@@ -318,7 +330,12 @@
     const mock = document.body.classList.contains('m7-mock');
     const qs = quotes(mock).filter(q => q[0] < u.b && u.a < q[1]);
     const inProof = proofs.filter(p => p.lo <= line && line <= p.hi);
-    if (!inProof.length) el('div', 'm7-legend', 'not in a proof S3 read', m);
+    const ref = refused.find(p => p.lo <= line && line <= p.hi);
+    if (ref) { const d = el('div', 'm7-legend', null, m);
+      const rp = el('span', 'm7-pill m7-bad', ref.status === 'rejected' ? 'rejected by the contract' : ref.status, d);
+      rp.title = data.glossary['This page'][ref.status === 'rejected' ? 'rejected by the contract' : ref.status] || 'UNDEFINED';
+      d.append(` ${ref.id}: ${ref.why.replace(/^contract:\s*/, '').slice(0, 160)}`); }
+    if (!inProof.length && !ref) el('div', 'm7-legend', 'not in a proof S3 read', m);
     inProof.forEach(p => { const quoting = qs.filter(q => q[2] === p);
       el('div', 'm7-legend', `${p.id} (L${p.lo}–${p.hi}): ${quoting.length ? 'quoted by' : 'no node quotes this'}`, m);
       quoting.forEach(q => { const d = el('div', null, null, m); el('span', 'm7-pill m7-stated', q[3].id + ' ' + q[3].kind, d).title = data.glossary['S3 node kinds'][q[3].kind] || 'UNDEFINED';
@@ -349,7 +366,12 @@
     const cv = carvedAt(line);
     if (cv) { const d = el('div', 'm7-legend', null, y); const p = el('span', 'm7-pill m7-stated', cv.type, d);
       p.title = data.glossary['This page'][cv.type] || 'UNDEFINED'; d.append(` ${cv.id} · L${cv.lines[0]}–${cv.lines[1]} · ${cv.section}`); }
-    if (!sc.length) el('div', 'm7-legend', cv ? (regions.some(r => r.lo <= line && line <= r.hi) ? 'read in this run; no scope cites this line' : 'not read in this run: no scopes yet') : 'not in an expository region', y);
+    const dfr = deferredAt(line);
+    if (dfr) { const d = el('div', 'm7-legend', null, y);
+      const dp = el('span', 'm7-pill m7-warn', dfr.status, d);
+      dp.title = data.glossary['This page'][dfr.status] || 'UNDEFINED';
+      d.append(` ${dfr.id}: ${dfr.why.slice(0, 120)}`); }
+    if (!sc.length && !dfr) el('div', 'm7-legend', cv ? (regions.some(r => r.lo <= line && line <= r.hi) ? 'read in this run; no scope cites this line' : 'not read in this run: no scopes yet') : 'not in an expository region', y);
     sc.forEach(s => { const d = el('div', null, null, y); el('span', 'm7-pill ' + (s['bare-parent'] ? 'm7-warn' : 'm7-stated'), s.kind, d).title = data.glossary['S4 scope kinds'][s.kind] || 'UNDEFINED';
       d.append(' ' + (s.fill == null ? 'held' : s.fill) + (mock ? ` — mock: ${s.mock.verdict}` : '')); });
   }

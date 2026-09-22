@@ -158,6 +158,10 @@ PAGE_TERMS = {
     "tagged generically": "an occurrence S1 marked only as a background-lexicon word or phrase "
                           "(e.g. co-t-structure as lexicon:structure)",
     "untagged": "an occurrence of a defined term that no S1 concept mark touches",
+    "rejected by the contract": "S3 read this proof and a code check refused the graph it produced; "
+                                "no graph was written, so the margin would otherwise be empty here",
+    "deferred": "S4 never read this region in this run: the per-paper cap was reached",
+    "errored": "the endpoint could not produce a judgeable answer for this item",
     "quoted": "the scope's fill is in the passage word for word, so the words it is about can be shown",
     "in the model\u2019s words": "the fill is not in the passage: it is the model's paraphrase, and only "
                                   "the cited lines can be shown",
@@ -294,6 +298,34 @@ def mock_scope(scope: dict, definitions) -> dict:
     return {"verdict": "kept", "reason": "passes the proposed checks"}
 
 
+def stage_outcomes(run: Path, paper: str) -> dict:
+    """What the run recorded for this paper's items that produced nothing.
+
+    A proof whose graph the contract refused, and a region S4 never read, look on
+    the page exactly like a passage nobody tried: empty. They are not the same, and
+    the run says which is which. On 0806.1324, lemma B.7's proof WAS read and its
+    graph rejected for circularity, twice; the page showed a blank margin (Joe,
+    2026-09-22).
+    """
+    out = {"proofs": {}, "regions": []}
+    for path in sorted((run / "accounting/S3").glob("*/S3.loop.json")):
+        for item in json.loads(path.read_text()).get("items") or ():
+            if item.get("paper") == paper and item.get("status") not in ("accepted", None):
+                out["proofs"][item["id"]] = {"status": item["status"], "why": item.get("reason", ""),
+                                             "attempts": len(item.get("attempts") or ())}
+    for name in ("S4.loop.json", "S4.select.json"):
+        for path in sorted((run / "accounting/S4").glob(f"*/{name}")):
+            for item in json.loads(path.read_text()).get("items") or ():
+                ident = str(item.get("id", ""))
+                if not ident.startswith(paper + ":") or item.get("status") in ("accepted", None):
+                    continue
+                m = re.search(r":L(\d+)-(\d+)$", ident)
+                if m:
+                    out["regions"].append({"id": ident.split(":")[1], "lines": [int(m.group(1)), int(m.group(2))],
+                                           "status": item["status"], "why": item.get("reason", "")})
+    return out
+
+
 def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
     marks = json.loads((run / "artifacts/marks" / f"fable-{paper}-dp-emacs.json").read_text())
     source = marks["text"]
@@ -334,6 +366,17 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
         if m:
             region["lo"], region["hi"] = int(m.group(1)), int(m.group(2))
     notes += list(regions.values())
+    # Proofs the run read and refused: a note where the passage is, not a blank margin.
+    outcomes = stage_outcomes(run, paper)
+    for pid, row in sorted(outcomes["proofs"].items()):
+        cand = run / "artifacts/candidates" / f"{pid}.candidate.json"
+        if not cand.is_file():
+            continue
+        c = json.loads(cand.read_text())
+        lo, hi = c["window-lines"]
+        notes.append({"type": "refused", "id": pid.split("__")[-1], "lo": lo, "hi": hi,
+                      "proved": (c.get("proved") or {}).get("kind"), "proof-lines": c["proof-lines"],
+                      **row})
     notes.sort(key=lambda n: (n["lo"], n["hi"]))
     nodes = [x for n in notes if n["type"] == "proof" for x in n["nodes"]]
     edges = [x for n in notes if n["type"] == "proof" for x in n["edges"]]
@@ -348,6 +391,8 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
                "warrants": {k: sum(e["warrant"] == k for e in edges)
                             for k in ("claim", "citation", "missing-warrant")},
                "regions": sum(n["type"] == "region" for n in notes), "scopes": len(scopes),
+               "refused-proofs": sum(n["type"] == "refused" for n in notes),
+               "deferred-regions": sum(r["status"] == "deferred" for r in outcomes["regions"]),
                "scopes-flagged": sum(bool(s["flags"]) for s in scopes),
                "scopes-bare-parent": sum(s["bare-parent"] for s in scopes),
                "scopes-filled": sum(s["fill"] is not None for s in scopes),
@@ -388,7 +433,7 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
                "kinds": [[k, *mark_kind(k)] for k in kinds],
                "marks": [[m["start"], m["end"], kind_ix[m["kind"]], int(grounded(m)), m.get("tip") or ""]
                          for m in marks["marks"]],
-               "strategies": strat, "glossary": glossary}
+               "strategies": strat, "deferred": outcomes["regions"], "glossary": glossary}
     page = (typeset / f"{paper}-tufte.html").read_text()
     if "data-sourcepos=" not in page:
         raise ValueError("typeset page has no source positions")

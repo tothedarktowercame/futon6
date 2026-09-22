@@ -153,6 +153,19 @@
     });
     return note;
   }
+  // A proof the run read and refused. Without this the margin is blank beside it, and
+  // a reader cannot tell a refusal from a passage nobody tried (0806.1324's lemma B.7).
+  function refusedNote(r) {
+    const note = el('div', 'm7-note refused');
+    const h = el('h4', null, `Proof${r.proved ? ' of a ' + r.proved : ''} — no graph `, note);
+    el('span', 'm7-where', `· ${r.id} · L${r['proof-lines'][0]}–${r['proof-lines'][1]}`, h);
+    const line = el('p', 'm7-legend', null, note);
+    pill(r.status === 'rejected' ? 'rejected by the contract' : r.status, 'm7-bad', line);
+    line.append(`${r.attempts} attempt${r.attempts === 1 ? '' : 's'}, then nothing written`);
+    el('p', null, r.why.replace(/^contract:\s*/, ''), note);
+    note.dataset.problem = '1';
+    return note;
+  }
   const FLAG = {'echo': 'repeats its slot definition', 'unanchored': 'not in the lines it cites', 'bare-noun': 'a bare noun phrase'};
   function regionNote(r) {
     const note = el('div', 'm7-note region');
@@ -192,7 +205,7 @@
   data.notes.forEach(n => {
     const cover = covering(n.lo, n.hi);
     if (!cover.length) { missing.push(`${n.id} (L${n.lo}–${n.hi})`); return; }
-    const note = n.type === 'proof' ? proofNote(n) : regionNote(n);
+    const note = n.type === 'proof' ? proofNote(n) : n.type === 'refused' ? refusedNote(n) : regionNote(n);
     cover.forEach(e => e.classList.add('m7-covered'));
     note.addEventListener('mouseenter', () => { note.classList.add('m7-active'); cover.forEach(e => e.classList.add('m7-lit')); });
     note.addEventListener('mouseleave', () => { note.classList.remove('m7-active'); cover.forEach(e => e.classList.remove('m7-lit')); });
@@ -213,7 +226,7 @@
     document.body.classList.toggle('m7-inline', inline);
     let floor = 0;
     notes.forEach(({n, note, anchor}) => {
-      const shown = (n.type === 'proof' ? showProofs.checked : showScopes.checked) && (!onlyFlagged.checked || note.dataset.problem);
+      const shown = (n.type === 'region' ? showScopes.checked : showProofs.checked) && (!onlyFlagged.checked || note.dataset.problem);
       note.classList.toggle('m7-hidden', !shown);
       if (inline) { if (note.parentNode !== anchor.parentNode) anchor.before(note); return; }
       if (note.parentNode !== rail) rail.append(note);
