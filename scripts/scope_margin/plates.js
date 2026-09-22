@@ -58,21 +58,38 @@
   const MARKUP = /\$[^$]*\$|\\\[[\s\S]*?\\\]|\\begin\{[^}]*\}[\s\S]*?\\end\{[^}]*\}|\\[A-Za-z]+(\{[^}]*\})?|%.*|[^A-Za-z]/g;
   const skipsProse = (a, b) => b - a > 12 &&
     data.source.slice(a, b).replace(MARKUP, ' ').split(/\s+/).filter(x => x.length > 2).length >= 3;
-  // A formula with no position is the next S1 math span at the cursor, if reaching it
-  // skips no prose.
+  // A formula with no position of its own is one of the next few S1 math spans at the
+  // cursor: the one whose text looks most like what was rendered (alttext expands the
+  // paper's macros, so this ranks candidates rather than deciding equality).
   const mathStarts = MARKS.map((m, i) => i).filter(i => MARKS[i][2] === MATH).sort((x, y) => MARKS[x][0] - MARKS[y][0]);
-  function nextMath(from) {
+  const symbols = t => new Set((t || '').replace(/\\[A-Za-z]+/g, ' ').match(/[A-Za-z0-9]/g) || []);
+  function like(a, b) {
+    const A = symbols(a), B = symbols(b);
+    if (!A.size || !B.size) return 0;
+    return [...A].filter(x => B.has(x)).length / new Set([...A, ...B]).size;
+  }
+  function firstAt(from) {
     let lo = 0, hi = mathStarts.length;
     while (lo < hi) { const m = (lo + hi) >> 1; if (MARKS[mathStarts[m]][0] < from) lo = m + 1; else hi = m; }
-    const i = mathStarts[lo];
-    return i != null && MARKS[i][0] - from < 200 && !skipsProse(from, MARKS[i][0]) ? [MARKS[i][0], MARKS[i][1]] : null;
+    return lo;
+  }
+  function nextMath(from, alt) {
+    let best = null;
+    for (let k = firstAt(from); k < mathStarts.length && k < firstAt(from) + 8; k++) {
+      const i = mathStarts[k];
+      if (MARKS[i][0] - from > 200 || skipsProse(from, MARKS[i][0])) break;
+      const score = alt ? like(data.source.slice(MARKS[i][0], MARKS[i][1]), alt) : 0;
+      if (!best || score > best.score) best = {i, score};
+      if (!alt) break;
+    }
+    return best ? [MARKS[best.i][0], MARKS[best.i][1]] : null;
   }
   let words = 0, placed = 0;
   function walk(node, cur) {
     for (const n of [...node.childNodes]) {
       if (SKIP(n)) continue;
       if (n.nodeType === 1 && n.tagName.toLowerCase() === 'math') {
-        const r = mathRange(n) || nextMath(cur.at);
+        const r = mathRange(n) || nextMath(cur.at, n.getAttribute('alttext'));
         if (r) { units.push({e: n, a: r[0], b: r[1]}); cur.at = Math.max(cur.at, r[1]); }
         continue;
       }
@@ -154,7 +171,19 @@
     return [c, m, y];
   }
   const TERMCLS = {'tagged as defined': 'm7-t-def', 'tagged generically': 'm7-t-gen', 'untagged': 'm7-t-none'};
-  const occs = data.terms.flatMap(t => t.occurrences.map(o => ({a: o[0], b: o[1], status: o[2], how: o[3], t})));
+  const STRAT = data.strategies;
+  const occs = STRAT.terms.flatMap(t => t.uses.map(u => ({a: u.start, b: u.end, status: u.s1, how: u['s1-grounding'], param: u.parameter, t})));
+  // Symbol occurrences, indexed by line: one hyperedge per name joins binders to uses.
+  const symByLine = new Map();
+  STRAT.symbols.forEach(e => e.occurrences.forEach(o => {
+    const l = lineOf(o.start); if (!symByLine.has(l)) symByLine.set(l, []); symByLine.get(l).push({e, o});
+  }));
+  const symbolsAt = (a, b) => {
+    const out = [];
+    for (let l = lineOf(a); l <= lineOf(b - 1); l++)
+      (symByLine.get(l) || []).forEach(x => { if (x.o.start < b && a < x.o.end) out.push(x); });
+    return out.sort((x, y) => x.o.start - y.o.start);
+  };
   function paint() {
     const mock = document.body.classList.contains('m7-mock'), qs = quotes(mock);
     units.forEach(u => {
@@ -219,12 +248,35 @@
   el('summary', null, 'the defined terms, one by one', td);
   const table = el('table', 'm7-terms', null, td);
   const hr = el('tr', null, null, table); ['term', 'defined', 'uses', 'as defined', 'generic', 'untagged', 'S1 grounded it to'].forEach(h => el('th', null, h, hr));
-  data.terms.forEach(t => {
-    const r = el('tr', null, null, table), n = s => t.occurrences.filter(o => o[2] === s).length;
+  STRAT.terms.forEach(t => {
+    const r = el('tr', null, null, table), n = s => t.uses.filter(u => u.s1 === s).length;
     el('td', null, t.term.replace(/\$([^$]*)\$/g, '$1').replace(/\\mathcal\{?(\w)\}?|\\(\w+)/g, (_, a, b) => a || b), r).title = t.definition;
-    el('td', null, 'L' + t.line, r); el('td', null, String(t.occurrences.length), r);
+    el('td', null, 'L' + t.line, r); el('td', null, String(t.uses.length), r);
     el('td', 'm7-ok', String(n('tagged as defined')), r); el('td', 'm7-warn', String(n('tagged generically')), r); el('td', 'm7-bad', String(n('untagged')), r);
-    el('td', 'm7-legend', [...new Set(t.occurrences.map(o => o[3]).filter(Boolean).flatMap(x => x.split(', ')))].join(', '), r);
+    el('td', 'm7-legend', [...new Set(t.uses.map(u => u['s1-grounding']).filter(Boolean).flatMap(x => x.split(', ')))].join(', '), r);
+  });
+  const G = STRAT.summary, gp = el('p', null, null, box);
+  el('b', null, 'Strategies (no model): ', gp);
+  gp.append(`${G.symbols} symbol names, ${G.occurrences} occurrences, ${G['binding-sites']} binding sites. ` +
+            `${G.rules['in-environment']} occurrences are bound in their own environment, ${G.rules['proved-statement']} by the statement their proof proves, ` +
+            `${G.rules['in-section']} by the nearest earlier binding in the section and ${G.rules['in-paper']} anywhere earlier (both assumed), ` +
+            `and ${G.rules.unbound} have no earlier binding of the name. Where S1 also grounded the symbol, it agrees with the binding ` +
+            `${G['s1-agrees']} times of ${G['s1-compared']}.`);
+  const sd = el('details', null, null, box);
+  el('summary', null, 'each symbol: binding sites and how its uses are bound', sd);
+  const stab = el('table', 'm7-terms', null, sd);
+  const sh = el('tr', null, null, stab); ['symbol', 'uses', 'binding sites', 'in env', 'proved', 'section', 'paper', 'unbound', 'S1 agrees', 'first binding says'].forEach(h => el('th', null, h, sh));
+  STRAT.symbols.forEach(e => {
+    const r = el('tr', null, null, stab), n = k => e.occurrences.filter(o => o.rule === k).length;
+    const judged = e.occurrences.filter(o => o['s1-agrees'] !== null);
+    el('td', null, e.name, r); el('td', null, String(e.occurrences.length), r); el('td', null, String(e.binders.length), r);
+    el('td', 'm7-ok', String(n('in-environment')), r); el('td', 'm7-ok', String(n('proved-statement')), r);
+    el('td', 'm7-cite', String(n('in-section')), r); el('td', 'm7-cite', String(n('in-paper')), r);
+    el('td', 'm7-warn', String(n('unbound')), r);
+    el('td', null, judged.length ? `${judged.filter(o => o['s1-agrees']).length}/${judged.length}` : '–', r);
+    el('td', 'm7-legend', e.binders.length ? `L${e.binders[0].line} ${e.binders[0].type || '(no type)'}`.slice(0, 60) : '', r);
+    r.addEventListener('mouseenter', () => litEdge(e, null, true));
+    r.addEventListener('mouseleave', () => litEdge(e, null, false));
   });
   const gd = el('details', null, null, box);
   el('summary', null, 'what every label on this page means', gd);
@@ -263,6 +315,27 @@
       el('div', 'm7-legend', `${p.id} (L${p.lo}–${p.hi}): ${quoting.length ? 'quoted by' : 'no node quotes this'}`, m);
       quoting.forEach(q => { const d = el('div', null, null, m); el('span', 'm7-pill m7-stated', q[3].id + ' ' + q[3].kind, d).title = data.glossary['S3 node kinds'][q[3].kind] || 'UNDEFINED';
         d.append(' ' + q[3].gloss); }); });
+    const sy = symbolsAt(u.a, u.b);
+    if (sy.length) {
+      const d = el('div', 'm7-read-sec m7-read-s', null, read);
+      el('b', null, 'Symbols here', d);
+      sy.forEach(({e, o}) => {
+        const row = el('div', 'm7-symrow', null, d);
+        el('code', null, e.name, row);
+        const b = o.binder == null ? null : e.binders[o.binder];
+        const rule = el('span', 'm7-pill ' + (o.rule === 'unbound' ? 'm7-warn' : o.rule === 'in-paper' || o.rule === 'in-section' ? 'm7-cite' : 'm7-ok'), o.rule, row);
+        rule.title = data.glossary['This page'][o.rule] || 'UNDEFINED';
+        row.append(b ? ` ${b.type || '(no type given)'} — bound at L${b.line}` : ' no binding of this name before it');
+        if (b) { const src = el('span', 'm7-pill m7-stated', b.source, row); src.title = data.glossary['This page'][b.source.split('+')[0]] || 'UNDEFINED'; }
+        const s1 = el('div', 'm7-legend', null, row);
+        s1.append(o['s1-grounding'] ? `S1 grounded it: “${o['s1-grounding']}” ` : 'S1 left it ungrounded ');
+        if (o['s1-agrees'] === true) el('span', 'm7-pill m7-ok', 'agrees', s1);
+        if (o['s1-agrees'] === false) el('span', 'm7-pill m7-bad', 'differs', s1);
+        el('span', 'm7-legend', ` · ${e.occurrences.length} uses, ${e.binders.length} binding site(s)`, row);
+        row.addEventListener('mouseenter', () => litEdge(e, o, true));
+        row.addEventListener('mouseleave', () => litEdge(e, o, false));
+      });
+    }
     const y = el('div', 'm7-read-sec m7-read-y', null, read); el('b', null, 'Y · S4 expository scopes', y);
     const sc = regions.flatMap(r => r.scopes.filter(s => s.lines[0] <= line && line <= s.lines[1]));
     const cv = carvedAt(line);
@@ -272,6 +345,17 @@
     sc.forEach(s => { const d = el('div', null, null, y); el('span', 'm7-pill ' + (s['bare-parent'] ? 'm7-warn' : 'm7-stated'), s.kind, d).title = data.glossary['S4 scope kinds'][s.kind] || 'UNDEFINED';
       d.append(' ' + (s.fill == null ? 'held' : s.fill) + (mock ? ` — mock: ${s.mock.verdict}` : '')); });
   }
+  // The hyperedge, shown: every use of the name, every binding site, and this link.
+  function litEdge(e, here, on) {
+    const uses = e.occurrences.map(o => [o.start, o.end]);
+    const binders = e.binders.map(b => [b.start, b.end]);
+    const chosen = here && here.binder != null ? e.binders[here.binder] : null;
+    units.forEach(u => {
+      u.e.classList.toggle('m7-sym-use', on && uses.some(([a, b]) => a < u.b && u.a < b));
+      u.e.classList.toggle('m7-sym-binder', on && binders.some(([a, b]) => a < u.b && u.a < b));
+      u.e.classList.toggle('m7-sym-bound', on && !!chosen && chosen.start < u.b && u.a < chosen.end);
+    });
+  }
   const unitOf = new Map();
   let hide;
   article.addEventListener('mouseover', ev => { if (pinned) return; const u = unitOf.get(ev.target.closest('.m7-u, math'));
@@ -280,6 +364,42 @@
     pinned = pinned === u ? null : u; show(u); });
 
   blocks.forEach(b => walk(b, {at: blockStart(b)}));
+  // A display set in an equation table has no position, and neither has its cell: the
+  // nearest positioned ancestor is the surrounding div. Place it at the next unused S1
+  // math span at or after that point.
+  const usedMath = new Set(units.map(u => u.a));
+  const groupSpan = new Map();          // one source display per equation table
+  [...article.querySelectorAll('math')].forEach(m => {
+    // Labels inside an xymatrix diagram are their own <math> inside the picture's SVG;
+    // the diagram is placed as a whole, so they are left alone rather than guessed at.
+    if (unitOf.has(m) || units.some(u => u.e === m) || m.closest('math') !== m
+        || m.closest('.ltx_picture, foreignObject, svg')) return;
+    const host = m.closest('[data-sourcepos]');
+    if (!host || !pos(host)) return;
+    let at = pos(host)[0];
+    // A displayed formula takes a displayed span ($$...$$, \\[...\\], an equation
+    // environment), never the next inline $x$ that happens to come first.
+    const wantDisplay = m.getAttribute('display') === 'block';
+    // An eqnarray is rendered as one <math> per cell; all the cells are that one display.
+    const group = m.closest('table.ltx_eqn_table, .ltx_equationgroup, .ltx_eqn_eqgroup');
+    if (group && groupSpan.has(group)) { units.push({e: m, a: groupSpan.get(group)[0], b: groupSpan.get(group)[1]}); return; }
+    const isDisplay = i => /display|eqnarray|equation|align|gather|multline/.test(MARKS[i][4] || '')
+      || /^(\$\$|\\\[|\\begin)/.test(data.source.slice(MARKS[i][0], MARKS[i][0] + 8));
+    const alt = m.getAttribute('alttext');
+    let pick = null;
+    for (const i of mathStarts) {
+      if (MARKS[i][0] < at || usedMath.has(MARKS[i][0])) continue;
+      if (MARKS[i][0] - at > 2000) break;
+      if (wantDisplay !== isDisplay(i)) continue;
+      const score = like(data.source.slice(MARKS[i][0], MARKS[i][1]), alt);
+      if (!pick || score > pick.score) pick = {i, score};
+      if (pick.score > 0.6) break;
+    }
+    if (pick) {
+      usedMath.add(MARKS[pick.i][0]); units.push({e: m, a: MARKS[pick.i][0], b: MARKS[pick.i][1]});
+      if (group) groupSpan.set(group, [MARKS[pick.i][0], MARKS[pick.i][1]]);
+    }
+  });
   units.forEach(u => unitOf.set(u.e, u));
   window.m7units = units;                         // for audits from the console
   align.textContent = `Placed ${placed} of ${words} words and ${units.length - placed} formulas at their source offsets; ` +

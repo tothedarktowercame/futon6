@@ -42,6 +42,7 @@ import sys
 from pathlib import Path
 
 import expository_region_extract as region_extract
+import markup_strategies
 import expository_scope_audit as scope_audit
 import iatc_json
 
@@ -156,6 +157,17 @@ PAGE_TERMS = {
     "section-lead": "S4 region: a section's prose before its first formal block",
     "section-tail": "S4 region: a section's prose after its last formal block",
     "in-proof": "S4 region: prose between displays inside a proof; S3 also reads it",
+    "in-environment": "binding rule: a binding of this symbol earlier in the same environment",
+    "proved-statement": "binding rule: inside a proof, a binding in the statement it proves",
+    "in-section": "binding rule (assumed): the nearest earlier binding in this section",
+    "in-paper": "binding rule (assumed): the nearest earlier binding anywhere before it",
+    "unbound": "no binding of this symbol's name occurs before this point",
+    "definiendum": "binding site: the $symbol$ of a Let $X$ be ... sentence (S1)",
+    "bind/let": "binding site: a Let/Fix/Take scope (S1)",
+    "bind/define": "binding site: a Define/denote/is called scope (S1)",
+    "bind/typed": "binding site: a formula with an arrow, f : A -> B (S1)",
+    "apposition": "binding site: an article-noun apposition, \"An object $S$ of $T$\" (this page's strategy, not S1)",
+    "quantifier": "binding site: for all/each/every $x$ (this page's strategy, not S1)",
 }
 
 
@@ -175,67 +187,6 @@ def grounded(mark: dict) -> bool:
     if mark["kind"] == "ref":
         return "dangling" not in (mark.get("tip") or "")
     return mark["kind"] not in ("symbol", "unknown", "role-gap")
-
-
-EMPH = re.compile(r"\\(?:emph|textbf|textit)\{((?:[^{}]|\{[^{}]*\})*)\}")
-
-
-def term_pattern(term: str) -> str:
-    """A leading parameter such as $\\F$- or $n$- stands for any symbol; the rest is literal."""
-    parts = re.split(r"(\$[^$]*\$)", term)
-    out = []
-    for i, part in enumerate(parts):
-        param = part.startswith("$") and i == 1 and not parts[0] and (part[1:-1] == "n" or
-                                                                      part[1:-1].startswith("\\F"))
-        out.append(r"\$[^$]{1,40}\$" if param else re.escape(part))
-    return "".join(out).replace(r"\ ", r"\s+") + "s?"
-
-
-def defined_terms(text: str, marks: list[dict], starts: list[int]) -> list[dict]:
-    """Terms the paper defines, and how S1's concept marks treat every occurrence."""
-    body = text.find("\\begin{document}")
-    found = {}
-    for m in marks:
-        if m["kind"] == "env/definition":
-            for e in EMPH.finditer(text, m["start"], m["end"]):
-                found.setdefault(e.group(1), (e.start(1), m))
-    # S1's own miner catches phrasings outside the environments ("the \\textit{heart} of").
-    import build_golden_paper
-    for d in build_golden_paper.mine_definitions(text):
-        for e in EMPH.finditer(d.term):
-            env = next((m for m in marks if m["kind"] == "env/definition" and m["start"] <= d.position < m["end"]), None)
-            found.setdefault(e.group(1), (d.position, env))
-    concepts = [m for m in marks if m["kind"] == "concept"]
-    taken, terms = [], []
-    for term, (at, env) in sorted(found.items(), key=lambda kv: -len(kv[0])):   # longest first
-        pats = [term_pattern(term)]
-        head = re.sub(r"^\$[^$]*\$-", "", term)
-        if head != term and head not in found:
-            pats.append(re.escape(head) + "s?")
-        occ = []
-        for pat in pats:
-            for o in re.finditer(r"(?<![A-Za-z-])" + pat + r"(?![A-Za-z])", text[body:], re.I):
-                a, b = o.start() + body, o.end() + body
-                if any(a < y and x < b for x, y in taken):
-                    continue
-                taken.append((a, b))
-                over = [c for c in concepts if c["start"] < b and a < c["end"]]
-                src = [dict(c.get("fields") or []) for c in over]
-                if any(f.get("source") == "defined-in-paper" for f in src):
-                    status, how = "tagged as defined", ""
-                elif over:
-                    status = "tagged generically"
-                    how = ", ".join(sorted({f.get("grounded") or f.get("source") or "concept" for f in src}))
-                else:
-                    status, how = "untagged", ""
-                occ.append([a, b, status, how])
-        occ.sort()
-        where = env or {"start": at, "end": min(len(text), at + 300)}
-        terms.append({"term": term, "at": at, "line": line_of(starts, at),
-                      "definition": re.sub(r"\s+", " ", text[where["start"]:where["end"]])[:600],
-                      "occurrences": occ})
-    terms.sort(key=lambda t: t["at"])
-    return terms
 
 
 def read_edn(paths):
@@ -402,7 +353,8 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
     body = source.find("\\begin{document}")
     kinds = sorted({m["kind"] for m in marks["marks"]})
     kind_ix = {k: i for i, k in enumerate(kinds)}
-    terms = defined_terms(source, marks["marks"], starts)
+    strat = markup_strategies.strategies(source, marks["marks"])
+    terms = strat["terms"]
     s4_used = sorted({s["kind"] for s in scopes} | {s["mock"].get("suggest") for s in scopes if s["mock"].get("suggest")})
     glossary = {
         "S1 mark kinds": {k: mark_kind(k)[1] for k in kinds},
@@ -413,9 +365,10 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
     }
     if set(NODE_MEANING) != set(iatc_json.NODE_KINDS) or set(WARRANT_MEANING) != set(iatc_json.WARRANT_KINDS.values()):
         raise ValueError("S3's node or warrant kinds changed; update NODE_MEANING / WARRANT_MEANING")
-    summary["terms"] = {"defined": len(terms), "occurrences": sum(len(t["occurrences"]) for t in terms),
-                        **{st: sum(o[2] == st for t in terms for o in t["occurrences"])
+    summary["terms"] = {"defined": len(terms), "occurrences": sum(len(t["uses"]) for t in terms),
+                        **{st: sum(u["s1"] == st for t in terms for u in t["uses"])
                            for st in ("tagged as defined", "tagged generically", "untagged")}}
+    summary["strategies"] = strat["summary"]
     # The regions S4 would read now, beside the ones this run's extractor carved.
     was = region_extract.extract_regions(paper, source)
     now = region_extract.extract_regions(paper, source, marks["marks"])
@@ -429,7 +382,7 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
                "kinds": [[k, *mark_kind(k)] for k in kinds],
                "marks": [[m["start"], m["end"], kind_ix[m["kind"]], int(grounded(m)), m.get("tip") or ""]
                          for m in marks["marks"]],
-               "terms": terms, "glossary": glossary}
+               "strategies": strat, "glossary": glossary}
     page = (typeset / f"{paper}-tufte.html").read_text()
     if "data-sourcepos=" not in page:
         raise ValueError("typeset page has no source positions")

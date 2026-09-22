@@ -65,3 +65,9 @@ dl.m7-gloss dt{font-family:ui-monospace,monospace;color:var(--m7-ink)}dl.m7-glos
 .m7-read-h code{font:12px ui-monospace,monospace}
 .m7-read-sec{margin-top:.35rem;padding-left:.45rem;border-left:4px solid #ccc}
 .m7-read-c{border-left-color:rgb(148,255,255)}.m7-read-m{border-left-color:rgb(255,148,255)}.m7-read-y{border-left-color:rgb(255,255,115)}
+.m7-read-s{border-left-color:#9b8bd0}
+.m7-symrow{margin:.2rem 0;padding-left:.3rem;border-left:2px solid #eee}
+.m7-symrow code{font:12px ui-monospace,monospace;background:#f2f0e6;padding:0 .25em;border-radius:2px;margin-right:.3em}
+.m7-sym-use{outline:1px dotted #7a4fa3}
+.m7-sym-binder{outline:2px solid #7a4fa3}
+.m7-sym-bound{outline:3px solid #2f7d4f}

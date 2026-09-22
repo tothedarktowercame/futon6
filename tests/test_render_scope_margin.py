@@ -60,29 +60,3 @@ def test_an_s1_kind_without_a_definition_stops_the_build():
     else:
         raise AssertionError("an undefined kind was accepted")
 
-
-def test_defined_terms_classify_each_use_by_what_s1_marked():
-    text = ("\\begin{document}\n"
-            "A pair is a \\textit{co-$t$-structure} if it has a \\textit{heart}.\n"
-            "Every co-$t$-structure here has a heart, and the heart is abelian; so is a homotopy colimit.\n")
-    env_end = text.index(".\n") + 1
-    at = text.index("co-$t$-structure here")
-    s = text.index("structure", at)
-    h = text.index("heart,")
-    marks = [{"kind": "env/definition", "start": text.index("A pair"), "end": env_end},
-             {"kind": "concept", "start": s, "end": s + 9, "fields": [["source", "lexicon"], ["grounded", "lexicon:structure"]]},
-             {"kind": "concept", "start": h, "end": h + 5, "fields": [["source", "defined-in-paper"]]}]
-    starts = [0] + [i + 1 for i, c in enumerate(text) if c == "\n"]
-    terms = {t["term"]: t for t in margin.defined_terms(text, marks, starts)}
-    assert set(terms) == {"co-$t$-structure", "heart"}          # "homotopy colimit" is used, not defined
-    cot = [(text[a:b], st, how) for a, b, st, how in terms["co-$t$-structure"]["occurrences"]]
-    assert ("co-$t$-structure", "tagged generically", "lexicon:structure") in cot
-    assert ("co-$t$-structure", "untagged", "") in cot            # the defining use itself
-    heart = [st for _, _, st, _ in terms["heart"]["occurrences"]]
-    assert heart.count("tagged as defined") == 1 and heart.count("untagged") == 2
-
-
-def test_a_leading_parameter_matches_any_symbol_but_t_is_literal():
-    import re
-    assert re.fullmatch(margin.term_pattern("$\\F$-preenvelope"), "$\\mathcal{B}$-preenvelopes")
-    assert not re.fullmatch(margin.term_pattern("$t$-structure"), "$n$-structure")
