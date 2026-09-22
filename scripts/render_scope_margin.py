@@ -158,6 +158,9 @@ PAGE_TERMS = {
     "tagged generically": "an occurrence S1 marked only as a background-lexicon word or phrase "
                           "(e.g. co-t-structure as lexicon:structure)",
     "untagged": "an occurrence of a defined term that no S1 concept mark touches",
+    "quoted": "the scope's fill is in the passage word for word, so the words it is about can be shown",
+    "in the model\u2019s words": "the fill is not in the passage: it is the model's paraphrase, and only "
+                                  "the cited lines can be shown",
     "leaf-section": "S4 region: a whole section with no formal block in it",
     "inflight": "S4 region: prose between two formal blocks of the same section and depth",
     "section-lead": "S4 region: a section's prose before its first formal block",
@@ -310,6 +313,13 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
     for s in audit["scopes"]:
         if s["paper"] == paper:
             s["mock"] = mock_scope(s, definitions)
+            # Where the scope's own words sit, so a reader can be shown them instead of
+            # the whole line. None when the fill is not quoted from the source at all.
+            lo, hi = s["lines"]
+            a = starts[lo - 1] if 0 < lo <= len(starts) else 0
+            b = starts[hi] if 0 < hi < len(starts) else len(source)
+            if not s.get("span") and s["fill"]:
+                s["span"] = scope_audit.locate(s["fill"], source[a:b], a)
     regions = {}
     for s in audit["scopes"]:
         if s["paper"] != paper:
@@ -340,6 +350,8 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
                "regions": sum(n["type"] == "region" for n in notes), "scopes": len(scopes),
                "scopes-flagged": sum(bool(s["flags"]) for s in scopes),
                "scopes-bare-parent": sum(s["bare-parent"] for s in scopes),
+               "scopes-filled": sum(s["fill"] is not None for s in scopes),
+               "scopes-quoted": sum(bool(s.get("span")) for s in scopes),
                "mock": {"nodes": {v: sum(x["mock"]["verdict"] == v for x in nodes)
                                   for v in ("kept", "re-anchored", "unanchored")},
                         "scopes": {v: sum(x["mock"]["verdict"] == v for x in scopes)

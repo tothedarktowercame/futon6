@@ -71,3 +71,4 @@ dl.m7-gloss dt{font-family:ui-monospace,monospace;color:var(--m7-ink)}dl.m7-glos
 .m7-sym-use{outline:1px dotted #7a4fa3}
 .m7-sym-binder{outline:2px solid #7a4fa3}
 .m7-sym-bound{outline:3px solid #2f7d4f}
+.m7-lit-span{background:#ffe9a8 !important;box-shadow:0 0 0 2px #d9a441;border-radius:2px}

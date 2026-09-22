@@ -82,8 +82,14 @@
   const notes = [];
   function glossOf(proof, id) { const n = proof.nodes.find(x => x.id === id); return n ? n.gloss : id; }
 
+  // A node quotes particular units and a scope may quote particular words. Light those
+  // when their offsets are known; fall back to the lines when they are not.
+  function litSpan(spans, lines, on) {
+    if (spans && spans.length && window.m7span && window.m7span(spans, on)) return;
+    covering(lines[0], lines[1]).forEach(e => e.classList.toggle('m7-lit-node', on));
+  }
   function litNode(n, on) {
-    covering(n.lines[0], n.lines[1]).forEach(e => e.classList.toggle('m7-lit-node', on));
+    litSpan(n.at, n.lines, on);
   }
   function proofNote(p) {
     const note = el('div', 'm7-note proof');
@@ -157,6 +163,9 @@
     pill(`${r.scopes.length - flagged} pass the checks`, flagged ? 'm7-warn' : 'm7-ok', line);
     if (flagged) pill(`${flagged} flagged`, 'm7-bad', line);
     if (generic) pill(`${generic} generic kind`, 'm7-warn', line, 'a parent kind whose vocabulary has more specific children');
+    const quoted = r.scopes.filter(s => s.span).length, filled = r.scopes.filter(s => s.fill != null).length;
+    if (filled) pill(`${quoted}/${filled} quoted`, quoted === filled ? 'm7-ok' : 'm7-warn', line,
+                     'scope fills whose words are in the passage, so they can be shown exactly');
     note.dataset.problem = (flagged || generic > r.scopes.length / 2) ? '1' : '';
     const mt = v => r.scopes.filter(x => x.mock && x.mock.verdict === v).length;
     const ms = el('p', 'm7-legend m7-mockline', null, note);
@@ -168,12 +177,13 @@
       const box = el('div', 'm7-scope', null, list);
       const k = el('div', 'm7-legend', null, box);
       pill(s.kind, s['bare-parent'] ? 'm7-warn' : 'm7-stated', k, s['bare-parent'] ? 'generic parent kind' : '');
+      if (s.fill != null) pill(s.span ? 'quoted' : 'in the model\u2019s words', s.span ? 'm7-ok' : 'm7-warn', k);
       k.append(`L${s.lines[0]}${s.lines[1] !== s.lines[0] ? '–' + s.lines[1] : ''}`);
       el('div', null, s.fill == null ? 'held: ' + (typeof s.held === 'string' ? s.held : 'no fill') : s.fill, box);
       if (s.flags.length) { const f = el('div', 'm7-legend', null, box); s.flags.forEach(x => pill(FLAG[x] || x, 'm7-bad', f)); }
       if (s.mock) mockLine(s.mock, box);
-      box.addEventListener('mouseenter', () => covering(s.lines[0], s.lines[1]).forEach(e => e.classList.add('m7-lit-node')));
-      box.addEventListener('mouseleave', () => covering(s.lines[0], s.lines[1]).forEach(e => e.classList.remove('m7-lit-node')));
+      box.addEventListener('mouseenter', () => litSpan(s.span ? [s.span] : null, s.lines, true));
+      box.addEventListener('mouseleave', () => litSpan(s.span ? [s.span] : null, s.lines, false));
     });
     return note;
   }

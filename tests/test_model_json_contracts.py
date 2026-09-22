@@ -17,14 +17,21 @@ import expository_json
 import mark3_expository_loop as expo_loop
 import stage_accounting as accounting
 
-CANDIDATE = {"schema": "expo-candidate/v1", "paper-id": "1111.0001", "passage-id": "1111.0001:leaf-0001:L20-24",
+# expo-candidate/v2: the region's sentence units, which a scope cites and quotes from.
+UNITS = [{"id": "L20-0a1b", "line": 20, "start": 100, "end": 135,
+          "text": "In Section 2 we define\nthe notation."},
+         {"id": "L22-7c3d", "line": 22, "start": 136, "end": 165,
+          "text": "Section 3\nproves the theorem."}]
+CANDIDATE = {"schema": "expo-candidate/v2", "paper-id": "1111.0001", "passage-id": "1111.0001:leaf-0001:L20-24",
              "region-id": "leaf-0001", "region-type": "leaf-section", "window-lines": [20, 24],
              "source-window": "In Section 2 we define\nthe notation.\nSection 3\nproves the theorem.\nx",
+             "units": UNITS,
              "enrichment": [], "vocab-path": "holes/excursions/expository-superpod-vocab.edn"}
 
 
-def scope(kind="rationale/telos/organization-roadmap", lo=20, hi=21, fill="Section 2 defines notation", held=""):
-    return {"kind": kind, "first_line": lo, "last_line": hi, "fill": fill, "held_reason": held}
+def scope(kind="rationale/telos/organization-roadmap", units=("L20-0a1b",),
+          fill="Section 2 we define the notation", held=""):
+    return {"kind": kind, "units": list(units), "fill": fill, "held_reason": held}
 
 
 class ExpositoryContract(unittest.TestCase):
@@ -39,15 +46,17 @@ class ExpositoryContract(unittest.TestCase):
         self.assertNotIn("perf/Agree", self.kinds)
 
     def test_problems_and_code_written_edn_pass_the_gate(self):
-        doc = {"scopes": [scope(), scope(kind="heuristic-plausibility", lo=22, hi=23, fill="",
+        doc = {"scopes": [scope(), scope(kind="heuristic-plausibility", units=("L22-7c3d",), fill="",
                                           held='no expectation is stated; "held" honestly')]}
-        self.assertEqual(expository_json.problems(doc, 20, 24, self.kinds), [])
+        self.assertEqual(expository_json.problems(doc, 20, 24, self.kinds, UNITS), [])
         for bad, text in (({"scopes": [scope(fill="", held="")]}, "exactly one"),
                           ({"scopes": [scope(fill="x", held="y")]}, "exactly one"),
-                          ({"scopes": [scope(lo=19)]}, "inside 20-24"),
+                          ({"scopes": [scope(units=())]}, "cites no unit"),
+                          # the fill must be the passage's words, not the model's about them
+                          ({"scopes": [scope(fill="the notation of the paper")]}, "is not in the unit"),
                           ({"scopes": [scope(kind="perf/Agree")]}, "not in the vocabulary"),
                           ({"scopes": []}, "nonempty")):
-            self.assertTrue(any(text in p for p in expository_json.problems(bad, 20, 24, self.kinds)), text)
+            self.assertTrue(any(text in p for p in expository_json.problems(bad, 20, 24, self.kinds, UNITS)), text)
         with tempfile.TemporaryDirectory() as d:
             path = Path(d) / "g.edn"
             path.write_text(expository_json.to_edn(doc, CANDIDATE, self.kinds, "m"))
@@ -55,7 +64,9 @@ class ExpositoryContract(unittest.TestCase):
                                   capture_output=True, text=True)
             self.assertEqual(gate.returncode, 0, gate.stdout + gate.stderr)
             text = path.read_text()
-        self.assertIn(':slot-fill {:roadmap "Section 2 defines notation"}', text)
+        self.assertIn(':slot-fill {:roadmap "Section 2 we define the notation"}', text)
+        self.assertIn(':units ["L20-0a1b"]', text)            # what the scope reads
+        self.assertIn(':fill-span [103 135]', text)           # and the extent of its own words
         self.assertIn(':held {:reason "no expectation is stated; \\"held\\" honestly"}', text)
 
     def test_loop_accounts_each_outcome_and_retries_only_failures(self):
@@ -119,7 +130,10 @@ class ExpositoryContract(unittest.TestCase):
             expo_loop.call_openai("p", CANDIDATE, self.kinds, "m")
         self.assertEqual(seen["temperature"], 0)
         self.assertEqual(seen["response_format"]["json_schema"]["schema"],
-                         expository_json.schema(20, 24, self.kinds))
+                         expository_json.schema(20, 24, self.kinds, UNITS))
+        # the model may only cite units this region actually has
+        scope_props = seen["response_format"]["json_schema"]["schema"]["properties"]["scopes"]["items"]["properties"]
+        self.assertEqual(scope_props["units"]["items"]["enum"], [u["id"] for u in UNITS])
 
 
 class CleanTypingContract(unittest.TestCase):

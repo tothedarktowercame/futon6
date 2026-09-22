@@ -25,10 +25,13 @@ from typing import Any
 REPO = Path(__file__).resolve().parent.parent
 MARKS_DIR = config.marks()
 VOCAB = REPO / "holes" / "excursions" / "expository-superpod-vocab.edn"
-SCHEMA = "expo-candidate/v1"
+# v2: every candidate carries the region's sentence units, so a scope cites what it
+# reads (region_units) instead of a line range, and its fill is quoted from them.
+SCHEMA = "expo-candidate/v2"
 
 sys.path.insert(0, str(REPO / "scripts"))
 import expository_region_extract as expo  # noqa: E402
+import region_units  # noqa: E402
 import mark3_extract_candidates as iatc_candidates  # noqa: E402
 
 
@@ -71,6 +74,7 @@ def extract(paper_id: str) -> list[dict[str, Any]]:
                 "region-type": region["type"],
                 "window-lines": [lo, hi],
                 "source-window": window_text(text, starts, lo, hi),
+                "units": region_units.units_for(text, starts, lo, hi),
                 "enrichment": iatc_candidates.window_enrichment(marks, starts, lo, hi),
                 "vocab-path": str(VOCAB.relative_to(REPO)),
                 "marks-path": iatc_candidates._display(marks_path),

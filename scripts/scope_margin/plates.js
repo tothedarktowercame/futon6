@@ -356,6 +356,18 @@
       u.e.classList.toggle('m7-sym-bound', on && !!chosen && chosen.start < u.b && u.a < chosen.end);
     });
   }
+  // Highlighting by source offsets, for the margin notes: a scope or a node covers
+  // particular words, and lighting the whole line says less than lighting those words.
+  window.m7span = (spans, on) => {
+    const rs = (spans && spans.length && Array.isArray(spans[0])) ? spans : (spans ? [spans] : []);
+    let hit = 0;
+    units.forEach(u => {
+      const lit = rs.some(([a, b]) => a < u.b && u.a < b);
+      if (lit) hit++;
+      u.e.classList.toggle('m7-lit-span', on && lit);
+    });
+    return hit;
+  };
   const unitOf = new Map();
   let hide;
   article.addEventListener('mouseover', ev => { if (pinned) return; const u = unitOf.get(ev.target.closest('.m7-u, math'));

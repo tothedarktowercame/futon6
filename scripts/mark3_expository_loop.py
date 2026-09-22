@@ -21,21 +21,24 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import expository_json  # noqa: E402
+import run_contract  # noqa: E402
 import stage_accounting as accounting  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 ARGCHECK = REPO / "scripts" / "expository_argcheck.bb"
 VOCAB = expository_json.VOCAB
 ALIGNMENT = REPO / "holes" / "excursions" / "E-iatc-expository-alignment.md"
-CANDIDATE_SCHEMA = "expo-candidate/v1"
+CANDIDATE_SCHEMA = "expo-candidate/v2"
 MAX_TOKENS = int(os.environ.get("FUTON6_EXPOSITORY_MAX_TOKENS", "2048"))
 
 SYSTEM = """You classify one expository region of a published mathematics paper.
 
 Return JSON with a list "scopes". Each scope is one thing the prose is doing, typed
 by a "kind" from the vocabulary below (its :hole says what to fill). For each scope:
-- "first_line"/"last_line": the ABSOLUTE line numbers printed on the left of the source;
-- "fill": the source-anchored text that fills the kind's hole, OR
+- "units": the ids of the sentence units this scope reads, from the list below. An id
+  names the unit's line; there is no order to follow, so read the unit before citing it;
+- "fill": the words from THOSE UNITS that fill the kind's hole. Copy them from the
+  source; a fill that is not in the units it cites is rejected, OR
 - "held_reason": why the hole cannot be filled from this text (then "fill" is "").
 Exactly one of "fill" and "held_reason" is non-empty. Hold rather than invent.
 This is the informal expository layer, not the formal proof layer."""
@@ -64,6 +67,14 @@ def numbered_window(candidate: dict[str, Any]) -> str:
     return "\n".join(f"{lo + i:5d} | {ln}" for i, ln in enumerate(body.split("\n")))
 
 
+def render_units(candidate: dict[str, Any]) -> str:
+    """The region's sentence units, under the ids "units" takes."""
+    units = candidate.get("units") or []
+    if not units:
+        return "(this candidate carries no units)"
+    return "\n".join(f"  {u['id']}  {' '.join(str(u['text']).split())}" for u in units)
+
+
 def build_prompt(candidate: dict[str, Any]) -> str:
     lo, hi = candidate["window-lines"]
     return f"""{SYSTEM}
@@ -78,6 +89,10 @@ def build_prompt(candidate: dict[str, Any]) -> str:
 Deterministic anatomy in this region:
 {render_enrichment(candidate)}
 
+Units of this region. "units" takes ids from THIS list, and a fill must be words
+from the units it cites:
+{render_units(candidate)}
+
 Source (ABSOLUTE line numbers on the left):
 {numbered_window(candidate)}"""
 
@@ -88,6 +103,13 @@ class ModelCallError(Exception):
 
 def call_stub(prompt: str, candidate: dict[str, Any], kinds: dict[str, str]) -> str:
     lo, hi = candidate["window-lines"]
+    units = candidate.get("units") or []
+    if units:
+        # Quote the unit, as the contract requires of a real answer.
+        first = units[0]
+        return json.dumps({"scopes": [{"kind": sorted(kinds)[0], "units": [first["id"]],
+                                       "fill": " ".join(str(first["text"]).split())[:120],
+                                       "held_reason": ""}]})
     snippet = " ".join(str(candidate.get("source-window", "")).split())[:120] or "source text"
     return json.dumps({"scopes": [{"kind": sorted(kinds)[0], "first_line": lo, "last_line": hi,
                                    "fill": snippet, "held_reason": ""}]})
@@ -105,7 +127,7 @@ def call_openai(prompt: str, candidate: dict[str, Any], kinds: dict[str, str], m
         "temperature": 0,
         "max_tokens": MAX_TOKENS,
         "response_format": {"type": "json_schema", "json_schema": {
-            "name": "expository_region", "strict": True, "schema": expository_json.schema(lo, hi, kinds)}},
+            "name": "expository_region", "strict": True, "schema": expository_json.schema(lo, hi, kinds, candidate.get("units") or ())}},
     }).encode()
     req = urllib.request.Request(f"{base}/chat/completions", data=body,
                                  headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"})
@@ -141,8 +163,12 @@ def require_candidates(candidate_paths: list[Path]) -> bool:
             continue
         vocab_path = candidate.get("vocab-path")
         vocab_ok = isinstance(vocab_path, str) and (REPO / vocab_path).exists()
-        if candidate.get("schema") != CANDIDATE_SCHEMA or not vocab_ok:
-            stale.append((path.name, f"schema={candidate.get('schema')!r}, vocab-path={vocab_path!r}"))
+        missing = run_contract.missing_expository_inputs(candidate)
+        if candidate.get("schema") != CANDIDATE_SCHEMA or not vocab_ok or missing:
+            why = f"schema={candidate.get('schema')!r}, vocab-path={vocab_path!r}"
+            if missing:
+                why += f", lacks {', '.join(missing)} required by {run_contract.contract_id()}"
+            stale.append((path.name, why))
     if stale:
         print(f"FATAL: {len(stale)}/{len(candidate_paths)} candidate(s) fail the expository precondition "
               f"({CANDIDATE_SCHEMA} with a repo-local vocab-path). Re-extract: "
@@ -177,7 +203,7 @@ def attempt_one(candidate, args, kinds, attempts: Path) -> tuple[str, str, dict]
         why = f"endpoint returned non-JSON despite the schema ({e}); check serving conformance"
         record["result"] = why
         return "errored", why, record
-    found = expository_json.problems(doc, lo, hi, kinds)
+    found = expository_json.problems(doc, lo, hi, kinds, candidate.get("units") or ())
     if found:
         why = "contract: " + "; ".join(found[:6])
         record["result"] = why[:500]

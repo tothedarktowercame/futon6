@@ -93,6 +93,25 @@ def flags(fill: str, cited: str, definitions) -> list[str]:
     return found
 
 
+def locate(fill: str, haystack: str, base: int = 0) -> list[int] | None:
+    """Where the fill's own words sit in the text, as [start, end) from `base`.
+
+    A scope cites lines, so anything it says about a passage can only be shown a
+    whole line (or block) at a time. When the fill is quoted from the source, its
+    exact extent can be recovered, and then a reader can be shown the words the
+    scope is about. Whitespace differs (the fill is one line, the source wraps),
+    so words are matched across any run of space; case and a trailing full stop
+    are allowed to differ. Returns None when the fill is not in the text at all,
+    which is the usual case: the model paraphrases.
+    """
+    words = [w for w in re.split(r"\s+", (fill or "").strip().rstrip(".")) if w]
+    if not words:
+        return None
+    pattern = r"\s+".join(re.escape(w) for w in words)
+    m = re.search(pattern, haystack, re.I)
+    return [base + m.start(), base + m.end()] if m else None
+
+
 def audit(expo_dir: Path, candidates_dir: Path, vocab: Path = expository_json.VOCAB) -> dict:
     definitions, parents = vocabulary_shape(vocab)
     graphs = read_edn(sorted(expo_dir.glob("*.edn")))
@@ -111,8 +130,12 @@ def audit(expo_dir: Path, candidates_dir: Path, vocab: Path = expository_json.VO
             cited = "\n".join(lines[max(0, lo - first):hi - first + 1])
             fill = next(iter((scope.get("slot-fill") or {}).values()), None)
             record = {"paper": paper, "passage": passage, "scope": scope["id"], "kind": kind,
-                      "lines": [lo, hi], "fill": fill,
+                      "lines": [lo, hi], "fill": fill, "span": None,
                       "bare-parent": kind in parents}
+            # A v2 scope carries the extent of its own fill; for older graphs a reader
+            # that holds the paper text (the renderer) locates it.
+            record["span"] = list(scope["fill-span"]) if scope.get("fill-span") else None
+            record["units"] = list(scope["source"].get("units") or ())
             if fill is None:
                 held += 1
                 record["held"] = scope.get("held-reason") or scope.get("held") or True

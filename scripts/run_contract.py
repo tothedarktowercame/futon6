@@ -55,6 +55,7 @@ CONTRACTS: dict[str, dict] = {
         },
         "decoding": {"temperature": 0, "max-tokens": 8192},
         "candidates": {"schema": "iatc-candidate/v5-proof", "requires": ["spans"]},
+        "expository-candidates": {"schema": "expo-candidate/v2", "requires": ["units"]},
         "quotation": "listed-units",
         "gate-retries": 1,
     },
@@ -98,6 +99,14 @@ def deviations(actual: dict, cid: str | None = None) -> list[str]:
     if "model" in actual and actual["model"] != want["model"]["served-as"]:
         out.append(f"model {actual['model']!r} (contract {want['model']['served-as']!r})")
     return out
+
+
+def missing_expository_inputs(candidate: dict, cid: str | None = None) -> list[str]:
+    """What an S4 candidate lacks. A region with no units cannot be cited by unit."""
+    want = spec(cid).get("expository-candidates")
+    if not want:
+        return []
+    return [f for f in want["requires"] if not candidate.get(f)]
 
 
 def missing_inputs(candidate: dict, cid: str | None = None) -> list[str]:
