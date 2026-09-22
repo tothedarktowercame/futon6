@@ -121,3 +121,45 @@ class AuthorityTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class NamesAsPapersWriteThem(unittest.TestCase):
+    """The authority stores "fubini theorem"; mathematics writes "Fubini's theorem",
+    "Hahn-Banach" with an en dash, and "Arzela-Ascoli" with its accent. 91 of the 845
+    APM informal proofs say "X's theorem" at least once (Joe, 2026-09-22)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.ca = ConceptAuthority()
+
+    def resolved(self, term):
+        hit = self.ca.resolve(term)
+        return hit.get("target") if hit else None
+
+    def test_a_result_named_after_a_person_resolves_in_the_possessive(self):
+        for possessive in ("Fubini's theorem", "Urysohn's lemma", "Sard's theorem",
+                           "Liouville's theorem", "Fatou's lemma", "Young's inequality"):
+            self.assertIsNotNone(self.resolved(possessive), possessive)
+
+    def test_the_possessive_falls_back_to_the_stored_form_only_when_it_has_to(self):
+        # nLab titles its own entry "Urysohn's lemma", so the possessive is a stored
+        # name there and must keep resolving to it; "Fubini's theorem" is stored only
+        # in the plain form, and falls back to that.
+        self.assertEqual(self.resolved("Fubini's theorem"), self.resolved("Fubini theorem"))
+        self.assertEqual(self.ca.resolve("Urysohn's lemma")["matched-on"], "urysohn's lemma")
+
+    def test_an_en_dash_and_an_accent_are_the_same_name(self):
+        self.assertEqual(self.resolved("Hahn–Banach theorem"), self.resolved("Hahn-Banach theorem"))
+        self.assertEqual(self.resolved("Arzelà-Ascoli theorem"), self.resolved("Arzela-Ascoli theorem"))
+        self.assertIsNotNone(self.resolved("Hahn–Banach theorem"))
+
+    def test_folding_is_a_fallback_and_never_displaces_a_stored_name(self):
+        # Terms that are stored WITH a dash or an accent must still resolve to
+        # themselves, not to some folded neighbour.
+        for term in ("Cauchy–Schwarz inequality", "Poincaré duality", "adjoint functor"):
+            self.assertIsNotNone(self.resolved(term), term)
+
+    def test_fold_leaves_an_ordinary_name_alone(self):
+        import concept_authority
+        self.assertEqual(concept_authority.fold("hahn-banach theorem"), "hahn-banach theorem")
+        self.assertEqual(concept_authority.fold("arzelà-ascoli"), "arzela-ascoli")

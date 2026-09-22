@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import unicodedata
 import sys
 from pathlib import Path
 
@@ -44,6 +45,17 @@ ALIASES = {
     "op": "opposite category", "ev": "evaluation", "coev": "coevaluation",
     "nat": "natural transformation", "lim": "limit", "spec": "spectrum",
 }
+
+
+# "fubini's theorem" -> "fubini theorem"; also the apostrophe-less "fubinis theorem"
+# a normaliser that drops punctuation would leave behind.
+POSSESSIVE = re.compile(r"\b(\w+?)(?:'s|\u2019s)\b")
+
+
+def fold(term: str) -> str:
+    """The same name with its dashes and diacritics flattened, for lookup only."""
+    term = term.replace("\u2013", "-").replace("\u2014", "-").replace("\u2212", "-")
+    return "".join(c for c in unicodedata.normalize("NFKD", term) if not unicodedata.combining(c))
 
 
 def normalize_term(term: str) -> str:
@@ -98,11 +110,26 @@ class ConceptAuthority:
 
     def _candidates(self, term: str):
         norm = normalize_term(term)
+        # Mathematics names a result after a person and the authority stores the bare
+        # form: "fubini theorem" resolves, "Fubini's theorem" did not, though that is
+        # how it is written. 91 of the 845 APM proofs say "X's theorem" at least once
+        # (Joe, 2026-09-22).
+        plain = POSSESSIVE.sub(r"\1", norm)
+        # A name may be typed with an en dash or with its accents ("Hahn-Banach" is
+        # stored; "Hahn\u2013Banach" and "Arzel\u00e0-Ascoli" are how papers write it).
+        # Folded forms are tried as EXTRA candidates: the stored keys were normalised
+        # by the current rule, so folding them away in place would lose entries that
+        # carry a dash or an accent of their own.
+        folded = fold(plain)
         seen = []
         for c in (norm,
+                  plain if plain != norm else None,
+                  folded if folded not in (norm, plain) else None,
+                  fold(norm) if fold(norm) not in (norm, plain, folded) else None,
                   norm.lstrip("\\") if norm.startswith("\\") else None,
                   norm[:-1] if norm.endswith("s") and len(norm) > 3 else None,
                   ALIASES.get(norm),
+                  ALIASES.get(plain),
                   ALIASES.get(norm.lstrip("\\"))):
             if c and c not in seen:
                 seen.append(c)
