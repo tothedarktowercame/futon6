@@ -20,6 +20,16 @@ Operationalization:
   prose inside a proof after an ``enumerate`` block and before the next display
   or formal block, e.g. 0905.0595 lines 202--208.
 
+* Given the paper's S1 marks (``extract_regions(..., marks)``, as the S4 candidate
+  extractor calls it), formal blocks also include S1's ``env/*`` environments, which
+  follow the author's ``\newtheorem`` and macros (``\df{...}``, ``\prf ... \eprf``)
+  that the fixed environment list cannot see; each section's own blocks stop at its
+  first subsection; a section's prose before its first formal block and after its
+  last becomes a ``section-lead`` / ``section-tail`` region; prose inside an S1 proof
+  is typed ``in-proof``; and a paragraph with fewer than three prose words is dropped.
+  On 0705.0102 (every environment an author macro) this takes the carving from 1
+  region, 4.8% of body lines, to 71 regions, 31%.
+
 The extractor prefers recall for expository spans over perfect LaTeX fidelity.
 """
 
@@ -55,7 +65,8 @@ SECTION_LEVELS = {
 
 SECTION_RE = re.compile(
     r"\\(?P<cmd>part|chapter|section|subsection|subsubsection|paragraph|subparagraph)"
-    r"\*?(?:\[[^\]]*\])?\{(?P<title>[^{}]*)\}"
+    # Titles may hold braces two deep ($S^{\perp_{\infty}}$, \ref{prop4}).
+    r"\*?(?:\[[^\]]*\])?\{(?P<title>(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}"
 )
 BEGIN_ENV_RE = re.compile(r"\\begin\{([^{}]+)\}")
 END_ENV_RE = re.compile(r"\\end\{([^{}]+)\}")
@@ -763,12 +774,84 @@ def cleanup_regions(
     return renumber_regions(entity_id, cleaned)
 
 
-def extract_regions(entity_id: str, text: str) -> dict[str, Any]:
+# S1's env/* kinds that are formal blocks, by canonical name (dp_paper_view maps an
+# author's \\newtheorem and macro environments onto these).
+# The bibliography and posed questions are not exposition either, so they count as blocks.
+S1_FORMAL_KINDS = {"theorem", "lemma", "proposition", "corollary", "definition", "remark", "proof",
+                   "conjecture", "claim", "notation", "assumption", "hypothesis", "axiom",
+                   "question", "problem", "thebibliography"}
+
+
+def own_span_end(sections: list[Section], pos: int) -> int:
+    """Where a section's own text ends: at its first subsection, else at its end."""
+    section = sections[pos]
+    for later in sections[pos + 1:]:
+        if later.line_start > section.line_start and later.level > section.level:
+            return later.line_start - 1
+    return section.line_end
+
+
+PROSE_ARGS = re.compile(r"\\(?:label|ref|eqref|cite|begin|end|newtheorem|bibitem)\*?(?:\[[^\]]*\])?(?:\{[^{}]*\})*")
+
+
+def prose_words(text: str) -> int:
+    """Words of running prose, with math, labels, references and bare commands removed."""
+    text = re.sub(r"\$\$.*?\$\$|\$[^$]*\$", " ", text, flags=re.S)
+    text = re.sub(r"\\\\[A-Za-z]+", " ", PROSE_ARGS.sub(" ", text))
+    return len(re.findall(r"[A-Za-z]{2,}", text))
+
+
+def blocks_from_marks(marks: list[dict[str, Any]], starts: list[int], ends: list[int],
+                      body_start: int, body_end: int) -> list[FormalBlock]:
+    """Formal blocks as S1 found them, including environments opened by an author's
+    macro (\\df{...}, \\prf ... \\eprf) that the fixed FORMAL_ENVS list cannot see."""
+    def line_of(offset: int) -> int:
+        lo, hi = 0, len(starts)
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if starts[mid] <= offset:
+                lo = mid + 1
+            else:
+                hi = mid
+        return lo
+    spans = sorted({(m["start"], m["end"], m["kind"][4:]) for m in marks
+                    if str(m.get("kind", "")).startswith("env/") and m["kind"][4:] in S1_FORMAL_KINDS},
+                   key=lambda x: (x[0], -x[1]))
+    out = []
+    for a, b, kind in spans:
+        lo, hi = line_of(a), line_of(b - 1)
+        if hi < body_start or lo > body_end:
+            continue
+        depth = sum(1 for x, y, _ in spans if x <= a < y and (y - x) > (b - a))
+        out.append(FormalBlock(lo, hi, a, b, kind, depth))
+    return out
+
+
+def merge_blocks(found: list[FormalBlock], from_marks: list[FormalBlock]) -> list[FormalBlock]:
+    """Union of the two detections; a block's depth counts every block that encloses it."""
+    seen = {(b.char_start, b.char_end) for b in found}
+    blocks = list(found) + [b for b in from_marks if (b.char_start, b.char_end) not in seen]
+    # A block is inside another when it starts inside it: a parsed display ends at the
+    # end of its line, so on a line shared with \\eprf it runs past the proof's end.
+    def inside(b: FormalBlock, o: FormalBlock) -> bool:
+        return o.char_start <= b.char_start < o.char_end and (o.char_end - o.char_start) > (b.char_end - b.char_start)
+    def depth(b: FormalBlock) -> int:
+        return sum(1 for o in blocks if o is not b and inside(b, o))
+    blocks = [FormalBlock(b.line_start, b.line_end, b.char_start, b.char_end, b.kind, depth(b)) for b in blocks]
+    return sorted(blocks, key=lambda block: (block.line_start, block.line_end, block.parent_depth))
+
+
+def extract_regions(entity_id: str, text: str, marks: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    """Expository regions of `text`. Given the paper's S1 marks, formal blocks include
+    the environments S1 found (author macros included), and a section's prose before
+    its first formal block and after its last becomes section-lead / section-tail."""
     lines = text.splitlines()
     starts, ends = line_offsets(text)
     body_start, body_end = find_body_range(lines)
     sections = parse_sections(lines, body_start, body_end)
     blocks = parse_formal_blocks(lines, starts, ends, body_start, body_end)
+    if marks is not None:
+        blocks = merge_blocks(blocks, blocks_from_marks(marks, starts, ends, body_start, body_end))
     regions: list[dict[str, Any]] = []
     leaf_section_ranges: list[tuple[int, int]] = []
 
@@ -808,13 +891,16 @@ def extract_regions(entity_id: str, text: str) -> dict[str, Any]:
 
     # Inflight regions: adjacent formal blocks at the same formal-parent depth.
     seen: set[tuple[int, int, str]] = set()
-    for section in sections:
+    for pos, section in enumerate(sections):
         if any(start <= section.line_start and section.line_end <= end for start, end in leaf_section_ranges):
             continue
+        # With S1 marks, a section's blocks are its own, not its subsections': otherwise
+        # each gap is emitted once per enclosing section, and gaps span subsection headings.
+        span_end = own_span_end(sections, pos) if marks is not None else section.line_end
         section_blocks = [
             block
             for block in blocks
-            if section.line_start <= block.line_start <= section.line_end
+            if section.line_start <= block.line_start <= span_end
         ]
         by_depth: dict[int, list[FormalBlock]] = {}
         for block in section_blocks:
@@ -857,6 +943,36 @@ def extract_regions(entity_id: str, text: str) -> dict[str, Any]:
                             ends,
                         )
                     )
+                    region_num += 1
+
+    # Section lead and tail (with S1 marks only): the prose a section opens with before
+    # its first formal block ("We recall the following definition from [E].") and ends
+    # with after its last, which neither rule above reaches. A section's own span stops
+    # at its first subsection; blocks count at depth 0 only.
+    if marks is not None:
+        covered = [(r["line_start"], r["line_end"]) for r in regions]
+        for pos, section in enumerate(sections):
+            if any(start <= section.line_start and section.line_end <= end for start, end in leaf_section_ranges):
+                continue
+            own_end = own_span_end(sections, pos)
+            top = [b for b in blocks if b.parent_depth == 0 and section.line_start < b.line_start <= own_end]
+            spans = []
+            if top:
+                spans.append(("section-lead", section.line_start + 1, top[0].line_start - 1))
+                tail_from = max(b.line_end for b in top) + 1
+                spans.append(("section-tail", tail_from, own_end))
+            elif section.has_deeper_section:
+                spans.append(("section-lead", section.line_start + 1, own_end))
+            for kind, lo, hi in spans:
+                trimmed = trim_content_lines(lines, lo, hi) if lo <= hi else None
+                if not trimmed:
+                    continue
+                for para_start, para_end in prose_paragraph_ranges(lines, *trimmed):
+                    if overlaps_any_block(blocks, para_start, para_end, 0) or any(
+                            a <= para_start and para_end <= b for a, b in covered):
+                        continue
+                    regions.append(make_region(f"{entity_id}-{kind}-{region_num:04d}", kind, section.title,
+                                               para_start, para_end, text, lines, starts, ends))
                     region_num += 1
 
     # SCAFFOLD-LESS FALLBACK (Joe's definition): a paper with no sectioning
@@ -905,7 +1021,19 @@ def extract_regions(entity_id: str, text: str) -> dict[str, Any]:
             region_num += 1
         regions.sort(key=lambda r: (r["line_start"], r["line_end"]))
 
+    if marks is not None:
+        # A paragraph of macros (\\eeg, \\esetup \\lemma \\label{..}) or of bare formulae
+        # gives a scope nothing to read.
+        regions = [r for r in regions if prose_words(r["text"]) >= 3]
     regions = cleanup_regions(entity_id, regions, text, lines, starts, ends, blocks, body_end)
+    if marks is not None:
+        # Prose between displays inside a proof stays a region (the inflight rule wants
+        # it), but is typed apart: S3 reads proofs, so S4 can tell exposition from steps.
+        proofs = [b for b in blocks if b.kind == "proof"]
+        for r in regions:
+            if any(b.char_start <= r["char_start"] and r["char_end"] <= b.char_end for b in proofs):
+                r["type"] = "in-proof"
+        regions = renumber_regions(entity_id, regions)
     expository_lines: set[int] = set()
     for region in regions:
         expository_lines.update(range(region["line_start"], region["line_end"] + 1))

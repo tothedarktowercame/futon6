@@ -41,6 +41,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import expository_region_extract as region_extract
 import expository_scope_audit as scope_audit
 import iatc_json
 
@@ -150,6 +151,11 @@ PAGE_TERMS = {
     "tagged generically": "an occurrence S1 marked only as a background-lexicon word or phrase "
                           "(e.g. co-t-structure as lexicon:structure)",
     "untagged": "an occurrence of a defined term that no S1 concept mark touches",
+    "leaf-section": "S4 region: a whole section with no formal block in it",
+    "inflight": "S4 region: prose between two formal blocks of the same section and depth",
+    "section-lead": "S4 region: a section's prose before its first formal block",
+    "section-tail": "S4 region: a section's prose after its last formal block",
+    "in-proof": "S4 region: prose between displays inside a proof; S3 also reads it",
 }
 
 
@@ -410,7 +416,15 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
     summary["terms"] = {"defined": len(terms), "occurrences": sum(len(t["occurrences"]) for t in terms),
                         **{st: sum(o[2] == st for t in terms for o in t["occurrences"])
                            for st in ("tagged as defined", "tagged generically", "untagged")}}
-    payload = {"file": source_file_index(typeset, paper), "summary": summary, "notes": notes,
+    # The regions S4 would read now, beside the ones this run's extractor carved.
+    was = region_extract.extract_regions(paper, source)
+    now = region_extract.extract_regions(paper, source, marks["marks"])
+    carved = [{"id": r["region_id"], "type": r["type"], "section": r["section_title"],
+               "lines": [r["line_start"], r["line_end"]]} for r in now["regions"]]
+    summary["carving"] = {"run": {"regions": len(was["regions"]), **was["coverage"]},
+                          "now": {"regions": len(now["regions"]), **now["coverage"],
+                                  "types": {t: sum(r["type"] == t for r in carved) for t in sorted({r["type"] for r in carved})}}}
+    payload = {"file": source_file_index(typeset, paper), "summary": summary, "notes": notes, "carved": carved,
                "starts": starts, "body": body,
                "kinds": [[k, *mark_kind(k)] for k in kinds],
                "marks": [[m["start"], m["end"], kind_ix[m["kind"]], int(grounded(m)), m.get("tip") or ""]

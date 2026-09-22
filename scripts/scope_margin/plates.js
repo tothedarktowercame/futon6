@@ -126,6 +126,7 @@
   const proofs = data.notes.filter(n => n.type === 'proof'), regions = data.notes.filter(n => n.type === 'region');
   const hit = (a, b, rs) => rs.some(([x, y]) => x < b && a < y);
   let ctl;
+  const carvedAt = line => data.carved.find(r => r.lines[0] <= line && line <= r.lines[1]);
   function quotes(mock) {
     const out = [];
     proofs.forEach(p => p.nodes.forEach(n => {
@@ -148,7 +149,7 @@
     let y = 0;
     if (ctl.y.checked) {
       if (regions.some(r => r.scopes.some(s => !(mock && s.mock.verdict === 'rejected') && s.lines[0] <= line && line <= s.lines[1]))) y = 1;
-      else if (regions.some(r => r.lo <= line && line <= r.hi)) y = 0.3;
+      else { const c = carvedAt(line); if (c) y = c.type === 'in-proof' ? 0.14 : 0.3; }
     }
     return [c, m, y];
   }
@@ -190,7 +191,8 @@
   sw(color(0, 1, 0), 'a proof-graph node quotes it');
   sw(color(0, 0.3, 0), 'inside a proof S3 read, not quoted');
   sw(color(0, 0, 1), 'an S4 scope cites this line');
-  sw(color(0, 0, 0.3), 'inside an expository region, no scope');
+  sw(color(0, 0, 0.3), 'a region S4 would read now, no scope in this run');
+  sw(color(0, 0, 0.14), 'prose inside a proof, carved as an in-proof region');
   sw(color(1, 1, 0), 'C + M: S1 grounded what a node quotes');
   sw(color(0, 1, 1), 'M + Y: a node quotes a line a scope also reads');
   sw(color(1, 0, 1), 'C + Y: S1 grounded what a scope reads');
@@ -202,6 +204,12 @@
   [ctl.c, ctl.m, ctl.y, ctl.t].forEach(c => c.addEventListener('change', paint));
   document.querySelectorAll('.m7-banner input').forEach(c => c.addEventListener('change', paint));
 
+  const K = data.summary.carving, cp = el('p', null, null, box);
+  el('b', null, 'Where S4 reads: ', cp);
+  cp.append(`this run carved ${K.run.regions} region(s), ${K.run.expository_lines} of ${K.run.body_lines} body lines (${K.run.pct}%). ` +
+            `The current extractor, given S1's environments, carves ${K.now.regions} (` +
+            Object.entries(K.now.types).map(([t, n]) => `${n} ${t}`).join(', ') + `), ${K.now.expository_lines} lines (${K.now.pct}%). ` +
+            'Only the run\'s regions have scopes; the rest show what the next run would read.');
   const T = data.summary.terms;
   const tp = el('p', null, null, box);
   el('b', null, `${T.defined} terms the paper defines, ${T.occurrences} occurrences: `, tp);
@@ -257,7 +265,10 @@
         d.append(' ' + q[3].gloss); }); });
     const y = el('div', 'm7-read-sec m7-read-y', null, read); el('b', null, 'Y · S4 expository scopes', y);
     const sc = regions.flatMap(r => r.scopes.filter(s => s.lines[0] <= line && line <= s.lines[1]));
-    if (!sc.length) el('div', 'm7-legend', regions.some(r => r.lo <= line && line <= r.hi) ? 'in an expository region; no scope cites this line' : 'not in an expository region', y);
+    const cv = carvedAt(line);
+    if (cv) { const d = el('div', 'm7-legend', null, y); const p = el('span', 'm7-pill m7-stated', cv.type, d);
+      p.title = data.glossary['This page'][cv.type] || 'UNDEFINED'; d.append(` ${cv.id} · L${cv.lines[0]}–${cv.lines[1]} · ${cv.section}`); }
+    if (!sc.length) el('div', 'm7-legend', cv ? (regions.some(r => r.lo <= line && line <= r.hi) ? 'read in this run; no scope cites this line' : 'not read in this run: no scopes yet') : 'not in an expository region', y);
     sc.forEach(s => { const d = el('div', null, null, y); el('span', 'm7-pill ' + (s['bare-parent'] ? 'm7-warn' : 'm7-stated'), s.kind, d).title = data.glossary['S4 scope kinds'][s.kind] || 'UNDEFINED';
       d.append(' ' + (s.fill == null ? 'held' : s.fill) + (mock ? ` — mock: ${s.mock.verdict}` : '')); });
   }

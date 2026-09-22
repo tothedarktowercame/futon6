@@ -55,7 +55,7 @@ def extract(paper_id: str) -> list[dict[str, Any]]:
     entity_id, raw_text = expo.load_text(paper_id)
     if raw_text != text:
         raise ValueError(f"text mismatch between extractor and golden marks for {paper_id}")
-    carved = expo.extract_regions(entity_id, text)
+    carved = expo.extract_regions(entity_id, text, marks)
     starts = line_starts(text)
     out: list[dict[str, Any]] = []
     for region in carved.get("regions", []):
