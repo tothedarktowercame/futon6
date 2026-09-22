@@ -167,8 +167,45 @@ def strip_archive_suffix(path: Path) -> str:
     return path.stem
 
 
-def safe_decode(raw: bytes) -> str:
-    return raw.decode("utf-8", errors="ignore")
+# \usepackage[<name>]{inputenc} -> Python codec. TeX decodes a file by what its
+# paper declares; so do we.
+_INPUTENC = {"utf8": "utf-8", "utf8x": "utf-8", "latin1": "latin-1", "latin9": "iso8859-15",
+             "latin2": "iso8859-2", "latin5": "iso8859-9", "ansinew": "cp1252",
+             "cp1252": "cp1252", "cp1250": "cp1250", "cp1251": "cp1251", "cp850": "cp850",
+             "cp866": "cp866", "koi8-r": "koi8_r", "applemac": "mac_roman", "macce": "mac_latin2"}
+_INPUTENC_RE = re.compile(rb"\\usepackage\s*\[([^\]]+)\]\s*\{inputenc\}")
+
+
+def declared_encoding(raw: bytes) -> str | None:
+    """The first non-UTF-8 input encoding this file declares, as a codec name.
+
+    Comments are skipped: math/0310337's master keeps a disabled
+    `% \\usepackage[applemac]{inputenc}` above its live latin1 one.
+    """
+    live = re.sub(rb"(?<!\\)%[^\n]*", b"", raw)
+    for m in _INPUTENC_RE.finditer(live):
+        for name in m.group(1).decode("ascii", "replace").split(","):
+            codec = _INPUTENC.get(name.strip().lower())
+            if codec and codec != "utf-8":
+                return codec
+    return None
+
+
+def safe_decode(raw: bytes, encoding: str | None = None) -> str:
+    """UTF-8 when the bytes are UTF-8; otherwise the encoding the paper declares.
+
+    Pre-2010 eprints are often 8-bit. Decoding them as UTF-8 with errors ignored
+    deleted every accented letter, so a French thesis's proof heading
+    "Démonstration" read "Dmonstration": math/0310337 lost all of its proofs at S1,
+    and 816 of 9,800 math.CT eprints have at least one such file. Papers usually
+    declare the encoding once, in the master, for every file they input (the
+    Cyrillic 2311.05131 declares cp1251); undeclared, cp1252 - the common case,
+    a stray accent in a name - which decodes every byte, so nothing is dropped.
+    """
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw.decode(declared_encoding(raw) or encoding or "cp1252", errors="replace")
 
 
 def strip_comments(text: str) -> str:
@@ -183,8 +220,8 @@ def strip_comments(text: str) -> str:
     return "".join(out)
 
 
-def read_eprint_files(path: Path) -> tuple[list[dict], dict]:
-    """Return text-ish files from an eprint archive, including .sty/.cls."""
+def _read_eprint_raw(path: Path) -> tuple[list[dict], dict]:
+    """Text-ish files from an eprint archive, as bytes, including .sty/.cls."""
     files = []
     meta = {"path": str(path), "status": "unknown"}
     lower = path.name.lower()
@@ -201,7 +238,7 @@ def read_eprint_files(path: Path) -> tuple[list[dict], dict]:
                         fh = tf.extractfile(member)
                         if fh is None:
                             continue
-                        files.append({"file": member.name, "text": safe_decode(fh.read())})
+                        files.append({"file": member.name, "raw": fh.read()})
                 if files:
                     meta["status"] = "tar"
                     return files, meta
@@ -212,12 +249,12 @@ def read_eprint_files(path: Path) -> tuple[list[dict], dict]:
 
         if lower.endswith(".gz"):
             raw = gzip.decompress(path.read_bytes())
-            files.append({"file": strip_archive_suffix(path) + ".tex", "text": safe_decode(raw)})
+            files.append({"file": strip_archive_suffix(path) + ".tex", "raw": raw})
             meta["status"] = "plain-gzip"
             return files, meta
 
         if lower.endswith(".tex"):
-            files.append({"file": path.name, "text": path.read_text(encoding="utf-8", errors="ignore")})
+            files.append({"file": path.name, "raw": path.read_bytes()})
             meta["status"] = "plain-tex"
             return files, meta
 
@@ -229,19 +266,26 @@ def read_eprint_files(path: Path) -> tuple[list[dict], dict]:
                         if member.isfile() and Path(member.name).suffix.lower() in TEXT_EXTS:
                             fh = tf.extractfile(member)
                             if fh is not None:
-                                files.append({"file": member.name, "text": safe_decode(fh.read())})
+                                files.append({"file": member.name, "raw": fh.read()})
                 if files:
                     meta["status"] = "bin-tar"
                     return files, meta
             except tarfile.TarError:
                 pass
-            files.append({"file": path.name, "text": safe_decode(raw)})
+            files.append({"file": path.name, "raw": raw})
             meta["status"] = "bin-text"
             return files, meta
     except Exception as exc:
         meta["status"] = "error"
         meta["error"] = repr(exc)
     return files, meta
+
+
+def read_eprint_files(path: Path) -> tuple[list[dict], dict]:
+    """Return text-ish files from an eprint archive, including .sty/.cls."""
+    files, meta = _read_eprint_raw(path)
+    declared = next((c for c in (declared_encoding(f["raw"]) for f in files) if c), None)
+    return [{"file": f["file"], "text": safe_decode(f["raw"], declared)} for f in files], meta
 
 
 def load_latexml_roles(path: Path) -> dict[str, dict]:

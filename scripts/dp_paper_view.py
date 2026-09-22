@@ -135,6 +135,12 @@ _ENV_CANON = {
     # author-defined / multilingual proof environment names (0807.1872 uses
     # \newenvironment{beweis}{…Proof…} as its proof env).
     "beweis": "proof", "pf": "proof", "demo": "proof", "preuve": "proof",
+    # French statement names, as environments (\\begin{lemme}) and as the titles
+    # \\newtheorem prints (math/0310337: Lemme, Théorème, Corollaire). Accents are
+    # folded before lookup, so "théorème" and "theoreme" are one key.
+    "lemme": "lemma", "theoreme": "theorem", "corollaire": "corollary",
+    "remarque": "remark", "exemple": "example", "demonstration": "proof",
+    "satz": "theorem", "korollar": "corollary",
 }
 
 # Author proof-DELIMITER macro pairs used in the body in place of an env
@@ -178,6 +184,60 @@ def _preamble(text):
     return text[:bd] if bd != -1 else ""
 
 
+_INCLUDE_RE = re.compile(r"\\(?:input|include|subfile)\s*\{\s*([^}]+?)\s*\}")
+
+
+def reading_order(files):
+    """The paper's files in the order a reader meets them: the master first.
+
+    Several detectors take everything before the first \\begin{document} of the
+    joined text as preamble and discard it. Joined in archive order, a book whose
+    master file sorts after its chapters (math/0608040, Higher Topos Theory: 29
+    chapter files, then highertopoi.tex) had every chapter treated as preamble -
+    887 proofs dropped, and S1 reported "no proof identified". So the joined text
+    follows the master: files it inputs before its \\begin{document} come first
+    (they are preamble - math/0310337 keeps its macros in Preambule.tex, including
+    the \\dem that opens every proof), then the master, then the files it inputs
+    after \\begin{document}, depth first in the order named, then any file nothing
+    names, in archive order.
+    """
+    by_stem = {}
+    for f in files:
+        stem = f["file"][:-4] if f["file"].endswith(".tex") else f["file"]
+        by_stem.setdefault(stem, f)
+        by_stem.setdefault(os.path.basename(stem), f)
+    masters = [f for f in files if "\\begin{document}" in f["text"]]
+    ordered, seen = [], set()
+
+    def children(source):
+        for m in _INCLUDE_RE.finditer(source):
+            name = m.group(1).strip()
+            name = name[:-4] if name.endswith(".tex") else name
+            child = by_stem.get(name) or by_stem.get(os.path.basename(name))
+            if child is not None:
+                yield child
+
+    def visit(f):
+        if id(f) in seen:
+            return
+        seen.add(id(f))
+        source = re.sub(r"(?<!\\)%.*", "", f["text"])
+        split = source.find("\\begin{document}")
+        if split != -1:                      # the preamble's inputs precede the master
+            for child in children(source[:split]):
+                visit(child)
+            source = source[split:]
+        ordered.append(f)
+        for child in children(source):
+            visit(child)
+
+    for f in masters:
+        visit(f)
+    for f in files:
+        visit(f)
+    return ordered
+
+
 def learn_environment_names(text):
     """Author environment names resolved from the preamble: {name: canon}.
 
@@ -189,7 +249,7 @@ def learn_environment_names(text):
     pre = _preamble(text)
     learned = {}
     for name, title in _NEWTHEOREM_RE.findall(pre):
-        words = re.findall(r"[A-Za-z]+", title)
+        words = re.findall(r"\w+", _fold_accents(title))
         canon = _ENV_CANON.get(words[0].lower()) if words else None
         if canon:
             learned[name.lower()] = canon
@@ -199,8 +259,15 @@ def learn_environment_names(text):
     return learned
 
 
+def _fold_accents(text):
+    """Théorème -> Theoreme, including TeX accents (Th\\'eor\\`eme)."""
+    import unicodedata
+    text = re.sub(r"\\[`'^\"~]\{?([A-Za-z])\}?", r"\1", text)
+    return "".join(c for c in unicodedata.normalize("NFD", text) if not unicodedata.combining(c))
+
+
 def _canon(name, learned):
-    key = name.rstrip("*").lower()
+    key = _fold_accents(name.rstrip("*")).lower()
     return learned.get(key) or _ENV_CANON.get(key, key)
 
 
@@ -745,7 +812,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     macros = sweep.collect_macros(files, roles)
 
     # Concatenate .tex files into one display text; track each file's base.
-    tex_files = [f for f in files if f["file"].endswith(".tex")] or files
+    tex_files = reading_order([f for f in files if f["file"].endswith(".tex")] or files)
     parts, bases, cursor = [], {}, 0
     for f in tex_files:
         header = f"% ===== {f['file']} =====\n"
