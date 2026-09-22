@@ -92,6 +92,14 @@ MARK_KINDS = {
     "assume/explicit": ("clause", "Assume/Suppose (that) ..., or If $...$, with the condition recorded"),
     "assume/consider": ("clause", "Consider ..., Choose $X$"),
     "quant/universal": ("clause", "For all/each/every/any ... $x$ (in $S$), or \\forall inside math"),
+    "quant/existential": ("clause", "There is/exists $x$ ..., or \\exists inside math"),
+    # A large operator binds its index: the i of \\sum_{i \\in I}. One kind per operator.
+    "bind/summation": ("clause", "a summation whose subscript binds an index variable"),
+    "bind/product": ("clause", "a product whose subscript binds an index variable"),
+    "bind/coprod": ("clause", "a coproduct whose subscript binds an index variable"),
+    "bind/big-union": ("clause", "a big union whose subscript binds an index variable"),
+    "bind/big-intersection": ("clause", "a big intersection whose subscript binds an index variable"),
+    "bind/integral": ("clause", "an integral whose subscript binds a variable of integration"),
     "constrain/relation": ("clause", "a formula containing a relation (=, <, \\in, \\subseteq, \\cong, ...)"),
     "constrain/such-that": ("clause", "a formula containing \\in (set membership); overlaps constrain/relation"),
     "constrain/where": ("clause", "where $x$ is/denotes ... or where x = ..."),
@@ -286,7 +294,9 @@ def mock_scope(scope: dict, definitions) -> dict:
 def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
     marks = json.loads((run / "artifacts/marks" / f"fable-{paper}-dp-emacs.json").read_text())
     source = marks["text"]
-    if (typeset / f"{paper}.tex").read_text() != source:
+    # Compare the bytes: 0708.2185's marks text holds 28 CRLF line endings, and reading
+    # the file in text mode turns them into LF, so an exact copy would look different.
+    if (typeset / f"{paper}.tex").read_bytes() != source.encode():
         raise ValueError("typeset source differs from the run-owned marks text")
     starts = [0] + [m.end() for m in re.finditer("\n", source)]
     notes = []
