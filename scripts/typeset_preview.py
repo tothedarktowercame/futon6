@@ -49,6 +49,20 @@ def tool(name: str, env: str, default: Path | None = None) -> Path:
     raise SystemExit(f"{name} not found: put it on PATH or set {env}")
 
 
+# LaTeXML.css inverts every --ltx-*-color under prefers-color-scheme: dark, while the
+# Tufte transform pins the page light. Unless the transform also puts the authored
+# colours back, a diagram's black arrows come out white on cream: 0708.2185's
+# commutative square was invisible in dark mode until it was highlighted.
+DARK_PIN = '[style*="--ltx-stroke-color:"] { stroke: var(--ltx-stroke-color); }'
+
+
+def check_dark_mode_pin(page: str) -> None:
+    if "prefers-color-scheme: dark" in page and DARK_PIN not in page:
+        raise SystemExit("the Tufte transform pins this page light but does not restore the "
+                         "converter's own colours: diagrams will be invisible in dark mode. "
+                         "Update tuftify.py (FUTON6_TUFTIFY) before publishing.")
+
+
 def build(run: Path, paper: str, out: Path, render: bool = True) -> dict:
     marks = json.loads((run / "artifacts/marks" / f"fable-{paper}-dp-emacs.json").read_text())
     out.mkdir(parents=True, exist_ok=True)
@@ -66,6 +80,7 @@ def build(run: Path, paper: str, out: Path, render: bool = True) -> dict:
         raise SystemExit(f"{paper}: the converter reported errors in the page; see {log}")
     subprocess.run([sys.executable, str(tuftify), f"{paper}.html", "-o", f"{paper}-tufte.html"],
                    cwd=out, check=True, stdout=subprocess.DEVNULL)
+    check_dark_mode_pin((out / f"{paper}-tufte.html").read_text())
     result = {"paper": paper, "dir": str(out), "source-positions": page.count("data-sourcepos")}
     if render:
         html, summary = render_scope_margin.build(run, paper, out)

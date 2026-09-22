@@ -73,3 +73,16 @@ def test_the_quote_check_is_the_one_the_run_measures():
     assert iatc_quote_check.sequential(2, ["u1"], offered) is False
     row["sequential"] = False                                  # check_graph adds this per node
     assert iatc_quote_check.tally([{"nodes": [row]}])["checkable"] == 1
+
+
+def test_a_page_pinned_light_must_restore_the_converter_s_own_colours():
+    import typeset_preview
+    pinned = "@media (prefers-color-scheme: dark) { html { background: #fffff8; } " + typeset_preview.DARK_PIN + " }"
+    typeset_preview.check_dark_mode_pin(pinned)                      # complete: no complaint
+    typeset_preview.check_dark_mode_pin("<html>no dark block here</html>")
+    try:
+        typeset_preview.check_dark_mode_pin("@media (prefers-color-scheme: dark) { html { background: #fffff8; } }")
+    except SystemExit as e:
+        assert "invisible in dark mode" in str(e)
+    else:
+        raise AssertionError("a light-pinned page with inverted diagram colours was accepted")
