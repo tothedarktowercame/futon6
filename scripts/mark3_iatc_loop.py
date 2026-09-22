@@ -57,11 +57,12 @@ otherwise leave it "").
 
 DO NOT RETYPE MATHEMATICS. Two fields carry it for you, and both are chosen from
 what the source already supplies:
-  "quote_spans" — the ids of the marked source units that STATE this node. Pick
-    the units; their text is taken from the source verbatim, so you never have to
-    reproduce a symbol. Pick only what this node needs: a hypothesis and the
-    conclusion drawn from it are SEPARATE units and must not be selected together
-    for one node.
+  "quote_spans" — the ids of the marked source units that STATE this node, chosen
+    from the list of units below. Their text is taken from the source verbatim, so
+    you never have to reproduce a symbol. Read the unit's text and pick the ones
+    that say what your gloss says; the ids carry no order to follow. Pick only what
+    this node needs: a hypothesis and the conclusion drawn from it are SEPARATE
+    units and must not be selected together for one node.
   "symbols" — which of the proof's bound symbols this node is about.
 "text" is a short PROSE gloss only — say what the node does in words. Formulae you
 type there are not used and can only be wrong: the JSON escape alphabet cannot
@@ -112,8 +113,29 @@ def numbered_window(cand: dict) -> str:
     return "\n".join(f"{lo + i:5d} | {ln}" for i, ln in enumerate(body.split("\n")))
 
 
+def render_units(cand: dict) -> str:
+    """The marked units, under the ids the schema accepts.
+
+    They were never shown. The schema took quote_spans from an enum of s1..sn built
+    at prompt time, and the prompt named no unit, so a node could only guess which
+    one it was citing: in mark7master-20260921, 87% of nodes cited unit s_i as node
+    i. The ids here are cut from each unit's own text (candidate_spans.unit_id), so
+    citing one means reading this list."""
+    units = iatc_json.source_spans(cand)
+    if not units:
+        return "(no marked units in this window)"
+    rows = []
+    for u in units:
+        text = " ".join(str(u.get("text", "")).split())
+        rows.append(f"  {u['id']}  ({u['kind']}) {text}")
+    return "\n".join(rows)
+
+
 def build_prompt(cand: dict, task: str, nodes: list | None = None) -> str:
-    binders = "\n".join(cand.get("binder-context", [])) or "(none)"
+    # The bindings for the symbols this window actually uses, each with the rule that
+    # chose it; candidates cut before that carry the old unscoped binder list.
+    binders = "\n".join(cand.get("bindings") or cand.get("binder-context", [])) or "(none)"
+    terms = "\n".join(cand.get("defined-terms") or []) or "(none identified)"
     proved = cand.get("proved")
     statement = (f"The proof establishes this {proved['kind']} (lines {proved['lines'][0]}-{proved['lines'][1]}):\n"
                  f"{proved['text']}" if proved else "No preceding statement was identified for this proof.")
@@ -127,12 +149,21 @@ def build_prompt(cand: dict, task: str, nodes: list | None = None) -> str:
 
 {statement}
 
-Variable typings established earlier in the paper:
+What the symbols in this passage were bound to, and where. A binding marked
+in-section or in-paper is assumed from the nearest earlier one, not stated here:
 {binders}
+
+Terms this passage uses that the paper defines elsewhere:
+{terms}
 
 Deterministic anatomy detected in this source (symbol typings, definitions,
 quantifiers, citations — consistent with the text; do not contradict them):
 {render_enrichment(cand)}
+
+Marked source units. "quote_spans" takes the ids from THIS list, and each unit's
+text is then taken from the source by code. An id names the unit's line; there is
+no order to follow, so read the unit before citing it:
+{render_units(cand)}
 
 Source, lines {lo}-{hi} (ABSOLUTE line numbers on the left):
 {numbered_window(cand)}

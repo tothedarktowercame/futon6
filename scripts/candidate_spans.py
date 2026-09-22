@@ -16,6 +16,7 @@ a line.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -27,6 +28,16 @@ MIN_CHARS, MAX_CHARS = 4, 400
 
 def line_starts(text: str) -> list[int]:
     return [0] + [i + 1 for i, ch in enumerate(text) if ch == "\n"]
+
+
+def unit_id(line: int, text: str) -> str:
+    """A unit's id names its line and its text, so it cannot be produced by counting.
+
+    With ids s1..sn a model that never sees the unit list can still answer: node i
+    cites s_i, and 87% of the nodes in mark7master-20260921 did exactly that. An id
+    like L349-3f9a has to be read off the listing, and it carries the evidence (the
+    line) for whoever checks the citation afterwards."""
+    return f"L{line}-{hashlib.sha1(text.encode()).hexdigest()[:4]}"
 
 
 def spans_for(candidate: dict, marks_doc: dict) -> list[dict]:
@@ -47,8 +58,17 @@ def spans_for(candidate: dict, marks_doc: dict) -> list[dict]:
         if (a, b) in seen:
             continue
         seen.add((a, b))
-        out.append({"kind": mark["kind"], "start": a, "end": b, "text": text[a:b]})
+        line = max(1, sum(1 for st in starts if st <= a))
+        out.append({"kind": mark["kind"], "start": a, "end": b, "text": text[a:b],
+                    "line": line, "id": unit_id(line, text[a:b])})
     out.sort(key=lambda sp: (sp["start"], sp["end"]))
+    # Two identical clauses on one line would share an id; the second gets a suffix.
+    seen_ids: dict[str, int] = {}
+    for sp in out:
+        n = seen_ids.get(sp["id"], 0)
+        seen_ids[sp["id"]] = n + 1
+        if n:
+            sp["id"] = f"{sp['id']}{chr(ord('a') + n - 1)}"
     return out
 
 

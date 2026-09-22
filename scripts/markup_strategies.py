@@ -26,6 +26,7 @@ pattern S1 lacks, the article-noun apposition of a definition: "An object $S$ of
 $\\T$ will be called ...".
 
 Usage: scripts/markup_strategies.py MARKS_JSON [OUT_JSON]
+       scripts/markup_strategies.py --list IDS --marks MARKS_DIR --out OUT_DIR
 """
 from __future__ import annotations
 
@@ -43,6 +44,9 @@ from pathlib import Path
 import expository_region_extract as regions
 
 SYMBOL_KINDS = ("symbol", "symbol-grounded")
+# A macro the paper defines for one of its objects (\T for the triangulated category)
+# is a symbol too, but S1 files it as `classified` with the role ID.
+MACRO_SYMBOL = re.compile(r"·\s*author-defined\s*·\s*ID\b")
 ENV_KINDS = {"theorem", "lemma", "proposition", "corollary", "definition", "remark", "example",
              "proof", "question", "conjecture", "claim", "notation"}
 EMPH = re.compile(r"\\(?:emph|textbf|textit)\{((?:[^{}]|\{[^{}]*\})*)\}")
@@ -229,7 +233,17 @@ def symbol_hypergraph(text: str, marks: list[dict]) -> list[dict]:
     by_name: dict[str, list[dict]] = {}
     for s in sites:
         by_name.setdefault(s["name"], []).append(s)
-    occ = sorted((m for m in marks if m["kind"] in SYMBOL_KINDS), key=lambda m: m["start"])
+    occ = sorted((m for m in marks if m["kind"] in SYMBOL_KINDS
+                  or (m["kind"] == "classified" and MACRO_SYMBOL.search(m.get("tip") or ""))),
+                 key=lambda m: m["start"])
+    # A letter inside the name of a defined term (the t of co-$t$-structure) is part of
+    # that name, not a variable standing on its own.
+    in_term = sorted((u["start"], u["end"]) for t in defined_terms(text, marks) for u in t["uses"]
+                     if "$" in t["term"])
+    def named(a: int, b: int) -> bool:
+        i = bisect.bisect_right(in_term, (a, float("inf")))
+        return any(x <= a and b <= y for x, y in in_term[max(0, i - 4):i])
+    occ = [m for m in occ if not named(m["start"], m["end"])]
     edges: dict[str, dict] = {}
     for m in occ:
         name = text[m["start"]:m["end"]]
@@ -282,9 +296,36 @@ def strategies(text: str, marks: list[dict]) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("marks", type=Path)
+    ap.add_argument("marks", type=Path, nargs="?")
     ap.add_argument("out", type=Path, nargs="?")
+    ap.add_argument("--list", dest="ids", type=Path, help="file of paper ids, one per line")
+    ap.add_argument("--marks", dest="marks_dir", type=Path, help="directory of S1 marks JSON")
+    ap.add_argument("--out", dest="out_dir", type=Path, help="directory for per-paper strategies")
     a = ap.parse_args()
+    if a.ids:
+        if not (a.marks_dir and a.out_dir):
+            ap.error("--list needs --marks and --out")
+        a.out_dir.mkdir(parents=True, exist_ok=True)
+        ids = [x.strip() for x in a.ids.read_text().splitlines() if x.strip()]
+        total = {"papers": 0, "missing": [], "occurrences": 0, "bound": 0, "s1-compared": 0, "s1-agrees": 0}
+        for pid in ids:
+            src = a.marks_dir / f"fable-{pid}-dp-emacs.json"
+            if not src.is_file():
+                total["missing"].append(pid)
+                continue
+            data = json.loads(src.read_text())
+            result = strategies(data["text"], data["marks"])
+            (a.out_dir / f"{pid}.strategies.json").write_text(json.dumps(result, ensure_ascii=False))
+            su = result["summary"]
+            total["papers"] += 1
+            total["occurrences"] += su["occurrences"]
+            total["bound"] += su["occurrences"] - su["rules"]["unbound"]
+            total["s1-compared"] += su["s1-compared"]
+            total["s1-agrees"] += su["s1-agrees"]
+        print(json.dumps(total))
+        return 1 if total["missing"] else 0
+    if not a.marks:
+        ap.error("give a marks file, or --list with --marks and --out")
     data = json.loads(a.marks.read_text())
     result = strategies(data["text"], data["marks"])
     if a.out:

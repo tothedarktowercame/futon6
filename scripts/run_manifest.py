@@ -18,7 +18,9 @@ NAME = "run-manifest.json"
 ARTIFACTS = {key: "artifacts/" + key for key in (
     "marks", "loss", "candidates", "graphs", "expo-candidates", "expo",
     "steps", "rung3", "paper-graphs", "clean", "demo")}
-EXPOSITORY_SELECTION = "even-spacing-in-source-order/v1"
+# v2: exposition first, then prose inside proofs if the cap leaves room (S3 reads
+# proofs); v1 spaced every region evenly, which had no in-proof regions to spend on.
+EXPOSITORY_SELECTION = "exposition-first-even-spacing/v2"
 ENV_KEYS = {key: "FUTON6_" + key.upper().replace("-", "_") for key in ARTIFACTS}
 REQUIRED = {
     "marks": (1, "*.json"), "loss": (1, "dashboard.json"),

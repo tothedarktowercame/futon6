@@ -60,3 +60,16 @@ def test_an_s1_kind_without_a_definition_stops_the_build():
     else:
         raise AssertionError("an undefined kind was accepted")
 
+
+
+def test_the_quote_check_is_the_one_the_run_measures():
+    import iatc_quote_check
+    offered = [dict(sp, id=f"u{i}") for i, sp in enumerate(SPANS, 1)]
+    node = {"id": "n2", "gloss": "For all objects X there exists a precover",
+            "text": offered[0]["text"], "quote-spans": ["u1"]}
+    row = iatc_quote_check.node_check(node, offered)
+    assert row["verdict"] == "re-anchor" and row["proposal"]["span"] == "u3"
+    assert iatc_quote_check.sequential(1, ["u1"], offered) is True
+    assert iatc_quote_check.sequential(2, ["u1"], offered) is False
+    row["sequential"] = False                                  # check_graph adds this per node
+    assert iatc_quote_check.tally([{"nodes": [row]}])["checkable"] == 1

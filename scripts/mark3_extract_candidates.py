@@ -29,6 +29,7 @@ import bisect
 import json
 
 import candidate_spans
+import markup_strategies
 import re
 from pathlib import Path
 from typing import Any
@@ -127,6 +128,45 @@ def binder_context(marks: list[dict[str, Any]], starts: list[int], before_line: 
     return out[-12:]  # nearest dozen
 
 
+BINDING_CAP = 24
+
+
+def window_bindings(strat: dict[str, Any], lo_line: int, hi_line: int) -> list[str]:
+    """For each symbol used in this window, where it was bound and by which rule.
+
+    This replaces "the nearest dozen let-binders before the passage", which was not
+    scoped: the twelfth binder back is often another proof's. Here each symbol's
+    binding is the one markup_strategies picked for the uses in THIS window, with
+    the rule that picked it, so an assumed binding says so.
+    """
+    out = []
+    for edge in strat["symbols"]:
+        uses = [o for o in edge["occurrences"] if lo_line <= o["line"] <= hi_line]
+        if not uses:
+            continue
+        bound = [o for o in uses if o["binder"] is not None]
+        if not bound:
+            out.append((min(o["line"] for o in uses), f"${edge['name']}$ — no binding of this name earlier"))
+            continue
+        pick = max(set(o["binder"] for o in bound), key=lambda b: sum(o["binder"] == b for o in bound))
+        site = edge["binders"][pick]
+        rule = next(o["rule"] for o in bound if o["binder"] == pick)
+        said = site["type"] or "(the text gives no type)"
+        out.append((min(o["line"] for o in uses),
+                    f"${edge['name']}$ — {said} (bound at L{site['line']}, {rule})"))
+    return [row for _, row in sorted(out)][:BINDING_CAP]
+
+
+def window_terms(strat: dict[str, Any], lo_line: int, hi_line: int) -> list[str]:
+    """Terms the paper defines that this window uses, with where they are defined."""
+    out = []
+    for term in strat["terms"]:
+        used = [u for u in term["uses"] if lo_line <= u["line"] <= hi_line and not u["definition-site"]]
+        if used:
+            out.append(f"{term['term']} — defined at L{term['line']}")
+    return out[:BINDING_CAP]
+
+
 def window_enrichment(marks: list[dict[str, Any]], starts: list[int],
                       lo_line: int, hi_line: int) -> list[dict[str, Any]]:
     """The deterministic anatomy the detector found INSIDE the candidate window —
@@ -181,7 +221,10 @@ STATEMENT_KINDS = {"env/theorem", "env/lemma", "env/proposition", "env/corollary
 STATEMENT_GAP = 20  # a statement ending further than this above its proof is not shown with it
 # v4: every candidate carries its S1 clause spans. v3 candidates had none, and
 # a loop given them fell back to the retype contract without saying so.
-SCHEMA_PROOF = "iatc-candidate/v4-proof"  # one candidate per S1-identified proof
+# v5: each span carries its line and an id cut from its text, and the prompt lists
+# them. Under v4 the ids were s1..sn, assigned positionally at prompt time and never
+# shown, so a node could only guess which unit it was citing.
+SCHEMA_PROOF = "iatc-candidate/v5-proof"  # one candidate per S1-identified proof
 
 
 def proof_regions(marks: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -216,6 +259,7 @@ def extract_all(paper_id: str) -> list[dict[str, Any]]:
     starts = line_starts(text)
     marks = [m for m in data["marks"] if "start" in m and "end" in m]
     statements = sorted((m for m in marks if m.get("kind") in STATEMENT_KINDS), key=lambda m: m["start"])
+    strat = markup_strategies.strategies(text, marks)      # same name, same thing: bindings and terms
     cands = []
     for i, proof in enumerate(proof_regions(marks)):
         p_lo = line_for(starts, proof["start"])
@@ -242,6 +286,8 @@ def extract_all(paper_id: str) -> list[dict[str, Any]]:
             "proved": proved,
             "window-lines": [lo, p_hi],
             "binder-context": binder_context(marks, starts, lo),
+            "bindings": window_bindings(strat, lo, p_hi),
+            "defined-terms": window_terms(strat, lo, p_hi),
             "enrichment": window_enrichment(marks, starts, lo, p_hi),
             "source-window": text[start_char:end_char].rstrip("\n"),
             "marks-path": _display(mf),

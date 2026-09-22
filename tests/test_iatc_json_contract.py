@@ -32,8 +32,8 @@ CAND = {"paper-id": "1111.0001", "proof-id": "1111.0001__p0", "passage-id": "111
         "window-lines": [10, 14], "proof-lines": [12, 14], "schema": loop.CANDIDATE_SCHEMA,
         "proved": {"kind": "lemma", "lines": [10, 11], "text": "\\begin{lemma} A iff B \\end{lemma}"},
         "source-window": "a\nb\nc\nd\ne", "binder-context": [], "enrichment": [],
-        "spans": [{"kind": "bind/let", "start": 0, "end": 1, "text": "a"},
-                  {"kind": "quant/universal", "start": 8, "end": 9, "text": "e"}]}
+        "spans": [{"kind": "bind/let", "start": 0, "end": 1, "text": "a", "line": 10, "id": "L10-0cc1"},
+                  {"kind": "quant/universal", "start": 8, "end": 9, "text": "e", "line": 14, "id": "L14-58e6"}]}
 
 
 class Contract(unittest.TestCase):
@@ -316,30 +316,30 @@ class QuotationByReference(unittest.TestCase):
                              "$\\Sigma^{-1}\\A$-precover $\\alpha$.",
             "enrichment": [{"tip": "bind/typed \u00b7 symbol:\\alpha | type:map"},
                            {"tip": "definiendum #0: $\\T$"}],
-            "spans": [{"kind": "bind/let", "start": 0, "end": 38,
+            "spans": [{"kind": "bind/let", "start": 0, "end": 38, "line": 349, "id": "L349-3f9a",
                        "text": "Let $\\T$ be a triangulated category."},
-                      {"kind": "quant/universal", "start": 39, "end": 96,
+                      {"kind": "quant/universal", "start": 39, "end": 96, "line": 351, "id": "L351-c71b",
                        "text": "Then there exists an $\\Sigma^{-1}\\A$-precover $\\alpha$."}]}
 
     def test_spans_are_offered_as_clause_units_not_lines(self):
         spans = iatc_json.source_spans(self.CAND)
-        self.assertEqual([sp["id"] for sp in spans], ["s1", "s2"])
+        self.assertEqual([sp["id"] for sp in spans], ["L349-3f9a", "L351-c71b"])   # cut from the unit, not counted
         self.assertEqual(spans[0]["kind"], "bind/let")
 
     def test_a_hypothesis_and_its_conclusion_cannot_be_one_selection(self):
         node = iatc_json.nodes_schema(349, 353, [],
                                       iatc_json.spans_of(self.CAND))["properties"]["nodes"]["items"]
         self.assertIn("quote_spans", node["required"])
-        self.assertEqual(node["properties"]["quote_spans"]["items"]["enum"], ["s1", "s2"])
+        self.assertEqual(node["properties"]["quote_spans"]["items"]["enum"], ["L349-3f9a", "L351-c71b"])
         # The whole line is not on offer: there is no id spanning both units, so a
         # premise and a conclusion cannot resolve to identical text.
-        self.assertEqual(iatc_json.quoted_source({"quote_spans": ["s1"]}, self.CAND),
+        self.assertEqual(iatc_json.quoted_source({"quote_spans": ["L349-3f9a"]}, self.CAND),
                          "Let $\\T$ be a triangulated category.")
-        self.assertNotEqual(iatc_json.quoted_source({"quote_spans": ["s1"]}, self.CAND),
-                            iatc_json.quoted_source({"quote_spans": ["s2"]}, self.CAND))
+        self.assertNotEqual(iatc_json.quoted_source({"quote_spans": ["L349-3f9a"]}, self.CAND),
+                            iatc_json.quoted_source({"quote_spans": ["L351-c71b"]}, self.CAND))
 
     def test_the_symbols_the_grammar_destroys_survive_quotation(self):
-        node = {"quote_spans": ["s2"]}
+        node = {"quote_spans": ["L351-c71b"]}
         quoted = iatc_json.quoted_source(node, self.CAND)
         # These are exactly the commands a JSON escape alphabet cannot spell.
         for command in ("\\Sigma", "\\alpha", "\\A"):
@@ -347,8 +347,34 @@ class QuotationByReference(unittest.TestCase):
         self.assertNotIn("\\triangle", quoted)
 
     def test_text_is_demoted_to_a_gloss_in_the_contract(self):
-        node = iatc_json.nodes_schema(349, 353, [], ["s1"])["properties"]["nodes"]["items"]
+        node = iatc_json.nodes_schema(349, 353, [], ["L349-3f9a"])["properties"]["nodes"]["items"]
         self.assertIn("NOT the node's mathematics", node["properties"]["text"]["description"])
+
+    def test_units_without_ids_are_refused_so_a_v4_run_cannot_fall_back_to_counting(self):
+        # Under the listed-units contract the prompt cites units by id. Candidates cut
+        # before ids existed would silently get positional s1..sn back, which is the
+        # defect the contract exists to remove: 87% of nodes cited s_i as node i.
+        import run_contract
+        old = {**CAND, "spans": [{k: v for k, v in sp.items() if k != "id"} for sp in CAND["spans"]]}
+        self.assertEqual(run_contract.missing_inputs(old, "mark7-v4"), ["spans[].id"])
+        self.assertEqual(run_contract.missing_inputs(old, "mark7-v3"), [])
+        with tempfile.TemporaryDirectory() as d:
+            Path(d, "x.candidate.json").write_text(json.dumps(old))
+            err = io.StringIO()
+            with patch("sys.stderr", err):
+                self.assertFalse(loop.require_candidates([Path(d, "x.candidate.json")]))
+        self.assertIn("spans[].id", err.getvalue())
+
+    def test_the_prompt_lists_every_unit_under_the_id_the_schema_accepts(self):
+        listing = loop.render_units(CAND)
+        for unit in iatc_json.source_spans(CAND):
+            self.assertIn(unit["id"], listing)
+            self.assertIn(unit["text"], listing)
+        prompt = loop.build_prompt(CAND, loop.NODES_TASK)
+        self.assertIn(listing, prompt)
+        enum = iatc_json.nodes_schema(10, 14, [], iatc_json.spans_of(CAND))
+        ids = enum["properties"]["nodes"]["items"]["properties"]["quote_spans"]["items"]["enum"]
+        self.assertEqual(ids, [u["id"] for u in iatc_json.source_spans(CAND)])
 
     def test_a_candidate_without_spans_is_refused_not_run_under_the_old_contract(self):
         # mark7probe-20260921: span code present, candidates without spans, and the

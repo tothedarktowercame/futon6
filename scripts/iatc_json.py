@@ -116,6 +116,10 @@ SPAN_KINDS = ("bind/let", "assume/explicit", "quant/universal", "constrain/relat
 def source_spans(candidate: dict) -> list[dict]:
     """The clause-sized units S1 already marked, in source order.
 
+    Each unit's id is cut with the unit (candidate_spans.unit_id): it names the unit's
+    line and hashes its text, so a citation has to be read off the listing in the
+    prompt rather than counted. Candidates cut before that get positional ids here.
+
     Line numbers were the wrong granularity and are gone. A LaTeX line routinely
     carries a hypothesis AND the conclusion drawn from it -- 0705.0102 line 622
     holds two hypotheses and a preenvelope claim -- so three different nodes could
@@ -125,7 +129,8 @@ def source_spans(candidate: dict) -> list[dict]:
     quant/universal units with character offsets; the contract simply never
     offered them.
     """
-    return [dict(sp, id=f"s{i}") for i, sp in enumerate(candidate.get("spans") or (), 1)]
+    return [sp if sp.get("id") else dict(sp, id=f"s{i}")          # pre-v5 candidates carry no id
+            for i, sp in enumerate(candidate.get("spans") or (), 1)]
 
 
 def spans_of(candidate: dict) -> list[str]:

@@ -236,6 +236,8 @@ a ready-but-never-run GPU arm; 5.5 needs a build; the substantive remaining work
  [{:id :S0 :name "provision"          :phase :infra :compute :gpu     :depends-on []            :halt true}
   {:id :S1 :name "anatomy"            :phase :p1    :compute :cpu     :depends-on [:S0]         :halt true
    :note "WHOLE paper: proofs + definitions + theorem statements + expository regions (dp_paper_view, all flags)"}
+  {:id :S1b :name "strategies"         :phase :p1    :compute :cpu     :depends-on [:S1]         :halt false
+   :note "same name, same thing: term and symbol hypergraphs over S1's marks (markup_strategies); S3/S4 candidates carry each window's bindings and defined terms"}
   {:id :S2 :name "concept-substrate"  :phase :p2    :compute :cpu     :depends-on [:S1] :barrier true :must-be-corpus-fresh true :halt true
    :go-no-go [:G-coverage]}
   {:id :S3 :name "iatc-formal"        :phase :p1    :compute :gpu-llm :depends-on [:S0 :S1]     :halt true

@@ -94,13 +94,27 @@ def select_even(candidates: list[dict[str, Any]], cap: int) -> tuple[list[dict[s
     Regions are ordered by source position, not filename, and the kept indices are
     floor(i * n / cap), so a cap samples the whole paper rather than its opening.
     Returns (selected, deferred); cap 0 selects everything.
+
+    Exposition is spent first. Once formal blocks were carved from S1's environments,
+    prose inside a proof became a region too (18 of 0705.0102's 71), and under a cap
+    those would take a quarter of the budget from the exposition S4 exists to read,
+    for passages S3 already reconstructs. They are selected only if the cap is not
+    exhausted, and are deferred, not dropped.
     """
-    ordered = sorted(candidates, key=lambda c: (c["window-lines"][0], c["window-lines"][1], c["region-id"]))
-    if cap <= 0 or len(ordered) <= cap:
-        return ordered, []
-    keep = {i * len(ordered) // cap for i in range(cap)}
-    return ([c for i, c in enumerate(ordered) if i in keep],
-            [c for i, c in enumerate(ordered) if i not in keep])
+    def order(rows):
+        return sorted(rows, key=lambda c: (c["window-lines"][0], c["window-lines"][1], c["region-id"]))
+    prose = order([c for c in candidates if c.get("region-type") != "in-proof"])
+    in_proof = order([c for c in candidates if c.get("region-type") == "in-proof"])
+    if cap <= 0 or len(prose) + len(in_proof) <= cap:
+        return prose + in_proof, []
+    if len(prose) <= cap:
+        room = cap - len(prose)
+        keep = {i * len(in_proof) // room for i in range(room)} if room and in_proof else set()
+        return (prose + [c for i, c in enumerate(in_proof) if i in keep],
+                [c for i, c in enumerate(in_proof) if i not in keep])
+    keep = {i * len(prose) // cap for i in range(cap)}
+    return ([c for i, c in enumerate(prose) if i in keep],
+            [c for i, c in enumerate(prose) if i not in keep] + in_proof)
 
 
 def main() -> int:

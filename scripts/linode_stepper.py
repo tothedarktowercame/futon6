@@ -82,6 +82,7 @@ RUNG3 = '"$FUTON6_RUNG3"'
 PAPERG = '"$FUTON6_PAPER_GRAPHS"'
 DEMO = '"$FUTON6_DEMO"'
 MARKS = '"$FUTON6_MARKS"'
+STRAT = RUN + "/artifacts/strategies"
 EXPO_CAND = '"$FUTON6_EXPO_CANDIDATES"'
 OPS = {
     "S0": {"boot": True, "note": "<profile.s0> — provision the host + serve the model"},
@@ -91,6 +92,14 @@ OPS = {
     "S1": {"cmd": "{PY} scripts/emit_marks.py --list {IDS} --run-dir " + RUN + " --run-id $RUN_ID --corpus-id $CORPUS --out " + MARKS,
            "gate": f"{{PY}} scripts/check_invariants.py --corpus --golden-dir {MARKS} --loss-dir \"$FUTON6_LOSS\"",
            "crit": "wf=0 across the batch — read artifacts/loss/dashboard.json under --run-dir at the halt"},
+    # S1b is deterministic and needs no GPU: the same-name-same-thing layer over S1's
+    # marks (markup_strategies). S3 and S4 read it through the candidate extractors --
+    # each candidate carries the bindings for the symbols its window uses, with the
+    # rule that chose each one, instead of "the nearest dozen let-binders", and the
+    # defined terms the window uses. Emitting it as an artifact too makes the run's
+    # binding coverage retrievable and comparable between runs.
+    "S1b": {"cmd": f"{{PY}} scripts/markup_strategies.py --list {{IDS}} --marks {MARKS} --out {STRAT}",
+            "crit": "per-paper term and symbol hypergraphs; every paper resolves"},
     "S2": {"cmd": "{PY} scripts/warp_substrate_check.py --ids {IDS} && "
            "{PY} scripts/coverage_inline.py --concepts data/warp/concept-usage.json --field paper_concepts",
            "note": "substrate-corpus match is now a measured gate (E-superpod-hardening H1 tier 1); "
@@ -107,9 +116,17 @@ OPS = {
            # masquerade as a stage failure. Its output is kept, not discarded.
            f"(bb scripts/iatc_anchor_faithfulness.bb {GRAPHS} "
            f"> {RUN}/anchor-faithfulness.txt 2>&1 || true) && "
-           f"tail -3 {RUN}/anchor-faithfulness.txt",
+           f"tail -3 {RUN}/anchor-faithfulness.txt && "
+           # Also a MEASUREMENT: does a node quote the clause its own gloss describes?
+           # Every gate passes while it does not -- the cited units exist and lie in
+           # the passage either way -- so the rate is recorded per run and compared.
+           f"{{PY}} scripts/iatc_quote_check.py --graphs {GRAPHS} --candidates {CAND} "
+           f"--out {RUN}/quote-agreement.json",
            "gate": f"bb scripts/iatc_argcheck.bb {GRAPHS} && {{PY}} scripts/substance_gate.py {GRAPHS}",
-           "note": "one candidate per S1-identified proof (with its statement); the model returns "
+           "note": "units are LISTED in the prompt under ids cut from their own text "
+                   "(contract mark7-v4); under v3 the ids were positional and never shown, and 87% "
+                   "of nodes cited unit s_i as node i. quote-agreement.json measures what that "
+                   "changed. One candidate per S1-identified proof (with its statement); the model returns "
                    "schema-constrained JSON and code writes the EDN graph (iatc_json). Nothing is "
                    "repaired or retried within an invocation; per-proof outcomes are in accounting. "
                    "Anchor-faithfulness is a measurement, reported separately from drift (H38)"},
@@ -119,8 +136,11 @@ OPS = {
            "--backend openai --model ${{MODEL:-meta-llama/Llama-3.1-8B-Instruct}} "
            f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
            "crit": "expository_argcheck (self-gated in loop)",
-           "note": "all regions unless FUTON6_EXPOSITORY_CAP_PER_PAPER pins a cap in the manifest; "
-                   "then even spacing in source order, with unselected regions accounted as deferred"},
+           "note": "regions are carved from S1's environments, so author-macro theorems and proofs "
+                   "bound the prose (0705.0102: 1 region -> 71). All regions unless "
+                   "FUTON6_EXPOSITORY_CAP_PER_PAPER pins a cap; then exposition is spent first and "
+                   "prose inside proofs only if the cap leaves room (S3 reads proofs), the rest "
+                   "accounted as deferred"},
     # S5 now BUILDS its own rung-3 half. Both producers are deterministic (no model):
     # cas_segment turns gated graphs into proof steps, rung3_technique turns those into
     # technique gap maps, and only then does comprehension have a strategy axis to score.

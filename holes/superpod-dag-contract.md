@@ -157,11 +157,13 @@ the only safety net. They are now load-bearing, not advisory.
  [{:id :S0  :depends-on []             :required true  :phase :p1}
   {:id :S1  :depends-on [:S0]          :required true  :phase :p1
    :note "deterministic anatomy: marks over the LaTeX source. Every later per-paper stage reads these."}
+  {:id :S1b :depends-on [:S1]          :required true  :phase :p1
+   :note "strategies: term and symbol hypergraphs over S1's marks (markup_strategies). Deterministic, no model. S3 and S4 candidates carry each window's bindings (with the rule that chose each) and the defined terms it uses."}
   {:id :S2  :depends-on [:S1]          :required true :barrier true :must-be-corpus-fresh true :phase :p2
    :note "concept-substrate — EMERGENT from this corpus; NEVER reused from a prior/pre-planned vocabulary (mark5 wrongly reused a stale index). No --reuse for S2: a foreign corpus-id is a hard refusal."}
-  {:id :S3  :depends-on [:S1]          :required true :compute :gpu-llm :phase :p1
+  {:id :S3  :depends-on [:S1 :S1b]     :required true :compute :gpu-llm :phase :p1
    :note "reconstruct EVERY proof substructure in the paper (not one selected passage). Finals only: *.rung2.edn are reports, not graphs."}
-  {:id :S4  :depends-on [:S1]          :required true :compute :gpu-llm :phase :p1
+  {:id :S4  :depends-on [:S1 :S1b]     :required true :compute :gpu-llm :phase :p1
    :note "expository scopes over the same anatomy; parallel to S3, not downstream of it."}
   {:id :S5  :depends-on [:S2 :S3]      :required true  :phase :p2
    :note "comprehension = R2d (needs the S2 substrate) (+) rung-3 (built from S3 graphs by cas_segment -> rung3_technique). CROSS-PAPER: corpus-relative."}

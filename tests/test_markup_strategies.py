@@ -94,3 +94,27 @@ def test_a_use_of_a_parametrised_term_records_the_parameter_it_instantiates():
         ("$\\F$-nice", "$\\F$"), ("$\\B$-nice", "$\\B$"), ("$\\B$-nice", "$\\B$"),
         ("$\\F$-nice", "$\\F$"), ("nice", None)]
     assert re.fullmatch(ms.term_pattern("$\\F$-nice")[0], "$\\mathcal{B}$-nices")
+
+
+def test_a_windows_bindings_name_the_symbols_it_uses_with_the_rule_that_chose_them():
+    import mark3_extract_candidates as mec
+    strat = ms.strategies(TEXT, MARKS + [sym("S", 8, nth=2)])
+    rows = mec.window_bindings(strat, 8, 8)                  # the proof line
+    assert any(r.startswith("$S$") and "proved-statement" in r and "L7" in r for r in rows)
+    assert mec.window_terms(strat, 10, 10) == ["$\\F$-nice — defined at L5"]
+
+
+def test_a_macro_the_paper_defines_for_an_object_is_a_symbol_too():
+    at = TEXT.index(r"\T$ is called")
+    marks = MARKS + [{"kind": "classified", "start": at, "end": at + 2,
+                      "tip": r"\T · author-defined · ID · paper.tex:45"}]
+    assert any(e["name"] == "\\T" for e in ms.symbol_hypergraph(TEXT, marks))
+
+
+def test_a_symbol_inside_the_name_of_a_defined_term_is_not_a_loose_variable():
+    # The \F of "$\F$-nice" is part of the term's name where the term is used.
+    use = TEXT.index(r"$\F$-nice object is nice")
+    inside = {"kind": "symbol", "start": use + 1, "end": use + 3}
+    loose = {"kind": "symbol", "start": TEXT.index(r"$\Sigma^{i}S$") + 1, "end": TEXT.index(r"$\Sigma^{i}S$") + 7}
+    names = {e["name"] for e in ms.symbol_hypergraph(TEXT, MARKS + [inside, loose])}
+    assert "\\F" not in names and "\\Sigma" in names

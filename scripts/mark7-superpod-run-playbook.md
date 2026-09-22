@@ -39,6 +39,30 @@ window yields the *whole* improve-as-we-run curve for every tier — not just en
 | comprehension scoped to run-corpus (floor→slope) | `clean_comprehension --substrate-papers` |
 | 3 normalization tiers + reground + whole-paper CLean | S10–S11 |
 | completeness ledger (S2 corpus-fresh, no cross-corpus reuse) | stepper ledger |
+| **units listed in the S3 prompt, ids cut from their text** (contract `mark7-v4`) | `candidate_spans.unit_id`, `mark3_iatc_loop.render_units` |
+| **quote-vs-gloss measured per run** (`quote-agreement.json`) | S3 tail |
+| **S1b strategies**: bindings + defined terms per window, with the rule that chose each | `markup_strategies`, fed through both candidate extractors |
+| **S4 regions carved from S1's environments** (author macros included) | `expository_region_extract(..., marks)` |
+| **S4 cap spends exposition first**, in-proof prose only if room is left | `select_even` |
+
+## 2a. What changed after the 20260921 run (read before reusing artifacts)
+
+The last run's own output showed three things worth fixing before the next window:
+
+- **S3 cited units it had never seen.** The prompt listed no units, while the schema
+  accepted ids `s1..sn` built at prompt time, so 87% of nodes cited unit `s_i` as node
+  `i`, and of the nodes whose gloss could be checked only 14% quoted the clause the
+  gloss described. Every gate passed throughout. Units are now listed in the prompt
+  under ids cut from their own text (`L350-b4ee`), and the rate is measured into
+  `quote-agreement.json` at S3.
+- **Candidates must be re-cut.** Contract `mark7-v4` refuses candidates whose units
+  carry no ids rather than falling back to positional ones; re-run
+  `mark3_extract_candidates.py`. Reusing a 20260921 candidate directory will stop the
+  run and say so.
+- **S4 was reading almost nothing.** Regions came from a fixed list of `\begin{...}`
+  names, so a paper whose environments are author macros (`\df`, `\prf`) yielded one
+  region: 0705.0102 gave 33 of 690 body lines. Carving from S1's environments gives 71
+  regions, 211 lines. With a cap, exposition is selected before prose inside proofs.
 
 ## 3. The run (turnkey)
 

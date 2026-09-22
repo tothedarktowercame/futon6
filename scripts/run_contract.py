@@ -43,9 +43,24 @@ CONTRACTS: dict[str, dict] = {
         "quotation": "spans",
         "gate-retries": 1,
     },
+    # v4: the units are LISTED in the prompt, each under an id cut from its own text
+    #     (L349-3f9a). Under v3 the ids were s1..sn, assigned at prompt time and never
+    #     shown to the model, so a node could only guess which unit it cited: 87% of
+    #     nodes in mark7master-20260921 cited unit s_i as node i, and of the nodes
+    #     whose gloss could be checked, 14% quoted the clause the gloss described.
+    "mark7-v4": {
+        "model": {
+            "checkpoint": "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4",
+            "served-as": "mark4-70b",
+        },
+        "decoding": {"temperature": 0, "max-tokens": 8192},
+        "candidates": {"schema": "iatc-candidate/v5-proof", "requires": ["spans"]},
+        "quotation": "listed-units",
+        "gate-retries": 1,
+    },
 }
 
-RECOMMENDED = "mark7-v3"
+RECOMMENDED = "mark7-v4"
 
 
 def contract_id() -> str:
@@ -87,7 +102,15 @@ def deviations(actual: dict, cid: str | None = None) -> list[str]:
 
 def missing_inputs(candidate: dict, cid: str | None = None) -> list[str]:
     """What this candidate lacks that the contract needs. Non-empty means refuse."""
-    return [field for field in spec(cid)["candidates"]["requires"] if not candidate.get(field)]
+    want = spec(cid)
+    out = [field for field in want["candidates"]["requires"] if not candidate.get(field)]
+    # A v4 run listing units by id needs candidates whose units HAVE ids: cut under
+    # v3 they have none, the loop would fall back to positional s1..sn, and the run
+    # would look like v4 while reproducing the defect v4 exists to remove.
+    if want["quotation"] == "listed-units" and not out:
+        if any(not sp.get("id") for sp in candidate.get("spans") or ()):
+            out.append("spans[].id")
+    return out
 
 
 if __name__ == "__main__":

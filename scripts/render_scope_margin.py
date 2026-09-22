@@ -44,10 +44,8 @@ from pathlib import Path
 import expository_region_extract as region_extract
 import markup_strategies
 import expository_scope_audit as scope_audit
+import iatc_quote_check as quote_check
 import iatc_json
-
-ALIGNED = 0.5            # share of a gloss's content words found in a quote
-BETTER = 0.25            # how much better another unit must match to be proposed
 
 # MOCK of the proposed S4 contract: a bare parent kind is not selectable, so the
 # scope takes a specific child or is held. These cues only suggest which child the
@@ -228,28 +226,14 @@ def line_of(starts: list[int], offset: int) -> int:
 
 
 def proof_note(graph: dict, candidate: dict | None, starts: list[int]) -> dict:
-    offered = [dict(sp, id=f"s{i}") for i, sp in enumerate((candidate or {}).get("spans") or (), 1)]
+    import iatc_json
+    offered = iatc_json.source_spans(candidate or {})
     by_id = {sp["id"]: sp for sp in offered}
     nodes = []
     for i, n in enumerate(graph["nodes"], 1):
-        gloss = words(n.get("gloss", ""))
-        cited = n.get("quote-spans") or []
-        own = match(gloss, n.get("text", ""))
-        own_hits = hits(gloss, n.get("text", ""))
-        best = max(offered, key=lambda sp: (hits(gloss, sp["text"]), -len(sp["text"])), default=None)
-        best_score = match(gloss, best["text"]) if best else 0.0
-        proposal = None
-        # Two shared words at least: one ("structure") is coincidence, not evidence.
-        if (best and best["id"] not in cited and hits(gloss, best["text"]) >= 2
-                and best_score >= ALIGNED and best_score >= own + BETTER):
-            proposal = {"span": best["id"], "text": best["text"], "kind": best.get("kind"),
-                        "at": [best["start"], best["end"]],
-                        "line": line_of(starts, best["start"]), "match": round(best_score, 2)}
-        # Fewer than two content words (mostly formulae: "Hom(S,ΣM_0)=0") and a word
-        # check cannot judge either way - say so rather than count it as a failure.
-        verdict = ("uncheckable" if len(gloss) < 2
-                   else "agrees" if own >= ALIGNED and own_hits >= 2
-                   else "re-anchor" if proposal else "unclear")
+        # One definition of this check, shared with the run's measurement (S3's tail).
+        row = quote_check.node_check(n, offered, line_of=lambda off: line_of(starts, off))
+        cited, verdict, proposal = row["cites"], row["verdict"], row["proposal"]
         mock = {"agrees": ("kept", "quote matches the gloss"),
                 "re-anchor": ("re-anchored", f"quote replaced by {proposal['span']}, the clause the gloss describes"
                               if proposal else ""),
@@ -258,7 +242,7 @@ def proof_note(graph: dict, candidate: dict | None, starts: list[int]) -> dict:
         nodes.append({"id": n["id"], "kind": n.get("kind"), "gloss": n.get("gloss", ""),
                       "quote": n.get("text", ""), "cites": cited, "lines": n["source"]["lines"],
                       "at": [[by_id[c]["start"], by_id[c]["end"]] for c in cited if c in by_id],
-                      "sequential": cited == [f"s{i}"], "match": round(own, 2),
+                      "sequential": quote_check.sequential(i, cited, offered), "match": row["match"],
                       "verdict": verdict, "proposal": proposal,
                       "mock": {"verdict": mock[0], "reason": mock[1]}})
     edges = [{"id": e["id"], "relation": e.get("relation") or e.get("kind"),
