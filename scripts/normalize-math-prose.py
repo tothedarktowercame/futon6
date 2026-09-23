@@ -773,7 +773,11 @@ def split_inline_math_dollar(s: str) -> list[tuple[str, str]]:
             out.append(("math", s[i : j + 1]))
             i = j + 1
         else:
-            j = s.find("$", i)
+            # An escaped "$" fails the branch above. Search from i would find
+            # that same "$" at i, append an empty part and leave i unmoved --
+            # an endless loop that grows `out` until the process is OOM-killed.
+            # Start past it so the scan always advances.
+            j = s.find("$", i + 1 if s[i] == "$" else i)
             if j < 0:
                 out.append(("text", s[i:]))
                 return out
@@ -1185,7 +1189,7 @@ def process_plain_text_segment(s: str) -> str:
     # pi_1, pi_2 (fundamental group)
     s = _sub_outside_inline_dollar(
         s,
-        re.compile(r"\bpi_(\d)"),
+        re.compile(r"(?<!\\)\bpi_(\d)"),
         lambda m: rf"$\pi_{{{m.group(1)}}}$",
     )
     # f_* (induced map)
@@ -1197,7 +1201,7 @@ def process_plain_text_segment(s: str) -> str:
     # General subscripted variables: y_n, f_n, By_n, g_eps etc.
     s = _sub_outside_inline_dollar(
         s,
-        re.compile(r"\b([A-Za-z]{1,3})_([a-z0-9]{1,4})\b"),
+        re.compile(r"(?<!\\)\b([A-Za-z]{1,3})_([a-z0-9]{1,4})\b"),
         lambda m: rf"${m.group(1)}_{{{m.group(2)}}}$",
     )
 
