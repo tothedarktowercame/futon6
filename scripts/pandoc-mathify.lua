@@ -1722,6 +1722,16 @@ function CodeBlock(el)
     return nil
   end
 
+  -- A fence that names its language is code by assertion. Everything below
+  -- this point is guesswork for untagged fences, where a display formula and a
+  -- snippet of source look alike; ```lean does not need guessing. Without this
+  -- the rescue is accidental -- most Lean blocks happen to contain a "#check"
+  -- or an "@[simp]" and trip the algorithm guard, but a block that does not
+  -- gets set as an aligned environment, turning the theorem into mathematics.
+  if el.classes and #el.classes > 0 then
+    return nil
+  end
+
   -- Keep genuine code blocks untouched.
   if txt:match("^def%s+") or txt:match("^import%s+") or txt:match("^class%s+") or txt:match("^#!/") then
     return nil
