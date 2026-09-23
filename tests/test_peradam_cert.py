@@ -1,3 +1,13 @@
+# ---------------------------------------------------------------------------
+# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+#
+# Documented rather than repaired. Each cause is stated so a reader can tell a
+# missing input or upstream drift from a defect in the code under test.
+#
+# 1 failure - corpus-dependent:
+#   PeradamRefusal [unreadable-edn] against the real corpus. The test asserts over
+#   corpus content that is not present here in the expected state.
+# ---------------------------------------------------------------------------
 from pathlib import Path
 
 import edn_format

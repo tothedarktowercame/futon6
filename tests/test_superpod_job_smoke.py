@@ -1,3 +1,16 @@
+# ---------------------------------------------------------------------------
+# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+#
+# Documented rather than repaired. Each cause is stated so a reader can tell a
+# missing input or upstream drift from a defect in the code under test.
+#
+# 3 failures - mixed:
+#   - preregister_qc profile does not match the 'broad-arxiv' the test expects;
+#     the profile is configuration, and this checkout is configured differently.
+#   - the arxiv moist-run fails downstream of that same difference.
+#   - one is the futon3 clarification-meta drift described in
+#     tests/test_arxiv_pattern_prompt.py.
+# ---------------------------------------------------------------------------
 """Smoke tests for scripts/superpod-job.py."""
 
 from __future__ import annotations

@@ -1,3 +1,16 @@
+# ---------------------------------------------------------------------------
+# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+#
+# Documented rather than repaired. Each cause is stated so a reader can tell a
+# missing input or upstream drift from a defect in the code under test.
+#
+# 4 failures - TMPDIR resolution:
+#   The test builds a literal path under TMPDIR and compares it against a path
+#   the code under test has resolved. Wherever TMPDIR is reached through a
+#   symlink, literal != resolved and the assertion fails over the spelling of a
+#   path rather than over behaviour. Setting TMPDIR to an already-resolved
+#   directory is not always sufficient, since a test runner may set its own.
+# ---------------------------------------------------------------------------
 """Configuration must select the same resources in checks and actual consumers."""
 from __future__ import annotations
 

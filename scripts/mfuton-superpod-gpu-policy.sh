@@ -15,19 +15,24 @@ mfuton_superpod_find_home() {
     return 0
   fi
 
-  local candidate
-  for candidate in \
-    "$HOME/gh/mfuton" \
-    "/users/rjmeyers/gh/mfuton" \
-    "/home/rjmeyers/gh/mfuton"
-  do
-    if [[ -x "$candidate/agent_skills/development/superpod/current-job-gpus.sh" ]]; then
-      printf '%s\n' "$candidate"
-      return 0
-    fi
-  done
+  # MFUTON_HOME IS the contract. The only fallback is a sibling checkout next to
+  # this one, which is derived from where this script actually sits and so holds
+  # on any layout.
+  #
+  # This used to enumerate absolute home paths from one machine, and then a
+  # user-relative path that still assumed a particular workspace folder name.
+  # Guessing harder is not the fix: a resolver that has to know someone's folder
+  # names is telling you the location is configuration, so it belongs in an
+  # environment variable that the failure message names. (june, 2026-09-23)
+  local sibling
+  sibling="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)/mfuton"
+  if [[ -x "$sibling/agent_skills/development/superpod/current-job-gpus.sh" ]]; then
+    printf '%s\n' "$sibling"
+    return 0
+  fi
 
-  echo "[gpu-policy] FATAL: MFUTON_HOME is unset and mfuton was not found in known locations." >&2
+  echo "[gpu-policy] FATAL: mfuton not found. Set MFUTON_HOME to the mfuton checkout" >&2
+  echo "[gpu-policy]        providing agent_skills/development/superpod/current-job-gpus.sh" >&2
   return 1
 }
 

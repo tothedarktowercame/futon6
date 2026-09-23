@@ -6,13 +6,22 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT_DIR/scripts/mfuton-superpod-gpu-policy.sh"
 
 # Override via env if desired.
-SCRATCH_ROOT="${SCRATCH_ROOT:-$HOME/gh/scratch/darktower/futon6}"
+#
+# The default follows futon6's own storage contract (futon6_config.storage():
+# FUTON6_STORAGE_ROOT, else code_root()/storage), so it lands wherever this
+# checkout already keeps bulk data. It used to hardcode one workspace's
+# directory shape under the invoking user's home, which is wrong everywhere
+# else.
+SCRATCH_ROOT="${SCRATCH_ROOT:-${FUTON6_STORAGE_ROOT:-$ROOT_DIR/../storage}/futon6}"
 DATA_DIR="${DATA_DIR:-$SCRATCH_ROOT/data}"
 OUT_DIR="${OUT_DIR:-$SCRATCH_ROOT/data/ct-validation/arxiv-paper-hg-gpu}"
 NUM_SHARDS="${NUM_SHARDS:-8}"
 
-BUNDLE_URL="http://172.236.28.208/futon6/arxiv-math-ct-handoff-2026-02-20.7z"
-SHA_URL="http://172.236.28.208/futon6/arxiv-math-ct-handoff-2026-02-20.7z.sha256"
+# Where the handoff bundle is served from. A bare host address is a deployment
+# particular, not a property of this pipeline, so it is overridable.
+BUNDLE_BASE_URL="${BUNDLE_BASE_URL:-http://172.236.28.208/futon6}"
+BUNDLE_URL="${BUNDLE_URL:-$BUNDLE_BASE_URL/arxiv-math-ct-handoff-2026-02-20.7z}"
+SHA_URL="${SHA_URL:-$BUNDLE_BASE_URL/arxiv-math-ct-handoff-2026-02-20.7z.sha256}"
 BUNDLE_FILE="${BUNDLE_FILE:-arxiv-math-ct-handoff-2026-02-20.7z}"
 SHA_FILE="${SHA_FILE:-arxiv-math-ct-handoff-2026-02-20.7z.sha256}"
 

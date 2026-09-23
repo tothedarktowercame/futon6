@@ -58,11 +58,46 @@ class ManifestTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "corpus-sha256"):
             self.prepare()
         self.ids.write_bytes((self.run_dir / "corpus.ids.txt").read_bytes())
-        for function, changed in (("source_identity", "code"), ("substrate_identity", "substrate")):
-            with patch.object(manifest, function, return_value={"changed": True}):
-                with self.assertRaisesRegex(ValueError, changed):
-                    self.prepare()
+        with patch.object(manifest, "substrate_identity", return_value={"changed": True}):
+            with self.assertRaisesRegex(ValueError, "substrate"):
+                self.prepare()
         self.assertEqual((self.run_dir / manifest.NAME).read_bytes(), original)
+
+    def test_changed_source_tree_keeps_completed_work_and_is_recorded(self):
+        """Editing the tree must not discard ledgered stages (rob, 2026-09-23).
+
+        `code` is a SHA over every source file, so gating resume on it meant a
+        comment, an unrelated script, or a fix to a stage that had not run yet
+        threw away every completed stage - making the repair of a mid-run defect
+        cost the whole run. The hash is still recorded and the change reported.
+        """
+        self.prepare()
+        original = (self.run_dir / manifest.NAME).read_bytes()
+        edited = {"git-head": "fixture", "source-sha256": "edited"}
+
+        with patch.object(manifest, "source_identity", return_value=edited):
+            doc = self.prepare()
+
+        # Resumed, manifest untouched, and the run says the tree moved under it.
+        self.assertEqual((self.run_dir / manifest.NAME).read_bytes(), original)
+        self.assertEqual(doc["code"]["source-sha256"], "code")
+        log = self.run_dir / manifest.CODE_CHANGES_LOG
+        self.assertTrue(log.exists())
+        entry = json.loads(log.read_text().splitlines()[-1])
+        self.assertEqual(entry["was"]["source-sha256"], "code")
+        self.assertEqual(entry["now"]["source-sha256"], "edited")
+
+    def test_discarding_on_a_changed_source_tree_is_opt_in(self):
+        """The old refuse-on-edit behaviour remains available, off by default."""
+        self.prepare()
+        edited = {"git-head": "fixture", "source-sha256": "edited"}
+
+        with patch.object(manifest, "source_identity", return_value=edited):
+            self.assertFalse(manifest.discard_on_code_change())
+            with patch.dict(os.environ, {manifest.DISCARD_ON_CODE_CHANGE_ENV: "1"}):
+                self.assertTrue(manifest.discard_on_code_change())
+                with self.assertRaisesRegex(ValueError, "code"):
+                    self.prepare()
 
     def test_refuses_unmanifested_artifacts_and_duplicate_corpus(self):
         self.run_dir.mkdir()

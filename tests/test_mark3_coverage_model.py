@@ -1,3 +1,13 @@
+# ---------------------------------------------------------------------------
+# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+#
+# Documented rather than repaired. Each cause is stated so a reader can tell a
+# missing input or upstream drift from a defect in the code under test.
+#
+# 1 failure - missing required input:
+#   SystemExit: missing required inputs: gh200_rendered_html. The harness wants a
+#   rendered-HTML input that is not present in this checkout.
+# ---------------------------------------------------------------------------
 import importlib.util
 import sys
 from pathlib import Path

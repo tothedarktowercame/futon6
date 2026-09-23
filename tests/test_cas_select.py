@@ -1,3 +1,15 @@
+# ---------------------------------------------------------------------------
+# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+#
+# Documented rather than repaired. Each cause is stated so a reader can tell a
+# missing input or upstream drift from a defect in the code under test.
+#
+# 2 failures - genuine, NOT a missing input:
+#   - whole-index recall@4 regressed: 12/22, a retrieval quality regression.
+#   - a segment assertion differs in ordering only.
+#   Both are real signals about cas_select behaviour and deserve investigation on
+#   their own terms.
+# ---------------------------------------------------------------------------
 import importlib.util
 import json
 import sys

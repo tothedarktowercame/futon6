@@ -1,3 +1,31 @@
+# ---------------------------------------------------------------------------
+# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+#
+# Documented rather than repaired. Each cause is stated so a reader can tell a
+# missing input or upstream drift from a defect in the code under test.
+#
+# 17 of 18 failures - missing futon3 family parent:
+#   The futon3 library no longer carries
+#   `library/math-strategy/clarification-meta.flexiarg`. It was removed upstream
+#   on 2026-08-13 (futon3 363d1727, "clarification-meta -> spec") because it was
+#   titled "Clarification (Meta-Tag, not a Pattern)" and said of itself that it
+#   was not a pattern; its substance moved into README-flexiarg.md section 3a,
+#   while the exemplars and routing stayed in PAPER-SHAPES-INDEX.md section 5.
+#
+#   arxiv_pattern_prompt.FAMILY_PARENTS still lists it, and
+#   `_has_paper_shape_families` requires EVERY parent to have a file, so that one
+#   absent file disqualifies every candidate library root and resolution falls
+#   through to the DEFAULT_FUTON3_LIBRARY (~/code/futon3/library). The reported
+#   path is therefore a fallback nobody configured, which makes this look like a
+#   path bug when it is a taxonomy change futon6 has not absorbed.
+#
+# The remaining one is the TMPDIR class:
+#   The test builds a literal path under TMPDIR and compares it against a path
+#   the code under test has resolved. Wherever TMPDIR is reached through a
+#   symlink, literal != resolved and the assertion fails over the spelling of a
+#   path rather than over behaviour. Setting TMPDIR to an already-resolved
+#   directory is not always sufficient, since a test runner may set its own.
+# ---------------------------------------------------------------------------
 """Tests for the arxiv-aware Stage 3 prompt builder.
 
 Validates:

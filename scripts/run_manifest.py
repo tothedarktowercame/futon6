@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import sys
 from datetime import datetime, timezone
 
 import futon6_config as config
@@ -181,6 +182,96 @@ def load(run_dir: Path) -> dict:
     return doc
 
 
+# Recorded in the manifest, excluded from the resume comparison.
+#
+# `pinned["host-configuration"]` is the WHOLE `config.effective()` dict, so every
+# field in it gates a resume. Splitting the Slurm job id and node out of
+# `hardware` into `hardware-placement` (futon6_config.VOLATILE_HARDWARE_FIELDS)
+# did not help on its own: the values changed key and stayed inside the same
+# pinned dict, so a resume in a new job was still refused with
+#   resume identity changed: host-configuration
+# On 2026-09-21 that blocked a run resuming at S10 after its allocation ended,
+# with S1-S9 already ledgered and nothing about the run itself changed. This is
+# the half that makes the split mean anything: placement is still recorded in
+# full, and the comparison does not look at it. (june, 2026-09-21)
+VOLATILE_CONFIG_KEYS = ("hardware-placement",)
+
+
+def _identity_view(doc: dict) -> dict:
+    """The pinned document as the resume check should see it: placement removed."""
+    view = dict(doc)
+    host = view.get("host-configuration")
+    if isinstance(host, dict):
+        view["host-configuration"] = {
+            key: value for key, value in host.items() if key not in VOLATILE_CONFIG_KEYS
+        }
+    return view
+
+
+# A CHANGED SOURCE TREE DOES NOT DISCARD COMPLETED STAGES (rob, 2026-09-23:
+# "the code hash can be computed and reported, but it changing SHOULD NOT
+# eliminate partial work").
+#
+# `code` is a SHA over every .py/.bb/.clj/.sh under scripts/ and src/ plus a few
+# contract files. It was gating resume, which meant editing any line anywhere in
+# the tree threw away every ledgered stage in every open run - a comment, an
+# unrelated script, a fix to a stage that had not run yet. The stages that
+# completed are on disk, accounted, and gate-checked; a later edit somewhere
+# else does not make them untrue. Worse, it made the repair of a mid-run defect
+# cost the whole run, which is exactly when repair is most needed: on 2026-09-21
+# a one-line fix to this very file could not be applied without discarding S1-S9.
+#
+# The hash is still computed and still recorded in the manifest, and a change is
+# reported on resume and appended to code-changes.jsonl in the run directory, so
+# a run that spans an edit says so in its own record. Reporting it is the useful
+# part; refusing on it was not.
+#
+# Set FUTON6_DISCARD_ON_CODE_CHANGE=1 to get the old behaviour where a changed
+# tree refuses the resume. It defaults to off. Use it when the edit plausibly
+# changes what the completed stages MEAN - a scoring rule, a gate threshold, a
+# schema - and you would rather lose the partial work than mix two definitions
+# in one run. That is a judgment about the specific edit, so it belongs to the
+# operator, not to a hash that cannot tell the difference.
+DISCARD_ON_CODE_CHANGE_ENV = "FUTON6_DISCARD_ON_CODE_CHANGE"
+CODE_CHANGES_LOG = "code-changes.jsonl"
+_TRUE = {"1", "true", "yes", "on"}
+
+
+def discard_on_code_change() -> bool:
+    """Whether a changed source tree should refuse the resume. Default: no."""
+    return os.environ.get(DISCARD_ON_CODE_CHANGE_ENV, "").strip().lower() in _TRUE
+
+
+def _record_code_change(run_dir: Path, was: dict | None, now: dict) -> None:
+    """Append the code change to the run's own record, and say so on stderr.
+
+    Appended to a sidecar rather than written into the manifest: the manifest is
+    this run's immutable identity, and the point here is that the source tree is
+    NOT part of that identity.
+    """
+    entry = {"at": datetime.now(timezone.utc).isoformat(), "was": was, "now": now}
+    with (run_dir / CODE_CHANGES_LOG).open("a") as handle:
+        handle.write(json.dumps(entry, sort_keys=True) + "\n")
+    def _short(value: str | None) -> str:
+        return (value or "unknown")[:12]
+
+    was_head, now_head = _short((was or {}).get("git-head")), _short(now.get("git-head"))
+    # Uncommitted edits leave git-head identical and move only the source hash,
+    # so reporting the head alone prints "abc -> abc" and explains nothing.
+    if was_head == now_head:
+        detail = (f"HEAD {now_head} unchanged, working tree edited "
+                  f"(source {_short((was or {}).get('source-sha256'))} -> "
+                  f"{_short(now.get('source-sha256'))})")
+    else:
+        detail = f"{was_head} -> {now_head}"
+    print(
+        f"NOTE: source tree changed since this run started ({detail}); "
+        f"completed stages are kept and the change is recorded in {CODE_CHANGES_LOG}. "
+        f"Set {DISCARD_ON_CODE_CHANGE_ENV}=1 to refuse instead.",
+        file=sys.stderr, flush=True,
+    )
+
+
 def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
     """Caller holds lock. Never adopt unmanifested artifacts or mutate a resume identity."""
     raw = ids.read_bytes()
@@ -208,9 +299,18 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
                             "expository-selection": EXPOSITORY_SELECTION if cap else "all-regions"}}
     if (run_dir / NAME).exists():
         doc = load(run_dir)
-        changed = [key for key, value in pinned.items() if doc.get(key) != value]
+        recorded, current = _identity_view(doc), _identity_view(pinned)
+        changed = [key for key, value in current.items() if recorded.get(key) != value]
+        if "code" in changed and not discard_on_code_change():
+            # Recorded and reported, never a reason to discard completed stages.
+            changed.remove("code")
+            _record_code_change(run_dir, recorded.get("code"), current["code"])
         if changed:
-            raise ValueError("resume identity changed: " + ", ".join(changed) + "; start a new run directory")
+            detail = "; start a new run directory"
+            if changed == ["code"]:
+                detail = (f"; {DISCARD_ON_CODE_CHANGE_ENV} is set, so a changed source tree"
+                          f" discards completed stages. Unset it to resume in place")
+            raise ValueError("resume identity changed: " + ", ".join(changed) + detail)
         validate_records(run_dir, doc)
         return doc
     occupied = [p.name for p in run_dir.iterdir() if p.name not in (".run.lock", "host-config.jsonl")]

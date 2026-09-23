@@ -1,3 +1,16 @@
+# ---------------------------------------------------------------------------
+# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+#
+# Documented rather than repaired. Each cause is stated so a reader can tell a
+# missing input or upstream drift from a defect in the code under test.
+#
+# 1 failure - genuine, NOT a missing input:
+#   test_nonselfloop_not_flagged asserts that a graph whose conclusion :B is NOT
+#   among its premises [:A] is not flagged as a self-loop. It IS being flagged.
+#   Pure Python (substance_gate.iatc_features / check_iatc_item), with no external
+#   tool and no data fixture involved, so this is a real over-flagging bug in the
+#   self-loop check and worth fixing on its own terms.
+# ---------------------------------------------------------------------------
 """rung-1 regression: the substance self-loop check must read ALL premise tokens,
 not just the first — so :premise [:A :B] :conclusion :B (conclusion is the 2nd
 premise) is caught. See substance_gate.py self-loop block."""

@@ -1,3 +1,15 @@
+# ---------------------------------------------------------------------------
+# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+#
+# Documented rather than repaired. Each cause is stated so a reader can tell a
+# missing input or upstream drift from a defect in the code under test.
+#
+# 1 failure - babashka:
+#   `bb` (babashka) is not on PATH. The gate chain shells out to it and dies
+#   with FileNotFoundError before any assertion runs. babashka is a required
+#   tool for these tests, not an optional one - see scripts/preflight.py, which
+#   refuses without it. Put `bb` on PATH and these pass.
+# ---------------------------------------------------------------------------
 import importlib.util, sys
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent

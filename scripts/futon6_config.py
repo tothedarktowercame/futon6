@@ -394,9 +394,15 @@ def effective() -> dict:
         # means. Pinning "slurm-job"/"node" made every multi-window run
         # unresumable: prepare() compares the whole dict, so the job id alone
         # refused a resume whose GPU model, count, driver and device list were
-        # identical. The volatile fields are still RECORDED, just outside the
-        # pinned comparison, so the run record still says where it ran.
-        # (june, 2026-09-21 - reported upstream.)
+        # identical. The volatile fields are still RECORDED, so the run record
+        # still says where it ran.
+        #
+        # This split is only half the fix, and on its own it changed nothing:
+        # prepare() pins the whole effective() dict, so the values simply moved
+        # to another key inside it and a resume in a new job was still refused.
+        # The other half is run_manifest.VOLATILE_CONFIG_KEYS, which drops
+        # "hardware-placement" from the comparison. Both are needed; neither
+        # works alone. (june, 2026-09-21 - reported upstream.)
         "hardware": {k: v for k, v in inventory.items() if k not in VOLATILE_HARDWARE_FIELDS},
         "hardware-placement": {k: inventory.get(k) for k in VOLATILE_HARDWARE_FIELDS},
         "serving": live,

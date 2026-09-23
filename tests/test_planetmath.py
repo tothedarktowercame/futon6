@@ -1,3 +1,14 @@
+# ---------------------------------------------------------------------------
+# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+#
+# Documented rather than repaired. Each cause is stated so a reader can tell a
+# missing input or upstream drift from a defect in the code under test.
+#
+# 3 failures - the planetmath corpus is absent:
+#   The planetmath sibling checkout is not present, so load_tex_dir() returns {}
+#   and the tests assert len > 100 / > 50. These tests require that corpus; they
+#   are not otherwise coupled to the host.
+# ---------------------------------------------------------------------------
 """Tests for PlanetMath loading and graph construction."""
 
 import os

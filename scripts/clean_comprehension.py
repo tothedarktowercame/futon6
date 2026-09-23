@@ -95,13 +95,17 @@ def main():
     ap.add_argument("--thin-credit", type=float, default=0.5)
     ap.add_argument("--lo", type=float, default=0.5)
     ap.add_argument("--hi", type=float, default=0.8)
-    ap.add_argument("--out", default="data/showcases/clean-demo/comprehension.json")
+    # Default resolved after parsing: with --run-dir the run owns the report.
+    ap.add_argument("--out", default=None)
     ap.add_argument("--substrate-papers", help="file of paper-ids: scope grounding to this "
                     "RUN-CORPUS (so comprehension rises with the run — finding #1 / accretion sweep)")
     ap.add_argument("--run-dir", help="if set, emit S5 MetricRecords here (INSTANTIATE-GPU)")
     ap.add_argument("--run-id", default="adhoc")
     ap.add_argument("--corpus-id", default="adhoc")
     args = ap.parse_args()
+    args.out_was_given = args.out is not None
+    if args.out is None:
+        args.out = "data/showcases/clean-demo/comprehension.json"
 
     substrate = r2d.load_substrate(r2d.parse_args([]))
     if args.substrate_papers:   # scope grounding to the run-corpus (finding #1)
@@ -162,9 +166,20 @@ def main():
                      "noun_buckets": nb, "strategy_buckets": sb,
                      "gap_to_ceiling": (None if comp is None else round(1 - comp, 3))})
 
-    Path(ROOT / args.out).parent.mkdir(parents=True, exist_ok=True)
+    # A run OWNS its output. --out defaults to a showcase path in the checkout,
+    # which no caller overrides, so every run overwrote the same file: outside
+    # the RETRIEVE manifest, absent from the bundle, and left looking current
+    # for whichever run finished last. With --run-dir the report lands beside
+    # the run's other artifacts; ad-hoc use (no --run-dir) keeps the showcase
+    # path, and an explicit --out always wins. (june, 2026-09-21)
+    out = Path(ROOT / args.out)
+    if args.run_dir and not args.out_was_given:
+        run_root = Path(args.run_dir)
+        out = (run_root if run_root.is_absolute() else ROOT / run_root) / "comprehension.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
     json.dump({"lo": args.lo, "hi": args.hi, "proofs": rows},
-              open(ROOT / args.out, "w"), indent=2)
+              open(out, "w"), indent=2)
+    print(f"wrote {out}")
 
     if args.run_dir:  # S5 inline metrics: weak-point (flag) + confidence + symbol-grounding by kind
         try:

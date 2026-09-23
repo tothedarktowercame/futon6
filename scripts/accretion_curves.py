@@ -99,7 +99,13 @@ def main():
     # not clobber a previous run's artifact. --run-dir was previously accepted
     # and ignored, and OUT is a mark6-hardcoded showcase path outside the
     # RETRIEVE manifest (E-superpod-hardening H16, 2026-08-06).
-    targets = [OUT]
+    #
+    # With --run-dir the run OWNS this artifact, so OUT is NOT written: keeping
+    # it in the target list does the very clobbering the comment above warns
+    # about, and leaves a file in the checkout that looks current but belongs to
+    # whichever run happened to finish last. Without --run-dir (ad-hoc
+    # inspection) the showcase path is still the right place. (june, 2026-09-21)
+    targets = [] if a.run_dir else [OUT]
     if a.run_dir:
         out_dir = a.run_dir if os.path.isabs(a.run_dir) else os.path.join(ROOT, a.run_dir)
         os.makedirs(out_dir, exist_ok=True)
