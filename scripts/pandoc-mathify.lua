@@ -412,9 +412,67 @@ local function has_balanced_delimiters(s)
   return braces == 0 and parens == 0
 end
 
+-- Bodies of text-mode macros must not be rewritten as mathematics. "\\text{max
+-- at }" is prose inside a formula; turning its "max" into the operator \\max
+-- puts a math-mode command in text mode, which is a "Missing $ inserted" error
+-- for every such word. Park those bodies before normalising and put them back
+-- after, so nothing in between can see them.
+local TEXT_MACROS = {"text", "textrm", "textbf", "textit", "textsf", "texttt",
+                     "mbox", "mathrm", "operatorname"}
+
+local function index_to_letters(n)
+  local out = {}
+  repeat
+    local d = n % 26
+    table.insert(out, 1, string.char(65 + d))
+    n = math.floor(n / 26)
+  until n == 0
+  return table.concat(out)
+end
+
+local function letters_to_index(letters)
+  local n = 0
+  for i = 1, #letters do
+    n = n * 26 + (letters:byte(i) - 65)
+  end
+  return n
+end
+
+local function park_text_bodies(s)
+  local parked = {}
+  for _, macro in ipairs(TEXT_MACROS) do
+    s = s:gsub("\\" .. macro .. "(%b{})", function(body)
+      parked[#parked + 1] = body
+      -- Letters only: a digit here would be picked up by
+      -- mark_integer_literals, and punctuation by the escaping rules.
+      return "\\" .. macro .. "ZzPARKED" .. index_to_letters(#parked) .. "ENDZz"
+    end)
+  end
+  return s, parked
+end
+
+local function unpark_text_bodies(s, parked)
+  return (s:gsub("ZzPARKED(%u+)ENDZz", function(letters)
+    return parked[letters_to_index(letters)] or ""
+  end))
+end
+
+-- %f[%a] is zero-width, so it also matches immediately after a backslash: in
+-- "\dim(xM)" it fires between the "\" and the "d" and inserts a second
+-- command, giving "\\mOpName{dim}(xM)". Inside a table cell that doubled
+-- backslash reads as a row break in the middle of a formula. Only rewrite a
+-- name that is not already part of a command.
+local function operator_call(s, name, repl)
+  s = s:gsub("^" .. name .. "%s*%(", repl .. "(")
+  s = s:gsub("([^\\%a])" .. name .. "%s*%(", "%1" .. repl .. "(")
+  return s
+end
+
 local function normalize_expr(s)
   s = trim(s)
   s = s:gsub("%$", "")
+  local parked
+  s, parked = park_text_bodies(s)
   s = s:gsub("thetransfere→Hisallowed∈TO", "the transfer e -> H is allowed in T_O")
   s = normalize_escaped_script_artifacts(s)
   -- Collapse doubled escaping artifacts (e.g., \\omega, \\$, \\)).
@@ -509,7 +567,7 @@ local function normalize_expr(s)
   s = replace_word(s, "Fix", "\\mOpName{Fix}")
   s = replace_word(s, "vec", "\\mOpName{vec}")
   s = replace_word(s, "tr", "\\mOpName{tr}")
-  s = s:gsub("%f[%a]diag%s*%(", "\\operatorname{diag}(")
+  s = operator_call(s, "diag", "\\operatorname{diag}")
   s = s:gsub("\\mOpName{char}%s*%.%s*\\text{poly}%s*%.%s*\\text{of}%s*([A-Za-z])", "\\text{char.~poly.~of} %1")
   s = s:gsub("\\mOpName{char}%s*%.%s*~?poly%s*%.%s*~?of%s*([A-Za-z])", "\\text{char.~poly.~of} %1")
   s = s:gsub("\\text{%s*\\mOpName{char}%s*%.%s*~?poly%s*%.%s*~?of%s*}", "\\text{char.~poly.~of}")
@@ -519,13 +577,13 @@ local function normalize_expr(s)
   s = s:gsub("([A-Za-z])%s*%+%s*([A-Z][A-Z0-9]+)%*", "%1 + %2^{\\mDualStar}")
   s = s:gsub("(\\mathup{%u[%u%d]*})%s*%*", "%1^{\\mDualStar}")
   s = s:gsub("%(cross%s*[%-%−]%s*term!%)", "(\\text{cross-term!})")
-  s = s:gsub("%f[%a]span%s*%(", "\\mOpName{span}(")
-  s = s:gsub("%f[%a]ker%s*%(", "\\mOpName{ker}(")
-  s = s:gsub("%f[%a]rank%s*%(", "\\mOpName{rank}(")
-  s = s:gsub("%f[%a]dim%s*%(", "\\mOpName{dim}(")
-  s = s:gsub("%f[%a]codim%s*%(", "\\mOpName{codim}(")
-  s = s:gsub("%f[%a]Tr%s*%(", "\\mOpName{Tr}(")
-  s = s:gsub("%f[%a]trace%s*%(", "\\mOpName{trace}(")
+  s = operator_call(s, "span", "\\mOpName{span}")
+  s = operator_call(s, "ker", "\\mOpName{ker}")
+  s = operator_call(s, "rank", "\\mOpName{rank}")
+  s = operator_call(s, "dim", "\\mOpName{dim}")
+  s = operator_call(s, "codim", "\\mOpName{codim}")
+  s = operator_call(s, "Tr", "\\mOpName{Tr}")
+  s = operator_call(s, "trace", "\\mOpName{trace}")
   s = s:gsub("^int%s*_", "\\int_")
   s = s:gsub("([^\\%a])int%s*_", "%1\\int_")
   s = s:gsub("^integral%s*_", "\\Integral_")
@@ -687,6 +745,7 @@ local function normalize_expr(s)
   s = s:gsub("\\%%", "\2"):gsub("%%", "\\%%"):gsub("\2", "\\%%")
 
   s = s:gsub("%s+", " ")
+  s = unpark_text_bodies(s, parked)
   return trim(s)
 end
 
@@ -755,6 +814,12 @@ local function keep_inline_code(s)
   -- and would mathify the line, stacking every underscore into a subscript.
   local head = s:match("^%s*([%a_][%w_\']*)")
   if head and lean_tactics[head] then
+    return true
+  end
+  -- A dotted namespace path -- Polynomial.reverse, Complex.abs,
+  -- MeasureTheory.Memℒp -- is a Lean identifier. is_mathy_inline() fires on the
+  -- ":=" or "(" beside it and would set the whole span as mathematics.
+  if s:match("%u[%w]*%.[%w_\128-\255]") then
     return true
   end
   -- Several tokens, at least one of them snake_case: still code, not math.
