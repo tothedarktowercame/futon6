@@ -557,6 +557,23 @@ local function normalize_expr(s)
   s = s:gsub("_%(([^()]+)%)", "_{%1}")
   s = s:gsub("(\\[%a]+)%s+([_%^])", "%1%2")
 
+  -- A chain of scripts is TeX already: "p^nq^m" is p^{n}q^{m} and
+  -- "P_MP_NP_M" is P_{M}P_{N}P_{M}, because an unbraced script takes exactly
+  -- one token. The greedy rule below would swallow the run between the two
+  -- markers -- p^{nq}^{m} -- which is a double superscript and an error. So
+  -- where a run is followed by another script marker, take one character and
+  -- leave the rest, then let the greedy rule finish the tail.
+  for _ = 1, 8 do
+    local before = s
+    s = s:gsub("([%a%)%}])([_%^])([A-Za-z][A-Za-z0-9]*)([_%^])",
+      function(base, marker, run, nxt)
+        return base .. marker .. "{" .. run:sub(1, 1) .. "}" .. run:sub(2) .. nxt
+      end)
+    if s == before then
+      break
+    end
+  end
+
   -- Normalize bare subscripts/superscripts from pseudo-code (A_tau -> A_{tau}).
   s = s:gsub("([%a%)%}])_([A-Za-z][A-Za-z0-9]*)", "%1_{%2}")
   s = s:gsub("([%a%)%}])%^([A-Za-z][A-Za-z0-9]*)", "%1^{%2}")
