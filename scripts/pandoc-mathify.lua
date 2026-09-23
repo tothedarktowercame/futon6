@@ -25,6 +25,23 @@ local greek_token_names = {
   Phi = true, Psi = true, Omega = true,
 }
 
+-- LaTeX commands that begin with a capital. A backslash followed by one of
+-- these is a command, not a set-difference separator.
+local latex_capital_commands = {
+  Big = true, Bigl = true, Bigr = true, Bigm = true,
+  Bigg = true, Biggl = true, Biggr = true, Biggm = true,
+  Gamma = true, Delta = true, Theta = true, Lambda = true, Xi = true,
+  Pi = true, Sigma = true, Upsilon = true, Phi = true, Psi = true, Omega = true,
+  Re = true, Im = true, Pr = true, Vert = true, Arrowvert = true,
+  Leftarrow = true, Rightarrow = true, Leftrightarrow = true,
+  Longleftarrow = true, Longrightarrow = true, Longleftrightarrow = true,
+  Cup = true, Cap = true, Vee = true, Wedge = true, Box = true, Diamond = true,
+  Downarrow = true, Uparrow = true, Updownarrow = true,
+  -- APM problem-statement shorthands (apm/project-cheatsheet.py).
+  R = true, C = true, Z = true, N = true, Q = true, T = true,
+  Rn = true, Rtw = true, RP = true, Son = true, Stw = true, Sth = true, Ttw = true,
+}
+
 local unicode_ops = {
   {"⊞", "\\boxplus "}, {"∧", "\\wedge "}, {"∩", "\\cap "},
   {"⊂", "\\subset "}, {"⊕", "\\oplus "}, {"⊗", "\\otimes "},
@@ -104,7 +121,25 @@ local function mark_integer_literals(s)
         while j <= #s and s:sub(j, j):match("%d") do
           j = j + 1
         end
-        table.insert(out, "\\mNumber{" .. s:sub(i, j - 1) .. "}")
+        -- A digit that carries a TeX unit is a dimension, not a numeral:
+        -- \\[2pt] is a line break with 2pt of leading, and marking the 2
+        -- turns it into an illegal unit of measure.
+        local rest = s:sub(j)
+        local is_dimension =
+          rest:match("^%s*p[tc]") or rest:match("^%s*e[mx]")
+          or rest:match("^%s*[cm]m") or rest:match("^%s*in")
+          or rest:match("^%s*bp") or rest:match("^%s*[dc]d")
+          or rest:match("^%s*cc") or rest:match("^%s*sp")
+          or rest:match("^%s*mu") or rest:match("^%s*%.%d")
+        if is_dimension then
+          table.insert(out, s:sub(i, j - 1))
+        else
+          -- Braced, so the marker is a single group wherever it lands. TeX
+          -- allows brace-less single-token arguments (\frac\pi2, \sqrt[3]7,
+          -- x^2); a bare \mNumber would be taken as the whole argument and
+          -- strand its own {N} after it.
+          table.insert(out, "{\\mNumber{" .. s:sub(i, j - 1) .. "}}")
+        end
         i = j
       else
         table.insert(out, ch)
@@ -408,7 +443,18 @@ local function normalize_expr(s)
   s = s:gsub("i_d/dt", "\\iota_{d/dt}")
 
   -- Handle literal backslash separators like N_n\GL_n, but avoid LaTeX commands.
-  s = s:gsub("([%w%)%}])\\([A-Z])", "%1 \\backslash %2")
+  -- The comment above was the intent; the rule did not honour it, because a
+  -- backslash before ANY capital matched -- including real commands. Anything
+  -- written \Bigr, \Gamma, \Omega or \Re directly after a closing brace, a
+  -- closing paren or a letter (i.e. \frac{a}{b}\Bigr]) was rewritten to
+  -- "\backslash Bigr" and printed as literal text. Capture the whole command
+  -- name and spare the ones that are commands.
+  s = s:gsub("([%w%)%}])\\([A-Z][A-Za-z]*)", function(pre, name)
+    if latex_capital_commands[name] then
+      return pre .. "\\" .. name
+    end
+    return pre .. " \\backslash " .. name
+  end)
 
   for _, pair in ipairs(unicode_ops) do
     s = s:gsub(pair[1], pair[2])
@@ -601,13 +647,79 @@ local function normalize_expr(s)
     s = s:gsub("\\" .. cmd .. "([A-Za-z])", "\\" .. cmd .. " %1")
   end
 
+  -- TeX allows brace-less single-token arguments: \frac\pi2 means
+  -- \frac{\pi}{2}. mark_integer_literals is about to turn that 2 into
+  -- \mNumber{2}, which would hand \frac the macro \mNumber as its whole
+  -- second argument and strand the {2}. Brace the arguments first so the
+  -- slots stay single tokens whatever gets substituted into them.
+  for _, cmd in ipairs({"dfrac", "tfrac", "frac", "binom"}) do
+    -- \cmd<tok><tok> where each tok is a command or a single character.
+    s = s:gsub("\\" .. cmd .. "%s*(\\%a+)%s*(\\%a+)", "\\" .. cmd .. "{%1}{%2}")
+    s = s:gsub("\\" .. cmd .. "%s*(\\%a+)%s*([%w])", "\\" .. cmd .. "{%1}{%2}")
+    s = s:gsub("\\" .. cmd .. "%s*([%w])%s*(\\%a+)", "\\" .. cmd .. "{%1}{%2}")
+    s = s:gsub("\\" .. cmd .. "%s*([%w])%s*([%w])", "\\" .. cmd .. "{%1}{%2}")
+  end
+  s = s:gsub("\\sqrt%s*(\\%a+)", "\\sqrt{%1}")
+
   s = mark_integer_literals(s)
 
-  s = s:gsub("#", "\\#")
-  s = s:gsub("%%", "\\%%")
+  -- Escape only characters that are not escaped already. The APM sources write
+  -- \# for cardinality; escaping unconditionally yields \\# , which ends the
+  -- row in display math instead of printing a hash.
+  s = s:gsub("\\#", "\1"):gsub("#", "\\#"):gsub("\1", "\\#")
+  s = s:gsub("\\%%", "\2"):gsub("%%", "\\%%"):gsub("\2", "\\%%")
 
   s = s:gsub("%s+", " ")
   return trim(s)
+end
+
+-- A Lean/mathlib declaration name cited in prose -- eLpNorm_le_eLpNorm_mul_rpow
+-- _measure_univ, MeasureTheory.lintegral_mono -- is an identifier, not an
+-- expression. is_mathy_inline() fires on any "_", so without this guard every
+-- such citation is typeset as nested subscripts (and errors with "Double
+-- subscript"). Require a leading letter, identifier characters only, at least
+-- two underscores, and one word-like segment, so real math ("x_1_2") is left
+-- to the mathifier.
+-- Lean 4 / Mathlib tactic names. A backticked span beginning with one of
+-- these is a tactic invocation, so it must survive as code.
+local lean_tactics = {
+  apply = true, exact = true, refine = true, simp = true, simpa = true,
+  intro = true, intros = true, rintro = true, obtain = true, choose = true,
+  use = true, have = true, show = true, calc = true, rw = true, rwa = true,
+  linarith = true, nlinarith = true, positivity = true, gcongr = true,
+  norm_num = true, norm_cast = true, push_cast = true, field_simp = true,
+  constructor = true, cases = true, rcases = true, induction = true,
+  ext = true, filter_upwards = true, measurability = true, continuity = true,
+  convert = true, specialize = true, unfold = true, omega = true,
+  decide = true, trivial = true, exfalso = true, by_cases = true,
+  set = true, let_ = true, suffices = true, change = true, exact_mod_cast = true,
+}
+
+local function is_declaration_name(s)
+  -- Mathlib identifiers carry non-ASCII: mul_left_cancel₀, Memℒp.
+  -- Lua patterns are byte-wise, so \128-\255 covers every UTF-8 byte.
+  if not s:match("^[%a\128-\255][%w_.'\128-\255]*$") then
+    return false
+  end
+  local _, underscores = s:gsub("_", "")
+  if underscores < 1 then
+    return false
+  end
+  -- Two or more word-like segments means a declaration name
+  -- (filter_upwards, measure_limsup_eq, tendsto_integral_of_dominated).
+  -- Real subscripted math has a short base and a short index -- x_n, a_ij,
+  -- E_alpha, L_infty -- so it never reaches two segments of three letters.
+  local long_segments = 0
+  for segment in s:gmatch("[%a]+") do
+    if #segment >= 3 then
+      long_segments = long_segments + 1
+    end
+  end
+  if long_segments >= 2 then
+    return true
+  end
+  -- Short segments still read as a declaration once there are several joins.
+  return underscores >= 3
 end
 
 local function keep_inline_code(s)
@@ -615,6 +727,21 @@ local function keep_inline_code(s)
     return true
   end
   if s:match("%.md$") or s:match("%.py$") or s:match("%.jsonl$") then
+    return true
+  end
+  if is_declaration_name(s) then
+    return true
+  end
+  -- A code span holding a whole Lean tactic invocation --
+  -- `filter_upwards [measure_limsup_eq_zero ...]`, `refine <phi, h, ?_>` --
+  -- is source code, not a formula. is_mathy_inline() fires on the "_" and "["
+  -- and would mathify the line, stacking every underscore into a subscript.
+  local head = s:match("^%s*([%a_][%w_\']*)")
+  if head and lean_tactics[head] then
+    return true
+  end
+  -- Several tokens, at least one of them snake_case: still code, not math.
+  if s:match("%s") and s:match("%a[%w\']*_[%w_\']*%a") then
     return true
   end
   return false
@@ -635,6 +762,11 @@ end
 
 local function is_compound_math_token(s)
   if not s:match("[_%^]") then
+    return false
+  end
+  -- A Lean declaration cited bare in prose is not an expression; mathifying it
+  -- produces stacked subscripts and "Double subscript" at compile time.
+  if is_declaration_name(s) then
     return false
   end
   if not s:match("[%a%d]") then
@@ -755,9 +887,17 @@ local function convert_mathy_segments(token)
     if a == nil then
       break
     end
-    push_str(out, token:sub(pos, a - 1))
-    table.insert(out, pandoc.Math("InlineMath", normalize_expr(token:sub(a, b))))
-    converted = true
+    local segment = token:sub(a, b)
+    if is_declaration_name(segment) then
+      -- A Lean declaration cited bare in prose. Mathifying it stacks its
+      -- underscores into nested subscripts, which is both wrong and a
+      -- "Double subscript" error at compile time. Keep it as text.
+      push_str(out, token:sub(pos, b))
+    else
+      push_str(out, token:sub(pos, a - 1))
+      table.insert(out, pandoc.Math("InlineMath", normalize_expr(segment)))
+      converted = true
+    end
     pos = b + 1
   end
   push_str(out, token:sub(pos))
@@ -1509,6 +1649,28 @@ function CodeBlock(el)
     if looks_like_algorithm_line(line) then
       return nil
     end
+  end
+
+  -- ASCII art is not mathematics. Some proofs draw a figure -- two spheres
+  -- joined by a circle, a commutative square -- in a code block; setting it as
+  -- math turns every "___" into stacked subscripts and every "|" into a
+  -- delimiter, for hundreds of errors from one picture.
+  for line in txt:gmatch("[^\n]+") do
+    if line:match("___") or line:match("%-%-%-%-") or line:match("/ *\\")
+       or line:match("|.*|.*|") or line:match("%.%-%-") then
+      return nil
+    end
+  end
+
+  -- A formula has balanced braces. A block that does not is something else --
+  -- most often a hand-drawn cases construct,
+  --     d(x) = { 1,          if S = 0,
+  --            { inf |x-s|,  otherwise.
+  -- whose braces are meant as ordinary characters. Setting it as math leaks
+  -- those braces into the document, where the unmatched one makes TeX scan to
+  -- end of file and the whole build fails.
+  if brace_delta(txt) ~= 0 then
+    return nil
   end
 
   local lines = {}
