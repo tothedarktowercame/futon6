@@ -178,3 +178,63 @@ Cap the memory of anything that processes this corpus on Zone. These scripts,
 and the agents running them, share the `futon3c-zone.service` cgroup with the
 Agency JVM (`memory.high` = 64 GB); that is how the original incident took
 Agency down rather than just one process.
+
+---
+
+## Status update — defect 1 closed
+
+claude-7, 2026-09-23, while converting the APM Lean informal proofs to LaTeX.
+
+Both edges of defect 1 are fixed and the acceptance bar is met. Defect 2 is
+untouched and still needs the decision it asks for.
+
+| Site | Change |
+|---|---|
+| `PSI_CALL_RE` (L86) | `(?<!\\)` added — no longer matches the name of an existing `\psi` |
+| `PSI_CALL_RE` application (L1061) | routed through `_sub_outside_inline_dollar` instead of a bare `.sub`, so it no longer fires inside inline math |
+| `Hom` rule (L1180) | `(?<!\\)` added — latent left edge closed |
+| `PROB_COMPARE_WRAP_RE`, `BAR_COMPARE_WRAP_RE` (L214, L218) | lookahead punctuation class is now `(?<!\\)[.;,:]` |
+
+The right edge was described as a judgement call between stopping the trailing
+class before a backslash and trimming a trailing `\` off the wrap. Neither was
+needed. The cleaner fix is to stop the *lookahead* firing on punctuation that
+belongs to a TeX command: in `\left|x\,dt\right|` the match ended at the `,` of
+`\,`, so making that comma invisible to the lookahead lets the match run to a
+real sentence boundary. Trimming the backslash would have removed the `\$` while
+leaving the wrap boundary in the wrong place.
+
+Acceptance, all four items:
+
+1. `tests/test_normalize_math_prose_escaped_dollar.py` — 15 passed.
+2. Generated `\$` over the corpus: **5 → 0**. Landed as
+   `scripts/survey-normalize-generated-dollars.py`, which exits non-zero on any
+   hang, memory-cap breach or generated `\$`, so the claim is checkable.
+3. Differential diff through `process_file` over all 501 files: exactly **5
+   files, 5 lines** differ — `a93J06:20`, `a98A06:14`, `a99J02:22`, `b94A02:82`,
+   `m02J01:14`, the five this note listed. Every changed line classifies as
+   "stranded backslash removed". No line fell outside that category, and no new
+   `\$` appeared anywhere.
+4. Pipeline runs end to end: all 501 files convert.
+
+Corpus is now 501 files, not 491 — the 6 stubs were written out and 10 problems
+that had no informal solution now have one.
+
+### What this did not fix
+
+Defect 2 (the unbalanced backtick, 307 lines in 59 files) is untouched, by
+design: this note asks for that to be decided rather than fixed silently.
+
+Converting all 501 files through the whole pipeline and measuring the *final*
+LaTeX shows the remaining damage is downstream of this script, in
+`pandoc-mathify.lua` or pandoc itself:
+
+- **499 escaped dollars across 129 files** in the emitted `.tex`. Zero source
+  files contain `\$` and `normalize-math-prose` now generates none, so all 499
+  are manufactured after it runs.
+- **579 TeX commands printed as literal text** (`\textbackslash in`,
+  `\textbackslash mathbb`, …) in body prose across 95 files. A further 1,542
+  occurrences sit in `\texorpdfstring` bookmark strings, which are cosmetic.
+- **11 unbalanced math spans in 5 files** that `repair-math-spans.py` cannot
+  settle; it repairs 124 spans across the corpus.
+
+Those want their own packet, against the filter rather than this script.

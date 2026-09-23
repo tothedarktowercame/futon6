@@ -83,7 +83,9 @@ WHITTAKER_W_ANY_RE = re.compile(
 )
 PSI_WHITTAKER_RE = re.compile(r"\bpsi-Whittaker\b")
 PSI_INV_WHITTAKER_RE = re.compile(r"\bpsi(?:\^\{-?1\}|\^-?1)-Whittaker\b")
-PSI_CALL_RE = re.compile(r"\bpsi\(([^()]+)\)")
+# (?<!\\) so the rule cannot match the *name* of an existing \psi command and
+# strand its backslash outside the wrap, producing the byte pair "\$".
+PSI_CALL_RE = re.compile(r"(?<!\\)\bpsi\(([^()]+)\)")
 NORMALIZES_PSI_RE = re.compile(r"\bnormalizes psi\b")
 CHARACTER_PSI_RE = re.compile(r"\bcharacter psi\b")
 DET_ABS_RE = re.compile(r"\|det\s+([A-Za-z0-9_]+)\|\^\{([^}]+)\}")
@@ -213,11 +215,11 @@ ABS_INT_COLON_DX_RE = re.compile(r"\|int\s+:([A-Za-z]+)(?:\^([0-9]+))?:\s*dx\|")
 E_ABS_RE = re.compile(r"\bE\|([A-Za-z][A-Za-z0-9_]*)\|")
 PROB_COMPARE_WRAP_RE = re.compile(
     r"\b((?:P\([^()\n]*\)|Pr\[[^\]\n]*\]|E\[[^\]\n]*\])\s*(?:<=|>=|<|>|=)\s*[^.;,\n]*?)"
-    r"(?=\s+\b(?:for|if|with|where|when)\b|\s{2,}\(|[.;,:]|$)"
+    r"(?=\s+\b(?:for|if|with|where|when)\b|\s{2,}\(|(?<!\\)[.;,:]|$)"
 )
 BAR_COMPARE_WRAP_RE = re.compile(
     r"(?:(?<=\s)|^)((?:\|\|[^|\n]+\|\||\|[^|\n]+\|)\s*(?:<=|>=|<|>|=)\s*[^.;,\n]*?)"
-    r"(?=\s+\b(?:for|if|with|where|when|and|or)\b|\s{2,}\(|[.;,:]|$)"
+    r"(?=\s+\b(?:for|if|with|where|when|and|or)\b|\s{2,}\(|(?<!\\)[.;,:]|$)"
 )
 MIN_NORM_TOKEN_RE = re.compile(r"\bmin\s+\|\|([^|\n]+)\|\|")
 RING_HYPHEN_WORD_RE = re.compile(r"\b([A-Z])-(submodule|module|algebra|equivariant|valued)\b")
@@ -1058,7 +1060,9 @@ def process_plain_text_segment(s: str) -> str:
     s = DIAG_CALL_RE.sub(_diag_call_repl, s)
     s = _sub_outside_inline_dollar(s, BARE_DIAG_INLINE_RE, _diag_inline_repl)
     s = DET_ABS_RE.sub(r"$|\\det \1|^{\2}$", s)
-    s = PSI_CALL_RE.sub(r"$\\psi(\1)$", s)
+    # Through the helper, not a bare .sub: a bare .sub also fires inside inline
+    # math, re-wrapping what is already math.
+    s = _sub_outside_inline_dollar(s, PSI_CALL_RE, lambda m: rf"$\psi({m.group(1)})$")
     s = NORMALIZES_PSI_RE.sub(r"normalizes $\\psi$", s)
     s = CHARACTER_PSI_RE.sub(r"character $\\psi$", s)
     s = NEQ_PAREN_RE.sub(r"$(\1\\neq\2)$", s)
@@ -1177,7 +1181,7 @@ def process_plain_text_segment(s: str) -> str:
         return rf"$\mathrm{{Hom}}({body})$"
     s = _sub_outside_inline_dollar(
         s,
-        re.compile(r"\bHom\(([^)]+)\)"),
+        re.compile(r"(?<!\\)\bHom\(([^)]+)\)"),
         _hom_repl,
     )
     # Z/2 as group (standalone, outside Hom)
@@ -1198,6 +1202,48 @@ def process_plain_text_segment(s: str) -> str:
         re.compile(r"\bf_\*"),
         lambda m: r"$f_*$",
     )
+    # Norms written with U+2016 DOUBLE VERTICAL LINE: ‖f‖_p, ‖f‖_∞, ‖f‖.
+    # The APM Lean proofs use these constantly in running prose. Left alone the
+    # bars stay text-mode glyphs and the subscript is not a subscript at all.
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"‖([^‖\n]{1,40})‖_(∞|[A-Za-z0-9]{1,4})"),
+        lambda m: rf"$\|{m.group(1)}\|_{{{'\\infty' if m.group(2) == '∞' else m.group(2)}}}$",
+    )
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"‖([^‖\n]{1,40})‖"),
+        lambda m: rf"$\|{m.group(1)}\|$",
+    )
+
+    # An earlier rule may already have lifted a sub/superscript on its own
+    # ("‖f‖_∞" becomes "$\|f\|$_$\infty$" once ∞ is converted), which renders
+    # as two separate formulas joined by a literal underscore. Rejoin them.
+    # This runs on the whole segment, not via _sub_outside_inline_dollar, since
+    # the text to merge lies on both sides of a dollar boundary.
+    s = re.sub(
+        r"\$([^$\n]{1,40})\$([_^])\$([^$\n]{1,20})\$",
+        lambda m: f"${m.group(1)}{m.group(2)}{{{m.group(3)}}}$",
+        s,
+    )
+
+    # Subscripts that are Greek letters or ∞ (E_α, N_ε, f_∞). The ASCII rule
+    # below cannot see them, so in prose they survive as a bare "_" and GFM
+    # then pairs it with the next one as emphasis, losing both subscripts.
+    s = _sub_outside_inline_dollar(
+        s,
+        re.compile(r"(?<!\\)\b([A-Za-z]{1,3})_([\u0370-\u03ff\u2202\u221e])"),
+        lambda m: rf"${m.group(1)}_{{{UNICODE_TO_TEX.get(m.group(2), m.group(2))}}}$",
+    )
+
+    # A bare variable whose subscript was already lifted on its own
+    # ("E_α" -> "E_$\alpha$") is still not a subscript. Pull the base in.
+    s = re.sub(
+        r"(?<![\\$\w])([A-Za-z]{1,3})_\$([^$\n]{1,20})\$",
+        lambda m: f"${m.group(1)}_{{{m.group(2)}}}$",
+        s,
+    )
+
     # General subscripted variables: y_n, f_n, By_n, g_eps etc.
     s = _sub_outside_inline_dollar(
         s,
