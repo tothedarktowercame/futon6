@@ -29,7 +29,7 @@ cd "${FUTON0_ROOT:-$CODE_ROOT/futon0}"
 # the report at a remote mesh host with a near-empty evidence store (found
 # live 2026-07-05: 172.236.28.208 answered with 5 events vs localhost's 8k).
 export FUTON3C_EVIDENCE_BASE="http://localhost:7070"
-timeout 90 bb --classpath scripts -m futon0.report.pattern-density 60 5000 2>/dev/null \
+timeout "${PATTERN_DENSITY_TIMEOUT:-90}" bb --classpath scripts -m futon0.report.pattern-density 60 5000 2>/dev/null \
   | python3 -c "
 import sys, re, json
 att = {}
