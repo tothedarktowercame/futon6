@@ -696,8 +696,24 @@ LIVE_OVERLAY_SCRIPT = """
     // glyphs and labels; fan the 2nd, 3rd… out in a small ring around the hub.
     const crowd = new Map();
     const positions = new Map();
+    // Warrant: claude-12-turn-97 (Joe) — "the live annotations should be up to date with
+    // the state of Agency". Applies client-side the same witnessed-presence predicate the
+    // server already has at futon3c HEAD (5b14a6f6, turn-c12-saucers F5): an agent is drawn
+    // only if its registry status is alive this server epoch (invoking/idle). The running
+    // :7070 JVM (started 2026-09-21) predates that commit and still emits "restored"
+    // durable-lineage agents with missions — the phantom flying sources Joe saw. Withheld
+    // agents are counted and surfaced in the badge, never silently dropped (the page's own
+    // no-silent-absence rule). Remove this filter once :7070 runs >= 5b14a6f6.
+    let withheldStale = 0;
+    const staleIds = [];
     for (const agent of ((data.agents && data.agents.items) || [])) {
       if (!agent["mission-id"] || !validPlacement(agent.placement)) continue;
+      const st = String(agent.status || "").toLowerCase();
+      if (st !== "invoking" && st !== "idle") {
+        withheldStale += 1;
+        staleIds.push(`${agent["agent-id"]}(${agent.status})`);
+        continue;
+      }
       const spot = `${agent.placement.x},${agent.placement.y}`;
       const k = crowd.get(spot) || 0;
       crowd.set(spot, k + 1);
@@ -720,6 +736,14 @@ LIVE_OVERLAY_SCRIPT = """
       }
       layer.appendChild(g);
       positions.set(String(agent["agent-id"]), {x: Number(p.x), y: Number(p.y)});
+    }
+    if (withheldStale > 0) {
+      const g = el("g", {"data-live-kind": "stale-withheld"});
+      g.appendChild(el("rect", {x: 18, y: 92, width: 320, height: 34, rx: 6, fill: "#1a2a12", stroke: "#a3e635", opacity: 0.92}));
+      g.appendChild(el("text", {x: 32, y: 115, class: "live-offline-badge", style: "fill:#d9f99d"},
+        `${withheldStale} stale agent annotation(s) withheld — not alive in Agency this epoch`));
+      title(g, `Withheld (registry status not invoking/idle — phantoms from before futon3c 5b14a6f6 reaches the live JVM):\n${staleIds.join("\n")}`);
+      layer.appendChild(g);
     }
     return positions;
   }
@@ -898,7 +922,7 @@ thickness ∝ log of commits touching the mission's own doc in the last <b>180 d
 <b><span style="color:#5a6372">thin dashed grey ring = zero commits in window</span></b> — an explicit
 no-data mark, not a missing one. The <b>complexity axis is not yet live</b> (futon1b holds no
 churn/complexity data), so this is change-frequency only — churn × complexity is pending the
-mission's plan layers 1–2, and the ring says so on hover. <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape. <b>Hover any star, hub, or live marker for its story.</b></p></header>
+mission's plan layers 1–2, and the ring says so on hover. <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape — agents are drawn only when their Agency registry status is alive this server epoch (invoking/idle); anything merely restored from durable lineage is withheld and counted in a notice, per claude-12-turn-97 (the annotation layer must track the state of Agency even while the layout lags). <b>Hover any star, hub, or live marker for its story.</b></p></header>
 <svg id="efe-field" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
 <rect x="0" y="0" width="{W}" height="{SKY_H}" fill="#0c0f18"/>
 <g>{''.join(fill)}</g><g>{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
