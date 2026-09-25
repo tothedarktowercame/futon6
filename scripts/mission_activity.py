@@ -333,10 +333,11 @@ def main():
                 "vars_touched": nvars,
                 "files_resolved": len(files),
                 "vars_unresolved": unres,
-                "commits_90d": sum(1 for ct in commits.values() if ct >= cutoff90),
-                "commits_all": len(commits),
-                "weekly": weekly_buckets(weekly_cts, now),
-                "complexity": round(sum(cplx(rf) for rf in files) / len(files), 2) if files else 0.0,
+                # No resolved file means no git history was read: null, not zero churn.
+                "commits_90d": sum(1 for ct in commits.values() if ct >= cutoff90) if files else None,
+                "commits_all": len(commits) if files else None,
+                "weekly": weekly_buckets(weekly_cts, now) if files else None,
+                "complexity": round(sum(cplx(rf) for rf in files) / len(files), 2) if files else None,
             }
         else:
             row["code"] = None
