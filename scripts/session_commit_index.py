@@ -262,11 +262,13 @@ def load_turns(commits):
             try:
                 a = json.load(open(af))
                 prefs = set()
+                # Pattern refs live on each sentence's fragments, as {"id": ...}.
                 for s in a.get("sentences", []):
-                    for c in s.get("cues", []) or []:
-                        for k in ("pattern", "pattern_ref", "pattern_id"):
-                            if c.get(k):
-                                prefs.add(str(c[k]))
+                    for fr in s.get("fragments", []) or []:
+                        for r in fr.get("pattern_refs", []) or []:
+                            rid = r.get("id") if isinstance(r, dict) else r
+                            if rid:
+                                prefs.add(str(rid))
                 if prefs:
                     patterns = sorted(prefs)
             except Exception:
