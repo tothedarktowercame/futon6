@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Build session -> commit index and operator-turn -> commit join.
 
-Reads codex/claude transcripts, operator turn records, and local git repos;
+Reads codex/claude transcripts, Kimi/Zai turn-round evidence in futon1b,
+operator turn records, and local git repos;
 writes data/session-commit-index.json. Stdlib only.
 """
 import json, os, re, subprocess, sys, glob, datetime
@@ -247,6 +248,99 @@ def scan_claude(short_idx, full_idx, per_repo, commits, counters):
     return n
 
 
+EVIDENCE = os.environ.get("FUTON1B_URL", "http://127.0.0.1:7073") + "/api/alpha/evidence"
+# Kimi and Zai keep no transcript on disk; their turns live only in futon1b as
+# :transcript :turn-round evidence, one entry per round with each tool call's
+# full args and a preview of its result. Retired seats are not on the roster,
+# so probe a fixed range and skip authors with no entries.
+EVIDENCE_AUTHORS = [f"kimi-{i}" for i in range(1, 31)] + [f"zai-{i}" for i in range(1, 11)]
+EDN_ENTRY = re.compile(r"\{:evidence/body ")
+EDN_STR = r'"((?:[^"\\]|\\.)*)"'
+
+
+def edn_unescape(s):
+    return re.sub(r"\\(.)", lambda m: {"n": "\n", "t": "\t"}.get(m.group(1), m.group(1)), s)
+
+
+def evidence_pages(author):
+    """Yield raw EDN entry chunks for AUTHOR's turn rounds since SINCE, newest first."""
+    import urllib.parse, urllib.request
+    before = None
+    while True:
+        q = {"author": author, "tags": "turn-round", "limit": "1000",
+             "since": SINCE + "T00:00:00Z"}
+        if before:
+            q["before"] = before
+        try:
+            with urllib.request.urlopen(EVIDENCE + "?" + urllib.parse.urlencode(q), timeout=300) as r:
+                text = r.read().decode("utf-8", "replace")
+        except Exception as e:
+            print(f"evidence {author}: {e}", file=sys.stderr)
+            return
+        starts = [m.start() for m in EDN_ENTRY.finditer(text)]
+        chunks = [text[a:b] for a, b in zip(starts, starts[1:] + [len(text)])]
+        if not chunks:
+            return
+        yield from chunks
+        ats = re.findall(r':evidence/at "([^"]+)"', chunks[-1])
+        if len(chunks) < 1000 or not ats or ats[-1] == before:
+            return
+        before = ats[-1]
+
+
+def scan_evidence(short_idx, full_idx, per_repo, commits, counters):
+    """Commits made by Kimi/Zai seats, read from their futon1b turn-round evidence."""
+    n_sessions = defaultdict(set)
+    seen = set()
+    for author in EVIDENCE_AUTHORS:
+        kind = author.split("-")[0]
+        for chunk in evidence_pages(author):
+            if "git commit" not in chunk and "] " not in chunk:
+                continue
+            eid = re.search(r':evidence/id "([^"]+)"', chunk)
+            if not eid or eid.group(1) in seen:
+                continue
+            seen.add(eid.group(1))
+            sid = re.search(r':evidence/session-id "([^"]+)"', chunk)
+            sid = sid.group(1) if sid else None
+            n_sessions[kind].add(sid)
+            at = re.search(r':evidence/at "([^"]+)"', chunk)
+            t0 = parse_iso(at.group(1)) if at else None
+            text = edn_unescape(chunk)
+            # A shell call's args are an EDN map printed into a string, so the
+            # command inside is escaped twice.
+            matched = set()
+            for cmd in re.findall(r':command ' + EDN_STR, text):
+                cmd = edn_unescape(cmd)
+                if "git commit" not in cmd:
+                    continue
+                msg = extract_m_message(cmd)
+                rpath = extract_repo_path(cmd)
+                rname = os.path.basename(rpath.rstrip("/")) if rpath else None
+                if not (msg and t0):
+                    continue
+                hits = {e["sha"]: e for rn in ([rname] if rname in per_repo else list(per_repo))
+                        for e in per_repo.get(rn, [])
+                        if e["subject"] == msg and parse_iso(e["at"])
+                        and abs((parse_iso(e["at"]) - t0).total_seconds()) <= 600}
+                if len(hits) == 1:
+                    e = next(iter(hits.values()))
+                    matched.add(e["sha"])
+                    commits.append({"sha": e["sha"], "repo": e["repo"], "session": sid,
+                                    "agent_kind": kind, "at": e["at"], "subject": e["subject"],
+                                    "match": "subject+time"})
+                    counters["subject+time"] += 1
+            for m in COMMIT_RE.finditer(text):
+                e, why = resolve_short(m.group(1), short_idx, full_idx)
+                if e and e["sha"] not in matched:
+                    matched.add(e["sha"])
+                    commits.append({"sha": e["sha"], "repo": e["repo"], "session": sid,
+                                    "agent_kind": kind, "at": e["at"], "subject": e["subject"],
+                                    "match": "sha-printed"})
+                    counters["sha-printed"] += 1
+    return {k: len(v) for k, v in n_sessions.items()}
+
+
 def load_turns(commits):
     turns = []
     for f in sorted(glob.glob(os.path.join(TURN_DIR, "turn-*.json"))):
@@ -312,7 +406,7 @@ def main():
     counters = defaultdict(int)
     n_codex = scan_codex(short_idx, full_idx, commits, counters)
     n_claude = scan_claude(short_idx, full_idx, per_repo, commits, counters)
-    n_kimi = 0  # no kimi transcripts found on disk
+    n_evidence = scan_evidence(short_idx, full_idx, per_repo, commits, counters)
 
     # dedupe by (sha, session)
     seen = set()
@@ -328,12 +422,17 @@ def main():
     turns = load_turns(commits)
 
     repo_commits = {r: len(per_repo.get(r, [])) for r in REPOS}
-    attributed = defaultdict(int)
+    # Distinct commits per repo: a commit quoted in two sessions counts once.
+    attributed_shas = defaultdict(set)
     for c in commits:
         if c.get("repo") and len(c["sha"]) == 40:
-            attributed[c["repo"]] += 1
+            attributed_shas[c["repo"]].add(c["sha"])
+    attributed = {r: len(v) for r, v in attributed_shas.items()}
     coverage = {
-        "sessions_scanned": {"codex": n_codex, "claude": n_claude, "kimi": n_kimi},
+        "sessions_scanned": {"codex": n_codex, "claude": n_claude,
+                             "kimi": n_evidence.get("kimi", 0), "zai": n_evidence.get("zai", 0)},
+        "commits_by_agent_kind": {k: len({c["sha"] for c in commits if c["agent_kind"] == k and c.get("repo")})
+                                  for k in ("codex", "claude", "kimi", "zai")},
         "commits_found": len(commits),
         "by_match": {"sha-printed": sum(1 for c in commits if c["match"] == "sha-printed"),
                      "subject+time": sum(1 for c in commits if c["match"] == "subject+time")},
