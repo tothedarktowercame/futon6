@@ -794,7 +794,7 @@ LIVE_OVERLAY_SCRIPT = """
       g.appendChild(el("rect", {x: 18, y: 92, width: 320, height: 34, rx: 6, fill: "#1a2a12", stroke: "#a3e635", opacity: 0.92}));
       g.appendChild(el("text", {x: 32, y: 115, class: "live-offline-badge", style: "fill:#d9f99d"},
         `${withheldStale} stale agent annotation(s) withheld — not alive in Agency this epoch`));
-      title(g, `Withheld (registry status not invoking/idle — phantoms from before futon3c 5b14a6f6 reaches the live JVM):\n${staleIds.join("\n")}`);
+      title(g, `Withheld (registry status not invoking/idle — phantoms from before futon3c 5b14a6f6 reaches the live JVM):\\n${staleIds.join("\\n")}`);
       layer.appendChild(g);
     }
     return positions;
