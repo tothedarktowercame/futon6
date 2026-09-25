@@ -171,15 +171,18 @@ for repo in sorted({p.parents[2] for p in ROOT.glob("futon*/holes/missions/M-*.m
             base = ln.rsplit("/", 1)[-1]
             if base.startswith("M-"):
                 MOM["M-" + base[2:-3]] += math.exp(-((NOW - t) / 86400) / 10.0)  # ~10-day decay
-# --- TORNHILL overlay (M-the-perfect-crime, integration plan layer 4, 2026-09-25) ---
+# --- MISSION-DOC ACTIVITY overlay (M-the-perfect-crime, 2026-09-25) ---
 # Warrant: claude-12-turn-95 (Joe) — "minimal visual improvement … that will let me see that
-# the Tornhill information is being considered". Change-frequency ring per district: commits
-# touching the mission's own doc (holes/missions/M-*.md) over the last 180 days, one
-# unweighted count per mission — Tornhill's change-frequency axis at the artifact this page
-# is about. The complexity axis is NOT yet live (plan layers 1–2: futon1b census reads 0 for
-# code/file-churn and code/indentation-complexity), so tooltips and legend say so rather than
-# implying hotspot = churn × complexity. Districts with zero commits in the window get a thin
-# dashed grey ring — an explicit no-data state, never silent absence (the mission's own crime).
+# the Tornhill information is being considered". Relabelled per claude-12-turn-100 (reviewer
+# feedback relayed by Joe): the ring counts commits to the mission's OWN DOC — activity on a
+# planning document — NOT Tornhill churn, which is change-frequency in the code under study.
+# Nothing links a mission to its code yet (M-the-perfect-crime plan layers 1–2), so code
+# churn cannot be measured; the label now says exactly what is measured, and says on hover
+# what is not. (The first version's "Tornhill churn" label was itself the overclaim class
+# this mission exists to catch — recorded in the mission.)
+# One unweighted count per mission, 180-day window, deduped across worktree repos by commit
+# hash. Districts with zero commits in the window get a thin dashed grey ring — an explicit
+# no-data state, never silent absence (the mission's own crime).
 CHURN = defaultdict(int)
 _seen_commits = set()  # futon* includes worktree repos (futon3c-*, futon2-*) sharing history;
                        # count each commit once, not once per worktree (M-the-perfect-crime
@@ -207,15 +210,16 @@ def churn_ring(x, y, m, n):
     if c == 0:  # explicit no-data: no commits touched this mission doc in the window
         return (f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r:.1f}" fill="none" stroke="#5a6372" '
                 f'stroke-width="0.7" stroke-dasharray="2,3" opacity="0.7">'
-                f'<title>{m} · Tornhill churn: 0 commits to this mission doc in 180d '
-                f'(explicit no-data ring; complexity axis pending)</title></circle>')
+                f'<title>{m} · mission-doc activity: 0 commits to this mission doc in 180d '
+                f'(explicit no-data ring; code churn not measurable — no mission→code link yet)</title></circle>')
     w = 0.8 + 2.6 * (math.log1p(c) / math.log1p(_cmax)) if _cmax else 0.8
     return (f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r:.1f}" fill="none" stroke="#eab308" '
             f'stroke-width="{w:.1f}" opacity="0.85">'
-            f'<title>{m} · Tornhill churn: {c} commits to this mission doc in 180d '
-            f'(git log; thickness ∝ log churn, max {_cmax}; complexity axis pending — '
-            f'churn × complexity not yet computable, M-the-perfect-crime layers 1–2)</title></circle>')
-tornhill_svg = "".join(churn_ring(x, y, m, n) for x, y, m, n in hubs)
+            f'<title>{m} · mission-doc activity: {c} commits to this mission doc in 180d '
+            f'(git log, thickness ∝ log count, max {_cmax}). This is activity on a planning '
+            f'document, NOT Tornhill churn (change-frequency in the code under study) — '
+            f'no mission→code link exists yet, M-the-perfect-crime layers 1–2.</title></circle>')
+activity_svg = "".join(churn_ring(x, y, m, n) for x, y, m, n in hubs)
 
 mgrid = [[0.0] * gw for _ in range(gh)]
 MSIG = 125.0
@@ -917,16 +921,16 @@ have no district on the carpet — operator semantics decision pending).
 <b><span style="color:#ffb43c">amber dashed lasso = YOUR
 territory</span></b> (missions worked in git's last ~3 weeks — the momentum/exploit baseline; inside = the WM
 confirms, outside = it breaks trend). <b><span style="color:#d8b066">⬡ = dark matter</span></b> (a lasso loop with
-momentum but no substrate-2 district — a mission worked but not yet ingested). <b><span style="color:#eab308">yellow ring = Tornhill change-frequency</span></b> (M-the-perfect-crime):
-thickness ∝ log of commits touching the mission's own doc in the last <b>180 days</b> (git log);
-<b><span style="color:#5a6372">thin dashed grey ring = zero commits in window</span></b> — an explicit
-no-data mark, not a missing one. The <b>complexity axis is not yet live</b> (futon1b holds no
-churn/complexity data), so this is change-frequency only — churn × complexity is pending the
-mission's plan layers 1–2, and the ring says so on hover. <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape — agents are drawn only when their Agency registry status is alive this server epoch (invoking/idle); anything merely restored from durable lineage is withheld and counted in a notice, per claude-12-turn-97 (the annotation layer must track the state of Agency even while the layout lags). <b>Hover any star, hub, or live marker for its story.</b></p></header>
+momentum but no substrate-2 district — a mission worked but not yet ingested). <b><span style="color:#eab308">yellow ring = mission-doc activity</span></b> (M-the-perfect-crime):
+thickness ∝ log of commits touching the mission's <b>own planning doc</b> in the last <b>180 days</b>
+(git log); <b><span style="color:#5a6372">thin dashed grey ring = zero commits in window</span></b> —
+an explicit no-data mark. This is <b>not Tornhill churn</b>: churn is change-frequency in the code
+under study, and nothing links a mission to its code yet (the mission's plan layers 1–2), so code
+churn cannot be shown here and the ring does not claim it. <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape — agents are drawn only when their Agency registry status is alive this server epoch (invoking/idle); anything merely restored from durable lineage is withheld and counted in a notice, per claude-12-turn-97 (the annotation layer must track the state of Agency even while the layout lags). <b>Hover any star, hub, or live marker for its story.</b></p></header>
 <svg id="efe-field" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
 <rect x="0" y="0" width="{W}" height="{SKY_H}" fill="#0c0f18"/>
 <g>{''.join(fill)}</g><g>{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
-<g>{hubline_svg}</g><g>{scope_svg}</g><g>{tornhill_svg}</g><g>{hub_svg}</g>
+<g>{hubline_svg}</g><g>{scope_svg}</g><g>{activity_svg}</g><g>{hub_svg}</g>
 <g>{lasso}</g><g>{''.join(ghosts)}</g>
 <g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
 <g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))) }"""
