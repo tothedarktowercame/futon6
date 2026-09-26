@@ -29,8 +29,35 @@ cd "${FUTON0_ROOT:-$CODE_ROOT/futon0}"
 # the report at a remote mesh host with a near-empty evidence store (found
 # live 2026-07-05: 172.236.28.208 answered with 5 events vs localhost's 8k).
 export FUTON3C_EVIDENCE_BASE="http://localhost:7070"
-timeout "${PATTERN_DENSITY_TIMEOUT:-90}" bb --classpath scripts -m futon0.report.pattern-density 60 5000 2>/dev/null \
-  | python3 -c "
+# Measured 2026-09-26 (E-kimi-task-54): the report asks for a limit=30000 page;
+# the server applies its 48h broad-page window (~17k entries, 52MB) and spends
+# ~5ms/entry assembling it, i.e. 90-174s total. The old 90s outer timeout and
+# the report's own 90s HTTP budget both sat INSIDE that range, so the scrape
+# saw 0 rows and the guard blamed a healthy JVM. Budgets: inner HTTP 240s so
+# the report fails cleanly on a genuinely stuck server, outer kill 300s.
+export FUTON3C_EVIDENCE_TIMEOUT_MS="${FUTON3C_EVIDENCE_TIMEOUT_MS:-240000}"
+REPORT_TIMEOUT="${PATTERN_DENSITY_TIMEOUT:-300}"
+REPORT_OUT="$(mktemp)"
+REPORT_ERR="$(mktemp)"
+trap 'rm -f "$TMP" "$REPORT_OUT" "$REPORT_ERR"' EXIT
+set +e
+timeout "$REPORT_TIMEOUT" bb --classpath scripts -m futon0.report.pattern-density 60 5000 \
+  >"$REPORT_OUT" 2>"$REPORT_ERR"
+report_rc=$?
+set -e
+if [ "$report_rc" -eq 124 ]; then
+  echo "FATAL: pattern-density report TIMED OUT after ${REPORT_TIMEOUT}s (exit 124)." >&2
+  echo "  This is a slow evidence page, not a dead JVM: GET :7070/api/alpha/evidence" >&2
+  echo "  costs ~5ms/entry server-side and a 48h broad page is ~17k entries (~90-174s)." >&2
+  echo "  Raise PATTERN_DENSITY_TIMEOUT or fix the server-side scan; check the JVM" >&2
+  echo "  separately (curl :7070/api/alpha/agents) before blaming it." >&2
+  exit 1
+fi
+if [ "$report_rc" -ne 0 ]; then
+  echo "FATAL: pattern-density report exited $report_rc: $(tail -n 1 "$REPORT_ERR")" >&2
+  exit 1
+fi
+python3 -c "
 import sys, re, json
 att = {}
 for line in sys.stdin:
@@ -39,7 +66,7 @@ for line in sys.stdin:
         pid, c = m.group(1), int(m.group(2))
         att[pid] = max(att.get(pid, 0), c)
 if len(att) < 50:
-    sys.exit(f'refusing to overwrite: only {len(att)} patterns scraped (JVM down or report shape changed?)')
+    sys.exit(f'refusing to overwrite: report completed but only {len(att)} patterns scraped (report shape changed or evidence window empty; a timeout exits earlier with its own message)')
 byname = {}
 for pid, c in att.items():
     name = pid.split('/')[-1]
@@ -48,7 +75,8 @@ json.dump({'by_id': att, 'by_name': byname,
            'window_days': 60, 'source': 'futon0.report.pattern-density via refresh_pattern_attestation.sh'},
           open('$TMP', 'w'))
 print(f'{len(att)} pattern ids, {len(byname)} names', file=sys.stderr)
-"
+" <"$REPORT_OUT"
 mv "$TMP" "$OUT"
+rm -f "$REPORT_OUT" "$REPORT_ERR"
 trap - EXIT
 echo "[attestation] refreshed $OUT"
