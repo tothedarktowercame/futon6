@@ -152,6 +152,21 @@ def resolve_var(var_id, ns_index):
     return ns_index.get(ns)
 
 
+def mission_code_files(var_ids, ns_index):
+    """Resolve one mission's touched vars to files.
+    Returns (sorted_files, n_unresolved) where sorted_files is a deduplicated,
+    sorted list of [repo, relpath] pairs."""
+    files = set()
+    unres = 0
+    for v in var_ids:
+        r = resolve_var(v, ns_index)
+        if r is None:
+            unres += 1
+        else:
+            files.add(r)
+    return [list(rf) for rf in sorted(files)], unres
+
+
 def git_file_commits(repo, paths):
     """relpath -> [(sha, ct)] via per-file git log (same semantics as the
     spec formula: git -C <repo> log --format=%H%x09%ct -- <path>)."""
@@ -372,17 +387,12 @@ def main():
     all_files = defaultdict(set)  # repo -> set of relpaths
     n_vars_total = n_res_total = 0
     for stem, varids in touches.items():
-        files = set()
-        unres = 0
-        for v in varids:
-            r = resolve_var(v, ns_index)
-            n_vars_total += 1
-            if r is None:
-                unres += 1
-            else:
-                n_res_total += 1
-                files.add(r)
-                all_files[r[0]].add(r[1])
+        files_list, unres = mission_code_files(varids, ns_index)
+        files = {tuple(rf) for rf in files_list}
+        n_vars_total += len(varids)
+        n_res_total += len(varids) - unres
+        for repo, rel in files:
+            all_files[repo].add(rel)
         mission_files[stem] = files
         mission_vars[stem] = (len(varids), unres)
 
@@ -481,6 +491,7 @@ def main():
                 "vars_touched": nvars,
                 "files_resolved": len(files),
                 "vars_unresolved": unres,
+                "files": sorted([list(rf) for rf in files]),
                 # No resolved file means no git history was read: null, not zero churn.
                 "commits_90d": sum(1 for ct in commits.values() if ct >= cutoff90) if files else None,
                 "commits_all": len(commits) if files else None,
