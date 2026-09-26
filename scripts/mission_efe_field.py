@@ -82,8 +82,8 @@ for m, scs in by_m.items():
             metric += 0.5
         if sc["binder"] == "certificate":
             metric = max(0.05, metric - 0.45) if verdict == "pass" else metric + 0.8
-        scope_pts.append((x, y, metric, sc["det"], ccol(m), vac, verdict))
-        hub_lines.append((cx, cy, x, y))
+        scope_pts.append((x, y, metric, sc["det"], ccol(m), vac, verdict, m))
+        hub_lines.append((cx, cy, x, y, m))
 
 # --- metric field on a vertex grid via scatter-add ---
 W = H = 3600
@@ -92,7 +92,7 @@ SIGMA = 70.0
 gw, gh = W // STEP + 1, H // STEP + 1
 grid = [[0.0] * gw for _ in range(gh)]
 rc = int(3 * SIGMA / STEP)
-for x, y, mtr, _det, _col, _vac, _ver in scope_pts:
+for x, y, mtr, _det, _col, _vac, _ver, _m in scope_pts:
     cgx, cgy = int(round(x / STEP)), int(round(y / STEP))
     for vy in range(max(0, cgy - rc), min(gh, cgy + rc + 1)):
         for vx in range(max(0, cgx - rc), min(gw, cgx + rc + 1)):
@@ -100,6 +100,10 @@ for x, y, mtr, _det, _col, _vac, _ver in scope_pts:
             grid[vy][vx] += mtr * math.exp(-d2 / (2 * SIGMA * SIGMA))
 fmax = max(max(r) for r in grid) or 1.0
 NB = 7
+import efe_carpet_controls as _ctl
+# Per-mission level-set band of the metric field at the hub's grid cell — the global
+# control panel's "band floor" hides districts below a band (E-kimi-task-45).
+BAND = {m: _ctl.hub_band(grid, fmax, NB, STEP, x, y) for x, y, m, n in hubs}
 TERR = ["#0a0e1a", "#0f2236", "#143447", "#1d5347", "#3a7338", "#94862e", "#c2792a"]
 
 # subtle banded fill (low opacity; the smooth contours carry the topo)
@@ -204,22 +208,21 @@ for repo in sorted({p.parents[2] for p in ROOT.glob("futon*/holes/missions/M-*.m
                 _seen_commits.add((sha, base))
                 CHURN["M-" + base[2:-3]] += 1
 _cmax = max(CHURN.values(), default=0)
-def churn_ring(x, y, m, n):
+def churn_ring(x, y, m, n, attrs=""):
     c = CHURN.get("M-" + m, 0)
     r = 2.6 + 1.5 * math.sqrt(GEN.get(m, 0)) + 4.5  # just outside the hub disc
     if c == 0:  # explicit no-data: no commits touched this mission doc in the window
         return (f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r:.1f}" fill="none" stroke="#5a6372" '
-                f'stroke-width="0.7" stroke-dasharray="2,3" opacity="0.7">'
+                f'stroke-width="0.7" stroke-dasharray="2,3" opacity="0.7" {attrs}>'
                 f'<title>{m} · mission-doc activity: 0 commits to this mission doc in 180d '
                 f'(explicit no-data ring; code churn not measurable — no mission→code link yet)</title></circle>')
     w = 0.8 + 2.6 * (math.log1p(c) / math.log1p(_cmax)) if _cmax else 0.8
     return (f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r:.1f}" fill="none" stroke="#eab308" '
-            f'stroke-width="{w:.1f}" opacity="0.85">'
+            f'stroke-width="{w:.1f}" opacity="0.85" {attrs}>'
             f'<title>{m} · mission-doc activity: {c} commits to this mission doc in 180d '
             f'(git log, thickness ∝ log count, max {_cmax}). This is activity on a planning '
             f'document, NOT Tornhill churn (change-frequency in the code under study) — '
             f'no mission→code link exists yet, M-the-perfect-crime layers 1–2.</title></circle>')
-activity_svg = "".join(churn_ring(x, y, m, n) for x, y, m, n in hubs)
 
 # --- CODE RING overlay: reads the file-level Tornhill report (M-the-perfect-crime) ---
 # Warrant: packet 1b (E-kimi-task-44, 2026-09-26) — the pink ring now shows the Tornhill
@@ -234,6 +237,12 @@ for _row in ACTIVITY["missions"]:
     ACT[_row["mission"]] = _row
     if _row["mission"].startswith("M-"):
         ACT[_row["mission"][2:]] = _row
+# Global-control attributes (E-kimi-task-45): every per-mission element carries its
+# district's band + status class so the panel can hide/show without a reload.
+STATUS = {m: _ctl.status_class((ACT.get(m) or {}).get("status_line")) for _, _, m, _ in hubs}
+def data_attrs(m):
+    return f'data-m="{m}" data-band="{BAND[m]}" data-status="{STATUS[m]}"'
+activity_svg = "".join(churn_ring(x, y, m, n, data_attrs(m)) for x, y, m, n in hubs)
 _TREP = _tring.load_report(_tring.REPORT_DIR)
 _TCHAT = _tring.load_chat(_tring.REPORT_DIR) if _TREP else None
 _TIDX = _tring.index(_TREP, _TCHAT) if _TREP else None
@@ -242,7 +251,7 @@ _TMETA = ({"filename": _TREP.get("_filename"), "generated": _TREP.get("generated
 def code_churn_ring(x, y, m, n):
     r = 2.6 + 1.5 * math.sqrt(GEN.get(m, 0)) + 7.5  # outside the doc-activity ring
     ring = _tring.mission_ring(ACT.get(m), _TIDX)
-    return _tring.ring_svg(x, y, r, m, ring, _TMETA, _hotspot_max)
+    return f'<g {data_attrs(m)}>' + _tring.ring_svg(x, y, r, m, ring, _TMETA, _hotspot_max) + "</g>"
 _RINGS = {m: _tring.mission_ring(ACT.get(m), _TIDX) for _, _, m, _ in hubs}
 _hotspot_max = max((r["hotspot"] for r in _RINGS.values() if r["state"] == "measured"),
                    default=0) or 1
@@ -315,21 +324,21 @@ for a, b, w in ROADS:
         roads.append(f'<line x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" '
                      f'stroke="#9a7fd0" stroke-width="{0.4+1.6*f:.1f}" opacity="{0.04+0.36*f:.2f}"/>')
 
-hubline_svg = "".join(f'<line x1="{a:.0f}" y1="{b:.0f}" x2="{c:.1f}" y2="{d:.1f}" stroke="#54627f" stroke-width="0.4" opacity="0.22"/>'
-                      for a, b, c, d in hub_lines)
-def scope_mark(x, y, mtr, det, col, vac, verdict):
+hubline_svg = "".join(f'<line x1="{a:.0f}" y1="{b:.0f}" x2="{c:.1f}" y2="{d:.1f}" stroke="#54627f" stroke-width="0.4" opacity="0.22" {data_attrs(m)}/>'
+                      for a, b, c, d, m in hub_lines)
+def scope_mark(x, y, mtr, det, col, vac, verdict, attrs=""):
     if verdict is not None:  # certificate: verdict diamond, green pass / red fail
         c = "#4ade80" if verdict == "pass" else "#ef4444"
         return (f'<path d="M {x:.1f} {y-4.4:.1f} L {x+4.4:.1f} {y:.1f} L {x:.1f} {y+4.4:.1f} '
-                f'L {x-4.4:.1f} {y:.1f} Z" fill="{c}" stroke="#04060c" stroke-width="0.6" opacity="0.95"/>')
+                f'L {x-4.4:.1f} {y:.1f} Z" fill="{c}" stroke="#04060c" stroke-width="0.6" opacity="0.95" {attrs}/>')
     if vac:  # vacuous scope: hollow ring — a binder with nothing bound inside
-        return f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.6" fill="none" stroke="{col}" stroke-width="1.0" opacity="0.85"/>'
+        return f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.6" fill="none" stroke="{col}" stroke-width="1.0" opacity="0.85" {attrs}/>'
     return (f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{2.4 if det else 1.4}" '
-            f'fill="{"#ffb454" if det else col}" opacity="{0.9 if det else 0.6}"/>')
-scope_svg = "".join(scope_mark(*pt) for pt in scope_pts)
+            f'fill="{"#ffb454" if det else col}" opacity="{0.9 if det else 0.6}" {attrs}/>')
+scope_svg = "".join(scope_mark(*pt[:7], data_attrs(pt[7])) for pt in scope_pts)
 # HEAD hubs: colour = Salingaros class (red/green/blue/grey), size = phylogeny generativity
 hub_svg = "".join(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{2.6+1.5*math.sqrt(GEN.get(m,0)):.1f}" fill="{ccol(m)}" '
-                  f'stroke="#04060c" stroke-width="0.9"><title>{m} · {CLS.get(m,"?")} · generativity {GEN.get(m,0)} · {n} scopes</title></circle>'
+                  f'stroke="#04060c" stroke-width="0.9" {data_attrs(m)}><title>{m} · {CLS.get(m,"?")} · generativity {GEN.get(m,0)} · {n} scopes · band {BAND[m]} · status {STATUS[m]}</title></circle>'
                   for x, y, m, n in hubs)
 
 def starpoly(cx, cy, r, fill, stroke, label, title):
@@ -915,10 +924,102 @@ LIVE_OVERLAY_SCRIPT = """
 </script>
 """
 
+# --- GLOBAL CONTROL PANEL (M-the-perfect-crime, E-kimi-task-45, 2026-09-26) ---
+# Joe (2026-09-26): "a global controller for the carpet that would turn off N of the
+# level sets … quite a lot of missions are in level set 0 which may be basically useless
+# for me now". Band floor + status filter hide districts (display:none, no reload);
+# layer toggles hide the doc ring / code ring / scope dots / momentum lasso. Defaults
+# show everything — the page is unchanged until a control is touched.
+from collections import Counter as _Counter
+_BAND_COUNTS = _Counter(BAND.values())
+_STATUS_COUNTS = _Counter(STATUS.values())
+CONTROLS_CSS = """
+#efe-controls{position:fixed;left:10px;top:120px;z-index:20;width:238px;padding:8px 10px;border:1px solid #334155;border-radius:8px;background:rgba(7,12,22,.93);color:#cdd3df;font:12px ui-sans-serif,system-ui,sans-serif}
+#efe-controls h2{margin:0 0 6px;font-size:12px;color:#e2e8f0}
+#efe-controls label{display:block;margin:3px 0;cursor:pointer}
+#efe-controls .ctl-section{margin:7px 0 3px;color:#8b95a7;font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:.06em}
+#efe-controls input[type=range]{width:150px;vertical-align:middle}
+#efe-controls .ctl-count{color:#8b95a7}
+#efe-controls .ctl-legend{margin:7px 0 0;color:#8b95a7;font-size:11px;line-height:1.35}
+#ctl-band-floor-label{color:#e2e8f0}
+"""
+_panel_status = "".join(
+    f'<label><input type="checkbox" data-ctl-status="{s}" checked> {s} '
+    f'<span class="ctl-count">({_STATUS_COUNTS.get(s, 0)})</span></label>'
+    for s in ("done", "open", "unknown"))
+_panel_html = (
+    '<div id="efe-controls">'
+    '<h2>carpet controls</h2>'
+    '<div class="ctl-section">band floor</div>'
+    f'<label><input type="range" id="ctl-band-floor" min="0" max="{NB - 1}" step="1" value="0"> '
+    f'<span id="ctl-band-floor-label">hide missions below band 0 — showing {len(hubs)} / hiding 0</span></label>'
+    f'<div class="ctl-count">districts per band: '
+    + " · ".join(f"b{b} {_BAND_COUNTS.get(b, 0)}" for b in range(NB)) + '</div>'
+    '<div class="ctl-section">status</div>' + _panel_status +
+    '<div class="ctl-section">layers</div>'
+    '<label><input type="checkbox" data-ctl-layer="#layer-doc-ring" checked> mission-doc ring</label>'
+    '<label><input type="checkbox" data-ctl-layer="#layer-code-ring" checked> code ring</label>'
+    '<label><input type="checkbox" data-ctl-layer="#layer-scope-dots" checked> scope dots</label>'
+    '<label><input type="checkbox" data-ctl-layer=".layer-lasso" checked> momentum lasso</label>'
+    '<p class="ctl-legend">band = density of scopes around the mission (its scopes weighted '
+    'by determined / frontier / vacuous, blurred with its neighbours) — not a judgement of value.</p>'
+    '</div>')
+# Inline JS: every string literal is single-line (a literal newline inside a JS string
+# broke the page on 2026-09-25). Plain string (not f-string); node --check the extract.
+CONTROLS_SCRIPT = """
+<script>
+(() => {
+  const svg = document.getElementById("efe-field");
+  const panel = document.getElementById("efe-controls");
+  if (!svg || !panel) return;
+  const header = document.querySelector("header");
+  if (header) panel.style.top = (header.offsetHeight + 8) + "px";
+  const els = Array.from(svg.querySelectorAll("[data-m]"));
+  const missions = new Map();
+  for (const e of els) {
+    const m = e.getAttribute("data-m");
+    if (!missions.has(m)) {
+      missions.set(m, {band: Number(e.getAttribute("data-band")), status: e.getAttribute("data-status")});
+    }
+  }
+  const floor = document.getElementById("ctl-band-floor");
+  const floorLabel = document.getElementById("ctl-band-floor-label");
+  const statusBoxes = Array.from(panel.querySelectorAll("input[data-ctl-status]"));
+  const layerBoxes = Array.from(panel.querySelectorAll("input[data-ctl-layer]"));
+  function apply() {
+    const f = Number(floor.value);
+    const hiddenStatus = new Set(statusBoxes.filter((b) => !b.checked).map((b) => b.getAttribute("data-ctl-status")));
+    let shown = 0;
+    let hidden = 0;
+    for (const info of missions.values()) {
+      if (info.band < f || hiddenStatus.has(info.status)) hidden++; else shown++;
+    }
+    for (const e of els) {
+      const info = missions.get(e.getAttribute("data-m"));
+      e.style.display = (info.band < f || hiddenStatus.has(info.status)) ? "none" : "";
+    }
+    floorLabel.textContent = "hide missions below band " + f + " — showing " + shown + " / hiding " + hidden;
+  }
+  function applyLayers() {
+    for (const b of layerBoxes) {
+      const sel = b.getAttribute("data-ctl-layer");
+      for (const node of document.querySelectorAll(sel)) {
+        node.style.display = b.checked ? "" : "none";
+      }
+    }
+  }
+  floor.addEventListener("input", apply);
+  for (const b of statusBoxes) b.addEventListener("change", apply);
+  for (const b of layerBoxes) b.addEventListener("change", applyLayers);
+})();
+</script>
+"""
+
 doc = f"""<!doctype html><meta charset=utf-8><title>Futon City — per-scope metric field</title>
 <style>body{{margin:0;background:#05060a;color:#cdd3df;font:13px sans-serif}}header{{padding:11px 20px}}
 h1{{font-size:16px;margin:0 0 4px}}p{{margin:0;color:#8b95a7;font-size:12px;max-width:1180px}}
-text{{cursor:default}}{LIVE_OVERLAY_STYLE}</style>
+text{{cursor:default}}{LIVE_OVERLAY_STYLE}{CONTROLS_CSS}</style>
+{_panel_html}
 <header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed <span id="live-status">live layer loading</span><button id="capability-zones-toggle" type="button" aria-pressed="true">capability zones: on</button><button id="capability-disagreement-toggle" type="button" aria-pressed="true">disagreement ×: shown</button></h1>
 <details id="capability-zones-help"><summary>capability zones — what am I looking at?</summary>
 <p>Every mission is coloured by its <b>capability zone</b>: the action-class whose seed it sits
@@ -973,11 +1074,11 @@ the report's window · <b><span style="color:#3a4252">faint dotted grey</span> =
 link yet</b> (coverage gap, stated not hidden). {_code_ring_legend} <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape — agents are drawn only when their Agency registry status is alive this server epoch (invoking/idle); anything merely restored from durable lineage is withheld and counted in a notice, per claude-12-turn-97 (the annotation layer must track the state of Agency even while the layout lags). <b>Hover any star, hub, or live marker for its story.</b></p></header>
 <svg id="efe-field" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
 <rect x="0" y="0" width="{W}" height="{SKY_H}" fill="#0c0f18"/>
-<g>{''.join(fill)}</g><g>{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
-<g>{hubline_svg}</g><g>{scope_svg}</g><g>{activity_svg}</g><g>{code_churn_svg}</g><g>{hub_svg}</g>
-<g>{lasso}</g><g>{''.join(ghosts)}</g>
+<g>{''.join(fill)}</g><g class="layer-lasso">{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
+<g>{hubline_svg}</g><g id="layer-scope-dots">{scope_svg}</g><g id="layer-doc-ring">{activity_svg}</g><g id="layer-code-ring">{code_churn_svg}</g><g>{hub_svg}</g>
+<g class="layer-lasso">{lasso}</g><g>{''.join(ghosts)}</g>
 <g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
-<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))) }"""
+<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))) }{CONTROLS_SCRIPT}"""
 OUT.write_text(doc)
 print(f"wrote {OUT}")
 print(f"{len(scope_pts)} scopes / {len(hubs)} districts · {sum(1 for p in scope_pts if p[3])} holes · "
