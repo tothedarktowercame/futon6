@@ -174,14 +174,20 @@ def git_file_commits(repo, paths):
 
 
 def doc_git(repo, rel_from_code):
-    """(weekly[26], last_commit_iso) for the doc file, --follow."""
+    """(cts, shas) for the doc file, --follow."""
     rel_repo = os.path.relpath(os.path.join(CODE, rel_from_code), os.path.join(CODE, repo))
     p = subprocess.run(
         ["git", "-C", os.path.join(CODE, repo), "log", "--follow",
-         "--format=%ct", "--", rel_repo],
+         "--format=%H %ct", "--", rel_repo],
         capture_output=True, text=True)
-    cts = [int(x) for x in p.stdout.split() if x.strip().isdigit()] if p.returncode == 0 else []
-    return cts
+    cts, shas = [], {}
+    if p.returncode == 0:
+        for line in p.stdout.splitlines():
+            parts = line.split()
+            if len(parts) == 2 and parts[1].isdigit():
+                shas[parts[0]] = int(parts[1])
+                cts.append(int(parts[1]))
+    return cts, shas
 
 
 # ---------------------------------------------------------------- v05 (futon1b)
@@ -404,6 +410,38 @@ def main():
             file_to_missions[rf].add(stem)
 
     stems = set(docs) | set(wholeness) | set(touches) | set(carpet)
+
+    # ---------------- v05: commit->mission links and per-var churn from futon1b
+    commit_pages = v05_pull("commit")
+    edit_pages = v05_pull("edits")
+    v05_commits = v05_parse_commits(commit_pages)      # sha -> {repo,ts,subject}
+    v05_edits = v05_parse_edits(edit_pages)            # [(sha, var, repo)]
+    sys.stderr.write(f"v05: {len(v05_commits)} commits, {len(v05_edits)} edits\n")
+
+    newest_by_repo = {}
+    for c in v05_commits.values():
+        if c["repo"] and c["ts"]:
+            newest_by_repo[c["repo"]] = max(newest_by_repo.get(c["repo"], 0), c["ts"])
+
+    sha_vars = defaultdict(list)   # sha -> [var_id]
+    for sha, var, _repo in v05_edits:
+        sha_vars[sha].append(var)
+
+    # rule (a): subject contains the mission stem as a token (case-sensitive)
+    stem_re = {s: re.compile(r"(?<![A-Za-z0-9-])" + re.escape(s) + r"(?![A-Za-z0-9-])")
+               for s in stems}
+    subj_hits = defaultdict(set)   # stem -> shas
+    for sha, c in v05_commits.items():
+        subj = c["subject"]
+        if not subj:
+            continue
+        for s, rx in stem_re.items():
+            if rx.search(subj):
+                subj_hits[s].add(sha)
+    sys.stderr.write(f"v05 subject-rule hits for {len(subj_hits)} stems\n")
+
+    # rule (b): sha in git log --follow -- <mission doc>; collect while iterating
+    doc_sha_map = {}               # stem -> {sha: ct}
     missions = []
     for stem in sorted(stems):
         row = {"mission": stem}
@@ -414,7 +452,8 @@ def main():
             status, nphases = doc_fields(os.path.join(CODE, rel))
             row["status_line"] = status
             row["lifecycle_phases"] = nphases
-            cts = doc_git(repo, rel)
+            cts, dshas = doc_git(repo, rel)
+            doc_sha_map[stem] = dshas
             row["doc_commits_weekly"] = weekly_buckets(cts, now)
             row["doc_last_commit"] = (datetime.fromtimestamp(max(cts), timezone.utc)
                                       .date().isoformat() if cts else None)
@@ -424,6 +463,7 @@ def main():
             row["lifecycle_phases"] = None
             row["doc_commits_weekly"] = None
             row["doc_last_commit"] = None
+            doc_sha_map[stem] = set()
 
         w = wholeness.get(stem)
         row["wholeness"] = w if w else None
@@ -461,11 +501,72 @@ def main():
         row["carpet"] = stem in carpet
         missions.append(row)
 
+    # ---------------- code_v05 per mission
+    var_to_missions = defaultdict(set)   # edited var -> missions (v05)
+    v05_per_mission = {}
+    for row in missions:
+        stem = row["mission"]
+        subj_shas = subj_hits.get(stem, set())
+        doc_shas = set(doc_sha_map.get(stem, {}))
+        linked = subj_shas | doc_shas
+        if not linked:
+            v05_per_mission[stem] = None
+            continue
+        ts_of = {}
+        for sha in linked:
+            c = v05_commits.get(sha)
+            if c and c["ts"]:
+                ts_of[sha] = c["ts"]
+            elif sha in doc_sha_map.get(stem, {}):
+                ts_of[sha] = doc_sha_map[stem][sha]
+        edits = []          # (sha, var)
+        var_counts = defaultdict(int)
+        for sha in linked:
+            for var in sha_vars.get(sha, ()):  # edits only exist for ingested commits
+                edits.append((sha, var))
+                var_counts[var] += 1
+                var_to_missions[var].add(stem)
+        edit_cts = [ts_of[sha] for sha, _ in edits if sha in ts_of]
+        last_ts = max(ts_of.values()) if ts_of else None
+        v05_per_mission[stem] = {
+            "commits": len(linked),
+            "by_rule": {"subject": len(subj_shas), "doc": len(doc_shas)},
+            "commits_after_ingest": sum(1 for sha in linked if sha not in v05_commits),
+            "vars_edited": len(var_counts),
+            "edits_90d": sum(1 for ct in edit_cts if ct >= cutoff90),
+            "weekly": weekly_buckets(edit_cts, now),
+            "last_commit": (datetime.fromtimestamp(last_ts, timezone.utc)
+                            .date().isoformat() if last_ts else None),
+            "top_vars": [[v, n] for v, n in
+                         sorted(var_counts.items(), key=lambda kv: (-kv[1], kv[0]))[:10]],
+        }
+    # coupling: shared edited vars
+    for row in missions:
+        stem = row["mission"]
+        blk = v05_per_mission[stem]
+        if blk is None:
+            row["code_v05"] = None
+            continue
+        shared = defaultdict(int)
+        my_vars = {var for sha in (subj_hits.get(stem, set()) | set(doc_sha_map.get(stem, {})))
+                   for var in sha_vars.get(sha, ())}
+        for var in my_vars:
+            for other in var_to_missions[var]:
+                if other != stem:
+                    shared[other] += 1
+        blk["coupling"] = [[o, c] for o, c in
+                           sorted(shared.items(), key=lambda kv: (-kv[1], kv[0]))[:5]]
+        row["code_v05"] = blk
+
     out = {
         "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "sources": {os.path.relpath(p, FUTON6): sha256(p)
                     for p in (WHOLENESS, EDGES, CARPET)},
         "resolution": {"vars": n_vars_total, "resolved": n_res_total},
+        "v05": {"commits": len(v05_commits), "edits": len(v05_edits),
+                "newest_commit_by_repo": {
+                    r: datetime.fromtimestamp(ts, timezone.utc).date().isoformat()
+                    for r, ts in sorted(newest_by_repo.items())}},
         "missions": missions,
     }
     with open(OUT, "w", encoding="utf-8") as f:
