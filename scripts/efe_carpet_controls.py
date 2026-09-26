@@ -7,12 +7,15 @@ data-status attributes that the page's inline JS filters on.
 """
 import re
 
-# Words that mark a mission's status line as DONE. Word-boundary matched
-# (case-insensitive), never substring matched: "incomplete" must NOT count as
-# "complete". Reviewed by claude-12 against mission-activity.json status_line
-# values (e.g. "archived", "COMPLETE (SUPERSEDED by …)", "CLOSED 2026-06-12").
-DONE_WORDS = ("archived", "complete", "completed", "superseded", "closed", "retired")
-_DONE_RE = re.compile(r"\b(" + "|".join(DONE_WORDS) + r")\b", re.IGNORECASE)
+# A status line marks a mission DONE when it opens with one of these words (after any
+# markdown emphasis), or says its last lifecycle phase is complete ("DOCUMENT complete").
+# Word-boundary matched, case-insensitive: "incomplete" is not "complete". Anchored at the
+# start because open missions report finished phases mid-line ("HEAD complete; IDENTIFY
+# draft pending" is open): 28 such lines were classed done by an unanchored match
+# (claude-12 review of 2ade473, against mission-activity.json status_line values).
+DONE_WORDS = ("archived", "complete", "completed", "superseded", "closed", "retired", "folded")
+_DONE_RE = re.compile(r"^\W*(" + "|".join(DONE_WORDS) + r")\b|\bdocument\s+complete\b",
+                      re.IGNORECASE)
 
 
 def hub_band(grid, fmax, nb, step, x, y):

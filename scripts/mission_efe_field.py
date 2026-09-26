@@ -242,7 +242,20 @@ for _row in ACTIVITY["missions"]:
 STATUS = {m: _ctl.status_class((ACT.get(m) or {}).get("status_line")) for _, _, m, _ in hubs}
 def data_attrs(m):
     return f'data-m="{m}" data-band="{BAND[m]}" data-status="{STATUS[m]}"'
-activity_svg = "".join(churn_ring(x, y, m, n, data_attrs(m)) for x, y, m, n in hubs)
+# Hover band (claude-12, 2026-09-26; Joe: hovering a ring gave nothing to follow). The
+# rings are thin unfilled strokes, so the pointer mostly misses them. Each ring gets an
+# invisible stroke-only twin, `width` units wide, carrying the same <title> and data-*
+# attributes (so the carpet controls hide it with its ring). Widths keep the doc ring
+# (r+4.5) and code ring (r+7.5) bands from covering each other.
+_RING_RE = re.compile(r'<circle cx="([^"]+)" cy="([^"]+)" r="([^"]+)"([^>]*)>(<title>.*?</title>)</circle>', re.S)
+def with_hover_band(svg, width):
+    def band(mo):
+        data = " ".join(re.findall(r'data-[\w-]+="[^"]*"', mo.group(4)))
+        return (mo.group(0) + f'<circle cx="{mo.group(1)}" cy="{mo.group(2)}" r="{mo.group(3)}" '
+                f'fill="none" stroke="#000" stroke-opacity="0" stroke-width="{width}" '
+                f'pointer-events="stroke" {data}>{mo.group(5)}</circle>')
+    return _RING_RE.sub(band, svg)
+activity_svg = with_hover_band("".join(churn_ring(x, y, m, n, data_attrs(m)) for x, y, m, n in hubs), 3)
 _TREP = _tring.load_report(_tring.REPORT_DIR)
 _TCHAT = _tring.load_chat(_tring.REPORT_DIR) if _TREP else None
 _TIDX = _tring.index(_TREP, _TCHAT) if _TREP else None
@@ -255,7 +268,7 @@ def code_churn_ring(x, y, m, n):
 _RINGS = {m: _tring.mission_ring(ACT.get(m), _TIDX) for _, _, m, _ in hubs}
 _hotspot_max = max((r["hotspot"] for r in _RINGS.values() if r["state"] == "measured"),
                    default=0) or 1
-code_churn_svg = "".join(code_churn_ring(x, y, m, n) for x, y, m, n in hubs)
+code_churn_svg = with_hover_band("".join(code_churn_ring(x, y, m, n) for x, y, m, n in hubs), 4)
 _n_measured = sum(1 for r in _RINGS.values() if r["state"] == "measured")
 _n_unmeasured = sum(1 for r in _RINGS.values() if r["state"] == "unmeasured")
 _n_nolink = sum(1 for r in _RINGS.values() if r["state"] == "no-link")

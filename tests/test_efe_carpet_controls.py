@@ -54,6 +54,13 @@ class StatusClassTest(unittest.TestCase):
         # word-boundary matching: "incomplete" must NOT trip the "complete" word
         self.assertEqual(ctl.status_class("DERIVE incomplete; slice-2 still open"), "open")
 
+    def test_finished_phase_of_open_mission_is_open(self) -> None:
+        # live status lines from mission-activity.json, 2026-09-26
+        self.assertEqual(ctl.status_class("HEAD complete; IDENTIFY draft pending operator acceptance"), "open")
+        self.assertEqual(ctl.status_class("**INSTANTIATE (Stage 1 production-wired; simulation spike complete)**"), "open")
+        self.assertEqual(ctl.status_class("ALL PHASES THROUGH DOCUMENT complete 2026-07-03"), "done")
+        self.assertEqual(ctl.status_class("**Archived** 2026-06-01"), "done")
+
     def test_unknown(self) -> None:
         self.assertEqual(ctl.status_class(None), "unknown")
         self.assertEqual(ctl.status_class(""), "unknown")
