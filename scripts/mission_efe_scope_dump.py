@@ -70,6 +70,10 @@ def fetch(binder):
     seen_cursors = set()
     while True:
         params = {"type": f"mission-scope/{binder}", "limit": LIMIT}
+        # main() reads only hx/props; asking for that one field halves the
+        # futon1b read per row (claude-12, 2026-09-26: 1000-row page 3.7-4.2 s
+        # with fields=hx/props against ~6 s for whole documents).
+        params["fields"] = "hx/props"
         if after:
             params["after"] = after
         q = urllib.parse.urlencode(params)
