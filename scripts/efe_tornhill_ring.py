@@ -50,7 +50,7 @@ def index(report, chat=None):
     idx = {}
     for repo, rdata in (report.get("repos") or {}).items():
         for row in rdata.get("files") or []:
-            idx[(repo, row["path"])] = dict(row)
+            idx[(repo, row["path"])] = dict(row, repo=repo)
     if chat:
         for row in chat.get("files") or []:
             key = (row.get("repo"), row.get("path"))
@@ -85,7 +85,7 @@ def mission_ring(mission_row, idx):
     top = []
     for row in sorted(hits, key=lambda r: -(r.get("hotspot") or 0))[:3]:
         top.append({
-            "path": row["path"],
+            "path": f'{row.get("repo", "?")}/{row["path"]}',
             "revs": row.get("revs") or 0,
             "hotspot": row.get("hotspot") or 0,
             "trend": "new" if row.get("born_in_window") else row.get("trend_ratio"),
@@ -128,7 +128,7 @@ def ring_svg(x, y, r, mission, ring, report_meta, hotspot_max):
     lines = []
     for t in ring["top"]:
         trend = t["trend"]
-        trend_s = "new" if trend == "new" else (f"trend ×{trend:.2f}" if isinstance(trend, (int, float)) else "trend n/a")
+        trend_s = "new" if trend == "new" else (f"trend ×{trend:.2f}" if isinstance(trend, (int, float)) else "trend not sampled: the report samples each repo's top 10 hotspots")
         lines.append(f'{t["path"]} (revs {t["revs"]}, hotspot {t["hotspot"]}, {trend_s})')
     seats = f' · seats {ring["seats"]}' if ring.get("seats") is not None else ""
     title = (f'{_esc(mission)} · CODE ring (Tornhill report): revs {ring["revs"]}, hotspot {ring["hotspot"]} · '

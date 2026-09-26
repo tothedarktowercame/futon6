@@ -66,8 +66,8 @@ class MissionRingTest(unittest.TestCase):
         self.assertEqual(r["n_files"], 3)
         self.assertIsNone(r["seats"])  # no chat given
         trends = {t["path"]: t["trend"] for t in r["top"]}
-        self.assertEqual(trends["src/beta/util.clj"], "new")
-        self.assertEqual(trends["src/alpha/core.clj"], 1.5)
+        self.assertEqual(trends["futon1/src/beta/util.clj"], "new")
+        self.assertEqual(trends["futon1/src/alpha/core.clj"], 1.5)
 
     def test_measured_seats_with_chat(self) -> None:
         chat = {"files": [{"repo": "futon1", "path": "src/alpha/core.clj",
