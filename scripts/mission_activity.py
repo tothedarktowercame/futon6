@@ -184,6 +184,114 @@ def doc_git(repo, rel_from_code):
     return cts
 
 
+# ---------------------------------------------------------------- v05 (futon1b)
+
+V05_BASE = "http://127.0.0.1:7073/api/alpha/hyperedges"
+V05_CACHE = "/tmp/v05-cache"
+V05_LIMIT = 1000  # server rejects >1000 (:invalid-limit)
+
+
+def _v05_cursor(txt):
+    m = re.search(r':next-cursor\s+"((?:[^"\\]|\\.)*)"', txt)
+    return m.group(1) if m else None
+
+
+def v05_pull(kind):
+    """Page futon1b hyperedges of the given type, caching raw pages in
+    /tmp/v05-cache. Resume-capable: reuses cached pages and continues from
+    the last page's cursor. Returns list of raw page texts (EDN)."""
+    import urllib.request
+    import urllib.parse
+    cdir = os.path.join(V05_CACHE, kind)
+    os.makedirs(cdir, exist_ok=True)
+    pages = []
+    i = 0
+    while os.path.isfile(os.path.join(cdir, f"page-{i:04d}.edn")):
+        pages.append(open(os.path.join(cdir, f"page-{i:04d}.edn"),
+                          encoding="utf-8").read())
+        i += 1
+    if os.path.isfile(os.path.join(cdir, "COMPLETE")):
+        sys.stderr.write(f"v05 {kind}: {len(pages)} cached pages (complete)\n")
+        return pages
+    cursor = _v05_cursor(pages[-1]) if pages else None
+    sys.stderr.write(f"v05 {kind}: resuming at page {i}\n")
+    failures = 0
+    while True:
+        q = {"type": f"code/v05/{kind}", "limit": str(V05_LIMIT)}
+        if cursor:
+            q["after"] = cursor
+        url = V05_BASE + "?" + urllib.parse.urlencode(q)
+        try:
+            with urllib.request.urlopen(url, timeout=300) as r:
+                txt = r.read().decode("utf-8")
+        except Exception as e:
+            failures += 1
+            sys.stderr.write(f"v05 {kind} page {i}: {e} (failure {failures})\n")
+            if failures > 60:
+                raise
+            time.sleep(min(60, 5 * failures))
+            continue
+        if '"{:error' in txt[:20] or txt.startswith("{:error"):
+            failures += 1
+            sys.stderr.write(f"v05 {kind} page {i}: server error {txt[:120]}\n")
+            if failures > 60:
+                raise RuntimeError(txt[:200])
+            time.sleep(min(60, 5 * failures))
+            continue
+        failures = 0
+        open(os.path.join(cdir, f"page-{i:04d}.edn"), "w", encoding="utf-8").write(txt)
+        pages.append(txt)
+        n = txt.count(':hx/id "hx:code/v05/')
+        new = _v05_cursor(txt)
+        sys.stderr.write(f"v05 {kind} page {i}: {n} edges\n")
+        if not new or n == 0 or new == cursor:
+            break
+        cursor = new
+        i += 1
+    open(os.path.join(cdir, "COMPLETE"), "w").write(str(len(pages)))
+    return pages
+
+
+def _unescape_edn(s):
+    return s.replace('\\"', '"').replace("\\\\", "\\")
+
+
+def v05_parse_commits(pages):
+    """sha -> {"repo":..,"ts":..,"subject":..}"""
+    out = {}
+    for txt in pages:
+        chunks = txt.split('"hx:code/v05/commit:')
+        for ch in chunks[1:]:
+            m = re.search(r':hx/endpoints\s+\["([0-9a-f]+)"', ch)
+            if not m:
+                continue
+            sha = m.group(1)
+            ts = re.search(r':timestamp\s+(\d+)', ch)
+            repo = re.search(r':repo\s+"([^"]+)"', ch)
+            subj = re.search(r':subject\s+"((?:[^"\\]|\\.)*)"', ch)
+            out[sha] = {
+                "repo": repo.group(1) if repo else None,
+                "ts": int(ts.group(1)) if ts else None,
+                "subject": _unescape_edn(subj.group(1)) if subj else "",
+            }
+    return out
+
+
+def v05_parse_edits(pages):
+    """list of (sha, var_id, repo)"""
+    out = []
+    for txt in pages:
+        chunks = txt.split('"hx:code/v05/edits:')
+        for ch in chunks[1:]:
+            m = re.search(r':hx/endpoints\s+\["([0-9a-f]+)"\s+"((?:[^"\\]|\\.)*)"', ch)
+            if not m:
+                continue
+            repo = re.search(r':repo\s+"([^"]+)"', ch)
+            out.append((m.group(1), _unescape_edn(m.group(2)),
+                        repo.group(1) if repo else None))
+    return out
+
+
 def weekly_buckets(cts, now):
     buckets = [0] * WEEKS
     start = now - WEEKS * 7 * DAY
