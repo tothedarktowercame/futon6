@@ -366,7 +366,14 @@ def doc_fields(path):
     return status, len(phases)
 
 
-def main():
+def main(argv=None):
+    import argparse
+    ap = argparse.ArgumentParser(description="per-mission activity and code churn")
+    ap.add_argument("--no-v05", action="store_true",
+                    help="skip the futon1b code/v05 pull; missions then carry no code_v05 "
+                         "and the output's v05 block says it was not pulled")
+    args = ap.parse_args(argv)
+    use_v05 = not args.no_v05
     t0 = time.time()
     now = int(time.time())
     cutoff90 = now - 90 * DAY
@@ -422,8 +429,8 @@ def main():
     stems = set(docs) | set(wholeness) | set(touches) | set(carpet)
 
     # ---------------- v05: commit->mission links and per-var churn from futon1b
-    commit_pages = v05_pull("commit")
-    edit_pages = v05_pull("edits")
+    commit_pages = v05_pull("commit") if use_v05 else []
+    edit_pages = v05_pull("edits") if use_v05 else []
     v05_commits = v05_parse_commits(commit_pages)      # sha -> {repo,ts,subject}
     v05_edits = v05_parse_edits(edit_pages)            # [(sha, var, repo)]
     sys.stderr.write(f"v05: {len(v05_commits)} commits, {len(v05_edits)} edits\n")
@@ -512,72 +519,76 @@ def main():
         row["carpet"] = stem in carpet
         missions.append(row)
 
-    # ---------------- code_v05 per mission
-    var_to_missions = defaultdict(set)   # edited var -> missions (v05)
-    v05_per_mission = {}
-    for row in missions:
-        stem = row["mission"]
-        subj_shas = subj_hits.get(stem, set())
-        doc_shas = set(doc_sha_map.get(stem, {}))
-        linked = subj_shas | doc_shas
-        if not linked:
-            v05_per_mission[stem] = None
-            continue
-        ts_of = {}
-        for sha in linked:
-            c = v05_commits.get(sha)
-            if c and c["ts"]:
-                ts_of[sha] = c["ts"]
-            elif sha in doc_sha_map.get(stem, {}):
-                ts_of[sha] = doc_sha_map[stem][sha]
-        edits = []          # (sha, var)
-        var_counts = defaultdict(int)
-        for sha in linked:
-            for var in sha_vars.get(sha, ()):  # edits only exist for ingested commits
-                edits.append((sha, var))
-                var_counts[var] += 1
-                var_to_missions[var].add(stem)
-        edit_cts = [ts_of[sha] for sha, _ in edits if sha in ts_of]
-        last_ts = max(ts_of.values()) if ts_of else None
-        v05_per_mission[stem] = {
-            "commits": len(linked),
-            "by_rule": {"subject": len(subj_shas), "doc": len(doc_shas)},
-            "commits_after_ingest": sum(1 for sha in linked if sha not in v05_commits),
-            "vars_edited": len(var_counts),
-            "edits_90d": sum(1 for ct in edit_cts if ct >= cutoff90),
-            "weekly": weekly_buckets(edit_cts, now),
-            "last_commit": (datetime.fromtimestamp(last_ts, timezone.utc)
-                            .date().isoformat() if last_ts else None),
-            "top_vars": [[v, n] for v, n in
-                         sorted(var_counts.items(), key=lambda kv: (-kv[1], kv[0]))[:10]],
-        }
-    # coupling: shared edited vars
-    for row in missions:
-        stem = row["mission"]
-        blk = v05_per_mission[stem]
-        if blk is None:
-            row["code_v05"] = None
-            continue
-        shared = defaultdict(int)
-        my_vars = {var for sha in (subj_hits.get(stem, set()) | set(doc_sha_map.get(stem, {})))
-                   for var in sha_vars.get(sha, ())}
-        for var in my_vars:
-            for other in var_to_missions[var]:
-                if other != stem:
-                    shared[other] += 1
-        blk["coupling"] = [[o, c] for o, c in
-                           sorted(shared.items(), key=lambda kv: (-kv[1], kv[0]))[:5]]
-        row["code_v05"] = blk
+    if use_v05:
+        # ---------------- code_v05 per mission
+        var_to_missions = defaultdict(set)   # edited var -> missions (v05)
+        v05_per_mission = {}
+        for row in missions:
+            stem = row["mission"]
+            subj_shas = subj_hits.get(stem, set())
+            doc_shas = set(doc_sha_map.get(stem, {}))
+            linked = subj_shas | doc_shas
+            if not linked:
+                v05_per_mission[stem] = None
+                continue
+            ts_of = {}
+            for sha in linked:
+                c = v05_commits.get(sha)
+                if c and c["ts"]:
+                    ts_of[sha] = c["ts"]
+                elif sha in doc_sha_map.get(stem, {}):
+                    ts_of[sha] = doc_sha_map[stem][sha]
+            edits = []          # (sha, var)
+            var_counts = defaultdict(int)
+            for sha in linked:
+                for var in sha_vars.get(sha, ()):  # edits only exist for ingested commits
+                    edits.append((sha, var))
+                    var_counts[var] += 1
+                    var_to_missions[var].add(stem)
+            edit_cts = [ts_of[sha] for sha, _ in edits if sha in ts_of]
+            last_ts = max(ts_of.values()) if ts_of else None
+            v05_per_mission[stem] = {
+                "commits": len(linked),
+                "by_rule": {"subject": len(subj_shas), "doc": len(doc_shas)},
+                "commits_after_ingest": sum(1 for sha in linked if sha not in v05_commits),
+                "vars_edited": len(var_counts),
+                "edits_90d": sum(1 for ct in edit_cts if ct >= cutoff90),
+                "weekly": weekly_buckets(edit_cts, now),
+                "last_commit": (datetime.fromtimestamp(last_ts, timezone.utc)
+                                .date().isoformat() if last_ts else None),
+                "top_vars": [[v, n] for v, n in
+                             sorted(var_counts.items(), key=lambda kv: (-kv[1], kv[0]))[:10]],
+            }
+        # coupling: shared edited vars
+        for row in missions:
+            stem = row["mission"]
+            blk = v05_per_mission[stem]
+            if blk is None:
+                row["code_v05"] = None
+                continue
+            shared = defaultdict(int)
+            my_vars = {var for sha in (subj_hits.get(stem, set()) | set(doc_sha_map.get(stem, {})))
+                       for var in sha_vars.get(sha, ())}
+            for var in my_vars:
+                for other in var_to_missions[var]:
+                    if other != stem:
+                        shared[other] += 1
+            blk["coupling"] = [[o, c] for o, c in
+                               sorted(shared.items(), key=lambda kv: (-kv[1], kv[0]))[:5]]
+            row["code_v05"] = blk
 
     out = {
         "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "sources": {os.path.relpath(p, FUTON6): sha256(p)
                     for p in (WHOLENESS, EDGES, CARPET)},
         "resolution": {"vars": n_vars_total, "resolved": n_res_total},
-        "v05": {"commits": len(v05_commits), "edits": len(v05_edits),
-                "newest_commit_by_repo": {
-                    r: datetime.fromtimestamp(ts, timezone.utc).date().isoformat()
-                    for r, ts in sorted(newest_by_repo.items())}},
+        # Not pulled (--no-v05): say so; missions carry no code_v05 key, so the
+        # absence cannot read as "no linked commits".
+        "v05": ({"pulled": True, "commits": len(v05_commits), "edits": len(v05_edits),
+                 "newest_commit_by_repo": {
+                     r: datetime.fromtimestamp(ts, timezone.utc).date().isoformat()
+                     for r, ts in sorted(newest_by_repo.items())}}
+                if use_v05 else {"pulled": False}),
         "missions": missions,
     }
     with open(OUT, "w", encoding="utf-8") as f:
