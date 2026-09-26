@@ -221,53 +221,42 @@ def churn_ring(x, y, m, n):
             f'no mission→code link exists yet, M-the-perfect-crime layers 1–2.</title></circle>')
 activity_svg = "".join(churn_ring(x, y, m, n) for x, y, m, n in hubs)
 
-# --- CODE CHURN overlay (M-the-perfect-crime, claude-12-turn-104, 2026-09-25) ---
-# Warrant: claude-12-turn-104 (Joe) — "page updates that display churn data in a meaningful,
-# not just explanations of gaps that remain". This is the real Tornhill axis the doc ring
-# could not be: change-frequency in the CODE the mission works on. Data: mission-activity.json
-# (scripts/mission_activity.py) — the mission→code link comes from fold-embed "touches" edges
-# (mission-doc:X → var ids) resolved to source files, then per-file git log. Complexity is the
-# indentation proxy, so hotspot = churn × complexity is shown on hover. Three explicit states
-# per district, never silent: solid pink ring = churn measured; dashed pink = link exists but
-# no files resolved; faint dotted grey = no mission→code link exists yet. Provenance and the
-# coverage fraction ride in every tooltip and in the legend.
+# --- CODE RING overlay: reads the file-level Tornhill report (M-the-perfect-crime) ---
+# Warrant: packet 1b (E-kimi-task-44, 2026-09-26) — the pink ring now shows the Tornhill
+# report looked up per mission via its code.files link, never the old per-mission git pass.
+# States, never silent: solid pink = measured (files in the report), dashed pink = linked
+# files but none changed in the report's window, faint dotted grey = no mission→code link,
+# and when the report is absent no rings at all plus a legend line saying so.
+import efe_tornhill_ring as _tring
 ACTIVITY = json.load(open(ROOT / "futon6/data/mission-activity.json"))
-ACTGEN = ACTIVITY.get("generated", "?")
 ACT = {}
 for _row in ACTIVITY["missions"]:
     ACT[_row["mission"]] = _row
     if _row["mission"].startswith("M-"):
         ACT[_row["mission"][2:]] = _row
-_c90max = max((((a.get("code") or {}).get("commits_90d") or 0) for a in ACT.values()), default=0) or 1
+_TREP = _tring.load_report(_tring.REPORT_DIR)
+_TCHAT = _tring.load_chat(_tring.REPORT_DIR) if _TREP else None
+_TIDX = _tring.index(_TREP, _TCHAT) if _TREP else None
+_TMETA = ({"filename": _TREP.get("_filename"), "generated": _TREP.get("generated"),
+           "window_days": _TREP.get("window_days")} if _TREP else None)
 def code_churn_ring(x, y, m, n):
-    a = ACT.get(m)
-    c = (a or {}).get("code")
     r = 2.6 + 1.5 * math.sqrt(GEN.get(m, 0)) + 7.5  # outside the doc-activity ring
-    if c is None:  # no mission→code link at all
-        return (f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r:.1f}" fill="none" stroke="#3a4252" '
-                f'stroke-width="0.6" stroke-dasharray="1,4" opacity="0.4">'
-                f'<title>{m} · code churn: NO mission→code link (this district\'s doc touches no '
-                f'resolvable code vars yet — coverage gap, stated not hidden)</title></circle>')
-    c90 = c.get("commits_90d")
-    if c90 is None:  # link exists, nothing resolved
-        return (f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r:.1f}" fill="none" stroke="#ec4899" '
-                f'stroke-width="0.8" stroke-dasharray="3,3" opacity="0.6">'
-                f'<title>{m} · code churn: mission→code link exists '
-                f'({c.get("vars_touched",0)} vars touched) but no files resolved '
-                f'({c.get("vars_unresolved",0)} unresolved) — churn not measurable</title></circle>')
-    hotspot = round(c90 * (c.get("complexity") or 0))
-    w = 0.8 + 3.0 * (math.log1p(c90) / math.log1p(_c90max))
-    coupling = ", ".join(f"{o}×{k}" for o, k in (a.get("coupling") or [])[:3]) or "none"
-    return (f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r:.1f}" fill="none" stroke="#ec4899" '
-            f'stroke-width="{w:.1f}" opacity="0.9">'
-            f'<title>{m} · CODE churn (Tornhill): {c90} commits to {c.get("files_resolved")} '
-            f'resolved code files in 90d ({c.get("commits_all")} all-time) · complexity '
-            f'{c.get("complexity")} (indent proxy) · HOTSPOT churn×cplx = {hotspot} · '
-            f'temporal coupling: {coupling} · source: mission-doc→var touches edges + per-file '
-            f'git log, generated {ACTGEN}</title></circle>')
+    ring = _tring.mission_ring(ACT.get(m), _TIDX)
+    return _tring.ring_svg(x, y, r, m, ring, _TMETA, _hotspot_max)
+_RINGS = {m: _tring.mission_ring(ACT.get(m), _TIDX) for _, _, m, _ in hubs}
+_hotspot_max = max((r["hotspot"] for r in _RINGS.values() if r["state"] == "measured"),
+                   default=0) or 1
 code_churn_svg = "".join(code_churn_ring(x, y, m, n) for x, y, m, n in hubs)
-_n_measured = sum(1 for _, _, m, _ in hubs
-                  if ((ACT.get(m) or {}).get("code") or {}).get("commits_90d") is not None)
+_n_measured = sum(1 for r in _RINGS.values() if r["state"] == "measured")
+_n_unmeasured = sum(1 for r in _RINGS.values() if r["state"] == "unmeasured")
+_n_nolink = sum(1 for r in _RINGS.values() if r["state"] == "no-link")
+if _TREP:
+    _code_ring_legend = (f"Measured for <b>{_n_measured}/{len(hubs)} districts</b> "
+                         f"(unmeasured {_n_unmeasured} · no-link {_n_nolink}); source "
+                         f"{_TMETA['filename']} generated {_TMETA['generated']} "
+                         f"({_TMETA['window_days']}d window).")
+else:
+    _code_ring_legend = "<b>No Tornhill report — code ring not drawn</b>."
 
 mgrid = [[0.0] * gw for _ in range(gh)]
 MSIG = 125.0
@@ -975,14 +964,13 @@ thickness ∝ log of commits touching the mission's <b>own planning doc</b> in t
 an explicit no-data mark. This is <b>not Tornhill churn</b>: churn is change-frequency in the code
 under study, and nothing links a mission to its code yet (the mission's plan layers 1–2), so code
 churn cannot be shown here and the ring does not claim it.
-<b><span style="color:#ec4899">pink ring = CODE churn (Tornhill, the real axis)</span></b>:
-commits in the last <b>90 days</b> to the code files the mission's doc is linked to via
-fold-embed <i>touches</i> edges + per-file git log (thickness ∝ log count). Hover gives
-<b>hotspot = churn × complexity</b> (indent proxy), all-time commits, and temporal coupling
-(missions sharing files). <b><span style="color:#ec4899">dashed pink</span> = link exists but no
-files resolved · <b><span style="color:#3a4252">faint dotted grey</span> = no mission→code link
-yet</b> (coverage gap, stated not hidden). Measured for <b>{_n_measured}/{len(hubs)} districts</b>;
-source mission-activity.json generated {ACTGEN}. <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape — agents are drawn only when their Agency registry status is alive this server epoch (invoking/idle); anything merely restored from durable lineage is withheld and counted in a notice, per claude-12-turn-97 (the annotation layer must track the state of Agency even while the layout lags). <b>Hover any star, hub, or live marker for its story.</b></p></header>
+<b><span style="color:#ec4899">pink ring = CODE ring (Tornhill report)</span></b>:
+each mission's <code>code.files</code> link looked up in the file-level Tornhill report
+(thickness ∝ log of summed hotspot). Hover gives summed <b>revs</b> and <b>hotspot</b>, the
+top files with their trend, seat count when chat attribution exists, and the report's
+provenance. <b><span style="color:#ec4899">dashed pink</span> = linked files, none changed in
+the report's window · <b><span style="color:#3a4252">faint dotted grey</span> = no mission→code
+link yet</b> (coverage gap, stated not hidden). {_code_ring_legend} <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape — agents are drawn only when their Agency registry status is alive this server epoch (invoking/idle); anything merely restored from durable lineage is withheld and counted in a notice, per claude-12-turn-97 (the annotation layer must track the state of Agency even while the layout lags). <b>Hover any star, hub, or live marker for its story.</b></p></header>
 <svg id="efe-field" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
 <rect x="0" y="0" width="{W}" height="{SKY_H}" fill="#0c0f18"/>
 <g>{''.join(fill)}</g><g>{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
