@@ -21,7 +21,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EPRINTS = config.eprints()
-DEFAULT_OUT = ROOT / "data" / "warp"
+DEFAULT_OUT = config.warp()
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from anatomy_v0_sweep import (  # noqa: E402

@@ -26,6 +26,8 @@ import time
 from collections import Counter
 from pathlib import Path
 
+import eprint_corpus as _corpus
+
 # june 2026-09-16: hardcoded /home/joe/... paths rewritten to a derived code root
 # (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
 _CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
@@ -159,12 +161,7 @@ def _build_standard_math_roles() -> dict[str, str]:
 STANDARD_MATH_ROLES = _build_standard_math_roles()
 
 
-def strip_archive_suffix(path: Path) -> str:
-    name = path.name
-    for suffix in (".tar.gz", ".tex.gz", ".gz", ".tar", ".bin", ".tex"):
-        if name.endswith(suffix):
-            return name[: -len(suffix)]
-    return path.stem
+strip_archive_suffix = _corpus.strip_archive_suffix
 
 
 # \usepackage[<name>]{inputenc} -> Python codec. TeX decodes a file by what its
@@ -697,9 +694,14 @@ def aggregate_results(results: list[dict]) -> dict:
     return {"papers": len(results), "ok": ok, "failed": failed, "skipped": skipped, "totals": dict(totals)}
 
 
-def iter_eprints(eprint_dir: Path) -> list[Path]:
-    paths = [p for p in eprint_dir.iterdir() if p.is_file() and p.name.endswith((".tar.gz", ".gz", ".tar", ".tex", ".bin"))]
-    return sorted(paths, key=lambda p: p.name)
+# Locating the corpus lives in `eprint_corpus`; re-exported so every existing caller of
+# `anatomy_v0_sweep.iter_eprints` / `strip_archive_suffix` keeps working unchanged.
+iter_eprints = _corpus.iter_eprints
+iter_corpus_eprints = _corpus.iter_corpus_eprints
+find_corpus_eprint = _corpus.find_corpus_eprint
+corpus_paper_ids = _corpus.corpus_paper_ids
+paper_key = _corpus.paper_key
+EPRINT_SUFFIXES = _corpus.EPRINT_SUFFIXES
 
 
 def parse_args(argv):

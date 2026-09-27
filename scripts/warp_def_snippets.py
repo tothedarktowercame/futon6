@@ -27,7 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import warp_defined_pass as dp   # reuse EMPH/DEFENV/CALL/concept_norm/read_text
 
 EPRINTS = dp.EPRINTS
-OUT = config.ROOT / 'data/warp/def-snippets.json'
+OUT = config.warp() / 'def-snippets.json'
 DASH = re.compile(r"[‐-―−-]")
 
 
@@ -69,13 +69,15 @@ def hits_with_snippets(text):
 def main(argv=None):
     argv = argv if argv is not None else sys.argv[1:]
     cap = int(argv[argv.index("--cap") + 1]) if "--cap" in argv else 6
+    # A corpus-scale pass is otherwise a silent hour: say where it is as it goes.
+    progress = int(argv[argv.index("--progress") + 1]) if "--progress" in argv else 500
     # only capture for hitlist concepts (the set #3 + GPU care about)
-    hl = json.load(open(config.ROOT / 'data/warp/hitlist.json'))
+    hl = json.load(open(config.warp() / 'hitlist.json'))
     keep = {h["concept"] for h in hl["hitlist"]}
     snips = defaultdict(list)
-    ids = sorted(p.name[:-len(".tar.gz")] for p in EPRINTS.glob("*.tar.gz"))
+    ids = dp.corpus_paper_ids()
     done = 0
-    for pid in ids:
+    for index, pid in enumerate(ids, 1):
         t = dp.read_text(pid)
         if not t:
             continue
@@ -85,6 +87,9 @@ def main(argv=None):
             if c in keep and len(snips[c]) < cap and (c, pid) not in seen:
                 snips[c].append({"paper": pid, "surface": surface, "snippet": snip})
                 seen.add((c, pid))
+        if progress and (index % progress == 0 or index == len(ids)):
+            print(f"[warp-def-snippets] {index}/{len(ids)} read={done} "
+                  f"concepts={len(snips)}", file=sys.stderr, flush=True)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({"schema": "def-snippets-v1", "papers_scanned": done,
                                "concepts_with_snippets": len(snips),

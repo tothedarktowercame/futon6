@@ -36,7 +36,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_GOLDEN = config.marks()
-DEFAULT_PRIOR = ROOT / "data" / "term-prior-ct.json"
+DEFAULT_PRIOR = config.term_prior()
 EXPOSITORY_EXTRACT = ROOT / "scripts" / "expository_region_extract.py"
 CHECKERS = {
     "concept": ROOT / "scripts" / "concept_argcheck.bb",
@@ -412,7 +412,7 @@ def prior_vs_posterior_metric(terms: list[str], prior_path: Path) -> dict[str, A
     dfs = list(hits.values())
     return {
         "computable": True,
-        "method": "posterior artifact terms looked up in data/term-prior-ct.json document-frequency prior",
+        "method": "posterior artifact terms looked up in the subject's term-prior document-frequency prior",
         "posterior_terms": len(unique_terms),
         "prior_terms": len(prior),
         "posterior_terms_with_prior_df": len(hits),

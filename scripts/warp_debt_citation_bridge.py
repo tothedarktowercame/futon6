@@ -17,15 +17,19 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DEBT = ROOT / "data" / "warp" / "corpus-debt.json"
-DEFAULT_CONCORDANCE = ROOT / "data" / "warp" / "concordance.json"
-DEFAULT_CITATIONS = ROOT / "data" / "warp" / "citations.json"
-DEFAULT_BIB = ROOT / "data" / "warp" / "bib-index.json"
+sys.path.insert(0, str(ROOT / "scripts"))
+import futon6_config as config  # noqa: E402
+
+DEFAULT_DEBT = config.warp() / "corpus-debt.json"
+DEFAULT_CONCORDANCE = config.warp() / "concordance.json"
+DEFAULT_CITATIONS = config.warp() / "citations.json"
+DEFAULT_BIB = config.warp() / "bib-index.json"
 DEFAULT_OUT = ROOT / "holes" / "debt-citation-bridge.md"
 
 

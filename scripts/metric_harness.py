@@ -21,7 +21,11 @@ import json
 import os
 import re
 import statistics
+import sys
 from collections import Counter, defaultdict
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import futon6_config as config  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -473,12 +477,12 @@ def run_comprehension(ctx, prose, vocab, n_held=20):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--concept-index", default="data/warp/concept-index.json")
+    ap.add_argument("--concept-index", default=str(config.warp() / "concept-index.json"))
     ap.add_argument("--clean-dir", default="data/mark5-ct100-run/holes/clean-ct200")
     ap.add_argument("--candidates", default="data/iatc-candidates-ct200")
     ap.add_argument("--vocab", default="holes/clean/tactic-gesture-vocab.edn")
-    ap.add_argument("--golden", default="data/showcases/ct-anatomy/golden")
-    ap.add_argument("--citations", default="data/warp/citations.json")
+    ap.add_argument("--golden", default=str(config.marks()))
+    ap.add_argument("--citations", default=str(config.warp() / "citations.json"))
     ap.add_argument("--n-held", type=int, default=20)
     ap.add_argument("--out", default="data/metric-harness-report.json")
     ap.add_argument("--from-records", help="aggregate MetricRecords a run emitted (run-dir)")

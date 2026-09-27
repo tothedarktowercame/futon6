@@ -25,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import warp_defined_pass as dp
 
-W = config.ROOT / 'data/warp'
+W = config.warp()
 EPRINTS = dp.EPRINTS
 DASH = re.compile(r"[‐-―−-]")
 STOPW = set("the a an of to in on for and or is are be by with we that this it as at".split())
@@ -37,13 +37,16 @@ def canon_toks(text):
     return [w for w in text.split() if w not in STOPW]
 
 
-def main():
+def main(argv=None):
+    argv = argv if argv is not None else sys.argv[1:]
+    # A corpus-scale pass is otherwise a silent hour: say where it is as it goes.
+    progress = int(argv[argv.index("--progress") + 1]) if "--progress" in argv else 500
     concepts = {h["concept"] for h in json.load(open(W / "hitlist.json"))["hitlist"]}
     maxn = max(len(c.split()) for c in concepts)
     paper_use = {}
-    ids = sorted(p.name[:-len(".tar.gz")] for p in EPRINTS.glob("*.tar.gz"))
+    ids = dp.corpus_paper_ids()
     done = 0
-    for pid in ids:
+    for index, pid in enumerate(ids, 1):
         t = dp.read_text(pid)
         if not t:
             continue
@@ -58,6 +61,9 @@ def main():
                     found.add(g)
         if found:
             paper_use[pid] = sorted(found)
+        if progress and (index % progress == 0 or index == len(ids)):
+            print(f"[warp-concept-usage] {index}/{len(ids)} read={done} "
+                  f"with-concepts={len(paper_use)}", file=sys.stderr, flush=True)
     (W / "concept-usage.json").write_text(json.dumps(
         {"schema": "concept-usage-v1", "papers_scanned": done,
          "papers_with_concepts": len(paper_use), "paper_concepts": paper_use}))

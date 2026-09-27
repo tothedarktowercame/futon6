@@ -26,12 +26,15 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+import futon6_config as config  # noqa: E402
+
 DEFAULT_CLOSE_READING = ROOT / "holes" / "excursions" / "close-reading"
 DEFAULT_PROPOSALS = DEFAULT_CLOSE_READING / "proposals"
 DEFAULT_HIERARCHY = DEFAULT_CLOSE_READING / "expository-scope-hierarchy.edn"
 DEFAULT_REPORT = DEFAULT_CLOSE_READING / "consolidation-report.json"
 DEFAULT_SUMMARY = DEFAULT_CLOSE_READING / "consolidation-report.md"
-DEFAULT_GH_ORDER = ROOT / "data" / "warp" / "gh200.txt"
+DEFAULT_GH_ORDER = config.warp() / "gh200.txt"
 EXTRACTOR = ROOT / "scripts" / "expository_region_extract.py"
 
 

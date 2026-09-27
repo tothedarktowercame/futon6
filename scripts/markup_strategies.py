@@ -134,13 +134,23 @@ def bibliographic(term: str) -> bool:
     return bool(BIBLIOGRAPHIC.search(term)) or len(term) > 80 or len(term.split()) > 8
 
 
-def bibliography_at(text: str, marks: list[dict]) -> int:
+# A paper without \begin{thebibliography} still has references: a plain \bibitem
+# list, or a \begin{references} / \begin{biblist} environment. Callers that scan a
+# raw e-print pass these too; the marked-up path keeps its single marker, so what
+# it finds does not change.
+BIBLIOGRAPHY_MARKERS = ("\\begin{thebibliography}",)
+RAW_BIBLIOGRAPHY_MARKERS = BIBLIOGRAPHY_MARKERS + (
+    "\\begin{references}", "\\begin{biblist}", "\\bibitem", "\\bibliography{")
+
+
+def bibliography_at(text: str, marks: list[dict],
+                    markers: tuple[str, ...] = BIBLIOGRAPHY_MARKERS) -> int:
     """Where the references begin; emphasis after this point is a citation."""
     for m in marks:
         if m["kind"] == "env/thebibliography":
             return m["start"]
-    at = text.find("\\begin{thebibliography}")
-    return at if at >= 0 else len(text)
+    found = [at for at in (text.find(marker) for marker in markers) if at >= 0]
+    return min(found) if found else len(text)
 
 
 def defined_terms(text: str, marks: list[dict]) -> list[dict]:

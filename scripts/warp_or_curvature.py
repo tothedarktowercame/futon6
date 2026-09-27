@@ -28,7 +28,7 @@ import substrate_metric_e1_curvature as eng
 import os
 from pathlib import Path
 
-W = str(config.ROOT / 'data/warp')
+W = str(config.warp())
 
 
 def main():

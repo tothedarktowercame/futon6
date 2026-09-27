@@ -26,12 +26,12 @@ import futon6_config as config
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GH200 = ROOT / "data" / "warp" / "gh200.txt"
-DEFAULT_GOLDEN = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
-DEFAULT_BIB_INDEX = ROOT / "data" / "warp" / "bib-index.json"
-DEFAULT_CITATIONS = ROOT / "data" / "warp" / "citations.json"
+DEFAULT_GH200 = config.warp() / "gh200.txt"
+DEFAULT_GOLDEN = config.marks()
+DEFAULT_BIB_INDEX = config.warp() / "bib-index.json"
+DEFAULT_CITATIONS = config.warp() / "citations.json"
 DEFAULT_CORPUS_INDEX = config.storage() / "futon6/data/arxiv-math-ct-file-index.jsonl"
-DEFAULT_OUT = ROOT / "data" / "warp" / "cite-resolution"
+DEFAULT_OUT = config.warp() / "cite-resolution"
 SCHEMA = "futon6/h7-cite-resolution/v1"
 
 

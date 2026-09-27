@@ -15,7 +15,7 @@ import futon6_config as config
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CORPUS_INDEX = config.storage() / "futon6/data/arxiv-math-ct-file-index.jsonl"
-DEFAULT_OUT = ROOT / "data" / "warp" / "cite-resolution"
+DEFAULT_OUT = config.warp() / "cite-resolution"
 SCHEMA = "futon6/h7-cite-resolution/v1"
 
 

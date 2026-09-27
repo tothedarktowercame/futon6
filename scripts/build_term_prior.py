@@ -11,7 +11,15 @@ criterion, so no curated list is needed.
 MSC-class-repeatable BY DESIGN: re-point --golden-dir and --out per class
 (the superpod blast re-points per MSC). Nothing CT-specific is hardcoded.
 
-    build_term_prior.py [--golden-dir DIR] [--min-papers K] [--max-papers N]
+Each paper's TEXT comes from one of two sources, because a subject's papers are
+not always marked up. `--source marks` reads the DP marks' "text" field (how the
+CT prior was built); `--source eprints` reads the same paper text out of the
+downloaded arXiv source archives, through the reader the rest of the WARP spine
+already uses. A subject with no DP markup is therefore not a subject without
+text — the e-prints carry the full TeX either way.
+
+    build_term_prior.py [--source marks|eprints] [--marks-dir DIR]
+                        [--eprints-dir DIR] [--min-papers K] [--max-papers N]
                         [--msc NAME] [--out FILE]
 """
 from __future__ import annotations
@@ -21,11 +29,13 @@ import json
 import re
 import sys
 from collections import Counter
+from collections.abc import Sequence
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import futon6_config as config
+
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GOLDEN = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
-DEFAULT_OUT = ROOT / "data" / "term-prior-ct.json"
 
 _WORD = re.compile(r"[a-z][a-z-]*")
 # boundary stopwords: an n-gram may not START or END on one (so "of modules"
@@ -110,32 +120,58 @@ def resolve_phrase(phrase: str, df, *, min_papers: int = 2) -> dict:
     return {"input": phrase, "resolution": phrase_key, "action": "KEPT", "df": phrase_df}
 
 
-def main(argv=None) -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--golden-dir", type=Path, default=DEFAULT_GOLDEN)
-    ap.add_argument("--min-papers", type=int, default=3)
-    ap.add_argument("--max-papers", type=int, default=4000)
-    ap.add_argument("--msc", default="ct")
-    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
-    a = ap.parse_args(argv)
-    files = sorted(a.golden_dir.glob("fable-*-dp-emacs.json"))[:a.max_papers]
-    df, n = Counter(), 0
-    for f in files:
+def marks_texts(marks_dir: Path, max_papers: int):
+    """Paper text as the DP marks recorded it."""
+    for f in sorted(marks_dir.glob("fable-*-dp-emacs.json"))[:max_papers]:
         try:
-            t = json.loads(f.read_text()).get("text", "")
+            text = json.loads(f.read_text()).get("text", "")
         except Exception:
             continue
-        if not t:
-            continue
+        if text:
+            yield text
+
+
+def eprint_texts(eprint_roots: Sequence[Path], max_papers: int):
+    """Paper text as arXiv shipped it: the same archives, through the same reader the
+    defined-pass, snippet and usage stages read, across every directory of the corpus.
+    Imported here, not at module level, so the marks source never loads the reader."""
+    import warp_defined_pass as defined_pass
+
+    roots = tuple(eprint_roots)
+    defined_pass.EPRINT_ROOTS = roots
+    defined_pass.EPRINTS = roots[0]
+    for paper_id in defined_pass.corpus_paper_ids()[:max_papers]:
+        text = defined_pass.read_text(paper_id)
+        if text:
+            yield text
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--source", choices=config.PROSE_SOURCES,
+                    default=config.prose_source())
+    ap.add_argument("--marks-dir", type=Path, default=config.marks())
+    ap.add_argument("--eprints-dir", type=Path, action="append", default=None,
+                    help="An e-print directory; repeatable. Defaults to the configured roots.")
+    ap.add_argument("--min-papers", type=int, default=3)
+    ap.add_argument("--max-papers", type=int, default=4000)
+    ap.add_argument("--msc", default=config.subject())
+    ap.add_argument("--out", type=Path, default=config.term_prior())
+    a = ap.parse_args(argv)
+    texts = (marks_texts(a.marks_dir, a.max_papers) if a.source == "marks"
+             else eprint_texts(a.eprints_dir or config.eprint_roots(), a.max_papers))
+    df, n = Counter(), 0
+    for t in texts:
         n += 1
         df.update(document_frequencies([t]))
         if n % 500 == 0:
             print(f"  {n} papers...", file=sys.stderr)
     index = build_index(df, min_papers=a.min_papers)
+    a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(
-        {"_meta": {"msc": a.msc, "papers": n, "min_papers": a.min_papers,
-                   "terms": len(index)}, "df": index}))
-    print(f"{n} papers; {len(index)} terms (df>={a.min_papers}) -> {a.out}")
+        {"_meta": {"msc": a.msc, "source": a.source, "papers": n,
+                   "min_papers": a.min_papers, "terms": len(index)}, "df": index}))
+    print(f"{n} papers ({a.source}); {len(index)} terms (df>={a.min_papers}) -> {a.out}")
     return 0
 
 

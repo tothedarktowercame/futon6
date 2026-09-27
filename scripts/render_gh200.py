@@ -22,9 +22,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import dp_anatomy_html as R
 import dp_paper_view as dpv
+import futon6_config as config
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_LIST = ROOT / "data" / "warp" / "gh200.txt"
+DEFAULT_LIST = config.warp() / "gh200.txt"
 DEFAULT_OUT = ROOT / "data" / "showcases" / "ct-anatomy" / "gh200"
 FLAGS = dict(with_ca=True, with_binders=True, with_scopes=True, with_xref=True)
 

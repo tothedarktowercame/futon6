@@ -50,9 +50,9 @@ def build_citation_neighborhood(hub=None, n=15):
     matched even-spread random sample of the same size — so the run can compare whether
     citation coherence steepens the accretion slope. Writes holes/math-ct-{neighborhood,
     random}.{ids.txt,fetch.jsonl} (safe-form ids; eprint_url constructed)."""
-    cits = json.load(open(os.path.join(ROOT, "data/warp/citations.json")))
+    cits = json.load(open(config.warp() / "citations.json"))
     cited_by = cits["cited_by"]
-    idx = json.load(open(os.path.join(ROOT, "data/warp/concept-index.json")))
+    idx = json.load(open(config.warp() / "concept-index.json"))
     incorpus = set()
     for rec in idx.values():
         incorpus.update(rec.get("papers", []))

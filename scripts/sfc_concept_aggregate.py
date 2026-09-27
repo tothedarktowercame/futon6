@@ -33,11 +33,11 @@ import os
 # (the tree that holds futon6 and its siblings). FUTON_CODE_ROOT overrides.
 _CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().parents[2])
 
-DEFAULT_CONCEPT_INDEX = ROOT / "data" / "warp" / "concept-index.json"
-DEFAULT_SNIPPETS = ROOT / "data" / "warp" / "def-snippets.json"
-DEFAULT_ENCYCLOPEDIA = ROOT / "data" / "concept-encyclopedia-ct.json"
+DEFAULT_CONCEPT_INDEX = config.warp() / "concept-index.json"
+DEFAULT_SNIPPETS = config.warp() / "def-snippets.json"
+DEFAULT_ENCYCLOPEDIA = config.concept_encyclopedia()
 DEFAULT_NLAB = ROOT / "data" / "nlab-wiring" / "pages.json"
-DEFAULT_FIXTURE = ROOT / "data" / "warp" / "sfc-adjunction-fixture.json"
+DEFAULT_FIXTURE = config.warp() / "sfc-adjunction-fixture.json"
 DEFAULT_REPORT = ROOT / "holes" / "excursions" / "sfc-concept-aggregate.md"
 PLANETMATH_DIR = config.sibling('planetmath') / '18_Category_theory_homological_algebra'
 

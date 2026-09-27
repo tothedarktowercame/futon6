@@ -27,7 +27,7 @@ from pathlib import Path
 
 import numpy as np
 
-W = config.ROOT / 'data/warp'
+W = config.warp()
 DASH = re.compile(r"[‐-―−-]")
 STOPTOK = set("the a an of to in on for and or is are be by with we have there "
               "exists every some any all that this it its as at from".split())

@@ -39,7 +39,7 @@ import numpy as np
 
 from viz_budget import guard_svg
 
-W = config.ROOT / 'data/warp'
+W = config.warp()
 GOLD = config.marks()
 
 

@@ -38,10 +38,13 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-GOLDEN = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
-CONCEPT_DIR = ROOT / "data" / "concept-encyclopedia" / "ct"
-CITES = ROOT / "data" / "warp" / "cite-resolution"
-DEFAULT_OUT = ROOT / "data" / "warp" / "concept-phylogeny.json"
+sys.path.insert(0, str(ROOT / "scripts"))
+import futon6_config as config  # noqa: E402
+
+GOLDEN = config.marks()
+CONCEPT_DIR = config.subject_data() / "concept-encyclopedia" / config.subject()
+CITES = config.warp() / "cite-resolution"
+DEFAULT_OUT = config.warp() / "concept-phylogeny.json"
 DEF_MARK_KINDS = {"definiendum", "definiens"}
 
 
@@ -184,7 +187,9 @@ def artifact_payload(*, papers: int, candidates: int, threads: dict[str, dict]) 
             activation_counts[step.get("type", "unknown")] += 1
     return {
         "schema": "futon6/warp/concept-phylogeny/v1",
-        "artifact": "data/warp/concept-phylogeny.json",
+        # The record names the file this run actually wrote, not a fixed subject's.
+        "artifact": str(DEFAULT_OUT.relative_to(ROOT)
+                        if DEFAULT_OUT.is_relative_to(ROOT) else DEFAULT_OUT),
         "description": (
             "Per-concept citation-descent phylogeny: definition, cited-activation, "
             "uncited-activation, and redefinition events woven over the resolved "

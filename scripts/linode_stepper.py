@@ -82,6 +82,7 @@ RUNG3 = '"$FUTON6_RUNG3"'
 PAPERG = '"$FUTON6_PAPER_GRAPHS"'
 DEMO = '"$FUTON6_DEMO"'
 MARKS = '"$FUTON6_MARKS"'
+WARP = '"$FUTON6_WARP_DIR"'   # the configured concept substrate, not a fixed subject's
 STRAT = RUN + "/artifacts/strategies"
 EXPO_CAND = '"$FUTON6_EXPO_CANDIDATES"'
 OPS = {
@@ -101,7 +102,7 @@ OPS = {
     "S1b": {"cmd": f"{{PY}} scripts/markup_strategies.py --list {{IDS}} --marks {MARKS} --out {STRAT}",
             "crit": "per-paper term and symbol hypergraphs; every paper resolves"},
     "S2": {"cmd": "{PY} scripts/warp_substrate_check.py --ids {IDS} && "
-           "{PY} scripts/coverage_inline.py --concepts data/warp/concept-usage.json --field paper_concepts",
+           f"{{PY}} scripts/coverage_inline.py --concepts {WARP}/concept-usage.json --field paper_concepts",
            "note": "substrate-corpus match is now a measured gate (E-superpod-hardening H1 tier 1); "
                    "committed concept-usage is df>=10-filtered so the coverage curve reads flat — "
                    "the raw-stream instrument needs S1 to dump per-paper raw concepts (tier 2)",
@@ -234,8 +235,9 @@ def sh(cmd, log_path=None):
 
 # ---- scale profiles (same stage commands; S0 + scale differ — the generalization test) ----
 _STAGE_MANIFEST = ("eprints (the sample's *.tar.gz) + ~68MB substrate "
-                   "(data/warp/{concept-index,def-snippets,defined-index,concept-usage}.json, "
-                   "data/concept-encyclopedia-ct.json, data/background-corpus-index.json) + futon3 patterns "
+                   "(the configured WARP directory's "
+                   "{concept-index,def-snippets,defined-index,concept-usage}.json, the subject's "
+                   "concept-encyclopedia-<subject>.json, data/background-corpus-index.json) + futon3 patterns "
                    "(futon3/resources/sigils/patterns-index.tsv, futon3/library)")
 # the RUN OUTPUTS to pull back to dev BEFORE teardown (mark6 lost the CLeans + paper-graphs
 # B by pulling only the embed JSON — never delete the box until all of these are on dev).
