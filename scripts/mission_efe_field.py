@@ -579,9 +579,9 @@ LIVE_OVERLAY_STYLE = """
 #capability-zones-toggle,#capability-disagreement-toggle{margin-left:10px;padding:3px 8px;border:1px solid #64748b;border-radius:5px;color:#e2e8f0;background:#172033;font:11px ui-sans-serif,system-ui,sans-serif;cursor:pointer}
 #capability-zones-toggle[aria-pressed="true"],#capability-disagreement-toggle[aria-pressed="true"]{border-color:#67e8f9;color:#cffafe;background:#164e63}
 #capability-zones-layer[data-hide-disagreement="true"] .capability-zone-disagreement{display:none}
-#header-cols{display:flex;gap:28px;align-items:flex-start;margin-top:6px}
-#header-main{flex:1 1 0;max-width:1180px}
-#zone-guide{flex:1 1 0;max-width:1100px;color:#aab4c3;font-size:12px;line-height:1.4;font-weight:400;overflow:auto;padding-right:6px}
+#header-cols{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-start;margin-top:6px}
+#header-main{flex:1 1 700px;max-width:1180px}
+#zone-guide{flex:1 1 520px;max-width:1100px;color:#aab4c3;font-size:12px;line-height:1.4;font-weight:400;overflow:auto;padding-right:6px}
 #zone-guide td:nth-child(2){white-space:nowrap}
 #zone-guide h2{margin:0 0 4px;font-size:14px;color:#e2e8f0}
 #zone-guide p{margin:0 0 5px;max-width:none}
@@ -1306,7 +1306,16 @@ CONTROLS_SCRIPT = """
   const panel = document.getElementById("efe-controls");
   if (!svg || !panel) return;
   const header = document.querySelector("header");
-  if (header) panel.style.top = (header.offsetHeight + 8) + "px";
+  // Sit just under the header, and ride up to the top of the window as the header
+  // scrolls away, so the panel is on screen however tall the header is.
+  const place = () => {
+    const top = Math.max(12, header ? header.getBoundingClientRect().bottom + 8 : 12);
+    panel.style.top = top + "px";
+    panel.style.maxHeight = Math.max(160, innerHeight - top - 12) + "px";
+  };
+  place();
+  addEventListener("scroll", place, {passive: true});
+  addEventListener("resize", place);
   const els = Array.from(svg.querySelectorAll("[data-m]"));
   const missions = new Map();
   for (const e of els) {
