@@ -20,6 +20,40 @@ ROOT = config.code_root()
 _VARIANT = sys.argv[1] if len(sys.argv) > 1 else None
 POS = json.load(open(ROOT / "futon6/data" /
                      (f"mission-carpet-pos-{_VARIANT}.json" if _VARIANT else "mission-carpet-pos.json")))
+# Missions with no BGE embedding get a GUESSED position in mission_carpet_variants.py
+# (centroid of cited neighbours, else the map centre), so several can land on exactly
+# the same point (Joe 2026-09-27: run4-outer-loop-successor and f10-u83 drawn on top
+# of each other). Record which positions are guesses, then fan out any missions that
+# share a point onto a small circle round it so each can be seen and clicked.
+try:
+    _bge = json.load(open(ROOT / "futon3a/resources/notions/bge_mission_embeddings.json"))
+    _bge_names = {r.get("basename") for r in (_bge if isinstance(_bge, list) else _bge.get("records", _bge))}
+    GUESSED = {k for k in POS if k not in _bge_names}
+    del _bge
+except (OSError, ValueError):
+    GUESSED = set()
+_at = defaultdict(list)
+for _k, _xy in POS.items():
+    _at[tuple(_xy)].append(_k)
+FANNED, FANNED_POS = {}, {}
+for (_x, _y), _ks in _at.items():
+    if len(_ks) > 1:
+        for _i, _k in enumerate(sorted(_ks)):
+            _a = 2 * math.pi * _i / len(_ks) - math.pi / 2
+            POS[_k] = [_x + 90 * math.cos(_a), _y + 90 * math.sin(_a)]
+            FANNED_POS[_k] = {"from": [_x, _y], "to": [round(POS[_k][0], 1), round(POS[_k][1], 1)]}
+            FANNED[_k] = [o for o in sorted(_ks) if o != _k]
+def placement_note(k):
+    """Plain-text note on how reliable a mission's map position is ('' if ordinary)."""
+    out = []
+    if k in GUESSED:
+        out.append("no text embedding for this mission, so its position is a guess "
+                   "(the centre of the missions it cites, or the middle of the map if it cites none)")
+    if k in FANNED:
+        out.append("it was placed on exactly the same point as " + ", ".join(FANNED[k]) +
+                   "; they are spread round that point so each can be seen")
+    return "; ".join(out)
+
 SCOPES = json.load(open(ROOT / "futon6/data/efe-scopes.json"))  # reproducible: scripts/mission_efe_scope_dump.py
 CAPS = json.load(open(ROOT / "futon6/data/capability-graph.json"))
 ROADS = json.load(open(ROOT / "futon6/data/mission-carpet-roads.json"))
@@ -312,9 +346,10 @@ for k in darkm:
     gx0, gy0 = POS[k]; stem = k[2:]
     tt = (f"{stem} — DARK MATTER: recent git momentum ({MOM[k]:.1f}) but NO substrate-2 "
           f"scope-district — a recently-worked mission D1 hasn't ingested yet. Present on "
-          f"momentum (the empty lasso loop), invisible to the metric.")
+          f"momentum (the empty lasso loop), invisible to the metric."
+          + (f" Position: {placement_note(k)}." if placement_note(k) else ""))
     ghosts.append(
-        f'<g><title>{tt}</title>'
+        f'<g data-dark-matter="{stem}"><title>{tt}</title>'
         f'<circle cx="{gx0:.0f}" cy="{gy0:.0f}" r="24" fill="#ffb43c" opacity="0.05" pointer-events="all"/>'
         f'<circle cx="{gx0:.0f}" cy="{gy0:.0f}" r="24" fill="none" stroke="#d8b066" stroke-width="1.3" '
         f'stroke-dasharray="4,4" opacity="0.85"/>'
@@ -584,6 +619,15 @@ LIVE_OVERLAY_SCRIPT = """
   const ENDPOINT = "http://localhost:7070/api/alpha/live-efe-map";
   const REFRESH_MS = 10000;
   const STATIC_CAPABILITY_ZONES = __CAPABILITY_ZONES_JSON__;
+  // Missions that shared one map point were spread apart at render time (see FANNED in
+  // mission_efe_field.py). Server-supplied placements still carry the shared point, so
+  // move a placement to its mission's fanned spot when it sits on the original point.
+  const FANNED_POS = __FANNED_POS_JSON__;
+  function fanPlace(missionId, p) {
+    const f = FANNED_POS[missionId] || FANNED_POS["M-" + missionId];
+    if (!f || !p || Math.abs(Number(p.x) - f.from[0]) > 2 || Math.abs(Number(p.y) - f.from[1]) > 2) return p;
+    return Object.assign({}, p, {x: f.to[0], y: f.to[1]});
+  }
   const FRONTIER_Y = 3410;
   const FRONTIER_H = 175;
   const svg = document.getElementById("efe-field");
@@ -679,7 +723,8 @@ LIVE_OVERLAY_SCRIPT = """
     const zones = data["capability-zones"] || STATIC_CAPABILITY_ZONES;
     zoneLayer.setAttribute("data-reduction-version", zones["reduction-version"] || "unavailable");
     const items = zones.items || [];
-    for (const item of items) {
+    for (const item0 of items) {
+      const item = fanPlace(item0["mission-id"], item0);
       if (!Number.isFinite(Number(item.x)) || !Number.isFinite(Number(item.y))) continue;
       const g = el("g", {
         "data-capability-mission-id": item["mission-id"],
@@ -699,11 +744,11 @@ LIVE_OVERLAY_SCRIPT = """
       zoneLayer.appendChild(g);
     }
     const legend = el("g", {class: "capability-zone-legend", "data-capability-legend": "true", transform: "translate(2800 55)"});
-    legend.appendChild(el("rect", {x: 0, y: 0, width: 330, height: 265, rx: 8, class: "capability-zone-legend-bg"}));
+    legend.appendChild(el("rect", {x: 0, y: 0, width: 430, height: 275, rx: 8, class: "capability-zone-legend-bg"}));
     legend.appendChild(el("text", {x: 14, y: 22, style: "font-weight:800"}, `capability zones · ${zones["reduction-version"] || "unavailable"}`));
     for (const [i, row] of (zones.legend || []).entries()) {
       const col = i >= 7 ? 1 : 0, line = i % 7;
-      const x = 14 + col * 158, y = 47 + line * 27;
+      const x = 14 + col * 210, y = 47 + line * 27;
       legend.appendChild(el("circle", {cx: x + 6, cy: y - 4, r: 6, fill: row.color, stroke: "#fff", "stroke-width": .7}));
       legend.appendChild(el("text", {x: x + 18, y}, `${row.class} · ${row["mission-count"] || 0}`));
     }
@@ -772,7 +817,8 @@ LIVE_OVERLAY_SCRIPT = """
     // no-silent-absence rule). Remove this filter once :7070 runs >= 5b14a6f6.
     let withheldStale = 0;
     const staleIds = [];
-    for (const agent of ((data.agents && data.agents.items) || [])) {
+    for (const agent0 of ((data.agents && data.agents.items) || [])) {
+      const agent = Object.assign({}, agent0, {placement: fanPlace(agent0["mission-id"], agent0.placement)});
       if (!agent["mission-id"] || !validPlacement(agent.placement)) continue;
       const st = String(agent.status || "").toLowerCase();
       if (st !== "invoking" && st !== "idle") {
@@ -1003,6 +1049,7 @@ def _mission_info(m, n):
         "certPass": sum(1 for sc in scs if sc["binder"] == "certificate" and sc.get("verdict") == "pass"),
         "certFail": sum(1 for sc in scs if sc["binder"] == "certificate" and sc.get("verdict") not in (None, "pass")),
         "momentum": round(MOM.get("M-" + m, 0.0), 2),
+        "placement": placement_note("M-" + m),
         "roads": sorted(_roads_of.get(m, []), key=lambda r: -r[1])[:25], "roadCount": len(_roads_of.get(m, [])),
     }
 MISSION_INFO = {m: _mission_info(m, n) for _, _, m, n in hubs}
@@ -1020,6 +1067,27 @@ DETAILS_CSS = """
 #efe-field [data-m],#efe-field [data-capability-mission-id]{cursor:pointer}
 """
 DETAILS_SCRIPT = """
+<script>
+// Static map labels (capability stars, dark-matter ghosts) can land on top of each
+// other when their anchors are close. Push a label down, one line at a time, until it
+// clears every label already placed; labels are handled top to bottom so the upper
+// one of a colliding pair stays where its mark is.
+(() => {
+  const svg = document.getElementById("efe-field");
+  if (!svg) return;
+  const labels = Array.from(svg.querySelectorAll("text")).filter((t) => !t.closest("#live-overlay, #capability-zones-layer, #efe-controls") && t.textContent.trim().length > 3);
+  const boxes = labels.map((t) => ({t, b: t.getBBox()})).filter((o) => o.b.width > 0).sort((a, c) => a.b.y - c.b.y || a.b.x - c.b.x);
+  const placed = [];
+  const hit = (a, c) => a.x < c.x + c.width - 2 && c.x < a.x + a.width - 2 && a.y < c.y + c.height - 2 && c.y < a.y + a.height - 2;
+  for (const o of boxes) {
+    let dy = 0;
+    const b = {x: o.b.x, y: o.b.y, width: o.b.width, height: o.b.height};
+    for (let k = 0; k < 8 && placed.some((p) => hit(b, p)); k++) { dy += o.b.height; b.y = o.b.y + dy; }
+    if (dy) o.t.setAttribute("y", Number(o.t.getAttribute("y")) + dy);
+    placed.push(b);
+  }
+})();
+</script>
 <div id="efe-details" hidden role="dialog" aria-label="Mission details"></div>
 <script>
 (() => {
@@ -1064,6 +1132,7 @@ DETAILS_SCRIPT = """
     h.push('<button class="close" aria-label="Close">×</button><h2>M-' + esc(m) + "</h2>");
     if (d.statusLine) h.push("<p><b>Status line:</b> " + esc(d.statusLine) + "</p>");
     if (d.doc) h.push('<p class="why">' + esc(d.doc) + "</p>");
+    if (d.placement) h.push('<p><b>Map position:</b> <span class="why">' + esc(d.placement) + "</span></p>");
     h.push("<p><b>Filter status:</b> " + esc(d.status) + ' <span class="why">(done only when the status line opens with a done word; no status line = unknown)</span></p>');
     h.push("<p><b>Band:</b> " + d.band + ' of 0–6 <span class="why">— density of scopes around the mission, weighted determined / frontier / vacuous and blurred with its neighbours; not a judgement of value</span></p>');
     h.push("<h3>Hub</h3><p><span class=sw style=background:" + d.clsColor + "></span><b>Colour</b> = Salingaros class: " + esc(CLASS_WHY[d.cls] || d.cls) + "</p>");
@@ -1239,7 +1308,7 @@ link yet</b> (coverage gap, stated not hidden). {_code_ring_legend} <b>Live over
 <g>{hubline_svg}</g><g id="layer-scope-dots">{scope_svg}</g><g id="layer-doc-ring">{activity_svg}</g><g id="layer-code-ring">{code_churn_svg}</g><g>{hub_svg}</g>
 <g class="layer-lasso">{lasso}</g><g>{''.join(ghosts)}</g>
 <g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
-<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))) }{CONTROLS_SCRIPT}{DETAILS_SCRIPT.replace("__MISSION_INFO_JSON__", json.dumps(MISSION_INFO, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"))}"""
+<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))).replace("__FANNED_POS_JSON__", json.dumps(FANNED_POS, separators=(",", ":"))) }{CONTROLS_SCRIPT}{DETAILS_SCRIPT.replace("__MISSION_INFO_JSON__", json.dumps(MISSION_INFO, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"))}"""
 # Readable type (Joe 2026-09-27: too small to read). One scale for every size on
 # the page — header, controls, SVG labels, live-overlay classes — so the relative
 # hierarchy is kept; nothing smaller than 15px. The details panel is already sized.
