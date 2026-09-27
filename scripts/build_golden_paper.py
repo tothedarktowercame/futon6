@@ -21,6 +21,7 @@ import futon6_config as config
 
 
 import argparse
+import bisect
 import html
 import importlib.util
 import json
@@ -84,6 +85,10 @@ class Mark:
     kind: str
     title: str
     label: str
+    # Which reading produced it. A consumer needs this to tell a term the paper
+    # framed as a definition ("is called \emph{regular}") from one it merely
+    # italicised in passing, and the two want different treatment downstream.
+    source: str = ""
 
 
 COMMON_HOLE_STARTS = {
@@ -209,6 +214,49 @@ def _clean_term(term: str) -> str:
     return term.strip()
 
 
+# Emphasis in either spelling: \emph{...}/\textit{...} and the older {\em ...}.
+EMPH = re.compile(r"\\(?:emph|textbf|textit)\{((?:[^{}]|\{[^{}]*\})*)\}"
+                  r"|\{\\(?:em|it|bf|sl)\s+([^{}]*)\}")
+# "A category $\C$ is called \emph{small} if ..." -- a definition with no
+# definition environment anywhere near it.
+CALLED = re.compile(r"\b(?:is|are|will\s+be|shall\s+be)\s+called\s+(?:an?\s+|the\s+)?"
+                    r"(?:\\(?:emph|textbf|textit)\{([^{}]{2,80})\}"
+                    r"|\{\\(?:em|it|bf|sl)\s+([^{}]{2,80})\})"
+                    r"|\b[Ww]e\s+(?:shall\s+|will\s+|now\s+)?call\s+[^.]{0,60}?"
+                    r"(?:\\(?:emph|textbf|textit)\{([^{}]{2,80})\}"
+                    r"|\{\\(?:em|it|bf|sl)\s+([^{}]{2,80})\})")
+# A paper italicises its references too: math/9906038 emphasises 21 journal and
+# publisher names ("J. Math. Phys.", "Springer-Verlag", "preprint math.QA/9802029").
+# None of them is a term the paper defines.
+BIBLIOGRAPHIC = re.compile(r"\d|\b[A-Z][a-z]{0,4}\.|"
+                           r"\b(?:preprint|Press|Verlag|Notes|Ann(?:als)?|Bull|Soc|Publ|Adv|Inc)\b")
+
+
+def emphasised(match: re.Match) -> str:
+    r"""The emphasised text, whichever spelling matched, or "" if it is not a term.
+
+    Emphasis carries line breaks ("small\nsets"), italic corrections (map\/) and
+    occasionally a fragment with an unclosed bracket; a term also needs a letter.
+    """
+    raw = next((g for g in match.groups() if g is not None), "")
+    term = re.sub(r"\s+", " ", raw).strip()
+    term = re.sub(r"\\/$", "", term).strip(" ,;:.-")
+    if term.count("(") != term.count(")"):
+        term = term.split("(")[0].strip()
+    return term if len(term) >= 3 and re.search(r"[A-Za-z]{2}", term) else ""
+
+
+def bibliographic(term: str) -> bool:
+    """A journal, publisher or preprint number set in italics, not a defined term."""
+    return bool(BIBLIOGRAPHIC.search(term)) or len(term) > 80 or len(term.split()) > 8
+
+
+def bibliography_at(text: str) -> int:
+    """Where the references begin; emphasis after this point is a citation."""
+    at = text.find("\\begin{thebibliography}")
+    return at if at >= 0 else len(text)
+
+
 def _definition_body(text: str, env: dict) -> tuple[int, int, str]:
     content = env.get("hx/content", {})
     start = int(content.get("position", 0))
@@ -234,19 +282,63 @@ def _add_definition(out: dict[str, Definition], term: str, position: int, source
 
 
 def mine_definitions(text: str, tex_envs: list[dict] | None = None) -> list[Definition]:
-    """Extract in-paper definienda from real definition envs plus intro patterns."""
+    r"""In-paper definienda, from definition environments AND from running prose.
+
+    The definiendum is the EMPHASISED text wherever there is emphasis. A paper
+    writes "A category $\C$ is called \emph{small} if ...", and what it defines
+    is `small` -- not the clause around it. Reading the clause instead of the
+    emphasis inside it is what produced definienda like `a {\it trivial
+    fibration} if it is both a fibration and a weak equivalence`, and
+    `the {\em tautological categorification}` with its markup still on it.
+
+    Prose counts as much as an environment. 0806.1324 (Krause) has no
+    definition environment at all and names its terms in running prose; reading
+    environments only, this found ONE definiendum in the whole paper and that
+    one by accident, so S1 marked 1 occurrence in 3,277 as a term the paper
+    defines. The strategies layer was taught to read prose on 2026-09-22
+    (e559968) and went from 42 defined terms across the run to 135; this is
+    that same reading, moved into the miner S1's `defined-in-paper` source
+    actually comes from, so the two layers cannot disagree about what a
+    definition is again.
+    """
     definitions: dict[str, Definition] = {}
     tex_envs = tex_envs if tex_envs is not None else detect_tex_env_scopes("paper", text)
     for env in tex_envs:
         if env.get("hx/type") != "env-tex/definition":
             continue
         body_start, _body_end, body = _definition_body(text, env)
-        for pat in (
-            r"\\(?:emph|textbf|textit)\{([^{}]{3,120})\}",
-            r"(?:An?|The)\s+([A-Za-z][A-Za-z0-9\\${}_^,\-\s]{2,100}?)\s+(?:is|are|consists|will be called|is called)\b",
-        ):
-            for match in re.finditer(pat, body):
-                _add_definition(definitions, match.group(1), body_start + match.start(1), "definition-env")
+        emphasised_here = False
+        for match in EMPH.finditer(body):
+            term = emphasised(match)
+            if term and not bibliographic(term):
+                emphasised_here = True
+                _add_definition(definitions, term, body_start + match.start(), "definition-env")
+        if emphasised_here:
+            continue
+        # Nothing emphasised in this environment: fall back to the shape of the
+        # sentence. That reading is loose -- out of "The category $\calC$ is
+        # ..." it takes "category $\calC$", which is the sentence's subject and
+        # not a definiendum -- so it runs only where there is no emphasis to
+        # prefer, rather than competing with one.
+        for match in re.finditer(
+                r"(?:An?|The)\s+([A-Za-z][A-Za-z0-9\\${}_^,\-\s]{2,100}?)"
+                r"\s+(?:is|are|consists|will be called|is called)\b", body):
+            _add_definition(definitions, match.group(1),
+                            body_start + match.start(1), "definition-env")
+
+    cut = bibliography_at(text)
+    # "... is called \emph{X}" and "we call ... \emph{X}".
+    for match in CALLED.finditer(text):
+        term = emphasised(match)
+        if term and match.start() < cut and not bibliographic(term):
+            _add_definition(definitions, term, match.start(), "called-by-name")
+    # Emphasis at a term's first use IS the definition, in the commonest shape
+    # mathematics uses: "The \emph{nerve} $N\C$ of the category $\C$ is the
+    # value on ...". No environment, no "is called", still a definition.
+    for match in EMPH.finditer(text):
+        term = emphasised(match)
+        if term and match.start() < cut and not bibliographic(term):
+            _add_definition(definitions, term, match.start(), "emphasised-in-prose")
 
     # The golden paragraph standard treats local introduction/notion sentences as
     # paper-local definitions for A-infinity style concepts, even when they live
@@ -254,13 +346,16 @@ def mine_definitions(text: str, tex_envs: list[dict] | None = None) -> list[Defi
     intro_patterns = (
         r"(?P<term>\$[^$\n]{1,120}\$-[A-Za-z][A-Za-z-]*(?:ies|s)?)\s+were introduced\b",
         r"notion of\s+(?P<term>\$[^$\n]{1,120}\$-[A-Za-z][A-Za-z-]*(?:ies|s)?)",
-        r"called\s+(?:the\s+)?(?P<term>[A-Za-z][A-Za-z0-9\\${}_^,\-\s]{3,100}?)(?:\.|,|\\cite|\s+by\b)",
     )
+    # A third pattern read `called\s+(?:the\s+)?(<100 chars>?)(?:\.|,|\cite|\s+by\b)`
+    # and swept the rest of the clause into the term: on 0806.1324 its single
+    # hit was `a {\em multiplicative system} if it admits both`. CALLED above is
+    # the same sentence read properly, anchored on the emphasis.
     for pat in intro_patterns:
         for match in re.finditer(pat, text):
-            _add_definition(definitions, match.group("term"), match.start("term"), "intro-pattern")
+            _add_definition(definitions, match.group("term"),
+                            match.start("term"), "intro-pattern")
     return sorted(definitions.values(), key=lambda d: (d.position, d.term.lower()))
-
 
 def normalized_term_key(term: str) -> str:
     term = strip_tex_commands(term).lower()
@@ -325,6 +420,7 @@ def definition_marks(text: str, definitions: list[Definition]) -> list[Mark]:
                     kind="defined",
                     title=f"defined in this paper @ {definition.position} ({definition.source})",
                     label=definition.term,
+                    source=definition.source,
                 ))
     return marks
 
@@ -389,17 +485,32 @@ def hole_marks(text: str, definitions: list[Definition]) -> list[Mark]:
 
 
 def select_non_overlapping(marks: list[Mark]) -> list[Mark]:
+    """Greedy by priority, then by length: the same selection, found by search.
+
+    Accepted spans never overlap each other, so the only ones that can collide
+    with a candidate are the span starting just before it and the one starting
+    just after; a binary search finds both. Comparing against every accepted
+    span instead is quadratic, and this runs over every occurrence of every
+    definiendum. When the miner learned to read definitions in prose that went
+    from 789 spans to 57,220 on math/0608040, and the quadratic scan took the
+    paper from under a second to minutes.
+    """
     priority = {"bind": 0, "defined": 1, "hole": 2}
     marks = sorted(marks, key=lambda m: (priority[m.kind], -(m.end - m.start), m.start))
     accepted: list[Mark] = []
-    occupied: list[tuple[int, int]] = []
+    starts: list[int] = []          # accepted spans, kept sorted by start
+    ends: list[int] = []            # their ends, in the same order
     for mark in marks:
         if mark.end <= mark.start:
             continue
-        if any(not (mark.end <= s or mark.start >= e) for s, e in occupied):
+        i = bisect.bisect_right(starts, mark.start)
+        if i and ends[i - 1] > mark.start:
+            continue
+        if i < len(starts) and starts[i] < mark.end:
             continue
         accepted.append(mark)
-        occupied.append((mark.start, mark.end))
+        starts.insert(i, mark.start)
+        ends.insert(i, mark.end)
     return sorted(accepted, key=lambda m: m.start)
 
 

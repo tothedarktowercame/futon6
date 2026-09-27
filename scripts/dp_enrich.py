@@ -326,6 +326,11 @@ def _prior_normalize(text: str, s: int, e: int, authoritative: bool):
     return None  # no recurring subphrase → not a real term, drop
 
 
+# Readings in which the paper itself presented the term AS a definition, as
+# opposed to merely italicising it. See the gate in concept_marks.
+DEFINITION_FRAMED = {"definition-env", "called-by-name", "intro-pattern"}
+
+
 def concept_marks(text: str, marks: list) -> list:
     """Prose terminology marks (kind=`concept`) from build_golden_paper's
     detectors, run over the stored text. Excludes anything overlapping a math
@@ -353,14 +358,25 @@ def concept_marks(text: str, marks: list) -> list:
             continue  # an emphasised SENTENCE (stress), not a named term
         cand.append((s, e, term, "emphasis", None))
     # defined-in-paper + concept-phrase (build_golden_paper's prose detectors).
-    # Multi-word, non-trivial only — single residues after trimming are noise.
     defs = gp.mine_definitions(text)
     for mk in gp.select_non_overlapping(
             gp.definition_marks(text, defs) + gp.hole_marks(text, defs)):
         defined = mk.kind == "defined"
         s, e = (mk.start, mk.end) if defined else _trim_phrase(text, mk.start, mk.end)
         term = re.sub(r"\s+", " ", text[s:e]).strip()
-        if e <= s or len(term) < 6 or " " not in term or in_math(s, e):
+        if e <= s or in_math(s, e):
+            continue
+        # A definiendum the paper FRAMED as one -- inside a definition
+        # environment, or "is called \emph{regular}" -- is authoritative even
+        # at one word, on the same grounds as author emphasis above: the braces
+        # gave it clean boundaries and nothing was trimmed. The multi-word floor
+        # is for spans that WERE trimmed (concept-phrase) and for terms taken
+        # from bare italics, where a one-word residue is as likely to be stress
+        # ("except", "constant") as a term.
+        if defined and mk.source in DEFINITION_FRAMED:
+            if len(term) < 3:
+                continue
+        elif len(term) < 6 or " " not in term:
             continue
         cand.append((s, e, term, "defined-in-paper" if defined else "concept-phrase",
                      None))

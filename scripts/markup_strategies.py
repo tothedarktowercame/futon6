@@ -41,6 +41,7 @@ import re
 import sys
 from pathlib import Path
 
+import build_golden_paper
 import expository_region_extract as regions
 
 SYMBOL_KINDS = ("symbol", "symbol-grounded")
@@ -49,30 +50,15 @@ SYMBOL_KINDS = ("symbol", "symbol-grounded")
 MACRO_SYMBOL = re.compile(r"·\s*author-defined\s*·\s*ID\b")
 ENV_KINDS = {"theorem", "lemma", "proposition", "corollary", "definition", "remark", "example",
              "proof", "question", "conjecture", "claim", "notation"}
-# Emphasis in either spelling: \emph{...} and the older {\em ...}.
-EMPH = re.compile(r"\\(?:emph|textbf|textit)\{((?:[^{}]|\{[^{}]*\})*)\}"
-                  r"|\{\\(?:em|it|bf|sl)\s+([^{}]*)\}")
-# A paper need not have definition environments: many define in running prose, and
-# 0806.1324 (Krause) has no definition environment at all while calling 25 terms by
-# name ("A category $\C$ is called \emph{small} if ...").
-CALLED = re.compile(r"\b(?:is|are|will\s+be|shall\s+be)\s+called\s+(?:an?\s+|the\s+)?"
-                    r"(?:\\(?:emph|textbf|textit)\{([^{}]{2,80})\}|\{\\(?:em|it|bf|sl)\s+([^{}]{2,80})\})"
-                    r"|\b[Ww]e\s+(?:shall\s+|will\s+|now\s+)?call\s+[^.]{0,60}?"
-                    r"(?:\\(?:emph|textbf|textit)\{([^{}]{2,80})\}|\{\\(?:em|it|bf|sl)\s+([^{}]{2,80})\})")
+# The reading of "what the paper presents as a definition" lives in the miner
+# that S1's own defined-in-paper source comes from, and is imported rather than
+# restated. It was restated once: prose definitions were taught here on
+# 2026-09-22 and not there, so this layer found 77 terms on 0806.1324 while S1
+# marked 1 occurrence in 3,277 as defined, and the page showed both at once.
+EMPH = build_golden_paper.EMPH
+CALLED = build_golden_paper.CALLED
+emphasised = build_golden_paper.emphasised
 
-
-def emphasised(match: re.Match) -> str:
-    r"""The emphasised text, whichever spelling matched, as a term or "" if it is not one.
-
-    Emphasis carries line breaks ("small\nsets"), italic corrections (map\/) and
-    occasionally a fragment with an unclosed bracket; a term also needs a letter.
-    """
-    raw = next(g for g in match.groups() if g is not None)
-    term = re.sub(r"\s+", " ", raw).strip()
-    term = re.sub(r"\\/$", "", term).strip(" ,;:.-")
-    if term.count("(") != term.count(")"):
-        term = term.split("(")[0].strip()
-    return term if len(term) >= 3 and re.search(r"[A-Za-z]{2}", term) else ""
 APPOSITION = re.compile(r"\b(?:[Aa]n?|[Tt]he|[Aa]ny|[Ee]very|[Ss]ome)\s+((?:[a-z][a-z-]*\s+){0,4}?[a-z][a-z-]*)\s+"
                         r"\$([^$]{1,24})\$((?:\s+(?:of|in|on)\s+\$[^$]{1,30}\$)?)(?![-\w])")
 QUANTIFIED = re.compile(r"\bfor\s+(?:all|each|every|any)\s+\$([^$]{1,12})\$(?![-\w])")
@@ -123,15 +109,8 @@ def term_pattern(term: str) -> tuple[str, bool]:
     return "".join(out).replace(r"\ ", r"\s+") + "s?", param
 
 
-# Emphasis is also how a bibliography sets journal and publisher names, and this paper
-# emphasises 21 of them ("J. Math. Phys.", "Springer-Verlag", "preprint math.QA/9802029").
-# None of them is a term the paper defines.
-BIBLIOGRAPHIC = re.compile(r"\d|\b[A-Z][a-z]{0,4}\.|\b(?:preprint|Press|Verlag|Notes|Ann(?:als)?|Bull|Soc|Publ|Adv|Inc)\b")
-
-
-def bibliographic(term: str) -> bool:
-    """A journal, publisher or preprint number set in italics, not a defined term."""
-    return bool(BIBLIOGRAPHIC.search(term)) or len(term) > 80 or len(term.split()) > 8
+BIBLIOGRAPHIC = build_golden_paper.BIBLIOGRAPHIC
+bibliographic = build_golden_paper.bibliographic
 
 
 def bibliography_at(text: str, marks: list[dict]) -> int:
@@ -169,12 +148,14 @@ def defined_terms(text: str, marks: list[dict]) -> list[dict]:
         term = emphasised(e)
         if term and not bibliographic(term) and e.start() < bibliography_at(text, marks):
             found.setdefault(term, (e.start(), None, "emphasised at its first use"))
-    import build_golden_paper                         # S1's own miner: "the \textit{heart} of"
+    # The miner returns the definiendum itself. It used to return the clause
+    # around it ("a {\it trivial fibration} if it is both a fibration and a weak
+    # equivalence"), so this had to dig the emphasis back out of the term.
     for d in build_golden_paper.mine_definitions(text):
-        for e in EMPH.finditer(d.term):
-            env = next((m for m in defs if m["start"] <= d.position < m["end"]), None)
-            if emphasised(e):
-                found.setdefault(emphasised(e), (d.position, env, "named by a definition pattern"))
+        if bibliographic(d.term):
+            continue
+        env = next((m for m in defs if m["start"] <= d.position < m["end"]), None)
+        found.setdefault(d.term, (d.position, env, "named by a definition pattern"))
     concepts = [m for m in marks if m["kind"] == "concept"]
     taken: list[tuple[int, int]] = []
     out = []
