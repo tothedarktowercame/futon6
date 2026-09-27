@@ -403,6 +403,16 @@ def starpoly(cx, cy, r, fill, stroke, label, title):
             f'<polygon points="{" ".join(p)}" fill="{fill}" stroke="{stroke}" stroke-width="1.7" pointer-events="all"/>'
             f'<text x="{cx+r+4:.0f}" y="{cy+5:.0f}" fill="#ffe08a" font-size="13">{label}</text></g>')
 
+# A claimed star used to sit at the CENTROID of its minting missions. Minters are often
+# far apart (apm-prelim-corpus-substrate: M-apm-solutions and M-futonzero-prelim-practice,
+# ~2500 units), so the star and every summit stacked on it floated in empty terrain
+# (Joe 2026-09-27). Now a star sits ON one mission: an operator-chosen anchor if there is
+# one, else its first listed minter; thin gold tethers run to its other minters.
+OPERATOR_ANCHOR = {  # Joe 2026-09-27: the APM prelim chain belongs on M-apm-demonstration
+    "apm-prelim-corpus-substrate": "M-apm-demonstration",
+}
+CLAIMED_AT = {}                                                  # cap -> (x, y) where its star is drawn
+tethers = []
 claimed = []
 offmap_unplaced = []                                             # claimed caps with no anchor — flagged, not silently dropped
 _placements = []                                                 # (cap, cx, cy, title) before de-overlap
@@ -415,10 +425,22 @@ for cap, info in CAPS.items():
             hosts = [h for h in hosts if h and h in POS]
             mp = [POS[h] for h in hosts]
             if mp:
-                anchored_via = "owning mission: " + ", ".join(hosts)
+                anchored_via = "anchored at owning mission: " + ", ".join(hosts)
         if mp:
-            cx = sum(p[0] for p in mp) / len(mp); cy = sum(p[1] for p in mp) / len(mp)
-            via = f" · anchored at {anchored_via}" if anchored_via else ""
+            ours = [mm for mm in info["minted_by"] if mm in POS] or hosts
+            op = OPERATOR_ANCHOR.get(cap)
+            at = op if op in POS else ours[0]
+            cx, cy = POS[at]
+            for mm in ours:
+                if mm != at:
+                    tethers.append(f'<line x1="{cx:.0f}" y1="{cy:.0f}" x2="{POS[mm][0]:.0f}" y2="{POS[mm][1]:.0f}" '
+                                   f'stroke="#e8c15a" stroke-width="1.1" stroke-dasharray="2,5" opacity="0.55">'
+                                   f'<title>{cap}: also minted by {mm}</title></line>')
+            if at not in ours:
+                anchored_via = ((anchored_via + "; ") if anchored_via else "") + f"placed on {at} (operator anchor)"
+            elif len(ours) > 1:
+                anchored_via = ((anchored_via + "; ") if anchored_via else "") + f"placed on {at}, dotted gold tethers to its other minters"
+            via = f" · {anchored_via}" if anchored_via else ""
             t = f"{cap} — CLAIMED ({info['status']}). {info.get('title','')[:120]} · minted by: {', '.join(info['minted_by'])}{via}"
             _placements.append((cap, cx, cy, t.replace('"', "'")))
         else:
@@ -433,17 +455,15 @@ for pl in _placements:
 for grp in _by_pt.values():
     if len(grp) == 1:
         cap, cx, cy, t = grp[0]
+        CLAIMED_AT[cap] = (cx, cy)
         claimed.append(starpoly(cx, cy, 10, "#ffe08a", "#a8801f", cap, t))      # FILLED = claimed
     else:
         for i, (cap, cx, cy, t) in enumerate(sorted(grp, key=lambda g: g[0])):  # ring fan-out, deterministic by name
             a = 2 * math.pi * i / len(grp)
+            CLAIMED_AT[cap] = (cx + 18*math.cos(a), cy - 18*math.sin(a))
             claimed.append(starpoly(cx + 18*math.cos(a), cy - 18*math.sin(a), 10, "#ffe08a", "#a8801f", cap, t))
-def cap_anchor(cap):  # centroid of the claimed ascent-parents' minting missions (a graph foothold)
-    mp = []
-    for p in CAPS[cap]["scope"]:
-        pv = CAPS.get(p, {})
-        if pv.get("claimed"):
-            mp += [POS[m] for m in pv["minted_by"] if m in POS]
+def cap_anchor(cap):  # where its claimed ascent-parents' stars are drawn (a graph foothold)
+    mp = [CLAIMED_AT[p] for p in CAPS[cap]["scope"] if p in CLAIMED_AT]
     return (sum(q[0] for q in mp) / len(mp), sum(q[1] for q in mp) / len(mp)) if mp else None
 
 # Projection-layer grounding (same status as BUILDER_HOST_MISSION / the pudding-kit
@@ -1436,7 +1456,7 @@ link yet</b> (coverage gap, stated not hidden). {_code_ring_legend} <b>Live over
 <g>{''.join(fill)}</g><g class="layer-lasso">{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
 <g>{hubline_svg}</g><g id="layer-scope-dots">{scope_svg}</g><g id="layer-doc-ring">{activity_svg}</g><g id="layer-code-ring">{code_churn_svg}</g><g>{hub_svg}</g>
 <g class="layer-lasso">{lasso}</g><g>{''.join(ghosts)}</g>
-<g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
+<g>{''.join(tethers)}</g><g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
 <g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))).replace("__FANNED_POS_JSON__", json.dumps(FANNED_POS, separators=(",", ":"))) }{CONTROLS_SCRIPT}{DETAILS_SCRIPT.replace("__MISSION_INFO_JSON__", json.dumps(MISSION_INFO, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")).replace("__ZONE_TEXT_JSON__", json.dumps(ZONE_TEXT, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"))}"""
 # Readable type (Joe 2026-09-27: too small to read). One scale for every size on
 # the page — header, controls, SVG labels, live-overlay classes — so the relative
