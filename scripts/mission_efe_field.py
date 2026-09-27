@@ -334,8 +334,11 @@ for a, b, w in ROADS:
     if a in POS and b in POS:
         x1, y1 = POS[a]; x2, y2 = POS[b]
         f = min(w, _wmax) / _wmax
+        # Road ends carry bare mission ids (data-m form) so the carpet controls
+        # can remove a road with either of its missions.
         roads.append(f'<line x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" '
-                     f'stroke="#9a7fd0" stroke-width="{0.4+1.6*f:.1f}" opacity="{0.04+0.36*f:.2f}"/>')
+                     f'stroke="#9a7fd0" stroke-width="{0.4+1.6*f:.1f}" opacity="{0.04+0.36*f:.2f}" '
+                     f'data-road-a="{a.removeprefix("M-")}" data-road-b="{b.removeprefix("M-")}"/>')
 
 hubline_svg = "".join(f'<line x1="{a:.0f}" y1="{b:.0f}" x2="{c:.1f}" y2="{d:.1f}" stroke="#54627f" stroke-width="0.4" opacity="0.22" {data_attrs(m)}/>'
                       for a, b, c, d, m in hub_lines)
@@ -969,13 +972,16 @@ _panel_html = (
     f'<div class="ctl-count">districts per band: '
     + " · ".join(f"b{b} {_BAND_COUNTS.get(b, 0)}" for b in range(NB)) + '</div>'
     '<div class="ctl-section">status</div>' + _panel_status +
+    '<label><input type="checkbox" id="ctl-scopes-only"> hide scopes only</label>' +
     '<div class="ctl-section">layers</div>'
     '<label><input type="checkbox" data-ctl-layer="#layer-doc-ring" checked> mission-doc ring</label>'
     '<label><input type="checkbox" data-ctl-layer="#layer-code-ring" checked> code ring</label>'
     '<label><input type="checkbox" data-ctl-layer="#layer-scope-dots" checked> scope dots</label>'
     '<label><input type="checkbox" data-ctl-layer=".layer-lasso" checked> momentum lasso</label>'
     '<p class="ctl-legend">band = density of scopes around the mission (its scopes weighted '
-    'by determined / frontier / vacuous, blurred with its neighbours) — not a judgement of value.</p>'
+    'by determined / frontier / vacuous, blurred with its neighbours) — not a judgement of value. '
+    'A mission removed by band or status is gone: hub, rings, scopes, capability-zone mark, '
+    'live markers and its pattern roads. Tick “hide scopes only” to keep the mission and drop just its scopes.</p>'
     '</div>')
 # Inline JS: every string literal is single-line (a literal newline inside a JS string
 # broke the page on 2026-09-25). Plain string (not f-string); node --check the extract.
@@ -999,19 +1005,28 @@ CONTROLS_SCRIPT = """
   const floorLabel = document.getElementById("ctl-band-floor-label");
   const statusBoxes = Array.from(panel.querySelectorAll("input[data-ctl-status]"));
   const layerBoxes = Array.from(panel.querySelectorAll("input[data-ctl-layer]"));
+  const scopesOnly = document.getElementById("ctl-scopes-only");
+  // Hiding is a generated stylesheet keyed on mission ids, not per-element
+  // display, so layers the live overlay draws or redraws later (capability
+  // zones, agent markers) are hidden too. Ids appear bare (data-m, roads) or
+  // M-prefixed (capability zones, live overlay); both forms are matched.
+  const hideStyle = document.createElement("style");
+  document.head.appendChild(hideStyle);
+  function selectors(m, only) {
+    const q = (attr, v) => '[' + attr + '="' + CSS.escape(v) + '"]';
+    if (only) return ["#layer-scope-dots " + q("data-m", m), "line" + q("data-m", m)];
+    const out = [q("data-m", m), q("data-road-a", m), q("data-road-b", m)];
+    for (const v of [m, "M-" + m]) out.push(q("data-capability-mission-id", v), q("data-mission-id", v));
+    return out;
+  }
   function apply() {
     const f = Number(floor.value);
     const hiddenStatus = new Set(statusBoxes.filter((b) => !b.checked).map((b) => b.getAttribute("data-ctl-status")));
-    let shown = 0;
-    let hidden = 0;
-    for (const info of missions.values()) {
-      if (info.band < f || hiddenStatus.has(info.status)) hidden++; else shown++;
-    }
-    for (const e of els) {
-      const info = missions.get(e.getAttribute("data-m"));
-      e.style.display = (info.band < f || hiddenStatus.has(info.status)) ? "none" : "";
-    }
-    floorLabel.textContent = "hide missions below band " + f + " — showing " + shown + " / hiding " + hidden;
+    const gone = [];
+    for (const [m, info] of missions) if (info.band < f || hiddenStatus.has(info.status)) gone.push(m);
+    const sel = gone.flatMap((m) => selectors(m, scopesOnly.checked));
+    hideStyle.textContent = sel.length ? sel.join(",") + "{display:none !important}" : "";
+    floorLabel.textContent = "hide missions below band " + f + " — showing " + (missions.size - gone.length) + " / hiding " + gone.length;
   }
   function applyLayers() {
     for (const b of layerBoxes) {
@@ -1023,6 +1038,7 @@ CONTROLS_SCRIPT = """
   }
   floor.addEventListener("input", apply);
   for (const b of statusBoxes) b.addEventListener("change", apply);
+  scopesOnly.addEventListener("change", apply);
   for (const b of layerBoxes) b.addEventListener("change", applyLayers);
 })();
 </script>
