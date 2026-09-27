@@ -1040,12 +1040,24 @@ DETAILS_SCRIPT = """
     const m = bare(e.getAttribute("data-m") || e.getAttribute("data-capability-mission-id") || e.getAttribute("data-mission-id"));
     return INFO[m] ? m : null;
   }
+  // Describe only the rings actually drawn for this mission, by their drawn
+  // stroke (hover twins have stroke-opacity 0 and are skipped), with a small
+  // swatch in the same stroke so the text matches what is on the map.
+  const RING_KIND = {"#eab308": "Yellow ring — mission-doc activity: commits to the planning doc in 180 days (thickness ∝ log count)", "#5a6372": "Thin dashed grey ring — mission-doc activity: no commits to the planning doc in 180 days", "#3a4252": "Faint dotted grey ring — no mission→code link yet, so code churn cannot be shown"};
+  function ring(els, layer) {
+    const c = els.flatMap((e) => (e.tagName === "circle" ? [e] : Array.from(e.querySelectorAll("circle")))).find((e) => e.getAttribute("stroke-opacity") !== "0" && e.getAttribute("stroke"));
+    if (!c) return null;
+    const stroke = c.getAttribute("stroke"), dash = c.getAttribute("stroke-dasharray") || "";
+    const kind = stroke === "#ec4899" ? (dash ? "Dashed pink ring — code linked, but none of its files changed in the Tornhill report's window" : "Pink ring — code churn from the Tornhill report (thickness ∝ log summed hotspot)") : (RING_KIND[stroke] || "Ring");
+    const sw = '<svg width="22" height="22" style="vertical-align:-5px;margin-right:6px"><circle cx="11" cy="11" r="8" fill="none" stroke="' + stroke + '" stroke-width="' + Math.max(1.5, Number(c.getAttribute("stroke-width")) || 1) + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : "") + "/></svg>";
+    const off = document.getElementById(layer)?.style.display === "none" ? ' <span class="why">(layer switched off in the controls)</span>' : "";
+    return "<p>" + sw + "<b>" + esc(kind) + "</b>" + off + "</p><p class=why>" + esc(titleOf(c) || titleOf(c.parentNode)) + "</p>";
+  }
   function hubOf(m) { return Array.from(svg.querySelectorAll("circle[data-m]")).find((c) => c.getAttribute("data-m") === m && /generativity/.test(titleOf(c))); }
   function show(m) {
     const d = INFO[m];
     const q = (sel) => Array.from(svg.querySelectorAll(sel)).filter((e) => bare(e.getAttribute("data-m") || e.getAttribute("data-capability-mission-id") || e.getAttribute("data-mission-id")) === m);
-    const docRing = q("#layer-doc-ring circle[data-m]").map(titleOf).find(Boolean);
-    const codeRing = q("#layer-code-ring [data-m]").map(titleOf).find(Boolean);
+    const rings = [ring(q("#layer-doc-ring circle[data-m]"), "layer-doc-ring"), ring(q("#layer-code-ring [data-m]"), "layer-code-ring")].filter(Boolean);
     const zone = q("[data-capability-mission-id]")[0];
     const live = q("#live-overlay [data-mission-id]").map(titleOf).filter(Boolean);
     const h = [];
@@ -1057,21 +1069,20 @@ DETAILS_SCRIPT = """
     h.push("<h3>Hub</h3><p><span class=sw style=background:" + d.clsColor + "></span><b>Colour</b> = Salingaros class: " + esc(CLASS_WHY[d.cls] || d.cls) + "</p>");
     h.push("<p><b>Size</b> = generativity " + d.gen + ' <span class="why">(citation backlinks: how many other missions cite this one; citations are not drawn as lines)</span></p>');
     h.push("<h3>Scopes · " + d.scopes + "</h3><p class=why>The small marks spiralling round the hub, one per scope, ordered by binder kind from the centre out.</p><ul>");
-    h.push("<li>" + d.holes + ' <span style="color:#ffb454">● orange</span> = open :detached holes (high ground: work named but not attached)</li>');
-    h.push("<li>" + d.vacuous + " ○ hollow = vacuous scopes (a binder with no named entities inside: suspect terrain)</li>");
+    if (d.holes) h.push("<li>" + d.holes + ' <span style="color:#ffb454">● orange</span> = open :detached holes (high ground: work named but not attached)</li>');
+    if (d.vacuous) h.push("<li>" + d.vacuous + " ○ hollow = vacuous scopes (a binder with no named entities inside: suspect terrain)</li>");
     if (d.certPass || d.certFail) h.push("<li>" + d.certPass + ' <span style="color:#4ade80">◆</span> certificate PASS (verified ground) · ' + d.certFail + ' <span style="color:#ef4444">◆</span> FAIL</li>');
-    h.push("<li>the rest are small dots in the hub's class colour</li></ul>");
+    h.push("<li>" + (d.holes || d.vacuous || d.certPass || d.certFail ? "the rest are" : "all are") + " small dots in the hub's class colour</li></ul>");
     h.push("<p class=why>By binder: " + Object.entries(d.binders).map(([k, v]) => esc(k) + " " + v).join(" · ") + "</p>");
-    h.push('<h3>Rings</h3><p><b style="color:#eab308">Yellow ring</b> (mission-doc activity): ' + esc(docRing || "none drawn") + "</p>");
-    h.push('<p><b style="color:#ec4899">Pink ring</b> (code, Tornhill report): ' + esc(codeRing || "none drawn") + "</p>");
+    if (rings.length) h.push("<h3>Rings</h3>" + rings.join(""));
     if (zone) {
       h.push("<h3>Capability zone</h3><p><b>" + esc(zone.getAttribute("data-capability-zone")) + "</b>" + (zone.getAttribute("data-capability-mixed") === "true" ? " · <b>mixed</b> (dashed/dim: the two nearest zone seeds are almost equally close, so the call is ambiguous)" : "") + "</p>");
       if (zone.getAttribute("data-capability-disagreement") === "true") h.push("<p>× <b>disagreement</b>: the raw high-dimensional reading names a different class than this zone. A diagnostic of boundary distortion, not proof the zone is wrong.</p>");
       const zt = titleOf(zone); if (zt) h.push('<p class="why">' + esc(zt) + "</p>");
     }
     if (live.length) h.push("<h3>Live now</h3><ul>" + live.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul>");
-    h.push("<h3>Momentum</h3><p>" + d.momentum + ' <span class="why">— recent git activity on the mission doc (10-day decay); high momentum puts it inside the amber dashed lasso, your territory</span></p>');
-    h.push("<h3>Pattern roads · " + d.roadCount + '</h3><p class="why">Purple lines: missions that apply the same library pattern; ink ∝ how often the strongest shared pattern was enacted in logged turns over the last 60 days.</p>');
+    if (d.momentum > 0) h.push("<h3>Momentum</h3><p>" + d.momentum + ' <span class="why">— recent git activity on the mission doc (10-day decay); high momentum puts it inside the amber dashed lasso, your territory</span></p>');
+    if (d.roadCount) h.push("<h3>Pattern roads · " + d.roadCount + '</h3><p class="why">Purple lines: missions that apply the same library pattern; ink ∝ how often the strongest shared pattern was enacted in logged turns over the last 60 days.</p>');
     if (d.roads.length) h.push("<ul>" + d.roads.map(([o, w]) => '<li><button class="go" data-go="' + esc(o) + '">M-' + esc(o) + "</button> · " + w + "</li>").join("") + "</ul>" + (d.roadCount > d.roads.length ? "<p class=why>… and " + (d.roadCount - d.roads.length) + " more</p>" : ""));
     box.innerHTML = h.join("");
     box.hidden = false;
