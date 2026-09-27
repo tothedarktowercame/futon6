@@ -82,9 +82,16 @@ def problems(doc, lo: int, hi: int, kinds, units=()) -> list[str]:
             cited = [by_id[x] for x in (s.get("units") or []) if x in by_id]
             if not cited:
                 found.append(f"scope {i}: cites no unit of this region")
-            elif fill and region_units.locate_in_units(fill, cited) is None:
-                # The fill must be the passage's words, not the model's about them.
-                found.append(f"scope {i}: fill {fill[:60]!r} is not in the unit(s) it cites")
+            # Whether the fill is the passage's words or the model's about them is
+            # RECORDED, not refused: to_edn writes :fill-span when the words are
+            # there and omits it when they are not, and the margin says which. It
+            # was refused here, and because anything this returns rejects the whole
+            # passage, one paraphrased scope discarded every scope beside it: on
+            # mark7master-20260921, 63% of filled scopes were paraphrase, which
+            # rejected 71% of regions and took 141 of the 279 properly quoted
+            # scopes (51%) down with their siblings. S3 makes the same measurement
+            # outside its gate (iatc_quote_check, quote-agreement.json); this is
+            # the same check on the same footing.
             continue
         a, b = s.get("first_line"), s.get("last_line")
         if not (isinstance(a, int) and isinstance(b, int) and lo <= a <= b <= hi):

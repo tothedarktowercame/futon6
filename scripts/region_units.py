@@ -104,8 +104,42 @@ def units_for(text: str, starts: list[int], lo_line: int, hi_line: int) -> list[
     return out[:MAX_UNITS]
 
 
+ADJACENT = 200          # markup and whitespace that may sit between two sentences
+
+
+def _runs(units: list[dict]):
+    """Cited units grouped into stretches that are contiguous in the paper."""
+    run: list[dict] = []
+    for u in sorted(units, key=lambda x: x["start"]):
+        if run and u["start"] - run[-1]["end"] > ADJACENT:
+            yield run
+            run = []
+        run.append(u)
+    if run:
+        yield run
+
+
+def _in_paper(placed: list[tuple[int, dict]], pos: int) -> int:
+    """An offset in the joined text, back in the paper."""
+    off, unit = placed[0]
+    for o, u in placed:
+        if o > pos:
+            break
+        off, unit = o, u
+    return unit["start"] + min(pos - off, unit["end"] - unit["start"])
+
+
 def locate_in_units(fill: str, units: list[dict]) -> list[int] | None:
-    """Where a fill sits inside the units it cites, as [start, end) in the paper."""
+    """Where a fill sits inside the units it cites, as [start, end) in the paper.
+
+    A quote may cross a unit edge. The units are sentences, the schema lets a
+    scope cite three of them, and what a scope is about does not stop at the
+    full stop the carver split on -- so a fill quoted word for word out of two
+    consecutive sentences was being read as the model's own words. Each unit is
+    searched alone first, so a quote inside one keeps exactly the offsets it had;
+    only then are contiguous runs searched. Units far apart in the paper are
+    never joined: a match across that gap would claim a span the scope never read.
+    """
     words = [w for w in re.split(r"\s+", (fill or "").strip().rstrip(".")) if w]
     if not words:
         return None
@@ -114,4 +148,16 @@ def locate_in_units(fill: str, units: list[dict]) -> list[int] | None:
         m = re.search(pattern, u["text"], re.I)
         if m:
             return [u["start"] + m.start(), u["start"] + m.end()]
+    for run in _runs(units):
+        if len(run) < 2:
+            continue
+        joined, placed = "", []
+        for u in run:
+            if joined:
+                joined += " "
+            placed.append((len(joined), u))
+            joined += u["text"]
+        m = re.search(pattern, joined, re.I)
+        if m:
+            return [_in_paper(placed, m.start()), _in_paper(placed, m.end())]
     return None

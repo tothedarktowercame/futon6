@@ -149,8 +149,19 @@ def audit(expo_dir: Path, candidates_dir: Path, vocab: Path = expository_json.VO
     by_check = {c: sum(c in r["flags"] for r in filled) for c in CHECKS}
     unflagged = sum(not r["flags"] for r in filled)
     total = sum(kinds.values())
+    # Is a scope's fill the passage's words, or the model's about them? Only a
+    # scope that cites units can say: to_edn writes :fill-span when the words are
+    # in the units cited and omits it when they are not. Scopes citing no unit are
+    # left out of the denominator rather than counted as paraphrase -- a v1 graph
+    # carries no units at all, and would otherwise read as 0% quoted when the truth
+    # is that nothing was asked. This is the S4 counterpart of S3's
+    # quote-agreement.json, and like it, it measures and does not gate.
+    citing = [r for r in filled if r["units"]]
+    quoted = sum(r["span"] is not None for r in citing)
     return {"schema": "expository-scope-audit/v1",
             "summary": {"passages": len(graphs), "scopes": total, "filled": len(filled), "held": held,
+                        "citing-units": len(citing), "quoted": quoted,
+                        "quoted-share": round(quoted / len(citing), 3) if citing else None,
                         "unflagged": unflagged, "by-check": by_check,
                         "top-kind-share": round(max(kinds.values()) / total, 3) if total else None,
                         "bare-parent-share": round(sum(r["bare-parent"] for r in records) / total, 3)
@@ -172,6 +183,9 @@ def main() -> int:
     s = result["summary"]
     filled = s["filled"] or 1
     print(f"{s['scopes']} scopes in {s['passages']} passages; {s['filled']} filled, {s['held']} held")
+    if s["citing-units"]:
+        print(f"{s['quoted']}/{s['citing-units']} filled scopes citing units quote them "
+              f"word for word ({s['quoted-share']:.0%}); the rest are in the model's words")
     print(f"  top kind {next(iter(s['kinds']), '-')} {s['top-kind-share']:.0%}; "
           f"bare parent kinds {s['bare-parent-share']:.0%}")
     print("  " + "  ".join(f"{c} {n} ({n / filled:.0%})" for c, n in s["by-check"].items())

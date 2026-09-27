@@ -64,11 +64,16 @@ class ExpositoryContract(unittest.TestCase):
         for bad, text in (({"scopes": [scope(fill="", held="")]}, "exactly one"),
                           ({"scopes": [scope(fill="x", held="y")]}, "exactly one"),
                           ({"scopes": [scope(units=())]}, "cites no unit"),
-                          # the fill must be the passage's words, not the model's about them
-                          ({"scopes": [scope(fill="the notation of the paper")]}, "is not in the unit"),
                           ({"scopes": [scope(kind="perf/Agree")]}, "not in the vocabulary"),
                           ({"scopes": []}, "nonempty")):
             self.assertTrue(any(text in p for p in expository_json.problems(bad, 20, 24, self.kinds, UNITS)), text)
+        # A fill in the model's words rather than the passage's is RECORDED, not
+        # refused: problems() rejects the whole passage, so refusing it here threw
+        # away every scope beside it. :fill-span is what tells the two apart.
+        paraphrase = {"scopes": [scope(fill="the notation of the paper")]}
+        self.assertEqual(expository_json.problems(paraphrase, 20, 24, self.kinds, UNITS), [])
+        self.assertNotIn(":fill-span",
+                         expository_json.to_edn(paraphrase, CANDIDATE, self.kinds, "m"))
         with tempfile.TemporaryDirectory() as d:
             path = Path(d) / "g.edn"
             path.write_text(expository_json.to_edn(doc, CANDIDATE, self.kinds, "m"))

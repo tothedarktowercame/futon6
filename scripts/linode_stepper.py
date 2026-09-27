@@ -135,7 +135,15 @@ OPS = {
            f"--out {EXPO_CAND} && {{PY}} scripts/mark3_expository_loop.py "
            f"--candidates {EXPO_CAND} --out {EXPO} "
            "--backend openai --model ${{MODEL:-meta-llama/Llama-3.1-8B-Instruct}} "
-           f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
+           f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS && "
+           # Also a MEASUREMENT, as at S3: is a scope's fill the passage's words, or
+           # the model's about them? This was a GATE inside the loop, and since a
+           # rejection discards the whole passage, one paraphrased scope took every
+           # scope beside it -- 63% of filled scopes were paraphrase on
+           # mark7master-20260921, which rejected 71% of regions and lost 51% of the
+           # properly quoted scopes with their siblings. The rate is recorded per run
+           # now, next to S3's quote-agreement.json, and nothing is refused for it.
+           f"{{PY}} scripts/expository_scope_audit.py --run-dir {RUN}",
            "crit": "expository_argcheck (self-gated in loop)",
            "note": "regions are carved from S1's environments, so author-macro theorems and proofs "
                    "bound the prose (0705.0102: 1 region -> 71). All regions unless "
@@ -143,7 +151,9 @@ OPS = {
                    "'scaled' gives each paper round(6*sqrt(regions)) clamped to [12, 120], so a note "
                    "is read whole and a book is sampled. Exposition is spent before prose inside "
                    "proofs (S3 reads proofs); the rest is accounted as deferred, with the cap and the "
-                   "paper's region count in the reason"},
+                   "paper's region count in the reason. Whether a scope quotes its units is "
+                   "MEASURED into expository-scope-audit.json (quoted-share), not gated: a "
+                   "paraphrased fill is recorded as the model's words and the margin says so"},
     # S5 now BUILDS its own rung-3 half. Both producers are deterministic (no model):
     # cas_segment turns gated graphs into proof steps, rung3_technique turns those into
     # technique gap maps, and only then does comprehension have a strategy axis to score.
