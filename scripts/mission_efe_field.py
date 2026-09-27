@@ -759,15 +759,47 @@ LIVE_OVERLAY_SCRIPT = """
       zoneLayer.appendChild(g);
     }
     const legend = el("g", {class: "capability-zone-legend", "data-capability-legend": "true", transform: "translate(2800 55)"});
-    legend.appendChild(el("rect", {x: 0, y: 0, width: 430, height: 275, rx: 8, class: "capability-zone-legend-bg"}));
+    // The legend is also a filter (Joe 2026-09-27): each row is a tickbox for its zone,
+    // plus a row for missions with no zone. Unticking hides those missions completely,
+    // through the same stylesheet as the band and status filters (the controls script
+    // listens for "efe-filter"). The hidden set lives on window so it survives redraws.
+    const hidden = window.EFE_ZONE_HIDDEN || (window.EFE_ZONE_HIDDEN = new Set());
+    const rows = (zones.legend || []).map((r) => ({key: r.class, label: `${r.class} · ${r["mission-count"] || 0}`, color: r.color}));
+    rows.push({key: "(none)", label: "no zone", color: null});
+    const perCol = Math.ceil(rows.length / 2);
+    const H = 47 + perCol * 27 + 50;
+    legend.appendChild(el("rect", {x: 0, y: 0, width: 470, height: H, rx: 8, class: "capability-zone-legend-bg"}));
     legend.appendChild(el("text", {x: 14, y: 22, style: "font-weight:800"}, `capability zones · ${zones["reduction-version"] || "unavailable"}`));
-    for (const [i, row] of (zones.legend || []).entries()) {
-      const col = i >= 7 ? 1 : 0, line = i % 7;
-      const x = 14 + col * 210, y = 47 + line * 27;
-      legend.appendChild(el("circle", {cx: x + 6, cy: y - 4, r: 6, fill: row.color, stroke: "#fff", "stroke-width": .7}));
-      legend.appendChild(el("text", {x: x + 18, y}, `${row.class} · ${row["mission-count"] || 0}`));
+    const changed = () => { drawLegendState(); document.dispatchEvent(new Event("efe-filter")); };
+    const boxes = [];
+    for (const [i, row] of rows.entries()) {
+      const col = i >= perCol ? 1 : 0, line = i % perCol;
+      const x = 14 + col * 235, y = 47 + line * 27;
+      const rg = el("g", {"data-zone-filter": row.key, style: "cursor:pointer", role: "checkbox"});
+      rg.appendChild(el("rect", {x: x - 4, y: y - 17, width: 225, height: 24, fill: "#000", opacity: 0}));
+      rg.appendChild(el("rect", {x, y: y - 11, width: 13, height: 13, rx: 2, fill: "none", stroke: "#e2e8f0", "stroke-width": 1.4}));
+      const tick = el("path", {d: `M ${x + 2.5} ${y - 4.5} L ${x + 5.5} ${y - 1.5} L ${x + 11} ${y - 8.5}`, fill: "none", stroke: "#f8fafc", "stroke-width": 2});
+      rg.appendChild(tick);
+      if (row.color) rg.appendChild(el("circle", {cx: x + 26, cy: y - 4, r: 6, fill: "none", stroke: row.color, "stroke-width": 3}));
+      rg.appendChild(el("text", {x: x + 38, y}, row.label));
+      rg.addEventListener("click", () => { hidden.has(row.key) ? hidden.delete(row.key) : hidden.add(row.key); changed(); });
+      boxes.push({row, rg, tick});
+      legend.appendChild(rg);
     }
-    legend.appendChild(el("text", {x: 14, y: 244}, "dashed/dim = mixed · × = high-D disagreement"));
+    const fy = 47 + perCol * 27 + 4;
+    const link = (x, label, fn) => { const t = el("text", {x, y: fy, style: "cursor:pointer;text-decoration:underline;fill:#93c5fd"}, label); t.addEventListener("click", fn); legend.appendChild(t); };
+    link(14, "show all", () => { hidden.clear(); changed(); });
+    link(110, "show none", () => { for (const b of boxes) hidden.add(b.row.key); changed(); });
+    legend.appendChild(el("text", {x: 14, y: fy + 26}, "dashed/dim = mixed · × = high-D disagreement"));
+    function drawLegendState() {
+      for (const b of boxes) {
+        const on = !hidden.has(b.row.key);
+        b.tick.style.display = on ? "" : "none";
+        b.rg.setAttribute("aria-checked", String(on));
+        b.rg.style.opacity = on ? "1" : ".45";
+      }
+    }
+    drawLegendState();
     zoneLayer.appendChild(legend);
     const counts = document.getElementById("cz-counts");
     if (counts) {
@@ -1256,7 +1288,12 @@ CONTROLS_SCRIPT = """
     const f = Number(floor.value);
     const hiddenStatus = new Set(statusBoxes.filter((b) => !b.checked).map((b) => b.getAttribute("data-ctl-status")));
     const gone = [];
-    for (const [m, info] of missions) if (info.band < f || hiddenStatus.has(info.status)) gone.push(m);
+    // Capability-zone tickboxes live in the zone legend (live overlay); read their
+    // hidden set and each mission's zone from the drawn zone marks.
+    const hiddenZones = window.EFE_ZONE_HIDDEN || new Set();
+    const zoneOf = new Map();
+    if (hiddenZones.size) for (const z of svg.querySelectorAll("[data-capability-mission-id]")) zoneOf.set(String(z.getAttribute("data-capability-mission-id")).replace(/^M-/, ""), z.getAttribute("data-capability-zone"));
+    for (const [m, info] of missions) if (info.band < f || hiddenStatus.has(info.status) || (hiddenZones.size && hiddenZones.has(zoneOf.get(m) || "(none)"))) gone.push(m);
     const sel = gone.flatMap((m) => selectors(m, scopesOnly.checked));
     hideStyle.textContent = sel.length ? sel.join(",") + "{display:none !important}" : "";
     floorLabel.textContent = "hide missions below band " + f + " — showing " + (missions.size - gone.length) + " / hiding " + gone.length;
@@ -1272,6 +1309,7 @@ CONTROLS_SCRIPT = """
   floor.addEventListener("input", apply);
   for (const b of statusBoxes) b.addEventListener("change", apply);
   scopesOnly.addEventListener("change", apply);
+  document.addEventListener("efe-filter", apply);
   for (const b of layerBoxes) b.addEventListener("change", applyLayers);
 })();
 </script>
