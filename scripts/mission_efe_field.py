@@ -735,7 +735,11 @@ LIVE_OVERLAY_SCRIPT = """
         "data-capability-mission-id": item["mission-id"],
         "data-capability-zone": item.class,
         "data-capability-mixed": Boolean(item["mixed?"]),
-        "data-capability-disagreement": Boolean(item["disagreement?"])
+        "data-capability-disagreement": Boolean(item["disagreement?"]),
+        "data-capability-runner-up": item["runner-up"] || "",
+        "data-capability-margin": Number.isFinite(Number(item.margin)) ? Number(item.margin).toPrecision(2) : "?",
+        "data-capability-high-d": item["high-d-class"] || "",
+        "data-capability-high-d-margin": Number.isFinite(Number(item["high-d-margin"])) ? Number(item["high-d-margin"]).toPrecision(2) : "?"
       });
       const color = item.color || ((zones.legend || []).find((z) => z.class === item.class) || {}).color || "#94a3b8";
       title(g, `${item["mission-id"]}\n3-D zone=${item.class} margin=${fmt(item.margin)}${item["mixed?"] ? " (mixed)" : ""}\nraw high-D diagnostic=${item["high-d-class"]} margin=${fmt(item["high-d-margin"])}${item["disagreement?"] ? " · DISAGREES" : ""}`);
@@ -1064,6 +1068,17 @@ def _mission_info(m, n):
         "roads": sorted(_roads_of.get(m, []), key=lambda r: -r[1])[:25], "roadCount": len(_roads_of.get(m, [])),
     }
 MISSION_INFO = {m: _mission_info(m, n) for _, _, m, n in hubs}
+# What each capability zone MEANS, for the details panel: the zone is the War Machine
+# action class whose seed a mission's embedding sits nearest, and each seed is a
+# sentence "Exercise <class> by …" (futon2 resources/capability_zones). The panel quotes
+# that sentence rather than a hand-written gloss, so it says what the zone was built from.
+try:
+    _seeds = json.load(open(ROOT / "futon2/resources/capability_zones/action_class_seeds.json"))
+    _seeds = _seeds if isinstance(_seeds, list) else _seeds.get("seeds", [])
+    ZONE_TEXT = {sd["class"]: {"text": re.sub(r"^Exercise \S+ by ", "", sd.get("text", "")).strip(),
+                               "evidence": sd.get("centroid_evidence_count", 0)} for sd in _seeds}
+except (OSError, ValueError, KeyError):
+    ZONE_TEXT = {}
 DETAILS_CSS = """
 #efe-details{position:fixed;right:12px;top:12px;bottom:12px;z-index:30;width:min(460px,92vw);overflow:auto;padding:14px 16px;border:1px solid #475569;border-radius:10px;background:rgba(7,12,22,.97);color:#dde3ee;font:16px/1.45 ui-sans-serif,system-ui,sans-serif}
 #efe-details[hidden]{display:none}
@@ -1103,6 +1118,7 @@ DETAILS_SCRIPT = """
 <script>
 (() => {
   const INFO = __MISSION_INFO_JSON__;
+  const ZONE_TEXT = __ZONE_TEXT_JSON__;
   const svg = document.getElementById("efe-field");
   const box = document.getElementById("efe-details");
   if (!svg || !box) return;
@@ -1161,11 +1177,16 @@ DETAILS_SCRIPT = """
       const disc = zone.querySelector("circle"), hubEl = hubOf(m);
       const sw = disc ? (() => { const cx = +disc.getAttribute("cx"), cy = +disc.getAttribute("cy"), r = +disc.getAttribute("r") + 9; return '<svg width="64" height="64" viewBox="' + (cx - r) + " " + (cy - r) + " " + 2 * r + " " + 2 * r + '" style="float:left;margin:2px 12px 4px 0">' + (hubEl ? hubEl.outerHTML.replace(/<title>[\s\S]*?<\/title>/, "") : "") + zone.innerHTML.replace(/<title>[\s\S]*?<\/title>/, "") + "</svg>"; })() : "";
       const mixed = zone.getAttribute("data-capability-mixed") === "true", dis = zone.getAttribute("data-capability-disagreement") === "true";
-      h.push("<h3>Capability zone</h3>" + sw + "<p><b>Thick coloured ring round the hub</b> = capability zone <b>" + esc(zone.getAttribute("data-capability-zone")) + "</b> (the ring's colour is the zone's colour in the zone legend; the hub inside keeps its own class colour)</p>");
-      if (mixed) h.push("<p><b>Dashed, dimmer zone ring</b> = <b>mixed</b>: the two nearest zone seeds are almost equally close, so the zone call is ambiguous</p>");
-      if (dis) h.push("<p><b>White × on the zone ring</b> (upper right) = <b>disagreement</b>: the raw high-dimensional reading names a different zone than this 3-D one. A sign the map distorts near this boundary, not proof the zone is wrong.</p>");
+      const zc = zone.getAttribute("data-capability-zone"), ru = zone.getAttribute("data-capability-runner-up"), hd = zone.getAttribute("data-capability-high-d");
+      const zcol = zone.querySelector("circle")?.getAttribute("stroke") || "#94a3b8";
+      const said = (c) => ZONE_TEXT[c] ? esc(ZONE_TEXT[c].text) : "(no seed text found)";
+      const seedBasis = (c) => ZONE_TEXT[c] ? (ZONE_TEXT[c].evidence ? "seed = that sentence plus the centroid of " + ZONE_TEXT[c].evidence + " logged actions of this class" : "seed = that sentence only: no logged actions of this class yet") : "";
+      h.push("<h3>Capability zone</h3>" + sw + '<p>Ring colour <span class=sw style="background:' + esc(zcol) + '"></span>= zone <b>' + esc(zc) + "</b>: of the War Machine's action classes, this mission's text is nearest to <b>" + esc(zc) + "</b>, which means: <i>" + said(zc) + "</i></p>");
+      h.push('<p class="why">' + esc(seedBasis(zc)) + ". Nearness is measured in a 3-D reduction (pca3-v1) of the BGE text embedding.</p>");
+      if (ru) h.push("<p><b>Runner-up:</b> " + esc(ru) + ", " + esc(zone.getAttribute("data-capability-margin")) + ' further away. <span class="why">' + said(ru) + "</span></p>");
+      if (mixed) h.push("<p><b>Dashed, dimmer ring = mixed:</b> that margin is in the thinnest tenth of all missions' margins, so " + esc(zc) + " vs " + esc(ru) + " is too close to call.</p>");
+      if (dis) h.push("<p><b>White × on the ring = disagreement:</b> measured in the full 1024-dimensional embedding instead, this mission is nearest <b>" + esc(hd) + "</b> (margin " + esc(zone.getAttribute("data-capability-high-d-margin")) + '), not ' + esc(zc) + '. <span class="why">' + said(hd) + '</span></p><p class="why">The 3-D zone is the one used; the × marks where the 3-D reduction may be distorting. Many ×s inside one zone suggest that zone’s boundary is off.</p>');
       h.push('<div style="clear:both"></div>');
-      const zt = titleOf(zone); if (zt) h.push('<p class="why">' + esc(zt) + "</p>");
     }
     if (live.length) h.push("<h3>Live now</h3><ul>" + live.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul>");
     if (d.momentum > 0) h.push("<h3>Momentum</h3><p>" + d.momentum + ' <span class="why">— recent git activity on the mission doc (10-day decay); high momentum puts it inside the amber dashed lasso, your territory</span></p>');
@@ -1319,7 +1340,7 @@ link yet</b> (coverage gap, stated not hidden). {_code_ring_legend} <b>Live over
 <g>{hubline_svg}</g><g id="layer-scope-dots">{scope_svg}</g><g id="layer-doc-ring">{activity_svg}</g><g id="layer-code-ring">{code_churn_svg}</g><g>{hub_svg}</g>
 <g class="layer-lasso">{lasso}</g><g>{''.join(ghosts)}</g>
 <g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
-<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))).replace("__FANNED_POS_JSON__", json.dumps(FANNED_POS, separators=(",", ":"))) }{CONTROLS_SCRIPT}{DETAILS_SCRIPT.replace("__MISSION_INFO_JSON__", json.dumps(MISSION_INFO, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"))}"""
+<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))).replace("__FANNED_POS_JSON__", json.dumps(FANNED_POS, separators=(",", ":"))) }{CONTROLS_SCRIPT}{DETAILS_SCRIPT.replace("__MISSION_INFO_JSON__", json.dumps(MISSION_INFO, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")).replace("__ZONE_TEXT_JSON__", json.dumps(ZONE_TEXT, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"))}"""
 # Readable type (Joe 2026-09-27: too small to read). One scale for every size on
 # the page — header, controls, SVG labels, live-overlay classes — so the relative
 # hierarchy is kept; nothing smaller than 15px. The details panel is already sized.
