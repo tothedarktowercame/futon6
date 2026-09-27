@@ -579,8 +579,17 @@ LIVE_OVERLAY_STYLE = """
 #capability-zones-toggle,#capability-disagreement-toggle{margin-left:10px;padding:3px 8px;border:1px solid #64748b;border-radius:5px;color:#e2e8f0;background:#172033;font:11px ui-sans-serif,system-ui,sans-serif;cursor:pointer}
 #capability-zones-toggle[aria-pressed="true"],#capability-disagreement-toggle[aria-pressed="true"]{border-color:#67e8f9;color:#cffafe;background:#164e63}
 #capability-zones-layer[data-hide-disagreement="true"] .capability-zone-disagreement{display:none}
-#capability-zones-help{margin:2px 0 6px;color:#8b95a7;font-size:12px;max-width:1180px}
-#capability-zones-help summary{cursor:pointer;color:#67e8f9}
+#header-cols{display:flex;gap:28px;align-items:flex-start;margin-top:6px}
+#header-main{flex:1 1 0;max-width:1180px}
+#zone-guide{flex:1 1 0;max-width:1100px;color:#aab4c3;font-size:12px;line-height:1.4;font-weight:400;overflow:auto;padding-right:6px}
+#zone-guide td:nth-child(2){white-space:nowrap}
+#zone-guide h2{margin:0 0 4px;font-size:14px;color:#e2e8f0}
+#zone-guide p{margin:0 0 5px;max-width:none}
+#zone-guide table{border-collapse:collapse;margin:4px 0 6px;width:100%}
+#zone-guide td,#zone-guide th{padding:2px 6px;vertical-align:top;text-align:left;font-size:11px;border-bottom:1px solid #1e293b}
+#zone-guide th{color:#cbd5e1;font-weight:700}
+#zone-guide td.n{text-align:right;white-space:nowrap}
+#zone-guide .ring{display:inline-block;width:.8em;height:.8em;border-radius:50%;border:3px solid;vertical-align:-.15em}
 #live-status.live{color:#bbf7d0;border-color:#22c55e;background:#052e16}
 #live-status.offline{color:#fecaca;border-color:#ef4444;background:#300b12}
 #live-overlay text{font-family:ui-sans-serif,system-ui,sans-serif;paint-order:stroke;stroke:#05060a;stroke-width:3px;stroke-linejoin:round}
@@ -1100,6 +1109,8 @@ def _mission_info(m, n):
         "roads": sorted(_roads_of.get(m, []), key=lambda r: -r[1])[:25], "roadCount": len(_roads_of.get(m, [])),
     }
 MISSION_INFO = {m: _mission_info(m, n) for _, _, m, n in hubs}
+# Header column explaining capability zones (Joe 2026-09-27: use the empty header
+# space). Counts are computed from the zone map being drawn, not written by hand.
 # What each capability zone MEANS, for the details panel: the zone is the War Machine
 # action class whose seed a mission's embedding sits nearest, and each seed is a
 # sentence "Exercise <class> by …" (futon2 resources/capability_zones). The panel quotes
@@ -1107,10 +1118,48 @@ MISSION_INFO = {m: _mission_info(m, n) for _, _, m, n in hubs}
 try:
     _seeds = json.load(open(ROOT / "futon2/resources/capability_zones/action_class_seeds.json"))
     _seeds = _seeds if isinstance(_seeds, list) else _seeds.get("seeds", [])
-    ZONE_TEXT = {sd["class"]: {"text": re.sub(r"^Exercise \S+ by ", "", sd.get("text", "")).strip(),
+    ZONE_TEXT = {sd["class"]: {"text": re.sub(r"^Exercise \S+ (by )?", "", sd.get("text", "")).strip(),
                                "evidence": sd.get("centroid_evidence_count", 0)} for sd in _seeds}
 except (OSError, ValueError, KeyError):
     ZONE_TEXT = {}
+
+def _esc(t): return str(t).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+def _zone_guide():
+    items = CAPABILITY_ZONES.get("items", [])
+    n, nmix = len(items), sum(1 for i in items if i.get("mixed?"))
+    ndis = sum(1 for i in items if i.get("disagreement?"))
+    rows = []
+    for lg in CAPABILITY_ZONES.get("legend", []):
+        c = lg["class"]; mine = [i for i in items if i.get("class") == c]
+        zt = ZONE_TEXT.get(c, {})
+        basis = (f"{zt['evidence']} logged examples" if zt.get("evidence") else "sentence only") if zt else "?"
+        rows.append(f'<tr><td><span class="ring" style="border-color:{lg["color"]}"></span></td><td><b>{_esc(c)}</b></td>'
+                    f'<td class="n">{len(mine)}</td><td class="n">{sum(1 for i in mine if i.get("mixed?"))}</td>'
+                    f'<td class="n">{sum(1 for i in mine if i.get("disagreement?"))}</td><td class="n">{basis}</td>'
+                    f'<td>{_esc(zt.get("text", ""))}</td></tr>')
+    return f"""<aside id="zone-guide"><h2>Capability zones — the thick coloured ring round each hub</h2>
+<p>The War Machine chooses among <b>action classes</b> (survey, close, apply-cascade, …). Each class has a
+<b>seed</b> point in BGE text-embedding space: the centroid of that class's logged examples, or, for a class with
+none yet, the embedding of its one-sentence description (below). A mission's <b>zone</b> is the class whose seed
+its own text embedding is nearest, measured in a 3-D PCA reduction (<code>{_esc(CAPABILITY_ZONES.get("reduction-version", "?"))}</code>)
+of that space. The map's layout is a separate 2-D reduction of the same embeddings, so zones can interleave on the map.</p>
+<p><b>Dashed, dimmer ring = mixed</b>: the nearest two seeds are almost equally near (margin in the thinnest tenth
+of all missions) — {nmix} of {n}. <b>White × = disagreement</b>: in the full 1024-dimensional embedding a
+different class is nearest — {ndis} of {n}, so on this map the × is the common case, not the exception: the 3-D
+reduction mostly changes which class is nearest. The 3-D zone is the one the War Machine reads.</p>
+<table><tr><th></th><th>zone</th><th class="n">missions</th><th class="n">mixed</th><th class="n">×</th><th class="n">seed from</th><th>class description</th></tr>
+{"".join(rows)}</table>
+<p>The zone legend at the top right of the map is a filter: untick zones to hide their missions. Click any hub
+for its own zone, runner-up and ×. <span id="cz-counts"></span></p></aside>
+<script>
+// Keep the zone guide no taller than the main header paragraph beside it; it scrolls.
+(() => {{
+  const main = document.getElementById("header-main"), guide = document.getElementById("zone-guide");
+  const fit = () => {{ if (main && guide) guide.style.maxHeight = Math.max(260, main.offsetHeight) + "px"; }};
+  fit(); addEventListener("resize", fit);
+}})();
+</script>"""
+ZONE_GUIDE_HTML = _zone_guide()
 DETAILS_CSS = """
 #efe-details{position:fixed;right:12px;top:12px;bottom:12px;z-index:30;width:min(460px,92vw);overflow:auto;padding:14px 16px;border:1px solid #475569;border-radius:10px;background:rgba(7,12,22,.97);color:#dde3ee;font:16px/1.45 ui-sans-serif,system-ui,sans-serif}
 #efe-details[hidden]{display:none}
@@ -1212,7 +1261,7 @@ DETAILS_SCRIPT = """
       const zc = zone.getAttribute("data-capability-zone"), ru = zone.getAttribute("data-capability-runner-up"), hd = zone.getAttribute("data-capability-high-d");
       const zcol = zone.querySelector("circle")?.getAttribute("stroke") || "#94a3b8";
       const said = (c) => ZONE_TEXT[c] ? esc(ZONE_TEXT[c].text) : "(no seed text found)";
-      const seedBasis = (c) => ZONE_TEXT[c] ? (ZONE_TEXT[c].evidence ? "seed = that sentence plus the centroid of " + ZONE_TEXT[c].evidence + " logged actions of this class" : "seed = that sentence only: no logged actions of this class yet") : "";
+      const seedBasis = (c) => ZONE_TEXT[c] ? (ZONE_TEXT[c].evidence ? "this zone's seed is the centroid of " + ZONE_TEXT[c].evidence + " logged examples of the class; the sentence describes it" : "this zone's seed is that sentence alone: the class has no logged examples yet") : "";
       h.push("<h3>Capability zone</h3>" + sw + '<p>Ring colour <span class=sw style="background:' + esc(zcol) + '"></span>= zone <b>' + esc(zc) + "</b>: of the War Machine's action classes, this mission's text is nearest to <b>" + esc(zc) + "</b>, which means: <i>" + said(zc) + "</i></p>");
       h.push('<p class="why">' + esc(seedBasis(zc)) + ". Nearness is measured in a 3-D reduction (pca3-v1) of the BGE text embedding.</p>");
       if (ru) h.push("<p><b>Runner-up:</b> " + esc(ru) + ", " + esc(zone.getAttribute("data-capability-margin")) + ' further away. <span class="why">' + said(ru) + "</span></p>");
@@ -1321,22 +1370,7 @@ h1{{font-size:16px;margin:0 0 4px}}p{{margin:0;color:#8b95a7;font-size:12px;max-
 text{{cursor:default}}{LIVE_OVERLAY_STYLE}{CONTROLS_CSS}{DETAILS_CSS}</style>
 {_panel_html}
 <header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed <span id="live-status">live layer loading</span><button id="capability-zones-toggle" type="button" aria-pressed="true">capability zones: on</button><button id="capability-disagreement-toggle" type="button" aria-pressed="true">disagreement ×: shown</button></h1>
-<details id="capability-zones-help"><summary>capability zones — what am I looking at?</summary>
-<p>Every mission has a thick coloured ring for its <b>capability zone</b>: the action-class whose seed it sits
-nearest in a 3-D PCA reduction (<code>pca3-v1</code>) of the BGE embedding space. The zone is
-computed in 3-D and only <i>displayed</i> here — nothing is decided on this 2-D picture, so what
-you accept is the same object the War Machine's preferences will read.
-<b>dashed/dim = mixed</b>: the two nearest seeds are so close (thinnest global decile of margins)
-that the call is honestly ambiguous.
-<b>× = disagreement</b>: the raw 1024-dimensional cosine reading — kept only as a
-boundary-distortion <i>diagnostic</i> — names a <i>different</i> class than the operative 3-D
-zone. A × does not mean the zone is wrong; thin high-D margins flip easily under projection.
-But where ×s <i>cluster inside one zone</i>, treat that zone's boundary as distortion-suspect
-and record a complaint: e.g. the <b>no-op</b> zone currently holds 51 missions of which 25 are
-disagreements (raw high-D mostly read them as <code>close</code> or <code>apply-cascade</code>) —
-exactly the kind of boundary question the walk exists to catch. <span id="cz-counts"></span></p>
-</details>
-<p><b>This is the metric (terrain), NOT the EFE</b> (EFE = G(π) = the geodesic over it, drawn later as policy
+<div id="header-cols"><p id="header-main"><b>This is the metric (terrain), NOT the EFE</b> (EFE = G(π) = the geodesic over it, drawn later as policy
 streamlines). Each mission is a DISTRICT — scopes spiral around the HEAD hub, <b>coloured by Salingaros class</b>
 (<span style="color:#3a9a4a">green=alive</span> · <span style="color:#c0392b">red=mess</span> ·
 <span style="color:#3a7ad0">blue=pipeline</span> · grey=stub) and <b>sized by generativity</b> — hub SIZE is
@@ -1371,7 +1405,7 @@ each mission's <code>code.files</code> link looked up in the file-level Tornhill
 top files with their trend, seat count when chat attribution exists, and the report's
 provenance. <b><span style="color:#ec4899">dashed pink</span> = linked files, none changed in
 the report's window · <b><span style="color:#3a4252">faint dotted grey</span> = no mission→code
-link yet</b> (coverage gap, stated not hidden). {_code_ring_legend} <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape — agents are drawn only when their Agency registry status is alive this server epoch (invoking/idle); anything merely restored from durable lineage is withheld and counted in a notice, per claude-12-turn-97 (the annotation layer must track the state of Agency even while the layout lags). <b>Hover any star, hub, or live marker for its story.</b></p></header>
+link yet</b> (coverage gap, stated not hidden). {_code_ring_legend} <b>Live overlay:</b> WM attention and agent telemetry on the EFE landscape — agents are drawn only when their Agency registry status is alive this server epoch (invoking/idle); anything merely restored from durable lineage is withheld and counted in a notice, per claude-12-turn-97 (the annotation layer must track the state of Agency even while the layout lags). <b>Hover any star, hub, or live marker for its story.</b></p>{ZONE_GUIDE_HTML}</div></header>
 <svg id="efe-field" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
 <rect x="0" y="0" width="{W}" height="{SKY_H}" fill="#0c0f18"/>
 <g>{''.join(fill)}</g><g class="layer-lasso">{''.join(lasso_fill)}</g><g>{''.join(roads)}</g><g>{''.join(contour)}</g>
