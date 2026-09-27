@@ -950,7 +950,7 @@ from collections import Counter as _Counter
 _BAND_COUNTS = _Counter(BAND.values())
 _STATUS_COUNTS = _Counter(STATUS.values())
 CONTROLS_CSS = """
-#efe-controls{position:fixed;left:10px;top:120px;z-index:20;width:238px;padding:8px 10px;border:1px solid #334155;border-radius:8px;background:rgba(7,12,22,.93);color:#cdd3df;font:12px ui-sans-serif,system-ui,sans-serif}
+#efe-controls{position:fixed;left:10px;top:120px;z-index:20;width:320px;max-height:calc(100vh - 20px);overflow:auto;padding:8px 10px;border:1px solid #334155;border-radius:8px;background:rgba(7,12,22,.93);color:#cdd3df;font:12px ui-sans-serif,system-ui,sans-serif}
 #efe-controls h2{margin:0 0 6px;font-size:12px;color:#e2e8f0}
 #efe-controls label{display:block;margin:3px 0;cursor:pointer}
 #efe-controls .ctl-section{margin:7px 0 3px;color:#8b95a7;font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:.06em}
@@ -983,6 +983,120 @@ _panel_html = (
     'A mission removed by band or status is gone: hub, rings, scopes, capability-zone mark, '
     'live markers and its pattern roads. Tick “hide scopes only” to keep the mission and drop just its scopes.</p>'
     '</div>')
+# --- Click-for-details (Joe 2026-09-27: hover titles are not enough; a click should
+# explain the mission's marks). Everything the panel says about a mission comes from
+# the same inputs its marks were drawn from; ring/zone/live text is read from the
+# drawn elements' own <title>s at click time, so the panel cannot drift from them.
+_roads_of = defaultdict(list)
+for _a, _b, _w in ROADS:
+    if _a in POS and _b in POS:
+        _roads_of[_a.removeprefix("M-")].append((_b.removeprefix("M-"), _w))
+        _roads_of[_b.removeprefix("M-")].append((_a.removeprefix("M-"), _w))
+def _mission_info(m, n):
+    scs = by_m.get(m, [])
+    act = ACT.get(m) or ACT.get("M-" + m) or {}
+    return {
+        "cls": CLS.get(m, "?"), "clsColor": ccol(m), "gen": GEN.get(m, 0), "scopes": n,
+        "band": BAND[m], "status": STATUS[m], "statusLine": act.get("status_line"), "doc": act.get("doc"),
+        "binders": dict(_Counter(sc["binder"] for sc in scs).most_common()),
+        "holes": sum(1 for sc in scs if sc["det"]), "vacuous": sum(1 for sc in scs if sc.get("vacuous")),
+        "certPass": sum(1 for sc in scs if sc["binder"] == "certificate" and sc.get("verdict") == "pass"),
+        "certFail": sum(1 for sc in scs if sc["binder"] == "certificate" and sc.get("verdict") not in (None, "pass")),
+        "momentum": round(MOM.get("M-" + m, 0.0), 2),
+        "roads": sorted(_roads_of.get(m, []), key=lambda r: -r[1])[:25], "roadCount": len(_roads_of.get(m, [])),
+    }
+MISSION_INFO = {m: _mission_info(m, n) for _, _, m, n in hubs}
+DETAILS_CSS = """
+#efe-details{position:fixed;right:12px;top:12px;bottom:12px;z-index:30;width:min(460px,92vw);overflow:auto;padding:14px 16px;border:1px solid #475569;border-radius:10px;background:rgba(7,12,22,.97);color:#dde3ee;font:16px/1.45 ui-sans-serif,system-ui,sans-serif}
+#efe-details[hidden]{display:none}
+#efe-details h2{margin:0 26px 4px 0;font-size:20px;color:#f8fafc;overflow-wrap:anywhere}
+#efe-details h3{margin:14px 0 4px;font-size:15px;color:#e2e8f0;text-transform:uppercase;letter-spacing:.05em}
+#efe-details p,#efe-details li{margin:3px 0;color:#cbd5e1;font-size:16px}
+#efe-details ul{margin:2px 0;padding-left:20px}
+#efe-details .why{color:#94a3b8;font-size:14px}
+#efe-details .sw{display:inline-block;width:.9em;height:.9em;border-radius:50%;vertical-align:-.1em;margin-right:4px}
+#efe-details button.close{position:absolute;right:10px;top:8px;font-size:20px;background:none;border:0;color:#cbd5e1;cursor:pointer}
+#efe-details button.go{background:none;border:0;padding:0;color:#93c5fd;cursor:pointer;font:inherit;text-decoration:underline}
+#efe-field [data-m],#efe-field [data-capability-mission-id]{cursor:pointer}
+"""
+DETAILS_SCRIPT = """
+<div id="efe-details" hidden role="dialog" aria-label="Mission details"></div>
+<script>
+(() => {
+  const INFO = __MISSION_INFO_JSON__;
+  const svg = document.getElementById("efe-field");
+  const box = document.getElementById("efe-details");
+  if (!svg || !box) return;
+  const NS = "http://www.w3.org/2000/svg";
+  const bare = (v) => (v && v.startsWith("M-") && !INFO[v] ? v.slice(2) : v);
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+  const titleOf = (e) => { const t = e && e.querySelector(":scope > title, title"); return t ? t.textContent.trim() : ""; };
+  // Wording follows mission_wholeness.py (Salingaros L = T·H over the scope tree).
+  const CLASS_WHY = {alive: "alive — well differentiated (branches at several depths) and harmonious: organised complexity", mess: "mess — well differentiated but low harmony: disorganised complexity, wants a centring pass", pipeline: "pipeline — enough centres but flat, branching only at the root: a line of phases", stub: "stub — few centres yet: wants developing"};
+  let marker = null;
+  function missionOf(target) {
+    const e = target.closest("[data-m],[data-capability-mission-id],[data-mission-id]");
+    if (!e) return null;
+    const m = bare(e.getAttribute("data-m") || e.getAttribute("data-capability-mission-id") || e.getAttribute("data-mission-id"));
+    return INFO[m] ? m : null;
+  }
+  function hubOf(m) { return Array.from(svg.querySelectorAll("circle[data-m]")).find((c) => c.getAttribute("data-m") === m && /generativity/.test(titleOf(c))); }
+  function show(m) {
+    const d = INFO[m];
+    const q = (sel) => Array.from(svg.querySelectorAll(sel)).filter((e) => bare(e.getAttribute("data-m") || e.getAttribute("data-capability-mission-id") || e.getAttribute("data-mission-id")) === m);
+    const docRing = q("#layer-doc-ring circle[data-m]").map(titleOf).find(Boolean);
+    const codeRing = q("#layer-code-ring [data-m]").map(titleOf).find(Boolean);
+    const zone = q("[data-capability-mission-id]")[0];
+    const live = q("#live-overlay [data-mission-id]").map(titleOf).filter(Boolean);
+    const h = [];
+    h.push('<button class="close" aria-label="Close">×</button><h2>M-' + esc(m) + "</h2>");
+    if (d.statusLine) h.push("<p><b>Status line:</b> " + esc(d.statusLine) + "</p>");
+    if (d.doc) h.push('<p class="why">' + esc(d.doc) + "</p>");
+    h.push("<p><b>Filter status:</b> " + esc(d.status) + ' <span class="why">(done only when the status line opens with a done word; no status line = unknown)</span></p>');
+    h.push("<p><b>Band:</b> " + d.band + ' of 0–6 <span class="why">— density of scopes around the mission, weighted determined / frontier / vacuous and blurred with its neighbours; not a judgement of value</span></p>');
+    h.push("<h3>Hub</h3><p><span class=sw style=background:" + d.clsColor + "></span><b>Colour</b> = Salingaros class: " + esc(CLASS_WHY[d.cls] || d.cls) + "</p>");
+    h.push("<p><b>Size</b> = generativity " + d.gen + ' <span class="why">(citation backlinks: how many other missions cite this one; citations are not drawn as lines)</span></p>');
+    h.push("<h3>Scopes · " + d.scopes + "</h3><p class=why>The small marks spiralling round the hub, one per scope, ordered by binder kind from the centre out.</p><ul>");
+    h.push("<li>" + d.holes + ' <span style="color:#ffb454">● orange</span> = open :detached holes (high ground: work named but not attached)</li>');
+    h.push("<li>" + d.vacuous + " ○ hollow = vacuous scopes (a binder with no named entities inside: suspect terrain)</li>");
+    if (d.certPass || d.certFail) h.push("<li>" + d.certPass + ' <span style="color:#4ade80">◆</span> certificate PASS (verified ground) · ' + d.certFail + ' <span style="color:#ef4444">◆</span> FAIL</li>');
+    h.push("<li>the rest are small dots in the hub's class colour</li></ul>");
+    h.push("<p class=why>By binder: " + Object.entries(d.binders).map(([k, v]) => esc(k) + " " + v).join(" · ") + "</p>");
+    h.push('<h3>Rings</h3><p><b style="color:#eab308">Yellow ring</b> (mission-doc activity): ' + esc(docRing || "none drawn") + "</p>");
+    h.push('<p><b style="color:#ec4899">Pink ring</b> (code, Tornhill report): ' + esc(codeRing || "none drawn") + "</p>");
+    if (zone) {
+      h.push("<h3>Capability zone</h3><p><b>" + esc(zone.getAttribute("data-capability-zone")) + "</b>" + (zone.getAttribute("data-capability-mixed") === "true" ? " · <b>mixed</b> (dashed/dim: the two nearest zone seeds are almost equally close, so the call is ambiguous)" : "") + "</p>");
+      if (zone.getAttribute("data-capability-disagreement") === "true") h.push("<p>× <b>disagreement</b>: the raw high-dimensional reading names a different class than this zone. A diagnostic of boundary distortion, not proof the zone is wrong.</p>");
+      const zt = titleOf(zone); if (zt) h.push('<p class="why">' + esc(zt) + "</p>");
+    }
+    if (live.length) h.push("<h3>Live now</h3><ul>" + live.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul>");
+    h.push("<h3>Momentum</h3><p>" + d.momentum + ' <span class="why">— recent git activity on the mission doc (10-day decay); high momentum puts it inside the amber dashed lasso, your territory</span></p>');
+    h.push("<h3>Pattern roads · " + d.roadCount + '</h3><p class="why">Purple lines: missions that apply the same library pattern; ink ∝ how often the strongest shared pattern was enacted in logged turns over the last 60 days.</p>');
+    if (d.roads.length) h.push("<ul>" + d.roads.map(([o, w]) => '<li><button class="go" data-go="' + esc(o) + '">M-' + esc(o) + "</button> · " + w + "</li>").join("") + "</ul>" + (d.roadCount > d.roads.length ? "<p class=why>… and " + (d.roadCount - d.roads.length) + " more</p>" : ""));
+    box.innerHTML = h.join("");
+    box.hidden = false;
+    box.scrollTop = 0;
+    const hub = hubOf(m);
+    if (marker) marker.remove();
+    if (hub) {
+      marker = document.createElementNS(NS, "circle");
+      for (const [k, v] of [["cx", hub.getAttribute("cx")], ["cy", hub.getAttribute("cy")], ["r", Number(hub.getAttribute("r")) + 16], ["fill", "none"], ["stroke", "#f8fafc"], ["stroke-width", "3"], ["stroke-dasharray", "6,4"], ["pointer-events", "none"]]) marker.setAttribute(k, v);
+      svg.appendChild(marker);
+    }
+    return hub;
+  }
+  function close() { box.hidden = true; if (marker) { marker.remove(); marker = null; } }
+  svg.addEventListener("click", (ev) => { const m = missionOf(ev.target); if (m) show(m); });
+  box.addEventListener("click", (ev) => {
+    if (ev.target.closest("button.close")) { close(); return; }
+    const go = ev.target.closest("button.go");
+    if (go && INFO[go.dataset.go]) { const hub = show(go.dataset.go); if (hub) hub.scrollIntoView({block: "center", inline: "center", behavior: "smooth"}); }
+  });
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") close(); });
+  window.efeDetails = {show, close};
+})();
+</script>
+"""
 # Inline JS: every string literal is single-line (a literal newline inside a JS string
 # broke the page on 2026-09-25). Plain string (not f-string); node --check the extract.
 CONTROLS_SCRIPT = """
@@ -1047,7 +1161,7 @@ CONTROLS_SCRIPT = """
 doc = f"""<!doctype html><meta charset=utf-8><title>Futon City — per-scope metric field</title>
 <style>body{{margin:0;background:#05060a;color:#cdd3df;font:13px sans-serif}}header{{padding:11px 20px}}
 h1{{font-size:16px;margin:0 0 4px}}p{{margin:0;color:#8b95a7;font-size:12px;max-width:1180px}}
-text{{cursor:default}}{LIVE_OVERLAY_STYLE}{CONTROLS_CSS}</style>
+text{{cursor:default}}{LIVE_OVERLAY_STYLE}{CONTROLS_CSS}{DETAILS_CSS}</style>
 {_panel_html}
 <header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed <span id="live-status">live layer loading</span><button id="capability-zones-toggle" type="button" aria-pressed="true">capability zones: on</button><button id="capability-disagreement-toggle" type="button" aria-pressed="true">disagreement ×: shown</button></h1>
 <details id="capability-zones-help"><summary>capability zones — what am I looking at?</summary>
@@ -1107,7 +1221,17 @@ link yet</b> (coverage gap, stated not hidden). {_code_ring_legend} <b>Live over
 <g>{hubline_svg}</g><g id="layer-scope-dots">{scope_svg}</g><g id="layer-doc-ring">{activity_svg}</g><g id="layer-code-ring">{code_churn_svg}</g><g>{hub_svg}</g>
 <g class="layer-lasso">{lasso}</g><g>{''.join(ghosts)}</g>
 <g>{''.join(claimed)}</g><g>{''.join(summit_svg)}</g><g>{''.join(sky)}</g>
-<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))) }{CONTROLS_SCRIPT}"""
+<g>{''.join(marks)}</g></svg>{LIVE_OVERLAY_SCRIPT.replace("__CAPABILITY_ZONES_JSON__", json.dumps(CAPABILITY_ZONES, separators=(",", ":"))) }{CONTROLS_SCRIPT}{DETAILS_SCRIPT.replace("__MISSION_INFO_JSON__", json.dumps(MISSION_INFO, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"))}"""
+# Readable type (Joe 2026-09-27: too small to read). One scale for every size on
+# the page — header, controls, SVG labels, live-overlay classes — so the relative
+# hierarchy is kept; nothing smaller than 15px. The details panel is already sized.
+def _bigger(n): return str(max(15, round(float(n) * 1.35)))
+_detail_at = doc.index('<div id="efe-details"')
+_style_end = doc.index("</style>")
+doc = (re.sub(r'(font-size:|font:)(\d+(?:\.\d+)?)px', lambda mo: mo.group(1) + _bigger(mo.group(2)) + "px", doc[:_style_end].replace(DETAILS_CSS, "\x00DETAILS\x00"))
+       .replace("\x00DETAILS\x00", DETAILS_CSS)
+       + re.sub(r'font-size="(\d+(?:\.\d+)?)"', lambda mo: 'font-size="' + _bigger(mo.group(1)) + '"', doc[_style_end:_detail_at])
+       + doc[_detail_at:])
 OUT.write_text(doc)
 print(f"wrote {OUT}")
 print(f"{len(scope_pts)} scopes / {len(hubs)} districts · {sum(1 for p in scope_pts if p[3])} holes · "
