@@ -659,12 +659,22 @@ LIVE_OVERLAY_SCRIPT = """
   svg.appendChild(layer);
   let zonesVisible = true;
 
-  if (zonesToggle) zonesToggle.addEventListener("click", () => {
-    zonesVisible = !zonesVisible;
+  // One switch for the zone layer (rings, ×s and the legend with its zone tickboxes),
+  // driven by the header button and the carpet-controls tickbox alike. While zones are
+  // off the per-zone filter is not applied either, so no hidden filter stays in force.
+  function setZonesVisible(v) {
+    zonesVisible = Boolean(v);
+    window.EFE_ZONES_VISIBLE = zonesVisible;
     zoneLayer.style.display = zonesVisible ? "" : "none";
-    zonesToggle.setAttribute("aria-pressed", String(zonesVisible));
-    zonesToggle.textContent = zonesVisible ? "capability zones: on" : "capability zones: off";
-  });
+    if (zonesToggle) {
+      zonesToggle.setAttribute("aria-pressed", String(zonesVisible));
+      zonesToggle.textContent = zonesVisible ? "capability zones: on" : "capability zones: off";
+    }
+    document.dispatchEvent(new CustomEvent("efe-zones", {detail: zonesVisible}));
+    document.dispatchEvent(new Event("efe-filter"));
+  }
+  window.efeSetZonesVisible = setZonesVisible;
+  if (zonesToggle) zonesToggle.addEventListener("click", () => setZonesVisible(!zonesVisible));
 
   const disagreementToggle = document.getElementById("capability-disagreement-toggle");
   let disagreementVisible = true;
@@ -1080,6 +1090,7 @@ _panel_html = (
     '<label><input type="checkbox" data-ctl-layer="#layer-code-ring" checked> code ring</label>'
     '<label><input type="checkbox" data-ctl-layer="#layer-scope-dots" checked> scope dots</label>'
     '<label><input type="checkbox" data-ctl-layer=".layer-lasso" checked> momentum lasso</label>'
+    '<label><input type="checkbox" id="ctl-zones" checked> capability zones (rings, ×, zone legend)</label>'
     '<p class="ctl-legend">band = density of scopes around the mission (its scopes weighted '
     'by determined / frontier / vacuous, blurred with its neighbours) — not a judgement of value. '
     'A mission removed by band or status is gone: hub, rings, scopes, capability-zone mark, '
@@ -1348,7 +1359,7 @@ CONTROLS_SCRIPT = """
     const gone = [];
     // Capability-zone tickboxes live in the zone legend (live overlay); read their
     // hidden set and each mission's zone from the drawn zone marks.
-    const hiddenZones = window.EFE_ZONE_HIDDEN || new Set();
+    const hiddenZones = window.EFE_ZONES_VISIBLE === false ? new Set() : (window.EFE_ZONE_HIDDEN || new Set());
     const zoneOf = new Map();
     if (hiddenZones.size) for (const z of svg.querySelectorAll("[data-capability-mission-id]")) zoneOf.set(String(z.getAttribute("data-capability-mission-id")).replace(/^M-/, ""), z.getAttribute("data-capability-zone"));
     for (const [m, info] of missions) if (info.band < f || hiddenStatus.has(info.status) || (hiddenZones.size && hiddenZones.has(zoneOf.get(m) || "(none)"))) gone.push(m);
@@ -1368,6 +1379,11 @@ CONTROLS_SCRIPT = """
   for (const b of statusBoxes) b.addEventListener("change", apply);
   scopesOnly.addEventListener("change", apply);
   document.addEventListener("efe-filter", apply);
+  const zonesBox = document.getElementById("ctl-zones");
+  if (zonesBox) {
+    zonesBox.addEventListener("change", () => window.efeSetZonesVisible && window.efeSetZonesVisible(zonesBox.checked));
+    document.addEventListener("efe-zones", (ev) => { zonesBox.checked = ev.detail; });
+  }
   for (const b of layerBoxes) b.addEventListener("change", applyLayers);
 })();
 </script>
