@@ -251,10 +251,21 @@ def bibliographic(term: str) -> bool:
     return bool(BIBLIOGRAPHIC.search(term)) or len(term) > 80 or len(term.split()) > 8
 
 
-def bibliography_at(text: str) -> int:
+# A paper without \begin{thebibliography} still has references: a plain \bibitem
+# list, or a \begin{references} / \begin{biblist} environment. These markers are
+# Rob Meyers's (a3f156a); the miner reads RAW e-print source, which is the case
+# they were added for, so it takes the wider set. markup_strategies reads the
+# marked-up path and keeps the single marker, so what that finds does not change.
+BIBLIOGRAPHY_MARKERS = ("\\begin{thebibliography}",)
+RAW_BIBLIOGRAPHY_MARKERS = BIBLIOGRAPHY_MARKERS + (
+    "\\begin{references}", "\\begin{biblist}", "\\bibitem", "\\bibliography{")
+
+
+def bibliography_at(text: str,
+                    markers: tuple[str, ...] = RAW_BIBLIOGRAPHY_MARKERS) -> int:
     """Where the references begin; emphasis after this point is a citation."""
-    at = text.find("\\begin{thebibliography}")
-    return at if at >= 0 else len(text)
+    found = [at for at in (text.find(marker) for marker in markers) if at >= 0]
+    return min(found) if found else len(text)
 
 
 def _definition_body(text: str, env: dict) -> tuple[int, int, str]:

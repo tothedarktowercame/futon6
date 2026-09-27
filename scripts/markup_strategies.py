@@ -117,9 +117,8 @@ bibliographic = build_golden_paper.bibliographic
 # list, or a \begin{references} / \begin{biblist} environment. Callers that scan a
 # raw e-print pass these too; the marked-up path keeps its single marker, so what
 # it finds does not change.
-BIBLIOGRAPHY_MARKERS = ("\\begin{thebibliography}",)
-RAW_BIBLIOGRAPHY_MARKERS = BIBLIOGRAPHY_MARKERS + (
-    "\\begin{references}", "\\begin{biblist}", "\\bibitem", "\\bibliography{")
+BIBLIOGRAPHY_MARKERS = build_golden_paper.BIBLIOGRAPHY_MARKERS
+RAW_BIBLIOGRAPHY_MARKERS = build_golden_paper.RAW_BIBLIOGRAPHY_MARKERS
 
 
 def bibliography_at(text: str, marks: list[dict],
