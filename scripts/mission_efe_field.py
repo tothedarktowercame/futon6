@@ -603,8 +603,8 @@ LIVE_OVERLAY_STYLE = """
 .live-ship-glyph{font-size:30px;text-anchor:middle;dominant-baseline:central;stroke:none}
 .live-ship-label{fill:#ffd89a;font-size:13px;font-weight:800}
 .live-offline-badge{fill:#fecaca;font-size:22px;font-weight:800}
-.capability-zone-entity{stroke:#05060a;stroke-width:2.2;paint-order:stroke;vector-effect:non-scaling-stroke}
-.capability-zone-mixed{fill-opacity:.22;stroke:#f8fafc;stroke-width:2.6;stroke-dasharray:4 3}
+.capability-zone-entity{vector-effect:non-scaling-stroke}
+.capability-zone-mixed{stroke-dasharray:5 4}
 .capability-zone-disagreement{fill:none;stroke:#ffffff;stroke-width:2.4;vector-effect:non-scaling-stroke}
 .capability-zone-legend text{font-family:ui-sans-serif,system-ui,sans-serif;fill:#f8fafc;font-size:12px;paint-order:stroke;stroke:#05060a;stroke-width:3px}
 .capability-zone-legend-bg{fill:#07101d;fill-opacity:.92;stroke:#94a3b8;stroke-width:1.2}
@@ -718,6 +718,11 @@ LIVE_OVERLAY_SCRIPT = """
     parent.appendChild(el("title", {}, text));
   }
 
+  const HUB_R = {};
+  for (const c of document.querySelectorAll("#efe-field circle[data-m]")) {
+    const t = c.querySelector("title");
+    if (t && /generativity/.test(t.textContent)) HUB_R[c.getAttribute("data-m")] = Number(c.getAttribute("r"));
+  }
   function drawCapabilityZones(data) {
     clear(zoneLayer);
     const zones = data["capability-zones"] || STATIC_CAPABILITY_ZONES;
@@ -734,10 +739,16 @@ LIVE_OVERLAY_SCRIPT = """
       });
       const color = item.color || ((zones.legend || []).find((z) => z.class === item.class) || {}).color || "#94a3b8";
       title(g, `${item["mission-id"]}\n3-D zone=${item.class} margin=${fmt(item.margin)}${item["mixed?"] ? " (mixed)" : ""}\nraw high-D diagnostic=${item["high-d-class"]} margin=${fmt(item["high-d-margin"])}${item["disagreement?"] ? " · DISAGREES" : ""}`);
-      g.appendChild(el("circle", {cx: item.x, cy: item.y, r: 11, fill: color, opacity: item["mixed?"] ? .55 : .82,
-        class: `capability-zone-entity ${item["mixed?"] ? "capability-zone-mixed" : ""}`}));
+      // The zone is a coloured RING outside the hub's own doc/code rings, not a filled
+      // disc: a disc covered the hub, so the hub's class colour (green = alive, …) was
+      // hidden under the zone colour (Joe 2026-09-27, M-mission-coherence-patterns).
+      const hubR = HUB_R[String(item["mission-id"]).replace(/^M-/, "")] || 3;
+      const zr = hubR + 12;
+      g.appendChild(el("circle", {cx: item.x, cy: item.y, r: zr, fill: "none", stroke: color, "stroke-width": 4, opacity: item["mixed?"] ? .6 : .9,
+        "pointer-events": "stroke", class: `capability-zone-entity capability-zone-ring ${item["mixed?"] ? "capability-zone-mixed" : ""}`}));
       if (item["disagreement?"]) {
-        const x = Number(item.x), y = Number(item.y);
+        // × sits on the ring at the upper right, clear of the hub.
+        const x = Number(item.x) + zr * Math.SQRT1_2, y = Number(item.y) - zr * Math.SQRT1_2;
         g.appendChild(el("path", {d: `M ${x-5} ${y-5} L ${x+5} ${y+5} M ${x+5} ${y-5} L ${x-5} ${y+5}`,
           class: "capability-zone-disagreement"}));
       }
@@ -1147,12 +1158,12 @@ DETAILS_SCRIPT = """
     if (zone) {
       // Swatch = a copy of the mission's own zone mark, so the big disc and white ×
       // seen on the map appear here at the same visual weight as the explanation.
-      const disc = zone.querySelector("circle");
-      const sw = disc ? (() => { const cx = +disc.getAttribute("cx"), cy = +disc.getAttribute("cy"), r = +disc.getAttribute("r") + 3; return '<svg width="56" height="56" viewBox="' + (cx - r) + " " + (cy - r) + " " + 2 * r + " " + 2 * r + '" style="float:left;margin:2px 12px 4px 0">' + zone.innerHTML.replace(/<title>[\s\S]*?<\/title>/, "") + "</svg>"; })() : "";
+      const disc = zone.querySelector("circle"), hubEl = hubOf(m);
+      const sw = disc ? (() => { const cx = +disc.getAttribute("cx"), cy = +disc.getAttribute("cy"), r = +disc.getAttribute("r") + 9; return '<svg width="64" height="64" viewBox="' + (cx - r) + " " + (cy - r) + " " + 2 * r + " " + 2 * r + '" style="float:left;margin:2px 12px 4px 0">' + (hubEl ? hubEl.outerHTML.replace(/<title>[\s\S]*?<\/title>/, "") : "") + zone.innerHTML.replace(/<title>[\s\S]*?<\/title>/, "") + "</svg>"; })() : "";
       const mixed = zone.getAttribute("data-capability-mixed") === "true", dis = zone.getAttribute("data-capability-disagreement") === "true";
-      h.push("<h3>Capability zone</h3>" + sw + "<p><b>Coloured disc on the hub</b> = capability zone <b>" + esc(zone.getAttribute("data-capability-zone")) + "</b> (the disc's colour is the zone's colour in the zone legend)</p>");
-      if (mixed) h.push("<p><b>Dashed white outline, dim fill</b> = <b>mixed</b>: the two nearest zone seeds are almost equally close, so the zone call is ambiguous</p>");
-      if (dis) h.push("<p><b>White × across the disc</b> = <b>disagreement</b>: the raw high-dimensional reading names a different zone than this 3-D one. A sign the map distorts near this boundary, not proof the zone is wrong.</p>");
+      h.push("<h3>Capability zone</h3>" + sw + "<p><b>Thick coloured ring round the hub</b> = capability zone <b>" + esc(zone.getAttribute("data-capability-zone")) + "</b> (the ring's colour is the zone's colour in the zone legend; the hub inside keeps its own class colour)</p>");
+      if (mixed) h.push("<p><b>Dashed, dimmer zone ring</b> = <b>mixed</b>: the two nearest zone seeds are almost equally close, so the zone call is ambiguous</p>");
+      if (dis) h.push("<p><b>White × on the zone ring</b> (upper right) = <b>disagreement</b>: the raw high-dimensional reading names a different zone than this 3-D one. A sign the map distorts near this boundary, not proof the zone is wrong.</p>");
       h.push('<div style="clear:both"></div>');
       const zt = titleOf(zone); if (zt) h.push('<p class="why">' + esc(zt) + "</p>");
     }
@@ -1252,7 +1263,7 @@ text{{cursor:default}}{LIVE_OVERLAY_STYLE}{CONTROLS_CSS}{DETAILS_CSS}</style>
 {_panel_html}
 <header><h1>Futon City — per-step-cost <b>METRIC field</b> g(s), per-scope ({len(scope_pts)} scopes / {len(hubs)} districts) · 🌟{len(claimed)} claimed · ⭐{len(unclaimed)} unclaimed <span id="live-status">live layer loading</span><button id="capability-zones-toggle" type="button" aria-pressed="true">capability zones: on</button><button id="capability-disagreement-toggle" type="button" aria-pressed="true">disagreement ×: shown</button></h1>
 <details id="capability-zones-help"><summary>capability zones — what am I looking at?</summary>
-<p>Every mission is coloured by its <b>capability zone</b>: the action-class whose seed it sits
+<p>Every mission has a thick coloured ring for its <b>capability zone</b>: the action-class whose seed it sits
 nearest in a 3-D PCA reduction (<code>pca3-v1</code>) of the BGE embedding space. The zone is
 computed in 3-D and only <i>displayed</i> here — nothing is decided on this 2-D picture, so what
 you accept is the same object the War Machine's preferences will read.
