@@ -1076,8 +1076,15 @@ DETAILS_SCRIPT = """
     h.push("<p class=why>By binder: " + Object.entries(d.binders).map(([k, v]) => esc(k) + " " + v).join(" · ") + "</p>");
     if (rings.length) h.push("<h3>Rings</h3>" + rings.join(""));
     if (zone) {
-      h.push("<h3>Capability zone</h3><p><b>" + esc(zone.getAttribute("data-capability-zone")) + "</b>" + (zone.getAttribute("data-capability-mixed") === "true" ? " · <b>mixed</b> (dashed/dim: the two nearest zone seeds are almost equally close, so the call is ambiguous)" : "") + "</p>");
-      if (zone.getAttribute("data-capability-disagreement") === "true") h.push("<p>× <b>disagreement</b>: the raw high-dimensional reading names a different class than this zone. A diagnostic of boundary distortion, not proof the zone is wrong.</p>");
+      // Swatch = a copy of the mission's own zone mark, so the big disc and white ×
+      // seen on the map appear here at the same visual weight as the explanation.
+      const disc = zone.querySelector("circle");
+      const sw = disc ? (() => { const cx = +disc.getAttribute("cx"), cy = +disc.getAttribute("cy"), r = +disc.getAttribute("r") + 3; return '<svg width="56" height="56" viewBox="' + (cx - r) + " " + (cy - r) + " " + 2 * r + " " + 2 * r + '" style="float:left;margin:2px 12px 4px 0">' + zone.innerHTML.replace(/<title>[\s\S]*?<\/title>/, "") + "</svg>"; })() : "";
+      const mixed = zone.getAttribute("data-capability-mixed") === "true", dis = zone.getAttribute("data-capability-disagreement") === "true";
+      h.push("<h3>Capability zone</h3>" + sw + "<p><b>Coloured disc on the hub</b> = capability zone <b>" + esc(zone.getAttribute("data-capability-zone")) + "</b> (the disc's colour is the zone's colour in the zone legend)</p>");
+      if (mixed) h.push("<p><b>Dashed white outline, dim fill</b> = <b>mixed</b>: the two nearest zone seeds are almost equally close, so the zone call is ambiguous</p>");
+      if (dis) h.push("<p><b>White × across the disc</b> = <b>disagreement</b>: the raw high-dimensional reading names a different zone than this 3-D one. A sign the map distorts near this boundary, not proof the zone is wrong.</p>");
+      h.push('<div style="clear:both"></div>');
       const zt = titleOf(zone); if (zt) h.push('<p class="why">' + esc(zt) + "</p>");
     }
     if (live.length) h.push("<h3>Live now</h3><ul>" + live.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul>");
