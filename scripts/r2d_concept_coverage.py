@@ -23,12 +23,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
+import futon6_config as config  # noqa: E402
 import sfc_concept_coverage as sfc  # noqa: E402
 
-DEFAULT_CONCEPT_INDEX = ROOT / "data" / "warp" / "concept-index.json"
-DEFAULT_SNIPPETS = ROOT / "data" / "warp" / "def-snippets.json"
-DEFAULT_DEFINED = ROOT / "data" / "warp" / "defined-index.json"
-DEFAULT_ENCYCLOPEDIA = ROOT / "data" / "concept-encyclopedia-ct.json"
+DEFAULT_CONCEPT_INDEX = config.warp() / "concept-index.json"
+DEFAULT_SNIPPETS = config.warp() / "def-snippets.json"
+DEFAULT_DEFINED = config.warp() / "defined-index.json"
+DEFAULT_ENCYCLOPEDIA = config.concept_encyclopedia()
 DEFAULT_GRAPH_DIR = ROOT / "data" / "iatc-argument-graphs" / "loop-run-70b"
 DEFAULT_SPEC = ROOT / "holes" / "excursions" / "r2d-spec.md"
 DEFAULT_REPORT = ROOT / "holes" / "excursions" / "r2d-concept-coverage.md"

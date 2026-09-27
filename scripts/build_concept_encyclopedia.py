@@ -20,10 +20,14 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import futon6_config as config
+
 ROOT = Path(__file__).resolve().parents[1]
-DATA, WARP = ROOT / "data", ROOT / "data" / "warp"
+DATA, WARP = config.subject_data(), config.warp()
 
 _MORPH = re.compile(r"morphism|functor|\bmap\b|transformation|arrow|adjoint")
 _PROP = re.compile(r"property|condition|ness$|bility$|\baxiom")
@@ -190,12 +194,12 @@ def _definition(c, snips):
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=200)
-    ap.add_argument("--msc", default="ct")
-    ap.add_argument("--out", type=Path, default=DATA / "concept-encyclopedia-ct.json")
+    ap.add_argument("--msc", default=config.subject())
+    ap.add_argument("--out", type=Path, default=config.concept_encyclopedia())
     a = ap.parse_args(argv)
 
     df = json.loads((DATA / f"term-prior-{a.msc}.json").read_text())["df"]
-    idx = json.loads((DATA / "background-corpus-index.json").read_text())["terms"]
+    idx = json.loads(config.authority().read_text())["terms"]
     snippets = json.loads((WARP / "def-snippets.json").read_text())["snippets"]
     auth = {e["concept"]: e for e in
             json.loads((WARP / "concept-graph.json").read_text()).get("authority", [])}
@@ -246,6 +250,7 @@ def main(argv=None) -> int:
            "definitions are real in-corpus passages; :structure is a mark3 hole",
            "audit": audit_entries(entries, sample_size=min(100, len(entries))),
            "entries": entries}
+    a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(out, indent=1))
 
     # EDN per-concept files (the superpod handoff units, like the IATC graphs):

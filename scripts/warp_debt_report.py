@@ -32,8 +32,8 @@ _CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CONCORDANCE = ROOT / "data" / "warp" / "concordance.json"
-DEFAULT_OUT = ROOT / "data" / "warp" / "corpus-debt.json"
+DEFAULT_CONCORDANCE = config.warp() / "concordance.json"
+DEFAULT_OUT = config.warp() / "corpus-debt.json"
 DEFAULT_MATHLIB = ROOT / "data" / "mathlib-defs.json"
 DEFAULT_NLAB = ROOT / "data" / "nlab-wiring" / "pages.json"
 DEFAULT_PLANETMATH = config.sibling('planetmath')

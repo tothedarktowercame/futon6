@@ -54,6 +54,70 @@ def eprints() -> Path:
     return candidates[0]
 
 
+def eprint_roots() -> tuple[Path, ...]:
+    """Where this corpus's e-prints are: directories, or the archives themselves.
+
+    A corpus is not always one directory. An acquired corpus arrives as many batch
+    directories, and copying tens of thousands of archives into one place to satisfy a
+    reader is slow and pointless -- on a filesystem without links (exFAT) it is a full
+    second copy of the corpus. So `FUTON6_EPRINTS` may name a FILE, one entry per line
+    (`#` comments and blank lines ignored, relative entries resolved against the checkout),
+    each entry an e-print DIRECTORY or a single ARCHIVE. A list of archives is the fast
+    form: nothing is listed or searched, each paper is opened where it lies.
+
+    When it names a directory -- which is every configuration that exists today -- this
+    is that one directory, so math.CT is read exactly as before.
+    """
+    if os.environ.get("FUTON6_EPRINTS"):
+        listed = path("FUTON6_EPRINTS", ROOT)
+        if listed.is_file():
+            roots: list[Path] = []
+            for line in listed.read_text(encoding="utf-8").splitlines():
+                entry = line.split("#", 1)[0].strip()
+                if not entry:
+                    continue
+                root = Path(entry).expanduser()
+                roots.append(root if root.is_absolute() else (ROOT / root).resolve())
+            if not roots:
+                raise ValueError(f"FUTON6_EPRINTS names an empty root list: {listed}")
+            return tuple(roots)
+    return (eprints(),)
+
+
+def corpus_ids() -> frozenset[str] | None:
+    """The papers this run's corpus consists of, or None for "every paper in the roots".
+
+    Roots say WHERE the archives are; this says WHICH of them are the corpus. They are
+    separate because one acquisition holds many subjects: the RH/GRH vocabulary is mined
+    over its own 71k papers, which sit in the same batch directories as 585k others.
+    `FUTON6_CORPUS_IDS` names a manifest -- one safe-form paper id per line, `#` comments
+    ignored -- of exactly the shape the Mark7 run manifests already use.
+    """
+    if not os.environ.get("FUTON6_CORPUS_IDS"):
+        return None
+    manifest = path("FUTON6_CORPUS_IDS", ROOT)
+    stamp = manifest.stat()
+    key = (str(manifest), stamp.st_mtime_ns, stamp.st_size)
+    # Read once per process: this is consulted on every paper lookup.
+    if _CORPUS_IDS_CACHE.get("key") == key:
+        return _CORPUS_IDS_CACHE["ids"]
+    ids = {line.split("#", 1)[0].strip() for line in manifest.read_text(encoding="utf-8").splitlines()}
+    ids.discard("")
+    if not ids:
+        raise ValueError(f"FUTON6_CORPUS_IDS names an empty manifest: {manifest}")
+    _CORPUS_IDS_CACHE.update(key=key, ids=frozenset(ids))
+    return _CORPUS_IDS_CACHE["ids"]
+
+
+_CORPUS_IDS_CACHE: dict = {}
+
+
+def concept_filter_path() -> Path | None:
+    """A caller-curated filter of phrases that are not concepts (`FUTON6_CONCEPT_FILTER`),
+    honoured where concepts are first recorded; None -- the default -- filters nothing."""
+    return path("FUTON6_CONCEPT_FILTER", ROOT) if os.environ.get("FUTON6_CONCEPT_FILTER") else None
+
+
 def anatomy() -> Path:
     return path("FUTON6_ANATOMY", storage() / "futon6/data/ct-anatomy-v0")
 
@@ -65,6 +129,54 @@ def authority() -> Path:
 def marks() -> Path:
     """The manifest selects run-owned marks; standalone tools retain their default."""
     return path("FUTON6_MARKS", ROOT / "data/showcases/ct-anatomy/golden")
+
+
+# The concept substrate -- a subject area's initial vocabulary: the WARP spine's
+# corpus-level concept files plus the subject's term prior and encyclopedia. The
+# defaults are exactly the math.CT vocabulary Mark7 ships with, in this checkout;
+# overriding them builds and reads another subject's vocabulary without touching it.
+#
+# Where the spine reads a paper's PROSE. math.CT has DP marks, which carry the
+# definienda and the concept phrases directly; a subject that has never been
+# marked up has none -- but it is not a subject without text, because the arXiv
+# e-print carries the full TeX. `eprints` reads the prose out of that source
+# instead, and is the ONE switch for it: the concordance's prose terms and the
+# term prior's text both follow it, so a subject cannot half-move.
+PROSE_SOURCES = ("marks", "eprints")
+
+
+def warp() -> Path:
+    """The WARP spine's directory: concordance, defined-index, hitlist, def-snippets,
+    concept-usage, concept-graph and concept-index."""
+    return path("FUTON6_WARP_DIR", ROOT / "data/warp")
+
+
+def subject() -> str:
+    """The MSC-class slug the vocabulary describes; it names the term prior and the
+    encyclopedia (`ct` = math.CT)."""
+    return os.environ.get("FUTON6_SUBJECT") or "ct"
+
+
+def subject_data() -> Path:
+    """Where the subject's term prior and concept encyclopedia live."""
+    return path("FUTON6_SUBJECT_DATA", ROOT / "data")
+
+
+def term_prior() -> Path:
+    return subject_data() / f"term-prior-{subject()}.json"
+
+
+def concept_encyclopedia() -> Path:
+    return subject_data() / f"concept-encyclopedia-{subject()}.json"
+
+
+def prose_source() -> str:
+    """`marks` (how the CT vocabulary was built) or `eprints` (a subject with no
+    DP markup, whose prose is read from the downloaded arXiv source)."""
+    source = os.environ.get("FUTON6_PROSE_SOURCE") or PROSE_SOURCES[0]
+    if source not in PROSE_SOURCES:
+        raise ValueError(f"FUTON6_PROSE_SOURCE must be one of {PROSE_SOURCES}, not {source!r}")
+    return source
 
 
 def python_argv() -> list[str]:
@@ -104,9 +216,14 @@ def child_environment() -> dict[str, str]:
         "REPO": str(ROOT),  # the S3 shell wrapper must execute this checkout
         "FUTON_CODE_ROOT": str(code_root()),
         "FUTON6_STORAGE_ROOT": str(storage()),
-        "FUTON6_EPRINTS": str(eprints()),
+        "FUTON6_EPRINTS": os.environ.get("FUTON6_EPRINTS") or str(eprints()),
         "FUTON6_ANATOMY": str(anatomy()),
         "FUTON6_BACKGROUND_CORPUS_INDEX": str(authority()),
+        "FUTON6_WARP_DIR": str(warp()),
+        "FUTON6_SUBJECT": subject(),
+        "FUTON6_SUBJECT_DATA": str(subject_data()),
+        "FUTON6_PROSE_SOURCE": prose_source(),
+        **({"FUTON6_CONCEPT_FILTER": str(concept_filter_path())} if concept_filter_path() else {}),
         "FUTON6_PYTHON_CMD": python_command(),
         "FUTON6_PYTHON": python_argv()[0],
         # Babashka reads the same argv without a second shell tokenizer.

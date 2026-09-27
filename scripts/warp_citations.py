@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
+import futon6_config as config  # noqa: E402
 from anatomy_v0_sweep import (  # noqa: E402
     DEFAULT_EPRINTS,
     parse_balanced_brace,
@@ -31,7 +32,7 @@ from anatomy_v0_sweep import (  # noqa: E402
     strip_comments,
 )
 
-DEFAULT_WARP = ROOT / "data" / "warp"
+DEFAULT_WARP = config.warp()
 DEFAULT_BIB_INDEX = DEFAULT_WARP / "bib-index.json"
 DEFAULT_BIB_DIR = DEFAULT_WARP / "bib"
 DEFAULT_OUT = DEFAULT_WARP / "citations.json"

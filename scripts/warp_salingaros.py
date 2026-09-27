@@ -29,7 +29,7 @@ import math
 from pathlib import Path
 
 GOLD = config.marks()
-OUT = config.ROOT / 'data/warp/aliveness.json'
+OUT = config.warp() / 'aliveness.json'
 SCOPE_KINDS = {"let-binder"}
 
 

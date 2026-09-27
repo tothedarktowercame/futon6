@@ -166,9 +166,10 @@ def check_concept_authority():
 
 def check_substrate():
     check_concept_authority()
-    need = ["data/warp/concept-index.json", "data/warp/def-snippets.json",
-            "data/warp/defined-index.json", "data/warp/concept-usage.json",
-            "data/concept-encyclopedia-ct.json",
+    warp = config.warp()
+    need = [str(warp / "concept-index.json"), str(warp / "def-snippets.json"),
+            str(warp / "defined-index.json"), str(warp / "concept-usage.json"),
+            str(config.concept_encyclopedia()),
             str(config.sibling("futon3") / "resources/sigils/patterns-index.tsv")]
     missing = [p for p in need if not os.path.exists(os.path.join(ROOT, p))]
     rec("substrate:present", not missing, f"{len(need) - len(missing)}/{len(need)} substrate files",

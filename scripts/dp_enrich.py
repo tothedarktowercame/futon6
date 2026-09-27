@@ -264,7 +264,7 @@ def _prior() -> dict:
     """Lazy-load the active prose-term df index → {term: papers}."""
     global _PRIOR
     if _PRIOR is None:
-        path = os.environ.get("DP_TERM_PRIOR") or str(ROOT / "data" / "term-prior-ct.json")
+        path = os.environ.get("DP_TERM_PRIOR") or str(config.term_prior())
         try:
             _PRIOR = json.loads(Path(path).read_text()).get("df", {})
         except Exception:

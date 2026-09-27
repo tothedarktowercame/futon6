@@ -26,8 +26,8 @@ import futon6_config as config
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = Path(__file__).resolve()
 EPRINTS = config.storage() / "futon6/data/arxiv-math-ct-eprints"
-GOLDEN_DIR = ROOT / "data" / "showcases" / "ct-anatomy" / "golden"
-LOG_DIR = ROOT / "data" / "warp" / "logs"
+GOLDEN_DIR = config.marks()
+LOG_DIR = config.warp() / "logs"
 FLAGS = dict(with_ca=True, with_binders=True, with_scopes=True, with_xref=True)
 
 

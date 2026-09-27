@@ -17,9 +17,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
+import futon6_config as config  # noqa: E402
 import sfc_concept_coverage as sfc  # noqa: E402
 
-DEFAULT_INDEX = ROOT / "data" / "warp" / "concept-index.json"
+DEFAULT_INDEX = config.warp() / "concept-index.json"
 DEFAULT_REPORT = ROOT / "holes" / "excursions" / "sfc-concept-index.md"
 
 

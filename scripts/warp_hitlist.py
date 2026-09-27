@@ -27,7 +27,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-W = config.ROOT / 'data/warp'
+W = config.warp()
 DASH = re.compile(r"[‐-―−-]")  # hyphen/en/em/minus variants
 
 
@@ -73,7 +73,32 @@ def is_noise(c):
     return False
 
 
-def main():
+def parse_args(argv):
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--cap", type=int, default=4000,
+                    help="How many groundable concepts to keep, by used-breadth (0 = all). "
+                         "The downstream stages build on exactly this list.")
+    ap.add_argument("--exclude", type=Path, default=None,
+                    help="A file of canonical concepts (one per line, # comments) that are not "
+                         "groundable for this corpus -- e.g. phrasing a caller has judged generic "
+                         "to all mathematical writing rather than particular to the subject.")
+    ap.add_argument("--out", type=Path, default=None,
+                    help="Where to write (default: the WARP directory's hitlist.json).")
+    return ap.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(sys.argv[1:] if argv is None else argv)
+    import concept_filter
+
+    active_filter = concept_filter.configured()
+    excluded: set[str] = set()
+    if args.exclude is not None:
+        excluded = {line.split("#", 1)[0].strip()
+                    for line in args.exclude.read_text(encoding="utf-8").splitlines()}
+        excluded.discard("")
     defidx = json.load(open(W / "defined-index.json"))["concept_to_papers"]
     defc = defaultdict(lambda: {"variants": set(), "papers": set()})
     for term, papers in defidx.items():
@@ -82,37 +107,57 @@ def main():
             defc[c]["variants"].add(term)
             defc[c]["papers"].update(papers)
 
-    conc = json.load(open(W / "concordance.json"))["terms"]
+    # Read one term at a time: a corpus-scale concordance costs ~4x its size to json.load,
+    # and only these per-concept aggregates are kept. Terms whose canonical form nothing
+    # defines are dropped as they stream past, exactly as the loop below would drop them.
+    import warp_concordance
+
     usedc = defaultdict(lambda: {"variants": set(), "used": set(), "defined": set()})
-    for term, rows in conc.items():
+    meta: dict = {}
+    for term, rows in warp_concordance.iter_concordance_terms(W / "concordance.json", meta=meta):
         c = canon(term)
-        if not c:
+        if not c or c not in defc:
             continue
         u = usedc[c]
         u["variants"].add(term)
         for r in rows:
-            (u["defined"] if r.get("role") == "defined" else u["used"]).add(r.get("paper"))
+            paper = r.get("paper")
+            # interned: the same paper id recurs across tens of thousands of terms
+            (u["defined"] if r.get("role") == "defined" else u["used"]).add(
+                sys.intern(paper) if isinstance(paper, str) else paper)
+
+    # A concordance mined from raw e-prints carries usage as per-concept paper COUNTS
+    # rather than rows (the rows ran to tens of millions). They count exactly what
+    # len(used-set) counts from rows, so the ranking is the same computation.
+    concept_used = meta.get(warp_concordance.CONCEPT_USED_PAPERS)
+    if concept_used is not None:
+        for c in concept_used:
+            if c in defc:
+                usedc[c]    # a concept only ever USED in prose still enters the ranking
 
     hit = []
     for c, u in usedc.items():
         d = defc.get(c)
-        if not d or is_noise(c):
+        if not d or is_noise(c) or c in excluded:
+            continue
+        if active_filter is not None and active_filter.match(c) is not None:
             continue
         defpapers = d["papers"] | u["defined"]
         hit.append({
             "concept": c,
             "variants": sorted(u["variants"] | d["variants"])[:12],
             "n_variants": len(u["variants"] | d["variants"]),
-            "used_papers": len(u["used"]),
+            "used_papers": concept_used.get(c, 0) if concept_used is not None else len(u["used"]),
             "defining_papers": len(defpapers),
             "defining_sample": sorted(defpapers)[:8],
         })
     hit.sort(key=lambda r: -r["used_papers"])
     frontier = sorted([h for h in hit if h["defining_papers"] <= 2 and h["used_papers"] >= 10],
                       key=lambda r: -r["used_papers"])
-    (W / "hitlist.json").write_text(json.dumps({
+    kept = hit[:args.cap] if args.cap > 0 else hit
+    (args.out or W / "hitlist.json").write_text(json.dumps({
         "schema": "hitlist-v1", "n_groundable": len(hit),
-        "hitlist": hit[:4000], "frontier": frontier[:200]}))
+        "hitlist": kept, "frontier": frontier[:200]}))
     print(f"groundable concepts (used AND defined, noise-filtered): {len(hit)}")
     print("=== top 18 groundable (by used-breadth) ===")
     for h in hit[:18]:

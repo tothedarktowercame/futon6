@@ -34,6 +34,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import futon6_config as config  # noqa: E402
 from def_formulae_extract import PATTERNS, RELATION, clean  # noqa: E402
 from sfc_symbol_grounding import ground  # noqa: E402
 
@@ -106,7 +107,7 @@ def ground_paper(paper: str, items: list[dict], backend: str, model: str) -> dic
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--snippets", default="data/warp/def-snippets.json")
+    ap.add_argument("--snippets", default=config.warp() / "def-snippets.json")
     ap.add_argument("--ids", help="restrict to these paper ids (one per line)")
     ap.add_argument("--backend", choices=["stub", "openai"], default="stub")
     ap.add_argument("--model", default="mark4-70b")

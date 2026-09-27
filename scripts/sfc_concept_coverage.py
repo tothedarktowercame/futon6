@@ -20,12 +20,13 @@ if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
 import build_term_prior  # noqa: E402
+import futon6_config as config  # noqa: E402
 
-DEFAULT_USAGE = ROOT / "data" / "warp" / "concept-usage.json"
-DEFAULT_SNIPPETS = ROOT / "data" / "warp" / "def-snippets.json"
-DEFAULT_DEFINED = ROOT / "data" / "warp" / "defined-index.json"
-DEFAULT_ENCYCLOPEDIA = ROOT / "data" / "concept-encyclopedia-ct.json"
-DEFAULT_GRAPH = ROOT / "data" / "warp" / "concept-graph.json"
+DEFAULT_USAGE = config.warp() / "concept-usage.json"
+DEFAULT_SNIPPETS = config.warp() / "def-snippets.json"
+DEFAULT_DEFINED = config.warp() / "defined-index.json"
+DEFAULT_ENCYCLOPEDIA = config.concept_encyclopedia()
+DEFAULT_GRAPH = config.warp() / "concept-graph.json"
 DEFAULT_REPORT = ROOT / "holes" / "excursions" / "sfc-concept-coverage.md"
 
 GENERIC_PHRASES = {

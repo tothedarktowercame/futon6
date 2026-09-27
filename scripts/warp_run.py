@@ -30,12 +30,21 @@ _CODE_ROOT = Path(os.environ.get("FUTON_CODE_ROOT") or Path(__file__).resolve().
 
 
 ROOT = Path(__file__).resolve().parents[1]
-WARP = ROOT / "data" / "warp"
+WARP = config.warp()
 EPRINTS = config.eprints()
 ANATOMY = config.anatomy()
 GOLDEN = config.marks()
 BACKGROUND = config.authority()
 MANIFEST = WARP / "warp-manifest.json"
+# The subject's vocabulary files. `ct` in this checkout; a subject override moves
+# the whole set together, so a second subject never overwrites the first.
+TERM_PRIOR = config.term_prior()
+ENCYCLOPEDIA = config.concept_encyclopedia()
+ENCYCLOPEDIA_ENTRIES = config.subject_data() / "concept-encyclopedia" / config.subject()
+# A subject's prose comes from its DP marks or from the e-prints; each stage
+# declares whichever it will actually read, so freshness tracks the real input.
+PROSE_FROM_EPRINTS = config.prose_source() == "eprints"
+TERM_PRIOR_INPUT = EPRINTS if PROSE_FROM_EPRINTS else GOLDEN
 
 GUARDED_OUTPUTS = {
     WARP / "concept-index.json",
@@ -67,62 +76,69 @@ def p(rel: str) -> Path:
     return ROOT / rel
 
 
-SPINE_STAGES: tuple[Stage, ...] = (
+def w(name: str) -> Path:
+    """A WARP spine artifact, wherever the spine's directory is configured."""
+    return WARP / name
+
+
+_SPINE_STAGES: tuple[Stage, ...] = (
     Stage(
         "S1a",
         "warp_concordance.py",
-        (EPRINTS, ANATOMY, GOLDEN),
-        (p("data/warp/concordance.json"),),
+        (EPRINTS, ANATOMY, GOLDEN) + ((w("defined-index.json"),) if PROSE_FROM_EPRINTS else ()),
+        (w("concordance.json"),),
         ("scripts/warp_concordance.py",),
+        notes=("Prose terms come from the e-prints, which the defined-index bounds."
+               if PROSE_FROM_EPRINTS else ""),
     ),
     Stage(
         "S1b",
         "warp_bib.py",
         (EPRINTS,),
-        (p("data/warp/bib-index.json"), p("data/warp/bib")),
+        (w("bib-index.json"), w("bib")),
         ("scripts/warp_bib.py",),
     ),
     Stage(
         "S1c",
         "warp_citations.py",
-        (EPRINTS, p("data/warp/bib-index.json"), p("data/warp/bib")),
-        (p("data/warp/citations.json"),),
+        (EPRINTS, w("bib-index.json"), w("bib")),
+        (w("citations.json"),),
         ("scripts/warp_citations.py",),
     ),
     Stage(
         "S2",
         "warp_defined_pass.py",
         (EPRINTS,),
-        (p("data/warp/defined-index.json"),),
+        (w("defined-index.json"),),
         ("scripts/warp_defined_pass.py",),
     ),
     Stage(
         "S3",
         "warp_hitlist.py",
-        (p("data/warp/concordance.json"), p("data/warp/defined-index.json")),
-        (p("data/warp/hitlist.json"),),
+        (w("concordance.json"), w("defined-index.json")),
+        (w("hitlist.json"),),
         ("scripts/warp_hitlist.py",),
     ),
     Stage(
         "S4a",
         "warp_def_snippets.py",
-        (p("data/warp/hitlist.json"), EPRINTS),
-        (p("data/warp/def-snippets.json"),),
+        (w("hitlist.json"), EPRINTS),
+        (w("def-snippets.json"),),
         ("scripts/warp_def_snippets.py",),
         notes="Script has no dry-run CLI and hard-codes live hitlist/eprints.",
     ),
     Stage(
         "S4b",
         "warp_concept_usage.py",
-        (p("data/warp/hitlist.json"), EPRINTS),
-        (p("data/warp/concept-usage.json"),),
+        (w("hitlist.json"), EPRINTS),
+        (w("concept-usage.json"),),
         ("scripts/warp_concept_usage.py",),
     ),
     Stage(
         "S5",
         "warp_concept_graph.py",
-        (p("data/warp/hitlist.json"), p("data/warp/def-snippets.json")),
-        (p("data/warp/concept-graph.json"),),
+        (w("hitlist.json"), w("def-snippets.json")),
+        (w("concept-graph.json"),),
         ("scripts/warp_concept_graph.py",),
         notes="Must precede S4c because embeddings consume concept-graph.json.",
     ),
@@ -130,18 +146,18 @@ SPINE_STAGES: tuple[Stage, ...] = (
         "S4c",
         "warp_concept_embed.py",
         (
-            p("data/warp/hitlist.json"),
-            p("data/warp/def-snippets.json"),
-            p("data/warp/concept-graph.json"),
+            w("hitlist.json"),
+            w("def-snippets.json"),
+            w("concept-graph.json"),
         ),
-        (p("data/warp/concept-embed.npy"), p("data/warp/concept-carpet-pos.json")),
+        (w("concept-embed.npy"), w("concept-carpet-pos.json")),
         ("scripts/warp_concept_embed.py",),
     ),
     Stage(
         "S6t",
         "build_term_prior.py",
-        (GOLDEN,),
-        (p("data/term-prior-ct.json"),),
+        (TERM_PRIOR_INPUT,),
+        (TERM_PRIOR,),
         ("scripts/build_term_prior.py",),
         notes="SFC foundation term prior; feeds S6b concept encyclopedia.",
     ),
@@ -149,13 +165,13 @@ SPINE_STAGES: tuple[Stage, ...] = (
         "S6b",
         "build_concept_encyclopedia.py",
         (
-            p("data/term-prior-ct.json"),
+            TERM_PRIOR,
             BACKGROUND,
-            p("data/warp/def-snippets.json"),
-            p("data/warp/concept-graph.json"),
-            p("data/warp/defined-index.json"),
+            w("def-snippets.json"),
+            w("concept-graph.json"),
+            w("defined-index.json"),
         ),
-        (p("data/concept-encyclopedia-ct.json"), p("data/concept-encyclopedia/ct")),
+        (ENCYCLOPEDIA, ENCYCLOPEDIA_ENTRIES),
         ("scripts/build_concept_encyclopedia.py",),
     ),
     Stage(
@@ -163,21 +179,37 @@ SPINE_STAGES: tuple[Stage, ...] = (
         "mark3_thread_tapestry.py",
         (
             GOLDEN,
-            p("data/concept-encyclopedia/ct"),
-            p("data/warp/cite-resolution"),
+            ENCYCLOPEDIA_ENTRIES,
+            w("cite-resolution"),
         ),
-        (p("data/warp/concept-phylogeny.json"),),
-        ("scripts/mark3_thread_tapestry.py", "--out", "data/warp/concept-phylogeny.json"),
+        (w("concept-phylogeny.json"),),
+        ("scripts/mark3_thread_tapestry.py", "--out", str(w("concept-phylogeny.json"))),
         notes="CAS-SEL genealogical-select descent input; R2d-3 coupling candidate.",
     ),
 )
+
+
+def _prose_ordered(stages: tuple[Stage, ...]) -> tuple[Stage, ...]:
+    """When S1a's prose layer reads S2's defined-index, S2 has to run first.
+
+    The dependency genuinely differs by prose source, so the order does too. With
+    the marks default nothing moves: S1a keeps running first, as it always has.
+    """
+    if not PROSE_FROM_EPRINTS:
+        return stages
+    by_id = {stage.stage_id: stage for stage in stages}
+    lead = [by_id[stage_id] for stage_id in ("S2", "S1a") if stage_id in by_id]
+    return tuple(lead) + tuple(s for s in stages if s.stage_id not in ("S1a", "S2"))
+
+
+SPINE_STAGES: tuple[Stage, ...] = _prose_ordered(_SPINE_STAGES)
 
 OVERLAY_STAGES: tuple[Stage, ...] = (
     Stage(
         "O1",
         "warp_or_curvature.py",
-        (p("data/warp/citations.json"),),
-        (p("data/warp/or-curvature.json"),),
+        (w("citations.json"),),
+        (w("or-curvature.json"),),
         ("scripts/warp_or_curvature.py",),
         overlay=True,
     ),
@@ -185,7 +217,7 @@ OVERLAY_STAGES: tuple[Stage, ...] = (
         "O2",
         "warp_salingaros.py",
         (GOLDEN,),
-        (p("data/warp/aliveness.json"),),
+        (w("aliveness.json"),),
         ("scripts/warp_salingaros.py",),
         overlay=True,
     ),
@@ -193,15 +225,15 @@ OVERLAY_STAGES: tuple[Stage, ...] = (
         "O3",
         "warp_paper_landscape.py",
         (
-            p("data/warp/hitlist.json"),
-            p("data/warp/concept-embed.npy"),
-            p("data/warp/defined-index.json"),
-            p("data/warp/concordance.json"),
-            p("data/warp/concept-usage.json"),
-            p("data/warp/or-curvature.json"),
-            p("data/warp/aliveness.json"),
+            w("hitlist.json"),
+            w("concept-embed.npy"),
+            w("defined-index.json"),
+            w("concordance.json"),
+            w("concept-usage.json"),
+            w("or-curvature.json"),
+            w("aliveness.json"),
         ),
-        (p("data/warp/paper-landscape.json"), p("data/warp/paper-landscape.html")),
+        (w("paper-landscape.json"), w("paper-landscape.html")),
         ("scripts/warp_paper_landscape.py",),
         overlay=True,
     ),
@@ -211,12 +243,12 @@ OVERLAY_STAGES: tuple[Stage, ...] = (
         (
             Path("/tmp/gh200.txt"),
             GOLDEN,
-            p("data/warp/concept-usage.json"),
-            p("data/warp/hitlist.json"),
-            p("data/warp/concept-embed.npy"),
-            p("data/warp/citations.json"),
+            w("concept-usage.json"),
+            w("hitlist.json"),
+            w("concept-embed.npy"),
+            w("citations.json"),
         ),
-        (p("data/warp/greatest-hits.html"),),
+        (w("greatest-hits.html"),),
         ("scripts/warp_greatest_hits.py",),
         overlay=True,
     ),
@@ -224,12 +256,12 @@ OVERLAY_STAGES: tuple[Stage, ...] = (
         "O5",
         "warp_debt_report.py",
         (
-            p("data/warp/concordance.json"),
+            w("concordance.json"),
             p("data/mathlib/training.jsonl"),
             p("data/nlab/Pages"),
             p("data/planetmath/planetmath.jsonl"),
         ),
-        (p("data/warp/corpus-debt.json"),),
+        (w("corpus-debt.json"),),
         ("scripts/warp_debt_report.py",),
         overlay=True,
     ),
@@ -240,11 +272,11 @@ AUDIT_ONLY_STAGES: tuple[Stage, ...] = (
         "consumer",
         "sfc_concept_coverage.py",
         (
-            p("data/warp/concept-usage.json"),
-            p("data/warp/def-snippets.json"),
-            p("data/warp/defined-index.json"),
-            p("data/concept-encyclopedia-ct.json"),
-            p("data/warp/concept-graph.json"),
+            w("concept-usage.json"),
+            w("def-snippets.json"),
+            w("defined-index.json"),
+            ENCYCLOPEDIA,
+            w("concept-graph.json"),
         ),
         (p("holes/excursions/sfc-concept-coverage.md"),),
         None,
@@ -254,12 +286,12 @@ AUDIT_ONLY_STAGES: tuple[Stage, ...] = (
         "SFC-D3",
         "sfc_concept_index.py",
         (
-            p("data/warp/concept-usage.json"),
-            p("data/warp/def-snippets.json"),
-            p("data/warp/defined-index.json"),
-            p("data/concept-encyclopedia-ct.json"),
+            w("concept-usage.json"),
+            w("def-snippets.json"),
+            w("defined-index.json"),
+            ENCYCLOPEDIA,
         ),
-        (p("data/warp/concept-index.json"), p("holes/excursions/sfc-concept-index.md")),
+        (w("concept-index.json"), p("holes/excursions/sfc-concept-index.md")),
         None,
         audit_only=True,
         notes="Canonical downstream artifact; read-only in WARP-ORCH-2.",
@@ -268,11 +300,11 @@ AUDIT_ONLY_STAGES: tuple[Stage, ...] = (
         "SFC-AGG",
         "sfc_concept_aggregate.py",
         (
-            p("data/warp/concept-index.json"),
-            p("data/warp/def-snippets.json"),
-            p("data/concept-encyclopedia-ct.json"),
+            w("concept-index.json"),
+            w("def-snippets.json"),
+            ENCYCLOPEDIA,
         ),
-        (p("data/warp/sfc-adjunction-fixture.json"), p("holes/excursions/sfc-concept-aggregate.md")),
+        (w("sfc-adjunction-fixture.json"), p("holes/excursions/sfc-concept-aggregate.md")),
         None,
         audit_only=True,
         notes="Canonical downstream SFC-AGG artifact; read-only in WARP-ORCH-2.",
@@ -667,7 +699,7 @@ def run(stages: Iterable[Stage], dry_run: bool = False, manifest_path: Path = MA
         if drift is not None:
             records["__derived-staleness-ping"] = drift
             print(
-                "DERIVED-STALENESS-PING: data/warp/concept-usage.json content changed; "
+                f"DERIVED-STALENESS-PING: {display_path(CONCEPT_USAGE)} content changed; "
                 "bell claude-2 before proceeding.",
                 file=sys.stderr,
             )

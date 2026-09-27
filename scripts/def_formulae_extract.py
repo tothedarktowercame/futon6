@@ -23,6 +23,9 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import futon6_config as config  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # display math first (more likely to be a whole definition), then inline
@@ -47,7 +50,7 @@ def clean(f: str) -> str:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--snippets", default="data/warp/def-snippets.json")
+    ap.add_argument("--snippets", default=config.warp() / "def-snippets.json")
     ap.add_argument("--ids", help="restrict to this manifest's papers (corpus identity)")
     ap.add_argument("--out", required=True)
     ap.add_argument("--max-per-concept", type=int, default=2)

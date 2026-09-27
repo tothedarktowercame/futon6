@@ -26,6 +26,8 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
+sys.path.insert(0, str(SCRIPTS))
+import futon6_config as config  # noqa: E402
 MARK3_EMBED_SPEC = importlib.util.spec_from_file_location("mark3_embed", SCRIPTS / "mark3_embed.py")
 mark3_embed = importlib.util.module_from_spec(MARK3_EMBED_SPEC)
 assert MARK3_EMBED_SPEC.loader is not None
@@ -475,7 +477,8 @@ def build_parser() -> argparse.ArgumentParser:
             "--encyclopedia-dir",
             type=Path,
             action="append",
-            default=[ROOT / "data/concept-encyclopedia/ct", ROOT / "data/concept-encyclopedia/ct-golden"],
+            default=[config.subject_data() / f"concept-encyclopedia/{config.subject()}",
+                     config.subject_data() / f"concept-encyclopedia/{config.subject()}-golden"],
         )
         p.add_argument("--embed-dir", type=Path, default=ROOT / "tmp/mark3-embed/ct-sample")
         p.add_argument("--space", default="per-msc")

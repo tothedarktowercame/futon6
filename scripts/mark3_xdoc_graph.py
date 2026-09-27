@@ -30,11 +30,15 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO / "scripts"))
+import futon6_config as config  # noqa: E402
+
 GRAPHS = REPO / "data" / "iatc-argument-graphs" / "gh200"
-CITES = REPO / "data" / "warp" / "cite-resolution"
+CITES = config.warp() / "cite-resolution"
 STOP = {"the", "a", "of", "is", "to", "and", "in", "for", "by", "with", "an",
         "from", "as", "on", "that", "this", "are", "be", "or"}
 MIN_OVERLAP = 2  # >= this many shared content tokens => candidate discharge

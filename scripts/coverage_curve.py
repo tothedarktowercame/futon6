@@ -22,12 +22,17 @@ Usage:
 """
 import argparse
 import json
+import sys
 from collections import defaultdict
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import futon6_config as config
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--usage", default="data/warp/concept-usage.json",
+    ap.add_argument("--usage", default=config.warp() / "concept-usage.json",
                     help="raw per-paper concepts (incl. hapax tail) — the honest input")
     ap.add_argument("--held-out", type=int, default=40)
     ap.add_argument("--min-usages", type=int, default=2)
