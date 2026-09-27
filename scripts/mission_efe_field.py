@@ -1157,7 +1157,7 @@ of that space. The map's layout is a separate 2-D reduction of the same embeddin
 <p><b>Dashed, dimmer ring = mixed</b>: the nearest two seeds are almost equally near (margin in the thinnest tenth
 of all missions) — {nmix} of {n}. <b>White × = disagreement</b>: in the full 1024-dimensional embedding a
 different class is nearest — {ndis} of {n}, so on this map the × is the common case, not the exception: the 3-D
-reduction mostly changes which class is nearest. The 3-D zone is the one the War Machine reads.</p>
+reduction mostly changes which class is nearest. The 3-D zone is the operative one: it is what the zone maps draw. (claude-8, 2026-09-27: on the path traced so far, War Machine preferences read per-class posteriors, not a mission's zone; whether those posteriors were filled from 3-D zones is not yet traced.)</p>
 <table><tr><th></th><th>zone</th><th class="n">missions</th><th class="n">mixed</th><th class="n">×</th><th class="n">seed from</th><th>class description</th></tr>
 {"".join(rows)}</table>
 <p>The zone legend at the top right of the map is a filter: untick zones to hide their missions. Click any hub
@@ -1277,7 +1277,7 @@ DETAILS_SCRIPT = """
       h.push('<p class="why">' + esc(seedBasis(zc)) + ". Nearness is measured in a 3-D reduction (pca3-v1) of the BGE text embedding.</p>");
       if (ru) h.push("<p><b>Runner-up:</b> " + esc(ru) + ", " + esc(zone.getAttribute("data-capability-margin")) + ' further away. <span class="why">' + said(ru) + "</span></p>");
       if (mixed) h.push("<p><b>Dashed, dimmer ring = mixed:</b> that margin is in the thinnest tenth of all missions' margins, so " + esc(zc) + " vs " + esc(ru) + " is too close to call.</p>");
-      if (dis) h.push("<p><b>White × on the ring = disagreement:</b> measured in the full 1024-dimensional embedding instead, this mission is nearest <b>" + esc(hd) + "</b> (margin " + esc(zone.getAttribute("data-capability-high-d-margin")) + '), not ' + esc(zc) + '. <span class="why">' + said(hd) + '</span></p><p class="why">The 3-D zone is the one used; the × marks where the 3-D reduction may be distorting. Many ×s inside one zone suggest that zone’s boundary is off.</p>');
+      if (dis) h.push("<p><b>White × on the ring = disagreement:</b> measured in the full 1024-dimensional embedding instead, this mission is nearest <b>" + esc(hd) + "</b> (margin " + esc(zone.getAttribute("data-capability-high-d-margin")) + '), not ' + esc(zc) + '. <span class="why">' + said(hd) + '</span></p><p class="why">The 3-D zone is the operative one (the one drawn); the × marks where the 3-D reduction may be distorting. Many ×s inside one zone suggest that zone’s boundary is off.</p>');
       h.push('<div style="clear:both"></div>');
     }
     if (live.length) h.push("<h3>Live now</h3><ul>" + live.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul>");
