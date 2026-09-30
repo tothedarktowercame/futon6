@@ -1,7 +1,7 @@
 # Mission: Canon fingerprint store — Billey-Tenner instantiation for symbol grounding
 
 **Date:** 2026-05-23
-**Status:** DERIVE → INSTANTIATE — decisions resolved + holes articulated (Joe 2026-06-08): scope bindings (§2.1) + frequency-ordered MAP-REDUCE (§3.1) + SQLite; F1 schema delta in §8, holes in §9
+**Status:** OPEN — DERIVE → INSTANTIATE — decisions resolved + holes articulated (Joe 2026-06-08): scope bindings (§2.1) + frequency-ordered MAP-REDUCE (§3.1) + SQLite; F1 schema delta in §8, holes in §9
 **Owner:** Joe (frames it) / claude-7 (drafted)
 **Predecessor:** [M-bayesian-structure-learning.md](M-bayesian-structure-learning.md)
 **Source pointer:** Billey, S. C. & Tenner, B. E. (2013).
@@ -286,7 +286,7 @@ just offline. Drops JSONL+aggregate-v1; **in-run queryability is the requirement
   (primary inference key) and `canon` (secondary); Stage 5 opens it read/write per run.
 - REDUCE: seed most-cited-first (§3.1) before the long tail.
 
-## 9. Next holes — INSTANTIATE (articulated 2026-06-08, per the §8 decisions)
+## Acceptance checklist (2026-09-30)
 
 - [ ] **F1** — SQLite `canon_store.db`: schema with **scope bindings** (`role`, `scope`,
       `strategy_anchor` replacing `position`) per the §8 delta; `write_batch_fingerprints`; wire into

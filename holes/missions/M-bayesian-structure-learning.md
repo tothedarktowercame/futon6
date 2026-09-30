@@ -1,7 +1,7 @@
 # Mission: Bayesian structure learning — formalising what we mean by it
 
 **Date:** 2026-05-23
-**Status:** SUPERSEDED-AS-MISSION → recast toward Campaign-bayesian-structure-learning (Joe 2026-06-08; see §7b). Idea-of-record; NOT WM-pickable (a Campaign across math / differentiable-code / War-Machine domains, the last = E-efe-education).
+**Status:** SUPERSEDED — SUPERSEDED-AS-MISSION → recast toward Campaign-bayesian-structure-learning (Joe 2026-06-08; see §7b). Idea-of-record; NOT WM-pickable (a Campaign across math / differentiable-code / War-Machine domains, the last = E-efe-education).
 **Owner:** Joe (frames it) / claude-7 (drafted)
 **Predecessor:** [M-symbol-grounding.md](M-symbol-grounding.md),
 [M-symbol-grounding-scaling-plan.md](M-symbol-grounding-scaling-plan.md)

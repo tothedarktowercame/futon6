@@ -1,7 +1,7 @@
 # Mission: M-differentiable-substrate
 
 **Date:** 2026-06-09
-**Status:** INSTANTIATE — scope-grain v2 producer live + wired to claude-4's rollout (see Checkpoint 1)
+**Status:** OPEN — INSTANTIATE — scope-grain v2 producer live + wired to claude-4's rollout (see Checkpoint 1)
 **Owner:** claude-3
 **Stage:** IDENTIFY → MAP → DERIVE → ARGUE → VERIFY → INSTANTIATE
 
@@ -531,3 +531,12 @@ A producer's-eye review. Findings accepted; corrections to the record:
    witness** (a regression guard that the policy head is consumed, not recomputed) or it can
    silently regress the same way. → action (claude-4 side, folds into the CH1 build): a
    prior-consumption assertion.
+
+## Acceptance checklist (2026-09-30)
+
+- [x] `scripts/diffsub_emit.py` emits ranked scope-grain proposals that are consumed by the rollout through the ratified interface. (evidence: checkpoint 1, commits `801dc62`, `34776c5`, and consumer witness `3d41d26`)
+- [x] The substrate-scale conditioning check reports bounded gradient norm and zero identity drift. (evidence: checkpoint 1 reports max/median 1.50 and 21/3/7/0 drift classification)
+- [x] Reachable capability anchors receive moves while the seven intended-dark islands remain dark. (evidence: checkpoint 1 consumer witness `3d41d26`)
+- [ ] A regression witness proves the rollout consumes the producer's `:prior` policy head without recomputing it from `:score`.
+- [ ] The CH1 return channel emits per-move weighted visit mass, `q-best`, and `q-mean`, and a recorded fit updates the policy prior.
+- [ ] A live discharge emits a realized peradam keyed by `:move/id`, and the CH2 value update plus a cross-mission-unlocking test grounds the learning claim.

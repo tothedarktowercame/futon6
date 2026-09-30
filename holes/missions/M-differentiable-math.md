@@ -1,7 +1,7 @@
 # Mission: Differentiable Mathematics — a ground-metric pilot on real math embeddings
 
 **Date:** 2026-05-31
-**Status:** IDENTIFY → pilot; claude-2 owns end-to-end (speculative-sequel scout)
+**Status:** OPEN — IDENTIFY → pilot; claude-2 owns end-to-end (speculative-sequel scout)
 **Checkpoint (2026-05-31):** both metric halves demonstrated on real math data —
 continuity (BGE NN geometry) + curvature (Ollivier–Ricci marks bottlenecks,
 hypothesis CONFIRMED). Committed. Next: BGE-grounded κ recompute (join the halves).
@@ -160,3 +160,10 @@ a prerequisite, so there is no urgency that justifies risking the box.
 - `futon3c C-substrate-completion` / `M-substrate-metric` — the keystone this informs.
 - [[project_differentiable_code]], [[project_prior_mathematics]] — sibling futon6/5 work.
 - `futon6/src/futon6/graph_embed.py` — how the structural embeddings were built (R-GCN).
+
+## Acceptance checklist (2026-09-30)
+
+- [x] The real BGE math embedding yields semantically coherent nearest neighbours on a memory-mapped slice. (evidence: “First probe RESULT” above)
+- [x] The committed Ollivier–Ricci pilot reports negative curvature on cross-area bridges and positive curvature on tight intra-community pairs. (evidence: `resources/differentiable-math/ricci-tag-curvature.json`, commit `192c120`)
+- [ ] A resource-bounded run recomputes curvature with BGE distance as the ground metric and records whether the bottleneck ranking survives.
+- [ ] The pilot's node-granularity, curvature, and textual-versus-structural findings are recorded as evidence for `M-substrate-metric`'s STANDARD-ARGUE/VERIFY contract.

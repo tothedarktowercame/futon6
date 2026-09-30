@@ -1,7 +1,7 @@
 # Mission: Artificial Stack Exchange
 
 **Date:** 2026-02-25
-**Status:** IDENTIFY (mission proposal)
+**Status:** OPEN — IDENTIFY (mission proposal)
 **Origin:** Joe Corneli, SFI Complexity Postdoctoral Fellowship proposal (~2019).
 Reformulated as a computational mission for the futon stack, 2026-02-25.
 **Owner:** futon6, with dependencies on futon3c (social loop), futon3b (gates),
@@ -234,14 +234,13 @@ Connect the Artificial Stack Exchange to the real world:
 | M22 Tutoring study | — | Future |
 | M23 Publication: Science | — | Deferred |
 
-## Completion Criteria
+## Acceptance checklist (2026-09-30)
 
-1. Self-play loop runs for 100 iterations, producing measurable graph growth
-2. At least one IAD-style institution improves Q&A quality vs. baseline
-3. At least one agent-written agent outperforms a generalist on its domain
-4. At least one agent-written gate rule improves quality on its topic
-5. At least one question is triggered by a real GitHub event and answered
-   with codebase-grounded evidence
+- [ ] The self-play loop completes 100 iterations and its record shows measurable graph growth.
+- [ ] A recorded comparison shows at least one IAD-style institution improves Q&A quality over the baseline.
+- [ ] A recorded domain evaluation shows at least one agent-written agent outperforms a generalist.
+- [ ] A recorded topic evaluation shows at least one agent-written gate rule improves quality.
+- [ ] A real GitHub event triggers a question whose recorded answer cites codebase-grounded evidence.
 
 ## Relationship to Adjacent Missions
 
