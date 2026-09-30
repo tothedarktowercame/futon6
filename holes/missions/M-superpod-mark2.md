@@ -1,7 +1,7 @@
 # Mission: Superpod Mark 2 — All of arXiv
 
 **Date:** 2026-03-29 (started), 2026-04-12 (rewritten)
-**Status:** MAP
+**Status:** OPEN — MAP
 **Owner:** Rob (superpod runs), Joe (pipeline code + evaluation)
 **Repos:** futon6 (pipeline), futon3c (downstream retrieval), apm-lean (evaluation)
 
@@ -201,6 +201,13 @@ scale.
    with measurably better retrieval precision than BGE-only Mark 1.
 
 ## Related missions
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] The improved pipeline completes on an all-arXiv-math corpus of at least 200,000 papers.
+- [ ] Stage 9b reports pairwise cosine-similarity standard deviation above 0.10 and validation accuracy below 90%.
+- [ ] A learn-to-swim or LeanDojo pilot record shows structural or hybrid retrieval finds technique-relevant papers missed by BGE-only retrieval.
+- [ ] `corpus_ws_bridge.py` serves a FAISS index whose measured retrieval precision exceeds the BGE-only Mark 1 baseline.
 
 | Mission | Relationship |
 |---------|-------------|

@@ -1,7 +1,7 @@
 # Mission: Prior Mathematics — a corpus base-rate prior for Stage 5 NER
 
 **Date:** 2026-05-31
-**Status:** step-1 CT prior BUILT (full corpus, 2026-05-31); step-2 posterior-vs-prior test next; Joe framed it, claude-2 drafted
+**Status:** OPEN — step-1 CT prior BUILT (full corpus, 2026-05-31); step-2 posterior-vs-prior test next; Joe framed it, claude-2 drafted
 **Owner:** Joe (frames) / claude-2 (drafted)
 **Predecessor:** [M-bayesian-structure-learning.md](M-bayesian-structure-learning.md)
   (this is one concrete, shippable instance of "accumulate posteriors, not counters")
@@ -353,5 +353,12 @@ receive that comparison whenever the better posterior lands.
   "accumulate posteriors with partial pooling" goal.
 - M-paper-reverse-morphogenesis / M-superpod-mark3 — the Stage 5 pipeline this
   prior plugs into.
+
+## Acceptance checklist (2026-09-30)
+
+- [x] `data/ct-term-prior.json` contains the full-corpus CT document-frequency prior with recorded coverage and read errors. (evidence: “Step 1 result” above; 9,742 documents, 56 undecodable)
+- [x] `scripts/superpod-job.py` provides the default-off collocation-coherence gate and `tests/test_collocation_gate.py` passes its real-prior cases. (evidence: implementation checkpoint above)
+- [ ] A fresh post-improvement CT NER run confirms the extractor supplies the candidate spans needed by the inline collocation gate.
+- [ ] The fresh run's posterior is compared with `data/ct-term-prior.json`, separately reporting posterior-over-prior detections and high-prior generic grabs.
 - M-differentiable-code (futon5) — structural analog of the same prior (§4).
 - External: Rob / superpod CT runner — the consumer; timing driver.

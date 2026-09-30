@@ -1,8 +1,8 @@
 # M-pheromone-field — designed stigmergic signals over the live EFE map (T1 follow-on)
 
-**Status: IDENTIFY (2026-07-05). Chartered by Joe (emacs-repl) as the T1 follow-on
+**Status:** OPEN — IDENTIFY (2026-07-05). Chartered by Joe (emacs-repl) as the T1 follow-on
 from M-live-efe-map ("it's OK to run M-pheromone-field as a follow on"). Charter
-drafted by claude-18. Owner: TBD.**
+drafted by claude-18. Owner: TBD.
 
 ## The claim gate (inherited, binding)
 
@@ -70,3 +70,10 @@ surfaces and are (sometimes) drawn. Three design questions, roughly in order:
   answers constrain the accumulator design), M-capability-star-map (what the WM
   credits). The ants correspondence stays structural: pheromones → this mission;
   colony behavior claims stay out until the loop closes.
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] A durable server-side accumulator records designed deposits by district and exposes the deposit semantics in the live EFE map.
+- [ ] Each signal class has a documented half-life and lazy read-time decay whose values are visible through the field endpoint.
+- [ ] An agent's normal context surface displays nearby high-pheromone districts without auto-dispatching action.
+- [ ] An evidence trace shows an agent's district or mission choice changed because of the field, or the mission records the stated clean-kill result after honest trials.

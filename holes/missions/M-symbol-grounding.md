@@ -1,7 +1,7 @@
 # Mission: Symbol Grounding — Structure Mining Inside `$...$` Math Content
 
 **Date:** 2026-05-21
-**Status:** IDENTIFY → MAP (sections 1–3); DERIVE for Layer 1 starting today
+**Status:** OPEN — IDENTIFY → MAP (sections 1–3); DERIVE for Layer 1 starting today
 **Owner:** Joe (architecture + Batch One curator); claude-7 (implementation)
 **Predecessor:** [M-structure-seed-promotion.md](M-structure-seed-promotion.md)
 — the scope-learning loop this mission extends down into math content
@@ -336,3 +336,12 @@ falling across two cycles**.
 At that point the next bottleneck is upstream: better symbol declaration
 detection in prose, or richer cross-paper resolution. Those are followups,
 not this mission.
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] The Layer 1 v2 demo shows visible math-scope marks on at least 80% of math-heavy papers and its regex regression tests pass.
+- [ ] Layer 2 reaches Layer 1 coverage parity and its AST handles at least five named constructions missed by regex.
+- [ ] Layer 3 achieves at least 50% symbol-grounding precision on a 30-paper sample against the First Proof Batch One projection.
+- [ ] Real post-H4 held output meets the preregistered `symbol_grounded` coverage-at-confidence target while keeping `symbol_tagged` at 1.0, `W-NEST-SCOPE` at 0, and grounding non-decreasing.
+- [ ] The evaluation harness machine-checks the preregistered capability-star bar and surfaces the result in a regenerated star-map graph.
+- [ ] Held-out precision and `math_outer_count` are recorded across two cycles and satisfy the mission's stopping rule or name the next upstream bottleneck.

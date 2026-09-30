@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-22 (rev 2026-05-23 with explicit preparation phase
 + Wikipedia gold source)
-**Status:** DERIVE — preparation gates must pass before sending Rob's batch
+**Status:** OPEN — DERIVE — preparation gates must pass before sending Rob's batch
 **Owner:** Joe (decides) / claude-7 (drafted)
 **Predecessor:** [M-symbol-grounding.md](M-symbol-grounding.md)
 
@@ -365,3 +365,12 @@ front-loading the precision validation. Specifically:
 - Joe's explicit OK in P6 is the consent gate (see [[operator
   not Sovereign]] in MEMORY.md: Joe-as-operator means his
   decisions are signals plus a final yes/no, not optional).
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] Wikipedia gold JSON contains at least 1,000 well-formed symbol/canon pairs across at least 500 articles, including a recorded 30-pair hand sample.
+- [ ] Combined PM and Wikipedia gold contains at least 1,500 pairs across at least 800 entries and reports the per-source precision delta.
+- [ ] Strategy gating plus canon-ancestry comparison achieves at least 25% loose precision on the combined gold.
+- [ ] The final evaluation reports at least 30% loose precision, no high-volume strategy below 15%, and no more than a five-point recall drop.
+- [ ] The full pipeline completes cleanly on 100 papers and emits loadable evaluation JSON plus a structurally valid learned-vocabulary side file.
+- [ ] Joe's explicit approval is recorded after review of the precision report, 100-paper output, and scale economics, before Rob's batch is sent.

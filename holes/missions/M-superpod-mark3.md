@@ -1,7 +1,7 @@
 # Mission: Superpod Mark 3 — Pattern-Tagged + Geometrically Annotated arXiv Corpus
 
 **Date:** 2026-04-27
-**Status:** IDENTIFY
+**Status:** OPEN — IDENTIFY
 **Owner:** Rob (superpod runs), Joe (pipeline code + evaluation)
 **Repos:** futon6 (pipeline), futon3c (downstream consumers),
 futon3 (pattern application diagnostic — parent theory mission)
@@ -706,7 +706,7 @@ silent-fail modes"), geometry artifact spec (matches
 branch (Q3 conclusion). DERIVE writeup is ≈ 1-2 hours of
 focused work.
 
-### tl;dr
+## Acceptance checklist (2026-09-30)
 
 - [ ] Mark 3 tags arXiv papers using an arXiv-aware prompt and hierarchical pattern set, with batch coverage and hand-tagging agreement measured and recorded.
 - [ ] Mark 3 uses eprint input by default for rich theorem-and-proof hypergraphs.

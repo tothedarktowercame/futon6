@@ -1,7 +1,7 @@
 # Mission: Structure-Seed Promotion — From Replay Labels to a Live Pattern Inducer
 
 **Date:** 2026-05-20
-**Status:** INSTANTIATE (sections 3.1–3.3 + anti-clobber filter landed 2026-05-20; loss-of-loss stopping rule open)
+**Status:** OPEN — INSTANTIATE (sections 3.1–3.3 + anti-clobber filter landed 2026-05-20; loss-of-loss stopping rule open)
 **Owner:** Joe (POC complete on `nlab-wiring.py` / `build-uncovered-sentence-audit.py` / `superpod-job.py`); next-phase delegate TBD
 **Predecessor work in same session:**
 - structure-seed signature aggregation and Stage 5 hook (Codex,
@@ -332,3 +332,9 @@ inhabitation rate per cycle drops below some threshold ε.
 - `test_detect_learned_skips_bad_regex_silently`
 
 Test count after this slice: 122 passed.
+
+## Acceptance checklist (2026-09-30)
+
+- [x] The information-rich signature, heuristic classification, quarantined regex emission, and anti-clobber slices run on real audit data. (evidence: 30-paper validation and 122-test checkpoint above)
+- [ ] Promotion-cycle records include `structure_loss` and before/after outer-term counts for every evaluated paper.
+- [ ] A measured cycle reports the inhabitation rate and applies the documented loss-of-loss stopping threshold ε.
