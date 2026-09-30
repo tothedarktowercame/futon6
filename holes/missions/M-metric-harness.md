@@ -1,6 +1,6 @@
 # M-metric-harness — the next end-to-end run measures PROGRESS, not throughput
 
-**Status:** HEAD complete; IDENTIFY authored; MAP complete (scratch-work survey);
+**Status:** OPEN — HEAD complete; IDENTIFY authored; MAP complete (scratch-work survey);
 DERIVE authored (3-axis taxonomy + per-phase & aggregate catalog); ARGUE authored
 (paradox resolved); VERIFY spiked (accretion slope real + steep at small n);
 **INSTANTIATE-CPU done** — `scripts/metric_harness.py`: 7 metrics across all 3 axes
@@ -561,3 +561,11 @@ instrumented to *emit metrics as it goes*:
 
 The slope report (`data/metric-harness-report.json` + the table) is the progress artifact
 and the superpod go/no-go input.
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] Every headline metric has a defined, non-trivial value at `n=1`.
+- [ ] Each metric emits its `n=1→10` slope with per-stage attribution.
+- [ ] Expected-rising metrics either rise or report a pinpointed cause of flatness.
+- [ ] A 10-paper then 20-paper run enables both reasoning siblings, concepts, comprehension, and cross-paper mining.
+- [ ] `data/metric-harness-report.json` presents slope, rather than paper count, as the headline.

@@ -1,7 +1,7 @@
 # Mission: Hyperreal Dictionary Planning
 
 **Date:** 2026-04-29
-**Status:** IDENTIFY
+**Status:** OPEN — IDENTIFY
 **Owner:** Joe
 **Repo:** futon6
 **Sequel architecture:** `futon3/holes/missions/M-live-geometric-stack.md`
@@ -249,3 +249,10 @@ likely split by consumer:
 - formalization packets
 - tutoring / learning pathways
 - self-play / agent loops
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] A written architecture note names the corpus-level schema and ingestion boundary.
+- [ ] At least two buildable-now probes run on real superpod-derived data.
+- [ ] A reality-check memo states missing prerequisites and effort bands for tutoring, self-play, and formalisation.
+- [ ] The roadmap assigns each next lane to a named follow-on mission.

@@ -1,7 +1,7 @@
 # M-efe-bge-followon-actions
 
 Date: 2026-06-12
-Status: HANDOFF-READY. Exploration by the claude owner-session; reviewed by fable-2 (whistle,
+**Status:** OPEN — HANDOFF-READY. Exploration by the claude owner-session; reviewed by fable-2 (whistle,
 2026-06-12). Offered to and scoped for **fable-2** to execute. This single document is the
 hand-off: it says what we did, what we learned, what is *not yet proven*, and the bundle to run.
 
@@ -186,3 +186,9 @@ Artifacts added: `scripts/mission_embed_diagnostics.py`;
 claude owner-session built the family + agreement matrix; fable-2 supplied the (a)/(b)/(c) review
 that corrected the premature "embed is richer" claim and the unaligned disagreement-field sketch.
 This doc is the synthesis handed back to fable-2 to execute.
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] The bimetric substrate records semantic distance, graph distance, and their disagreement as separate fields.
+- [ ] The disagreement-field ranking is evaluated against `O-cross-mission-unlocking` and beats chance and graph distance alone.
+- [ ] The mission records Joe’s decisions on adopting the bimetric framing and the standing unlocking acceptance test.

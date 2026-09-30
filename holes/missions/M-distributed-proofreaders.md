@@ -1,7 +1,7 @@
 # M-distributed-proofreaders — structure-first recognition + QA over the math corpus
 
 **Date:** 2026-06-13 · owner: claude-1 seat (this session) · paired (Joe + Opus)
-**Status:** DERIVE (working PoC in hand; derive gate minted below)
+**Status:** OPEN — DERIVE (working PoC in hand; derive gate minted below)
 **Capability:** `:distributed-proofreaders` (region t3, Futon City) — the
 solo-FUTON, CPU-local planet in the `full-arxiv-mining` ↔
 `math-ct-prior-substrate` system.
@@ -125,3 +125,11 @@ work (single-GPU Linode, separate lane).
 
 **Per-MSC replication:** the whole chain is `--eprints <dir>`-parameterised;
 the superpod blast re-points DEFAULT_EPRINTS per MSC class. Demo complete.
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] The structural mop-up vocabulary classifies `\begin`, `\label`, `\ref`, and `\\` without counting them as genuine unknowns.
+- [ ] The standard vocabulary registry covers the measured residue including `\vert`, `\Box`, and `\#`.
+- [ ] Recognized-but-untyped operator macros such as `\Hom`, `\End`, and `\colim` receive corpus-reusable roles.
+- [ ] A corpus-wide recognizer registry is generated from the corrected macro tables and reused across papers.
+- [ ] A re-mine loss census shows the dominant genuine loss class decreases without increasing a previously repaired class.

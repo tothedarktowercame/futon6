@@ -1,5 +1,7 @@
 # Mission: Distributed Proofs & Refutations — FM-001
 
+**Status:** OPEN — no prior status recorded
+
 Date: 2026-03-07
 Scope: Distributed multi-agent attack on FM-001 (Ramsey Numbers for Book Graphs)
 using Lakatos-style dialectical proof methodology across federated IRC channels.
@@ -530,3 +532,11 @@ Joe attaches to claude-2 (Mentor) via workspace2 and monitors.
   - supervises both `make dev` and `scripts/ngircd_bridge.py`
   - defaults `CODEX_CWD` to the `futon6` root to reduce scattered work
   - also intentionally leaves `FUTON3C_PROOF_STATE_ROOT` unset
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] `FM-001-ramsey-book-graphs-state.md` retains a spec lock matching the FrontierMath source with zero substitution incidents.
+- [ ] The mission records at least three distinct proof routes and no unlicensed TryHarder or dual-core overlap events.
+- [ ] The falsification record names a checked counterexample, obstruction, reduced subproblem, or reusable negative result.
+- [ ] Every budgeted solver run has a classified log, artifact hashes, and independently checked SAT witness or UNSAT evidence.
+- [ ] The final MAP record documents the proof landscape, discovered patterns, PURs, and final mission status.

@@ -1,6 +1,6 @@
 # M-live-efe-map — agents on the EFE landscape, ants-style
 
-**Status: VERIFY complete (2026-07-04) — HEAD and IDENTIFY ratified by
+**Status:** CLOSED — VERIFY complete (2026-07-04) — HEAD and IDENTIFY ratified by
 Joe 2026-07-04 evening; MAP verified the inventory and found the
 frontier gap; DERIVE locked the two-tier placement/freshness rule;
 ARGUE defended it; Joe ratified DERIVE+ARGUE (D-frontier, D-method, C3
@@ -9,7 +9,7 @@ claims against the live systems same session (claude-18). All checks
 pass; three operational findings recorded for INSTANTIATE. C3 cadence
 resolved by Joe: ≈daily; the one-off re-embed ran same session
 (coordinates 212 → 248, BGE file regenerated, endpoint serving the new
-set live).**
+set live).
 
 ## HEAD
 

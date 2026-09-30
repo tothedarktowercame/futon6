@@ -1,7 +1,7 @@
 # Mission: Paper Reverse Morphogenesis
 
 **Date:** 2026-04-15
-**Status:** DERIVE (design spec for batch-002; implementation follows)
+**Status:** OPEN — DERIVE (design spec for batch-002; implementation follows)
 **Parent mission:** M-superpod-mark2 (Checkpoint — Learn As We Go, 2026-04-15)
 **Consumer mission:** M-apm-solutions (forward solver for theorem proving)
 **Owner:** Joe (design, pipeline code), Rob (superpod execution)
@@ -520,3 +520,12 @@ batches 003+ sharper than 002.
 | M-apm-solutions | Consumer: forward solver trained on this corpus |
 | M-artificial-stack-exchange | Future consumer: agents use forward solver |
 | M-diagramprover | Separate proof-search workflow; may consume forward solver output |
+
+## Acceptance checklist (2026-09-30)
+
+- [ ] Batch-002 produces stage 5c technique terms with loci and classical/LLM provenance.
+- [ ] Batch-002 produces stage 5d paper hypergraphs with typed nodes, typed hyperedges, and extractor provenance.
+- [ ] Stage 6 emits the four-layer reconstruction schema for one-, two-, and three-pass arms.
+- [ ] Stage 11 emits term coverage, structural match, finding coherence, and an inevitability score per paper.
+- [ ] `experiment_meta.json` records every experimental arm and per-paper assignment.
+- [ ] The per-batch loop emits reviewed update proposals and a 100-paper prior-batch comparison before advancing.
