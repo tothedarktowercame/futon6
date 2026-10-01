@@ -15,8 +15,10 @@ class ComparatorTests(unittest.TestCase):
   base={"schema":c.ACCT,"stage":"S4","invocation":"S4-a001"}
   ec={"accepted":2,"rejected":0,"errored":0,"deferred":0,"expected":2,"unaccounted":0}
   sc={"accepted":2,"rejected":0,"errored":0,"deferred":4,"expected":6,"unaccounted":0}
-  (d/"S4.extract.json").write_text(json.dumps({**base,"producer":"extract","expected":papers,"counts":ec,"items":ex}))
-  (d/"S4.select.json").write_text(json.dumps({**base,"producer":"select","expected":sorted(x["id"] for x in sel),"counts":sc,"items":sel}))
+  expected_papers=list(reversed(papers)) if reverse else papers
+  expected_selected=sorted([x["id"] for x in sel],reverse=reverse)
+  (d/"S4.extract.json").write_text(json.dumps({**base,"producer":"extract","expected":expected_papers,"counts":ec,"items":ex}))
+  (d/"S4.select.json").write_text(json.dumps({**base,"producer":"select","expected":expected_selected,"counts":sc,"items":sel}))
   (run/"run-manifest.json").write_text(json.dumps({"schema-version":1,"papers":papers,"selection":{"expository-selection":"archived-policy/v1","expository-cap":1,"expository-cap-rule":None}}))
   return run,d/"S4.extract.json",d/"S4.select.json",run/"run-manifest.json"
  def test_exact_baseline_same_budget_and_old_ids(self):

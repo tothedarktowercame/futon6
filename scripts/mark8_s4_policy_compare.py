@@ -21,7 +21,7 @@ def unique(rows,label):
   if x["id"] in out: raise ValueError(f"duplicate {label} id: {x['id']}")
   out[x["id"]]=x
  return out
-def semantic(doc): return digest({**doc,"items":sorted(doc["items"],key=lambda x:x["id"])})
+def semantic(doc): return digest({**doc,"expected":sorted(doc["expected"]),"items":sorted(doc["items"],key=lambda x:x["id"])})
 def load(path,producer):
  d=json.loads(path.read_bytes()); finite(d)
  if d.get("schema")!=ACCT or d.get("stage")!="S4" or d.get("producer")!=producer: raise ValueError(f"refused {producer} schema/stage/producer")
