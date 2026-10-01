@@ -150,3 +150,59 @@ The implementation is complete; the remaining actions belong to the operator.
         "source-line": 4,
     }
     assert all(gate["hx/type"] == "mission-scope/operator-gate" for gate in gates)
+
+
+def test_real_argue_table_keeps_all_seven_library_citations(tmp_path: Path) -> None:
+    root = SCRIPT.parents[2]
+    mission = root / "futon2/holes/M-G-over-cascades.md"
+    text = mission.read_text()
+    table = text.split("**Pattern cross-reference", 1)[1].split("**Trade-offs", 1)[0]
+    path = _write(tmp_path, "M-table.md",
+                  "# Mission\n\n## MAP\n"
+                  "`aif/expected-free-energy-scorecard`\n\n## ARGUE\n" + table)
+    tree = scope_detect.detect_mission_scopes(
+        path, kernel_terms=[], capabilities=set(),
+        patterns=scope_detect.load_pattern_index(root),
+    )
+    scopes = _by_binder(tree, "pattern")
+    argue = [s for s in scopes if s["ends"][1]["phase"] == "argue"]
+    assert [s["ends"][2]["ident"] for s in argue] == [
+        "futon-theory/structural-tension-as-observation",
+        "aif/expected-free-energy-scorecard",
+        "aif/candidate-pattern-action-space",
+        "aif/admissibility",
+        "aif/no-self-certification",
+        "aif/off-continuity-null-discriminates",
+        "aif/niche-construction",
+    ]
+    assert len(scopes) == 8
+    assert all((root / s["ends"][2]["ref"]).is_file() for s in argue)
+
+
+def test_short_prose_and_unknown_qualified_names_are_not_pattern_citations():
+    index = {"aif/admissibility": "library/aif/admissibility.flexiarg",
+             "no-self-certification": "library/aif/no-self-certification.flexiarg"}
+    assert scope_detect.pattern_slots(
+        "admissibility; unknown/no-self-certification", index) == []
+    slots = scope_detect.pattern_slots(
+        "`aif/admissibility` then `aif/admissibility`", index)
+    assert len(slots) == 2
+    assert slots[0]["offset"] < slots[1]["offset"]
+
+
+def test_ambiguous_basenames_require_qualification_and_ignore_worktrees(tmp_path):
+    for repo, category in [("futon3", "aif"), ("futon3", "other"),
+                           ("futon3-old-worktree", "aif")]:
+        library = tmp_path / repo / "library" / category
+        library.mkdir(parents=True, exist_ok=True)
+        (library / "no-self-certification.flexiarg").write_text("pattern")
+    patterns = scope_detect.load_pattern_index(tmp_path)
+    assert len(patterns) == 2
+    path = _write(tmp_path, "M-ambiguous.md",
+                  "# Mission\n\n## ARGUE\nno-self-certification\n"
+                  "`aif/no-self-certification`\n")
+    tree = scope_detect.detect_mission_scopes(
+        path, kernel_terms=[], capabilities=set(), patterns=patterns)
+    citations = _by_binder(tree, "pattern")
+    assert len(citations) == 1
+    assert citations[0]["ends"][2]["ident"] == "aif/no-self-certification"

@@ -76,6 +76,13 @@ def fetch(binder):
         params["fields"] = "hx/props"
         if after:
             params["after"] = after
+        else:
+            # Exact totals are opt-in server-side: futon1b's hyperedges-route
+            # only counts when include-total=true, because skipping the count
+            # is what enables its bounded-window caching. The pagination check
+            # below needs that total, so ask for it on the FIRST page only --
+            # counting scans the whole matching type.
+            params["include-total"] = "true"
         q = urllib.parse.urlencode(params)
         req = urllib.request.Request(f"{BASE}?{q}", headers={"Accept": "application/json"})
         # futon1b routes these through with-expensive-read!; the largest binder

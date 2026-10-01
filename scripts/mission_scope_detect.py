@@ -163,21 +163,18 @@ def load_capabilities(path: Path = STAR_MAP) -> set[str]:
 
 
 def load_pattern_index(root: Path = ROOT) -> list[dict]:
-    """Distinctive flexiarg basenames available as literal pattern citations."""
+    """Library identities, including short names when explicitly qualified."""
     patterns = []
-    seen: set[str] = set()
     for path in sorted(root.glob("futon*/library/**/*.flexiarg")):
-        name = path.stem
-        if name in seen:
+        # Worktree copies are not additional pattern authorities.
+        if not re.fullmatch(r"futon[0-9]+[a-z]?", path.relative_to(root).parts[0]):
             continue
-        if name.count("-") >= 2 and len(name) >= 12:
-            patterns.append(
-                {
-                    "name": name,
-                    "ref": path.relative_to(root).as_posix(),
-                }
-            )
-            seen.add(name)
+        library = root / path.relative_to(root).parts[0] / "library"
+        patterns.append({
+            "name": path.stem,
+            "id": path.relative_to(library).with_suffix("").as_posix(),
+            "ref": path.relative_to(root).as_posix(),
+        })
     return patterns
 
 
@@ -281,21 +278,24 @@ def capability_slots(text: str, capabilities: set[str], concept_terms: Iterable[
 
 def pattern_slots(text: str, pattern_index: dict[str, str]) -> list[dict]:
     slots = []
-    seen = set()
-    for m in PATTERN_CANDIDATE_RE.finditer(text):
+    # Qualified citations resolve against exact library IDs. Keep the
+    # distinctive-name heuristic only for unqualified prose.
+    candidates = list(re.finditer(
+        r"(?<![a-z0-9_/-])([a-z][a-z0-9-]*(?:/[a-z][a-z0-9-]*)+)(?![a-z0-9_/-])",
+        text,
+    ))
+    qualified_spans = [m.span() for m in candidates]
+    candidates.extend(m for m in PATTERN_CANDIDATE_RE.finditer(text)
+                      if not any(a <= m.start() < b for a, b in qualified_spans))
+    for m in sorted(candidates, key=lambda match: match.start()):
         name = m.group(1)
-        if name in seen:
-            continue
         if name in pattern_index:
-            slots.append(
-                {
-                    "role": "pattern",
-                    "ident": name,
-                    "ref": pattern_index[name],
-                    "offset": m.start(),
-                }
-            )
-            seen.add(name)
+            slots.append({
+                "role": "pattern",
+                "ident": name,
+                "ref": pattern_index[name],
+                "offset": m.start(),
+            })
     return slots
 
 
@@ -421,11 +421,19 @@ def detect_mission_scopes(
     capabilities = capabilities if capabilities is not None else load_capabilities()
     patterns = patterns if patterns is not None else load_pattern_index()
     sections = split_sections(text)
-    pattern_index = {pattern["name"]: pattern["ref"] for pattern in patterns}
+    refs_by_name: dict[str, set[str]] = {}
+    for pattern in patterns:
+        name = pattern["name"]
+        if name.count("-") >= 2 and len(name) >= 12:
+            refs_by_name.setdefault(name, set()).add(pattern["ref"])
+        if pattern.get("id"):
+            refs_by_name.setdefault(pattern["id"], set()).add(pattern["ref"])
+    # Ambiguous names must be qualified, never resolved by directory order.
+    pattern_index = {name: next(iter(refs)) for name, refs in refs_by_name.items()
+                     if len(refs) == 1}
 
     scopes: list[dict] = []
     phase_stack: list[tuple[int, str, str, str]] = []
-    seen_patterns: set[str] = set()
     idx = 0
 
     def current_parent(level: int) -> tuple[str | None, str]:
@@ -525,9 +533,8 @@ def detect_mission_scopes(
         # inline-closure idiom). Per-bullet anchors are what mission-mode
         # renders and what cascade reassembly orders by; a single positionless
         # rollup loses both (WM piloted flight 2026-06-12, sortie 5).
-        pat_slots = [slot for slot in pattern_slots(sec.text, pattern_index) if slot["ident"] not in seen_patterns]
+        pat_slots = pattern_slots(sec.text, pattern_index)
         for slot in pat_slots:
-            seen_patterns.add(slot["ident"])
             offset = slot.pop("offset", 0)
             pos = sec.content_start + offset
             window = sec.text[max(0, offset - 200):offset + 200]
