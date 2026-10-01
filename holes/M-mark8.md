@@ -82,7 +82,7 @@ decision it is intended to inform.
       declared before implementation.
 - [x] The report-only wooliness slice passes unit, determinism, and forbidden-
       input tests.
-- [ ] Offline S4 policies are compared at an identical global call budget.
+- [x] Offline S4 policies are compared at an identical global call budget.
 - [ ] The refusal/error queue preserves every attempted or skipped item with a
       reason and retry disposition.
 - [ ] A prospective run compares Mark8 with the frozen Mark7 baseline.
