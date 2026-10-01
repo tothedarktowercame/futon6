@@ -92,6 +92,27 @@ def load_corpus_ids(path: Path) -> CorpusIds:
     return CorpusIds(canonical, safe, safe_to_canonical, canonical_to_safe, titles_by_safe)
 
 
+def load_plain_ids(path: Path) -> CorpusIds:
+    """Load Mark7's frozen one-id-per-line corpus when no metadata index exists."""
+    canonical: set[str] = set()
+    safe: set[str] = set()
+    safe_to_canonical: dict[str, str] = {}
+    canonical_to_safe: dict[str, str] = {}
+    for raw in path.read_text().splitlines():
+        value = raw.strip()
+        if not value or value.startswith("#"):
+            continue
+        cid = value.replace("__", "/")
+        sid = safe_id(cid)
+        canonical.add(cid)
+        safe.add(sid)
+        safe_to_canonical[sid] = cid
+        canonical_to_safe[cid] = sid
+    if not canonical:
+        raise ValueError(f"empty corpus id manifest: {path}")
+    return CorpusIds(canonical, safe, safe_to_canonical, canonical_to_safe, {})
+
+
 def load_bib_index(path: Path) -> dict[str, dict[str, Any]]:
     data = json.loads(path.read_text())
     return {paper["paper_id"]: paper for paper in data.get("papers", [])}
@@ -265,6 +286,9 @@ def resolve_paper(marks_path: Path, bib_index: dict[str, dict[str, Any]],
 def iter_papers(args: argparse.Namespace) -> list[str]:
     if args.paper:
         return args.paper
+    if args.ids:
+        return [line.strip() for line in args.ids.read_text().splitlines()
+                if line.strip() and not line.lstrip().startswith("#")]
     ids = [line.strip() for line in args.gh200.read_text().splitlines() if line.strip()]
     if args.sample_size:
         ids = ids[:args.sample_size]
@@ -280,17 +304,18 @@ def main() -> int:
     ap.add_argument("--bib-index", type=Path, default=DEFAULT_BIB_INDEX)
     ap.add_argument("--citations", type=Path, default=DEFAULT_CITATIONS)
     ap.add_argument("--corpus-index", type=Path, default=DEFAULT_CORPUS_INDEX)
+    ap.add_argument("--ids", type=Path, help="frozen one-id-per-line Mark7 corpus; overrides --corpus-index")
     ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
     args = ap.parse_args()
 
-    ids = load_corpus_ids(args.corpus_index)
+    ids = load_plain_ids(args.ids) if args.ids else load_corpus_ids(args.corpus_index)
     bib = load_bib_index(args.bib_index)
     citation_edges = load_citation_edges(args.citations)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     source_paths = {
         "bib-index": str(args.bib_index),
         "citations-index": str(args.citations),
-        "corpus-id-index": str(args.corpus_index),
+        "corpus-id-index": str(args.ids or args.corpus_index),
     }
 
     summaries = []

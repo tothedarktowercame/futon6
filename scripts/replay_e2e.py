@@ -338,6 +338,31 @@ def p3(run_dir):
             f"{len(pts)} checkpoints, rise {d.get('rise')}, rising={d.get('rising')}")
 
 
+@check("P4-corpus-layers", "WARP/TAPESTRY retrieval", needs="S12")
+def p4(run_dir):
+    root = Path(run_dir)
+    doc = manifest.load(root)
+    features = doc.get("features") or {}
+    details = []
+    if features.get("warp"):
+        warp = manifest.contained(root, doc["artifacts"]["warp"])
+        wm = json.loads((warp / "warp-manifest.json").read_text())
+        if not wm or not (warp / "concept-index.json").is_file():
+            return False, "enabled WARP has no stage manifest or concept index"
+        details.append(f"WARP {len([k for k in wm if not k.startswith('__')])} stages")
+    if features.get("tapestry"):
+        cite = json.loads((manifest.contained(root, doc["artifacts"]["cite-resolution"]) /
+                           "manifest.json").read_text())
+        phylogeny = json.loads((manifest.contained(root, doc["artifacts"]["tapestry"]) /
+                                "concept-phylogeny.json").read_text())
+        if cite.get("schema") != "futon6/h7-cite-resolution-run/v1":
+            return False, "citation-resolution manifest has the wrong schema"
+        if phylogeny.get("schema") != "futon6/warp/concept-phylogeny/v1":
+            return False, "concept phylogeny has the wrong schema"
+        details.append(f"TAPESTRY {cite.get('stats', {}).get('papers-written', 0)} papers")
+    return True, ", ".join(details) if details else "corpus-wide layers disabled by manifest"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", required=True)
@@ -399,6 +424,7 @@ def main() -> int:
     p1(R(a.run_dir), through=T)
     p2(R(a.run_dir), a.corpus_id, through=T)
     p3(R(a.run_dir), through=T)
+    p4(R(a.run_dir), through=T)
 
     if not RESULTS:
         print("no checks applicable at --through " + a.through)
@@ -418,7 +444,7 @@ def main() -> int:
         else:
             tag = "PASS"
         print(f"  [{tag}] {cid:<{width}}  {msg}   ({hz})")
-    skipped = 12 - len(RESULTS)
+    skipped = 13 - len(RESULTS)
     print(f"\n{len(RESULTS) - fails - warns}/{len(RESULTS)} pass, {warns} warn, {fails} fail"
           + (f"  ({skipped} not yet applicable)" if skipped else ""))
     if fails:

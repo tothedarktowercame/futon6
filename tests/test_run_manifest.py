@@ -63,6 +63,52 @@ class ManifestTests(unittest.TestCase):
                 self.prepare()
         self.assertEqual((self.run_dir / manifest.NAME).read_bytes(), original)
 
+    def test_corpus_layers_default_on_and_independent_opt_outs_are_pinned(self):
+        doc = self.prepare()
+        self.assertEqual(doc["features"], {"warp": True, "tapestry": True})
+        env = manifest.environment(self.run_dir, doc)
+        self.assertEqual(env["FUTON6_ENABLE_WARP"], "1")
+        self.assertEqual(env["FUTON6_ENABLE_TAPESTRY"], "1")
+        self.assertEqual(Path(env["FUTON6_WARP_DIR"]), self.run_dir / "artifacts/warp")
+
+        second = self.base / "no-warp"
+        with manifest.lock(second):
+            disabled = manifest.prepare(second, "test-run", "test-corpus", self.ids,
+                                        warp=False, tapestry=True)
+        self.assertEqual(disabled["features"], {"warp": False, "tapestry": True})
+        self.assertNotIn("FUTON6_WARP_DIR", manifest.environment(second, disabled))
+        with manifest.lock(second), self.assertRaisesRegex(ValueError, "features"):
+            manifest.prepare(second, "test-run", "test-corpus", self.ids,
+                             warp=True, tapestry=True)
+
+    def test_legacy_manifest_resumes_with_both_layers_implicitly_off(self):
+        self.prepare()
+        path = self.run_dir / manifest.NAME
+        legacy = json.loads(path.read_text())
+        legacy.pop("features")
+        for key in ("warp", "warp-subject", "cite-resolution", "tapestry"):
+            legacy["artifacts"].pop(key)
+        path.write_text(json.dumps(legacy))
+
+        with manifest.lock(self.run_dir):
+            resumed = manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids,
+                                       warp=False, tapestry=False)
+
+        self.assertNotIn("features", resumed)
+        self.assertEqual(manifest.environment(self.run_dir, resumed)["FUTON6_ENABLE_WARP"], "0")
+
+    def test_enabled_layers_are_required_at_their_declared_prefix(self):
+        doc = self.prepare()
+        for key, filename in (("marks", "paper.json"), ("loss", "dashboard.json")):
+            directory = self.run_dir / doc["artifacts"][key]
+            directory.mkdir(parents=True)
+            (directory / filename).write_text("{}")
+        (self.run_dir / "metrics.jsonl").write_text(
+            json.dumps({"run_id": "test-run", "corpus_id": "test-corpus", "stage": "S1"}) + "\n")
+        (self.run_dir / "phase-ledger.jsonl").write_text("{}\n")
+        with self.assertRaisesRegex(ValueError, "WARP artifact"):
+            manifest.require_artifacts(self.run_dir, doc, "S2")
+
     def test_changed_source_tree_keeps_completed_work_and_is_recorded(self):
         """Editing the tree must not discard ledgered stages (rob, 2026-09-23).
 

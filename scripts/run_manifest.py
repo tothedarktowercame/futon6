@@ -19,7 +19,8 @@ import run_contract
 NAME = "run-manifest.json"
 ARTIFACTS = {key: "artifacts/" + key for key in (
     "marks", "loss", "candidates", "graphs", "expo-candidates", "expo",
-    "steps", "rung3", "paper-graphs", "clean", "demo")}
+    "steps", "rung3", "paper-graphs", "clean", "demo", "warp",
+    "warp-subject", "cite-resolution", "tapestry")}
 # v2: exposition first, then prose inside proofs if the cap leaves room (S3 reads
 # proofs); v1 spaced every region evenly, which had no in-proof regions to spend on.
 # v3: the cap itself scales with the number of regions the paper carved, so a note and
@@ -156,6 +157,11 @@ def declared_item_floor() -> float:
     return floor
 
 
+def declared_features(*, warp: bool = True, tapestry: bool = True) -> dict[str, bool]:
+    """Corpus-wide phases pinned into a run's immutable configuration."""
+    return {"warp": bool(warp), "tapestry": bool(tapestry)}
+
+
 def item_floor(doc: dict) -> float:
     """The floor this run is judged by: whatever its manifest pinned.
 
@@ -169,7 +175,12 @@ def item_floor(doc: dict) -> float:
 
 def load(run_dir: Path) -> dict:
     doc = json.loads((run_dir / NAME).read_text())
-    if not isinstance(doc, dict) or doc.get("schema-version") != 1 or doc.get("artifacts") != ARTIFACTS or doc.get("ids") != "corpus.ids.txt":
+    artifacts = doc.get("artifacts") if isinstance(doc, dict) else None
+    if (not isinstance(doc, dict) or doc.get("schema-version") != 1 or
+            not isinstance(artifacts, dict) or
+            any(ARTIFACTS.get(key) != value for key, value in artifacts.items()) or
+            not ((set(ARTIFACTS) - {"warp", "warp-subject", "cite-resolution", "tapestry"}) <= set(artifacts)) or
+            doc.get("ids") != "corpus.ids.txt"):
         raise ValueError("unsupported or malformed run manifest")
     if not all(isinstance(doc.get(key), str) and doc[key] for key in ("run-id", "corpus-id", "corpus-sha256")):
         raise ValueError("manifest has no run/corpus identity")
@@ -200,6 +211,8 @@ VOLATILE_CONFIG_KEYS = ("hardware-placement",)
 def _identity_view(doc: dict) -> dict:
     """The pinned document as the resume check should see it: placement removed."""
     view = dict(doc)
+    # Runs retrieved before corpus-wide layers existed implicitly had both off.
+    view.setdefault("features", {"warp": False, "tapestry": False})
     host = view.get("host-configuration")
     if isinstance(host, dict):
         view["host-configuration"] = {
@@ -272,7 +285,8 @@ def _record_code_change(run_dir: Path, was: dict | None, now: dict) -> None:
     )
 
 
-def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
+def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path, *,
+            warp: bool = True, tapestry: bool = True) -> dict:
     """Caller holds lock. Never adopt unmanifested artifacts or mutate a resume identity."""
     raw = ids.read_bytes()
     papers = [line.strip() for line in raw.decode().splitlines() if line.strip()]
@@ -292,6 +306,7 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
               "run-contract": run_contract.active(),
               "host-configuration": config.effective(),
               "model-revision": os.environ.get("FUTON6_MODEL_REVISION"),
+              "features": declared_features(warp=warp, tapestry=tapestry),
               "selection": {"all-proofs": True,
                             "expository-cap": cap,
                             # Deferred regions are accounted as deferred, never as accepted.
@@ -327,12 +342,21 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path) -> dict:
 
 
 def environment(run_dir: Path, doc: dict) -> dict[str, str]:
-    return {"RUN_ID": doc["run-id"], "CORPUS": doc["corpus-id"],
+    features = doc.get("features") or {"warp": False, "tapestry": False}
+    env = {"RUN_ID": doc["run-id"], "CORPUS": doc["corpus-id"],
             "FUTON6_RUN_DIR": str(run_dir),
             **{ENV_KEYS[key]: str(contained(run_dir, value)) for key, value in doc["artifacts"].items()},
             "MARKS_DIR": str(contained(run_dir, doc["artifacts"]["marks"])),
             "EVAL_REPORT": str(run_dir / "eval-report.json"),
-            "EVAL_SUMMARY": str(run_dir / "eval-summary.md")}
+            "EVAL_SUMMARY": str(run_dir / "eval-summary.md"),
+            "FUTON6_ENABLE_WARP": "1" if features.get("warp") else "0",
+            "FUTON6_ENABLE_TAPESTRY": "1" if features.get("tapestry") else "0"}
+    if features.get("warp"):
+        env.update({
+            "FUTON6_WARP_DIR": str(contained(run_dir, doc["artifacts"]["warp"])),
+            "FUTON6_SUBJECT_DATA": str(contained(run_dir, doc["artifacts"]["warp-subject"])),
+        })
+    return env
 
 
 def validate_records(run_dir: Path, doc: dict):
@@ -372,3 +396,16 @@ def require_artifacts(run_dir: Path, doc: dict, through: str):
     if stage >= 8 and not any(p.is_file() and p.stat().st_size for p in
                             (run_dir / doc["artifacts"]["demo"] / "ingest").rglob("*.json")):
         raise ValueError("missing exported ingest artifacts")
+    features = doc.get("features") or {}
+    if stage >= 2 and features.get("warp"):
+        for name in ("warp-manifest.json", "concept-index.json", "concept-usage.json",
+                     "bib-index.json", "citations.json"):
+            path = contained(run_dir, doc["artifacts"]["warp"]) / name
+            if not path.is_file() or not path.stat().st_size:
+                raise ValueError(f"missing/empty WARP artifact for {through}: {path}")
+    if stage >= 12 and features.get("tapestry"):
+        cite_manifest = contained(run_dir, doc["artifacts"]["cite-resolution"]) / "manifest.json"
+        phylogeny = contained(run_dir, doc["artifacts"]["tapestry"]) / "concept-phylogeny.json"
+        for path in (cite_manifest, phylogeny):
+            if not path.is_file() or not path.stat().st_size:
+                raise ValueError(f"missing/empty TAPESTRY artifact for {through}: {path}")

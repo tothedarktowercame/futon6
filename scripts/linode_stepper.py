@@ -101,7 +101,8 @@ OPS = {
     # binding coverage retrievable and comparable between runs.
     "S1b": {"cmd": f"{{PY}} scripts/markup_strategies.py --list {{IDS}} --marks {MARKS} --out {STRAT}",
             "crit": "per-paper term and symbol hypergraphs; every paper resolves"},
-    "S2": {"cmd": "{PY} scripts/warp_substrate_check.py --ids {IDS} && "
+    "S2": {"cmd": f"{{PY}} scripts/mark7_corpus_layers.py warp --run-dir {RUN} && "
+           "{PY} scripts/warp_substrate_check.py --ids {IDS} && "
            f"{{PY}} scripts/coverage_inline.py --concepts {WARP}/concept-usage.json --field paper_concepts",
            "note": "substrate-corpus match is now a measured gate (E-superpod-hardening H1 tier 1); "
                    "committed concept-usage is df>=10-filtered so the coverage curve reads flat — "
@@ -223,7 +224,8 @@ OPS = {
             f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
             "crit": "structural canonical shapes + whole-paper signatures produced"},
     "S12": {"cmd": f"{{PY}} scripts/accretion_curves.py --graphs {GRAPHS} --candidates {CAND} "
-            f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
+            f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS && "
+            f"{{PY}} scripts/mark7_corpus_layers.py tapestry --run-dir {RUN}",
             "crit": "ACCRETION SWEEP: every tier metric checkpointed at log-spaced n -> rising curves"},
     "RETRIEVE": {"boot": True, "halt": True, "note": "<profile.retrieve> — pull ALL run outputs to dev BEFORE teardown"},
 }
@@ -647,6 +649,10 @@ def main():
     ap.add_argument("--run-dir", help="phase-ledger + emit dir (data/runs/<run-id>)")
     ap.add_argument("--corpus-id")
     ap.add_argument("--run-id")
+    ap.add_argument("--warp", action=argparse.BooleanOptionalAction, default=None,
+                    help="refresh a run-local WARP substrate at S2 (default on for new runs)")
+    ap.add_argument("--tapestry", action=argparse.BooleanOptionalAction, default=None,
+                    help="resolve citations and build concept phylogeny at S12 (default on for new runs)")
     ap.add_argument("--reuse", nargs="+", action="extend", default=[], choices=["S0", "STAGE"], help="completed boot steps; repeated options accumulate; computational stages require ledger evidence")
     ap.add_argument("--mark-done", nargs="+", choices=["S0", "STAGE"], default=[], help="terminal boot bookkeeping; cannot combine with --run, --plan, --from, --to or --reuse")
     args = ap.parse_args()
@@ -672,6 +678,10 @@ def main():
         if args.ids:
             IDS = shlex.quote(args.ids)
         print("host configuration: " + json.dumps(config.effective(), sort_keys=True))
+        print("corpus layers: " + json.dumps({
+            "warp": True if args.warp is None else args.warp,
+            "tapestry": True if args.tapestry is None else args.tapestry,
+        }, sort_keys=True))
         plan(stages, args.profile)
         return 0
     try:
@@ -687,7 +697,15 @@ def main():
             source_ids = Path(ROOT) / IDS
         os.environ.update(config.child_environment())
         with manifest.lock(run_dir):
-            doc = manifest.prepare(run_dir, run_id, corpus_id, source_ids)
+            if (run_dir / manifest.NAME).exists():
+                recorded_features = (manifest.load(run_dir).get("features") or
+                                     {"warp": False, "tapestry": False})
+            else:
+                recorded_features = {"warp": True, "tapestry": True}
+            requested_warp = recorded_features["warp"] if args.warp is None else args.warp
+            requested_tapestry = recorded_features["tapestry"] if args.tapestry is None else args.tapestry
+            doc = manifest.prepare(run_dir, run_id, corpus_id, source_ids,
+                                   warp=requested_warp, tapestry=requested_tapestry)
             os.environ.update(manifest.environment(run_dir, doc))
             IDS = shlex.quote(str(run_dir / doc["ids"]))
             effective = doc["host-configuration"]

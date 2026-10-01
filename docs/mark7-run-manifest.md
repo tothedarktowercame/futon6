@@ -41,6 +41,27 @@ or dependency lock. Configuration paths are frozen for execution, so relocating
 a run permits replay/retrieval but does not silently authorize execution under
 a different checkout or input root.
 
+New runs pin two corpus-wide features, both enabled by default. They have
+independent command-line opt-outs:
+
+```bash
+# default: WARP and TAPESTRY enabled
+python3 scripts/linode_stepper.py --run ...
+
+python3 scripts/linode_stepper.py --run ... --no-warp
+python3 scripts/linode_stepper.py --run ... --no-tapestry
+python3 scripts/linode_stepper.py --run ... --no-warp --no-tapestry
+```
+
+WARP runs at S2, after S1 has produced run-local marks and before paid WEFT
+mining. It writes its stage manifest and substrate under `artifacts/warp/`, and
+its subject term prior and encyclopedia under `artifacts/warp-subject/`.
+Subsequent stages read that run-local substrate. TAPESTRY runs at S12, resolves
+citations for the frozen corpus into `artifacts/cite-resolution/`, and writes
+`artifacts/tapestry/concept-phylogeny.json`. If WARP is disabled while TAPESTRY
+is enabled, TAPESTRY uses the configured frozen external substrate. Feature
+choices are immutable on resume.
+
 Resume with the same run and corpus IDs, configuration, and `--run-dir`, using
 `--from S<n>` for the next stage. Omit `--ids` to use the frozen list. Changed
 corpus bytes, code, substrate, model revision, or configuration require a new
@@ -155,6 +176,8 @@ combine with execution/planning/range/reuse flags, and cannot mark S1–S12 done
 | `artifacts/steps`, `artifacts/rung3` | S5 proof steps and technique maps |
 | `artifacts/paper-graphs` | S6 paper graphs |
 | `artifacts/clean`, `artifacts/demo` | S7 CLeans, embedding; S8 ingest exports |
+| `artifacts/warp`, `artifacts/warp-subject` | Versioned WARP indexes, manifest, term prior and encyclopedia |
+| `artifacts/cite-resolution`, `artifacts/tapestry` | Run-local citation resolutions and concept phylogeny |
 | `render/`, run-root JSON/text files | Rendered pages, eval/anchor reports, harvested and learned outputs |
 
 The runner installs output environment variables from the manifest. Standalone
