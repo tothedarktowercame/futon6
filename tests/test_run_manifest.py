@@ -110,6 +110,11 @@ class ManifestTests(unittest.TestCase):
         self.assertNotIn("allocation", resumed)
         self.assertNotIn("FUTON6_PLAN", manifest.environment(self.run_dir, resumed))
 
+        with patch.dict(os.environ, {"FUTON6_MODEL_CALL_BUDGET": "9"}), \
+                manifest.lock(self.run_dir), \
+                self.assertRaisesRegex(ValueError, "allocation"):
+            manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids)
+
     def test_legacy_manifest_resumes_with_both_layers_implicitly_off(self):
         self.prepare()
         path = self.run_dir / manifest.NAME

@@ -57,8 +57,9 @@ Promotion to an allocator input requires all of:
 ## Allocation slices after validation
 
 1. Offline replay of S4 selection at the same global acceptance total.
-2. Deterministic prechecks for missing clause spans, cyclic step proposals, and
-   prompt-size overflow, with saved slots returned to the deferred pool.
+2. Deterministic prechecks for missing clause spans and prompt-size overflow,
+   with saved slots returned to the deferred pool. Cyclic model-produced step
+   graphs are post-call validation failures, not deterministic prechecks.
 3. A refusal/error queue distinguishing deterministic skips, retryable parse
    failures, timeouts, and truncations.
 4. Batchwise routing using post-call outcomes while retaining a declared

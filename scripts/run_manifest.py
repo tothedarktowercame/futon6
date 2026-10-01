@@ -233,7 +233,11 @@ def _identity_view(doc: dict) -> dict:
     # Runs retrieved before corpus-wide layers existed implicitly had both off.
     view.setdefault("features", {"warp": False, "tapestry": False})
     # Pre-Mark8 runs had no allocator and therefore spent no planner-declared calls.
-    view.setdefault("allocation", declared_allocation())
+    # This compatibility identity is historical fact, not current environment.
+    view.setdefault("allocation", {
+        "model-call-budget": DEFAULT_MODEL_CALL_BUDGET,
+        "allocation-policy": ALLOCATION_POLICY,
+    })
     host = view.get("host-configuration")
     if isinstance(host, dict):
         view["host-configuration"] = {
