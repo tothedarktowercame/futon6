@@ -44,6 +44,7 @@ def main(argv=None):
     concepts = {h["concept"] for h in json.load(open(W / "hitlist.json"))["hitlist"]}
     maxn = max(len(c.split()) for c in concepts)
     paper_use = {}
+    scanned_ids = []
     ids = dp.corpus_paper_ids()
     done = 0
     for index, pid in enumerate(ids, 1):
@@ -51,6 +52,7 @@ def main(argv=None):
         if not t:
             continue
         done += 1
+        scanned_ids.append(pid)
         w = canon_toks(t)
         found = set()
         # n-gram membership against the concept set
@@ -66,6 +68,7 @@ def main(argv=None):
                   f"with-concepts={len(paper_use)}", file=sys.stderr, flush=True)
     (W / "concept-usage.json").write_text(json.dumps(
         {"schema": "concept-usage-v1", "papers_scanned": done,
+         "papers_scanned_ids": sorted(scanned_ids),
          "papers_with_concepts": len(paper_use), "paper_concepts": paper_use}))
     import statistics
     cnts = [len(v) for v in paper_use.values()]

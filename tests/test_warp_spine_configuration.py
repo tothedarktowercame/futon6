@@ -81,6 +81,39 @@ class SpineDefaultsTests(unittest.TestCase):
         self.assertIn((config.ROOT / "data/concept-encyclopedia-ct.json").resolve(),
                       gate.SUBSTRATE)
 
+    def test_substrate_identity_includes_scanned_papers_without_concepts(self):
+        import warp_substrate_check as gate
+
+        identities, field = gate.substrate_paper_ids({
+            "schema": "concept-usage-v1",
+            "papers_scanned": 2,
+            "papers_scanned_ids": ["paper-with-concepts", "paper-with-none"],
+            "paper_concepts": {"paper-with-concepts": ["category"]},
+        }, "paper_concepts")
+        self.assertEqual(identities, {"paper-with-concepts", "paper-with-none"})
+        self.assertEqual(field, "papers_scanned_ids")
+
+    def test_substrate_identity_refuses_duplicate_or_mismatched_evidence(self):
+        import warp_substrate_check as gate
+
+        with self.assertRaisesRegex(ValueError, "unique nonempty"):
+            gate.substrate_paper_ids({
+                "papers_scanned": 2, "papers_scanned_ids": ["p1", "p1"]
+            }, "paper_concepts")
+        with self.assertRaisesRegex(ValueError, "does not match"):
+            gate.substrate_paper_ids({
+                "papers_scanned": 2, "papers_scanned_ids": ["p1"]
+            }, "paper_concepts")
+
+    def test_substrate_identity_retains_legacy_paper_concepts_fallback(self):
+        import warp_substrate_check as gate
+
+        identities, field = gate.substrate_paper_ids({
+            "paper_concepts": {"p1": ["category"]}
+        }, "paper_concepts")
+        self.assertEqual(identities, {"p1"})
+        self.assertEqual(field, "paper_concepts")
+
 
 class SubjectOverrideTests(unittest.TestCase):
     """A second subject's vocabulary must not touch the first one's."""
