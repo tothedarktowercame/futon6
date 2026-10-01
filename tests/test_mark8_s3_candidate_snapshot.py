@@ -11,7 +11,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import mark3_extract_candidates as extract
 
 
-def write_snapshot(root: Path, papers=("p1",), payload=b'{"paper-id":"p1"}'):
+def write_snapshot(root: Path, papers=("p1",), payload=None):
+    if payload is None:
+        payload = json.dumps({"schema": extract.run_contract.spec()["candidates"]["schema"],
+                              "paper-id": "p1", "proof-id": "p1__p0"}).encode()
     candidate = root / "p1__p0.candidate.json"
     candidate.write_bytes(payload)
     manifest = {
@@ -45,6 +48,19 @@ class CandidateSnapshot(unittest.TestCase):
             extract.frozen_snapshot(self.root, ["p2"], all_proofs=True)
         (self.root / "p1__p1.candidate.json").write_text("{}")
         with self.assertRaisesRegex(ValueError, "file set"):
+            extract.frozen_snapshot(self.root, ["p1"], all_proofs=True)
+
+    def test_frozen_candidates_refuse_foreign_payload_identity(self):
+        write_snapshot(self.root)
+        path = self.root / "p1__p0.candidate.json"
+        payload = json.loads(path.read_text())
+        payload["paper-id"] = "foreign"
+        encoded = json.dumps(payload).encode()
+        path.write_bytes(encoded)
+        manifest = json.loads((self.root / "manifest.json").read_text())
+        manifest["files"][0]["sha256"] = hashlib.sha256(encoded).hexdigest()
+        (self.root / "manifest.json").write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, "paper-id differs"):
             extract.frozen_snapshot(self.root, ["p1"], all_proofs=True)
 
     def test_cli_resume_does_not_call_extraction(self):

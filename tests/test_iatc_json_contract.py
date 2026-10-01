@@ -56,10 +56,11 @@ class Contract(unittest.TestCase):
         derivations = iatc_json.steps_schema(10, 14, 3)["properties"]["derivations"]["properties"]
         entry = derivations["2"]["items"]["properties"]
         self.assertIn("iff", entry["relation"]["enum"])
-        # the second call knows which nodes exist, so a derivation cannot cite node 4 of 3,
-        # and node 2's premises exclude node 2: a node cannot be derived from itself
-        self.assertEqual(sorted(derivations), ["1", "2", "3"])
-        self.assertEqual(entry["premises"]["items"]["enum"], [1, 3])
+        # Topological order is structural: node 1 cannot be derived and node n
+        # can cite only earlier nodes.
+        self.assertEqual(sorted(derivations), ["2", "3"])
+        self.assertEqual(entry["premises"]["items"]["enum"], [1])
+        self.assertEqual(derivations["3"]["items"]["properties"]["premises"]["items"]["enum"], [1, 2])
 
     def test_derivations_become_steps_in_node_order(self):
         doc = {"derivations": {"3": [{"relation": "implies", "premises": [2], "warrant_kind": "stated",
@@ -88,10 +89,11 @@ class Contract(unittest.TestCase):
                           "steps": [step([7], 14), step([14], 7)]}
         self.assertTrue(any("node 7 -> node 14 -> node 7" in p
                             for p in iatc_json.problems(observed_short, 10, 14)))
-        # a proof may state its conclusion before the steps that justify it: the
-        # requirement is acyclicity, not the order the steps are listed in
+        # A non-topological node listing is now refused rather than left for a
+        # costly cycle retry.
         claim_first = {"nodes": [node(), node(), node()], "steps": [step([2, 3], 1), step([3], 2)]}
-        self.assertEqual(iatc_json.problems(claim_first, 10, 14), [])
+        self.assertTrue(any("topologically ordered" in problem
+                            for problem in iatc_json.problems(claim_first, 10, 14)))
         for bad, text in (({"nodes": [node(), node()], "steps": [step([5], 2)]}, "refers to node"),
                           ({"nodes": [node(lo=12, hi=11), node()], "steps": [step([1], 2)]}, "ordered range"),
                           ({"nodes": [node(), node()], "steps": [step([1], 2, lo=9)]}, "inside 10-14"),
@@ -99,6 +101,11 @@ class Contract(unittest.TestCase):
             self.assertTrue(any(text in p for p in iatc_json.problems(bad, 10, 14)), (bad, text))
         iff = {"nodes": [node(text="A"), node(text="B")], "steps": [step([1], 2, relation="iff")]}
         self.assertEqual(iatc_json.problems(iff, 10, 14), [])
+        contradiction = {
+            "nodes": [node(text="contrary assumption"), node(text="contradiction"), node(text="claim")],
+            "steps": [step([1], 2), step([2], 3, relation="by-contradiction")],
+        }
+        self.assertEqual(iatc_json.problems(contradiction, 10, 14), [])
         # a construction step establishes the object it builds (34 such steps in the
         # 98-graph corpus), and a proof establishes the paper's own labelled statement
         construction = {"nodes": [node(text="hypotheses"), node(kind="object", text="the product P"),
@@ -249,7 +256,7 @@ class Loop(unittest.TestCase):
             body = json.loads(request.data)
             seen.append((request.full_url, body))
             if request.full_url.endswith("/tokenize"):
-                return Response({"count": 8193})
+                return Response({"count": 8193, "max_model_len": 16384})
             return Response({"choices": [{"finish_reason": "stop", "message": {"content": "{}"}}]})
         with patch("urllib.request.urlopen", urlopen):
             answer = loop.call_openai("prompt", CAND, "m", iatc_json.nodes_schema(10, 14))
@@ -265,7 +272,7 @@ class Loop(unittest.TestCase):
         class Response:
             def __enter__(self): return self
             def __exit__(self, *args): return False
-            def read(self): return b'{"count":16200}'
+            def read(self): return b'{"count":16200,"max_model_len":16384}'
         def urlopen(request, timeout):
             calls.append(request.full_url)
             return Response()
@@ -275,6 +282,28 @@ class Loop(unittest.TestCase):
         self.assertEqual(len(calls), 1)
         self.assertTrue(calls[0].endswith("/tokenize"))
         self.assertEqual(caught.exception.envelope["available-output-tokens"], 184)
+
+    def test_token_preflight_requires_the_pinned_endpoint_context(self):
+        class Response:
+            def __init__(self, payload): self.payload = payload
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self): return json.dumps(self.payload).encode()
+        for served in (None, True, 8192):
+            calls = []
+            def urlopen(request, timeout):
+                calls.append(request.full_url)
+                payload = {"count": 100}
+                if served is not None:
+                    payload["max_model_len"] = served
+                return Response(payload)
+            expected = ("positive integer max_model_len" if served in (None, True)
+                        else "endpoint max_model_len=8192")
+            with self.subTest(served=served), patch("urllib.request.urlopen", urlopen), \
+                    self.assertRaisesRegex(loop.ModelCallError, expected):
+                loop.call_openai("prompt", CAND, "m", iatc_json.nodes_schema(10, 14))
+            self.assertEqual(len(calls), 1)
+            self.assertTrue(calls[0].endswith("/tokenize"))
 
     def test_preflight_refusal_is_accounted_with_the_envelope(self):
         def refuse(_prompt, _cand, _model, _schema):
@@ -300,9 +329,12 @@ class Loop(unittest.TestCase):
         doc, sanitized, repairs = loop.parse_model_json(raw)
         self.assertEqual(doc["warrant"], "tensor by $\\times$")
         self.assertIsNotNone(sanitized)
-        self.assertEqual(repairs, [{"offset": 23, "codepoint": 9, "restored-prefix": "\\t"}])
+        self.assertEqual(repairs, [{"offset": 23, "codepoint": 9,
+                                    "restored-command": "\\times"}])
         with self.assertRaises(json.JSONDecodeError):
             loop.parse_model_json('{"warrant":"two\t words"}')
+        with self.assertRaises(json.JSONDecodeError):
+            loop.parse_model_json('{"warrant":"two\twords"}')
 
     def test_raw_and_sanitized_responses_are_both_retained(self):
         clean_nodes = json.dumps({"nodes": [node(text="tensor by $\\times$", lo=12, hi=12),
@@ -316,7 +348,7 @@ class Loop(unittest.TestCase):
         self.assertEqual(items["1111.0001__p0"]["status"], "accepted")
         self.assertIn("nodes-response", attempt)
         self.assertIn("nodes-sanitized-response", attempt)
-        self.assertEqual(attempt["nodes-sanitization"][0]["restored-prefix"], "\\t")
+        self.assertEqual(attempt["nodes-sanitization"][0]["restored-command"], "\\times")
         raw = self.out / ".attempts/r/S3-sanitize/1111.0001__p0.nodes.json"
         repaired = self.out / ".attempts/r/S3-sanitize/1111.0001__p0.nodes.sanitized.json"
         self.assertIn("\t", raw.read_text())

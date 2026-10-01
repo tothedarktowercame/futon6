@@ -230,6 +230,9 @@ VOLATILE_CONFIG_KEYS = ("hardware-placement",)
 def _identity_view(doc: dict) -> dict:
     """The pinned document as the resume check should see it: placement removed."""
     view = dict(doc)
+    # Manifests older than explicit contract pinning ran Mark7-v4. Supplying that
+    # historical identity makes them resumable without relabelling them Mark8.
+    view.setdefault("run-contract", run_contract.active("mark7-v4"))
     # Runs retrieved before corpus-wide layers existed implicitly had both off.
     view.setdefault("features", {"warp": False, "tapestry": False})
     # Pre-Mark8 runs had no allocator and therefore spent no planner-declared calls.

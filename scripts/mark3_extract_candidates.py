@@ -31,6 +31,7 @@ import json
 
 import candidate_spans
 import markup_strategies
+import run_contract
 import re
 from pathlib import Path
 from typing import Any
@@ -337,17 +338,61 @@ def frozen_snapshot(outdir: Path, papers: list[str], *, all_proofs: bool) -> dic
         raise ValueError("candidate snapshot requested-papers do not match the run corpus")
     if doc.get("all-proofs") is not all_proofs:
         raise ValueError("candidate snapshot extraction mode does not match --all-proofs")
+    if not all_proofs:
+        raise ValueError("only all-proofs candidate snapshots are reusable")
     expected = doc.get("files")
-    if not isinstance(expected, list) or any(set(row) != {"path", "sha256"} for row in expected):
+    if (not isinstance(expected, list)
+            or any(not isinstance(row, dict) or set(row) != {"path", "sha256"}
+                   or not isinstance(row["path"], str) or not row["path"]
+                   or Path(row["path"]).name != row["path"]
+                   or not isinstance(row["sha256"], str)
+                   for row in expected)):
         raise ValueError("candidate snapshot files are malformed")
+    expected_names = [row["path"] for row in expected]
+    if len(expected_names) != len(set(expected_names)):
+        raise ValueError("candidate snapshot has duplicate file identities")
+    rows = doc.get("papers")
+    if not isinstance(rows, list):
+        raise ValueError("candidate snapshot paper rows are malformed")
+    identities: list[str] = []
+    by_proof: dict[str, dict] = {}
+    requested = set(papers)
+    for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError("candidate snapshot paper row is not an object")
+        paper, proof = row.get("paper-id"), row.get("proof-id")
+        if not isinstance(paper, str) or not paper or paper not in requested:
+            raise ValueError(f"candidate snapshot row has foreign paper-id {paper!r}")
+        if not isinstance(proof, str) or not proof:
+            raise ValueError("candidate snapshot row has missing proof-id")
+        identities.append(proof)
+        by_proof[proof] = row
+    if len(identities) != len(set(identities)):
+        raise ValueError("candidate snapshot has duplicate proof identities")
+    row_names = sorted(f"{proof}.candidate.json" for proof in identities)
     actual_paths = sorted(outdir.glob("*.candidate.json"))
     actual_names = [path.name for path in actual_paths]
-    expected_names = [row["path"] for row in expected]
-    if expected_names != sorted(expected_names) or actual_names != expected_names:
+    if (expected_names != sorted(expected_names) or actual_names != expected_names
+            or row_names != expected_names):
         raise ValueError("candidate snapshot file set differs from its manifest")
+    schema = run_contract.spec()["candidates"]["schema"]
     for path, row in zip(actual_paths, expected):
         if _sha256(path) != row["sha256"]:
             raise ValueError(f"candidate snapshot hash mismatch: {path.name}")
+        try:
+            candidate = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError(f"candidate snapshot payload unreadable: {path.name}: {exc}") from exc
+        if not isinstance(candidate, dict):
+            raise ValueError(f"candidate snapshot payload is not an object: {path.name}")
+        proof = path.name.removesuffix(".candidate.json")
+        manifest_row = by_proof[proof]
+        if candidate.get("schema") != schema:
+            raise ValueError(f"candidate snapshot payload has wrong schema: {path.name}")
+        if candidate.get("proof-id") != proof:
+            raise ValueError(f"candidate snapshot payload proof-id differs from filename: {path.name}")
+        if candidate.get("paper-id") != manifest_row["paper-id"]:
+            raise ValueError(f"candidate snapshot payload paper-id differs from manifest: {path.name}")
     return doc
 
 

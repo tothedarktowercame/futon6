@@ -47,9 +47,9 @@ CANDIDATE_SCHEMA = CONTRACT["candidates"]["schema"]
 # recorded as a deviation rather than silently changing what a run means.
 MAX_TOKENS = int(os.environ.get("FUTON6_IATC_MAX_TOKENS") or CONTRACT["decoding"]["max-tokens"])
 MODEL_CONTEXT_TOKENS = int(os.environ.get("FUTON6_MODEL_CONTEXT_TOKENS")
-                           or CONTRACT["decoding"]["context-tokens"])
+                           or CONTRACT["decoding"].get("context-tokens", 16384))
 MIN_OUTPUT_TOKENS = int(os.environ.get("FUTON6_IATC_MIN_OUTPUT_TOKENS")
-                        or CONTRACT["decoding"]["min-output-tokens"])
+                        or CONTRACT["decoding"].get("min-output-tokens", 256))
 
 NODES_TASK = """You read ONE mathematical proof and list what its argument is made of.
 
@@ -252,6 +252,16 @@ def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> ModelAnswe
     prompt_tokens = tokenized.get("count")
     if isinstance(prompt_tokens, bool) or not isinstance(prompt_tokens, int) or prompt_tokens < 0:
         raise ModelCallError(0, "token preflight returned no nonnegative integer count")
+    served_context = tokenized.get("max_model_len")
+    if isinstance(served_context, bool) or not isinstance(served_context, int) or served_context <= 0:
+        raise ModelCallError(0, "token preflight returned no positive integer max_model_len")
+    if served_context != MODEL_CONTEXT_TOKENS:
+        raise ModelCallError(
+            0, f"token preflight refused: endpoint max_model_len={served_context}, "
+               f"contract context_tokens={MODEL_CONTEXT_TOKENS}",
+            envelope={"prompt-tokens": prompt_tokens,
+                      "endpoint-context-tokens": served_context,
+                      "context-tokens": MODEL_CONTEXT_TOKENS})
     available = MODEL_CONTEXT_TOKENS - prompt_tokens
     envelope = {"prompt-tokens": prompt_tokens,
                 "context-tokens": MODEL_CONTEXT_TOKENS,
@@ -408,6 +418,10 @@ def load_candidates_for_run(cands: list[Path]) -> tuple[list[dict], list[tuple[d
 # there rather than closed. Parsed control characters are still refused; the
 # pre-parse sanitizer below handles only an unescaped command-prefix byte.
 CONTROL_CHARS = {"\t": "\\t", "\b": "\\b", "\r": "\\r", "\f": "\\f", "\v": "\\v"}
+# Repairs are evidence-derived, not guesses over the whole JSON control alphabet.
+# The Mark8 rhgrh run observed a literal TAB followed by "imes", i.e. a serving
+# serializer had materialised JSON's \t while emitting the LaTeX command \times.
+CONTROL_COMMAND_SUFFIXES = {"\t": ("imes",)}
 
 
 def sanitize_string_control_chars(raw: str) -> tuple[str, list[dict]]:
@@ -424,13 +438,19 @@ def sanitize_string_control_chars(raw: str) -> tuple[str, list[dict]]:
     in_string = False
     escaped = False
     for offset, char in enumerate(raw):
-        if in_string and char in CONTROL_CHARS and offset + 1 < len(raw) and raw[offset + 1].isalpha():
-            spelling = CONTROL_CHARS[char]
-            out.append("\\\\" + spelling[1:])
-            repairs.append({"offset": offset, "codepoint": ord(char),
-                            "restored-prefix": spelling})
-            escaped = False
-            continue
+        if in_string and char in CONTROL_COMMAND_SUFFIXES:
+            suffix = next((suffix for suffix in CONTROL_COMMAND_SUFFIXES[char]
+                           if raw.startswith(suffix, offset + 1)
+                           and (offset + 1 + len(suffix) == len(raw)
+                                or not raw[offset + 1 + len(suffix)].isalpha())), None)
+            if suffix is not None:
+                command = "\\" + CONTROL_CHARS[char][1:] + suffix
+                # Two source backslashes decode to one literal LaTeX backslash.
+                out.append("\\\\" + CONTROL_CHARS[char][1:])
+                repairs.append({"offset": offset, "codepoint": ord(char),
+                                "restored-command": command})
+                escaped = False
+                continue
         out.append(char)
         if not in_string:
             if char == '"':

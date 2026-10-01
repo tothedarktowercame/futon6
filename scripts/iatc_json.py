@@ -156,21 +156,21 @@ def steps_schema(lo: int, hi: int, node_count: int) -> dict:
     Two things are structural here rather than checked afterwards. The premises of
     a derivation are drawn from the nodes that now exist, which is why this is a
     second call (3 of 20 proofs in the first live run cited nodes never written).
-    And each node's premises are drawn from the OTHER nodes, so a node cannot be
-    derived from itself: that self-loop was every remaining rejection in the third
-    and fourth live runs. Multiple derivations of one node stay expressible (5.4%
-    of concluded nodes in the 98-graph corpus have more than one).
+    Nodes are listed in topological order. Node 1 is therefore an assumption,
+    citation, definition, or introduced object and cannot be derived; node n may
+    cite only nodes 1..n-1. This makes every directed cycle structurally
+    unrepresentable while multiple derivations of one node remain expressible.
     """
     line = {"type": "integer", "minimum": lo, "maximum": hi}
     derivations = {}
-    for node in range(1, max(node_count, 1) + 1):
-        others = [n for n in range(1, max(node_count, 1) + 1) if n != node]
+    for node in range(2, max(node_count, 1) + 1):
+        earlier = list(range(1, node))
         derivation = {"type": "object", "additionalProperties": False,
                       "required": ["relation", "premises", "warrant_kind", "warrant",
                                    "first_line", "last_line"],
                       "properties": {"relation": {"type": "string", "enum": list(RELATIONS)},
                                      "premises": {"type": "array", "minItems": 1, "maxItems": MAX_PREMISES,
-                                                  "items": {"type": "integer", "enum": others or [node]}},
+                                                  "items": {"type": "integer", "enum": earlier}},
                                      "warrant_kind": {"type": "string", "enum": list(WARRANT_KINDS)},
                                      "warrant": {"type": "string", "minLength": 1, "maxLength": 240},
                                      "first_line": line, "last_line": line}}
@@ -219,6 +219,10 @@ def problems(doc, lo: int, hi: int) -> list[str]:
             continue
         if conclusion in premises:
             found.append(f"{label}: node {conclusion} is both premise and conclusion")
+        later = [premise for premise in premises if premise >= conclusion]
+        if later:
+            found.append(f"{label}: conclusion node {conclusion} uses non-earlier premise(s) {later}; "
+                         "nodes must be topologically ordered")
         # No rule on the conclusion's kind. A construction step establishes the object
         # it builds, and a proof establishes the paper's own labelled statement, which
         # the model records as a ref carrying that label (`Theorem~\ref{StrongYone}`).

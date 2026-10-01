@@ -15,6 +15,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import run_manifest as manifest
+import run_contract
 import retrieve_run
 import linode_stepper as stepper
 import conformance
@@ -62,6 +63,29 @@ class ManifestTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "substrate"):
                 self.prepare()
         self.assertEqual((self.run_dir / manifest.NAME).read_bytes(), original)
+
+    def test_historical_contract_digests_and_mark8_selection_are_distinct(self):
+        self.assertEqual(run_contract.digest("mark7-v3"),
+                         "14a12f15bef34ff7726301d10840d5f42fed5d50a6ebb9337e5a6399398dd45a")
+        self.assertEqual(run_contract.digest("mark7-v4"),
+                         "616bc208000e4e9d692f59ea7c02652c1bef6c7bbbb843de711ce8377efdfcfb")
+        self.assertEqual(stepper.contract_for_run(self.run_dir), "mark8-v1")
+        doc = self.prepare()
+        self.assertEqual(doc["run-contract"]["id"], "mark8-v1")
+        self.assertEqual(stepper.contract_for_run(self.run_dir), "mark8-v1")
+
+    def test_pre_contract_manifest_resumes_as_mark7_v4_not_mark8(self):
+        self.prepare()
+        path = self.run_dir / manifest.NAME
+        legacy = json.loads(path.read_text())
+        legacy.pop("run-contract")
+        legacy["host-configuration"]["serving-conformance"]["required"]["contract"] = "mark7-v4"
+        path.write_text(json.dumps(legacy))
+        self.assertEqual(stepper.contract_for_run(self.run_dir), "mark7-v4")
+        with patch.dict(os.environ, {run_contract.CONTRACT_ENV: "mark7-v4"}), \
+                manifest.lock(self.run_dir):
+            resumed = manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids)
+        self.assertNotIn("run-contract", resumed)
 
     def test_corpus_layers_default_on_and_independent_opt_outs_are_pinned(self):
         doc = self.prepare()

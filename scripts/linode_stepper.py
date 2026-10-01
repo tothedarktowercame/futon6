@@ -29,6 +29,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import futon6_config as config
 import run_manifest as manifest
+import run_contract
 import stage_accounting as accounting
 try:
     import edn_format as edn
@@ -40,6 +41,19 @@ except ImportError as _exc:          # inspectable without it; see _MissingDeps
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, "holes", "linode-stepper-contract.md")
 PY = config.python_command()  # configured interpreter, safely quoted for stage shells
+MARK8_RUN_CONTRACT = "mark8-v1"
+
+
+def contract_for_run(run_dir: Path) -> str:
+    """New Mark8 runs use Mark8-v1; resumes inherit their recorded identity."""
+    if (run_dir / manifest.NAME).exists():
+        recorded = manifest.load(run_dir).get("run-contract") or {"id": "mark7-v4"}
+        selected = recorded.get("id")
+    else:
+        selected = MARK8_RUN_CONTRACT
+    if not isinstance(selected, str) or selected not in run_contract.CONTRACTS:
+        raise ValueError(f"run manifest names unknown contract {selected!r}")
+    return selected
 
 
 def kw(x):
@@ -689,6 +703,14 @@ def main():
         corpus_id = manifest.identity(args.corpus_id, "CORPUS", "--corpus-id")
         run_dir = Path(args.run_dir or os.path.join("data", "runs", run_id))
         run_dir = (Path(ROOT) / run_dir).resolve()
+        selected_contract = contract_for_run(run_dir)
+        inherited_contract = os.environ.get(run_contract.CONTRACT_ENV)
+        if inherited_contract and inherited_contract != selected_contract:
+            raise ValueError(f"{run_contract.CONTRACT_ENV}={inherited_contract!r} disagrees "
+                             f"with run contract {selected_contract!r}")
+        # Explicit even when no shell setting exists: child extraction and model
+        # processes must use the same contract the immutable manifest records.
+        os.environ[run_contract.CONTRACT_ENV] = selected_contract
         if args.ids:
             source_ids = (Path(ROOT) / args.ids).resolve()
         elif (run_dir / manifest.NAME).exists():
