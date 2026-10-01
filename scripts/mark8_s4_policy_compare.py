@@ -25,8 +25,20 @@ def semantic(doc): return digest({**doc,"items":sorted(doc["items"],key=lambda x
 def load(path,producer):
  d=json.loads(path.read_bytes()); finite(d)
  if d.get("schema")!=ACCT or d.get("stage")!="S4" or d.get("producer")!=producer: raise ValueError(f"refused {producer} schema/stage/producer")
+ if d.get("invocation")!="S4-a001": raise ValueError(f"refused {producer} invocation")
  if not isinstance(d.get("items"),list): raise ValueError(f"{producer} items must be a list")
- return d,unique(d["items"],producer)
+ rows=unique(d["items"],producer)
+ expected=d.get("expected"); counts=d.get("counts")
+ if not isinstance(expected,list) or len(expected)!=len(set(expected)) or not all(isinstance(x,str) and x for x in expected): raise ValueError(f"invalid {producer} expected identities")
+ if set(expected)!=set(rows): raise ValueError(f"{producer} expected identities contradict items")
+ vocab={"accepted","rejected","errored","deferred","expected","unaccounted"}
+ if not isinstance(counts,dict) or set(counts)!=vocab or not all(isinstance(v,int) and not isinstance(v,bool) and v>=0 for v in counts.values()): raise ValueError(f"invalid {producer} counts")
+ statuses=Counter(x.get("status") for x in rows.values())
+ if any(x not in {"accepted","rejected","errored","deferred"} for x in statuses): raise ValueError(f"invalid {producer} item status")
+ actual={x:statuses[x] for x in ("accepted","rejected","errored","deferred")}
+ actual.update(expected=len(expected),unaccounted=len(set(expected)-set(rows)))
+ if counts!=actual: raise ValueError(f"{producer} counts contradict items/expected")
+ return d,rows
 def allocate(counts,budget):
  total=sum(counts.values()); spend=min(total,budget)
  weights={p:min(120,max(12,round(6*math.sqrt(n)))) for p,n in counts.items()}
@@ -51,6 +63,7 @@ def compare(extract_path,select_path,manifest_path):
   if path!=expected[name].resolve(): raise ValueError(f"{name} path mismatch or escape")
  extract,ep=load(extract_path,"extract"); select,sp=load(select_path,"select")
  manifest=json.loads(manifest_path.read_bytes()); finite(manifest)
+ if isinstance(manifest.get("schema-version"),bool) or manifest.get("schema-version")!=1: raise ValueError("unsupported or missing manifest schema-version")
  papers=manifest.get("papers"); selection=manifest.get("selection")
  if not isinstance(papers,list) or len(papers)!=len(set(papers)) or not all(isinstance(x,str) and x for x in papers): raise ValueError("invalid manifest papers")
  if not isinstance(selection,dict): raise ValueError("missing archived selection policy")
