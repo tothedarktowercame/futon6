@@ -227,6 +227,33 @@ class ManifestTests(unittest.TestCase):
                 stepper.main()
             self.assertEqual(exit.exception.code, 2)
 
+    def test_runner_preflights_staged_warp_before_enabling_run_local_paths(self):
+        staged = self.base / "staged-warp"
+        observed = {}
+
+        def execute(*_args):
+            observed["warp"] = os.environ["FUTON6_WARP_DIR"]
+            return 0
+
+        def preflight_gate(*_args):
+            observed["preflight-warp"] = os.environ["FUTON6_WARP_DIR"]
+            return 0
+
+        with patch.dict(os.environ, {"FUTON6_WARP_DIR": str(staged)}), \
+                patch.object(sys, "argv", ["stepper", "--run", "--from", "S1", "--to", "S1",
+                                           "--run-dir", str(self.run_dir), "--run-id", "test-run",
+                                           "--corpus-id", "test-corpus", "--ids", str(self.ids),
+                                           "--reuse", "S0", "STAGE"]), \
+                patch.object(stepper, "preflight_gate", side_effect=preflight_gate) as preflight, \
+                patch.object(stepper, "conformance_gate", return_value=0), \
+                patch.object(stepper, "run", side_effect=execute) as run_stage:
+            self.assertEqual(stepper.main(), 0)
+
+        preflight.assert_called_once()
+        self.assertEqual(observed["preflight-warp"], str(staged))
+        self.assertEqual(observed["warp"], str(self.run_dir / "artifacts/warp"))
+        run_stage.assert_called_once()
+
     def test_runner_logs_and_writes_inside_manifest_paths(self):
         doc = self.prepare()
         stage = {"id": "S1", "name": "fixture", "compute": "cpu", "halt": False, "go": []}

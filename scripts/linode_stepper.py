@@ -706,7 +706,6 @@ def main():
             requested_tapestry = recorded_features["tapestry"] if args.tapestry is None else args.tapestry
             doc = manifest.prepare(run_dir, run_id, corpus_id, source_ids,
                                    warp=requested_warp, tapestry=requested_tapestry)
-            os.environ.update(manifest.environment(run_dir, doc))
             IDS = shlex.quote(str(run_dir / doc["ids"]))
             effective = doc["host-configuration"]
             print("host configuration: " + json.dumps(effective, sort_keys=True))
@@ -718,9 +717,15 @@ def main():
                     ledger_record(str(run_dir), sid, corpus_id, run_id)
                     print(f"ledger: {sid} marked done for corpus {corpus_id}")
                 return 0
+            # Preflight the staged source substrate before switching WARP to its
+            # empty run-local output directory.  Default-on WARP is built at S2;
+            # requiring its outputs before S1 made every new enabled run
+            # impossible to start.  The run-owned paths still become active
+            # before any computational stage executes.
             rc = preflight_gate(str(run_dir / doc["ids"])) or conformance_gate(str(run_dir / doc["ids"]))
             if rc:
                 return rc
+            os.environ.update(manifest.environment(run_dir, doc))
             return run(order(stages, args.frm, args.to), args.profile, args.no_halt,
                        str(run_dir), corpus_id, run_id, sorted(set(args.reuse)))
     except (OSError, ValueError) as exc:
