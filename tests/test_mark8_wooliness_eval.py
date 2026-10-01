@@ -34,6 +34,35 @@ class AucTests(unittest.TestCase):
 
 
 class EvaluationTests(unittest.TestCase):
+    def test_wrong_wooliness_schema_is_refused_before_gate(self):
+        wool, outcomes, quotes = inputs([("p:a", .9, True, .2), ("p:b", .1, False, .8)])
+        wool["schema"] = "model-output/v1"
+        with self.assertRaisesRegex(ValueError, "wooliness must satisfy schema"):
+            evaluation.evaluate(wool, outcomes, quotes)
+
+    def test_string_false_is_not_a_boolean_label(self):
+        wool, outcomes, quotes = inputs([("p:a", .1, False, .2)])
+        outcomes["records"][0]["weak-extraction"] = "false"
+        with self.assertRaisesRegex(ValueError, "must be a JSON boolean"):
+            evaluation.evaluate(wool, outcomes, quotes)
+
+    def test_unnamed_baseline_is_refused(self):
+        wool, outcomes, quotes = inputs([("p:a", .1, False, .2)])
+        outcomes["baseline-name"] = ""
+        with self.assertRaisesRegex(ValueError, "nonempty baseline proxy"):
+            evaluation.evaluate(wool, outcomes, quotes)
+
+    def test_nonfinite_and_boolean_numeric_values_are_refused(self):
+        for document, field, value in (("wool", "W", float("nan")),
+                                       ("outcome", "baseline-proxy", float("inf")),
+                                       ("quote", "agrees-share", True)):
+            with self.subTest(document=document, field=field, value=value):
+                wool, outcomes, quotes = inputs([("p:a", .1, False, .2)])
+                target = {"wool": wool, "outcome": outcomes, "quote": quotes}[document]
+                target["records"][0][field] = value
+                with self.assertRaisesRegex(ValueError, "finite JSON number"):
+                    evaluation.evaluate(wool, outcomes, quotes)
+
     def test_deterministic_bytes_under_reordered_inputs(self):
         rows = [("p:b", .8, True, .7), ("p:a", .2, False, .3)]
         first = inputs(rows)
@@ -91,13 +120,28 @@ class EvaluationTests(unittest.TestCase):
         top = report["C6-attention"]["rows"][0]
         self.assertEqual(set(top["components"]), {"W", "quote-disagreement", "baseline-proxy"})
 
+    def test_any_duplicate_forces_insufficient_even_with_at_least_21_joined_rows(self):
+        rows = []
+        for i in range(11):
+            rows.append((f"p:weak-{i}", .9, True, .6))
+            rows.append((f"p:strong-{i}", .1, False, .4))
+        wool, outcomes, quotes = inputs(rows)
+        wool["records"].append(dict(wool["records"][0]))
+
+        report = evaluation.evaluate(wool, outcomes, quotes)
+
+        self.assertGreaterEqual(report["join"]["joined"], 21)
+        self.assertEqual(report["join"]["duplicate-count"], 1)
+        self.assertEqual(report["join"]["duplicates"]["wooliness"], ["p:weak-0"])
+        self.assertEqual(report["gate"]["status"], "insufficient")
+
     def test_module_imports_only_standard_library_and_reads_only_cli_files(self):
         tree = ast.parse((ROOT / "scripts" / "mark8_wooliness_eval.py").read_text())
         imports = {alias.name.split(".")[0] for node in ast.walk(tree)
                    if isinstance(node, ast.Import) for alias in node.names}
         imports |= {node.module.split(".")[0] for node in ast.walk(tree)
                     if isinstance(node, ast.ImportFrom) and node.module}
-        self.assertEqual(imports, {"__future__", "argparse", "json", "pathlib", "typing"})
+        self.assertEqual(imports, {"__future__", "argparse", "json", "math", "pathlib", "typing"})
         self.assertEqual(evaluation.INPUT_FILES, ("wooliness", "outcomes", "quote-agreement"))
 
 

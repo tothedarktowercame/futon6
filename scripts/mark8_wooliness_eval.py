@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +17,51 @@ MIN_COVERAGE = 0.80
 MIN_JOINED = 20
 MIN_AUC = 0.65
 ATTENTION = {"W": 0.50, "quote-disagreement": 0.30, "baseline-proxy": 0.20}
+WOOLINESS_SCHEMA = "futon6/mark8-wooliness/v1"
+OUTCOME_STATUSES = frozenset({"accepted", "refused", "rejected", "errored", "deferred"})
+
+
+def identifier(row: dict, *, paper: bool = False) -> None:
+    if not isinstance(row.get("passage-id"), str) or not row["passage-id"]:
+        raise ValueError("passage-id must be a nonempty string")
+    if paper and (not isinstance(row.get("paper-id"), str) or not row["paper-id"]):
+        raise ValueError(f"{row['passage-id']}: paper-id must be a nonempty string")
+
+
+def number(value: Any, label: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+        raise ValueError(f"{label} must be a finite JSON number")
+    result = float(value)
+    if not 0 <= result <= 1:
+        raise ValueError(f"{label} must lie in [0,1]")
+    return result
+
+
+def validate_inputs(wooliness: Any, outcomes: Any, quotes: Any) -> None:
+    documents = ((wooliness, WOOLINESS_SCHEMA, "wooliness"),
+                 (outcomes, OUTCOME_SCHEMA, "outcomes"),
+                 (quotes, QUOTE_SCHEMA, "quote-agreement"))
+    for document, schema, label in documents:
+        if (not isinstance(document, dict) or document.get("schema") != schema or
+                not isinstance(document.get("records"), list) or
+                not all(isinstance(row, dict) for row in document["records"])):
+            raise ValueError(f"{label} must satisfy schema {schema}")
+    if not isinstance(outcomes.get("baseline-name"), str) or not outcomes["baseline-name"].strip():
+        raise ValueError("outcomes must name a nonempty baseline proxy")
+    for row in wooliness["records"]:
+        identifier(row, paper=True)
+        for field in ("W", "U", "C", "D"):
+            number(row.get(field), f"{row['passage-id']}.{field}")
+    for row in outcomes["records"]:
+        identifier(row)
+        if row.get("status") not in OUTCOME_STATUSES:
+            raise ValueError(f"{row['passage-id']}: invalid outcome status")
+        if not isinstance(row.get("weak-extraction"), bool):
+            raise ValueError(f"{row['passage-id']}: weak-extraction must be a JSON boolean")
+        number(row.get("baseline-proxy"), f"{row['passage-id']}.baseline-proxy")
+    for row in quotes["records"]:
+        identifier(row)
+        number(row.get("agrees-share"), f"{row['passage-id']}.agrees-share")
 
 
 def auc(scores: list[float], labels: list[bool]) -> float | None:
@@ -52,8 +98,7 @@ def calibration(points: list[dict]) -> list[dict]:
 
 
 def evaluate(wooliness: dict, outcomes: dict, quotes: dict, *, top_k: int = 20) -> dict:
-    if outcomes.get("schema") != OUTCOME_SCHEMA or quotes.get("schema") != QUOTE_SCHEMA:
-        raise ValueError("outcome and quote inputs must use the frozen Mark8 schemas")
+    validate_inputs(wooliness, outcomes, quotes)
     wool, wool_dups = index(wooliness.get("records", []), "passage-id")
     outcome, outcome_dups = index(outcomes.get("records", []), "passage-id")
     quote, quote_dups = index(quotes.get("records", []), "passage-id")
@@ -65,21 +110,20 @@ def evaluate(wooliness: dict, outcomes: dict, quotes: dict, *, top_k: int = 20) 
     points = []
     for identifier in joined_ids:
         w, o, q = wool[identifier], accepted_outcome[identifier], quote[identifier]
-        values = {name: float(w[name]) for name in ("W", "U", "C", "D")}
-        values["baseline-proxy"] = float(o["baseline-proxy"])
-        values["agrees-share"] = float(q["agrees-share"])
-        if any(not 0 <= value <= 1 for value in values.values()):
-            raise ValueError(f"{identifier}: scores and shares must lie in [0,1]")
+        values = {name: number(w[name], f"{identifier}.{name}") for name in ("W", "U", "C", "D")}
+        values["baseline-proxy"] = number(o["baseline-proxy"], f"{identifier}.baseline-proxy")
+        values["agrees-share"] = number(q["agrees-share"], f"{identifier}.agrees-share")
         points.append({"passage-id": identifier, "paper-id": str(w["paper-id"]),
                        **{name: values[name] for name in ("W", "U", "C", "D")},
-                       "outcome": bool(o["weak-extraction"]),
+                       "outcome": o["weak-extraction"],
                        "agrees-share": values["agrees-share"],
                        "baseline-proxy": values["baseline-proxy"]})
     w_auc = auc([row["W"] for row in points], [row["outcome"] for row in points])
     baseline_auc = auc([row["baseline-proxy"] for row in points],
                        [row["outcome"] for row in points])
     coverage = len(points) / len(wool) if wool else 0.0
-    adequate = len(points) >= MIN_JOINED and coverage >= MIN_COVERAGE and w_auc is not None and baseline_auc is not None
+    adequate = (not duplicate_ids and len(points) >= MIN_JOINED and coverage >= MIN_COVERAGE
+                and w_auc is not None and baseline_auc is not None)
     status = ("eligible" if adequate and w_auc >= MIN_AUC and w_auc >= baseline_auc else
               "report-only" if adequate else "insufficient")
     attention = []
