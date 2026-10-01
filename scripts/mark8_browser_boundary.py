@@ -4,7 +4,7 @@ from __future__ import annotations
 import argparse,hashlib,json,math
 from collections import Counter
 from pathlib import Path
-from collections.abc import Sequence
+from collections.abc import Mapping,Sequence
 from edn_format import Keyword,loads
 
 SCHEMA="futon6/mark8-browser-boundary/v1"; ACCT="futon6-stage-accounting/v1"; MAX_FILES=20000; MAX_BYTES=300_000_000; MAX_OUTPUT_BYTES=15_000_000
@@ -48,6 +48,9 @@ def add_file(files,seen,run,rel,stage,role,paper,item):
  p=inside(run,Path(rel),role);seen.add(rel)
  files.append({"path":Path(rel).as_posix(),"bytes":p.stat().st_size,"sha256":sha(p),"producer-stage":stage,"role":role,"paper-id":paper,"item-id":item})
  return p
+def producer_keyword(value,label):
+ if not isinstance(value,Keyword) or not str(value)[1:]:raise ValueError(f"invalid producer-native {label}")
+ return str(value)
 def build(run,s3_path,s4_path,manifest_path):
  run=run.resolve();mp=inside(run,manifest_path,"manifest");manifest=json.loads(mp.read_bytes());finite(manifest)
  if manifest.get("schema-version")!=1 or isinstance(manifest.get("schema-version"),bool):raise ValueError("bad manifest schema-version")
@@ -60,10 +63,11 @@ def build(run,s3_path,s4_path,manifest_path):
   primary=[x for x in arts if isinstance(x,str) and x.endswith(".edn") and not x.endswith(".rung2.edn")]
   if len(primary)!=1:raise ValueError("accepted S3 item lacks unique primary graph")
   gp=add_file(files,seen,run,primary[0],"S3","accepted-graph",paper,ident);g=loads(gp.read_text())
-  if g.get(k("paper/id"))!=paper or g.get(k("passage/id")) is None or not isinstance(g.get(k("nodes")),Sequence):raise ValueError("invalid graph schema or identity")
-  passage=str(g[k("passage/id")]);nodes=[]
+  passage=g.get(k("passage/id"))
+  if g.get(k("paper/id"))!=paper or not isinstance(passage,str) or not passage or not isinstance(g.get(k("nodes")),Sequence):raise ValueError("invalid graph schema or identity")
+  nodes=[]
   for node in g[k("nodes")]:
-   raw=node.get(k("id"));nid=str(raw) if raw is not None else ""
+   raw=node.get(k("id"));nid=producer_keyword(raw,"node id")
    if not nid or nid in nodes:raise ValueError("duplicate/empty graph node id")
    nodes.append(nid)
   sp=f"artifacts/steps/{ident}.steps.json";step_path=add_file(files,seen,run,sp,"S3","derived-steps",paper,ident);sd=json.loads(step_path.read_bytes());finite(sd)
@@ -73,7 +77,13 @@ def build(run,s3_path,s4_path,manifest_path):
    sid=step.get("id")
    if not isinstance(sid,str) or not sid or sid in steps:raise ValueError("duplicate/empty step id")
    steps.append(sid)
-  warrants=sorted({str(edge.get(k("warrant"),{}).get(k("kind"))) for edge in g.get(k("edges"),[]) if edge.get(k("warrant"))})
+  warrants=set()
+  for edge in g.get(k("edges"),[]):
+   if k("warrant") not in edge:continue
+   warrant=edge[k("warrant")]
+   if not isinstance(warrant,Mapping) or not warrant:raise ValueError("invalid producer-native warrant map")
+   warrants.add(producer_keyword(warrant.get(k("kind")),"warrant kind"))
+  warrants=sorted(warrants)
   entities.append({"id":f"item:{ident}","kind":"accepted-proof","item-id":ident,"paper-id":paper,"passage-id":passage,"node-ids":nodes,"step-ids":steps,"warrant-kinds":warrants})
   relations.append({"from":f"paper:{paper}","to":f"item:{ident}","kind":"has-accepted-proof"})
  for ident,row in sorted(s4rows.items()):

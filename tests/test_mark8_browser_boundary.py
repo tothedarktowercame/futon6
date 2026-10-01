@@ -67,12 +67,27 @@ class BoundaryTests(unittest.TestCase):
    with self.assertRaisesRegex(ValueError,"node id"):b.build(run,s3,s4,m)
    run,s3,s4,m=self.make(Path(t)/"step");p=run/"artifacts/steps/math__0301001__p0.steps.json";p.write_text(json.dumps({"paper_id":"math__0301001","steps":[{"id":""}]}))
    with self.assertRaisesRegex(ValueError,"step id"):b.build(run,s3,s4,m)
+ def test_producer_native_passage_node_and_warrant_types(self):
+  bad=[
+   ('{:paper/id "math__0301001" :passage/id 17 :nodes [{:id :n1}] :edges []}',"graph schema"),
+   ('{:paper/id "math__0301001" :passage/id "p" :nodes [{:id 17}] :edges []}',"node id"),
+   ('{:paper/id "math__0301001" :passage/id "p" :nodes [{:id true}] :edges []}',"node id"),
+   ('{:paper/id "math__0301001" :passage/id "p" :nodes [{:id :n1}] :edges [{:warrant {}}]}',"warrant map"),
+   ('{:paper/id "math__0301001" :passage/id "p" :nodes [{:id :n1}] :edges [{:warrant {:kind 17}}]}',"warrant kind")]
+  with tempfile.TemporaryDirectory() as t:
+   for i,(text,pattern) in enumerate(bad):
+    run,s3,s4,m=self.make(Path(t)/str(i));(run/"artifacts/graphs/math__0301001__p0.edn").write_text(text)
+    with self.assertRaisesRegex(ValueError,pattern):b.build(run,s3,s4,m)
+   run,s3,s4,m=self.make(Path(t)/"valid");x=b.build(run,s3,s4,m)
+   proof=next(e for e in x["entities"] if e["kind"]=="accepted-proof")
+   self.assertEqual(proof["passage-id"],"math__0301001:proof0:L1-2")
+   self.assertEqual(proof["node-ids"],[":n1"]);self.assertEqual(proof["warrant-kinds"],[":citation"])
  def test_expanded_metadata_hits_actual_encoded_output_budget(self):
   with tempfile.TemporaryDirectory() as t:
    run,s3,s4,m=self.make(t);normal=b.build(run,s3,s4,m);old=b.MAX_OUTPUT_BYTES
    try:
     b.MAX_OUTPUT_BYTES=len(b.enc(normal))+1000
-    p=run/"artifacts/graphs/math__0301001__p0.edn";p.write_text('{:paper/id "math__0301001" :passage/id "p" :nodes [{:id "'+('x'*3000)+'"}] :edges []}')
+    p=run/"artifacts/graphs/math__0301001__p0.edn";p.write_text('{:paper/id "math__0301001" :passage/id "p" :nodes [{:id :'+('x'*3000)+'}] :edges []}')
     with self.assertRaisesRegex(ValueError,"encoded.*budget"):b.build(run,s3,s4,m)
    finally:b.MAX_OUTPUT_BYTES=old
 if __name__=="__main__":unittest.main()
