@@ -401,6 +401,21 @@ class QuotationByReference(unittest.TestCase):
                 self.assertFalse(loop.require_candidates([Path(d, "x.candidate.json")]))
         self.assertIn("lacks spans", err.getvalue())
 
+    def test_missing_spans_are_an_item_refusal_not_a_batch_format_failure(self):
+        import mark3_iatc_loop as loop
+        bare = {k: v for k, v in self.CAND.items() if k != "spans"}
+        bare.update({"schema": loop.CANDIDATE_SCHEMA,
+                     "proof-lines": [349, 353], "proof-id": "p0", "paper-id": "paper"})
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d, "p0.candidate.json")
+            path.write_text(json.dumps(bare))
+            classified = loop.load_candidates_for_run([path])
+        self.assertIsNotNone(classified)
+        loaded, refused = classified
+        self.assertEqual([c["proof-id"] for c in loaded], ["p0"])
+        self.assertEqual(refused[0][0]["proof-id"], "p0")
+        self.assertIn("precheck: lacks spans", refused[0][1])
+
 
 class ControlCharacterGuard(unittest.TestCase):
     """The escape alphabet substitutes silently; nothing legitimate is affected."""

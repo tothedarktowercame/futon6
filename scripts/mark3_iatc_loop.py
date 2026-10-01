@@ -321,6 +321,41 @@ def require_candidates(cands: list[Path]) -> bool:
     return True
 
 
+def load_candidates_for_run(cands: list[Path]) -> tuple[list[dict], list[tuple[dict, str]]] | None:
+    """Load a batch, separating deterministic input refusals from stale formats.
+
+    A correctly versioned extractor can legitimately find a proof whose anatomy
+    supplies no clause spans.  That item cannot be sent under mark7-v4, but it
+    must not prevent the other candidates from being measured.  Unreadable or
+    wrong-schema files still refuse the entire batch because their identities
+    and producer contract are not trustworthy.
+    """
+    loaded: list[dict] = []
+    refused: list[tuple[dict, str]] = []
+    fatal: list[tuple[str, str]] = []
+    for cf in cands:
+        try:
+            cand = json.loads(cf.read_text())
+        except ValueError as exc:
+            fatal.append((cf.name, f"unreadable: {exc}"))
+            continue
+        if cand.get("schema") != CANDIDATE_SCHEMA or not cand.get("proof-lines"):
+            fatal.append((cf.name, f"schema={cand.get('schema')!r}"))
+            continue
+        loaded.append(cand)
+        missing = run_contract.missing_inputs(cand)
+        if missing:
+            refused.append((cand, f"precheck: lacks {', '.join(missing)} required by "
+                                  f"{run_contract.contract_id()}"))
+    if fatal:
+        print(f"FATAL: {len(fatal)}/{len(cands)} candidate(s) have an unreadable or stale "
+              f"producer contract ({CANDIDATE_SCHEMA})", file=sys.stderr)
+        for name, why in fatal[:10]:
+            print(f"  - {name}: {why}", file=sys.stderr)
+        return None
+    return loaded, refused
+
+
 
 # No legitimate model answer contains a raw control character. They appear only
 # when the JSON escape alphabet substituted for a LaTeX command the grammar could
@@ -452,8 +487,10 @@ def run(args) -> int:
     if not cands:
         print("no candidates found", file=sys.stderr)
         return 2
-    if not require_candidates(cands):
+    classified = load_candidates_for_run(cands)
+    if classified is None:
         return 2
+    loaded, precheck_refused = classified
     outdir = Path(args.out)
     outdir.mkdir(parents=True, exist_ok=True)
     # Attempts are scoped by run and runner invocation (H37), so a retried stage
@@ -477,7 +514,6 @@ def run(args) -> int:
     print(f"run contract {contract['id']} sha256:{contract['sha256'][:12]}"
           + (f" DEVIATING: {'; '.join(contract['deviations'])}" if contract["deviations"] else ""),
           flush=True)
-    loaded = [json.loads(cf_path.read_text()) for cf_path in cands]
     ledger = accounting.Accounting("S3", "loop", [c["proof-id"] for c in loaded])
     counts = {"accepted": 0, "rejected": 0, "errored": 0, "carried": 0}
     accepted_graphs = []
@@ -526,8 +562,15 @@ def run(args) -> int:
 
     # A prior acceptance is settled by the filesystem, not the model: resolve those
     # first so the pool only ever holds real work. This is what makes resume cheap.
+    refused_ids = {cand["proof-id"] for cand, _ in precheck_refused}
+    for cand, why in precheck_refused:
+        finish(cand, "rejected", why,
+               {"attempt": 0, "phase": "precheck", "result": why})
+
     pending = []
     for cand in loaded:
+        if cand["proof-id"] in refused_ids:
+            continue
         final = outdir / f"{cand['proof-id']}.edn"
         if not final.exists():
             pending.append(cand)
