@@ -26,6 +26,7 @@ import stage_accounting as accounting
 
 import argparse
 import bisect
+import hashlib
 import json
 
 import candidate_spans
@@ -311,6 +312,59 @@ def default_papers() -> list[str]:
     return out
 
 
+SNAPSHOT_SCHEMA = "futon6/iatc-candidate-snapshot/v1"
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def frozen_snapshot(outdir: Path, papers: list[str], *, all_proofs: bool) -> dict:
+    """Validate and describe a candidate set without re-running extraction.
+
+    Resuming S3 used to execute extraction over the full corpus before discovering
+    that almost every graph could be carried.  A reusable set is now an immutable
+    input: exact requested paper order, extraction mode, filenames and bytes must
+    all match the receipt written by the original extraction.
+    """
+    manifest_path = outdir / "manifest.json"
+    if not manifest_path.is_file():
+        raise ValueError("candidate snapshot has no manifest.json")
+    doc = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if doc.get("schema") != SNAPSHOT_SCHEMA:
+        raise ValueError(f"candidate snapshot schema is {doc.get('schema')!r}, expected {SNAPSHOT_SCHEMA}")
+    if doc.get("requested-papers") != papers:
+        raise ValueError("candidate snapshot requested-papers do not match the run corpus")
+    if doc.get("all-proofs") is not all_proofs:
+        raise ValueError("candidate snapshot extraction mode does not match --all-proofs")
+    expected = doc.get("files")
+    if not isinstance(expected, list) or any(set(row) != {"path", "sha256"} for row in expected):
+        raise ValueError("candidate snapshot files are malformed")
+    actual_paths = sorted(outdir.glob("*.candidate.json"))
+    actual_names = [path.name for path in actual_paths]
+    expected_names = [row["path"] for row in expected]
+    if expected_names != sorted(expected_names) or actual_names != expected_names:
+        raise ValueError("candidate snapshot file set differs from its manifest")
+    for path, row in zip(actual_paths, expected):
+        if _sha256(path) != row["sha256"]:
+            raise ValueError(f"candidate snapshot hash mismatch: {path.name}")
+    return doc
+
+
+def record_reused_snapshot(doc: dict, outdir: Path, papers: list[str]) -> None:
+    """Account a verified frozen extraction in the current S3 invocation."""
+    by_paper: dict[str, list[dict]] = {paper: [] for paper in papers}
+    for row in doc["papers"]:
+        by_paper[row["paper-id"]].append(row)
+    ledger = accounting.Accounting("S3", "extract", papers)
+    for paper in papers:
+        rows = by_paper[paper]
+        artifacts = [accounting.relative(outdir / f"{row['proof-id']}.candidate.json") for row in rows]
+        ledger.record(paper, "accepted", "reused frozen candidate snapshot",
+                      paper=paper, artifacts=artifacts,
+                      outputs=[row["proof-id"] for row in rows])
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(REPO / "data" / "iatc-candidates"))
@@ -318,10 +372,29 @@ def main() -> int:
     ap.add_argument("--list", help="file of paper ids, one per line (same as emit_marks --list)")
     ap.add_argument("--all-proofs", action="store_true",
                     help="one candidate per proof identified by S1 (the Mark7 path), not one legacy passage")
+    ap.add_argument("--reuse-frozen", action="store_true",
+                    help="reuse an exact manifest-bound candidate snapshot when present; "
+                         "refuse stale/unreceipted files instead of re-extracting")
     a = ap.parse_args()
-    papers = a.papers or (a.list and [l.strip() for l in open(a.list) if l.strip()]) or default_papers()
+    listed = ([line.strip() for line in Path(a.list).read_text(encoding="utf-8").splitlines()
+               if line.strip()] if a.list else None)
+    papers = a.papers or listed or default_papers()
     outdir = Path(a.out)
     outdir.mkdir(parents=True, exist_ok=True)
+    existing = sorted(outdir.glob("*.candidate.json"))
+    if a.reuse_frozen and existing:
+        try:
+            snapshot = frozen_snapshot(outdir, papers, all_proofs=a.all_proofs)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"FATAL: cannot reuse candidate snapshot: {exc}", file=_sys.stderr)
+            return 2
+        record_reused_snapshot(snapshot, outdir, papers)
+        print(f"reused {len(existing)} frozen candidate(s) for {len(papers)} paper(s) from {outdir}")
+        return 0
+    if existing:
+        print(f"FATAL: {outdir} already contains {len(existing)} candidate(s); "
+              "use --reuse-frozen with a valid snapshot or a fresh output directory", file=_sys.stderr)
+        return 2
     # Every requested paper is accounted for. A paper that cannot be extracted is
     # an errored item, not a silent omission from the frozen corpus.
     ledger = accounting.Accounting("S3", "extract", papers)
@@ -357,7 +430,15 @@ def main() -> int:
               f"  {pid}: {cands[0]['selection']} lines {cands[0]['window-lines']} "
               f"({len(cands[0]['source-window'])} chars, {len(cands[0]['binder-context'])} binders, "
               f"{len(cands[0]['enrichment'])} anatomy marks)")
-    (outdir / "manifest.json").write_text(json.dumps({"papers": manifest}, indent=2))
+    files = [{"path": path.name, "sha256": _sha256(path)}
+             for path in sorted(outdir.glob("*.candidate.json"))]
+    (outdir / "manifest.json").write_text(json.dumps({
+        "schema": SNAPSHOT_SCHEMA,
+        "requested-papers": papers,
+        "all-proofs": a.all_proofs,
+        "files": files,
+        "papers": manifest,
+    }, indent=2) + "\n")
     n_papers = len({m["paper-id"] for m in manifest})
     print(f"\n{len(manifest)} candidate(s) from {n_papers}/{len(papers)} papers -> {outdir}")
     return 1 if ledger.failed() else 0

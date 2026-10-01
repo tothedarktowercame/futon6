@@ -38,7 +38,9 @@ CONTRACTS: dict[str, dict] = {
             "checkpoint": "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4",
             "served-as": "mark4-70b",
         },
-        "decoding": {"temperature": 0, "max-tokens": 8192},
+        "decoding": {"temperature": 0, "max-tokens": 8192,
+                     "context-tokens": 16384, "min-output-tokens": 256,
+                     "output-policy": "tokenize-then-cap-to-context"},
         "candidates": {"schema": "iatc-candidate/v4-proof", "requires": ["spans"]},
         "quotation": "spans",
         "gate-retries": 1,
@@ -53,7 +55,9 @@ CONTRACTS: dict[str, dict] = {
             "checkpoint": "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4",
             "served-as": "mark4-70b",
         },
-        "decoding": {"temperature": 0, "max-tokens": 8192},
+        "decoding": {"temperature": 0, "max-tokens": 8192,
+                     "context-tokens": 16384, "min-output-tokens": 256,
+                     "output-policy": "tokenize-then-cap-to-context"},
         "candidates": {"schema": "iatc-candidate/v5-proof", "requires": ["spans"]},
         "expository-candidates": {"schema": "expo-candidate/v2", "requires": ["units"]},
         "quotation": "listed-units",
@@ -96,6 +100,12 @@ def deviations(actual: dict, cid: str | None = None) -> list[str]:
         out.append(f"gate-retries {actual['gate-retries']} (contract {want['gate-retries']})")
     if "max-tokens" in actual and actual["max-tokens"] != want["decoding"]["max-tokens"]:
         out.append(f"max-tokens {actual['max-tokens']} (contract {want['decoding']['max-tokens']})")
+    if "context-tokens" in actual and actual["context-tokens"] != want["decoding"]["context-tokens"]:
+        out.append(f"context-tokens {actual['context-tokens']} "
+                   f"(contract {want['decoding']['context-tokens']})")
+    if "min-output-tokens" in actual and actual["min-output-tokens"] != want["decoding"]["min-output-tokens"]:
+        out.append(f"min-output-tokens {actual['min-output-tokens']} "
+                   f"(contract {want['decoding']['min-output-tokens']})")
     if "model" in actual and actual["model"] != want["model"]["served-as"]:
         out.append(f"model {actual['model']!r} (contract {want['model']['served-as']!r})")
     return out

@@ -108,7 +108,7 @@ OPS = {
                    "committed concept-usage is df>=10-filtered so the coverage curve reads flat — "
                    "the raw-stream instrument needs S1 to dump per-paper raw concepts (tier 2)",
            "crit": "G-coverage: raw coverage rises with corpus-fraction"},
-    "S3": {"cmd": f"{{PY}} scripts/mark3_extract_candidates.py --list {{IDS}} --all-proofs --out {CAND} && "
+    "S3": {"cmd": f"{{PY}} scripts/mark3_extract_candidates.py --list {{IDS}} --all-proofs --reuse-frozen --out {CAND} && "
            f"CANDIDATES={CAND} OUT={GRAPHS} bash scripts/linode-4gpu-run.sh && "
            # MEASUREMENT, not a gate. Per-proof outcomes are in S3 accounting; the
            # anchor rate was once reconstructed wrongly after the fact (H38), so it
