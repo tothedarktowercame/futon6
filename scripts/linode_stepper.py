@@ -722,10 +722,13 @@ def main():
             # requiring its outputs before S1 made every new enabled run
             # impossible to start.  The run-owned paths still become active
             # before any computational stage executes.
+            run_environment = manifest.environment(run_dir, doc)
+            for name in ("FUTON6_ENABLE_WARP", "FUTON6_ENABLE_TAPESTRY"):
+                os.environ[name] = run_environment[name]
             rc = preflight_gate(str(run_dir / doc["ids"])) or conformance_gate(str(run_dir / doc["ids"]))
             if rc:
                 return rc
-            os.environ.update(manifest.environment(run_dir, doc))
+            os.environ.update(run_environment)
             return run(order(stages, args.frm, args.to), args.profile, args.no_halt,
                        str(run_dir), corpus_id, run_id, sorted(set(args.reuse)))
     except (OSError, ValueError) as exc:

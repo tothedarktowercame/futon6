@@ -237,6 +237,7 @@ class ManifestTests(unittest.TestCase):
 
         def preflight_gate(*_args):
             observed["preflight-warp"] = os.environ["FUTON6_WARP_DIR"]
+            observed["preflight-enabled"] = os.environ["FUTON6_ENABLE_WARP"]
             return 0
 
         with patch.dict(os.environ, {"FUTON6_WARP_DIR": str(staged)}), \
@@ -251,6 +252,7 @@ class ManifestTests(unittest.TestCase):
 
         preflight.assert_called_once()
         self.assertEqual(observed["preflight-warp"], str(staged))
+        self.assertEqual(observed["preflight-enabled"], "1")
         self.assertEqual(observed["warp"], str(self.run_dir / "artifacts/warp"))
         run_stage.assert_called_once()
 

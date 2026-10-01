@@ -169,8 +169,12 @@ def check_substrate():
     warp = config.warp()
     need = [str(warp / "concept-index.json"), str(warp / "def-snippets.json"),
             str(warp / "defined-index.json"), str(warp / "concept-usage.json"),
-            str(config.concept_encyclopedia()),
             str(config.sibling("futon3") / "resources/sigils/patterns-index.tsv")]
+    # A new subject's encyclopedia is an S2 WARP output.  Requiring it before
+    # that stage makes default-on WARP impossible for precisely the subjects it
+    # is meant to build.  Disabled/legacy runs still require the staged file.
+    if os.environ.get("FUTON6_ENABLE_WARP") != "1":
+        need.insert(-1, str(config.concept_encyclopedia()))
     missing = [p for p in need if not os.path.exists(os.path.join(ROOT, p))]
     rec("substrate:present", not missing, f"{len(need) - len(missing)}/{len(need)} substrate files",
         "extract data/mark7-ct-substrate.tgz at the configured checkout and FUTON3_ROOT" if missing else "")
