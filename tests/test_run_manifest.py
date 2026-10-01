@@ -81,6 +81,35 @@ class ManifestTests(unittest.TestCase):
             manifest.prepare(second, "test-run", "test-corpus", self.ids,
                              warp=True, tapestry=True)
 
+    def test_mark8_allocation_and_artifact_paths_are_pinned(self):
+        with manifest.lock(self.run_dir):
+            doc = manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids,
+                                   model_call_budget=17,
+                                   allocation_policy="fixture-policy/v1")
+        self.assertEqual(doc["allocation"], {
+            "model-call-budget": 17, "allocation-policy": "fixture-policy/v1"})
+        env = manifest.environment(self.run_dir, doc)
+        self.assertEqual(Path(env["FUTON6_PLAN"]), self.run_dir / "artifacts/plan")
+        self.assertEqual(Path(env["FUTON6_BROWSER"]), self.run_dir / "artifacts/browser")
+        with manifest.lock(self.run_dir), self.assertRaisesRegex(ValueError, "allocation"):
+            manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids,
+                             model_call_budget=18,
+                             allocation_policy="fixture-policy/v1")
+
+    def test_legacy_manifest_implicitly_has_zero_budget_and_no_plan_paths(self):
+        self.prepare()
+        path = self.run_dir / manifest.NAME
+        legacy = json.loads(path.read_text())
+        legacy.pop("allocation")
+        legacy["artifacts"].pop("plan")
+        legacy["artifacts"].pop("browser")
+        path.write_text(json.dumps(legacy))
+
+        with manifest.lock(self.run_dir):
+            resumed = manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids)
+        self.assertNotIn("allocation", resumed)
+        self.assertNotIn("FUTON6_PLAN", manifest.environment(self.run_dir, resumed))
+
     def test_legacy_manifest_resumes_with_both_layers_implicitly_off(self):
         self.prepare()
         path = self.run_dir / manifest.NAME
