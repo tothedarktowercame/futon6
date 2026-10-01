@@ -249,6 +249,12 @@ def _openai_json(path: str, payload: dict) -> dict:
         raise ModelCallError(exc.code, exc.read().decode("utf-8", "replace")[:300])
     except urllib.error.URLError as exc:
         raise ModelCallError(0, str(exc.reason))
+    except TimeoutError as exc:
+        # socket timeouts can escape urllib as the built-in TimeoutError rather
+        # than URLError.  They are an item-level transport failure: allowing one
+        # to escape the worker aborts the pool and leaves every in-flight item
+        # unaccounted.
+        raise ModelCallError(0, f"request timed out: {exc}")
 
 
 def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> ModelAnswer:

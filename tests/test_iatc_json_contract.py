@@ -270,6 +270,12 @@ class Loop(unittest.TestCase):
         self.assertEqual(answer.prompt_tokens, 8193)
         self.assertEqual(request["response_format"]["json_schema"]["schema"], iatc_json.nodes_schema(10, 14))
 
+    def test_socket_timeout_is_an_item_level_model_error(self):
+        with patch("urllib.request.urlopen", side_effect=TimeoutError("timed out")), \
+                patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:8000/v1"}):
+            with self.assertRaisesRegex(loop.ModelCallError, "request timed out: timed out"):
+                loop._openai_json("/chat/completions", {})
+
     def test_token_preflight_refuses_without_sending_impossible_completion(self):
         calls = []
         class Response:
