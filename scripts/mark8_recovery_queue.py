@@ -28,7 +28,13 @@ def classify(reason, has_response):
 
 def build(paths: list[Path]):
     seen, queue, audit, input_hashes = set(), [], Counter(), []
-    for path in sorted(paths, key=lambda p: str(p)):
+    sources = []
+    for path in paths:
+        path = path.resolve()
+        run = path.parents[3]
+        relative = path.relative_to(run).as_posix()
+        sources.append((relative, path, run))
+    for relative, path, run in sorted(sources, key=lambda row: row[0]):
         doc = json.loads(path.read_bytes())
         if doc.get("schema") != ACCOUNTING_SCHEMA or doc.get("stage") not in {"S3", "S4"} or doc.get("producer") != "loop":
             raise ValueError(f"{path}: refused accounting schema/stage/producer")
@@ -36,7 +42,7 @@ def build(paths: list[Path]):
         items = doc.get("items")
         if not isinstance(items, list): raise ValueError(f"{path}: items must be a list")
         accounting_hash = hashlib.sha256(encode({**doc, "items": sorted(items, key=lambda x: str(x.get("id")))})).hexdigest()
-        input_hashes.append({"path": str(path), "semantic-sha256": accounting_hash})
+        input_hashes.append({"path": relative, "semantic-sha256": accounting_hash})
         for item in items:
             ident, status = item.get("id"), item.get("status")
             if not isinstance(ident, str) or not ident or ident in seen: raise ValueError(f"duplicate/invalid item id: {ident!r}")
@@ -54,10 +60,11 @@ def build(paths: list[Path]):
             if status not in {"rejected", "errored"}: continue
             responses = [a.get("response") for a in attempts if isinstance(a, dict) and isinstance(a.get("response"), str)]
             cls, disposition, retry = classify(reason, bool(responses))
-            evidence = [{"kind": "accounting", "path": str(path), "semantic-sha256": accounting_hash}]
-            run = path.parents[3]
+            evidence = [{"kind": "accounting", "path": relative, "semantic-sha256": accounting_hash}]
             for kind, ref in sorted([("artifact", x) for x in artifacts] + [("response", x) for x in responses]):
-                target = run / ref
+                target = (run / ref).resolve()
+                try: target.relative_to(run.resolve())
+                except ValueError: raise ValueError(f"{ident}: evidence path escapes run: {ref}")
                 if not target.is_file(): raise ValueError(f"{ident}: missing evidence {ref}")
                 evidence.append({"kind": kind, "path": ref, "sha256": sha(target)})
             queue.append({"source-stage": stage, "item-id": ident, "paper-id": paper, "status": status,

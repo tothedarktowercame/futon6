@@ -1,4 +1,4 @@
-import json, tempfile, unittest
+import json, shutil, tempfile, unittest
 from pathlib import Path
 from scripts import mark8_recovery_queue as q
 
@@ -41,6 +41,16 @@ class RecoveryQueueTests(unittest.TestCase):
   xs=[self.item("b","errored","unknown"),self.item("a","rejected","no clause spans in the proof, required by mark7-v4")]
   a=self.write("S3",xs); one=q.encode(q.build([a])); a=self.write("S3",list(reversed(xs))); two=q.encode(q.build([a]))
   self.assertEqual(one,two)
+ def test_identical_run_trees_at_different_roots_are_byte_identical(self):
+  item=self.item("x","errored","nodes: TimeoutError: timed out",response=True)
+  first=self.write("S3",[item])
+  other=Path(self.t.name)/"other"/"run"
+  shutil.copytree(self.run,other)
+  second=other/"accounting/S3/S3-a001/S3.loop.json"
+  self.assertEqual(q.encode(q.build([first])),q.encode(q.build([second])))
+ def test_evidence_path_escape_is_refused(self):
+  item=self.item("x","errored","unknown"); item["artifacts"]=["../outside.json"]
+  with self.assertRaisesRegex(ValueError,"escapes run"): q.build([self.write("S3",[item])])
  def test_control_character_requires_completed_response(self):
   reason="endpoint returned non-JSON despite the schema (Invalid control character at: line 1 column 2 (char 1))"
   out=q.build([self.write("S4",[self.item("x","errored",reason)])])
