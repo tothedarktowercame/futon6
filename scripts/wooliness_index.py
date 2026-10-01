@@ -17,6 +17,20 @@ MAX_HOPS = 3
 PRECALL_INPUT_ROLES = frozenset({"candidate", "marks", "strategies", "citation-index",
                                  "concept-encyclopedia"})
 CANDIDATE_SCHEMAS = frozenset({"iatc-candidate/v5-proof", "expo-candidate/v2"})
+MODEL_DERIVED_FIELDS = frozenset({
+    "model-output", "model_output", "graph", "outcome", "comprehension",
+    "completion", "model-response", "model_response",
+})
+
+
+def model_derived_fields(value: Any) -> set[str]:
+    """Forbidden model-result containers found anywhere in a candidate payload."""
+    if isinstance(value, dict):
+        found = {str(key) for key in value if str(key) in MODEL_DERIVED_FIELDS}
+        return found | set().union(*(model_derived_fields(child) for child in value.values()), set())
+    if isinstance(value, list):
+        return set().union(*(model_derived_fields(child) for child in value), set())
+    return set()
 
 
 def load_role(role: str, path: Path) -> Any:
@@ -37,6 +51,10 @@ def load_role(role: str, path: Path) -> Any:
     }[role]
     if not isinstance(doc, dict) or not valid(doc):
         raise ValueError(f"{path}: does not satisfy frozen {role} schema")
+    if role == "candidate":
+        forbidden = sorted(model_derived_fields(doc))
+        if forbidden:
+            raise ValueError(f"{path}: candidate contains model-derived field(s): {forbidden}")
     return doc
 
 
@@ -63,16 +81,17 @@ def fields(mark: dict) -> dict[str, str]:
     return {str(k): str(v) for k, v in mark.get("fields", [])}
 
 
-def concepts_in(marks_doc: dict, span: tuple[int, int]) -> set[str]:
+def concepts_in(marks_doc: dict, span: tuple[int, int]) -> dict[str, int]:
     text = str(marks_doc["text"])
     lo, hi = span
-    out = set()
+    out: dict[str, int] = {}
     for mark in marks_doc.get("marks", []):
         if mark.get("kind") != "concept" or not (int(mark["start"]) < hi and lo < int(mark["end"])):
             continue
         term = fields(mark).get("term") or text[int(mark["start"]):int(mark["end"])]
         if norm(term):
-            out.add(norm(term))
+            key = norm(term)
+            out[key] = min(out.get(key, int(mark["start"])), int(mark["start"]))
     return out
 
 
@@ -91,9 +110,11 @@ def encyclopedia_index(doc: dict) -> tuple[set[str], dict[str, set[str]]]:
     return known, definitions
 
 
-def prior_definitions(strategies: dict, passage_start: int) -> set[str]:
-    return {norm(str(row.get("term", ""))) for row in strategies.get("terms", [])
-            if isinstance(row.get("at"), int) and row["at"] <= passage_start}
+def local_definitions(strategies: dict, first_uses: dict[str, int]) -> set[str]:
+    """Terms whose witnessed definition precedes their first use in this passage."""
+    return {term for row in strategies.get("terms", [])
+            if (term := norm(str(row.get("term", "")))) in first_uses
+            and isinstance(row.get("at"), int) and row["at"] <= first_uses[term]}
 
 
 def citation_records_in(doc: dict, span: tuple[int, int]) -> list[dict]:
@@ -134,9 +155,10 @@ def distance(source: str, targets: set[str], graph: dict[str, set[str]]) -> int:
 def score(candidate: dict, marks: dict, strategies: dict, citation_doc: dict,
           encyclopedia: dict, graph: dict[str, set[str]]) -> dict:
     span = char_span(str(marks["text"]), candidate["window-lines"])
-    terms = concepts_in(marks, span)
+    occurrences = concepts_in(marks, span)
+    terms = set(occurrences)
     known, definition_papers = encyclopedia_index(encyclopedia)
-    prior = prior_definitions(strategies, span[0])
+    prior = local_definitions(strategies, occurrences)
     grounded = prior | known
     u = sum(term not in grounded for term in terms) / len(terms) if terms else 0.0
     citations = citation_records_in(citation_doc, span)

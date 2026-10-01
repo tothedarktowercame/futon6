@@ -64,6 +64,25 @@ class WoolinessTests(unittest.TestCase):
         self.assertEqual((after["U"], after["D"]), (0.0, 0.0))
         self.assertLess(after["W"], before["W"])
 
+    def test_definition_earlier_inside_passage_grounds_first_use_but_later_definition_does_not(self):
+        candidate, marks, strategies, citations, encyclopedia = fixture(prior=False, with_cite=False)
+        encyclopedia["entries"] = []
+        use = marks["text"].index("alpha")
+
+        before = wool.build([candidate], {"A": marks}, {"A": strategies}, citations,
+                            encyclopedia)["records"][0]
+        self.assertEqual((before["U"], before["D"], before["W"]), (1.0, 1.0, .75))
+
+        strategies["terms"] = [{"term": "alpha", "at": use - 1, "line": 2, "uses": []}]
+        earlier = wool.build([candidate], {"A": marks}, {"A": strategies}, citations,
+                             encyclopedia)["records"][0]
+        self.assertEqual((earlier["U"], earlier["D"]), (0.0, 0.0))
+
+        strategies["terms"] = [{"term": "alpha", "at": use + 1, "line": 2, "uses": []}]
+        later = wool.build([candidate], {"A": marks}, {"A": strategies}, citations,
+                           encyclopedia)["records"][0]
+        self.assertEqual((later["U"], later["D"], later["W"]), (1.0, 1.0, .75))
+
     def test_resolving_citation_lowers_c_d_and_w(self):
         before = one(resolved=False)
         after = one(resolved=True)
@@ -103,6 +122,19 @@ class WoolinessTests(unittest.TestCase):
                     wool.load_role(forbidden, path)
             with self.assertRaisesRegex(ValueError, "frozen candidate schema"):
                 wool.load_role("candidate", path)
+
+            admitted = fixture()[0]
+            admitted["model-output"] = {"graph": {"nodes": []}, "outcome": "accepted"}
+            path.write_text(json.dumps(admitted))
+            with self.assertRaisesRegex(ValueError, "model-derived field"):
+                wool.load_role("candidate", path)
+
+            for field in ("graph", "outcome", "comprehension"):
+                payload = fixture()[0]
+                payload[field] = {}
+                path.write_text(json.dumps(payload))
+                with self.subTest(field=field), self.assertRaisesRegex(ValueError, "model-derived field"):
+                    wool.load_role("candidate", path)
 
 
 if __name__ == "__main__":
