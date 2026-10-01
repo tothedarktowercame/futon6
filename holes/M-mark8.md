@@ -80,7 +80,7 @@ decision it is intended to inform.
 - [x] Mark8 has an isolated branch based on the default-on WARP/TAPESTRY work.
 - [x] The wooliness diagnostic, promotion gates, and Neo4j boundary are
       declared before implementation.
-- [ ] The report-only wooliness slice passes unit, determinism, and forbidden-
+- [x] The report-only wooliness slice passes unit, determinism, and forbidden-
       input tests.
 - [ ] Offline S4 policies are compared at an identical global call budget.
 - [ ] The refusal/error queue preserves every attempted or skipped item with a
