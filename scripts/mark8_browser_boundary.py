@@ -2,11 +2,12 @@
 """Freeze an explicit, read-only structural-browser boundary for a Mark7 run."""
 from __future__ import annotations
 import argparse,hashlib,json,math
+from collections import Counter
 from pathlib import Path
 from collections.abc import Sequence
 from edn_format import Keyword,loads
 
-SCHEMA="futon6/mark8-browser-boundary/v1"; ACCT="futon6-stage-accounting/v1"; MAX_FILES=20000; MAX_BYTES=300_000_000
+SCHEMA="futon6/mark8-browser-boundary/v1"; ACCT="futon6-stage-accounting/v1"; MAX_FILES=20000; MAX_BYTES=300_000_000; MAX_OUTPUT_BYTES=15_000_000
 def enc(x):return (json.dumps(x,indent=2,sort_keys=True)+"\n").encode()
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def k(name):return Keyword(name)
@@ -27,11 +28,20 @@ def inside(run,path,label):
 def accounting(run,path,stage):
  p=inside(run,path,"accounting");d=json.loads(p.read_bytes());finite(d)
  if d.get("schema")!=ACCT or d.get("stage")!=stage or d.get("producer")!="loop":raise ValueError("bad accounting schema/stage/producer")
+ if d.get("invocation")!=f"{stage}-a001":raise ValueError("bad accounting invocation")
  seen={}
  for row in d.get("items",[]):
   ident=row.get("id")
   if not isinstance(ident,str) or not ident or ident in seen:raise ValueError("duplicate/invalid accounting item")
   seen[ident]=row
+ expected=d.get("expected");counts=d.get("counts")
+ if not isinstance(expected,list) or len(expected)!=len(set(expected)) or not all(isinstance(x,str) and x for x in expected) or set(expected)!=set(seen):raise ValueError("accounting expected identities contradict items")
+ vocab={"accepted","rejected","errored","deferred","expected","unaccounted"}
+ if not isinstance(counts,dict) or set(counts)!=vocab or not all(isinstance(v,int) and not isinstance(v,bool) and v>=0 for v in counts.values()):raise ValueError("invalid accounting counts")
+ statuses=Counter(x.get("status") for x in seen.values())
+ if any(x not in {"accepted","rejected","errored","deferred"} for x in statuses):raise ValueError("invalid accounting status")
+ actual={x:statuses[x] for x in ("accepted","rejected","errored","deferred")};actual.update(expected=len(expected),unaccounted=0)
+ if counts!=actual:raise ValueError("accounting counts contradict items/expected")
  return p,d,seen
 def add_file(files,seen,run,rel,stage,role,paper,item):
  if rel in seen:raise ValueError(f"duplicate published path: {rel}")
@@ -53,13 +63,15 @@ def build(run,s3_path,s4_path,manifest_path):
   if g.get(k("paper/id"))!=paper or g.get(k("passage/id")) is None or not isinstance(g.get(k("nodes")),Sequence):raise ValueError("invalid graph schema or identity")
   passage=str(g[k("passage/id")]);nodes=[]
   for node in g[k("nodes")]:
-   nid=str(node.get(k("id")));nodes.append(nid)
+   raw=node.get(k("id"));nid=str(raw) if raw is not None else ""
+   if not nid or nid in nodes:raise ValueError("duplicate/empty graph node id")
+   nodes.append(nid)
   sp=f"artifacts/steps/{ident}.steps.json";step_path=add_file(files,seen,run,sp,"S3","derived-steps",paper,ident);sd=json.loads(step_path.read_bytes());finite(sd)
   if sd.get("paper_id")!=paper or not isinstance(sd.get("steps"),list):raise ValueError("invalid steps schema or identity")
   steps=[]
   for step in sd["steps"]:
    sid=step.get("id")
-   if not isinstance(sid,str):raise ValueError("invalid step id")
+   if not isinstance(sid,str) or not sid or sid in steps:raise ValueError("duplicate/empty step id")
    steps.append(sid)
   warrants=sorted({str(edge.get(k("warrant"),{}).get(k("kind"))) for edge in g.get(k("edges"),[]) if edge.get(k("warrant"))})
   entities.append({"id":f"item:{ident}","kind":"accepted-proof","item-id":ident,"paper-id":paper,"passage-id":passage,"node-ids":nodes,"step-ids":steps,"warrant-kinds":warrants})
@@ -79,7 +91,9 @@ def build(run,s3_path,s4_path,manifest_path):
  total=sum(x["bytes"] for x in files)
  if len(files)>MAX_FILES or total>MAX_BYTES:raise ValueError("browser boundary size/count budget exceeded")
  sources=[{"path":Path(x).as_posix(),"sha256":sha(inside(run,Path(x),"source"))} for x in (manifest_path,s3_path,s4_path)]
- return {"schema":SCHEMA,"sources":sources,"files":files,"entities":sorted(entities,key=lambda x:x["id"]),"relationships":sorted(relations,key=lambda x:(x["from"],x["kind"],x["to"])),"skipped-roles":[{"role":"rung3","reason":"paper aggregate has no exact accepted-item identity"},{"role":"paper-graphs","reason":"paper aggregate, outside accepted-item boundary"},{"role":"embeddings","reason":"no exact accepted-item source identity"},{"role":"citations","reason":"unpinned citation substrate absent"}],"summary":{"files":len(files),"bytes":total,"entities":len(entities),"relationships":len(relations),"papers":len(papers),"max-files":MAX_FILES,"max-bytes":MAX_BYTES}}
+ result={"schema":SCHEMA,"sources":sources,"files":files,"entities":sorted(entities,key=lambda x:x["id"]),"relationships":sorted(relations,key=lambda x:(x["from"],x["kind"],x["to"])),"skipped-roles":[{"role":"rung3","reason":"paper aggregate has no exact accepted-item identity"},{"role":"paper-graphs","reason":"paper aggregate, outside accepted-item boundary"},{"role":"embeddings","reason":"no exact accepted-item source identity"},{"role":"citations","reason":"unpinned citation substrate absent"}],"summary":{"files":len(files),"bytes":total,"entities":len(entities),"relationships":len(relations),"papers":len(papers),"max-files":MAX_FILES,"max-bytes":MAX_BYTES,"max-output-bytes":MAX_OUTPUT_BYTES}}
+ if len(enc(result))>MAX_OUTPUT_BYTES:raise ValueError("encoded browser boundary output budget exceeded")
+ return result
 def main():
  ap=argparse.ArgumentParser();ap.add_argument("--run-root",type=Path,required=True);ap.add_argument("--s3-accounting",type=Path,required=True);ap.add_argument("--s4-accounting",type=Path,required=True);ap.add_argument("--manifest",type=Path,required=True);ap.add_argument("--out",type=Path,required=True);a=ap.parse_args();a.out.write_bytes(enc(build(a.run_root,a.s3_accounting,a.s4_accounting,a.manifest)));return 0
 if __name__=="__main__":raise SystemExit(main())

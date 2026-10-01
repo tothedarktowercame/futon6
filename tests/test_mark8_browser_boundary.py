@@ -14,6 +14,8 @@ class BoundaryTests(unittest.TestCase):
   base={"schema":b.ACCT,"producer":"loop"}
   s3={**base,"stage":"S3","items":[{"id":"math__0301001__p0","paper":"math__0301001","status":"accepted","artifacts":["artifacts/graphs/math__0301001__p0.edn"]}]}
   s4={**base,"stage":"S4","items":[{"id":"math/0301001:r0","paper":"math/0301001","status":"accepted","artifacts":["artifacts/expo/x.edn"]}]}
+  for stage,doc in (("S3",s3),("S4",s4)):
+   doc["invocation"]=f"{stage}-a001";doc["expected"]=[doc["items"][0]["id"]];doc["counts"]={"accepted":1,"rejected":0,"errored":0,"deferred":0,"expected":1,"unaccounted":0}
   (run/"accounting/S3/x/a.json").write_text(json.dumps(s3));(run/"accounting/S4/x/a.json").write_text(json.dumps(s4))
   return run,Path("accounting/S3/x/a.json"),Path("accounting/S4/x/a.json"),Path("run-manifest.json")
  def test_real_shape_exact_ids_and_allowlist(self):
@@ -42,7 +44,7 @@ class BoundaryTests(unittest.TestCase):
    with self.assertRaisesRegex(ValueError,"duplicate"):b.build(run,s3,s4,m)
    run,s3,s4,m=self.make(Path(t)/"b");d=json.loads((run/s3).read_text());d["items"][0]["paper"]="foreign";(run/s3).write_text(json.dumps(d))
    with self.assertRaisesRegex(ValueError,"identity"):b.build(run,s3,s4,m)
-   run,s3,s4,m=self.make(Path(t)/"c");d=json.loads((run/s3).read_text());d["items"][0]["status"]="rejected";(run/s3).write_text(json.dumps(d));x=b.build(run,s3,s4,m)
+   run,s3,s4,m=self.make(Path(t)/"c");d=json.loads((run/s3).read_text());d["items"][0]["status"]="rejected";d["counts"]["accepted"]=0;d["counts"]["rejected"]=1;(run/s3).write_text(json.dumps(d));x=b.build(run,s3,s4,m)
    self.assertFalse(any(f["producer-stage"]=="S3" for f in x["files"]))
  def test_malformed_nonfinite_and_dangling_refuse(self):
   with tempfile.TemporaryDirectory() as t:
@@ -54,4 +56,23 @@ class BoundaryTests(unittest.TestCase):
    try:
     with self.assertRaisesRegex(ValueError,"budget"):b.build(run,s3,s4,m)
    finally:b.MAX_FILES=old
+ def test_false_invocation_counts_and_expected_refuse(self):
+  with tempfile.TemporaryDirectory() as t:
+   for n,(field,value,pattern) in enumerate((("invocation","S3-a999","invocation"),("counts",{"accepted":999},"counts"),("expected",["foreign"],"expected"))):
+    run,s3,s4,m=self.make(Path(t)/str(n));d=json.loads((run/s3).read_text());d[field]=value;(run/s3).write_text(json.dumps(d))
+    with self.assertRaisesRegex(ValueError,pattern):b.build(run,s3,s4,m)
+ def test_duplicate_and_empty_navigation_ids_refuse(self):
+  with tempfile.TemporaryDirectory() as t:
+   run,s3,s4,m=self.make(t);p=run/"artifacts/graphs/math__0301001__p0.edn";p.write_text('{:paper/id "math__0301001" :passage/id "p" :nodes [{:id :n1} {:id :n1}] :edges []}')
+   with self.assertRaisesRegex(ValueError,"node id"):b.build(run,s3,s4,m)
+   run,s3,s4,m=self.make(Path(t)/"step");p=run/"artifacts/steps/math__0301001__p0.steps.json";p.write_text(json.dumps({"paper_id":"math__0301001","steps":[{"id":""}]}))
+   with self.assertRaisesRegex(ValueError,"step id"):b.build(run,s3,s4,m)
+ def test_expanded_metadata_hits_actual_encoded_output_budget(self):
+  with tempfile.TemporaryDirectory() as t:
+   run,s3,s4,m=self.make(t);normal=b.build(run,s3,s4,m);old=b.MAX_OUTPUT_BYTES
+   try:
+    b.MAX_OUTPUT_BYTES=len(b.enc(normal))+1000
+    p=run/"artifacts/graphs/math__0301001__p0.edn";p.write_text('{:paper/id "math__0301001" :passage/id "p" :nodes [{:id "'+('x'*3000)+'"}] :edges []}')
+    with self.assertRaisesRegex(ValueError,"encoded.*budget"):b.build(run,s3,s4,m)
+   finally:b.MAX_OUTPUT_BYTES=old
 if __name__=="__main__":unittest.main()
