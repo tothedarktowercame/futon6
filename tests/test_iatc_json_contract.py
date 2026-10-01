@@ -258,9 +258,12 @@ class Loop(unittest.TestCase):
             if request.full_url.endswith("/tokenize"):
                 return Response({"count": 8193, "max_model_len": 16384})
             return Response({"choices": [{"finish_reason": "stop", "message": {"content": "{}"}}]})
-        with patch("urllib.request.urlopen", urlopen):
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:8000/v1"}), \
+                patch("urllib.request.urlopen", urlopen):
             answer = loop.call_openai("prompt", CAND, "m", iatc_json.nodes_schema(10, 14))
-        self.assertEqual([url.rsplit("/", 1)[-1] for url, _ in seen], ["tokenize", "completions"])
+        self.assertEqual([url for url, _ in seen],
+                         ["http://localhost:8000/tokenize",
+                          "http://localhost:8000/v1/chat/completions"])
         request = seen[1][1]
         self.assertEqual(request["temperature"], 0)
         self.assertEqual(request["max_tokens"], 8191)  # observed 1204.6277 envelope

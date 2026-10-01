@@ -230,9 +230,15 @@ def call_stub(prompt: str, cand: dict, schema: dict) -> str:
 def _openai_json(path: str, payload: dict) -> dict:
     import urllib.error
     import urllib.request
-    base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
+    base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1").rstrip("/")
+    # vLLM's OpenAI-compatible inference routes live below /v1, while its
+    # tokenizer route is served at the origin as /tokenize.  OPENAI_BASE_URL is
+    # conventionally the former, so joining both routes to it sent preflight to
+    # the nonexistent /v1/tokenize and turned every candidate into an HTTP 404.
+    endpoint = ((base[:-3] if base.endswith("/v1") else base) + path
+                if path == "/tokenize" else base + path)
     key = os.environ.get("OPENAI_API_KEY", "x")
-    req = urllib.request.Request(f"{base}{path}", data=json.dumps(payload).encode(),
+    req = urllib.request.Request(endpoint, data=json.dumps(payload).encode(),
                                  headers={"Content-Type": "application/json",
                                           "Authorization": f"Bearer {key}"})
     try:
