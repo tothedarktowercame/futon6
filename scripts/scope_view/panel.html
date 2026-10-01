@@ -1,0 +1,14 @@
+<aside id="scope-panel" aria-label="Scope explorer">
+  <h2>Scope explorer</h2>
+  <p>Mark7 · 0705.0102 · <a href="/wip/">WIP index</a></p>
+  <p>Choose a scope to see its source and interpretation. Click highlighted text to inspect overlapping annotations.</p>
+  <label>Layer <select id="scope-layer"><option>Source marks</option><option>Proof graphs</option><option>Expository scopes</option></select></label>
+  <label>Kind <select id="scope-kind"></select></label>
+  <label>Search <input id="scope-search" type="search" placeholder="Kind, source, or interpretation"></label>
+  <label><input id="scope-highlight" type="checkbox" checked> Highlight matching source positions</label>
+  <p id="scope-count" role="status"></p>
+  <div class="scope-actions"><button id="scope-prev">Previous</button><button id="scope-next">Next</button><button id="scope-jump">Jump to selection</button></div>
+  <label>Annotations <select id="scope-list" size="7" aria-label="Annotations"></select></label>
+  <div id="scope-detail"></div>
+  <p class="scope-help">Highlights indicate rendered elements starting within the annotation’s source lines, not exact glyph boundaries. No matching position means unanchored; no substitute location is guessed. Nested and overlapping annotations remain separate entries.</p>
+</aside>

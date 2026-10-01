@@ -33,7 +33,7 @@
         }
       ],
       "hx/content": {
-        "end": 45,
+        "end": 58,
         "match": "Mission: Agency Refactor",
         "position": 0
       },
@@ -129,9 +129,9 @@
         }
       ],
       "hx/content": {
-        "end": 405,
+        "end": 418,
         "match": "Derivation",
-        "position": 45
+        "position": 58
       },
       "hx/ends": [
         {
@@ -229,9 +229,9 @@
         }
       ],
       "hx/content": {
-        "end": 680,
+        "end": 693,
         "match": "Scope In",
-        "position": 405
+        "position": 418
       },
       "hx/ends": [
         {
@@ -316,9 +316,9 @@
         }
       ],
       "hx/content": {
-        "end": 680,
+        "end": 693,
         "match": "Scope In",
-        "position": 405
+        "position": 418
       },
       "hx/ends": [
         {
@@ -407,9 +407,9 @@
         }
       ],
       "hx/content": {
-        "end": 1081,
+        "end": 1094,
         "match": "Scope Out",
-        "position": 680
+        "position": 693
       },
       "hx/ends": [
         {
@@ -502,9 +502,9 @@
         }
       ],
       "hx/content": {
-        "end": 1081,
+        "end": 1094,
         "match": "Scope Out",
-        "position": 680
+        "position": 693
       },
       "hx/ends": [
         {
@@ -605,9 +605,9 @@
         }
       ],
       "hx/content": {
-        "end": 1713,
+        "end": 1726,
         "match": "Source Material",
-        "position": 1081
+        "position": 1094
       },
       "hx/ends": [
         {
@@ -742,9 +742,9 @@
         }
       ],
       "hx/content": {
-        "end": 1713,
+        "end": 1726,
         "match": "Source Material",
-        "position": 1081
+        "position": 1094
       },
       "hx/ends": [
         {
@@ -859,9 +859,9 @@
         }
       ],
       "hx/content": {
-        "end": 1723,
+        "end": 1736,
         "match": "Parts",
-        "position": 1713
+        "position": 1726
       },
       "hx/ends": [
         {
@@ -947,9 +947,9 @@
         }
       ],
       "hx/content": {
-        "end": 2445,
+        "end": 2458,
         "match": "Part I: Registry + Shapes",
-        "position": 1723
+        "position": 1736
       },
       "hx/ends": [
         {
@@ -1115,9 +1115,9 @@
         }
       ],
       "hx/content": {
-        "end": 2445,
+        "end": 2458,
         "match": "Part I: Registry + Shapes",
-        "position": 1723
+        "position": 1736
       },
       "hx/ends": [
         {
@@ -1287,9 +1287,9 @@
         }
       ],
       "hx/content": {
-        "end": 3288,
+        "end": 3301,
         "match": "Part II: S-presence",
-        "position": 2445
+        "position": 2458
       },
       "hx/ends": [
         {
@@ -1453,9 +1453,9 @@
         }
       ],
       "hx/content": {
-        "end": 3288,
+        "end": 3301,
         "match": "Part II: S-presence",
-        "position": 2445
+        "position": 2458
       },
       "hx/ends": [
         {
@@ -1615,9 +1615,9 @@
         }
       ],
       "hx/content": {
-        "end": 4316,
+        "end": 4329,
         "match": "Part III: S-authenticate",
-        "position": 3288
+        "position": 3301
       },
       "hx/ends": [
         {
@@ -1739,9 +1739,9 @@
         }
       ],
       "hx/content": {
-        "end": 4316,
+        "end": 4329,
         "match": "Part III: S-authenticate",
-        "position": 3288
+        "position": 3301
       },
       "hx/ends": [
         {
@@ -1892,9 +1892,9 @@
         }
       ],
       "hx/content": {
-        "end": 4316,
+        "end": 4329,
         "match": "Part III: S-authenticate",
-        "position": 3288
+        "position": 3301
       },
       "hx/ends": [
         {
@@ -2057,9 +2057,9 @@
         }
       ],
       "hx/content": {
-        "end": 6038,
+        "end": 6051,
         "match": "Part IV: S-dispatch",
-        "position": 4316
+        "position": 4329
       },
       "hx/ends": [
         {
@@ -2244,9 +2244,9 @@
         }
       ],
       "hx/content": {
-        "end": 6038,
+        "end": 6051,
         "match": "Part IV: S-dispatch",
-        "position": 4316
+        "position": 4329
       },
       "hx/ends": [
         {
@@ -2419,9 +2419,9 @@
         }
       ],
       "hx/content": {
-        "end": 7291,
+        "end": 7304,
         "match": "Part V: S-persist",
-        "position": 6038
+        "position": 6051
       },
       "hx/ends": [
         {
@@ -2572,9 +2572,9 @@
         }
       ],
       "hx/content": {
-        "end": 7291,
+        "end": 7304,
         "match": "Part V: S-persist",
-        "position": 6038
+        "position": 6051
       },
       "hx/ends": [
         {
@@ -2737,9 +2737,9 @@
         }
       ],
       "hx/content": {
-        "end": 9477,
+        "end": 9490,
         "match": "Part VI: Integration",
-        "position": 7291
+        "position": 7304
       },
       "hx/ends": [
         {
@@ -2904,9 +2904,9 @@
         }
       ],
       "hx/content": {
-        "end": 9477,
+        "end": 9490,
         "match": "Part VI: Integration",
-        "position": 7291
+        "position": 7304
       },
       "hx/ends": [
         {
@@ -3031,9 +3031,9 @@
         }
       ],
       "hx/content": {
-        "end": 9733,
+        "end": 9746,
         "match": "Exit Conditions",
-        "position": 9477
+        "position": 9490
       },
       "hx/ends": [
         {
@@ -3115,9 +3115,9 @@
         }
       ],
       "hx/content": {
-        "end": 10143,
+        "end": 10156,
         "match": "R11 Enforcement",
-        "position": 9733
+        "position": 9746
       },
       "hx/ends": [
         {

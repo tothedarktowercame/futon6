@@ -50,7 +50,7 @@
         }
       ],
       "hx/content": {
-        "end": 306,
+        "end": 319,
         "match": "Mission: Agency + Forum Infrastructure",
         "position": 0
       },
@@ -142,9 +142,9 @@
         }
       ],
       "hx/content": {
-        "end": 452,
+        "end": 465,
         "match": "Owner",
-        "position": 306
+        "position": 319
       },
       "hx/ends": [
         {
@@ -210,9 +210,9 @@
         }
       ],
       "hx/content": {
-        "end": 462,
+        "end": 475,
         "match": "Scope",
-        "position": 452
+        "position": 465
       },
       "hx/ends": [
         {
@@ -298,9 +298,9 @@
         }
       ],
       "hx/content": {
-        "end": 837,
+        "end": 850,
         "match": "Scope In",
-        "position": 462
+        "position": 475
       },
       "hx/ends": [
         {
@@ -433,9 +433,9 @@
         }
       ],
       "hx/content": {
-        "end": 837,
+        "end": 850,
         "match": "Scope In",
-        "position": 462
+        "position": 475
       },
       "hx/ends": [
         {
@@ -544,9 +544,9 @@
         }
       ],
       "hx/content": {
-        "end": 1059,
+        "end": 1072,
         "match": "Scope Out",
-        "position": 837
+        "position": 850
       },
       "hx/ends": [
         {
@@ -627,9 +627,9 @@
         }
       ],
       "hx/content": {
-        "end": 1059,
+        "end": 1072,
         "match": "Scope Out",
-        "position": 837
+        "position": 850
       },
       "hx/ends": [
         {
@@ -710,9 +710,9 @@
         }
       ],
       "hx/content": {
-        "end": 1202,
+        "end": 1215,
         "match": "Time Box",
-        "position": 1059
+        "position": 1072
       },
       "hx/ends": [
         {
@@ -794,9 +794,9 @@
         }
       ],
       "hx/content": {
-        "end": 1492,
+        "end": 1505,
         "match": "Exit Conditions",
-        "position": 1202
+        "position": 1215
       },
       "hx/ends": [
         {
@@ -898,9 +898,9 @@
         }
       ],
       "hx/content": {
-        "end": 2721,
+        "end": 2734,
         "match": "Conceptual Foundation",
-        "position": 1492
+        "position": 1505
       },
       "hx/ends": [
         {
@@ -1006,9 +1006,9 @@
         }
       ],
       "hx/content": {
-        "end": 3700,
+        "end": 3713,
         "match": "Overview",
-        "position": 2721
+        "position": 2734
       },
       "hx/ends": [
         {
@@ -1118,9 +1118,9 @@
         }
       ],
       "hx/content": {
-        "end": 5185,
+        "end": 5198,
         "match": "Layer 1: Agency",
-        "position": 3700
+        "position": 3713
       },
       "hx/ends": [
         {
@@ -1258,9 +1258,9 @@
         }
       ],
       "hx/content": {
-        "end": 6952,
+        "end": 6965,
         "match": "Layer 2: Forum",
-        "position": 5185
+        "position": 5198
       },
       "hx/ends": [
         {
@@ -1370,9 +1370,9 @@
         }
       ],
       "hx/content": {
-        "end": 7350,
+        "end": 7363,
         "match": "Layer 3: Observation",
-        "position": 6952
+        "position": 6965
       },
       "hx/ends": [
         {
@@ -1430,9 +1430,9 @@
         }
       ],
       "hx/content": {
-        "end": 7371,
+        "end": 7384,
         "match": "Division of Work",
-        "position": 7350
+        "position": 7363
       },
       "hx/ends": [
         {
@@ -1494,9 +1494,9 @@
         }
       ],
       "hx/content": {
-        "end": 7710,
+        "end": 7723,
         "match": "Codex builds:",
-        "position": 7371
+        "position": 7384
       },
       "hx/ends": [
         {
@@ -1566,9 +1566,9 @@
         }
       ],
       "hx/content": {
-        "end": 7959,
+        "end": 7972,
         "match": "Claude builds:",
-        "position": 7710
+        "position": 7723
       },
       "hx/ends": [
         {
@@ -1634,9 +1634,9 @@
         }
       ],
       "hx/content": {
-        "end": 8225,
+        "end": 8238,
         "match": "Decisions",
-        "position": 7959
+        "position": 7972
       },
       "hx/ends": [
         {
@@ -1702,9 +1702,9 @@
         }
       ],
       "hx/content": {
-        "end": 8329,
+        "end": 8342,
         "match": "Open Questions",
-        "position": 8225
+        "position": 8238
       },
       "hx/ends": [
         {
@@ -1778,9 +1778,9 @@
         }
       ],
       "hx/content": {
-        "end": 9179,
+        "end": 9192,
         "match": "Sequence: Agent Posts to Forum",
-        "position": 8329
+        "position": 8342
       },
       "hx/ends": [
         {
@@ -1874,9 +1874,9 @@
         }
       ],
       "hx/content": {
-        "end": 9753,
+        "end": 9766,
         "match": "Success Criteria",
-        "position": 9179
+        "position": 9192
       },
       "hx/ends": [
         {

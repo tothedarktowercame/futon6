@@ -4,11 +4,11 @@
   "scope-count-by-binder-type": {
     "capability-scope": 10,
     "eightfold-phase": 6,
-    "loose-section": 40,
+    "loose-section": 41,
     "mission-scope-in": 1,
     "mission-scope-out": 1,
     "operator-gate": 1,
-    "pattern": 8,
+    "pattern": 22,
     "source-material": 12
   },
   "scope-hyperedges": [
@@ -71,7 +71,7 @@
         }
       ],
       "hx/content": {
-        "end": 1264,
+        "end": 1271,
         "match": "Mission: Learning Loop",
         "position": 0
       },
@@ -163,9 +163,9 @@
         }
       ],
       "hx/content": {
-        "end": 1280,
+        "end": 1287,
         "match": "IDENTIFY",
-        "position": 1264
+        "position": 1271
       },
       "hx/ends": [
         {
@@ -239,9 +239,9 @@
         }
       ],
       "hx/content": {
-        "end": 2130,
+        "end": 2137,
         "match": "Motivation",
-        "position": 1280
+        "position": 1287
       },
       "hx/ends": [
         {
@@ -344,9 +344,9 @@
         }
       ],
       "hx/content": {
-        "end": 2130,
+        "end": 2137,
         "match": "Motivation",
-        "position": 1280
+        "position": 1287
       },
       "hx/ends": [
         {
@@ -453,9 +453,9 @@
         }
       ],
       "hx/content": {
-        "end": 2938,
+        "end": 2945,
         "match": "The actual sorry",
-        "position": 2130
+        "position": 2137
       },
       "hx/ends": [
         {
@@ -561,9 +561,9 @@
         }
       ],
       "hx/content": {
-        "end": 2938,
+        "end": 2945,
         "match": "The actual sorry",
-        "position": 2130
+        "position": 2137
       },
       "hx/ends": [
         {
@@ -673,9 +673,9 @@
         }
       ],
       "hx/content": {
-        "end": 3808,
+        "end": 3815,
         "match": "Two parallel scales, same move",
-        "position": 2938
+        "position": 2945
       },
       "hx/ends": [
         {
@@ -789,9 +789,9 @@
         }
       ],
       "hx/content": {
-        "end": 3808,
+        "end": 3815,
         "match": "Two parallel scales, same move",
-        "position": 2938
+        "position": 2945
       },
       "hx/ends": [
         {
@@ -897,9 +897,9 @@
         }
       ],
       "hx/content": {
-        "end": 4898,
+        "end": 4905,
         "match": "Scope in",
-        "position": 3808
+        "position": 3815
       },
       "hx/ends": [
         {
@@ -1012,9 +1012,9 @@
         }
       ],
       "hx/content": {
-        "end": 4898,
+        "end": 4905,
         "match": "Scope in",
-        "position": 3808
+        "position": 3815
       },
       "hx/ends": [
         {
@@ -1127,9 +1127,9 @@
         }
       ],
       "hx/content": {
-        "end": 4898,
+        "end": 4905,
         "match": "Scope in",
-        "position": 3808
+        "position": 3815
       },
       "hx/ends": [
         {
@@ -1239,9 +1239,9 @@
         }
       ],
       "hx/content": {
-        "end": 6026,
+        "end": 6033,
         "match": "Scope out",
-        "position": 4898
+        "position": 4905
       },
       "hx/ends": [
         {
@@ -1378,9 +1378,9 @@
         }
       ],
       "hx/content": {
-        "end": 6026,
+        "end": 6033,
         "match": "Scope out",
-        "position": 4898
+        "position": 4905
       },
       "hx/ends": [
         {
@@ -1532,9 +1532,9 @@
         }
       ],
       "hx/content": {
-        "end": 6026,
+        "end": 6033,
         "match": "Scope out",
-        "position": 4898
+        "position": 4905
       },
       "hx/ends": [
         {
@@ -1675,9 +1675,9 @@
         }
       ],
       "hx/content": {
-        "end": 6955,
+        "end": 6962,
         "match": "Completion criteria",
-        "position": 6026
+        "position": 6033
       },
       "hx/ends": [
         {
@@ -1807,9 +1807,9 @@
         }
       ],
       "hx/content": {
-        "end": 6955,
+        "end": 6962,
         "match": "Completion criteria",
-        "position": 6026
+        "position": 6033
       },
       "hx/ends": [
         {
@@ -1919,9 +1919,9 @@
         }
       ],
       "hx/content": {
-        "end": 7744,
+        "end": 7751,
         "match": "Open questions",
-        "position": 6955
+        "position": 6962
       },
       "hx/ends": [
         {
@@ -2019,9 +2019,9 @@
         }
       ],
       "hx/content": {
-        "end": 8399,
+        "end": 8406,
         "match": "MAP",
-        "position": 7744
+        "position": 7751
       },
       "hx/ends": [
         {
@@ -2132,9 +2132,9 @@
         }
       ],
       "hx/content": {
-        "end": 8399,
+        "end": 8406,
         "match": "MAP",
-        "position": 7744
+        "position": 7751
       },
       "hx/ends": [
         {
@@ -2273,9 +2273,9 @@
         }
       ],
       "hx/content": {
-        "end": 11089,
+        "end": 11096,
         "match": "DERIVE",
-        "position": 8399
+        "position": 8406
       },
       "hx/ends": [
         {
@@ -2437,9 +2437,9 @@
         }
       ],
       "hx/content": {
-        "end": 11089,
+        "end": 11096,
         "match": "DERIVE",
-        "position": 8399
+        "position": 8406
       },
       "hx/ends": [
         {
@@ -2561,9 +2561,9 @@
         }
       ],
       "hx/content": {
-        "end": 11387,
+        "end": 11394,
         "match": "ARGUE",
-        "position": 11089
+        "position": 11096
       },
       "hx/ends": [
         {
@@ -2649,9 +2649,9 @@
         }
       ],
       "hx/content": {
-        "end": 11761,
+        "end": 11768,
         "match": "The sorry restated",
-        "position": 11387
+        "position": 11394
       },
       "hx/ends": [
         {
@@ -2769,9 +2769,9 @@
         }
       ],
       "hx/content": {
-        "end": 13092,
+        "end": 13099,
         "match": "What the construction warrants",
-        "position": 11761
+        "position": 11768
       },
       "hx/ends": [
         {
@@ -2917,9 +2917,9 @@
         }
       ],
       "hx/content": {
-        "end": 14821,
+        "end": 14828,
         "match": "Against the completion criteria",
-        "position": 13092
+        "position": 13099
       },
       "hx/ends": [
         {
@@ -3037,9 +3037,9 @@
         }
       ],
       "hx/content": {
-        "end": 16226,
+        "end": 16233,
         "match": "The strongest objection",
-        "position": 14821
+        "position": 14828
       },
       "hx/ends": [
         {
@@ -3137,9 +3137,9 @@
         }
       ],
       "hx/content": {
-        "end": 17249,
+        "end": 17256,
         "match": "What falsifies this argument",
-        "position": 16226
+        "position": 16233
       },
       "hx/ends": [
         {
@@ -3245,9 +3245,9 @@
         }
       ],
       "hx/content": {
-        "end": 18052,
+        "end": 18059,
         "match": "What this ARGUE phase establishes",
-        "position": 17249
+        "position": 17256
       },
       "hx/ends": [
         {
@@ -3349,9 +3349,9 @@
         }
       ],
       "hx/content": {
-        "end": 18557,
+        "end": 18564,
         "match": "VERIFY",
-        "position": 18052
+        "position": 18059
       },
       "hx/ends": [
         {
@@ -3454,9 +3454,9 @@
         }
       ],
       "hx/content": {
-        "end": 18557,
+        "end": 18564,
         "match": "VERIFY",
-        "position": 18052
+        "position": 18059
       },
       "hx/ends": [
         {
@@ -3555,9 +3555,9 @@
         }
       ],
       "hx/content": {
-        "end": 19520,
+        "end": 19527,
         "match": "Probe 1 \u2014 flexiarg existence and content",
-        "position": 18557
+        "position": 18564
       },
       "hx/ends": [
         {
@@ -3655,9 +3655,9 @@
         }
       ],
       "hx/content": {
-        "end": 20647,
+        "end": 20654,
         "match": "Probe 2 \u2014 the negative-evidence claim",
-        "position": 19520
+        "position": 19527
       },
       "hx/ends": [
         {
@@ -3763,9 +3763,9 @@
         }
       ],
       "hx/content": {
-        "end": 20647,
+        "end": 20654,
         "match": "Probe 2 \u2014 the negative-evidence claim",
-        "position": 19520
+        "position": 19527
       },
       "hx/ends": [
         {
@@ -3883,9 +3883,9 @@
         }
       ],
       "hx/content": {
-        "end": 21999,
+        "end": 22006,
         "match": "Probe 3 \u2014 idempotency by construction",
-        "position": 20647
+        "position": 20654
       },
       "hx/ends": [
         {
@@ -3983,9 +3983,9 @@
         }
       ],
       "hx/content": {
-        "end": 22823,
+        "end": 22830,
         "match": "Probe 4 \u2014 the derivation's step-structure grew from use",
-        "position": 21999
+        "position": 22006
       },
       "hx/ends": [
         {
@@ -4063,9 +4063,9 @@
         }
       ],
       "hx/content": {
-        "end": 23868,
+        "end": 23875,
         "match": "What VERIFY does NOT yet check",
-        "position": 22823
+        "position": 22830
       },
       "hx/ends": [
         {
@@ -4171,9 +4171,9 @@
         }
       ],
       "hx/content": {
-        "end": 24863,
+        "end": 24870,
         "match": "Verify-phase witness summary",
-        "position": 23868
+        "position": 23875
       },
       "hx/ends": [
         {
@@ -4283,9 +4283,9 @@
         }
       ],
       "hx/content": {
-        "end": 25262,
+        "end": 25269,
         "match": "INSTANTIATE",
-        "position": 24863
+        "position": 24870
       },
       "hx/ends": [
         {
@@ -4367,9 +4367,9 @@
         }
       ],
       "hx/content": {
-        "end": 26214,
+        "end": 26221,
         "match": "The offramp wiring",
-        "position": 25262
+        "position": 25269
       },
       "hx/ends": [
         {
@@ -4435,9 +4435,9 @@
         }
       ],
       "hx/content": {
-        "end": 25476,
+        "end": 25483,
         "match": "pattern: hinge-entry-slots",
-        "position": 25459
+        "position": 25466
       },
       "hx/ends": [
         {
@@ -4503,9 +4503,9 @@
         }
       ],
       "hx/content": {
-        "end": 25548,
+        "end": 25555,
         "match": "pattern: whose-question-is-this",
-        "position": 25526
+        "position": 25533
       },
       "hx/ends": [
         {
@@ -4571,9 +4571,9 @@
         }
       ],
       "hx/content": {
-        "end": 25621,
+        "end": 25628,
         "match": "pattern: interest-event-vocabulary",
-        "position": 25596
+        "position": 25603
       },
       "hx/ends": [
         {
@@ -4613,35 +4613,27 @@
       "scope-id": "M-learning-loop:scope-041"
     },
     {
-      "binder-type": "source-material",
+      "binder-type": "pattern",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "The offramp wiring",
+          "name": "pattern: whose-question-is-this",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "kind": "file",
-          "ref": "tmp/offramp-M-learning-loop.edn",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "sorry"
+          "ident": "whose-question-is-this",
+          "ref": "futon3/library/structure/whose-question-is-this.flexiarg",
+          "role": "pattern"
         }
       ],
       "hx/content": {
-        "end": 26214,
-        "match": "The offramp wiring",
-        "position": 25262
+        "end": 25701,
+        "match": "pattern: whose-question-is-this",
+        "position": 25679
       },
       "hx/ends": [
         {
@@ -4649,111 +4641,51 @@
           "role": "entity"
         },
         {
-          "name": "The offramp wiring",
+          "name": "pattern: whose-question-is-this",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "kind": "file",
-          "ref": "tmp/offramp-M-learning-loop.edn",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "sorry"
+          "ident": "whose-question-is-this",
+          "ref": "futon3/library/structure/whose-question-is-this.flexiarg",
+          "role": "pattern"
         }
       ],
       "hx/id": "M-learning-loop:scope-042",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "source-material",
+        "pattern",
         "instantiate"
       ],
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
-      "hx/type": "mission-scope/source-material",
+      "hx/type": "mission-scope/pattern",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-042"
     },
     {
-      "binder-type": "loose-section",
+      "binder-type": "pattern",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "Hinge 3 consumed \u2014 the agent-voiced test",
-          "phase": "verify",
+          "name": "pattern: hinge-entry-slots",
+          "phase": "instantiate",
           "role": "environment"
         },
         {
-          "level": 3,
-          "role": "heading",
-          "title": "Hinge 3 consumed \u2014 the agent-voiced test"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "reframe"
-        },
-        {
-          "role": "concept",
-          "term": "sorry"
-        },
-        {
-          "role": "concept",
-          "term": "morphogenesis"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
+          "ident": "hinge-entry-slots",
+          "ref": "futon3/library/structure/hinge-entry-slots.flexiarg",
+          "role": "pattern"
         }
       ],
       "hx/content": {
-        "end": 29768,
-        "match": "Hinge 3 consumed \u2014 the agent-voiced test",
-        "position": 26214
+        "end": 25736,
+        "match": "pattern: hinge-entry-slots",
+        "position": 25719
       },
       "hx/ends": [
         {
@@ -4761,78 +4693,26 @@
           "role": "entity"
         },
         {
-          "name": "Hinge 3 consumed \u2014 the agent-voiced test",
-          "phase": "verify",
+          "name": "pattern: hinge-entry-slots",
+          "phase": "instantiate",
           "role": "environment"
         },
         {
-          "level": 3,
-          "role": "heading",
-          "title": "Hinge 3 consumed \u2014 the agent-voiced test"
-        },
-        {
-          "role": "concept",
-          "term": "map"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "reframe"
-        },
-        {
-          "role": "concept",
-          "term": "sorry"
-        },
-        {
-          "role": "concept",
-          "term": "morphogenesis"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
+          "ident": "hinge-entry-slots",
+          "ref": "futon3/library/structure/hinge-entry-slots.flexiarg",
+          "role": "pattern"
         }
       ],
       "hx/id": "M-learning-loop:scope-043",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "loose-section",
-        "verify"
+        "pattern",
+        "instantiate"
       ],
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
+      "hx/type": "mission-scope/pattern",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-043"
     },
@@ -4844,6 +4724,438 @@
           "role": "entity"
         },
         {
+          "name": "pattern: interest-event-vocabulary",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "interest-event-vocabulary",
+          "ref": "futon3/library/structure/interest-event-vocabulary.flexiarg",
+          "role": "pattern"
+        }
+      ],
+      "hx/content": {
+        "end": 25768,
+        "match": "pattern: interest-event-vocabulary",
+        "position": 25743
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: interest-event-vocabulary",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "interest-event-vocabulary",
+          "ref": "futon3/library/structure/interest-event-vocabulary.flexiarg",
+          "role": "pattern"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-044",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-044"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: hinge-entry-slots",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "hinge-entry-slots",
+          "ref": "futon3/library/structure/hinge-entry-slots.flexiarg",
+          "role": "pattern"
+        }
+      ],
+      "hx/content": {
+        "end": 25877,
+        "match": "pattern: hinge-entry-slots",
+        "position": 25860
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: hinge-entry-slots",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "hinge-entry-slots",
+          "ref": "futon3/library/structure/hinge-entry-slots.flexiarg",
+          "role": "pattern"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-045",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-045"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: whose-question-is-this",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "whose-question-is-this",
+          "ref": "futon3/library/structure/whose-question-is-this.flexiarg",
+          "role": "pattern"
+        }
+      ],
+      "hx/content": {
+        "end": 25929,
+        "match": "pattern: whose-question-is-this",
+        "position": 25907
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: whose-question-is-this",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "whose-question-is-this",
+          "ref": "futon3/library/structure/whose-question-is-this.flexiarg",
+          "role": "pattern"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-046",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-046"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: interest-event-vocabulary",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "interest-event-vocabulary",
+          "ref": "futon3/library/structure/interest-event-vocabulary.flexiarg",
+          "role": "pattern"
+        }
+      ],
+      "hx/content": {
+        "end": 26001,
+        "match": "pattern: interest-event-vocabulary",
+        "position": 25976
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: interest-event-vocabulary",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "interest-event-vocabulary",
+          "ref": "futon3/library/structure/interest-event-vocabulary.flexiarg",
+          "role": "pattern"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-047",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-047"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "The offramp wiring",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "tmp/offramp-M-learning-loop.edn",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        }
+      ],
+      "hx/content": {
+        "end": 26221,
+        "match": "The offramp wiring",
+        "position": 25269
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "The offramp wiring",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "tmp/offramp-M-learning-loop.edn",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-048",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-048"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Hinge 3 consumed \u2014 the agent-voiced test",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Hinge 3 consumed \u2014 the agent-voiced test"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "reframe"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "morphogenesis"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        }
+      ],
+      "hx/content": {
+        "end": 29775,
+        "match": "Hinge 3 consumed \u2014 the agent-voiced test",
+        "position": 26221
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Hinge 3 consumed \u2014 the agent-voiced test",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Hinge 3 consumed \u2014 the agent-voiced test"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "reframe"
+        },
+        {
+          "role": "concept",
+          "term": "sorry"
+        },
+        {
+          "role": "concept",
+          "term": "morphogenesis"
+        },
+        {
+          "role": "concept",
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-049",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "verify"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-049"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
           "name": "pattern: what-problem-is-this-actually-solving",
           "phase": "verify",
           "role": "environment"
@@ -4863,9 +5175,9 @@
         }
       ],
       "hx/content": {
-        "end": 26724,
+        "end": 26731,
         "match": "pattern: what-problem-is-this-actually-solving",
-        "position": 26687
+        "position": 26694
       },
       "hx/ends": [
         {
@@ -4891,7 +5203,7 @@
           "term": "pattern"
         }
       ],
-      "hx/id": "M-learning-loop:scope-044",
+      "hx/id": "M-learning-loop:scope-050",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -4902,355 +5214,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/pattern",
       "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-044"
-    },
-    {
-      "binder-type": "loose-section",
-      "ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "What INSTANTIATE establishes",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "What INSTANTIATE establishes"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        }
-      ],
-      "hx/content": {
-        "end": 31170,
-        "match": "What INSTANTIATE establishes",
-        "position": 29768
-      },
-      "hx/ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "What INSTANTIATE establishes",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "What INSTANTIATE establishes"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        }
-      ],
-      "hx/id": "M-learning-loop:scope-045",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "loose-section",
-        "loose"
-      ],
-      "hx/parent": "M-learning-loop:scope-037",
-      "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-045"
-    },
-    {
-      "binder-type": "loose-section",
-      "ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "What INSTANTIATE does NOT establish",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "What INSTANTIATE does NOT establish"
-        },
-        {
-          "role": "concept",
-          "term": "instantiate"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        }
-      ],
-      "hx/content": {
-        "end": 31958,
-        "match": "What INSTANTIATE does NOT establish",
-        "position": 31170
-      },
-      "hx/ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "What INSTANTIATE does NOT establish",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "What INSTANTIATE does NOT establish"
-        },
-        {
-          "role": "concept",
-          "term": "instantiate"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "patterns"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        }
-      ],
-      "hx/id": "M-learning-loop:scope-046",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "loose-section",
-        "loose"
-      ],
-      "hx/parent": "M-learning-loop:scope-037",
-      "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-046"
-    },
-    {
-      "binder-type": "loose-section",
-      "ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 attributed B/A entities",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Full-loop implementation \u2014 attributed B/A entities"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
-          "term": "capabilities"
-        },
-        {
-          "role": "concept",
-          "term": "active"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "fallback"
-        },
-        {
-          "role": "concept",
-          "term": "observe"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "runtime"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        }
-      ],
-      "hx/content": {
-        "end": 37687,
-        "match": "Full-loop implementation \u2014 attributed B/A entities",
-        "position": 31958
-      },
-      "hx/ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 attributed B/A entities",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Full-loop implementation \u2014 attributed B/A entities"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
-          "term": "capabilities"
-        },
-        {
-          "role": "concept",
-          "term": "active"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "fallback"
-        },
-        {
-          "role": "concept",
-          "term": "observe"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "runtime"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        }
-      ],
-      "hx/id": "M-learning-loop:scope-047",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "loose-section",
-        "loose"
-      ],
-      "hx/parent": "M-learning-loop:scope-037",
-      "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-047"
+      "scope-id": "M-learning-loop:scope-050"
     },
     {
       "binder-type": "pattern",
@@ -5260,24 +5224,20 @@
           "role": "entity"
         },
         {
-          "name": "pattern: all-or-nothing",
-          "phase": "instantiate",
+          "name": "pattern: enrichment/rational-reconstruction",
+          "phase": "verify",
           "role": "environment"
         },
         {
-          "ident": "all-or-nothing",
-          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "ident": "enrichment/rational-reconstruction",
+          "ref": "futon3/library/enrichment/rational-reconstruction.flexiarg",
           "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "runtime"
         }
       ],
       "hx/content": {
-        "end": 37014,
-        "match": "pattern: all-or-nothing",
-        "position": 37000
+        "end": 27009,
+        "match": "pattern: enrichment/rational-reconstruction",
+        "position": 26975
       },
       "hx/ends": [
         {
@@ -5285,474 +5245,26 @@
           "role": "entity"
         },
         {
-          "name": "pattern: all-or-nothing",
-          "phase": "instantiate",
+          "name": "pattern: enrichment/rational-reconstruction",
+          "phase": "verify",
           "role": "environment"
         },
         {
-          "ident": "all-or-nothing",
-          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "ident": "enrichment/rational-reconstruction",
+          "ref": "futon3/library/enrichment/rational-reconstruction.flexiarg",
           "role": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "runtime"
-        }
-      ],
-      "hx/id": "M-learning-loop:scope-048",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "pattern",
-        "instantiate"
-      ],
-      "hx/parent": "M-learning-loop:scope-037",
-      "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
-      "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-048"
-    },
-    {
-      "binder-type": "source-material",
-      "ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 attributed B/A entities",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "data/capability-mining/operator-turns.edn",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "capability_graph_ingest.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "capability_matrix.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_mining_test.clj",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
-          "term": "capabilities"
-        },
-        {
-          "role": "concept",
-          "term": "active"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "fallback"
-        },
-        {
-          "role": "concept",
-          "term": "observe"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "runtime"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        }
-      ],
-      "hx/content": {
-        "end": 37687,
-        "match": "Full-loop implementation \u2014 attributed B/A entities",
-        "position": 31958
-      },
-      "hx/ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 attributed B/A entities",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "data/capability-mining/operator-turns.edn",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "capability_graph_ingest.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "capability_matrix.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_mining_test.clj",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
-          "term": "capabilities"
-        },
-        {
-          "role": "concept",
-          "term": "active"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "fallback"
-        },
-        {
-          "role": "concept",
-          "term": "observe"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "runtime"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        }
-      ],
-      "hx/id": "M-learning-loop:scope-049",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "source-material",
-        "instantiate"
-      ],
-      "hx/parent": "M-learning-loop:scope-037",
-      "hx/role": "component",
-      "hx/type": "mission-scope/source-material",
-      "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-049"
-    },
-    {
-      "binder-type": "loose-section",
-      "ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "endpoints"
-        },
-        {
-          "role": "concept",
-          "term": "requires"
-        },
-        {
-          "role": "concept",
-          "term": "xtdb"
-        },
-        {
-          "role": "concept",
-          "term": "held"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
-        }
-      ],
-      "hx/content": {
-        "end": 39445,
-        "match": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
-        "position": 37687
-      },
-      "hx/ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
-          "phase": "loose",
-          "role": "environment"
-        },
-        {
-          "level": 3,
-          "role": "heading",
-          "title": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "endpoints"
-        },
-        {
-          "role": "concept",
-          "term": "requires"
-        },
-        {
-          "role": "concept",
-          "term": "xtdb"
-        },
-        {
-          "role": "concept",
-          "term": "held"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
-        }
-      ],
-      "hx/id": "M-learning-loop:scope-050",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "loose-section",
-        "loose"
-      ],
-      "hx/parent": "M-learning-loop:scope-037",
-      "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-050"
-    },
-    {
-      "binder-type": "source-material",
-      "ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest_test.clj",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "endpoints"
-        },
-        {
-          "role": "concept",
-          "term": "requires"
-        },
-        {
-          "role": "concept",
-          "term": "xtdb"
-        },
-        {
-          "role": "concept",
-          "term": "held"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
-        }
-      ],
-      "hx/content": {
-        "end": 39445,
-        "match": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
-        "position": 37687
-      },
-      "hx/ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest_test.clj",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "endpoints"
-        },
-        {
-          "role": "concept",
-          "term": "requires"
-        },
-        {
-          "role": "concept",
-          "term": "xtdb"
-        },
-        {
-          "role": "concept",
-          "term": "held"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
         }
       ],
       "hx/id": "M-learning-loop:scope-051",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "source-material",
-        "instantiate"
+        "pattern",
+        "verify"
       ],
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
-      "hx/type": "mission-scope/source-material",
+      "hx/type": "mission-scope/pattern",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-051"
     },
@@ -5764,34 +5276,14 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
+          "name": "What INSTANTIATE establishes",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Full-loop implementation \u2014 capability-matrix aggregate view"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
+          "title": "What INSTANTIATE establishes"
         },
         {
           "role": "concept",
@@ -5799,17 +5291,29 @@
         },
         {
           "role": "concept",
-          "term": "inspectable"
+          "term": "agent"
         },
         {
           "role": "concept",
-          "term": "certify"
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
         }
       ],
       "hx/content": {
-        "end": 41376,
-        "match": "Full-loop implementation \u2014 capability-matrix aggregate view",
-        "position": 39445
+        "end": 31177,
+        "match": "What INSTANTIATE establishes",
+        "position": 29775
       },
       "hx/ends": [
         {
@@ -5817,34 +5321,14 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
+          "name": "What INSTANTIATE establishes",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Full-loop implementation \u2014 capability-matrix aggregate view"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
+          "title": "What INSTANTIATE establishes"
         },
         {
           "role": "concept",
@@ -5852,11 +5336,23 @@
         },
         {
           "role": "concept",
-          "term": "inspectable"
+          "term": "agent"
         },
         {
           "role": "concept",
-          "term": "certify"
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
         }
       ],
       "hx/id": "M-learning-loop:scope-052",
@@ -5873,64 +5369,35 @@
       "scope-id": "M-learning-loop:scope-052"
     },
     {
-      "binder-type": "source-material",
+      "binder-type": "pattern",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
+          "name": "pattern: hinge-entry-slots",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "kind": "file",
-          "ref": "scripts/capability_matrix.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_matrix_test.clj",
-          "role": "source"
+          "ident": "hinge-entry-slots",
+          "ref": "futon3/library/structure/hinge-entry-slots.flexiarg",
+          "role": "pattern"
         },
         {
           "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
+          "term": "prior"
         },
         {
           "role": "concept",
           "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "inspectable"
-        },
-        {
-          "role": "concept",
-          "term": "certify"
         }
       ],
       "hx/content": {
-        "end": 41376,
-        "match": "Full-loop implementation \u2014 capability-matrix aggregate view",
-        "position": 39445
+        "end": 30966,
+        "match": "pattern: hinge-entry-slots",
+        "position": 30949
       },
       "hx/ends": [
         {
@@ -5938,120 +5405,67 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
+          "name": "pattern: hinge-entry-slots",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "kind": "file",
-          "ref": "scripts/capability_matrix.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_matrix_test.clj",
-          "role": "source"
+          "ident": "hinge-entry-slots",
+          "ref": "futon3/library/structure/hinge-entry-slots.flexiarg",
+          "role": "pattern"
         },
         {
           "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
+          "term": "prior"
         },
         {
           "role": "concept",
           "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "inspectable"
-        },
-        {
-          "role": "concept",
-          "term": "certify"
         }
       ],
       "hx/id": "M-learning-loop:scope-053",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "source-material",
+        "pattern",
         "instantiate"
       ],
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
-      "hx/type": "mission-scope/source-material",
+      "hx/type": "mission-scope/pattern",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-053"
     },
     {
-      "binder-type": "capability-scope",
+      "binder-type": "pattern",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
+          "name": "pattern: whose-question-is-this",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "ident": "capability",
-          "role": "capability",
-          "source": "kernel"
+          "ident": "whose-question-is-this",
+          "ref": "futon3/library/structure/whose-question-is-this.flexiarg",
+          "role": "pattern"
         },
         {
           "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
+          "term": "prior"
         },
         {
           "role": "concept",
           "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "inspectable"
-        },
-        {
-          "role": "concept",
-          "term": "certify"
         }
       ],
       "hx/content": {
-        "end": 41376,
-        "match": "Full-loop implementation \u2014 capability-matrix aggregate view",
-        "position": 39445
+        "end": 30993,
+        "match": "pattern: whose-question-is-this",
+        "position": 30971
       },
       "hx/ends": [
         {
@@ -6059,60 +5473,104 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
+          "name": "pattern: whose-question-is-this",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "ident": "capability",
-          "role": "capability",
-          "source": "kernel"
+          "ident": "whose-question-is-this",
+          "ref": "futon3/library/structure/whose-question-is-this.flexiarg",
+          "role": "pattern"
         },
         {
           "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
+          "term": "prior"
         },
         {
           "role": "concept",
           "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "inhabitation"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
-        },
-        {
-          "role": "concept",
-          "term": "inspectable"
-        },
-        {
-          "role": "concept",
-          "term": "certify"
         }
       ],
       "hx/id": "M-learning-loop:scope-054",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "capability-scope",
+        "pattern",
         "instantiate"
       ],
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
-      "hx/type": "mission-scope/capability-scope",
+      "hx/type": "mission-scope/pattern",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-054"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: interest-event-vocabulary",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "interest-event-vocabulary",
+          "ref": "futon3/library/structure/interest-event-vocabulary.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 31026,
+        "match": "pattern: interest-event-vocabulary",
+        "position": 31001
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: interest-event-vocabulary",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "interest-event-vocabulary",
+          "ref": "futon3/library/structure/interest-event-vocabulary.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-055",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-055"
     },
     {
       "binder-type": "loose-section",
@@ -6122,42 +5580,18 @@
           "role": "entity"
         },
         {
-          "name": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
+          "name": "What INSTANTIATE does NOT establish",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels"
+          "title": "What INSTANTIATE does NOT establish"
         },
         {
           "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "endpoints"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        },
-        {
-          "role": "concept",
-          "term": "env"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "requires"
+          "term": "instantiate"
         },
         {
           "role": "concept",
@@ -6165,13 +5599,21 @@
         },
         {
           "role": "concept",
-          "term": "invariant"
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
         }
       ],
       "hx/content": {
-        "end": 42890,
-        "match": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
-        "position": 41376
+        "end": 31965,
+        "match": "What INSTANTIATE does NOT establish",
+        "position": 31177
       },
       "hx/ends": [
         {
@@ -6179,42 +5621,18 @@
           "role": "entity"
         },
         {
-          "name": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
+          "name": "What INSTANTIATE does NOT establish",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels"
+          "title": "What INSTANTIATE does NOT establish"
         },
         {
           "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "endpoints"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        },
-        {
-          "role": "concept",
-          "term": "env"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "requires"
+          "term": "instantiate"
         },
         {
           "role": "concept",
@@ -6222,10 +5640,18 @@
         },
         {
           "role": "concept",
-          "term": "invariant"
+          "term": "patterns"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
         }
       ],
-      "hx/id": "M-learning-loop:scope-055",
+      "hx/id": "M-learning-loop:scope-056",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -6235,140 +5661,6 @@
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-055"
-    },
-    {
-      "binder-type": "source-material",
-      "ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "7f5080d",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "endpoints"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        },
-        {
-          "role": "concept",
-          "term": "env"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "requires"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        }
-      ],
-      "hx/content": {
-        "end": 42890,
-        "match": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
-        "position": 41376
-      },
-      "hx/ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "7f5080d",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "endpoints"
-        },
-        {
-          "role": "concept",
-          "term": "isolation"
-        },
-        {
-          "role": "concept",
-          "term": "env"
-        },
-        {
-          "role": "concept",
-          "term": "produces"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "requires"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "invariant"
-        }
-      ],
-      "hx/id": "M-learning-loop:scope-056",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
-        "source-material",
-        "instantiate"
-      ],
-      "hx/parent": "M-learning-loop:scope-037",
-      "hx/role": "component",
-      "hx/type": "mission-scope/source-material",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-056"
     },
@@ -6380,22 +5672,14 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+          "name": "Full-loop implementation \u2014 attributed B/A entities",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
+          "title": "Full-loop implementation \u2014 attributed B/A entities"
         },
         {
           "role": "concept",
@@ -6403,19 +5687,7 @@
         },
         {
           "role": "concept",
-          "term": "checkable"
-        },
-        {
-          "role": "concept",
-          "term": "truth"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
+          "term": "complete"
         },
         {
           "role": "concept",
@@ -6423,21 +5695,49 @@
         },
         {
           "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "queryable"
+          "term": "status"
         },
         {
           "role": "concept",
           "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "capabilities"
+        },
+        {
+          "role": "concept",
+          "term": "active"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "observe"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "isolation"
         }
       ],
       "hx/content": {
-        "end": 45756,
-        "match": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
-        "position": 42890
+        "end": 37694,
+        "match": "Full-loop implementation \u2014 attributed B/A entities",
+        "position": 31965
       },
       "hx/ends": [
         {
@@ -6445,22 +5745,14 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+          "name": "Full-loop implementation \u2014 attributed B/A entities",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified"
-        },
-        {
-          "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
+          "title": "Full-loop implementation \u2014 attributed B/A entities"
         },
         {
           "role": "concept",
@@ -6468,19 +5760,7 @@
         },
         {
           "role": "concept",
-          "term": "checkable"
-        },
-        {
-          "role": "concept",
-          "term": "truth"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
+          "term": "complete"
         },
         {
           "role": "concept",
@@ -6488,15 +5768,43 @@
         },
         {
           "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "queryable"
+          "term": "status"
         },
         {
           "role": "concept",
           "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "capabilities"
+        },
+        {
+          "role": "concept",
+          "term": "active"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "observe"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "isolation"
         }
       ],
       "hx/id": "M-learning-loop:scope-057",
@@ -6513,96 +5821,31 @@
       "scope-id": "M-learning-loop:scope-057"
     },
     {
-      "binder-type": "source-material",
+      "binder-type": "pattern",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+          "name": "pattern: all-or-nothing",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "kind": "api",
-          "ref": "GET /api/alpha/relations",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "data/capability-mining/ingest-receipt.edn",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "futon1b_server.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "2e0e2a57",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "ce20eb2c",
-          "role": "source"
+          "ident": "all-or-nothing",
+          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "role": "pattern"
         },
         {
           "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "checkable"
-        },
-        {
-          "role": "concept",
-          "term": "truth"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "queryable"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
+          "term": "runtime"
         }
       ],
       "hx/content": {
-        "end": 45756,
-        "match": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
-        "position": 42890
+        "end": 37021,
+        "match": "pattern: all-or-nothing",
+        "position": 37007
       },
       "hx/ends": [
         {
@@ -6610,114 +5853,64 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+          "name": "pattern: all-or-nothing",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "kind": "api",
-          "ref": "GET /api/alpha/relations",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "data/capability-mining/ingest-receipt.edn",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "futon1b_server.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "2e0e2a57",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "ce20eb2c",
-          "role": "source"
+          "ident": "all-or-nothing",
+          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "role": "pattern"
         },
         {
           "role": "concept",
-          "term": "status"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "checkable"
-        },
-        {
-          "role": "concept",
-          "term": "truth"
-        },
-        {
-          "role": "concept",
-          "term": "state"
-        },
-        {
-          "role": "concept",
-          "term": "prior"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "queryable"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
+          "term": "runtime"
         }
       ],
       "hx/id": "M-learning-loop:scope-058",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "source-material",
+        "pattern",
         "instantiate"
       ],
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
-      "hx/type": "mission-scope/source-material",
+      "hx/type": "mission-scope/pattern",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-058"
     },
     {
-      "binder-type": "loose-section",
+      "binder-type": "source-material",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 WebArxana render surface",
-          "phase": "loose",
+          "name": "Full-loop implementation \u2014 attributed B/A entities",
+          "phase": "instantiate",
           "role": "environment"
         },
         {
-          "level": 3,
-          "role": "heading",
-          "title": "Full-loop implementation \u2014 WebArxana render surface"
+          "kind": "file",
+          "ref": "data/capability-mining/operator-turns.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "capability_graph_ingest.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "capability_matrix.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_mining_test.clj",
+          "role": "source"
         },
         {
           "role": "concept",
@@ -6725,11 +5918,7 @@
         },
         {
           "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
+          "term": "complete"
         },
         {
           "role": "concept",
@@ -6737,29 +5926,49 @@
         },
         {
           "role": "concept",
-          "term": "endpoint"
+          "term": "status"
         },
         {
           "role": "concept",
-          "term": "src"
+          "term": "webarxana"
         },
         {
           "role": "concept",
-          "term": "efe"
+          "term": "capabilities"
         },
         {
           "role": "concept",
-          "term": "map"
+          "term": "active"
         },
         {
           "role": "concept",
-          "term": "renderer"
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "observe"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "isolation"
         }
       ],
       "hx/content": {
-        "end": 49079,
-        "match": "Full-loop implementation \u2014 WebArxana render surface",
-        "position": 45756
+        "end": 37694,
+        "match": "Full-loop implementation \u2014 attributed B/A entities",
+        "position": 31965
       },
       "hx/ends": [
         {
@@ -6767,14 +5976,29 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 WebArxana render surface",
-          "phase": "loose",
+          "name": "Full-loop implementation \u2014 attributed B/A entities",
+          "phase": "instantiate",
           "role": "environment"
         },
         {
-          "level": 3,
-          "role": "heading",
-          "title": "Full-loop implementation \u2014 WebArxana render surface"
+          "kind": "file",
+          "ref": "data/capability-mining/operator-turns.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "capability_graph_ingest.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "capability_matrix.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_mining_test.clj",
+          "role": "source"
         },
         {
           "role": "concept",
@@ -6782,11 +6006,7 @@
         },
         {
           "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
+          "term": "complete"
         },
         {
           "role": "concept",
@@ -6794,79 +6014,74 @@
         },
         {
           "role": "concept",
-          "term": "endpoint"
+          "term": "status"
         },
         {
           "role": "concept",
-          "term": "src"
+          "term": "webarxana"
         },
         {
           "role": "concept",
-          "term": "efe"
+          "term": "capabilities"
         },
         {
           "role": "concept",
-          "term": "map"
+          "term": "active"
         },
         {
           "role": "concept",
-          "term": "renderer"
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "observe"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "runtime"
+        },
+        {
+          "role": "concept",
+          "term": "isolation"
         }
       ],
       "hx/id": "M-learning-loop:scope-059",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "loose-section",
-        "loose"
+        "source-material",
+        "instantiate"
       ],
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
+      "hx/type": "mission-scope/source-material",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-059"
     },
     {
-      "binder-type": "source-material",
+      "binder-type": "loose-section",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 WebArxana render surface",
-          "phase": "instantiate",
+          "name": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
+          "phase": "loose",
           "role": "environment"
         },
         {
-          "kind": "url",
-          "ref": "http://localhost:3100/live/capability-graph.html`,",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "3100/live/capability-graph.html",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_render.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "dev/web/webarxana/src/webarxana/server/core.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_render_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "a0af0a0b",
-          "role": "source"
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion"
         },
         {
           "role": "concept",
@@ -6874,15 +6089,7 @@
         },
         {
           "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
           "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
         },
         {
           "role": "concept",
@@ -6890,25 +6097,33 @@
         },
         {
           "role": "concept",
-          "term": "src"
+          "term": "endpoints"
         },
         {
           "role": "concept",
-          "term": "efe"
+          "term": "requires"
         },
         {
           "role": "concept",
-          "term": "map"
+          "term": "xtdb"
         },
         {
           "role": "concept",
-          "term": "renderer"
+          "term": "held"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
         }
       ],
       "hx/content": {
-        "end": 49079,
-        "match": "Full-loop implementation \u2014 WebArxana render surface",
-        "position": 45756
+        "end": 39452,
+        "match": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
+        "position": 37694
       },
       "hx/ends": [
         {
@@ -6916,39 +6131,14 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 WebArxana render surface",
-          "phase": "instantiate",
+          "name": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
+          "phase": "loose",
           "role": "environment"
         },
         {
-          "kind": "url",
-          "ref": "http://localhost:3100/live/capability-graph.html`,",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "3100/live/capability-graph.html",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_render.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "dev/web/webarxana/src/webarxana/server/core.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_render_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "a0af0a0b",
-          "role": "source"
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion"
         },
         {
           "role": "concept",
@@ -6956,15 +6146,7 @@
         },
         {
           "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
           "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
         },
         {
           "role": "concept",
@@ -6972,54 +6154,63 @@
         },
         {
           "role": "concept",
-          "term": "src"
+          "term": "endpoints"
         },
         {
           "role": "concept",
-          "term": "efe"
+          "term": "requires"
         },
         {
           "role": "concept",
-          "term": "map"
+          "term": "xtdb"
         },
         {
           "role": "concept",
-          "term": "renderer"
+          "term": "held"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
         }
       ],
       "hx/id": "M-learning-loop:scope-060",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "source-material",
-        "instantiate"
+        "loose-section",
+        "loose"
       ],
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
-      "hx/type": "mission-scope/source-material",
+      "hx/type": "mission-scope/loose-section",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-060"
     },
     {
-      "binder-type": "loose-section",
+      "binder-type": "source-material",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
-          "phase": "loose",
+          "name": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
+          "phase": "instantiate",
           "role": "environment"
         },
         {
-          "level": 3,
-          "role": "heading",
-          "title": "Full-loop implementation \u2014 witness-bearing cross-mission edges"
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest.clj",
+          "role": "source"
         },
         {
-          "role": "concept",
-          "term": "webarxana"
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest_test.clj",
+          "role": "source"
         },
         {
           "role": "concept",
@@ -7031,41 +6222,37 @@
         },
         {
           "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "inspectable"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
           "term": "endpoint"
         },
         {
           "role": "concept",
-          "term": "missions"
+          "term": "endpoints"
         },
         {
           "role": "concept",
-          "term": "capabilities"
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "xtdb"
+        },
+        {
+          "role": "concept",
+          "term": "held"
         },
         {
           "role": "concept",
           "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
         }
       ],
       "hx/content": {
-        "end": 51244,
-        "match": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
-        "position": 49079
+        "end": 39452,
+        "match": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
+        "position": 37694
       },
       "hx/ends": [
         {
@@ -7073,18 +6260,19 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
-          "phase": "loose",
+          "name": "Full-loop implementation \u2014 authoritative Futon1b graph ingestion",
+          "phase": "instantiate",
           "role": "environment"
         },
         {
-          "level": 3,
-          "role": "heading",
-          "title": "Full-loop implementation \u2014 witness-bearing cross-mission edges"
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest.clj",
+          "role": "source"
         },
         {
-          "role": "concept",
-          "term": "webarxana"
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest_test.clj",
+          "role": "source"
         },
         {
           "role": "concept",
@@ -7096,231 +6284,37 @@
         },
         {
           "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "inspectable"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
           "term": "endpoint"
         },
         {
           "role": "concept",
-          "term": "missions"
+          "term": "endpoints"
         },
         {
           "role": "concept",
-          "term": "capabilities"
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "xtdb"
+        },
+        {
+          "role": "concept",
+          "term": "held"
         },
         {
           "role": "concept",
           "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
         }
       ],
       "hx/id": "M-learning-loop:scope-061",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "loose-section",
-        "loose"
-      ],
-      "hx/parent": "M-learning-loop:scope-037",
-      "hx/role": "component",
-      "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-061"
-    },
-    {
-      "binder-type": "source-material",
-      "ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "capability_graph_render.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_render_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_mining_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_matrix_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "c0429001cbd4",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "inspectable"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "capabilities"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        }
-      ],
-      "hx/content": {
-        "end": 51244,
-        "match": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
-        "position": 49079
-      },
-      "hx/ends": [
-        {
-          "ident": "M-learning-loop",
-          "role": "entity"
-        },
-        {
-          "name": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
-          "phase": "instantiate",
-          "role": "environment"
-        },
-        {
-          "kind": "file",
-          "ref": "capability_graph_render.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_render_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_mining_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_matrix_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "c0429001cbd4",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "webarxana"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "mission"
-        },
-        {
-          "role": "concept",
-          "term": "evidence"
-        },
-        {
-          "role": "concept",
-          "term": "complete"
-        },
-        {
-          "role": "concept",
-          "term": "inspectable"
-        },
-        {
-          "role": "concept",
-          "term": "agent"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "missions"
-        },
-        {
-          "role": "concept",
-          "term": "capabilities"
-        },
-        {
-          "role": "concept",
-          "term": "verify"
-        }
-      ],
-      "hx/id": "M-learning-loop:scope-062",
-      "hx/labels": [
-        "scope",
-        "mission-scope",
         "source-material",
         "instantiate"
       ],
@@ -7328,7 +6322,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
       "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-062"
+      "scope-id": "M-learning-loop:scope-061"
     },
     {
       "binder-type": "loose-section",
@@ -7338,22 +6332,14 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Full-loop implementation \u2014 the batch-route follow-on, both sides"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "xtdb"
+          "title": "Full-loop implementation \u2014 capability-matrix aggregate view"
         },
         {
           "role": "concept",
@@ -7361,21 +6347,37 @@
         },
         {
           "role": "concept",
-          "term": "pre"
+          "term": "mission"
         },
         {
           "role": "concept",
-          "term": "fallback"
+          "term": "missions"
         },
         {
           "role": "concept",
-          "term": "verify"
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "certify"
         }
       ],
       "hx/content": {
-        "end": 53510,
-        "match": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
-        "position": 51244
+        "end": 41383,
+        "match": "Full-loop implementation \u2014 capability-matrix aggregate view",
+        "position": 39452
       },
       "hx/ends": [
         {
@@ -7383,22 +6385,14 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Full-loop implementation \u2014 the batch-route follow-on, both sides"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "xtdb"
+          "title": "Full-loop implementation \u2014 capability-matrix aggregate view"
         },
         {
           "role": "concept",
@@ -7406,18 +6400,34 @@
         },
         {
           "role": "concept",
-          "term": "pre"
+          "term": "mission"
         },
         {
           "role": "concept",
-          "term": "fallback"
+          "term": "missions"
         },
         {
           "role": "concept",
-          "term": "verify"
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "certify"
         }
       ],
-      "hx/id": "M-learning-loop:scope-063",
+      "hx/id": "M-learning-loop:scope-062",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -7428,7 +6438,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-063"
+      "scope-id": "M-learning-loop:scope-062"
     },
     {
       "binder-type": "source-material",
@@ -7438,42 +6448,19 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "kind": "api",
-          "ref": "POST /api/alpha/relations/batch",
+          "kind": "file",
+          "ref": "scripts/capability_matrix.clj",
           "role": "source"
         },
         {
           "kind": "file",
-          "ref": "capability_graph_ingest.clj",
+          "ref": "scripts/capability_matrix_test.clj",
           "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "0356c93",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "2e0e2a57",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "xtdb"
         },
         {
           "role": "concept",
@@ -7481,21 +6468,37 @@
         },
         {
           "role": "concept",
-          "term": "pre"
+          "term": "mission"
         },
         {
           "role": "concept",
-          "term": "fallback"
+          "term": "missions"
         },
         {
           "role": "concept",
-          "term": "verify"
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "certify"
         }
       ],
       "hx/content": {
-        "end": 53510,
-        "match": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
-        "position": 51244
+        "end": 41383,
+        "match": "Full-loop implementation \u2014 capability-matrix aggregate view",
+        "position": 39452
       },
       "hx/ends": [
         {
@@ -7503,42 +6506,19 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "kind": "api",
-          "ref": "POST /api/alpha/relations/batch",
+          "kind": "file",
+          "ref": "scripts/capability_matrix.clj",
           "role": "source"
         },
         {
           "kind": "file",
-          "ref": "capability_graph_ingest.clj",
+          "ref": "scripts/capability_matrix_test.clj",
           "role": "source"
-        },
-        {
-          "kind": "file",
-          "ref": "scripts/capability_graph_ingest_test.clj",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "0356c93",
-          "role": "source"
-        },
-        {
-          "kind": "commit",
-          "ref": "2e0e2a57",
-          "role": "source"
-        },
-        {
-          "role": "concept",
-          "term": "endpoint"
-        },
-        {
-          "role": "concept",
-          "term": "xtdb"
         },
         {
           "role": "concept",
@@ -7546,18 +6526,34 @@
         },
         {
           "role": "concept",
-          "term": "pre"
+          "term": "mission"
         },
         {
           "role": "concept",
-          "term": "fallback"
+          "term": "missions"
         },
         {
           "role": "concept",
-          "term": "verify"
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "certify"
         }
       ],
-      "hx/id": "M-learning-loop:scope-064",
+      "hx/id": "M-learning-loop:scope-063",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -7567,6 +6563,122 @@
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-063"
+    },
+    {
+      "binder-type": "capability-scope",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "capability",
+          "role": "capability",
+          "source": "kernel"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "certify"
+        }
+      ],
+      "hx/content": {
+        "end": 41383,
+        "match": "Full-loop implementation \u2014 capability-matrix aggregate view",
+        "position": 39452
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 capability-matrix aggregate view",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "capability",
+          "role": "capability",
+          "source": "kernel"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "certify"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-064",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "capability-scope",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/capability-scope",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-064"
     },
@@ -7578,30 +6690,14 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
+          "name": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "namespace"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
+          "title": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels"
         },
         {
           "role": "concept",
@@ -7609,25 +6705,41 @@
         },
         {
           "role": "concept",
-          "term": "scope"
+          "term": "endpoints"
         },
         {
           "role": "concept",
-          "term": "inhabitation"
+          "term": "isolation"
         },
         {
           "role": "concept",
-          "term": "evidence"
+          "term": "env"
         },
         {
           "role": "concept",
-          "term": "agent"
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
         }
       ],
       "hx/content": {
-        "end": 55008,
-        "match": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
-        "position": 53510
+        "end": 42897,
+        "match": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
+        "position": 41383
       },
       "hx/ends": [
         {
@@ -7635,30 +6747,14 @@
           "role": "entity"
         },
         {
-          "name": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
+          "name": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
           "phase": "loose",
           "role": "environment"
         },
         {
           "level": 3,
           "role": "heading",
-          "title": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs"
-        },
-        {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "namespace"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
+          "title": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels"
         },
         {
           "role": "concept",
@@ -7666,19 +6762,35 @@
         },
         {
           "role": "concept",
-          "term": "scope"
+          "term": "endpoints"
         },
         {
           "role": "concept",
-          "term": "inhabitation"
+          "term": "isolation"
         },
         {
           "role": "concept",
-          "term": "evidence"
+          "term": "env"
         },
         {
           "role": "concept",
-          "term": "agent"
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
         }
       ],
       "hx/id": "M-learning-loop:scope-065",
@@ -7695,37 +6807,26 @@
       "scope-id": "M-learning-loop:scope-065"
     },
     {
-      "binder-type": "pattern",
+      "binder-type": "source-material",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "pattern: capability-vocabulary-v0",
+          "name": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "ident": "capability-vocabulary-v0",
-          "ref": "futon3/library/capability/capability-vocabulary-v0.flexiarg",
-          "role": "pattern"
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest_test.clj",
+          "role": "source"
         },
         {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "namespace"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
+          "kind": "commit",
+          "ref": "7f5080d",
+          "role": "source"
         },
         {
           "role": "concept",
@@ -7733,13 +6834,41 @@
         },
         {
           "role": "concept",
-          "term": "scope"
+          "term": "endpoints"
+        },
+        {
+          "role": "concept",
+          "term": "isolation"
+        },
+        {
+          "role": "concept",
+          "term": "env"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
         }
       ],
       "hx/content": {
-        "end": 53836,
-        "match": "pattern: capability-vocabulary-v0",
-        "position": 53812
+        "end": 42897,
+        "match": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
+        "position": 41383
       },
       "hx/ends": [
         {
@@ -7747,30 +6876,19 @@
           "role": "entity"
         },
         {
-          "name": "pattern: capability-vocabulary-v0",
+          "name": "Stop-the-line repair \u2014 fail-closed graph-ingest authority and labels",
           "phase": "instantiate",
           "role": "environment"
         },
         {
-          "ident": "capability-vocabulary-v0",
-          "ref": "futon3/library/capability/capability-vocabulary-v0.flexiarg",
-          "role": "pattern"
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest_test.clj",
+          "role": "source"
         },
         {
-          "role": "concept",
-          "term": "capability"
-        },
-        {
-          "role": "concept",
-          "term": "flexiarg"
-        },
-        {
-          "role": "concept",
-          "term": "namespace"
-        },
-        {
-          "role": "concept",
-          "term": "pattern"
+          "kind": "commit",
+          "ref": "7f5080d",
+          "role": "source"
         },
         {
           "role": "concept",
@@ -7778,42 +6896,74 @@
         },
         {
           "role": "concept",
-          "term": "scope"
+          "term": "endpoints"
+        },
+        {
+          "role": "concept",
+          "term": "isolation"
+        },
+        {
+          "role": "concept",
+          "term": "env"
+        },
+        {
+          "role": "concept",
+          "term": "produces"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "requires"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "invariant"
         }
       ],
       "hx/id": "M-learning-loop:scope-066",
       "hx/labels": [
         "scope",
         "mission-scope",
-        "pattern",
+        "source-material",
         "instantiate"
       ],
       "hx/parent": "M-learning-loop:scope-037",
       "hx/role": "component",
-      "hx/type": "mission-scope/pattern",
+      "hx/type": "mission-scope/source-material",
       "parent": "M-learning-loop:scope-037",
       "scope-id": "M-learning-loop:scope-066"
     },
     {
-      "binder-type": "pattern",
+      "binder-type": "loose-section",
       "ends": [
         {
           "ident": "M-learning-loop",
           "role": "entity"
         },
         {
-          "name": "pattern: capability-signature-vector",
-          "phase": "instantiate",
+          "name": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+          "phase": "loose",
           "role": "environment"
         },
         {
-          "ident": "capability-signature-vector",
-          "ref": "futon3/library/capability/capability-signature-vector.flexiarg",
-          "role": "pattern"
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified"
         },
         {
           "role": "concept",
-          "term": "evidence"
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
         },
         {
           "role": "concept",
@@ -7821,21 +6971,41 @@
         },
         {
           "role": "concept",
-          "term": "flexiarg"
+          "term": "checkable"
         },
         {
           "role": "concept",
-          "term": "pattern"
+          "term": "truth"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
         },
         {
           "role": "concept",
           "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "queryable"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
         }
       ],
       "hx/content": {
-        "end": 54263,
-        "match": "pattern: capability-signature-vector",
-        "position": 54236
+        "end": 45763,
+        "match": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+        "position": 42897
       },
       "hx/ends": [
         {
@@ -7843,18 +7013,22 @@
           "role": "entity"
         },
         {
-          "name": "pattern: capability-signature-vector",
-          "phase": "instantiate",
+          "name": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+          "phase": "loose",
           "role": "environment"
         },
         {
-          "ident": "capability-signature-vector",
-          "ref": "futon3/library/capability/capability-signature-vector.flexiarg",
-          "role": "pattern"
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified"
         },
         {
           "role": "concept",
-          "term": "evidence"
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
         },
         {
           "role": "concept",
@@ -7862,21 +7036,1043 @@
         },
         {
           "role": "concept",
-          "term": "flexiarg"
+          "term": "checkable"
         },
         {
           "role": "concept",
-          "term": "pattern"
+          "term": "truth"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
         },
         {
           "role": "concept",
           "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "queryable"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
         }
       ],
       "hx/id": "M-learning-loop:scope-067",
       "hx/labels": [
         "scope",
         "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-067"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "GET /api/alpha/relations",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "data/capability-mining/ingest-receipt.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon1b_server.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "2e0e2a57",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "ce20eb2c",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "checkable"
+        },
+        {
+          "role": "concept",
+          "term": "truth"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "queryable"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        }
+      ],
+      "hx/content": {
+        "end": 45763,
+        "match": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+        "position": 42897
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 the deliberate live ingest, performed and verified",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "GET /api/alpha/relations",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "data/capability-mining/ingest-receipt.edn",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "futon1b_server.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "2e0e2a57",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "ce20eb2c",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "status"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "checkable"
+        },
+        {
+          "role": "concept",
+          "term": "truth"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        },
+        {
+          "role": "concept",
+          "term": "prior"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "queryable"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-068",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-068"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 WebArxana render surface",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 WebArxana render surface"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "efe"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "renderer"
+        }
+      ],
+      "hx/content": {
+        "end": 49086,
+        "match": "Full-loop implementation \u2014 WebArxana render surface",
+        "position": 45763
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 WebArxana render surface",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 WebArxana render surface"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "efe"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "renderer"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-069",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-069"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 WebArxana render surface",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "url",
+          "ref": "http://localhost:3100/live/capability-graph.html`,",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "3100/live/capability-graph.html",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_render.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "dev/web/webarxana/src/webarxana/server/core.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_render_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "a0af0a0b",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "efe"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "renderer"
+        }
+      ],
+      "hx/content": {
+        "end": 49086,
+        "match": "Full-loop implementation \u2014 WebArxana render surface",
+        "position": 45763
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 WebArxana render surface",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "url",
+          "ref": "http://localhost:3100/live/capability-graph.html`,",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "3100/live/capability-graph.html",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_render.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "dev/web/webarxana/src/webarxana/server/core.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_render_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "a0af0a0b",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "src"
+        },
+        {
+          "role": "concept",
+          "term": "efe"
+        },
+        {
+          "role": "concept",
+          "term": "map"
+        },
+        {
+          "role": "concept",
+          "term": "renderer"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-070",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-070"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 witness-bearing cross-mission edges"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "capabilities"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        }
+      ],
+      "hx/content": {
+        "end": 51251,
+        "match": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
+        "position": 49086
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 witness-bearing cross-mission edges"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "capabilities"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-071",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-071"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "capability_graph_render.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_render_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_mining_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_matrix_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "c0429001cbd4",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "capabilities"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        }
+      ],
+      "hx/content": {
+        "end": 51251,
+        "match": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
+        "position": 49086
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 witness-bearing cross-mission edges",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "file",
+          "ref": "capability_graph_render.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_render_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_mining_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_matrix_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "c0429001cbd4",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "complete"
+        },
+        {
+          "role": "concept",
+          "term": "inspectable"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "capabilities"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-072",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-072"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 the batch-route follow-on, both sides"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "xtdb"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "pre"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        }
+      ],
+      "hx/content": {
+        "end": 53517,
+        "match": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+        "position": 51251
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 the batch-route follow-on, both sides"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "xtdb"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "pre"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-073",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-073"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: all-or-nothing",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "all-or-nothing",
+          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/content": {
+        "end": 53088,
+        "match": "pattern: all-or-nothing",
+        "position": 53074
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: all-or-nothing",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "all-or-nothing",
+          "ref": "futon3/library/futon-theory/all-or-nothing.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-074",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
         "pattern",
         "instantiate"
       ],
@@ -7884,7 +8080,463 @@
       "hx/role": "component",
       "hx/type": "mission-scope/pattern",
       "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-067"
+      "scope-id": "M-learning-loop:scope-074"
+    },
+    {
+      "binder-type": "source-material",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "POST /api/alpha/relations/batch",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "capability_graph_ingest.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "0356c93",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "2e0e2a57",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "xtdb"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "pre"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        }
+      ],
+      "hx/content": {
+        "end": 53517,
+        "match": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+        "position": 51251
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 the batch-route follow-on, both sides",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "kind": "api",
+          "ref": "POST /api/alpha/relations/batch",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "capability_graph_ingest.clj",
+          "role": "source"
+        },
+        {
+          "kind": "file",
+          "ref": "scripts/capability_graph_ingest_test.clj",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "0356c93",
+          "role": "source"
+        },
+        {
+          "kind": "commit",
+          "ref": "2e0e2a57",
+          "role": "source"
+        },
+        {
+          "role": "concept",
+          "term": "endpoint"
+        },
+        {
+          "role": "concept",
+          "term": "xtdb"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "pre"
+        },
+        {
+          "role": "concept",
+          "term": "fallback"
+        },
+        {
+          "role": "concept",
+          "term": "verify"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-075",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "source-material",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/source-material",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-075"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "namespace"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 55015,
+        "match": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
+        "position": 53517
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 3,
+          "role": "heading",
+          "title": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "namespace"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        },
+        {
+          "role": "concept",
+          "term": "inhabitation"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-076",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-076"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: capability-vocabulary-v0",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "capability-vocabulary-v0",
+          "ref": "futon3/library/capability/capability-vocabulary-v0.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "namespace"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/content": {
+        "end": 53843,
+        "match": "pattern: capability-vocabulary-v0",
+        "position": 53819
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: capability-vocabulary-v0",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "capability-vocabulary-v0",
+          "ref": "futon3/library/capability/capability-vocabulary-v0.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "namespace"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "scope"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-077",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-077"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: capability-signature-vector",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "capability-signature-vector",
+          "ref": "futon3/library/capability/capability-signature-vector.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/content": {
+        "end": 54270,
+        "match": "pattern: capability-signature-vector",
+        "position": 54243
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: capability-signature-vector",
+          "phase": "instantiate",
+          "role": "environment"
+        },
+        {
+          "ident": "capability-signature-vector",
+          "ref": "futon3/library/capability/capability-signature-vector.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-078",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "instantiate"
+      ],
+      "hx/parent": "M-learning-loop:scope-037",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-037",
+      "scope-id": "M-learning-loop:scope-078"
     },
     {
       "binder-type": "pattern",
@@ -7925,9 +8577,9 @@
         }
       ],
       "hx/content": {
-        "end": 54470,
+        "end": 54477,
         "match": "pattern: hinge-capability-extraction",
-        "position": 54443
+        "position": 54450
       },
       "hx/ends": [
         {
@@ -7965,7 +8617,7 @@
           "term": "agent"
         }
       ],
-      "hx/id": "M-learning-loop:scope-068",
+      "hx/id": "M-learning-loop:scope-079",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -7976,7 +8628,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/pattern",
       "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-068"
+      "scope-id": "M-learning-loop:scope-079"
     },
     {
       "binder-type": "source-material",
@@ -8033,9 +8685,9 @@
         }
       ],
       "hx/content": {
-        "end": 55008,
+        "end": 55015,
         "match": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
-        "position": 53510
+        "position": 53517
       },
       "hx/ends": [
         {
@@ -8089,7 +8741,7 @@
           "term": "agent"
         }
       ],
-      "hx/id": "M-learning-loop:scope-069",
+      "hx/id": "M-learning-loop:scope-080",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -8100,7 +8752,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/source-material",
       "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-069"
+      "scope-id": "M-learning-loop:scope-080"
     },
     {
       "binder-type": "capability-scope",
@@ -8157,9 +8809,9 @@
         }
       ],
       "hx/content": {
-        "end": 55008,
+        "end": 55015,
         "match": "Full-loop implementation \u2014 capability vocabulary committed as flexiargs",
-        "position": 53510
+        "position": 53517
       },
       "hx/ends": [
         {
@@ -8213,7 +8865,7 @@
           "term": "agent"
         }
       ],
-      "hx/id": "M-learning-loop:scope-070",
+      "hx/id": "M-learning-loop:scope-081",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -8224,7 +8876,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/capability-scope",
       "parent": "M-learning-loop:scope-037",
-      "scope-id": "M-learning-loop:scope-070"
+      "scope-id": "M-learning-loop:scope-081"
     },
     {
       "binder-type": "loose-section",
@@ -8245,9 +8897,9 @@
         }
       ],
       "hx/content": {
-        "end": 55024,
+        "end": 55031,
         "match": "Checkpoints",
-        "position": 55008
+        "position": 55015
       },
       "hx/ends": [
         {
@@ -8265,7 +8917,7 @@
           "title": "Checkpoints"
         }
       ],
-      "hx/id": "M-learning-loop:scope-071",
+      "hx/id": "M-learning-loop:scope-082",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -8276,7 +8928,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
       "parent": "M-learning-loop:scope-000",
-      "scope-id": "M-learning-loop:scope-071"
+      "scope-id": "M-learning-loop:scope-082"
     },
     {
       "binder-type": "loose-section",
@@ -8365,9 +9017,9 @@
         }
       ],
       "hx/content": {
-        "end": 59653,
+        "end": 59660,
         "match": "Checkpoint 1 \u2014 2026-04-18: A\u2192B artefact diagnosis",
-        "position": 55024
+        "position": 55031
       },
       "hx/ends": [
         {
@@ -8453,18 +9105,18 @@
           "term": "prior"
         }
       ],
-      "hx/id": "M-learning-loop:scope-072",
+      "hx/id": "M-learning-loop:scope-083",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-learning-loop:scope-071",
+      "hx/parent": "M-learning-loop:scope-082",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-071",
-      "scope-id": "M-learning-loop:scope-072"
+      "parent": "M-learning-loop:scope-082",
+      "scope-id": "M-learning-loop:scope-083"
     },
     {
       "binder-type": "loose-section",
@@ -8553,9 +9205,9 @@
         }
       ],
       "hx/content": {
-        "end": 66510,
+        "end": 66517,
         "match": "Checkpoint 2 \u2014 2026-04-18: The tagging/mining cut",
-        "position": 59653
+        "position": 59660
       },
       "hx/ends": [
         {
@@ -8641,18 +9293,18 @@
           "term": "map"
         }
       ],
-      "hx/id": "M-learning-loop:scope-073",
+      "hx/id": "M-learning-loop:scope-084",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-learning-loop:scope-071",
+      "hx/parent": "M-learning-loop:scope-082",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-071",
-      "scope-id": "M-learning-loop:scope-073"
+      "parent": "M-learning-loop:scope-082",
+      "scope-id": "M-learning-loop:scope-084"
     },
     {
       "binder-type": "loose-section",
@@ -8741,9 +9393,9 @@
         }
       ],
       "hx/content": {
-        "end": 73498,
+        "end": 73505,
         "match": "Checkpoint 3 \u2014 2026-07-09: Pipeline v0 pair-consumption on M-trip-journal IDENTIFY-exit",
-        "position": 66510
+        "position": 66517
       },
       "hx/ends": [
         {
@@ -8829,18 +9481,102 @@
           "term": "hypergraph"
         }
       ],
-      "hx/id": "M-learning-loop:scope-074",
+      "hx/id": "M-learning-loop:scope-085",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-learning-loop:scope-071",
+      "hx/parent": "M-learning-loop:scope-082",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-071",
-      "scope-id": "M-learning-loop:scope-074"
+      "parent": "M-learning-loop:scope-082",
+      "scope-id": "M-learning-loop:scope-085"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: what-problem-is-this-actually-solving",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "ident": "what-problem-is-this-actually-solving",
+          "ref": "futon3/library/structure/what-problem-is-this-actually-solving.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/content": {
+        "end": 68503,
+        "match": "pattern: what-problem-is-this-actually-solving",
+        "position": 68466
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: what-problem-is-this-actually-solving",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "ident": "what-problem-is-this-actually-solving",
+          "ref": "futon3/library/structure/what-problem-is-this-actually-solving.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "identify"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-086",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "loose"
+      ],
+      "hx/parent": "M-learning-loop:scope-082",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-082",
+      "scope-id": "M-learning-loop:scope-086"
     },
     {
       "binder-type": "loose-section",
@@ -8969,9 +9705,9 @@
         }
       ],
       "hx/content": {
-        "end": 83095,
+        "end": 83102,
         "match": "Checkpoint 4 \u2014 2026-07-09: DERIVE \u2014 second pair consumed, first negative-evidence result",
-        "position": 73498
+        "position": 73505
       },
       "hx/ends": [
         {
@@ -9097,18 +9833,186 @@
           "term": "scope"
         }
       ],
-      "hx/id": "M-learning-loop:scope-075",
+      "hx/id": "M-learning-loop:scope-087",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "verify"
       ],
-      "hx/parent": "M-learning-loop:scope-071",
+      "hx/parent": "M-learning-loop:scope-082",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-071",
-      "scope-id": "M-learning-loop:scope-075"
+      "parent": "M-learning-loop:scope-082",
+      "scope-id": "M-learning-loop:scope-087"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: structure/backwards-induction",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "ident": "structure/backwards-induction",
+          "ref": "futon3/library/structure/backwards-induction.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "superpod"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        }
+      ],
+      "hx/content": {
+        "end": 74622,
+        "match": "pattern: structure/backwards-induction",
+        "position": 74593
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: structure/backwards-induction",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "ident": "structure/backwards-induction",
+          "ref": "futon3/library/structure/backwards-induction.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "superpod"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "flexiarg"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-088",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "verify"
+      ],
+      "hx/parent": "M-learning-loop:scope-082",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-082",
+      "scope-id": "M-learning-loop:scope-088"
+    },
+    {
+      "binder-type": "pattern",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: what-problem-is-this-actually-solving",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "ident": "what-problem-is-this-actually-solving",
+          "ref": "futon3/library/structure/what-problem-is-this-actually-solving.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        }
+      ],
+      "hx/content": {
+        "end": 75777,
+        "match": "pattern: what-problem-is-this-actually-solving",
+        "position": 75740
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "pattern: what-problem-is-this-actually-solving",
+          "phase": "verify",
+          "role": "environment"
+        },
+        {
+          "ident": "what-problem-is-this-actually-solving",
+          "ref": "futon3/library/structure/what-problem-is-this-actually-solving.flexiarg",
+          "role": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "missions"
+        },
+        {
+          "role": "concept",
+          "term": "pattern"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-089",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "pattern",
+        "verify"
+      ],
+      "hx/parent": "M-learning-loop:scope-082",
+      "hx/role": "component",
+      "hx/type": "mission-scope/pattern",
+      "parent": "M-learning-loop:scope-082",
+      "scope-id": "M-learning-loop:scope-089"
     },
     {
       "binder-type": "loose-section",
@@ -9141,9 +10045,9 @@
         }
       ],
       "hx/content": {
-        "end": 83639,
+        "end": 83646,
         "match": "Named extension (deferred): need-all-three mission-value blend",
-        "position": 83095
+        "position": 83102
       },
       "hx/ends": [
         {
@@ -9173,18 +10077,18 @@
           "term": "requires"
         }
       ],
-      "hx/id": "M-learning-loop:scope-076",
+      "hx/id": "M-learning-loop:scope-090",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-learning-loop:scope-071",
+      "hx/parent": "M-learning-loop:scope-082",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-071",
-      "scope-id": "M-learning-loop:scope-076"
+      "parent": "M-learning-loop:scope-082",
+      "scope-id": "M-learning-loop:scope-090"
     },
     {
       "binder-type": "loose-section",
@@ -9241,9 +10145,9 @@
         }
       ],
       "hx/content": {
-        "end": 85034,
+        "end": 85042,
         "match": "Checkpoint \u2014 2026-07-22: operator acceptance of criteria 3\u20134",
-        "position": 83639
+        "position": 83646
       },
       "hx/ends": [
         {
@@ -9297,18 +10201,134 @@
           "term": "agent"
         }
       ],
-      "hx/id": "M-learning-loop:scope-077",
+      "hx/id": "M-learning-loop:scope-091",
       "hx/labels": [
         "scope",
         "mission-scope",
         "loose-section",
         "loose"
       ],
-      "hx/parent": "M-learning-loop:scope-071",
+      "hx/parent": "M-learning-loop:scope-082",
       "hx/role": "component",
       "hx/type": "mission-scope/loose-section",
-      "parent": "M-learning-loop:scope-071",
-      "scope-id": "M-learning-loop:scope-077"
+      "parent": "M-learning-loop:scope-082",
+      "scope-id": "M-learning-loop:scope-091"
+    },
+    {
+      "binder-type": "loose-section",
+      "ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Acceptance checklist",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Acceptance checklist"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "hypergraph"
+        },
+        {
+          "role": "concept",
+          "term": "runnable"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        }
+      ],
+      "hx/content": {
+        "end": 85921,
+        "match": "Acceptance checklist",
+        "position": 85042
+      },
+      "hx/ends": [
+        {
+          "ident": "M-learning-loop",
+          "role": "entity"
+        },
+        {
+          "name": "Acceptance checklist",
+          "phase": "loose",
+          "role": "environment"
+        },
+        {
+          "level": 2,
+          "role": "heading",
+          "title": "Acceptance checklist"
+        },
+        {
+          "role": "concept",
+          "term": "capability"
+        },
+        {
+          "role": "concept",
+          "term": "evidence"
+        },
+        {
+          "role": "concept",
+          "term": "mission"
+        },
+        {
+          "role": "concept",
+          "term": "agent"
+        },
+        {
+          "role": "concept",
+          "term": "webarxana"
+        },
+        {
+          "role": "concept",
+          "term": "hypergraph"
+        },
+        {
+          "role": "concept",
+          "term": "runnable"
+        },
+        {
+          "role": "concept",
+          "term": "state"
+        }
+      ],
+      "hx/id": "M-learning-loop:scope-092",
+      "hx/labels": [
+        "scope",
+        "mission-scope",
+        "loose-section",
+        "loose"
+      ],
+      "hx/parent": "M-learning-loop:scope-000",
+      "hx/role": "component",
+      "hx/type": "mission-scope/loose-section",
+      "parent": "M-learning-loop:scope-000",
+      "scope-id": "M-learning-loop:scope-092"
     },
     {
       "anchor-line": "**Gate:** operator-input \u2014 E-capability-graph-ui-polish interactive UI session (set 2026-07-22; supersedes the operator-acceptance gate, resolved same day by criteria 3\u20134 acceptance)",
@@ -9333,9 +10353,9 @@
       "gate-kind": "operator-input",
       "gate-text": "E-capability-graph-ui-polish interactive UI session (set 2026-07-22; supersedes the operator-acceptance gate, resolved same day by criteria 3\u20134 acceptance)",
       "hx/content": {
-        "end": 514,
+        "end": 521,
         "match": "operator gate: operator-input",
-        "position": 332
+        "position": 339
       },
       "hx/ends": [
         {
@@ -9354,7 +10374,7 @@
           "text": "E-capability-graph-ui-polish interactive UI session (set 2026-07-22; supersedes the operator-acceptance gate, resolved same day by criteria 3\u20134 acceptance)"
         }
       ],
-      "hx/id": "M-learning-loop:scope-078",
+      "hx/id": "M-learning-loop:scope-093",
       "hx/labels": [
         "scope",
         "mission-scope",
@@ -9365,7 +10385,7 @@
       "hx/role": "component",
       "hx/type": "mission-scope/operator-gate",
       "parent": "M-learning-loop:scope-000",
-      "scope-id": "M-learning-loop:scope-078",
+      "scope-id": "M-learning-loop:scope-093",
       "source-line": 5
     }
   ]
