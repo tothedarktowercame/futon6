@@ -102,9 +102,10 @@ def c1(graphs_dir, steps_dir):
 
 @check("C2-clean-accounting", "S7 accounting", needs="S7")
 def c2(run_dir, corpus_id, clean_dir):
-    # Every S3-accepted graph must be a typed, gated CLean. A graph merely
-    # mentioned in a log (rejected, failed) used to count as accounted for, so a
-    # G7 rejection could sit inside a replay PASS.
+    # Every S3-accepted graph must receive an S7 verdict, and every S7 acceptance
+    # must have exactly one gated CLean. Explicit S7 rejections remain findings;
+    # they are governed by the pinned item floor in A1, not silently promoted to
+    # files and not reinterpreted here as broken accounting.
     s3 = accounting.ledgered_invocation(run_dir, "S3", corpus_id)
     s7 = accounting.ledgered_invocation(run_dir, "S7", corpus_id)
     if not (s3 and s7):
@@ -112,12 +113,19 @@ def c2(run_dir, corpus_id, clean_dir):
     graphs = set(accounting.accepted_outputs(accounting.load(accounting.directory(run_dir, "S3", s3), "S3", "loop")))
     typing = accounting.load(accounting.directory(run_dir, "S7", s7), "S7", "typing")
     typed = {e["id"] for e in typing["items"] if e["status"] == "accepted"}
+    judged = [e["id"] for e in typing["items"]
+              if e.get("status") in ("accepted", "rejected", "errored")]
     files = {os.path.basename(p)[:-len(".clean.edn")] for p in glob.glob(os.path.join(clean_dir, "*.clean.edn"))}
-    not_typed = sorted(graphs - typed)
+    expected_mismatch = sorted(graphs ^ set(typing.get("expected") or []))
+    unaccounted = sorted(graphs - set(judged))
+    duplicates = len(judged) != len(set(judged))
     mismatch = sorted(typed ^ files)
-    return (not not_typed and not mismatch,
-            f"{len(typed)}/{len(graphs)} accepted graphs typed"
-            + (f"; not typed e.g. {not_typed[:3]}" if not_typed else "")
+    refused = len(judged) - len(typed)
+    return (not expected_mismatch and not unaccounted and not duplicates and not mismatch,
+            f"{len(typed)}/{len(graphs)} graphs typed; {refused} explicit S7 refusal(s)"
+            + (f"; S7 inputs disagree e.g. {expected_mismatch[:3]}" if expected_mismatch else "")
+            + (f"; unaccounted e.g. {unaccounted[:3]}" if unaccounted else "")
+            + ("; duplicate S7 item records" if duplicates else "")
             + (f"; CLean files disagree with accounting e.g. {mismatch[:3]}" if mismatch else ""))
 
 
