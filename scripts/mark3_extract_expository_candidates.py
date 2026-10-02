@@ -218,7 +218,8 @@ def main() -> int:
             path.write_text(json.dumps(candidate, indent=2), encoding="utf-8")
             selected_names.add(path.name)
             select_ledger.record(candidate["passage-id"], "accepted", paper=paper_id,
-                                 artifacts=[accounting.relative(path)], outputs=[candidate["passage-id"]])
+                                 artifacts=[accounting.relative(path)], outputs=[candidate["passage-id"]],
+                                 checkpoint=False)
             manifest.append({"paper-id": paper_id, "passage-id": candidate["passage-id"],
                              "region-id": candidate["region-id"], "window-lines": candidate["window-lines"],
                              "enrichment": len(candidate["enrichment"])})
