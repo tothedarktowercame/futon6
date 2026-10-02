@@ -82,9 +82,17 @@ def query_model(endpoint, model, prompt, sk, methods):
     try:
         with urllib.request.urlopen(
                 req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "120"))) as r:
-            choice = json.loads(r.read())["choices"][0]
+            payload = json.loads(r.read())
     except urllib.error.URLError as e:
         raise TypingCallError(f"query error: {e}")
+    except TimeoutError as e:
+        raise TypingCallError(f"query timed out: {e}")
+    except (json.JSONDecodeError, UnicodeDecodeError) as e:
+        raise TypingCallError(f"unreadable response envelope: {e}")
+    try:
+        choice = payload["choices"][0]
+    except (KeyError, IndexError, TypeError) as e:
+        raise TypingCallError(f"malformed response envelope: {e}")
     if choice.get("finish_reason") == "length":
         raise TypingCallError(f"output truncated at max_tokens={max_tokens}")
     try:

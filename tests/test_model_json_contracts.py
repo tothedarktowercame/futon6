@@ -215,6 +215,23 @@ class CleanTypingContract(unittest.TestCase):
         code, item, _ = self.run_typing(typing.TypingCallError("output truncated at max_tokens=600"))
         self.assertEqual((code, item["status"]), (1, "errored"))
 
+    def test_transport_and_malformed_envelope_become_typing_errors(self):
+        import clean_box_typing as typing
+        with patch("urllib.request.urlopen", side_effect=TimeoutError("timed out")):
+            with self.assertRaisesRegex(typing.TypingCallError, "query timed out"):
+                typing.query_model("http://host/v1/chat/completions", "m", "p",
+                                   {"boxes": [{"id": "e1"}]}, {"reduce-to-known-result"})
+
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+            def read(self): return b'{"unexpected":true}'
+
+        with patch("urllib.request.urlopen", return_value=Response()):
+            with self.assertRaisesRegex(typing.TypingCallError, "malformed response envelope"):
+                typing.query_model("http://host/v1/chat/completions", "m", "p",
+                                   {"boxes": [{"id": "e1"}]}, {"reduce-to-known-result"})
+
 
 if __name__ == "__main__":
     unittest.main()
