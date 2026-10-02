@@ -152,6 +152,20 @@ class ExpositoryContract(unittest.TestCase):
         scope_props = seen["response_format"]["json_schema"]["schema"]["properties"]["scopes"]["items"]["properties"]
         self.assertEqual(scope_props["units"]["items"]["enum"], [u["id"] for u in UNITS])
 
+    def test_transport_and_malformed_envelope_are_item_level_errors(self):
+        with patch("urllib.request.urlopen", side_effect=TimeoutError("timed out")):
+            with self.assertRaisesRegex(expo_loop.ModelCallError, "request timed out"):
+                expo_loop.call_openai("p", CANDIDATE, self.kinds, "m")
+
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+            def read(self): return b'{"unexpected":true}'
+
+        with patch("urllib.request.urlopen", return_value=Response()):
+            with self.assertRaisesRegex(expo_loop.ModelCallError, "malformed response envelope"):
+                expo_loop.call_openai("p", CANDIDATE, self.kinds, "m")
+
 
 class CleanTypingContract(unittest.TestCase):
     GRAPH = """{:paper/id "9999.0003" :nodes [{:id :n1 :kind :claim :text "A"} {:id :n2 :kind :claim :text "B"}
@@ -196,10 +210,27 @@ class CleanTypingContract(unittest.TestCase):
     def test_contract_violation_rejects_without_reprompting_and_endpoint_failure_errors(self):
         import clean_box_typing as typing
         code, item, _ = self.run_typing({"e1": "not-a-method"})
-        self.assertEqual((code, item["status"]), (1, "rejected"))
+        self.assertEqual((code, item["status"]), (0, "rejected"))
         self.assertIn("typing contract", item["reason"])
         code, item, _ = self.run_typing(typing.TypingCallError("output truncated at max_tokens=600"))
-        self.assertEqual((code, item["status"]), (1, "errored"))
+        self.assertEqual((code, item["status"]), (0, "errored"))
+
+    def test_transport_and_malformed_envelope_become_typing_errors(self):
+        import clean_box_typing as typing
+        with patch("urllib.request.urlopen", side_effect=TimeoutError("timed out")):
+            with self.assertRaisesRegex(typing.TypingCallError, "query timed out"):
+                typing.query_model("http://host/v1/chat/completions", "m", "p",
+                                   {"boxes": [{"id": "e1"}]}, {"reduce-to-known-result"})
+
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+            def read(self): return b'{"unexpected":true}'
+
+        with patch("urllib.request.urlopen", return_value=Response()):
+            with self.assertRaisesRegex(typing.TypingCallError, "malformed response envelope"):
+                typing.query_model("http://host/v1/chat/completions", "m", "p",
+                                   {"boxes": [{"id": "e1"}]}, {"reduce-to-known-result"})
 
 
 if __name__ == "__main__":

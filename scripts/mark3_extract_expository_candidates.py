@@ -34,6 +34,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 import expository_region_extract as expo  # noqa: E402
 import region_units  # noqa: E402
 import mark3_extract_candidates as iatc_candidates  # noqa: E402
+import run_contract  # noqa: E402
 
 
 def line_starts(text: str) -> list[int]:
@@ -130,6 +131,30 @@ def select_even(candidates: list[dict[str, Any]], cap: int) -> tuple[list[dict[s
             [c for i, c in enumerate(prose) if i not in keep] + in_proof)
 
 
+def select_modelable(candidates: list[dict[str, Any]], cap: int):
+    """Refuse deterministic precondition failures before spending selection slots."""
+    eligible, refused = [], []
+    for candidate in candidates:
+        missing = run_contract.missing_expository_inputs(candidate)
+        (refused if missing else eligible).append((candidate, missing) if missing else candidate)
+    selected, deferred = select_even(eligible, cap)
+    return selected, deferred, refused
+
+
+def reconcile_stale_selection(outdir: Path, regions: Path, selected_names: set[str]) -> list[str]:
+    """Remove only obsolete generated views whose canonical region bytes agree."""
+    removed = []
+    for path in sorted(outdir.glob("*.candidate.json")):
+        if path.name in selected_names:
+            continue
+        canonical = regions / path.name
+        if not canonical.is_file() or canonical.read_bytes() != path.read_bytes():
+            raise ValueError(f"stale candidate is not the canonical generated region: {path.name}")
+        path.unlink()
+        removed.append(path.name)
+    return removed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default=str(REPO / "data" / "expository-candidates"))
@@ -182,28 +207,44 @@ def main() -> int:
     for paper_id, candidates in by_paper.items():
         cap = cap_for(args.cap_per_paper, len(candidates))
         caps[paper_id] = cap
-        selected, deferred = select_even(candidates, cap)
+        selected, deferred, refused = select_modelable(candidates, cap)
+        for candidate, missing in refused:
+            select_ledger.record(candidate["passage-id"], "rejected",
+                                 f"precheck: lacks {', '.join(missing)} required by "
+                                 f"{run_contract.contract_id()}", paper=paper_id,
+                                 checkpoint=False)
         for candidate in selected:
             path = outdir / safe_name(candidate)
             path.write_text(json.dumps(candidate, indent=2), encoding="utf-8")
             selected_names.add(path.name)
             select_ledger.record(candidate["passage-id"], "accepted", paper=paper_id,
-                                 artifacts=[accounting.relative(path)], outputs=[candidate["passage-id"]])
+                                 artifacts=[accounting.relative(path)], outputs=[candidate["passage-id"]],
+                                 checkpoint=False)
             manifest.append({"paper-id": paper_id, "passage-id": candidate["passage-id"],
                              "region-id": candidate["region-id"], "window-lines": candidate["window-lines"],
                              "enrichment": len(candidate["enrichment"])})
         for candidate in deferred:
             select_ledger.record(candidate["passage-id"], "deferred",
                                  f"cap {cap} of {len(candidates)} regions for this paper; not selected by "
-                                 f"{run_manifest.EXPOSITORY_SELECTION}", paper=paper_id)
+                                 f"{run_manifest.EXPOSITORY_SELECTION}", paper=paper_id,
+                                 checkpoint=False)
         if deferred:
             print(f"  {paper_id}: selected {len(selected)}, deferred {len(deferred)} "
                   f"(cap {cap} of {len(candidates)} regions)")
-    stale = sorted(p.name for p in outdir.glob("*.candidate.json") if p.name not in selected_names)
-    if stale:
-        # A selected candidate left by another selection would be modelled as if chosen now.
-        print(f"FATAL: {len(stale)} candidate file(s) outside this selection, e.g. {stale[:3]}")
+        if refused:
+            print(f"  {paper_id}: precheck-refused {len(refused)} region(s)")
+    # Selection is deterministic, local, and safely repeatable.  Writing the
+    # entire growing JSON document for each of tens of thousands of deferrals is
+    # quadratic; publish it atomically once all selection outcomes are known.
+    select_ledger.checkpoint()
+    try:
+        stale = reconcile_stale_selection(outdir, regions, selected_names)
+    except ValueError as exc:
+        # Foreign or edited files are not safe to delete and must never be modelled.
+        print(f"FATAL: {exc}")
         return 2
+    if stale:
+        print(f"  reconciled {len(stale)} obsolete generated selection file(s)")
     (outdir / "manifest.json").write_text(json.dumps({"candidates": manifest,
                                                       "cap-per-paper": args.cap_per_paper,
                                                       "cap-rule": run_manifest.cap_rule(args.cap_per_paper),

@@ -7,10 +7,10 @@ Per candidate (from mark3_extract_candidates.py --all-proofs):
   order, line ranges) -> code writes the EDN graph -> iatc_argcheck + substance
   gate -> rung-2 profile -> accept. Finally the substance gate runs over the batch.
 
-The model never writes EDN, and nothing is repaired or retried to fix a format.
-An output that breaks the contract is a rejected item with its reasons. Each
-item gets one call per stage invocation, at temperature 0, so the result is a
-measurement of the prompt, model and contract rather than of resampling luck;
+The model never writes EDN. The sole format repair restores an unescaped JSON
+control byte inside a string to its auditable backslash-command spelling while
+retaining the raw response; all semantic contract failures remain refusals. Each
+item gets one call per phase at temperature 0 (plus the declared gate retry), so
 re-invoking a failed stage retries only the items that were not accepted.
 
 Backends:
@@ -30,6 +30,7 @@ import sys
 import threading
 import time
 from pathlib import Path
+from typing import NamedTuple
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import iatc_json  # noqa: E402
@@ -45,6 +46,10 @@ CANDIDATE_SCHEMA = CONTRACT["candidates"]["schema"]
 # The contract fixes decoding. The env override stays for experiments, and is
 # recorded as a deviation rather than silently changing what a run means.
 MAX_TOKENS = int(os.environ.get("FUTON6_IATC_MAX_TOKENS") or CONTRACT["decoding"]["max-tokens"])
+MODEL_CONTEXT_TOKENS = int(os.environ.get("FUTON6_MODEL_CONTEXT_TOKENS")
+                           or CONTRACT["decoding"].get("context-tokens", 16384))
+MIN_OUTPUT_TOKENS = int(os.environ.get("FUTON6_IATC_MIN_OUTPUT_TOKENS")
+                        or CONTRACT["decoding"].get("min-output-tokens", 256))
 
 NODES_TASK = """You read ONE mathematical proof and list what its argument is made of.
 
@@ -93,9 +98,17 @@ Published proofs elide steps constantly; recording that honestly is the point of
 this layer. "first_line"/"last_line" locate the derivation.
 
 Checked by code; an output that breaks this is rejected:
+- Keep the derivation graph topological. List assumptions, cited facts, and a
+  contrary assumption before anything derived from them; every derivation must
+  point from those earlier prerequisites toward a later conclusion.
 - The derivations must not go in a circle: if node A is used to derive node B, then
   B must not, directly or through other nodes, be used to derive A. Write an
   equivalence as ONE derivation with relation "iff".
+- In a proof by contradiction, the contrary assumption is an ASSUMED starting
+  node, not something derived from the theorem being proved. Derive a separate
+  contradiction node from it, then derive the conclusion from that contradiction
+  with relation "by-contradiction". Never add a reverse edge from the conclusion
+  back to the contrary assumption.
 - Every line lies in the given source."""
 
 
@@ -173,9 +186,17 @@ Source, lines {lo}-{hi} (ABSOLUTE line numbers on the left):
 class ModelCallError(Exception):
     """The endpoint could not produce a judgeable answer (HTTP error, truncation)."""
 
-    def __init__(self, code, detail):
+    def __init__(self, code, detail, *, envelope=None):
         self.code = code
+        self.envelope = envelope
         super().__init__(f"HTTP {code}: {detail}" if code else detail)
+
+
+class ModelAnswer(NamedTuple):
+    text: str
+    prompt_tokens: int
+    max_tokens: int
+    context_tokens: int
 
 
 def call_stub(prompt: str, cand: dict, schema: dict) -> str:
@@ -206,34 +227,77 @@ def call_stub(prompt: str, cand: dict, schema: dict) -> str:
                                               "first_line": lo, "last_line": hi}]}})
 
 
-def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> str:
+def _openai_json(path: str, payload: dict) -> dict:
     import urllib.error
     import urllib.request
-    base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
+    base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1").rstrip("/")
+    # vLLM's OpenAI-compatible inference routes live below /v1, while its
+    # tokenizer route is served at the origin as /tokenize.  OPENAI_BASE_URL is
+    # conventionally the former, so joining both routes to it sent preflight to
+    # the nonexistent /v1/tokenize and turned every candidate into an HTTP 404.
+    endpoint = ((base[:-3] if base.endswith("/v1") else base) + path
+                if path == "/tokenize" else base + path)
     key = os.environ.get("OPENAI_API_KEY", "x")
-    body = json.dumps({
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": CONTRACT["decoding"]["temperature"],
-        "max_tokens": MAX_TOKENS,
-        "response_format": {"type": "json_schema", "json_schema": {
-            "name": "iatc_proof", "strict": True, "schema": schema}},
-    }).encode()
-    req = urllib.request.Request(f"{base}/chat/completions", data=body,
+    req = urllib.request.Request(endpoint, data=json.dumps(payload).encode(),
                                  headers={"Content-Type": "application/json",
                                           "Authorization": f"Bearer {key}"})
     try:
         with urllib.request.urlopen(
-                req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "600"))) as r:
-            choice = json.loads(r.read())["choices"][0]
-    except urllib.error.HTTPError as e:
-        raise ModelCallError(e.code, e.read().decode("utf-8", "replace")[:300])
-    except urllib.error.URLError as e:
-        raise ModelCallError(0, str(e.reason))
+                req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "600"))) as response:
+            return json.loads(response.read())
+    except urllib.error.HTTPError as exc:
+        raise ModelCallError(exc.code, exc.read().decode("utf-8", "replace")[:300])
+    except urllib.error.URLError as exc:
+        raise ModelCallError(0, str(exc.reason))
+    except TimeoutError as exc:
+        # socket timeouts can escape urllib as the built-in TimeoutError rather
+        # than URLError.  They are an item-level transport failure: allowing one
+        # to escape the worker aborts the pool and leaves every in-flight item
+        # unaccounted.
+        raise ModelCallError(0, f"request timed out: {exc}")
+
+
+def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> ModelAnswer:
+    """Call only after the serving tokenizer proves the request fits its context."""
+    messages = [{"role": "user", "content": prompt}]
+    tokenized = _openai_json("/tokenize", {"model": model, "messages": messages})
+    prompt_tokens = tokenized.get("count")
+    if isinstance(prompt_tokens, bool) or not isinstance(prompt_tokens, int) or prompt_tokens < 0:
+        raise ModelCallError(0, "token preflight returned no nonnegative integer count")
+    served_context = tokenized.get("max_model_len")
+    if isinstance(served_context, bool) or not isinstance(served_context, int) or served_context <= 0:
+        raise ModelCallError(0, "token preflight returned no positive integer max_model_len")
+    if served_context != MODEL_CONTEXT_TOKENS:
+        raise ModelCallError(
+            0, f"token preflight refused: endpoint max_model_len={served_context}, "
+               f"contract context_tokens={MODEL_CONTEXT_TOKENS}",
+            envelope={"prompt-tokens": prompt_tokens,
+                      "endpoint-context-tokens": served_context,
+                      "context-tokens": MODEL_CONTEXT_TOKENS})
+    available = MODEL_CONTEXT_TOKENS - prompt_tokens
+    envelope = {"prompt-tokens": prompt_tokens,
+                "context-tokens": MODEL_CONTEXT_TOKENS,
+                "available-output-tokens": available}
+    if available < MIN_OUTPUT_TOKENS:
+        raise ModelCallError(
+            0, f"token preflight refused: prompt_tokens={prompt_tokens}, "
+               f"context_tokens={MODEL_CONTEXT_TOKENS}, available_output_tokens={available}, "
+               f"minimum_output_tokens={MIN_OUTPUT_TOKENS}", envelope=envelope)
+    max_tokens = min(MAX_TOKENS, available)
+    response = _openai_json("/chat/completions", {
+        "model": model,
+        "messages": messages,
+        "temperature": CONTRACT["decoding"]["temperature"],
+        "max_tokens": max_tokens,
+        "response_format": {"type": "json_schema", "json_schema": {
+            "name": "iatc_proof", "strict": True, "schema": schema}},
+    })
+    choice = response["choices"][0]
     if choice.get("finish_reason") == "length":
         # A truncated document is not the model's answer; nothing is salvaged from it.
-        raise ModelCallError(0, f"output truncated at max_tokens={MAX_TOKENS}")
-    return choice["message"]["content"]
+        raise ModelCallError(0, f"output truncated at max_tokens={max_tokens}")
+    return ModelAnswer(choice["message"]["content"], prompt_tokens, max_tokens,
+                       MODEL_CONTEXT_TOKENS)
 
 
 
@@ -321,6 +385,41 @@ def require_candidates(cands: list[Path]) -> bool:
     return True
 
 
+def load_candidates_for_run(cands: list[Path]) -> tuple[list[dict], list[tuple[dict, str]]] | None:
+    """Load a batch, separating deterministic input refusals from stale formats.
+
+    A correctly versioned extractor can legitimately find a proof whose anatomy
+    supplies no clause spans.  That item cannot be sent under mark7-v4, but it
+    must not prevent the other candidates from being measured.  Unreadable or
+    wrong-schema files still refuse the entire batch because their identities
+    and producer contract are not trustworthy.
+    """
+    loaded: list[dict] = []
+    refused: list[tuple[dict, str]] = []
+    fatal: list[tuple[str, str]] = []
+    for cf in cands:
+        try:
+            cand = json.loads(cf.read_text())
+        except ValueError as exc:
+            fatal.append((cf.name, f"unreadable: {exc}"))
+            continue
+        if cand.get("schema") != CANDIDATE_SCHEMA or not cand.get("proof-lines"):
+            fatal.append((cf.name, f"schema={cand.get('schema')!r}"))
+            continue
+        loaded.append(cand)
+        missing = run_contract.missing_inputs(cand)
+        if missing:
+            refused.append((cand, f"precheck: lacks {', '.join(missing)} required by "
+                                  f"{run_contract.contract_id()}"))
+    if fatal:
+        print(f"FATAL: {len(fatal)}/{len(cands)} candidate(s) have an unreadable or stale "
+              f"producer contract ({CANDIDATE_SCHEMA})", file=sys.stderr)
+        for name, why in fatal[:10]:
+            print(f"  - {name}: {why}", file=sys.stderr)
+        return None
+    return loaded, refused
+
+
 
 # No legitimate model answer contains a raw control character. They appear only
 # when the JSON escape alphabet substituted for a LaTeX command the grammar could
@@ -328,8 +427,68 @@ def require_candidates(cands: list[Path]) -> bool:
 # 0919b probe as $\"mathcal{T}$ — \" for \mathcal, which also injects a stray
 # quote. quote_spans removes the exposure for a node's mathematics, but citation
 # and warrant are still free strings the model types, so the class is only latent
-# there rather than closed. This refuses it wherever it appears.
+# there rather than closed. Parsed control characters are still refused; the
+# pre-parse sanitizer below handles only an unescaped command-prefix byte.
 CONTROL_CHARS = {"\t": "\\t", "\b": "\\b", "\r": "\\r", "\f": "\\f", "\v": "\\v"}
+# Repairs are evidence-derived, not guesses over the whole JSON control alphabet.
+# The Mark8 rhgrh run observed a literal TAB followed by "imes", i.e. a serving
+# serializer had materialised JSON's \t while emitting the LaTeX command \times.
+CONTROL_COMMAND_SUFFIXES = {"\t": ("imes",)}
+
+
+def sanitize_string_control_chars(raw: str) -> tuple[str, list[dict]]:
+    """Restore an unescaped control byte only when it occurs inside a JSON string.
+
+    vLLM has emitted a literal tab for the first two characters of ``\\times``.
+    In a JSON string, replacing that byte with the JSON spelling ``\\\\t`` restores
+    the intended backslash-plus-letter sequence.  Legal whitespace outside strings
+    is untouched; unknown controls and malformed quoting are left for json.loads to
+    refuse.  The caller keeps both the raw bytes and this explicit repair ledger.
+    """
+    out: list[str] = []
+    repairs: list[dict] = []
+    in_string = False
+    escaped = False
+    for offset, char in enumerate(raw):
+        if in_string and char in CONTROL_COMMAND_SUFFIXES:
+            suffix = next((suffix for suffix in CONTROL_COMMAND_SUFFIXES[char]
+                           if raw.startswith(suffix, offset + 1)
+                           and (offset + 1 + len(suffix) == len(raw)
+                                or not raw[offset + 1 + len(suffix)].isalpha())), None)
+            if suffix is not None:
+                command = "\\" + CONTROL_CHARS[char][1:] + suffix
+                # Two source backslashes decode to one literal LaTeX backslash.
+                out.append("\\\\" + CONTROL_CHARS[char][1:])
+                repairs.append({"offset": offset, "codepoint": ord(char),
+                                "restored-command": command})
+                escaped = False
+                continue
+        out.append(char)
+        if not in_string:
+            if char == '"':
+                in_string = True
+            continue
+        if escaped:
+            escaped = False
+        elif char == "\\":
+            escaped = True
+        elif char == '"':
+            in_string = False
+    return "".join(out), repairs
+
+
+def parse_model_json(raw: str) -> tuple[dict, str | None, list[dict]]:
+    """Parse as-is, or apply the one auditable serving repair above."""
+    try:
+        return json.loads(raw), None, []
+    except json.JSONDecodeError as original:
+        sanitized, repairs = sanitize_string_control_chars(raw)
+        if not repairs:
+            raise original
+        try:
+            return json.loads(sanitized), sanitized, repairs
+        except json.JSONDecodeError:
+            raise original
 
 
 def control_char_damage(value, path: str = "") -> list[str]:
@@ -364,20 +523,36 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             record["steps-prompt-len"] = len(prompt)
             steps_ctx = (prompt, schema)
         try:
-            raw = (call_stub(prompt, cand, schema) if args.backend == "stub"
-                   else call_openai(prompt, cand, args.model, schema))
+            answer = (call_stub(prompt, cand, schema) if args.backend == "stub"
+                      else call_openai(prompt, cand, args.model, schema))
         except ModelCallError as e:
+            if e.envelope is not None:
+                record[f"{phase}-token-envelope"] = e.envelope
             record["result"] = f"{phase}: {e}"[:300]
             return "errored", f"{phase}: {e}", record
+        if isinstance(answer, ModelAnswer):
+            raw = answer.text
+            record[f"{phase}-token-envelope"] = {
+                "prompt-tokens": answer.prompt_tokens,
+                "max-output-tokens": answer.max_tokens,
+                "context-tokens": answer.context_tokens,
+            }
+        else:  # stub and test doubles do not need a serving-tokenizer dependency
+            raw = answer
         raw_path = tmp / f"{pid}.{phase}.json"
         raw_path.write_text(raw)
         record[f"{phase}-response"] = accounting.relative(raw_path)
         try:
-            part = json.loads(raw)
+            part, sanitized, repairs = parse_model_json(raw)
         except ValueError as e:
             why = f"{phase}: endpoint returned non-JSON despite the schema ({e}); check serving conformance"
             record["result"] = why
             return "errored", why, record
+        if sanitized is not None:
+            repaired_path = tmp / f"{pid}.{phase}.sanitized.json"
+            repaired_path.write_text(sanitized)
+            record[f"{phase}-sanitized-response"] = accounting.relative(repaired_path)
+            record[f"{phase}-sanitization"] = repairs
         damage = control_char_damage(part, phase)
         if damage:
             why = (f"{phase}: model output carries control characters — "
@@ -425,16 +600,38 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
                    + "\n\nGive the derivations again, fixing exactly that. Keep every "
                      "part that was not at fault.")
         try:
-            raw = (call_stub(amended, cand, schema) if args.backend == "stub"
-                   else call_openai(amended, cand, args.model, schema))
-            part = json.loads(raw)
+            answer = (call_stub(amended, cand, schema) if args.backend == "stub"
+                      else call_openai(amended, cand, args.model, schema))
+            if isinstance(answer, ModelAnswer):
+                raw = answer.text
+                record[f"retry{retry}-token-envelope"] = {
+                    "prompt-tokens": answer.prompt_tokens,
+                    "max-output-tokens": answer.max_tokens,
+                    "context-tokens": answer.context_tokens,
+                }
+            else:
+                raw = answer
         except (ModelCallError, ValueError) as e:
+            if isinstance(e, ModelCallError) and e.envelope is not None:
+                record[f"retry{retry}-token-envelope"] = e.envelope
             record[f"retry{retry}-result"] = f"retry failed: {e}"[:200]
             break
+        retry_path = tmp / f"{pid}.steps.retry{retry}.json"
+        retry_path.write_text(raw)
+        record[f"retry{retry}-response"] = accounting.relative(retry_path)
+        try:
+            part, sanitized, repairs = parse_model_json(raw)
+        except ValueError as e:
+            record[f"retry{retry}-result"] = f"retry failed: {e}"[:200]
+            break
+        if sanitized is not None:
+            repaired_path = tmp / f"{pid}.steps.retry{retry}.sanitized.json"
+            repaired_path.write_text(sanitized)
+            record[f"retry{retry}-sanitized-response"] = accounting.relative(repaired_path)
+            record[f"retry{retry}-sanitization"] = repairs
         if control_char_damage(part, "steps"):
             record[f"retry{retry}-result"] = "retry carried control characters"
             break
-        (tmp / f"{pid}.steps.retry{retry}.json").write_text(raw)
         doc.update(part)
         doc["steps"] = iatc_json.steps_of(doc)
         ok, why = judge()
@@ -452,8 +649,10 @@ def run(args) -> int:
     if not cands:
         print("no candidates found", file=sys.stderr)
         return 2
-    if not require_candidates(cands):
+    classified = load_candidates_for_run(cands)
+    if classified is None:
         return 2
+    loaded, precheck_refused = classified
     outdir = Path(args.out)
     outdir.mkdir(parents=True, exist_ok=True)
     # Attempts are scoped by run and runner invocation (H37), so a retried stage
@@ -472,12 +671,13 @@ def run(args) -> int:
     # by futon6_config and must not affect what is written here.
     contract = run_contract.active()
     contract["deviations"] = run_contract.deviations(
-        {"gate-retries": args.gate_retries, "max-tokens": MAX_TOKENS, "model": args.model})
+        {"gate-retries": args.gate_retries, "max-tokens": MAX_TOKENS,
+         "context-tokens": MODEL_CONTEXT_TOKENS,
+         "min-output-tokens": MIN_OUTPUT_TOKENS, "model": args.model})
     (outdir / "run-contract.json").write_text(json.dumps(contract, indent=2) + "\n")
     print(f"run contract {contract['id']} sha256:{contract['sha256'][:12]}"
           + (f" DEVIATING: {'; '.join(contract['deviations'])}" if contract["deviations"] else ""),
           flush=True)
-    loaded = [json.loads(cf_path.read_text()) for cf_path in cands]
     ledger = accounting.Accounting("S3", "loop", [c["proof-id"] for c in loaded])
     counts = {"accepted": 0, "rejected": 0, "errored": 0, "carried": 0}
     accepted_graphs = []
@@ -526,8 +726,15 @@ def run(args) -> int:
 
     # A prior acceptance is settled by the filesystem, not the model: resolve those
     # first so the pool only ever holds real work. This is what makes resume cheap.
+    refused_ids = {cand["proof-id"] for cand, _ in precheck_refused}
+    for cand, why in precheck_refused:
+        finish(cand, "rejected", why,
+               {"attempt": 0, "phase": "precheck", "result": why})
+
     pending = []
     for cand in loaded:
+        if cand["proof-id"] in refused_ids:
+            continue
         final = outdir / f"{cand['proof-id']}.edn"
         if not final.exists():
             pending.append(cand)

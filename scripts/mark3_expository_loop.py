@@ -11,11 +11,13 @@ stage retries only the items that were not accepted.
 from __future__ import annotations
 
 import argparse
+import concurrent.futures as cf
 import json
 import os
 import re
 import subprocess
 import sys
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -133,11 +135,19 @@ def call_openai(prompt: str, candidate: dict[str, Any], kinds: dict[str, str], m
                                  headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"})
     try:
         with urllib.request.urlopen(req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as response:
-            choice = json.loads(response.read())["choices"][0]
+            payload = json.loads(response.read())
     except urllib.error.HTTPError as e:
         raise ModelCallError(f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:300]}")
     except urllib.error.URLError as e:
         raise ModelCallError(str(e.reason))
+    except TimeoutError as e:
+        raise ModelCallError(f"request timed out: {e}")
+    except (json.JSONDecodeError, UnicodeDecodeError) as e:
+        raise ModelCallError(f"endpoint returned an unreadable response envelope: {e}")
+    try:
+        choice = payload["choices"][0]
+    except (KeyError, IndexError, TypeError) as e:
+        raise ModelCallError(f"endpoint returned a malformed response envelope: {e}")
     if choice.get("finish_reason") == "length":
         raise ModelCallError(f"output truncated at max_tokens={MAX_TOKENS}")
     return choice["message"]["content"]
@@ -240,6 +250,24 @@ def run(args: argparse.Namespace) -> int:
     ledger = accounting.Accounting("S4", "loop", [c["passage-id"] for c in loaded])
     counts = {"accepted": 0, "rejected": 0, "errored": 0, "carried": 0}
     bypaper = {}  # paper-id -> [total, accepted], for the S4 expository-coverage emit
+    pending = []
+    books = threading.Lock()
+
+    def finish(candidate, status, why, record):
+        pid = candidate.get("paper-id") or str(candidate["passage-id"]).split(":")[0]
+        item = candidate["passage-id"]
+        final = outdir / safe_output_name(candidate)
+        with books:
+            rec = bypaper.setdefault(pid, [0, 0])
+            counts[status] += 1
+            if status == "accepted":
+                rec[1] += 1
+                ledger.record(item, "accepted", paper=pid, outputs=[item], attempts=[record],
+                              artifacts=[accounting.relative(final)])
+            else:
+                ledger.record(item, status, why, paper=pid, attempts=[record])
+            print(f"  {item}: {status}" + (f" ({why[:160]})" if why else ""), flush=True)
+
     for candidate in loaded:
         pid = candidate.get("paper-id") or str(candidate["passage-id"]).split(":")[0]
         item = candidate["passage-id"]
@@ -262,17 +290,26 @@ def run(args: argparse.Namespace) -> int:
                           attempts=[{"carried-from": carried.get("invocation"), "path": carried.get("path")}])
             print(f"  {item}: accepted (carried from {carried.get('invocation')})")
             continue
+        pending.append(candidate)
+
+    def work(candidate):
+        item = candidate["passage-id"]
+        final = outdir / safe_output_name(candidate)
         status, why, record = attempt_one(candidate, args, kinds, attempts)
-        counts[status] += 1
         if status == "accepted":
             accounting.publish_accepted(outdir, item, final, (attempts / final.name).read_bytes(),
                                         {"path": record["graph"]})
-            rec[1] += 1
-            ledger.record(item, "accepted", paper=pid, outputs=[item], attempts=[record],
-                          artifacts=[accounting.relative(final)])
-        else:
-            ledger.record(item, status, why, paper=pid, attempts=[record])
-        print(f"  {item}: {status}" + (f" ({why[:160]})" if why else ""))
+        finish(candidate, status, why, record)
+
+    workers = max(1, int(getattr(args, "concurrency", 1) or 1))
+    if workers == 1 or len(pending) <= 1:
+        for candidate in pending:
+            work(candidate)
+    else:
+        print(f"== {len(pending)} expository region(s) at concurrency {workers} ==", flush=True)
+        with cf.ThreadPoolExecutor(max_workers=workers) as pool:
+            for future in cf.as_completed([pool.submit(work, c) for c in pending]):
+                future.result()
 
     print(f"\nexpository-loop: accepted {counts['accepted']} (carried {counts['carried']}) · "
           f"rejected {counts['rejected']} · errored {counts['errored']} of {len(loaded)}")
@@ -308,6 +345,7 @@ def main() -> int:
     parser.add_argument("--out", default=str(REPO / "data" / "expository-scope-graphs" / "loop-run"))
     parser.add_argument("--backend", choices=["stub", "openai"], default="stub")
     parser.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct")
+    parser.add_argument("--concurrency", type=int, default=int(os.environ.get("FUTON6_CONCURRENCY", "1")))
     parser.add_argument("--run-dir", help="if set, emit S4 expository-coverage MetricRecords here")
     parser.add_argument("--run-id", default="adhoc")
     parser.add_argument("--corpus-id", default="adhoc")

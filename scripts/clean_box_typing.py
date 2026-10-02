@@ -24,6 +24,7 @@ Usage (on the Linode host, after S3):
   futon6/.venv/bin/python scripts/clean_box_typing.py --graphs data/iatc-argument-graphs/gh200 --out /tmp/ct --stub
 """
 import argparse
+import concurrent.futures as cf
 import glob
 import json
 import os
@@ -82,9 +83,17 @@ def query_model(endpoint, model, prompt, sk, methods):
     try:
         with urllib.request.urlopen(
                 req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "120"))) as r:
-            choice = json.loads(r.read())["choices"][0]
+            payload = json.loads(r.read())
     except urllib.error.URLError as e:
         raise TypingCallError(f"query error: {e}")
+    except TimeoutError as e:
+        raise TypingCallError(f"query timed out: {e}")
+    except (json.JSONDecodeError, UnicodeDecodeError) as e:
+        raise TypingCallError(f"unreadable response envelope: {e}")
+    try:
+        choice = payload["choices"][0]
+    except (KeyError, IndexError, TypeError) as e:
+        raise TypingCallError(f"malformed response envelope: {e}")
     if choice.get("finish_reason") == "length":
         raise TypingCallError(f"output truncated at max_tokens={max_tokens}")
     try:
@@ -118,6 +127,8 @@ def main():
     ap.add_argument("--endpoint", default="http://localhost:8000/v1/chat/completions")
     ap.add_argument("--model", default="hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4")
     ap.add_argument("--stub", action="store_true")
+    ap.add_argument("--concurrency", type=int,
+                    default=int(os.environ.get("FUTON6_CONCURRENCY", "1")))
     ap.add_argument("--run-dir", help="if set, emit S7 MetricRecords here (INSTANTIATE-GPU)")
     ap.add_argument("--run-id", default="adhoc")
     ap.add_argument("--corpus-id", default="adhoc")
@@ -143,6 +154,7 @@ def main():
     for name, why in refused:
         failed.append((name, why))
         print(f"  FAIL {name}: {why}")
+    prepared = []
     for pid, gf in finals:
         try:
             dropped = []
@@ -156,6 +168,10 @@ def main():
             ledger.record(pid, "rejected", f"load error: {type(e).__name__}: {e}", paper=pid)
             print(f"  REJECT {pid}: load error — {e}")
             continue
+        prepared.append((pid, nodes, edges, sk0, prompt))
+
+    def ask(entry):
+        pid, nodes, edges, sk0, prompt = entry
         try:
             if args.stub:
                 answer = stub_typing(sk0)
@@ -163,9 +179,23 @@ def main():
                 wait_for_server(args.endpoint)
                 answer = query_model(args.endpoint, args.model, prompt, sk0, methods)
         except TypingCallError as e:
-            failed.append((pid, str(e)))
-            ledger.record(pid, "errored", f"typing: {e}", paper=pid)
-            print(f"  FAIL {pid}: {e}")
+            return pid, nodes, edges, sk0, None, str(e)
+        return pid, nodes, edges, sk0, answer, None
+
+    workers = max(1, args.concurrency)
+    if workers > 1 and len(prepared) > 1:
+        print(f"== {len(prepared)} CLean typing item(s) at concurrency {workers} ==", flush=True)
+        pool = cf.ThreadPoolExecutor(max_workers=workers)
+        answers = pool.map(ask, prepared)
+    else:
+        pool = None
+        answers = map(ask, prepared)
+
+    for pid, nodes, edges, sk0, answer, error in answers:
+        if error is not None:
+            failed.append((pid, error))
+            ledger.record(pid, "errored", f"typing: {error}", paper=pid)
+            print(f"  FAIL {pid}: {error}")
             continue
         ok, why = valid(answer, sk0, methods)
         if not ok:
@@ -216,6 +246,8 @@ def main():
                                axis="completeness", value=round(discharge, 4), computable=True)
             except Exception as ee:
                 print(f"    (S7 metric emit skipped: {ee})")
+    if pool is not None:
+        pool.shutdown()
 
     # "(cyclic)" was a guess baked into the summary line as well as the per-item
     # one. Rejections are reported by their actual gate now, and grouped, so a
@@ -240,19 +272,13 @@ def main():
                    if os.path.basename(c)[:-len(".clean.edn")] not in set(typed))
     if stale:
         print(f"stale CLeans not produced by this invocation: {stale[:5]}")
-        failed.extend((s_, "stale CLean output") for s_ in stale)
     # S7 postcondition gates over the accepted CLeans
     rc2 = os.system(f"cd {ROOT} && bb scripts/clean_vocab_gate.bb {args.out} >/dev/null 2>&1")
     print(f"[gate] clean_vocab_gate over accepted: {'PASS' if rc2==0 else 'FAIL'}")
-    # Success means the typing ran and its output is consistent: nothing failed to
-    # type, no stale CLean is lying around, and the vocab gate passes over what was
-    # accepted. A gate rejection (G1-G8, including a G7 cycle) is a finding about one
-    # proof, so it is recorded as a rejected item instead. That used to exit 0 as
-    # "cleanly rejected", which put a passing S7 ledger row over a CLean corpus with
-    # proofs missing; what prevents that now is the accounting, not the exit status -
-    # the rejected proof is named, S7's expected items are S3's accepted outputs, and
-    # replay's C2 compares the two.
-    sys.exit(0 if (not failed and rc2 == 0) else 1)
+    # Per-item rejections and typing failures are complete ledger outcomes, not a
+    # producer crash.  The runner applies the run's pinned item-success floor.
+    # Stale output or a vocabulary-gate failure is systemic and remains fatal.
+    sys.exit(0 if (not stale and rc2 == 0) else 1)
 
 
 if __name__ == "__main__":

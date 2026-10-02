@@ -59,6 +59,17 @@ class AccountingRules(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "already written"):
             accounting.Accounting("S6", "assemble", ["a"], self.base)
 
+    def test_repeatable_bulk_records_publish_only_on_explicit_checkpoint(self):
+        ledger = accounting.Accounting("S4", "select", ["a", "b"], self.base)
+        ledger.record("a", "deferred", "cap", checkpoint=False)
+        on_disk = json.loads((self.base / "S4.select.json").read_text())
+        self.assertEqual(on_disk["counts"]["unaccounted"], 2)
+        ledger.record("b", "rejected", "precheck", checkpoint=False)
+        ledger.checkpoint()
+        on_disk = json.loads((self.base / "S4.select.json").read_text())
+        self.assertEqual((on_disk["counts"]["deferred"], on_disk["counts"]["rejected"],
+                          on_disk["counts"]["unaccounted"]), (1, 1, 0))
+
     def test_problems_name_unaccounted_extra_rejected_deferred_and_missing_artifacts(self):
         ledger = accounting.Accounting("S4", "select", ["a", "b", "c"], self.base)
         ledger.record("a", "accepted", artifacts=["missing.json"])
@@ -245,6 +256,28 @@ class ExpositorySelection(unittest.TestCase):
         self.assertEqual(expo_extract.select_even(self.candidates(10), 0)[1], [])
         self.assertEqual(len(expo_extract.select_even(self.candidates(2), 5)[0]), 2)
 
+    def test_missing_units_are_refused_before_they_consume_a_cap_slot(self):
+        rows = self.candidates(4)
+        for i, row in enumerate(rows):
+            row["units"] = [] if i == 1 else [{"id": f"u{i}", "text": "quoted source"}]
+        selected, deferred, refused = expo_extract.select_modelable(rows, 2)
+        self.assertEqual(len(selected), 2)
+        self.assertEqual(len(deferred), 1)
+        self.assertEqual([(row["region-id"], missing) for row, missing in refused],
+                         [("r1", ["units"])])
+        self.assertNotIn("r1", {row["region-id"] for row in selected})
+
+    def test_stale_generated_selection_is_removed_but_foreign_content_is_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d); regions = out / "regions"; regions.mkdir()
+            stale = out / "old.candidate.json"; canonical = regions / stale.name
+            stale.write_text("same"); canonical.write_text("same")
+            self.assertEqual(expo_extract.reconcile_stale_selection(out, regions, set()), [stale.name])
+            self.assertFalse(stale.exists())
+            stale.write_text("edited")
+            with self.assertRaisesRegex(ValueError, "not the canonical"):
+                expo_extract.reconcile_stale_selection(out, regions, set())
+
     def test_manifest_pins_cap_and_algorithm(self):
         with tempfile.TemporaryDirectory() as d, \
                 patch.object(manifest, "source_identity", return_value={}), \
@@ -287,7 +320,9 @@ class PaperGraphsAndCleans(unittest.TestCase):
         result = subprocess.run([sys.executable, str(ROOT / "scripts/paper_graph_assemble.py"), "--list", str(ids),
                                  "--marks-dir", str(marks), "--out", str(self.base / "B")],
                                 capture_output=True, text=True, env={**os.environ, accounting.DIR_ENV: str(adir)})
-        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        # The producer completed its ledger, so an item rejection is not a process
+        # failure.  linode_stepper applies the manifest's pinned item floor.
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         doc = accounting.load(adir, "S6", "assemble")
         self.assertEqual({e["id"]: e["status"] for e in doc["items"]},
                          {"1111.0001": "rejected", "2222.0002": "accepted"})

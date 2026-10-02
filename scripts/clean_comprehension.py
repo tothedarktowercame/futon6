@@ -99,6 +99,9 @@ def main():
     ap.add_argument("--out", default=None)
     ap.add_argument("--substrate-papers", help="file of paper-ids: scope grounding to this "
                     "RUN-CORPUS (so comprehension rises with the run — finding #1 / accretion sweep)")
+    ap.add_argument("--concept-encyclopedia", type=Path,
+                    help="explicit frozen encyclopedia; avoids confusing run-local WARP outputs "
+                         "with the manifest-pinned grounding substrate")
     ap.add_argument("--run-dir", help="if set, emit S5 MetricRecords here (INSTANTIATE-GPU)")
     ap.add_argument("--run-id", default="adhoc")
     ap.add_argument("--corpus-id", default="adhoc")
@@ -107,7 +110,10 @@ def main():
     if args.out is None:
         args.out = "data/showcases/clean-demo/comprehension.json"
 
-    substrate = r2d.load_substrate(r2d.parse_args([]))
+    substrate_args = r2d.parse_args([])
+    if args.concept_encyclopedia is not None:
+        substrate_args.concept_encyclopedia = args.concept_encyclopedia
+    substrate = r2d.load_substrate(substrate_args)
     if args.substrate_papers:   # scope grounding to the run-corpus (finding #1)
         raw = [l.strip() for l in open(args.substrate_papers) if l.strip()]
         ids = set(raw) | {i.replace("__", "/") for i in raw}   # match concept-index id form

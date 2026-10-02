@@ -59,9 +59,25 @@ CONTRACTS: dict[str, dict] = {
         "quotation": "listed-units",
         "gate-retries": 1,
     },
+    # Mark8 retains Mark7-v4's extraction contract but makes the serving token
+    # envelope part of run identity. Historical contract maps above stay byte-for-
+    # byte stable because their digests identify already archived runs.
+    "mark8-v1": {
+        "model": {
+            "checkpoint": "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4",
+            "served-as": "mark4-70b",
+        },
+        "decoding": {"temperature": 0, "max-tokens": 8192,
+                     "context-tokens": 16384, "min-output-tokens": 256,
+                     "output-policy": "tokenize-then-cap-to-context"},
+        "candidates": {"schema": "iatc-candidate/v5-proof", "requires": ["spans"]},
+        "expository-candidates": {"schema": "expo-candidate/v2", "requires": ["units"]},
+        "quotation": "listed-units",
+        "gate-retries": 1,
+    },
 }
 
-RECOMMENDED = "mark7-v4"
+RECOMMENDED = "mark8-v1"
 
 
 def contract_id() -> str:
@@ -82,9 +98,9 @@ def digest(cid: str | None = None) -> str:
     return hashlib.sha256(canonical.encode()).hexdigest()
 
 
-def active() -> dict:
+def active(cid: str | None = None) -> dict:
     """The contract this process runs under, as it goes into a run record."""
-    cid = contract_id()
+    cid = cid or contract_id()
     return {"id": cid, "sha256": digest(cid), "recommended": cid == RECOMMENDED, **spec(cid)}
 
 
@@ -96,6 +112,12 @@ def deviations(actual: dict, cid: str | None = None) -> list[str]:
         out.append(f"gate-retries {actual['gate-retries']} (contract {want['gate-retries']})")
     if "max-tokens" in actual and actual["max-tokens"] != want["decoding"]["max-tokens"]:
         out.append(f"max-tokens {actual['max-tokens']} (contract {want['decoding']['max-tokens']})")
+    if "context-tokens" in actual and actual["context-tokens"] != want["decoding"].get("context-tokens"):
+        out.append(f"context-tokens {actual['context-tokens']} "
+                   f"(contract {want['decoding'].get('context-tokens')})")
+    if "min-output-tokens" in actual and actual["min-output-tokens"] != want["decoding"].get("min-output-tokens"):
+        out.append(f"min-output-tokens {actual['min-output-tokens']} "
+                   f"(contract {want['decoding'].get('min-output-tokens')})")
     if "model" in actual and actual["model"] != want["model"]["served-as"]:
         out.append(f"model {actual['model']!r} (contract {want['model']['served-as']!r})")
     return out

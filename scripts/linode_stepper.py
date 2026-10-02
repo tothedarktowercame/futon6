@@ -29,6 +29,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import futon6_config as config
 import run_manifest as manifest
+import run_contract
 import stage_accounting as accounting
 try:
     import edn_format as edn
@@ -40,6 +41,20 @@ except ImportError as _exc:          # inspectable without it; see _MissingDeps
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, "holes", "linode-stepper-contract.md")
 PY = config.python_command()  # configured interpreter, safely quoted for stage shells
+CONCEPT_ENCYCLOPEDIA = shlex.quote(str(config.concept_encyclopedia()))
+MARK8_RUN_CONTRACT = "mark8-v1"
+
+
+def contract_for_run(run_dir: Path) -> str:
+    """New Mark8 runs use Mark8-v1; resumes inherit their recorded identity."""
+    if (run_dir / manifest.NAME).exists():
+        recorded = manifest.load(run_dir).get("run-contract") or {"id": "mark7-v4"}
+        selected = recorded.get("id")
+    else:
+        selected = MARK8_RUN_CONTRACT
+    if not isinstance(selected, str) or selected not in run_contract.CONTRACTS:
+        raise ValueError(f"run manifest names unknown contract {selected!r}")
+    return selected
 
 
 def kw(x):
@@ -101,13 +116,14 @@ OPS = {
     # binding coverage retrievable and comparable between runs.
     "S1b": {"cmd": f"{{PY}} scripts/markup_strategies.py --list {{IDS}} --marks {MARKS} --out {STRAT}",
             "crit": "per-paper term and symbol hypergraphs; every paper resolves"},
-    "S2": {"cmd": "{PY} scripts/warp_substrate_check.py --ids {IDS} && "
+    "S2": {"cmd": f"{{PY}} scripts/mark7_corpus_layers.py warp --run-dir {RUN} && "
+           "{PY} scripts/warp_substrate_check.py --ids {IDS} && "
            f"{{PY}} scripts/coverage_inline.py --concepts {WARP}/concept-usage.json --field paper_concepts",
            "note": "substrate-corpus match is now a measured gate (E-superpod-hardening H1 tier 1); "
                    "committed concept-usage is df>=10-filtered so the coverage curve reads flat — "
                    "the raw-stream instrument needs S1 to dump per-paper raw concepts (tier 2)",
            "crit": "G-coverage: raw coverage rises with corpus-fraction"},
-    "S3": {"cmd": f"{{PY}} scripts/mark3_extract_candidates.py --list {{IDS}} --all-proofs --out {CAND} && "
+    "S3": {"cmd": f"{{PY}} scripts/mark3_extract_candidates.py --list {{IDS}} --all-proofs --reuse-frozen --out {CAND} && "
            f"CANDIDATES={CAND} OUT={GRAPHS} bash scripts/linode-4gpu-run.sh && "
            # MEASUREMENT, not a gate. Per-proof outcomes are in S3 accounting; the
            # anchor rate was once reconstructed wrongly after the fact (H38), so it
@@ -163,11 +179,12 @@ OPS = {
     "S5": {"cmd": f"{{PY}} scripts/cas_segment.py {GRAPHS}/*.edn --out-dir {STEPS} && "
            f"{{PY}} scripts/rung3_technique.py --steps-dir {STEPS} --out-dir {RUNG3} && "
            f"{{PY}} scripts/clean_comprehension.py --graphs {GRAPHS} --candidates {CAND} "
-           f"--steps {STEPS} --rung3 {RUNG3} --run-dir {RUN} "
+           f"--steps {STEPS} --rung3 {RUNG3} --concept-encyclopedia {CONCEPT_ENCYCLOPEDIA} "
+           f"--run-dir {RUN} "
            "--run-id $RUN_ID --corpus-id $CORPUS",
            "crit": "G-comprehension: verdict separates weak-extraction from weak-proof"},
-    # Every paper is assembled and accounted even when one is malformed; the stage
-    # still fails on any rejected or errored paper object.
+    # Every paper is assembled and accounted even when one is malformed; the
+    # runner's pinned item-success floor decides whether the stage may continue.
     "S6": {"cmd": f"{{PY}} scripts/paper_graph_assemble.py --list {{IDS}} --iatc {GRAPHS} --expo {EXPO} "
            f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS --out {PAPERG} --marks-dir {MARKS}",
            "gate": f"test -d {PAPERG} && "
@@ -223,7 +240,8 @@ OPS = {
             f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
             "crit": "structural canonical shapes + whole-paper signatures produced"},
     "S12": {"cmd": f"{{PY}} scripts/accretion_curves.py --graphs {GRAPHS} --candidates {CAND} "
-            f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS",
+            f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS && "
+            f"{{PY}} scripts/mark7_corpus_layers.py tapestry --run-dir {RUN}",
             "crit": "ACCRETION SWEEP: every tier metric checkpointed at log-spaced n -> rising curves"},
     "RETRIEVE": {"boot": True, "halt": True, "note": "<profile.retrieve> — pull ALL run outputs to dev BEFORE teardown"},
 }
@@ -647,6 +665,10 @@ def main():
     ap.add_argument("--run-dir", help="phase-ledger + emit dir (data/runs/<run-id>)")
     ap.add_argument("--corpus-id")
     ap.add_argument("--run-id")
+    ap.add_argument("--warp", action=argparse.BooleanOptionalAction, default=None,
+                    help="refresh a run-local WARP substrate at S2 (default on for new runs)")
+    ap.add_argument("--tapestry", action=argparse.BooleanOptionalAction, default=None,
+                    help="resolve citations and build concept phylogeny at S12 (default on for new runs)")
     ap.add_argument("--reuse", nargs="+", action="extend", default=[], choices=["S0", "STAGE"], help="completed boot steps; repeated options accumulate; computational stages require ledger evidence")
     ap.add_argument("--mark-done", nargs="+", choices=["S0", "STAGE"], default=[], help="terminal boot bookkeeping; cannot combine with --run, --plan, --from, --to or --reuse")
     args = ap.parse_args()
@@ -672,6 +694,10 @@ def main():
         if args.ids:
             IDS = shlex.quote(args.ids)
         print("host configuration: " + json.dumps(config.effective(), sort_keys=True))
+        print("corpus layers: " + json.dumps({
+            "warp": True if args.warp is None else args.warp,
+            "tapestry": True if args.tapestry is None else args.tapestry,
+        }, sort_keys=True))
         plan(stages, args.profile)
         return 0
     try:
@@ -679,6 +705,14 @@ def main():
         corpus_id = manifest.identity(args.corpus_id, "CORPUS", "--corpus-id")
         run_dir = Path(args.run_dir or os.path.join("data", "runs", run_id))
         run_dir = (Path(ROOT) / run_dir).resolve()
+        selected_contract = contract_for_run(run_dir)
+        inherited_contract = os.environ.get(run_contract.CONTRACT_ENV)
+        if inherited_contract and inherited_contract != selected_contract:
+            raise ValueError(f"{run_contract.CONTRACT_ENV}={inherited_contract!r} disagrees "
+                             f"with run contract {selected_contract!r}")
+        # Explicit even when no shell setting exists: child extraction and model
+        # processes must use the same contract the immutable manifest records.
+        os.environ[run_contract.CONTRACT_ENV] = selected_contract
         if args.ids:
             source_ids = (Path(ROOT) / args.ids).resolve()
         elif (run_dir / manifest.NAME).exists():
@@ -687,8 +721,15 @@ def main():
             source_ids = Path(ROOT) / IDS
         os.environ.update(config.child_environment())
         with manifest.lock(run_dir):
-            doc = manifest.prepare(run_dir, run_id, corpus_id, source_ids)
-            os.environ.update(manifest.environment(run_dir, doc))
+            if (run_dir / manifest.NAME).exists():
+                recorded_features = (manifest.load(run_dir).get("features") or
+                                     {"warp": False, "tapestry": False})
+            else:
+                recorded_features = {"warp": True, "tapestry": True}
+            requested_warp = recorded_features["warp"] if args.warp is None else args.warp
+            requested_tapestry = recorded_features["tapestry"] if args.tapestry is None else args.tapestry
+            doc = manifest.prepare(run_dir, run_id, corpus_id, source_ids,
+                                   warp=requested_warp, tapestry=requested_tapestry)
             IDS = shlex.quote(str(run_dir / doc["ids"]))
             effective = doc["host-configuration"]
             print("host configuration: " + json.dumps(effective, sort_keys=True))
@@ -700,9 +741,18 @@ def main():
                     ledger_record(str(run_dir), sid, corpus_id, run_id)
                     print(f"ledger: {sid} marked done for corpus {corpus_id}")
                 return 0
+            # Preflight the staged source substrate before switching WARP to its
+            # empty run-local output directory.  Default-on WARP is built at S2;
+            # requiring its outputs before S1 made every new enabled run
+            # impossible to start.  The run-owned paths still become active
+            # before any computational stage executes.
+            run_environment = manifest.environment(run_dir, doc)
+            for name in ("FUTON6_ENABLE_WARP", "FUTON6_ENABLE_TAPESTRY"):
+                os.environ[name] = run_environment[name]
             rc = preflight_gate(str(run_dir / doc["ids"])) or conformance_gate(str(run_dir / doc["ids"]))
             if rc:
                 return rc
+            os.environ.update(run_environment)
             return run(order(stages, args.frm, args.to), args.profile, args.no_halt,
                        str(run_dir), corpus_id, run_id, sorted(set(args.reuse)))
     except (OSError, ValueError) as exc:

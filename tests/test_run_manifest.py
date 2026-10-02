@@ -15,6 +15,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import run_manifest as manifest
+import run_contract
 import retrieve_run
 import linode_stepper as stepper
 import conformance
@@ -62,6 +63,109 @@ class ManifestTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "substrate"):
                 self.prepare()
         self.assertEqual((self.run_dir / manifest.NAME).read_bytes(), original)
+
+    def test_historical_contract_digests_and_mark8_selection_are_distinct(self):
+        self.assertEqual(run_contract.digest("mark7-v3"),
+                         "14a12f15bef34ff7726301d10840d5f42fed5d50a6ebb9337e5a6399398dd45a")
+        self.assertEqual(run_contract.digest("mark7-v4"),
+                         "616bc208000e4e9d692f59ea7c02652c1bef6c7bbbb843de711ce8377efdfcfb")
+        self.assertEqual(stepper.contract_for_run(self.run_dir), "mark8-v1")
+        doc = self.prepare()
+        self.assertEqual(doc["run-contract"]["id"], "mark8-v1")
+        self.assertEqual(stepper.contract_for_run(self.run_dir), "mark8-v1")
+
+    def test_pre_contract_manifest_resumes_as_mark7_v4_not_mark8(self):
+        self.prepare()
+        path = self.run_dir / manifest.NAME
+        legacy = json.loads(path.read_text())
+        legacy.pop("run-contract")
+        legacy["host-configuration"]["serving-conformance"]["required"]["contract"] = "mark7-v4"
+        path.write_text(json.dumps(legacy))
+        self.assertEqual(stepper.contract_for_run(self.run_dir), "mark7-v4")
+        with patch.dict(os.environ, {run_contract.CONTRACT_ENV: "mark7-v4"}), \
+                manifest.lock(self.run_dir):
+            resumed = manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids)
+        self.assertNotIn("run-contract", resumed)
+
+    def test_corpus_layers_default_on_and_independent_opt_outs_are_pinned(self):
+        doc = self.prepare()
+        self.assertEqual(doc["features"], {"warp": True, "tapestry": True})
+        env = manifest.environment(self.run_dir, doc)
+        self.assertEqual(env["FUTON6_ENABLE_WARP"], "1")
+        self.assertEqual(env["FUTON6_ENABLE_TAPESTRY"], "1")
+        self.assertEqual(Path(env["FUTON6_WARP_DIR"]), self.run_dir / "artifacts/warp")
+
+        second = self.base / "no-warp"
+        with manifest.lock(second):
+            disabled = manifest.prepare(second, "test-run", "test-corpus", self.ids,
+                                        warp=False, tapestry=True)
+        self.assertEqual(disabled["features"], {"warp": False, "tapestry": True})
+        self.assertNotIn("FUTON6_WARP_DIR", manifest.environment(second, disabled))
+        with manifest.lock(second), self.assertRaisesRegex(ValueError, "features"):
+            manifest.prepare(second, "test-run", "test-corpus", self.ids,
+                             warp=True, tapestry=True)
+
+    def test_mark8_allocation_and_artifact_paths_are_pinned(self):
+        with manifest.lock(self.run_dir):
+            doc = manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids,
+                                   model_call_budget=17,
+                                   allocation_policy="fixture-policy/v1")
+        self.assertEqual(doc["allocation"], {
+            "model-call-budget": 17, "allocation-policy": "fixture-policy/v1"})
+        env = manifest.environment(self.run_dir, doc)
+        self.assertEqual(Path(env["FUTON6_PLAN"]), self.run_dir / "artifacts/plan")
+        self.assertEqual(Path(env["FUTON6_BROWSER"]), self.run_dir / "artifacts/browser")
+        with manifest.lock(self.run_dir), self.assertRaisesRegex(ValueError, "allocation"):
+            manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids,
+                             model_call_budget=18,
+                             allocation_policy="fixture-policy/v1")
+
+    def test_legacy_manifest_implicitly_has_zero_budget_and_no_plan_paths(self):
+        self.prepare()
+        path = self.run_dir / manifest.NAME
+        legacy = json.loads(path.read_text())
+        legacy.pop("allocation")
+        legacy["artifacts"].pop("plan")
+        legacy["artifacts"].pop("browser")
+        path.write_text(json.dumps(legacy))
+
+        with manifest.lock(self.run_dir):
+            resumed = manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids)
+        self.assertNotIn("allocation", resumed)
+        self.assertNotIn("FUTON6_PLAN", manifest.environment(self.run_dir, resumed))
+
+        with patch.dict(os.environ, {"FUTON6_MODEL_CALL_BUDGET": "9"}), \
+                manifest.lock(self.run_dir), \
+                self.assertRaisesRegex(ValueError, "allocation"):
+            manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids)
+
+    def test_legacy_manifest_resumes_with_both_layers_implicitly_off(self):
+        self.prepare()
+        path = self.run_dir / manifest.NAME
+        legacy = json.loads(path.read_text())
+        legacy.pop("features")
+        for key in ("warp", "warp-subject", "cite-resolution", "tapestry"):
+            legacy["artifacts"].pop(key)
+        path.write_text(json.dumps(legacy))
+
+        with manifest.lock(self.run_dir):
+            resumed = manifest.prepare(self.run_dir, "test-run", "test-corpus", self.ids,
+                                       warp=False, tapestry=False)
+
+        self.assertNotIn("features", resumed)
+        self.assertEqual(manifest.environment(self.run_dir, resumed)["FUTON6_ENABLE_WARP"], "0")
+
+    def test_enabled_layers_are_required_at_their_declared_prefix(self):
+        doc = self.prepare()
+        for key, filename in (("marks", "paper.json"), ("loss", "dashboard.json")):
+            directory = self.run_dir / doc["artifacts"][key]
+            directory.mkdir(parents=True)
+            (directory / filename).write_text("{}")
+        (self.run_dir / "metrics.jsonl").write_text(
+            json.dumps({"run_id": "test-run", "corpus_id": "test-corpus", "stage": "S1"}) + "\n")
+        (self.run_dir / "phase-ledger.jsonl").write_text("{}\n")
+        with self.assertRaisesRegex(ValueError, "WARP artifact"):
+            manifest.require_artifacts(self.run_dir, doc, "S2")
 
     def test_changed_source_tree_keeps_completed_work_and_is_recorded(self):
         """Editing the tree must not discard ledgered stages (rob, 2026-09-23).
@@ -146,6 +250,35 @@ class ManifestTests(unittest.TestCase):
             with patch.object(sys, "argv", ["stepper", *flags]), self.assertRaises(SystemExit) as exit:
                 stepper.main()
             self.assertEqual(exit.exception.code, 2)
+
+    def test_runner_preflights_staged_warp_before_enabling_run_local_paths(self):
+        staged = self.base / "staged-warp"
+        observed = {}
+
+        def execute(*_args):
+            observed["warp"] = os.environ["FUTON6_WARP_DIR"]
+            return 0
+
+        def preflight_gate(*_args):
+            observed["preflight-warp"] = os.environ["FUTON6_WARP_DIR"]
+            observed["preflight-enabled"] = os.environ["FUTON6_ENABLE_WARP"]
+            return 0
+
+        with patch.dict(os.environ, {"FUTON6_WARP_DIR": str(staged)}), \
+                patch.object(sys, "argv", ["stepper", "--run", "--from", "S1", "--to", "S1",
+                                           "--run-dir", str(self.run_dir), "--run-id", "test-run",
+                                           "--corpus-id", "test-corpus", "--ids", str(self.ids),
+                                           "--reuse", "S0", "STAGE"]), \
+                patch.object(stepper, "preflight_gate", side_effect=preflight_gate) as preflight, \
+                patch.object(stepper, "conformance_gate", return_value=0), \
+                patch.object(stepper, "run", side_effect=execute) as run_stage:
+            self.assertEqual(stepper.main(), 0)
+
+        preflight.assert_called_once()
+        self.assertEqual(observed["preflight-warp"], str(staged))
+        self.assertEqual(observed["preflight-enabled"], "1")
+        self.assertEqual(observed["warp"], str(self.run_dir / "artifacts/warp"))
+        run_stage.assert_called_once()
 
     def test_runner_logs_and_writes_inside_manifest_paths(self):
         doc = self.prepare()

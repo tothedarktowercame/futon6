@@ -28,6 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import iatc_json
 import mark3_iatc_loop as loop
+import mark3_extract_candidates as extract
 import stage_accounting as accounting
 
 
@@ -55,10 +56,11 @@ class Contract(unittest.TestCase):
         derivations = iatc_json.steps_schema(10, 14, 3)["properties"]["derivations"]["properties"]
         entry = derivations["2"]["items"]["properties"]
         self.assertIn("iff", entry["relation"]["enum"])
-        # the second call knows which nodes exist, so a derivation cannot cite node 4 of 3,
-        # and node 2's premises exclude node 2: a node cannot be derived from itself
-        self.assertEqual(sorted(derivations), ["1", "2", "3"])
-        self.assertEqual(entry["premises"]["items"]["enum"], [1, 3])
+        # Topological order is structural: node 1 cannot be derived and node n
+        # can cite only earlier nodes.
+        self.assertEqual(sorted(derivations), ["2", "3"])
+        self.assertEqual(entry["premises"]["items"]["enum"], [1])
+        self.assertEqual(derivations["3"]["items"]["properties"]["premises"]["items"]["enum"], [1, 2])
 
     def test_derivations_become_steps_in_node_order(self):
         doc = {"derivations": {"3": [{"relation": "implies", "premises": [2], "warrant_kind": "stated",
@@ -78,10 +80,20 @@ class Contract(unittest.TestCase):
         self.assertTrue(any("assumes what it proves" in p for p in iatc_json.problems(cycle, 10, 14)))
         longer = {"nodes": [node(), node(), node()], "steps": [step([1], 2), step([2], 3), step([3], 1)]}
         self.assertTrue(any("node 1 -> node 2 -> node 3 -> node 1" in p for p in iatc_json.problems(longer, 10, 14)))
-        # a proof may state its conclusion before the steps that justify it: the
-        # requirement is acyclicity, not the order the steps are listed in
+        # Exact cycle shapes independently observed in the rhgrh run.
+        observed_long = {"nodes": [node() for _ in range(7)],
+                         "steps": [step([4], 5), step([5], 6), step([6], 7), step([7], 4)]}
+        self.assertTrue(any("node 4 -> node 5 -> node 6 -> node 7 -> node 4" in p
+                            for p in iatc_json.problems(observed_long, 10, 14)))
+        observed_short = {"nodes": [node() for _ in range(14)],
+                          "steps": [step([7], 14), step([14], 7)]}
+        self.assertTrue(any("node 7 -> node 14 -> node 7" in p
+                            for p in iatc_json.problems(observed_short, 10, 14)))
+        # A non-topological node listing is now refused rather than left for a
+        # costly cycle retry.
         claim_first = {"nodes": [node(), node(), node()], "steps": [step([2, 3], 1), step([3], 2)]}
-        self.assertEqual(iatc_json.problems(claim_first, 10, 14), [])
+        self.assertTrue(any("topologically ordered" in problem
+                            for problem in iatc_json.problems(claim_first, 10, 14)))
         for bad, text in (({"nodes": [node(), node()], "steps": [step([5], 2)]}, "refers to node"),
                           ({"nodes": [node(lo=12, hi=11), node()], "steps": [step([1], 2)]}, "ordered range"),
                           ({"nodes": [node(), node()], "steps": [step([1], 2, lo=9)]}, "inside 10-14"),
@@ -89,6 +101,11 @@ class Contract(unittest.TestCase):
             self.assertTrue(any(text in p for p in iatc_json.problems(bad, 10, 14)), (bad, text))
         iff = {"nodes": [node(text="A"), node(text="B")], "steps": [step([1], 2, relation="iff")]}
         self.assertEqual(iatc_json.problems(iff, 10, 14), [])
+        contradiction = {
+            "nodes": [node(text="contrary assumption"), node(text="contradiction"), node(text="claim")],
+            "steps": [step([1], 2), step([2], 3, relation="by-contradiction")],
+        }
+        self.assertEqual(iatc_json.problems(contradiction, 10, 14), [])
         # a construction step establishes the object it builds (34 such steps in the
         # 98-graph corpus), and a proof establishes the paper's own labelled statement
         construction = {"nodes": [node(text="hypotheses"), node(kind="object", text="the product P"),
@@ -225,21 +242,132 @@ class Loop(unittest.TestCase):
         self.assertFalse(loop.require_candidates(sorted(self.cands.glob("*.candidate.json"))))
 
     def test_requests_schema_at_temperature_zero(self):
-        seen = {}
+        seen = []
         class Response:
+            def __init__(self, payload):
+                self.payload = payload
             def __enter__(self):
                 return self
             def __exit__(self, *a):
                 return False
             def read(self):
-                return json.dumps({"choices": [{"finish_reason": "stop", "message": {"content": "{}"}}]}).encode()
+                return json.dumps(self.payload).encode()
         def urlopen(request, timeout):
-            seen.update(json.loads(request.data))
+            body = json.loads(request.data)
+            seen.append((request.full_url, body))
+            if request.full_url.endswith("/tokenize"):
+                return Response({"count": 8193, "max_model_len": 16384})
+            return Response({"choices": [{"finish_reason": "stop", "message": {"content": "{}"}}]})
+        with patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:8000/v1"}), \
+                patch("urllib.request.urlopen", urlopen):
+            answer = loop.call_openai("prompt", CAND, "m", iatc_json.nodes_schema(10, 14))
+        self.assertEqual([url for url, _ in seen],
+                         ["http://localhost:8000/tokenize",
+                          "http://localhost:8000/v1/chat/completions"])
+        request = seen[1][1]
+        self.assertEqual(request["temperature"], 0)
+        self.assertEqual(request["max_tokens"], 8191)  # observed 1204.6277 envelope
+        self.assertEqual(answer.prompt_tokens, 8193)
+        self.assertEqual(request["response_format"]["json_schema"]["schema"], iatc_json.nodes_schema(10, 14))
+
+    def test_socket_timeout_is_an_item_level_model_error(self):
+        with patch("urllib.request.urlopen", side_effect=TimeoutError("timed out")), \
+                patch.dict(os.environ, {"OPENAI_BASE_URL": "http://localhost:8000/v1"}):
+            with self.assertRaisesRegex(loop.ModelCallError, "request timed out: timed out"):
+                loop._openai_json("/chat/completions", {})
+
+    def test_token_preflight_refuses_without_sending_impossible_completion(self):
+        calls = []
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self): return b'{"count":16200,"max_model_len":16384}'
+        def urlopen(request, timeout):
+            calls.append(request.full_url)
             return Response()
-        with patch("urllib.request.urlopen", urlopen):
-            loop.call_openai("prompt", CAND, "m", iatc_json.nodes_schema(10, 14))
-        self.assertEqual(seen["temperature"], 0)
-        self.assertEqual(seen["response_format"]["json_schema"]["schema"], iatc_json.nodes_schema(10, 14))
+        with patch("urllib.request.urlopen", urlopen), self.assertRaisesRegex(
+                loop.ModelCallError, "token preflight refused") as caught:
+            loop.call_openai("large prompt", CAND, "m", iatc_json.nodes_schema(10, 14))
+        self.assertEqual(len(calls), 1)
+        self.assertTrue(calls[0].endswith("/tokenize"))
+        self.assertEqual(caught.exception.envelope["available-output-tokens"], 184)
+
+    def test_token_preflight_requires_the_pinned_endpoint_context(self):
+        class Response:
+            def __init__(self, payload): self.payload = payload
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self): return json.dumps(self.payload).encode()
+        for served in (None, True, 8192):
+            calls = []
+            def urlopen(request, timeout):
+                calls.append(request.full_url)
+                payload = {"count": 100}
+                if served is not None:
+                    payload["max_model_len"] = served
+                return Response(payload)
+            expected = ("positive integer max_model_len" if served in (None, True)
+                        else "endpoint max_model_len=8192")
+            with self.subTest(served=served), patch("urllib.request.urlopen", urlopen), \
+                    self.assertRaisesRegex(loop.ModelCallError, expected):
+                loop.call_openai("prompt", CAND, "m", iatc_json.nodes_schema(10, 14))
+            self.assertEqual(len(calls), 1)
+            self.assertTrue(calls[0].endswith("/tokenize"))
+
+    def test_preflight_refusal_is_accounted_with_the_envelope(self):
+        def refuse(_prompt, _cand, _model, _schema):
+            raise loop.ModelCallError(0, "token preflight refused",
+                                      envelope={"prompt-tokens": 16200,
+                                                "context-tokens": 16384,
+                                                "available-output-tokens": 184})
+        adir = self.base / "accounting" / "S3-envelope"
+        args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
+                                  model="m", rung2_gate=False, loss_log_interval=0, gate_retries=0)
+        with patch.object(loop, "call_openai", refuse), \
+                patch.dict(os.environ, {accounting.DIR_ENV: str(adir),
+                                        accounting.INVOCATION_ENV: "S3-envelope"}):
+            loop.run(args)
+        items = accounting.load(adir, "S3", "loop")["items"]
+        self.assertEqual({row["status"] for row in items}, {"errored"})
+        self.assertEqual(items[0]["attempts"][0]["nodes-token-envelope"]["prompt-tokens"], 16200)
+
+    def test_raw_tab_in_json_string_is_restored_with_a_repair_ledger(self):
+        # Exact serving defect observed for math__0103059__p1: the intended
+        # LaTeX prefix `\\t` arrived as an unescaped tab byte.
+        raw = '{"warrant":"tensor by $\times$"}'
+        doc, sanitized, repairs = loop.parse_model_json(raw)
+        self.assertEqual(doc["warrant"], "tensor by $\\times$")
+        self.assertIsNotNone(sanitized)
+        self.assertEqual(repairs, [{"offset": 23, "codepoint": 9,
+                                    "restored-command": "\\times"}])
+        with self.assertRaises(json.JSONDecodeError):
+            loop.parse_model_json('{"warrant":"two\t words"}')
+        with self.assertRaises(json.JSONDecodeError):
+            loop.parse_model_json('{"warrant":"two\twords"}')
+
+    def test_raw_and_sanitized_responses_are_both_retained(self):
+        clean_nodes = json.dumps({"nodes": [node(text="tensor by $\\times$", lo=12, hi=12),
+                                             node(text="result", lo=14, hi=14)]})
+        damaged_nodes = clean_nodes.replace("\\\\t", "\t", 1)
+        answers = {"1111.0001__p0": [damaged_nodes, self.doc("x")[1]],
+                   "1111.0001__p1": self.doc("second"),
+                   "1111.0001__p2": self.doc("third")}
+        _, items = self.invoke("S3-sanitize", answers)
+        attempt = items["1111.0001__p0"]["attempts"][0]
+        self.assertEqual(items["1111.0001__p0"]["status"], "accepted")
+        self.assertIn("nodes-response", attempt)
+        self.assertIn("nodes-sanitized-response", attempt)
+        self.assertEqual(attempt["nodes-sanitization"][0]["restored-command"], "\\times")
+        raw = self.out / ".attempts/r/S3-sanitize/1111.0001__p0.nodes.json"
+        repaired = self.out / ".attempts/r/S3-sanitize/1111.0001__p0.nodes.sanitized.json"
+        self.assertIn("\t", raw.read_text())
+        self.assertIn("\\\\times", repaired.read_text())
+
+    def test_derivation_prompt_names_topology_equivalence_and_contradiction(self):
+        self.assertIn("topological", loop.STEPS_TASK)
+        self.assertIn('relation "iff"', loop.STEPS_TASK)
+        self.assertIn('relation "by-contradiction"', loop.STEPS_TASK)
+        self.assertIn("contrary assumption", loop.STEPS_TASK)
 
 
 if __name__ == "__main__":
@@ -400,6 +528,21 @@ class QuotationByReference(unittest.TestCase):
             with patch("sys.stderr", err):
                 self.assertFalse(loop.require_candidates([Path(d, "x.candidate.json")]))
         self.assertIn("lacks spans", err.getvalue())
+
+    def test_missing_spans_are_an_item_refusal_not_a_batch_format_failure(self):
+        import mark3_iatc_loop as loop
+        bare = {k: v for k, v in self.CAND.items() if k != "spans"}
+        bare.update({"schema": loop.CANDIDATE_SCHEMA,
+                     "proof-lines": [349, 353], "proof-id": "p0", "paper-id": "paper"})
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d, "p0.candidate.json")
+            path.write_text(json.dumps(bare))
+            classified = loop.load_candidates_for_run([path])
+        self.assertIsNotNone(classified)
+        loaded, refused = classified
+        self.assertEqual([c["proof-id"] for c in loaded], ["p0"])
+        self.assertEqual(refused[0][0]["proof-id"], "p0")
+        self.assertIn("precheck: lacks spans", refused[0][1])
 
 
 class ControlCharacterGuard(unittest.TestCase):

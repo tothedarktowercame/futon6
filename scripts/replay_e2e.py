@@ -102,9 +102,10 @@ def c1(graphs_dir, steps_dir):
 
 @check("C2-clean-accounting", "S7 accounting", needs="S7")
 def c2(run_dir, corpus_id, clean_dir):
-    # Every S3-accepted graph must be a typed, gated CLean. A graph merely
-    # mentioned in a log (rejected, failed) used to count as accounted for, so a
-    # G7 rejection could sit inside a replay PASS.
+    # Every S3-accepted graph must receive an S7 verdict, and every S7 acceptance
+    # must have exactly one gated CLean. Explicit S7 rejections remain findings;
+    # they are governed by the pinned item floor in A1, not silently promoted to
+    # files and not reinterpreted here as broken accounting.
     s3 = accounting.ledgered_invocation(run_dir, "S3", corpus_id)
     s7 = accounting.ledgered_invocation(run_dir, "S7", corpus_id)
     if not (s3 and s7):
@@ -112,12 +113,19 @@ def c2(run_dir, corpus_id, clean_dir):
     graphs = set(accounting.accepted_outputs(accounting.load(accounting.directory(run_dir, "S3", s3), "S3", "loop")))
     typing = accounting.load(accounting.directory(run_dir, "S7", s7), "S7", "typing")
     typed = {e["id"] for e in typing["items"] if e["status"] == "accepted"}
+    judged = [e["id"] for e in typing["items"]
+              if e.get("status") in ("accepted", "rejected", "errored")]
     files = {os.path.basename(p)[:-len(".clean.edn")] for p in glob.glob(os.path.join(clean_dir, "*.clean.edn"))}
-    not_typed = sorted(graphs - typed)
+    expected_mismatch = sorted(graphs ^ set(typing.get("expected") or []))
+    unaccounted = sorted(graphs - set(judged))
+    duplicates = len(judged) != len(set(judged))
     mismatch = sorted(typed ^ files)
-    return (not not_typed and not mismatch,
-            f"{len(typed)}/{len(graphs)} accepted graphs typed"
-            + (f"; not typed e.g. {not_typed[:3]}" if not_typed else "")
+    refused = len(judged) - len(typed)
+    return (not expected_mismatch and not unaccounted and not duplicates and not mismatch,
+            f"{len(typed)}/{len(graphs)} graphs typed; {refused} explicit S7 refusal(s)"
+            + (f"; S7 inputs disagree e.g. {expected_mismatch[:3]}" if expected_mismatch else "")
+            + (f"; unaccounted e.g. {unaccounted[:3]}" if unaccounted else "")
+            + ("; duplicate S7 item records" if duplicates else "")
             + (f"; CLean files disagree with accounting e.g. {mismatch[:3]}" if mismatch else ""))
 
 
@@ -338,6 +346,31 @@ def p3(run_dir):
             f"{len(pts)} checkpoints, rise {d.get('rise')}, rising={d.get('rising')}")
 
 
+@check("P4-corpus-layers", "WARP/TAPESTRY retrieval", needs="S12")
+def p4(run_dir):
+    root = Path(run_dir)
+    doc = manifest.load(root)
+    features = doc.get("features") or {}
+    details = []
+    if features.get("warp"):
+        warp = manifest.contained(root, doc["artifacts"]["warp"])
+        wm = json.loads((warp / "warp-manifest.json").read_text())
+        if not wm or not (warp / "concept-index.json").is_file():
+            return False, "enabled WARP has no stage manifest or concept index"
+        details.append(f"WARP {len([k for k in wm if not k.startswith('__')])} stages")
+    if features.get("tapestry"):
+        cite = json.loads((manifest.contained(root, doc["artifacts"]["cite-resolution"]) /
+                           "manifest.json").read_text())
+        phylogeny = json.loads((manifest.contained(root, doc["artifacts"]["tapestry"]) /
+                                "concept-phylogeny.json").read_text())
+        if cite.get("schema") != "futon6/h7-cite-resolution-run/v1":
+            return False, "citation-resolution manifest has the wrong schema"
+        if phylogeny.get("schema") != "futon6/warp/concept-phylogeny/v1":
+            return False, "concept phylogeny has the wrong schema"
+        details.append(f"TAPESTRY {cite.get('stats', {}).get('papers-written', 0)} papers")
+    return True, ", ".join(details) if details else "corpus-wide layers disabled by manifest"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", required=True)
@@ -399,6 +432,7 @@ def main() -> int:
     p1(R(a.run_dir), through=T)
     p2(R(a.run_dir), a.corpus_id, through=T)
     p3(R(a.run_dir), through=T)
+    p4(R(a.run_dir), through=T)
 
     if not RESULTS:
         print("no checks applicable at --through " + a.through)
@@ -418,7 +452,7 @@ def main() -> int:
         else:
             tag = "PASS"
         print(f"  [{tag}] {cid:<{width}}  {msg}   ({hz})")
-    skipped = 12 - len(RESULTS)
+    skipped = 13 - len(RESULTS)
     print(f"\n{len(RESULTS) - fails - warns}/{len(RESULTS)} pass, {warns} warn, {fails} fail"
           + (f"  ({skipped} not yet applicable)" if skipped else ""))
     if fails:

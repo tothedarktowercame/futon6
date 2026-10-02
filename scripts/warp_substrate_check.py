@@ -43,6 +43,28 @@ def shown(path: Path) -> str:
         return str(path)
 
 
+def substrate_paper_ids(raw: object, field: str) -> tuple[set[str], str]:
+    """Return witnessed scanned identities, retaining legacy index support."""
+    if not isinstance(raw, dict):
+        raise ValueError("concept usage must be a JSON object")
+    scanned = raw.get("papers_scanned_ids")
+    if scanned is not None:
+        if (not isinstance(scanned, list)
+                or any(not isinstance(pid, str) or not pid for pid in scanned)
+                or len(set(scanned)) != len(scanned)):
+            raise ValueError("papers_scanned_ids must contain unique nonempty strings")
+        declared = raw.get("papers_scanned")
+        if isinstance(declared, bool) or not isinstance(declared, int):
+            raise ValueError("papers_scanned must be an integer")
+        if declared != len(scanned):
+            raise ValueError("papers_scanned does not match papers_scanned_ids")
+        return set(scanned), "papers_scanned_ids"
+    pc = raw.get(field, raw)
+    if not isinstance(pc, dict):
+        raise ValueError(f"{field} must be a JSON object")
+    return set(pc), field
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", required=True, help="run id manifest (one paper id per line)")
@@ -66,11 +88,16 @@ def main() -> int:
 
     ids = [l.strip() for l in open(args.ids) if l.strip()]
     raw = json.load(open(concepts))
-    pc = raw.get(args.field, raw) if isinstance(raw, dict) else raw
-    covered = [p for p in ids if p in pc]
+    try:
+        substrate_ids, identity_field = substrate_paper_ids(raw, args.field)
+    except ValueError as exc:
+        print(f"✗ invalid concept usage identity evidence: {exc}")
+        return 1
+    covered = [p for p in ids if p in substrate_ids]
     frac = len(covered) / len(ids) if ids else 0.0
     print(f"  corpus match: {len(covered)}/{len(ids)} run ids in "
-          f"{shown(concepts)}:{args.field} ({frac:.1%}; substrate holds {len(pc)} papers)")
+          f"{shown(concepts)}:{identity_field} ({frac:.1%}; "
+          f"substrate holds {len(substrate_ids)} papers)")
     if frac < args.require:
         print(f"✗ substrate-corpus match {frac:.1%} < required {args.require:.0%} — "
               f"the substrate was mined from a different corpus. Rebuild the WARP "

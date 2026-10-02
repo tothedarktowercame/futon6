@@ -207,11 +207,11 @@ def main():
     if len(papers) > 1:
         print(f"\nS6: {counts['accepted']}/{len(papers)} paper objects accepted · "
               f"{counts['rejected']} rejected · {counts['errored']} errored")
-    return 1 if ledger.failed() else 0
+    # Item outcomes are complete and machine-readable at this point.  Do not turn
+    # one malformed paper into a producer crash: the runner applies the pinned
+    # item-success floor to this ledger and decides whether S6 may continue.
+    return 0
 
 
 if __name__ == "__main__":
-    # main() returns a status; discarding it made every failure exit 0, so the
-    # S6 loop's `|| exit 1` could never fire and two malformed paper objects sat
-    # behind a passing stage ledger entry.
     sys.exit(main() or 0)
