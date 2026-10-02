@@ -133,11 +133,19 @@ def call_openai(prompt: str, candidate: dict[str, Any], kinds: dict[str, str], m
                                  headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"})
     try:
         with urllib.request.urlopen(req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as response:
-            choice = json.loads(response.read())["choices"][0]
+            payload = json.loads(response.read())
     except urllib.error.HTTPError as e:
         raise ModelCallError(f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:300]}")
     except urllib.error.URLError as e:
         raise ModelCallError(str(e.reason))
+    except TimeoutError as e:
+        raise ModelCallError(f"request timed out: {e}")
+    except (json.JSONDecodeError, UnicodeDecodeError) as e:
+        raise ModelCallError(f"endpoint returned an unreadable response envelope: {e}")
+    try:
+        choice = payload["choices"][0]
+    except (KeyError, IndexError, TypeError) as e:
+        raise ModelCallError(f"endpoint returned a malformed response envelope: {e}")
     if choice.get("finish_reason") == "length":
         raise ModelCallError(f"output truncated at max_tokens={MAX_TOKENS}")
     return choice["message"]["content"]

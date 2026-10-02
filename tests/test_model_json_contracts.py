@@ -152,6 +152,20 @@ class ExpositoryContract(unittest.TestCase):
         scope_props = seen["response_format"]["json_schema"]["schema"]["properties"]["scopes"]["items"]["properties"]
         self.assertEqual(scope_props["units"]["items"]["enum"], [u["id"] for u in UNITS])
 
+    def test_transport_and_malformed_envelope_are_item_level_errors(self):
+        with patch("urllib.request.urlopen", side_effect=TimeoutError("timed out")):
+            with self.assertRaisesRegex(expo_loop.ModelCallError, "request timed out"):
+                expo_loop.call_openai("p", CANDIDATE, self.kinds, "m")
+
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+            def read(self): return b'{"unexpected":true}'
+
+        with patch("urllib.request.urlopen", return_value=Response()):
+            with self.assertRaisesRegex(expo_loop.ModelCallError, "malformed response envelope"):
+                expo_loop.call_openai("p", CANDIDATE, self.kinds, "m")
+
 
 class CleanTypingContract(unittest.TestCase):
     GRAPH = """{:paper/id "9999.0003" :nodes [{:id :n1 :kind :claim :text "A"} {:id :n2 :kind :claim :text "B"}
