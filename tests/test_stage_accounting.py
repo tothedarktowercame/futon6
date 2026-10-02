@@ -256,6 +256,17 @@ class ExpositorySelection(unittest.TestCase):
                          [("r1", ["units"])])
         self.assertNotIn("r1", {row["region-id"] for row in selected})
 
+    def test_stale_generated_selection_is_removed_but_foreign_content_is_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d); regions = out / "regions"; regions.mkdir()
+            stale = out / "old.candidate.json"; canonical = regions / stale.name
+            stale.write_text("same"); canonical.write_text("same")
+            self.assertEqual(expo_extract.reconcile_stale_selection(out, regions, set()), [stale.name])
+            self.assertFalse(stale.exists())
+            stale.write_text("edited")
+            with self.assertRaisesRegex(ValueError, "not the canonical"):
+                expo_extract.reconcile_stale_selection(out, regions, set())
+
     def test_manifest_pins_cap_and_algorithm(self):
         with tempfile.TemporaryDirectory() as d, \
                 patch.object(manifest, "source_identity", return_value={}), \
