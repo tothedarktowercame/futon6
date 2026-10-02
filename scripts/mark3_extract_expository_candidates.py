@@ -211,7 +211,8 @@ def main() -> int:
         for candidate, missing in refused:
             select_ledger.record(candidate["passage-id"], "rejected",
                                  f"precheck: lacks {', '.join(missing)} required by "
-                                 f"{run_contract.contract_id()}", paper=paper_id)
+                                 f"{run_contract.contract_id()}", paper=paper_id,
+                                 checkpoint=False)
         for candidate in selected:
             path = outdir / safe_name(candidate)
             path.write_text(json.dumps(candidate, indent=2), encoding="utf-8")
@@ -224,12 +225,17 @@ def main() -> int:
         for candidate in deferred:
             select_ledger.record(candidate["passage-id"], "deferred",
                                  f"cap {cap} of {len(candidates)} regions for this paper; not selected by "
-                                 f"{run_manifest.EXPOSITORY_SELECTION}", paper=paper_id)
+                                 f"{run_manifest.EXPOSITORY_SELECTION}", paper=paper_id,
+                                 checkpoint=False)
         if deferred:
             print(f"  {paper_id}: selected {len(selected)}, deferred {len(deferred)} "
                   f"(cap {cap} of {len(candidates)} regions)")
         if refused:
             print(f"  {paper_id}: precheck-refused {len(refused)} region(s)")
+    # Selection is deterministic, local, and safely repeatable.  Writing the
+    # entire growing JSON document for each of tens of thousands of deferrals is
+    # quadratic; publish it atomically once all selection outcomes are known.
+    select_ledger.checkpoint()
     try:
         stale = reconcile_stale_selection(outdir, regions, selected_names)
     except ValueError as exc:

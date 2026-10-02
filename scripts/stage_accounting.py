@@ -3,7 +3,8 @@
 A stage command's exit status says whether the process finished; it does not say
 which items were attempted, which were accepted, and why the others were not.
 Each item-level producer therefore writes one accounting document per runner
-invocation, checkpointed after every item so a crash still leaves evidence.
+invocation. Paid/non-repeatable work checkpoints after every item; deterministic
+bulk transforms may defer writes and explicitly checkpoint once complete.
 
     <run>/accounting/<stage>/<invocation>/<stage>.<producer>.json
 
@@ -73,7 +74,7 @@ class Accounting:
         self.checkpoint()
 
     def record(self, item, status: str, reason: str = "", *, paper=None,
-               artifacts=(), outputs=(), attempts=()):
+               artifacts=(), outputs=(), attempts=(), checkpoint: bool = True):
         item = str(item)
         if status not in STATUSES:
             raise ValueError(f"unknown accounting status {status!r} for {item}")
@@ -84,7 +85,8 @@ class Accounting:
         self.items[item] = {"id": item, "status": status, "reason": reason,
                             "paper": paper, "artifacts": [str(a) for a in artifacts],
                             "outputs": [str(o) for o in outputs], "attempts": list(attempts)}
-        self.checkpoint()
+        if checkpoint:
+            self.checkpoint()
 
     def counts(self) -> dict[str, int]:
         counts = {status: 0 for status in STATUSES}

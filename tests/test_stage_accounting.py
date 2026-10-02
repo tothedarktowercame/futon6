@@ -59,6 +59,17 @@ class AccountingRules(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "already written"):
             accounting.Accounting("S6", "assemble", ["a"], self.base)
 
+    def test_repeatable_bulk_records_publish_only_on_explicit_checkpoint(self):
+        ledger = accounting.Accounting("S4", "select", ["a", "b"], self.base)
+        ledger.record("a", "deferred", "cap", checkpoint=False)
+        on_disk = json.loads((self.base / "S4.select.json").read_text())
+        self.assertEqual(on_disk["counts"]["unaccounted"], 2)
+        ledger.record("b", "rejected", "precheck", checkpoint=False)
+        ledger.checkpoint()
+        on_disk = json.loads((self.base / "S4.select.json").read_text())
+        self.assertEqual((on_disk["counts"]["deferred"], on_disk["counts"]["rejected"],
+                          on_disk["counts"]["unaccounted"]), (1, 1, 0))
+
     def test_problems_name_unaccounted_extra_rejected_deferred_and_missing_artifacts(self):
         ledger = accounting.Accounting("S4", "select", ["a", "b", "c"], self.base)
         ledger.record("a", "accepted", artifacts=["missing.json"])
