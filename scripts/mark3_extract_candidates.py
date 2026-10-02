@@ -486,7 +486,10 @@ def main() -> int:
     }, indent=2) + "\n")
     n_papers = len({m["paper-id"] for m in manifest})
     print(f"\n{len(manifest)} candidate(s) from {n_papers}/{len(papers)} papers -> {outdir}")
-    return 1 if ledger.failed() else 0
+    # Extraction failures are accounted per paper.  A completed ledger is a
+    # successful producer invocation; the runner applies the pinned item floor
+    # and stops only for a corpus-level collapse or accounting defect.
+    return 0
 
 
 if __name__ == "__main__":
