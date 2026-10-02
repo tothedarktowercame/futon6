@@ -41,6 +41,7 @@ except ImportError as _exc:          # inspectable without it; see _MissingDeps
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, "holes", "linode-stepper-contract.md")
 PY = config.python_command()  # configured interpreter, safely quoted for stage shells
+CONCEPT_ENCYCLOPEDIA = shlex.quote(str(config.concept_encyclopedia()))
 MARK8_RUN_CONTRACT = "mark8-v1"
 
 
@@ -178,7 +179,8 @@ OPS = {
     "S5": {"cmd": f"{{PY}} scripts/cas_segment.py {GRAPHS}/*.edn --out-dir {STEPS} && "
            f"{{PY}} scripts/rung3_technique.py --steps-dir {STEPS} --out-dir {RUNG3} && "
            f"{{PY}} scripts/clean_comprehension.py --graphs {GRAPHS} --candidates {CAND} "
-           f"--steps {STEPS} --rung3 {RUNG3} --run-dir {RUN} "
+           f"--steps {STEPS} --rung3 {RUNG3} --concept-encyclopedia {CONCEPT_ENCYCLOPEDIA} "
+           f"--run-dir {RUN} "
            "--run-id $RUN_ID --corpus-id $CORPUS",
            "crit": "G-comprehension: verdict separates weak-extraction from weak-proof"},
     # Every paper is assembled and accounted even when one is malformed; the
