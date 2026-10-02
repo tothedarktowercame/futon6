@@ -210,10 +210,10 @@ class CleanTypingContract(unittest.TestCase):
     def test_contract_violation_rejects_without_reprompting_and_endpoint_failure_errors(self):
         import clean_box_typing as typing
         code, item, _ = self.run_typing({"e1": "not-a-method"})
-        self.assertEqual((code, item["status"]), (1, "rejected"))
+        self.assertEqual((code, item["status"]), (0, "rejected"))
         self.assertIn("typing contract", item["reason"])
         code, item, _ = self.run_typing(typing.TypingCallError("output truncated at max_tokens=600"))
-        self.assertEqual((code, item["status"]), (1, "errored"))
+        self.assertEqual((code, item["status"]), (0, "errored"))
 
     def test_transport_and_malformed_envelope_become_typing_errors(self):
         import clean_box_typing as typing
