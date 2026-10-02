@@ -34,6 +34,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 import expository_region_extract as expo  # noqa: E402
 import region_units  # noqa: E402
 import mark3_extract_candidates as iatc_candidates  # noqa: E402
+import run_contract  # noqa: E402
 
 
 def line_starts(text: str) -> list[int]:
@@ -130,6 +131,16 @@ def select_even(candidates: list[dict[str, Any]], cap: int) -> tuple[list[dict[s
             [c for i, c in enumerate(prose) if i not in keep] + in_proof)
 
 
+def select_modelable(candidates: list[dict[str, Any]], cap: int):
+    """Refuse deterministic precondition failures before spending selection slots."""
+    eligible, refused = [], []
+    for candidate in candidates:
+        missing = run_contract.missing_expository_inputs(candidate)
+        (refused if missing else eligible).append((candidate, missing) if missing else candidate)
+    selected, deferred = select_even(eligible, cap)
+    return selected, deferred, refused
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default=str(REPO / "data" / "expository-candidates"))
@@ -182,7 +193,11 @@ def main() -> int:
     for paper_id, candidates in by_paper.items():
         cap = cap_for(args.cap_per_paper, len(candidates))
         caps[paper_id] = cap
-        selected, deferred = select_even(candidates, cap)
+        selected, deferred, refused = select_modelable(candidates, cap)
+        for candidate, missing in refused:
+            select_ledger.record(candidate["passage-id"], "rejected",
+                                 f"precheck: lacks {', '.join(missing)} required by "
+                                 f"{run_contract.contract_id()}", paper=paper_id)
         for candidate in selected:
             path = outdir / safe_name(candidate)
             path.write_text(json.dumps(candidate, indent=2), encoding="utf-8")
@@ -199,6 +214,8 @@ def main() -> int:
         if deferred:
             print(f"  {paper_id}: selected {len(selected)}, deferred {len(deferred)} "
                   f"(cap {cap} of {len(candidates)} regions)")
+        if refused:
+            print(f"  {paper_id}: precheck-refused {len(refused)} region(s)")
     stale = sorted(p.name for p in outdir.glob("*.candidate.json") if p.name not in selected_names)
     if stale:
         # A selected candidate left by another selection would be modelled as if chosen now.

@@ -245,6 +245,17 @@ class ExpositorySelection(unittest.TestCase):
         self.assertEqual(expo_extract.select_even(self.candidates(10), 0)[1], [])
         self.assertEqual(len(expo_extract.select_even(self.candidates(2), 5)[0]), 2)
 
+    def test_missing_units_are_refused_before_they_consume_a_cap_slot(self):
+        rows = self.candidates(4)
+        for i, row in enumerate(rows):
+            row["units"] = [] if i == 1 else [{"id": f"u{i}", "text": "quoted source"}]
+        selected, deferred, refused = expo_extract.select_modelable(rows, 2)
+        self.assertEqual(len(selected), 2)
+        self.assertEqual(len(deferred), 1)
+        self.assertEqual([(row["region-id"], missing) for row, missing in refused],
+                         [("r1", ["units"])])
+        self.assertNotIn("r1", {row["region-id"] for row in selected})
+
     def test_manifest_pins_cap_and_algorithm(self):
         with tempfile.TemporaryDirectory() as d, \
                 patch.object(manifest, "source_identity", return_value={}), \
