@@ -181,8 +181,8 @@ OPS = {
            f"--steps {STEPS} --rung3 {RUNG3} --run-dir {RUN} "
            "--run-id $RUN_ID --corpus-id $CORPUS",
            "crit": "G-comprehension: verdict separates weak-extraction from weak-proof"},
-    # Every paper is assembled and accounted even when one is malformed; the stage
-    # still fails on any rejected or errored paper object.
+    # Every paper is assembled and accounted even when one is malformed; the
+    # runner's pinned item-success floor decides whether the stage may continue.
     "S6": {"cmd": f"{{PY}} scripts/paper_graph_assemble.py --list {{IDS}} --iatc {GRAPHS} --expo {EXPO} "
            f"--run-dir {RUN} --run-id $RUN_ID --corpus-id $CORPUS --out {PAPERG} --marks-dir {MARKS}",
            "gate": f"test -d {PAPERG} && "

@@ -309,7 +309,9 @@ class PaperGraphsAndCleans(unittest.TestCase):
         result = subprocess.run([sys.executable, str(ROOT / "scripts/paper_graph_assemble.py"), "--list", str(ids),
                                  "--marks-dir", str(marks), "--out", str(self.base / "B")],
                                 capture_output=True, text=True, env={**os.environ, accounting.DIR_ENV: str(adir)})
-        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        # The producer completed its ledger, so an item rejection is not a process
+        # failure.  linode_stepper applies the manifest's pinned item floor.
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         doc = accounting.load(adir, "S6", "assemble")
         self.assertEqual({e["id"]: e["status"] for e in doc["items"]},
                          {"1111.0001": "rejected", "2222.0002": "accepted"})
