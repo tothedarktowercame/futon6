@@ -30,7 +30,7 @@ REPO = Path(__file__).resolve().parent.parent
 ARGCHECK = REPO / "scripts" / "expository_argcheck.bb"
 VOCAB = expository_json.VOCAB
 ALIGNMENT = REPO / "holes" / "excursions" / "E-iatc-expository-alignment.md"
-CANDIDATE_SCHEMA = "expo-candidate/v2"
+CANDIDATE_SCHEMA = run_contract.expository_candidate_schema()  # v2 under mark7-v4, v1 under mark7-v3
 MAX_TOKENS = int(os.environ.get("FUTON6_EXPOSITORY_MAX_TOKENS", "2048"))
 
 SYSTEM = """You classify one expository region of a published mathematics paper.
@@ -44,6 +44,16 @@ by a "kind" from the vocabulary below (its :hole says what to fill). For each sc
 - "held_reason": why the hole cannot be filled from this text (then "fill" is "").
 Exactly one of "fill" and "held_reason" is non-empty. Hold rather than invent.
 This is the informal expository layer, not the formal proof layer."""
+
+if CANDIDATE_SCHEMA == "expo-candidate/v1":
+    # mark7-v3 (the 2026-09-21 runs): a scope names its lines, and its fill is not checked against the text.
+    SYSTEM = SYSTEM.replace(
+        """- "units": the ids of the sentence units this scope reads, from the list below. An id
+  names the unit's line; there is no order to follow, so read the unit before citing it;
+- "fill": the words from THOSE UNITS that fill the kind's hole. Copy them from the
+  source; a fill that is not in the units it cites is rejected, OR""",
+        """- "first_line"/"last_line": the ABSOLUTE line numbers printed on the left of the source;
+- "fill": the source-anchored text that fills the kind's hole, OR""")
 
 
 def exemplar_excerpt() -> str:
@@ -77,6 +87,14 @@ def render_units(candidate: dict[str, Any]) -> str:
     return "\n".join(f"  {u['id']}  {' '.join(str(u['text']).split())}" for u in units)
 
 
+def unit_listing(candidate: dict[str, Any]) -> str:
+    """The region's units for the prompt, or nothing for a candidate without units (expo-candidate/v1)."""
+    if not candidate.get("units"):
+        return ""
+    return ('Units of this region. "units" takes ids from THIS list, and a fill must be words\n'
+            f"from the units it cites:\n{render_units(candidate)}\n\n")
+
+
 def build_prompt(candidate: dict[str, Any]) -> str:
     lo, hi = candidate["window-lines"]
     return f"""{SYSTEM}
@@ -91,11 +109,7 @@ def build_prompt(candidate: dict[str, Any]) -> str:
 Deterministic anatomy in this region:
 {render_enrichment(candidate)}
 
-Units of this region. "units" takes ids from THIS list, and a fill must be words
-from the units it cites:
-{render_units(candidate)}
-
-Source (ABSOLUTE line numbers on the left):
+{unit_listing(candidate)}Source (ABSOLUTE line numbers on the left):
 {numbered_window(candidate)}"""
 
 
@@ -118,6 +132,7 @@ def call_stub(prompt: str, candidate: dict[str, Any], kinds: dict[str, str]) -> 
 
 
 def call_openai(prompt: str, candidate: dict[str, Any], kinds: dict[str, str], model: str) -> str:
+    import http.client
     import urllib.error
     import urllib.request
     base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
@@ -144,6 +159,11 @@ def call_openai(prompt: str, candidate: dict[str, Any], kinds: dict[str, str], m
         raise ModelCallError(f"request timed out: {e}")
     except (json.JSONDecodeError, UnicodeDecodeError) as e:
         raise ModelCallError(f"endpoint returned an unreadable response envelope: {e}")
+    except (OSError, http.client.HTTPException) as e:
+        # urllib wraps a failure while sending the request as URLError, but one while reading
+        # the answer (a dropped connection, a reset) arrives bare. It is the same endpoint
+        # failure and belongs to this item, not to the whole stage.
+        raise ModelCallError(f"{type(e).__name__}: {e}")
     try:
         choice = payload["choices"][0]
     except (KeyError, IndexError, TypeError) as e:

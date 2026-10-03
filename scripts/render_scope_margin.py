@@ -46,6 +46,7 @@ import markup_strategies
 import expository_scope_audit as scope_audit
 import iatc_quote_check as quote_check
 import iatc_json
+import stage_accounting as accounting
 
 # MOCK of the proposed S4 contract: a bare parent kind is not selectable, so the
 # scope takes a specific child or is held. These cues only suggest which child the
@@ -309,13 +310,13 @@ def stage_outcomes(run: Path, paper: str) -> dict:
     """
     out = {"proofs": {}, "regions": []}
     for path in sorted((run / "accounting/S3").glob("*/S3.loop.json")):
-        for item in json.loads(path.read_text()).get("items") or ():
+        for item in accounting.read(path).get("items") or ():
             if item.get("paper") == paper and item.get("status") not in ("accepted", None):
                 out["proofs"][item["id"]] = {"status": item["status"], "why": item.get("reason", ""),
                                              "attempts": len(item.get("attempts") or ())}
     for name in ("S4.loop.json", "S4.select.json"):
         for path in sorted((run / "accounting/S4").glob(f"*/{name}")):
-            for item in json.loads(path.read_text()).get("items") or ():
+            for item in accounting.read(path).get("items") or ():
                 ident = str(item.get("id", ""))
                 if not ident.startswith(paper + ":") or item.get("status") in ("accepted", None):
                     continue

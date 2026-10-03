@@ -31,7 +31,10 @@ import re
 import sys
 from pathlib import Path
 
+from functools import lru_cache
+
 import build_golden_paper as gp
+from dp_capabilities.intervals import Extents
 import anatomy_v0_sweep as sweep  # SHARED math-span tokenizer — the same one the
 # checker uses, so detector/checker agree exactly on "where math is" (runbook).
 
@@ -190,6 +193,7 @@ def _lexicon():
 _LEX_WORD = re.compile(r"[A-Za-z][A-Za-z-]*")
 
 
+@lru_cache(maxsize=None)  # pure, and asked again for every lexicon candidate of every word
 def _singular(w):
     """NNexus-style depluralization so PLURAL prose matches SINGULAR lexicon
     entries ("bicategories"→"bicategory", "functors"→"functor"). Conservative:
@@ -338,9 +342,10 @@ def concept_marks(text: str, marks: list) -> list:
     # "where math is" via the SHARED tokenizer (not the math marks) — identical
     # to the checker, so emphasis inside \[...\]/$...$ is judged the same way.
     math_ranges = [(s, e) for s, e, _d, _b in sweep.math_spans(text)]
+    math_extents = Extents(math_ranges)
 
     def in_math(s, e):
-        return any(ms < e and me > s for ms, me in math_ranges)
+        return math_extents.overlap(s, e)  # any(ms < e and me > s for ms, me in math_ranges)
 
     cand = []  # (start, end, term, source, target|None)
     # lexicon-grounded terms (NNexus-style) — these are GROUNDED (cite an authority)
@@ -401,11 +406,13 @@ def concept_marks(text: str, marks: list) -> list:
                 "defined-in-paper": "defined in this paper",
                 "concept-phrase": "concept (canon link)",
                 "lexicon": "grounded term"}
-    out, occupied = [], []
+    # cand is in start order, so every accepted span starts at or before s, and
+    # (s, e) lies inside one exactly when the furthest accepted end reaches e.
+    out, reach_end = [], None
     for s, e, term, source, target in cand:
-        if any(os <= s and e <= oe for os, oe in occupied):
+        if reach_end is not None and e <= reach_end:
             continue
-        occupied.append((s, e))
+        reach_end = e if reach_end is None else max(reach_end, e)
         fields = [["term", term], ["source", source]]
         if target:
             fields.append(["grounded", target])

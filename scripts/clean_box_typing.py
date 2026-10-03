@@ -26,6 +26,7 @@ Usage (on the Linode host, after S3):
 import argparse
 import concurrent.futures as cf
 import glob
+import http.client
 import json
 import os
 import subprocess
@@ -90,6 +91,11 @@ def query_model(endpoint, model, prompt, sk, methods):
         raise TypingCallError(f"query timed out: {e}")
     except (json.JSONDecodeError, UnicodeDecodeError) as e:
         raise TypingCallError(f"unreadable response envelope: {e}")
+    except (OSError, http.client.HTTPException) as e:
+        # urllib wraps a failure while sending the request as URLError, but one while reading
+        # the answer (a dropped connection, a reset) arrives bare. It is the same endpoint
+        # failure and belongs to this item, not to the whole stage.
+        raise TypingCallError(f"query error: {type(e).__name__}: {e}")
     try:
         choice = payload["choices"][0]
     except (KeyError, IndexError, TypeError) as e:

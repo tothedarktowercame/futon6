@@ -182,8 +182,13 @@ def run_steps_paths(args: argparse.Namespace, paths: list[Path]) -> list[dict[st
     patterns = cas_select.load_patterns(index_path=args.index, library_dir=args.library)
     out = []
     for path in sorted(paths):
-        steps_doc = cas_select.load_steps(path)
-        out.append(gapmap_for_steps(steps_doc, patterns, k=args.k))
+        # A steps file that cannot be read or classified is that paper's failure: it is
+        # reported and the other gap maps are still written. It used to raise and stop S5.
+        try:
+            steps_doc = cas_select.load_steps(path)
+            out.append(gapmap_for_steps(steps_doc, patterns, k=args.k))
+        except Exception as exc:
+            print(f"  SKIP {path.name}: {type(exc).__name__}: {exc}", file=sys.stderr)
     return out
 
 
@@ -228,8 +233,13 @@ def main(argv: list[str] | None = None) -> int:
         gapmaps = run_fixture_dir(args)
     elif args.steps:
         gapmaps = run_steps_paths(args, [args.steps])
+        if not gapmaps:
+            return 1
     elif args.steps_dir:
-        gapmaps = run_steps_paths(args, list(args.steps_dir.glob("*.steps.json")))
+        steps = list(args.steps_dir.glob("*.steps.json"))
+        gapmaps = run_steps_paths(args, steps)
+        if steps and not gapmaps:     # every paper failed: that is the stage failing
+            return 1
     else:
         gapmaps = run_cas_select_payload(args)
 

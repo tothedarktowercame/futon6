@@ -40,7 +40,7 @@ FEATS = ["n_boxes", "n_wires", "n_holes", "n_discharges_known", "max_fanout",
 
 def signatures(ids, breakdowns, min_proofs=2):
     macros = sorted({b["macro"] for b in breakdowns})
-    feats = [f for f in FEATS if isinstance(breakdowns[0].get(f), (int, float))]
+    feats = [f for f in FEATS if isinstance((breakdowns[0] if breakdowns else {}).get(f), (int, float))]
     bypaper = defaultdict(list)
     for i, b in zip(ids, breakdowns):
         # split("__")[0] collapses every legacy id (math__0310337 -> "math"), which
@@ -56,7 +56,7 @@ def signatures(ids, breakdowns, min_proofs=2):
         fp = [mc.get(m, 0) / n for m in macros]
         prof = [sum(float(b.get(f, 0) or 0) for b in bs) / n for f in feats]
         sig[p] = [fp, prof]
-    for j in range(len(feats)):
+    for j in range(len(feats) if papers else 0):     # with no paper there is no column to normalise
         col = [sig[p][1][j] for p in papers]
         m, s = st.mean(col), (st.pstdev(col) or 1)
         for p in papers:
@@ -89,13 +89,16 @@ def main():
         print(f"  {p} (n={len(bypaper[p])}): {dict(Counter(b['macro'] for b in bypaper[p]))}")
     print("\nwhole-paper structural twins (paper-level NN):")
     sims = []
-    for p in papers:
+    for p in papers if len(papers) > 1 else ():     # a lone paper has no twin to compare with
         q, s = sorted([(x, cos(vec(sig, p), vec(sig, x))) for x in papers if x != p],
                       key=lambda z: -z[1])[0]
         sims.append(s)
         print(f"  {p}  ≈  {q}   (paper-sim {s:.2f})")
-    print(f"\npaper-twin sim: mean {st.mean(sims):.2f}, range {min(sims):.2f}–{max(sims):.2f} "
-          f"— papers cluster by argument-shape composition, not topic")
+    if sims:
+        print(f"\npaper-twin sim: mean {st.mean(sims):.2f}, range {min(sims):.2f}–{max(sims):.2f} "
+              f"— papers cluster by argument-shape composition, not topic")
+    else:
+        print("\npaper-twin sim: fewer than two papers with a signature, so no twins")
 
     # PERSIST (E-superpod-hardening S11). This stage computed a shape census and
     # a signature per paper and then printed both into a terminal, so learning
@@ -123,11 +126,11 @@ def main():
                 {"paper": p,
                  "n_proofs": len(bypaper[p]),
                  "profile": dict(Counter(b["macro"] for b in bypaper[p])),
-                 "nearest": sorted([(x, round(cos(vec(sig, p), vec(sig, x)), 4))
-                                    for x in papers if x != p], key=lambda z: -z[1])[0]}
+                 "nearest": next(iter(sorted([(x, round(cos(vec(sig, p), vec(sig, x)), 4))
+                                              for x in papers if x != p], key=lambda z: -z[1])), None)}
                 for p in papers],
-            "paper_twin_sim": {"mean": round(st.mean(sims), 4),
-                               "min": round(min(sims), 4), "max": round(max(sims), 4)},
+            "paper_twin_sim": ({"mean": round(st.mean(sims), 4),
+                                "min": round(min(sims), 4), "max": round(max(sims), 4)} if sims else None),
         }
         path = os.path.join(out_dir, "structural-canon.json")
         with open(path, "w") as fh:

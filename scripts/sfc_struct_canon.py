@@ -135,7 +135,7 @@ def main():
         if not os.path.exists(a.formulae):
             reason = (f"input {a.formulae} absent: no pipeline stage produces definition "
                       f"formulae. Producing them needs (a) an extraction step from "
-                      f"data/warp/def-snippets.json prose and (b) the latexmlmath binary "
+                      f"the WARP layer's def-snippets.json prose and (b) the latexmlmath binary "
                       f"required by scripts/sfc_def_structure.bb, which is not installed "
                       f"and not listed as a dependency.")
             print(f"REFUSED: {reason}")

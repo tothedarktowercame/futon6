@@ -42,7 +42,8 @@ def main(argv=None):
     # A corpus-scale pass is otherwise a silent hour: say where it is as it goes.
     progress = int(argv[argv.index("--progress") + 1]) if "--progress" in argv else 500
     concepts = {h["concept"] for h in json.load(open(W / "hitlist.json"))["hitlist"]}
-    maxn = max(len(c.split()) for c in concepts)
+    # A small corpus can ground no concept at all (a 2-paper rehearsal does): nothing to find.
+    maxn = max((len(c.split()) for c in concepts), default=0)
     paper_use = {}
     scanned_ids = []
     ids = dp.corpus_paper_ids()

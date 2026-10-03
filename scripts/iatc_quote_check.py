@@ -108,8 +108,15 @@ def main() -> int:
     paths = sorted(p for p in a.graphs.glob("*.edn") if not p.name.endswith(".rung2.edn"))
     out = []
     for path, graph in zip(paths, scope_audit.read_edn(paths)):
+        if graph is None:     # unreadable, reported by read_edn; the check goes on
+            continue
         cand = a.candidates / f"{path.stem}.candidate.json"
-        out.append(check_graph(graph, json.loads(cand.read_text()) if cand.is_file() else None))
+        # A graph or candidate the check cannot read is reported and left out. One such file
+        # used to raise and fail S3, and with it the run.
+        try:
+            out.append(check_graph(graph, json.loads(cand.read_text()) if cand.is_file() else None))
+        except Exception as exc:
+            print(f"  SKIP {path.name}: {type(exc).__name__}: {exc}", file=sys.stderr)
     summary = tally(out)
     if a.out:
         a.out.write_text(json.dumps({"summary": summary, "graphs": out}, ensure_ascii=False))

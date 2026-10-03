@@ -12,6 +12,7 @@ import re
 import subprocess
 import sys
 from datetime import datetime, timezone
+from urllib.parse import urlsplit
 
 import futon6_config as config
 import run_contract
@@ -122,9 +123,12 @@ def source_identity() -> dict:
 
 
 def substrate_identity() -> dict:
-    files = {name: config.ROOT / "data" / name for name in (
-        "warp/concept-index.json", "warp/def-snippets.json", "warp/defined-index.json",
-        "warp/concept-usage.json", "concept-encyclopedia-ct.json")}
+    # The same files and keys as before, read where the config puts the subject's
+    # substrate (FUTON6_WARP_DIR, FUTON6_SUBJECT, FUTON6_SUBJECT_DATA), so a math.CT
+    # run's identity is unchanged and another subject's names its own encyclopedia.
+    files = {f"warp/{name}": config.warp() / name for name in (
+        "concept-index.json", "def-snippets.json", "defined-index.json", "concept-usage.json")}
+    files[config.concept_encyclopedia().name] = config.concept_encyclopedia()
     files["concept-authority"] = config.authority()
     sibling = config.sibling("futon3")
     files["patterns-index"] = sibling / "resources/sigils/patterns-index.tsv"
@@ -243,9 +247,23 @@ def _identity_view(doc: dict) -> dict:
     })
     host = view.get("host-configuration")
     if isinstance(host, dict):
-        view["host-configuration"] = {
-            key: value for key, value in host.items() if key not in VOLATILE_CONFIG_KEYS
-        }
+        host = {key: value for key, value in host.items() if key not in VOLATILE_CONFIG_KEYS}
+        # A manifest recorded before a field became volatile still holds it under
+        # "hardware"; compare both sides without it, so such a run resumes too.
+        if isinstance(host.get("hardware"), dict):
+            host["hardware"] = {key: value for key, value in host["hardware"].items()
+                                if key not in config.VOLATILE_HARDWARE_FIELDS}
+        # Where the job reaches a server it runs for itself is placement too. A
+        # launcher that starts each job's vLLM on the first free port from its
+        # preference gives a resumed job another port, which was refused as a
+        # changed host. What the server is stays pinned: "model", "model-revision",
+        # "serving" and "serving-conformance". A remote endpoint keeps its address,
+        # which there names the server.
+        serving = host.get("serving")
+        if isinstance(serving, dict) and serving.get("endpoint-is-local") \
+                and isinstance(host.get("endpoint"), str):
+            host["endpoint"] = urlsplit(host["endpoint"])._replace(netloc="this-job").geturl()
+        view["host-configuration"] = host
     return view
 
 

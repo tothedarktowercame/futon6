@@ -10,17 +10,14 @@ vocabulary saturates = convergence). Writes an SVG line chart.
   futon6/.venv/bin/python scripts/accretion_curves.py
 """
 import glob
-import json
 import os
-import shutil
 import sys
-import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 import strategy_recognizer as sr  # noqa: E402
-from iatc_lexicon_harvest import harvest  # noqa: E402
-from iatc_move_reground import cluster_cues, score  # noqa: E402
+from iatc_lexicon_harvest import Harvest, graph_records  # noqa: E402
+from iatc_move_reground import candidate_windows, cluster_cues, score  # noqa: E402
 
 OUT = os.path.join(ROOT, "data/showcases/mark6-accretion-curve.html")
 
@@ -30,26 +27,28 @@ def move_curve(graph_dir="data/iatc-argument-graphs/loop-run-70b",
     gd = graph_dir if os.path.isabs(graph_dir) else os.path.join(ROOT, graph_dir)
     cd = cand_dir if os.path.isabs(cand_dir) else os.path.join(ROOT, cand_dir)
     golden = sorted(g for g in glob.glob(os.path.join(gd, "*.edn")) if "rung2" not in g)
-    windows = [json.load(open(f)).get("source-window", "")
-               for f in glob.glob(os.path.join(cd, "*.candidate.json"))]
+    windows = candidate_windows(cd)
     if ns is None:   # log-spaced checkpoints up to the corpus size (the accretion sweep)
         N = len(golden)
         ns = sorted({0, 1, 2, 3, 5, 7} | {n for n in (10, 30, 100, 300, 1000) if n < N} | {N})
     vocab = sr.load_vocab(os.path.join(ROOT, "holes/clean/tactic-gesture-vocab.edn"))
+    # The harvest of the first k graphs is the harvest of the first k' < k plus that of the
+    # graphs between: one running harvest, each graph read and each paper built once, gives
+    # every checkpoint what harvesting its first k graphs from scratch gave.
+    records = graph_records(golden[:max((min(k, len(golden)) for k in ns), default=0)])
+    harvested, added = Harvest(), 0
     pts = []
     for k in ns:
         k = min(k, len(golden))
         if k == 0:
             pts.append((0, 0, score(vocab, windows)["proof-move-grounding"]))
             continue
-        td = tempfile.mkdtemp()
-        for g in golden[:k]:
-            shutil.copy(g, td)
-        lex, _, _ = harvest(td)
-        cues = cluster_cues(lex)
+        for record in records[added:k]:
+            harvested.add(record)
+        added = max(added, k)
+        cues = cluster_cues(harvested.lex)
         aug = {**vocab, "heuristic": {**vocab["heuristic"], "corpus-move": cues}}
         pts.append((k, len(cues), score(aug, windows)["proof-move-grounding"]))
-        shutil.rmtree(td)
     return pts, len(windows)
 
 

@@ -31,6 +31,8 @@ _sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
 import futon6_config as config
 
 
+from bisect import bisect_left, bisect_right
+from functools import partial
 import json
 import re
 import sys
@@ -38,8 +40,10 @@ from pathlib import Path
 
 from dp_capabilities.math_envelope import is_script_run, mathalpha_regions  # SHARED
 from dp_capabilities.wellformed import scope_crossings  # SHARED nesting lint
+from dp_capabilities.intervals import Extents, Stabbing  # SHARED interval queries (no detector logic)
 # "where math-alphabet groups / scripts are" locators (DC-6) — same status as the
 # span tokenizer: agreeing where things are is not an author≠reviewer breach.
+import paper_pool
 import anatomy_v0_sweep as sweep  # SHARED math-span tokenizer (delimiter parity,
 # \$ / $$ handling) — the same ground-truth the detector uses for "where math
 # is". Agreeing on the span tokenizer is not an author≠reviewer breach (it's
@@ -104,12 +108,53 @@ def _source_nonsymbol_regions(text):
     return regions
 
 
-def _source_grounded(text, mark):
+_DEFINED_AS = re.compile(r"\s*\}?\s+is\s+defined\s+(?:as|to be)\b")
+_LET = re.compile(r"\blet", re.I)  # every place the binder pattern can begin
+
+
+class _Grounding:
+    """One paper's source-grounding lookups, shared by all of its marks.
+
+    The blank lines are found once, so a paragraph's edges come from a bisection
+    instead of str.rfind/str.find scanning back and forth for every mark; a
+    paragraph's "Let" positions are found once; and each (symbol, paragraph)
+    binder answer is kept. Repeating all of that per mark was quadratic in a
+    paper with long paragraphs.
+    """
+
+    def __init__(self, text):
+        self.text = text
+        self.blank_lines = []
+        i = text.find("\n\n")
+        while i != -1:
+            self.blank_lines.append(i)
+            i = text.find("\n\n", i + 1)
+        self.lets = {}
+        self.binders = {}
+
+    def paragraph_edges(self, start):
+        """(text.rfind("\n\n", 0, start), text.find("\n\n", start))"""
+        k = bisect_right(self.blank_lines, start - 2)
+        before = self.blank_lines[k - 1] if k else -1
+        k = bisect_left(self.blank_lines, start)
+        after = self.blank_lines[k] if k < len(self.blank_lines) else -1
+        return before, after
+
+    def lets_in(self, lo, hi):
+        if (lo, hi) not in self.lets:
+            self.lets[(lo, hi)] = [m.start() for m in _LET.finditer(self.text, lo, hi)]
+        return self.lets[(lo, hi)]
+
+
+def _source_grounded(text, mark, grounding=None):
     """Check a narrow, explicit source declaration, not the proposed label.
 
     Current evidence scope: local Let $x$ be ... binders in the same paragraph,
     and a term immediately followed by 'is defined as/to be'. Other authority
     claims remain unverified debt until an independent authority reader exists.
+
+    GROUNDING, a _Grounding for this TEXT, shares the paragraph and binder
+    lookups between the paper's marks; without it each call works them out.
     """
     start, end = mark["start"], mark["end"]
     surface = text[start:end]
@@ -118,17 +163,33 @@ def _source_grounded(text, mark):
         claim = fields.get("grounded")
         if not isinstance(claim, str) or not claim.strip():
             return False
+        # matched in place: text[end:] copied the rest of the paper for every term
         return bool(re.fullmatch(r"[A-Za-z][A-Za-z -]*", surface)
-                    and re.match(r"\s*\}?\s+is\s+defined\s+(?:as|to be)\b", text[end:]))
+                    and _DEFINED_AS.match(text, end))
     if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*|\\[A-Za-z]+", surface):
         return False
-    paragraph = text.rfind("\n\n", 0, start) + 2
+    grounding = grounding or _Grounding(text)
+    before, segment_end = grounding.paragraph_edges(start)
+    paragraph = before + 2
     paragraph = max(0, paragraph if paragraph >= 2 else 0)
-    binder = re.compile(r"\bLet\s+\$\s*(" + re.escape(surface) + r")\s*\$\s+be\s+(?:an?\s+)?[A-Za-z][A-Za-z -]*", re.I)
     # Include the binder's own symbol as well as subsequent uses.
-    segment_end = text.find("\n\n", start)
-    segment = text[paragraph:segment_end if segment_end >= 0 else len(text)]
-    return any(paragraph + m.start(1) <= start for m in binder.finditer(segment))
+    limit = segment_end if segment_end >= 0 else len(text)
+    key = (surface, paragraph, limit)
+    if key not in grounding.binders:
+        binder = re.compile(r"\bLet\s+\$\s*(" + re.escape(surface) + r")\s*\$\s+be\s+(?:an?\s+)?[A-Za-z][A-Za-z -]*", re.I)
+        # Binder matches come left to right with rising group-1 starts, so the
+        # first one alone decides whether any sits at or before START. It can
+        # only begin at a "Let"; matching there with the paragraph's end as the
+        # text's end reads exactly what a search of the paragraph copy read.
+        first = None
+        for at in grounding.lets_in(paragraph, limit):
+            found = binder.match(text, at, limit)
+            if found:
+                first = found.start(1)
+                break
+        grounding.binders[key] = first
+    first = grounding.binders[key]
+    return first is not None and first <= start
 
 
 def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
@@ -138,6 +199,8 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
         data = json.loads(f.read_text())
     text, marks = data["text"], data["marks"]
     spans = _math_spans(text)
+    atoms, span_cover = Stabbing(spans), Extents(spans)
+    grounding = _Grounding(text)  # _source_grounded's lookups, shared across this paper's marks
     V = []  # violations
 
     def add(inv, sev, s, e, msg, fix):
@@ -151,14 +214,13 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     # W-ATOMIC: no structural-scope boundary strictly inside a $...$ span.
     # (A scope may CONTAIN a span or sit outside it; it may not split one.)
     for m in struct:
-        for s, e in spans:
-            inside_start = s < m["start"] < e
-            inside_end = s < m["end"] < e
-            if inside_start or inside_end:
-                add("W-ATOMIC", "error", m["start"], m["end"],
-                    f'{m.get("kind")} boundary inside math span '
-                    f'{text[s:e][:30]!r} — math is atomic', "tighten-detector")
-                break
+        # the first span, in span order, with either boundary strictly inside it
+        inside = atoms.containing(m["start"]) + atoms.containing(m["end"])
+        if inside:
+            s, e = spans[min(inside)]
+            add("W-ATOMIC", "error", m["start"], m["end"],
+                f'{m.get("kind")} boundary inside math span '
+                f'{text[s:e][:30]!r} — math is atomic', "tighten-detector")
     # W-NEST: structural scopes nest or are disjoint, never partially overlap.
     ss = sorted(struct, key=lambda m: (m["start"], -m["end"]))
     for i, a in enumerate(ss):
@@ -188,9 +250,10 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     # --- COVERAGE -------------------------------------------------------
     # C-MATH-NONNULL: every $...$ span carries a math mark (R1, hungry-$).
     math_extents = [(m["start"], m["end"]) for m in math_marks]
+    math_cover = Extents(math_extents)
     null_spans = 0
     for s, e in spans:
-        if not any(ms <= s and me >= e for ms, me in math_extents):
+        if not math_cover.contain(s, e):
             null_spans += 1
             add("C-MATH-NONNULL", "debt", s, e,
                 f'$-span {text[s:e][:30]!r} has no math mark', "extend-coverage")
@@ -198,9 +261,9 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     # ungrounded tagged symbols are explicit (countable) debt.
     sym_marks = [m for m in marks if m.get("kind") in SYMBOL_KINDS]
     nonsym_extents = _source_nonsymbol_regions(text)
+    nonsym_cover = Extents(nonsym_extents)
     for m in marks:
-        if m.get("kind") in NON_SYMBOL_KINDS and not any(
-                a <= m["start"] and m["end"] <= b for a, b in nonsym_extents):
+        if m.get("kind") in NON_SYMBOL_KINDS and not nonsym_cover.contain(m["start"], m["end"]):
             add("W-NONSYM-WITNESS", "error", m["start"], m["end"],
                 "non-symbol claim has no independently recognized source context",
                 "tighten-detector")
@@ -214,7 +277,7 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
         rng = range(m["start"], m["end"])
         tagged_pos.update(rng)
         if m["kind"] in GROUNDED:
-            if _source_grounded(text, m):
+            if _source_grounded(text, m, grounding):
                 grounded_pos.update(rng)
             else:
                 add("C-GROUND-WITNESS", "debt", m["start"], m["end"],
@@ -228,7 +291,7 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
         for lm in LETTER_RUN.finditer(text[s:e]):
             ls, le = s + lm.start(), s + lm.end()
             # Only independently parsed source context can exclude a run.
-            if any(ms <= ls and me >= le for ms, me in nonsym_extents):
+            if nonsym_cover.contain(ls, le):
                 nonsym += 1
                 continue
             total_syms += 1
@@ -253,6 +316,7 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     for s, e in spans:
         for rs, re_ in mathalpha_regions(text[s:e]):
             ma_global.append((s + rs, s + re_))
+    ma_cover = Extents(ma_global)
     # Only UNGROUNDED bare runs (kind "symbol"): a grounded multi-letter unit is
     # a NAME the binder resolved (a sloppy bare "Ab" = the category, not A·b) —
     # not a product to split, so not a juxtaposition defect.
@@ -262,11 +326,11 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
         # only within MEASURED math spans — consistent with C-SYM coverage, and
         # avoids flagging marks the detector placed via per-file span boundaries
         # that differ from the concatenated-text tokenizer (e.g. xy-pic displays).
-        if not any(a <= m["start"] and m["end"] <= b for a, b in spans):
+        if not span_cover.contain(m["start"], m["end"]):
             continue
         surf = text[m["start"]:m["end"]]
         if len(surf) >= 2 and surf.isalpha() \
-                and not any(rs <= m["start"] and m["end"] <= re for rs, re in ma_global) \
+                and not ma_cover.contain(m["start"], m["end"]) \
                 and not is_script_run(text, m["start"]):
             add("W-SYM-JUXTAPOSITION", "debt", m["start"], m["end"],
                 f'ungrounded bare multi-letter run {surf!r} should split into '
@@ -286,6 +350,7 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     # formula (content overlaps a math span) is skipped — not a prose term.
     notice_extents = [(m["start"], m["end"]) for m in marks
                       if m.get("kind") in TERM_NOTICE_KINDS]
+    notice_cover = Extents(notice_extents)
     terms_located = terms_covered = 0
     for em in EMPH_RE.finditer(text):
         cs, ce = em.start(1), em.end(1)
@@ -294,10 +359,10 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
             continue
         if term.endswith(".") or ". " in term:
             continue  # an emphasised SENTENCE (stress), not a named term
-        if any(ms < ce and me > cs for ms, me in spans):
+        if span_cover.overlap(cs, ce):
             continue  # emphasis around math, not a term
         terms_located += 1
-        if any(ns < ce and ne > cs for ns, ne in notice_extents):
+        if notice_cover.overlap(cs, ce):
             terms_covered += 1
         else:
             add("C-TERM-COVERAGE", "debt", cs, ce,
@@ -310,7 +375,7 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     concept_marks_ = [m for m in marks if m.get("kind") == "concept"]
     terms_grounded = 0
     for m in concept_marks_:
-        if _source_grounded(text, m):
+        if _source_grounded(text, m, grounding):
             terms_grounded += 1
         else:
             add("C-TERM-GROUND", "debt", m["start"], m["end"],
@@ -322,10 +387,11 @@ def check_paper(paper, data=None, golden_dir=GOLDEN_DIR):
     # links the two. Independent locator (consequent connective + nearby
     # hypothesis); uncovered = the implication structure was not captured.
     impl_extents = [(m["start"], m["end"]) for m in marks if m.get("kind") == "implies"]
+    impl_cover = Extents(impl_extents)
     for cm in re.finditer(r"(?:^|\.\s+)(Then|Hence|Thus|Therefore)\b", text):
         cs = cm.start(1)
         if re.search(r"\b(?:Let|Given|Suppose|Assume)\b", text[max(0, cs - 400):cs]):
-            if not any(s <= cs < e for s, e in impl_extents):
+            if not impl_cover.hold(cs):
                 add("C-IMPL-PAIR", "debt", cs, cs + len(cm.group(1)),
                     f'"{cm.group(1)}" consequent not linked to its hypothesis '
                     f'(no implication scope)', "extend-coverage")
@@ -375,15 +441,24 @@ def _print_paper(rep):
         print(f"    {flag} {inv:18} {counts[inv]:5}   [{fix}]")
 
 
+def _check_marks_file(path, loss_dir):
+    """One paper's report, written to loss_dir; runs in a worker process."""
+    f = Path(path)
+    paper = f.name[len("fable-"):-len("-dp-emacs.json")]
+    rep = check_paper(paper, json.loads(f.read_text()))
+    (Path(loss_dir) / f"{paper}.json").write_text(json.dumps(rep))
+    return rep
+
+
 def corpus(golden_dir=GOLDEN_DIR, loss_dir=LOSS_DIR):
     golden_dir = Path(golden_dir)
     loss_dir = Path(loss_dir)
     loss_dir.mkdir(parents=True, exist_ok=True)
     reps = []
-    for f in sorted(golden_dir.glob("fable-*-dp-emacs.json")):
-        paper = f.name[len("fable-"):-len("-dp-emacs.json")]
-        rep = check_paper(paper, json.loads(f.read_text()))
-        (loss_dir / f"{paper}.json").write_text(json.dumps(rep))
+    # Papers are checked on every CPU the job may use; reported and aggregated
+    # here in file order, as the serial loop did.
+    files = [str(f) for f in sorted(golden_dir.glob("fable-*-dp-emacs.json"))]
+    for _, rep in paper_pool.map_papers(partial(_check_marks_file, loss_dir=str(loss_dir)), files):
         reps.append(rep)
         _print_paper(rep)
     # aggregate

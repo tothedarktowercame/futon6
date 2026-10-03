@@ -26,11 +26,13 @@ def detect_scope_manifest(ftext, base, entity_id, nw, ca):
             # blob Joe flagged (a 414-char constrain/relation across a
             # GrCalc display). Clamp to the earliest of all three.
             limits = [end, pos + 140]
-            sent = ftext.find(". ", pos)
+            # Only an occurrence starting by pos + 140 can lower the minimum, so
+            # each search stops there instead of running on to the end of the text.
+            sent = ftext.find(". ", pos, pos + 140 + 2)
             if sent != -1:
                 limits.append(sent)
             for delim in (r"\begin{", r"\[", "$$"):
-                d = ftext.find(delim, pos + 1)
+                d = ftext.find(delim, pos + 1, pos + 140 + len(delim))
                 if d != -1:
                     limits.append(d)
             end = min(limits)

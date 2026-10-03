@@ -81,54 +81,101 @@ def _pid_of(fname):
         return base.rsplit("__p", 1)[0]
 
 
-def harvest(graph_dir):
-    """Layer-agnostic: an IATC inference-move, an expository scope, and (in principle) an
-    SFC typed-slot are the same shape — a CLASSIFIED scope (kind) + a :source anchor +
-    a grounding confidence. Harvests whichever the file carries."""
-    lex = defaultdict(lambda: {"count": 0, "conf": [], "kinds": Counter(), "layer": Counter(), "exemplars": []})
-    grammar = Counter()       # relation grammar (IATC) + move grammar (expository kinds)
-    flattened = []
-    cache = {}
-    for f in sorted(glob.glob(os.path.join(graph_dir, "*.edn"))):
-        if "rung2" in f:
-            continue
-        pid = _pid_of(f)
-        lines = _text_lines(pid, cache)
+def _graph_record(f, lines, pid):
+    """What one graph adds to the harvest, in the order it adds it, or why it was skipped."""
+    try:
         t = open(f).read()
-        expository = ":scopes" in t or ":slot-fill" in t
+    except (OSError, UnicodeDecodeError) as exc:     # one unreadable graph is skipped
+        return {"skip": f"  SKIP {os.path.basename(f)}: {type(exc).__name__}: {exc}"}
+    expository = ":scopes" in t or ":slot-fill" in t
+    adds, grammar, flattened = [], [], []
 
-        def add(key, conf, kind, layer, a=None, b=None):
-            e = lex[_norm(key)]; e["count"] += 1; e["conf"].append(conf)
+    def add(key, conf, kind, layer, a=None, b=None):
+        adds.append((_norm(key), conf, kind, layer, a, b))
+
+    if expository:  # EXPOSITORY: scope kind (move grammar) + slot-fill text, span-anchored
+        for block in re.split(r'(?=:kind :)', t):     # one scope per :kind block
+            km = re.search(r':kind (:[a-z/-]+)', block)
+            if not km:
+                continue
+            kind = km.group(1)
+            grammar.append(kind)
+            lm = re.search(r':lines \[(\d+) (\d+)\]', block)
+            fills = re.findall(r'"([^"]{4,})"', block.split(":slot-fill", 1)[1]) if ":slot-fill" in block else []
+            fill = " ".join(fills)[:90]
+            if fill and lm:
+                a, b = int(lm.group(1)), int(lm.group(2))
+                conf, _, _ = _confidence(fill, _span(lines, a, b))
+                add(fill, conf, kind, "expository", a, b)
+    else:           # IATC: node move-names + warrant phrases + relation grammar
+        for m in re.finditer(r':kind :([a-z-]+),?\s*:text "([^"]{4,80})"[^}]*?:source \{:lines \[(\d+) (\d+)\]', t):
+            kind, text, a, b = m.group(1), m.group(2), int(m.group(3)), int(m.group(4))
+            conf, faith, flat = _confidence(text, _span(lines, a, b))
+            add(text, conf, kind, "iatc", a, b)
+            if flat:
+                flattened.append({"pid": pid, "lines": [a, b], "text": text})
+        for w in re.findall(r':warrant \{[^}]*?:text "([^"]{4,80})"', t):
+            add(w, 0.5, "warrant", "iatc")
+        grammar.extend(re.findall(r":relation :([a-z-]+)", t))
+    return {"pid": pid, "adds": adds, "grammar": grammar, "flattened": flattened}
+
+
+def _paper_records(paper):
+    """The records of one paper's graphs, `paper` = (pid, files), its text built once."""
+    pid, files = paper
+    lines = _text_lines(pid, {})
+    return [_graph_record(f, lines, pid) for f in files]
+
+
+def graph_records(files, workers=None):
+    """Each graph's record, in the order of `files` (rung-2 graphs left out). Papers are read in
+    worker processes on the CPUs the job may use, each paper's text built once."""
+    import paper_pool
+    files = [f for f in files if "rung2" not in f]
+    papers = {}
+    for f in files:
+        papers.setdefault(_pid_of(f), []).append(f)
+    records = {}
+    for (_pid, group), paper_records in paper_pool.map_in_order(_paper_records, list(papers.items()), workers):
+        records.update(zip(group, paper_records))
+    return [records[f] for f in files]
+
+
+class Harvest:
+    """The lexicon, grammar and flattened anchorings of the graph records added so far.
+
+    Records added in file order give what a serial pass over those files gave: the same entries
+    in the same order, the same confidence lists and exemplars."""
+
+    def __init__(self):
+        self.lex = defaultdict(lambda: {"count": 0, "conf": [], "kinds": Counter(), "layer": Counter(),
+                                        "exemplars": []})
+        self.grammar = Counter()   # relation grammar (IATC) + move grammar (expository kinds)
+        self.flattened = []
+
+    def add(self, record):
+        if "skip" in record:
+            print(record["skip"], file=sys.stderr)
+            return
+        pid = record["pid"]
+        for key, conf, kind, layer, a, b in record["adds"]:
+            e = self.lex[key]; e["count"] += 1; e["conf"].append(conf)
             e["kinds"][kind] += 1; e["layer"][layer] += 1
             if a and len(e["exemplars"]) < 3:
                 e["exemplars"].append({"pid": pid, "lines": [a, b], "conf": conf})
+        for g in record["grammar"]:
+            self.grammar[g] += 1
+        self.flattened.extend(record["flattened"])
 
-        if expository:  # EXPOSITORY: scope kind (move grammar) + slot-fill text, span-anchored
-            for block in re.split(r'(?=:kind :)', t):     # one scope per :kind block
-                km = re.search(r':kind (:[a-z/-]+)', block)
-                if not km:
-                    continue
-                kind = km.group(1)
-                grammar[kind] += 1
-                lm = re.search(r':lines \[(\d+) (\d+)\]', block)
-                fills = re.findall(r'"([^"]{4,})"', block.split(":slot-fill", 1)[1]) if ":slot-fill" in block else []
-                fill = " ".join(fills)[:90]
-                if fill and lm:
-                    a, b = int(lm.group(1)), int(lm.group(2))
-                    conf, _, _ = _confidence(fill, _span(lines, a, b))
-                    add(fill, conf, kind, "expository", a, b)
-        else:           # IATC: node move-names + warrant phrases + relation grammar
-            for m in re.finditer(r':kind :([a-z-]+),?\s*:text "([^"]{4,80})"[^}]*?:source \{:lines \[(\d+) (\d+)\]', t):
-                kind, text, a, b = m.group(1), m.group(2), int(m.group(3)), int(m.group(4))
-                conf, faith, flat = _confidence(text, _span(lines, a, b))
-                add(text, conf, kind, "iatc", a, b)
-                if flat:
-                    flattened.append({"pid": pid, "lines": [a, b], "text": text})
-            for w in re.findall(r':warrant \{[^}]*?:text "([^"]{4,80})"', t):
-                add(w, 0.5, "warrant", "iatc")
-            for r in re.findall(r":relation :([a-z-]+)", t):
-                grammar[r] += 1
-    return lex, grammar, flattened
+
+def harvest(graph_dir, workers=None):
+    """Layer-agnostic: an IATC inference-move, an expository scope, and (in principle) an
+    SFC typed-slot are the same shape — a CLASSIFIED scope (kind) + a :source anchor +
+    a grounding confidence. Harvests whichever the file carries."""
+    collected = Harvest()
+    for record in graph_records(sorted(glob.glob(os.path.join(graph_dir, "*.edn"))), workers):
+        collected.add(record)
+    return collected.lex, collected.grammar, collected.flattened
 
 
 def main():

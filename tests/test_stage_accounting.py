@@ -243,6 +243,71 @@ class StepperAttempts(StageFixture, unittest.TestCase):
         self.assertEqual(stepper.accounting_problems(str(self.run_dir), "S7", "S7-a001", "c")[0], [])
 
 
+class LargeAccountingKeepsItsEvidence(StageFixture, unittest.TestCase):
+    """Past JOURNAL_ABOVE_BYTES items wait in a journal between whole rewrites; every
+    reader, a crash and the finished document still give what a rewrite per item gave."""
+
+    def record_all(self, directory, items, *, above, stamps):
+        stamps = iter(stamps)
+        with patch.object(accounting, "JOURNAL_ABOVE_BYTES", above), \
+                patch.object(accounting, "_now", side_effect=lambda: next(stamps)):
+            ledger = accounting.Accounting("S4", "select", items, directory)
+            for n, item in enumerate(items):
+                ledger.record(item, "deferred" if n % 3 == 0 else "accepted", "cap" if n % 3 == 0 else "",
+                              paper="p", outputs=[item])
+        return ledger
+
+    def test_journal_and_a_rewrite_after_each_item_end_in_the_same_document(self):
+        items = [f"p:r{n}" for n in range(40)]
+        stamps = [f"2026-09-28T00:00:{n:02d}+00:00" for n in range(len(items) + 1)]
+        per_item = self.record_all(self.base / "per-item", items, above=1 << 40, stamps=stamps)
+        journaled = self.record_all(self.base / "journal", items, above=0, stamps=stamps)
+        self.assertFalse(accounting.journal_path(per_item.path).exists())
+        self.assertTrue(accounting.journal_path(journaled.path).is_file())
+        self.assertLess(len(json.loads(journaled.path.read_text())["items"]), len(items))
+        # Before the whole rewrite every reader already sees every item.
+        self.assertEqual(accounting.load(self.base / "journal", "S4", "select"), per_item.document())
+        self.assertEqual(accounting.read(journaled.path), json.loads(per_item.path.read_text()))
+        accounting._write_waiting_documents()            # what the process's exit does
+        self.assertFalse(accounting.journal_path(journaled.path).exists())
+        self.assertEqual(journaled.path.read_bytes(), per_item.path.read_bytes())
+
+    def test_a_killed_journaling_producer_leaves_the_same_evidence(self):
+        with patch.object(accounting, "JOURNAL_ABOVE_BYTES", 0):
+            killed = accounting.Accounting("S6", "assemble", list(self.papers), self.run_dir / "accounting/S6/S6-a001")
+            killed.record("1111.0001", "accepted", outputs=["1111.0001"])
+        self.addCleanup(killed._close_journal, remove=False)          # SIGKILL: no exit handler runs
+        with accounting.journal_path(killed.path).open("a") as journal:
+            journal.write('{"updated": "2026-09-28T00:00:00+00:00", "item": {"id": "2222.0')   # torn by the kill
+        self.assertEqual(stepper.next_invocation(str(self.run_dir), "S6", "r", "c"), "S6-a002")
+        row = self.attempts()[0]
+        self.assertEqual((row["invocation"], row["outcome"]), ("S6-a001", "interrupted"))
+        self.assertEqual(row["accounting"]["assemble"], killed.counts())
+        self.assertEqual((row["accounting"]["assemble"]["accepted"], row["accounting"]["assemble"]["unaccounted"]), (1, 1))
+
+    def test_a_journaling_producer_that_exits_leaves_the_whole_document(self):
+        script = ("import sys; sys.path.insert(0, %r); import stage_accounting as a; a.JOURNAL_ABOVE_BYTES = 0; "
+                  "l = a.Accounting('S6', 'assemble', %r); "
+                  % (str(ROOT / "scripts"), list(self.papers)))
+        for paper in self.papers:
+            script += f"l.record({paper!r}, 'accepted', outputs=[{paper!r}]); "
+        with patch.dict(stepper.OPS, {"S6": {"cmd": f"{sys.executable} -c \"{script}\""}}), \
+                patch.object(stepper, "DEPS", {"S6": []}):
+            rc = stepper.run([{"id": "S6", "name": "fixture", "compute": "cpu", "halt": False, "go": []}],
+                             "superpod", True, str(self.run_dir), "c", "r", [])
+        self.assertEqual(rc, 0)
+        document = self.run_dir / "accounting/S6/S6-a001/S6.assemble.json"
+        self.assertEqual(json.loads(document.read_text())["counts"]["accepted"], 2)
+        self.assertFalse(accounting.journal_path(document).exists())
+
+    def test_the_periodic_rewrite_takes_over_from_the_journal(self):
+        with patch.object(accounting, "JOURNAL_REWRITE_SECONDS", 0.0):
+            ledger = self.record_all(self.base / "rewrite", [f"p:r{n}" for n in range(5)], above=0,
+                                     stamps=[f"2026-09-28T00:00:0{n}+00:00" for n in range(6)])
+        self.assertFalse(accounting.journal_path(ledger.path).exists())
+        self.assertEqual(json.loads(ledger.path.read_text()), ledger.document())
+
+
 class ExpositorySelection(unittest.TestCase):
     def candidates(self, n):
         return [{"paper-id": "1111.0001", "region-id": f"r{i}", "passage-id": f"1111.0001:r{i}",

@@ -191,6 +191,55 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(entry["was"]["source-sha256"], "code")
         self.assertEqual(entry["now"]["source-sha256"], "edited")
 
+    def test_a_new_job_on_another_gpu_resumes_but_another_gpu_count_refuses(self):
+        """Slurm places a resumed run anew: job, node and which GPU are placement, not identity.
+
+        mark7rhgrh12-20260927 was refused because its next job got GPU 4 instead of GPU 0.
+        """
+        def inventory(job, node, gpus):
+            return {"device-authority": "SLURM_JOB_GPUS", "device-namespace": "global-physical",
+                    "requested": gpus, "count": len(gpus), "devices": [], "visible-to-this-process": True,
+                    "slurm-job": job, "node": node}
+
+        # Written before the GPU indices became placement: they sit under "hardware".
+        with patch.object(manifest.config, "hardware", return_value=inventory("1", "n4", ["0"])), \
+             patch.object(manifest.config, "VOLATILE_HARDWARE_FIELDS", ("slurm-job", "node")):
+            self.prepare()
+        original = (self.run_dir / manifest.NAME).read_bytes()
+        with patch.object(manifest.config, "hardware", return_value=inventory("2", "n9", ["4"])):
+            self.prepare()
+        self.assertEqual((self.run_dir / manifest.NAME).read_bytes(), original)
+        with patch.object(manifest.config, "hardware", return_value=inventory("3", "n4", ["0", "1"])):
+            with self.assertRaisesRegex(ValueError, "host-configuration"):
+                self.prepare()
+
+    def test_a_new_job_whose_own_server_got_another_port_resumes_but_another_remote_server_refuses(self):
+        """A launcher may start each job's vLLM on the first free port: a local address is placement.
+
+        mark7rhgrh12v4-20260927 pinned http://127.0.0.1:11510/v1, so a resume whose server got 11511
+        was refused as a changed host.
+        """
+        def prepare_on(url, local=True, run_dir=None):
+            live = {"endpoint-is-local": local, "stack": "vllm", "stack-version": "0.26.0",
+                    "served-models": ["m"], "max-model-len": 32768, "reachable": True}
+            with patch.dict(os.environ, {"OPENAI_BASE_URL": url}), \
+                 patch.object(manifest.config, "serving", return_value=live):
+                return self.prepare(run_dir)
+
+        prepare_on("http://127.0.0.1:11510/v1")
+        original = (self.run_dir / manifest.NAME).read_bytes()
+        prepare_on("http://127.0.0.1:11511/v1")
+        prepare_on("http://localhost:11600/v1")
+        self.assertEqual((self.run_dir / manifest.NAME).read_bytes(), original)
+        for url, local in (("http://127.0.0.1:11511/other/v1", True), ("http://gpu-box:11510/v1", False)):
+            with self.subTest(url=url), self.assertRaisesRegex(ValueError, "host-configuration"):
+                prepare_on(url, local)
+
+        remote = self.base / "remote run"
+        prepare_on("http://gpu-box:11510/v1", local=False, run_dir=remote)
+        with self.assertRaisesRegex(ValueError, "host-configuration"):
+            prepare_on("http://gpu-box:11511/v1", local=False, run_dir=remote)
+
     def test_discarding_on_a_changed_source_tree_is_opt_in(self):
         """The old refuse-on-edit behaviour remains available, off by default."""
         self.prepare()

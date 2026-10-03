@@ -17,7 +17,7 @@ Modes:
 
 Usage:
   futon6/.venv/bin/python scripts/coverage_inline.py --self-test
-  futon6/.venv/bin/python scripts/coverage_inline.py --concepts data/warp/concept-usage.json --field paper_concepts
+  futon6/.venv/bin/python scripts/coverage_inline.py --concepts "$FUTON6_WARP_DIR/concept-usage.json" --field paper_concepts
 """
 import argparse
 import json

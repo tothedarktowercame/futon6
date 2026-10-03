@@ -36,6 +36,7 @@ _sys.path.insert(0, str(_Path(__file__).resolve().parent))
 
 import argparse
 import bisect
+from functools import partial
 import json
 import re
 import sys
@@ -43,6 +44,8 @@ from pathlib import Path
 
 import build_golden_paper
 import expository_region_extract as regions
+import paper_pool
+from dp_capabilities.intervals import Stabbing
 
 SYMBOL_KINDS = ("symbol", "symbol-grounded")
 # A macro the paper defines for one of its objects (\T for the triangulated category)
@@ -131,6 +134,10 @@ def bibliography_at(text: str, marks: list[dict],
     return min(found) if found else len(text)
 
 
+SENTENCE_END = re.compile(r"[.!?]\s")
+SENTENCE_END_AT = re.compile(r"[.!?](\s|$)")
+
+
 def defined_terms(text: str, marks: list[dict]) -> list[dict]:
     """Every term the paper defines, with its definition site and every use."""
     starts = _line_starts(text)
@@ -166,7 +173,15 @@ def defined_terms(text: str, marks: list[dict]) -> list[dict]:
         env = next((m for m in defs if m["start"] <= d.position < m["end"]), None)
         found.setdefault(d.term, (d.position, env, "named by a definition pattern"))
     concepts = [m for m in marks if m["kind"] == "concept"]
+    # Every use of every term asks which concepts it overlaps and whether an
+    # earlier term already took its characters; scanning all concepts and all
+    # taken uses each time was quadratic in a long paper.
+    concept_index = Stabbing([(c["start"], c["end"]) for c in concepts])
     taken: list[tuple[int, int]] = []
+    held = bytearray(len(text) + 1)  # characters inside a taken use; taken uses never overlap
+    held_all = True  # False once an empty use is taken, which held cannot represent
+    body_text = text[body:]
+    sentence_ends = [m.end() for m in SENTENCE_END.finditer(text, body)]
     out = []
     for term, (at, env, how_found) in sorted(found.items(), key=lambda kv: -len(kv[0])):  # longest first
         pat, has_param = term_pattern(term)
@@ -176,12 +191,15 @@ def defined_terms(text: str, marks: list[dict]) -> list[dict]:
             pats.append((re.escape(head) + "s?", False))
         uses = []
         for p, param in pats:
-            for o in re.finditer(r"(?<![A-Za-z-])" + p + r"(?![A-Za-z])", text[body:], re.I):
+            for o in re.finditer(r"(?<![A-Za-z-])" + p + r"(?![A-Za-z])", body_text, re.I):
                 a, b = o.start() + body, o.end() + body
-                if any(a < y and x < b for x, y in taken):
+                if (held.find(1, a, b) != -1 if held_all and b > a
+                        else any(a < y and x < b for x, y in taken)):
                     continue
                 taken.append((a, b))
-                over = [c for c in concepts if c["start"] < b and a < c["end"]]
+                held[a:b] = b"\x01" * (b - a)
+                held_all = held_all and b > a
+                over = [concepts[j] for j in sorted(concept_index.meeting(a, b))]
                 src = [_fields(c) for c in over]
                 if any(f.get("source") == "defined-in-paper" for f in src):
                     s1, how = "tagged as defined", ""
@@ -202,10 +220,14 @@ def defined_terms(text: str, marks: list[dict]) -> list[dict]:
         if env:
             where = env
         else:
-            before = [m.end() for m in re.finditer(r"[.!?]\s", text[body:at])]
-            after = re.search(r"[.!?](\s|$)", text[at:])
-            where = {"start": body + (before[-1] if before else 0),
-                     "end": at + (after.end() if after else 300)}
+            # The last sentence end in text[body:at] and the first from at, found without
+            # scanning or copying the paper for every term: a sentence end is two
+            # characters that cannot overlap another, so one lies in text[body:at]
+            # exactly when it ends by at.
+            k = bisect.bisect_right(sentence_ends, at) - 1
+            after = SENTENCE_END_AT.search(text, at)
+            where = {"start": sentence_ends[k] if k >= 0 else body,
+                     "end": after.end() if after else at + 300}
         out.append({"term": term, "at": at, "line": _line(starts, at), "how-found": how_found,
                     "definition": re.sub(r"\s+", " ", text[where["start"]:where["end"]])[:600],
                     "definition-span": [where["start"], where["end"]], "uses": uses})
@@ -271,7 +293,8 @@ def binding_sites(text: str, marks: list[dict]) -> list[dict]:
     return merged
 
 
-def symbol_hypergraph(text: str, marks: list[dict]) -> list[dict]:
+def symbol_hypergraph(text: str, marks: list[dict], terms: list[dict] | None = None) -> list[dict]:
+    """TERMS is defined_terms(text, marks) when the caller already has it."""
     starts = _line_starts(text)
     envs = sorted(((m["start"], m["end"], m["kind"][4:]) for m in marks
                    if m["kind"].startswith("env/") and m["kind"][4:] in ENV_KINDS), key=lambda e: (e[0], -e[1]))
@@ -282,12 +305,18 @@ def symbol_hypergraph(text: str, marks: list[dict]) -> list[dict]:
         line = _line(starts, offset)
         inside = [s for s in sections if s.line_start <= line <= s.line_end]
         return max(inside, key=lambda s: s.line_start) if inside else None
+    env_index = Stabbing([(e[0], e[1]) for e in envs])
     def innermost(offset: int):
-        inside = [e for e in envs if e[0] <= offset < e[1]]
-        return min(inside, key=lambda e: e[1] - e[0]) if inside else None
+        # e[0] <= offset < e[1], from the index rather than every environment; the
+        # shortest wins and, on a tie, the earliest in envs, as before
+        inside = sorted(env_index.meeting(offset, offset + 1))
+        return min((envs[j] for j in inside), key=lambda e: e[1] - e[0]) if inside else None
+    proved: dict = {}
     def proved_by(proof):
-        before = [e for e in envs if e[2] != "proof" and e[1] <= proof[0] and proof[0] - e[1] < 400]
-        return max(before, key=lambda e: e[1]) if before else None
+        if proof not in proved:  # a function of the proof environment alone
+            before = [e for e in envs if e[2] != "proof" and e[1] <= proof[0] and proof[0] - e[1] < 400]
+            proved[proof] = max(before, key=lambda e: e[1]) if before else None
+        return proved[proof]
 
     sites = binding_sites(text, marks)
     by_name: dict[str, list[dict]] = {}
@@ -298,7 +327,8 @@ def symbol_hypergraph(text: str, marks: list[dict]) -> list[dict]:
                  key=lambda m: m["start"])
     # A letter inside the name of a defined term (the t of co-$t$-structure) is part of
     # that name, not a variable standing on its own.
-    in_term = sorted((u["start"], u["end"]) for t in defined_terms(text, marks) for u in t["uses"]
+    terms = defined_terms(text, marks) if terms is None else terms
+    in_term = sorted((u["start"], u["end"]) for t in terms for u in t["uses"]
                      if "$" in t["term"])
     def named(a: int, b: int) -> bool:
         i = bisect.bisect_right(in_term, (a, float("inf")))
@@ -370,6 +400,7 @@ def macro_table(text: str) -> dict[str, dict]:
     definitions are in the paper's own preamble, so this is a read, not a guess.
     """
     out: dict[str, dict] = {}
+    starts = _line_starts(text)  # once: per definition it rescanned the whole paper
     for pattern in (MACRO_DEF, DEF_DEF):
         for m in pattern.finditer(text):
             name = next((g for g in m.groups()[:2] if g), None) if pattern is MACRO_DEF else m.group(1)
@@ -377,7 +408,7 @@ def macro_table(text: str) -> dict[str, dict]:
                 continue
             body = _braced(text, m.end() - 1).strip()
             if body:
-                out[name] = {"body": body, "line": _line(_line_starts(text), m.start()),
+                out[name] = {"body": body, "line": _line(starts, m.start()),
                              "takes-argument": "#" in body}
     for name, entry in out.items():
         body, seen = entry["body"], {name}
@@ -396,7 +427,7 @@ def macro_table(text: str) -> dict[str, dict]:
 
 def strategies(text: str, marks: list[dict]) -> dict:
     terms = defined_terms(text, marks)
-    symbols = symbol_hypergraph(text, marks)
+    symbols = symbol_hypergraph(text, marks, terms)  # the terms once, not twice
     occ = [o for e in symbols for o in e["occurrences"]]
     rules = {r: sum(o["rule"] == r for o in occ)
              for r in ("in-environment", "proved-statement", "in-section", "in-paper", "unbound")}
@@ -408,6 +439,17 @@ def strategies(text: str, marks: list[dict]) -> dict:
                         "binding-sites": sum(len(e["binders"]) for e in symbols), "rules": rules,
                         "macros": len(macros),
                         "s1-compared": len(judged), "s1-agrees": sum(o["s1-agrees"] for o in judged)}}
+
+
+def paper_strategies(pid: str, marks_dir: Path, out_dir: Path) -> dict | None:
+    """One paper's strategies, written to out_dir; None when it has no S1 marks. Runs in a worker."""
+    src = marks_dir / f"fable-{pid}-dp-emacs.json"
+    if not src.is_file():
+        return None
+    data = json.loads(src.read_text())
+    result = strategies(data["text"], data["marks"])
+    (out_dir / f"{pid}.strategies.json").write_text(json.dumps(result, ensure_ascii=False))
+    return result["summary"]
 
 
 def main() -> int:
@@ -424,22 +466,20 @@ def main() -> int:
         a.out_dir.mkdir(parents=True, exist_ok=True)
         ids = [x.strip() for x in a.ids.read_text().splitlines() if x.strip()]
         total = {"papers": 0, "missing": [], "occurrences": 0, "bound": 0, "s1-compared": 0, "s1-agrees": 0}
-        for pid in ids:
-            src = a.marks_dir / f"fable-{pid}-dp-emacs.json"
-            if not src.is_file():
+        work = partial(paper_strategies, marks_dir=a.marks_dir, out_dir=a.out_dir)
+        for pid, su in paper_pool.map_papers(work, ids):  # on every CPU the job may use
+            if su is None:
                 total["missing"].append(pid)
                 continue
-            data = json.loads(src.read_text())
-            result = strategies(data["text"], data["marks"])
-            (a.out_dir / f"{pid}.strategies.json").write_text(json.dumps(result, ensure_ascii=False))
-            su = result["summary"]
             total["papers"] += 1
             total["occurrences"] += su["occurrences"]
             total["bound"] += su["occurrences"] - su["rules"]["unbound"]
             total["s1-compared"] += su["s1-compared"]
             total["s1-agrees"] += su["s1-agrees"]
         print(json.dumps(total))
-        return 1 if total["missing"] else 0
+        # A paper without S1 marks is listed as missing and the stage goes on; it fails only when
+        # no paper resolves. Failing on any missing paper stopped the run over one paper.
+        return 1 if total["missing"] and not total["papers"] else 0
     if not a.marks:
         ap.error("give a marks file, or --list with --marks and --out")
     data = json.loads(a.marks.read_text())

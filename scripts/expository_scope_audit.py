@@ -49,16 +49,28 @@ ECHO_PREFIX = 20          # characters of a slot definition that count as repeat
 CHECKS = ("echo", "unanchored", "bare-noun")
 
 
-def read_edn(paths: list[Path]) -> list[dict]:
-    """EDN -> JSON through babashka, the reader the gates use (see expository_json)."""
+def read_edn(paths: list[Path]) -> list[dict | None]:
+    """EDN -> JSON through babashka, the reader the gates use (see expository_json).
+
+    One entry per path, in order, and None for a file that cannot be read, which is reported.
+    One unreadable file used to fail the whole read, and with it S3 or S4."""
     if not paths:
         return []
     program = ("(require '[cheshire.core :as json]) "
                "(doseq [p *command-line-args*] "
-               "  (println (json/generate-string (clojure.edn/read-string (slurp p)))))")
+               "  (println (try (json/generate-string (clojure.edn/read-string (slurp p))) "
+               "                (catch Throwable e (json/generate-string {:read-error (str e)})))))")
     out = subprocess.run(["bb", "-e", program, *map(str, paths)],
                          capture_output=True, text=True, check=True).stdout
-    return [json.loads(line) for line in out.splitlines() if line.strip()]
+    docs = []
+    for path, line in zip(paths, [line for line in out.splitlines() if line.strip()]):
+        doc = json.loads(line)
+        if doc is None or (isinstance(doc, dict) and set(doc) == {"read-error"}):
+            why = doc["read-error"] if doc else "empty"
+            print(f"  SKIP {path.name}: {why}", file=sys.stderr)
+            doc = None
+        docs.append(doc)
+    return docs
 
 
 def vocabulary_shape(path: Path = expository_json.VOCAB) -> tuple[dict[str, str], set[str]]:
@@ -114,37 +126,51 @@ def locate(fill: str, haystack: str, base: int = 0) -> list[int] | None:
 
 def audit(expo_dir: Path, candidates_dir: Path, vocab: Path = expository_json.VOCAB) -> dict:
     definitions, parents = vocabulary_shape(vocab)
-    graphs = read_edn(sorted(expo_dir.glob("*.edn")))
-    records, kinds, held = [], collections.Counter(), 0
-    for g in graphs:
-        paper, passage = g["paper/id"], g["passage/id"]
-        _, region, _ = passage.split(":")
-        candidate = candidates_dir / f"{paper}.{region}.candidate.json"
-        window = json.loads(candidate.read_text()) if candidate.is_file() else None
-        lines = window["source-window"].split("\n") if window else []
-        first = window["window-lines"][0] if window else 0
-        for scope in g.get("scopes", []):
-            kind = scope["kind"]
-            kinds[kind] += 1
-            lo, hi = scope["source"]["lines"]
-            cited = "\n".join(lines[max(0, lo - first):hi - first + 1])
-            fill = next(iter((scope.get("slot-fill") or {}).values()), None)
-            record = {"paper": paper, "passage": passage, "scope": scope["id"], "kind": kind,
-                      "lines": [lo, hi], "fill": fill, "span": None,
-                      "bare-parent": kind in parents}
-            # A v2 scope carries the extent of its own fill; for older graphs a reader
-            # that holds the paper text (the renderer) locates it.
-            record["span"] = list(scope["fill-span"]) if scope.get("fill-span") else None
-            record["units"] = list(scope["source"].get("units") or ())
-            if fill is None:
-                held += 1
-                record["held"] = scope.get("held-reason") or scope.get("held") or True
-                record["flags"] = []
-            elif window is None:
-                record["flags"] = ["no-source-window"]
-            else:
-                record["flags"] = flags(fill, cited, definitions.values())
-            records.append(record)
+    paths = sorted(expo_dir.glob("*.edn"))
+    graphs = read_edn(paths)
+    records, kinds, held, passages = [], collections.Counter(), 0, 0
+    for path, g in zip(paths, graphs):
+        if g is None:     # unreadable, reported by read_edn
+            continue
+        # A passage whose graph the audit cannot read is reported and left out whole: its
+        # records count only when all of them could be made. One such graph used to fail S4.
+        graph_records, graph_kinds, graph_held = [], collections.Counter(), 0
+        try:
+            paper, passage = g["paper/id"], g["passage/id"]
+            _, region, _ = passage.split(":")
+            candidate = candidates_dir / f"{paper}.{region}.candidate.json"
+            window = json.loads(candidate.read_text()) if candidate.is_file() else None
+            lines = window["source-window"].split("\n") if window else []
+            first = window["window-lines"][0] if window else 0
+            for scope in g.get("scopes", []):
+                kind = scope["kind"]
+                graph_kinds[kind] += 1
+                lo, hi = scope["source"]["lines"]
+                cited = "\n".join(lines[max(0, lo - first):hi - first + 1])
+                fill = next(iter((scope.get("slot-fill") or {}).values()), None)
+                record = {"paper": paper, "passage": passage, "scope": scope["id"], "kind": kind,
+                          "lines": [lo, hi], "fill": fill, "span": None,
+                          "bare-parent": kind in parents}
+                # A v2 scope carries the extent of its own fill; for older graphs a reader
+                # that holds the paper text (the renderer) locates it.
+                record["span"] = list(scope["fill-span"]) if scope.get("fill-span") else None
+                record["units"] = list(scope["source"].get("units") or ())
+                if fill is None:
+                    graph_held += 1
+                    record["held"] = scope.get("held-reason") or scope.get("held") or True
+                    record["flags"] = []
+                elif window is None:
+                    record["flags"] = ["no-source-window"]
+                else:
+                    record["flags"] = flags(fill, cited, definitions.values())
+                graph_records.append(record)
+        except Exception as exc:
+            print(f"  SKIP {path.name}: {type(exc).__name__}: {exc}", file=sys.stderr)
+            continue
+        records += graph_records
+        kinds.update(graph_kinds)
+        held += graph_held
+        passages += 1
     filled = [r for r in records if r["fill"] is not None]
     by_check = {c: sum(c in r["flags"] for r in filled) for c in CHECKS}
     unflagged = sum(not r["flags"] for r in filled)
@@ -159,7 +185,7 @@ def audit(expo_dir: Path, candidates_dir: Path, vocab: Path = expository_json.VO
     citing = [r for r in filled if r["units"]]
     quoted = sum(r["span"] is not None for r in citing)
     return {"schema": "expository-scope-audit/v1",
-            "summary": {"passages": len(graphs), "scopes": total, "filled": len(filled), "held": held,
+            "summary": {"passages": passages, "scopes": total, "filled": len(filled), "held": held,
                         "citing-units": len(citing), "quoted": quoted,
                         "quoted-share": round(quoted / len(citing), 3) if citing else None,
                         "unflagged": unflagged, "by-check": by_check,
@@ -186,8 +212,9 @@ def main() -> int:
     if s["citing-units"]:
         print(f"{s['quoted']}/{s['citing-units']} filled scopes citing units quote them "
               f"word for word ({s['quoted-share']:.0%}); the rest are in the model's words")
-    print(f"  top kind {next(iter(s['kinds']), '-')} {s['top-kind-share']:.0%}; "
-          f"bare parent kinds {s['bare-parent-share']:.0%}")
+    share = lambda x: "-" if x is None else f"{x:.0%}"     # None when no scope was audited
+    print(f"  top kind {next(iter(s['kinds']), '-')} {share(s['top-kind-share'])}; "
+          f"bare parent kinds {share(s['bare-parent-share'])}")
     print("  " + "  ".join(f"{c} {n} ({n / filled:.0%})" for c, n in s["by-check"].items())
           + f"  unflagged {s['unflagged']} ({s['unflagged'] / filled:.0%})")
     print(f"per-scope flags -> {out}")

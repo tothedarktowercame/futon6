@@ -123,6 +123,23 @@ def deviations(actual: dict, cid: str | None = None) -> list[str]:
     return out
 
 
+def lists_units(cid: str | None = None) -> bool:
+    """S3 lists its units in the prompt, under ids cut from their text (v4 on). Under v3 the
+    units carry no ids: the schema numbers them s1..sn and the prompt does not list them."""
+    return spec(cid)["quotation"] == "listed-units"
+
+
+def proof_candidate_schema(cid: str | None = None) -> str:
+    return spec(cid)["candidates"]["schema"]
+
+
+def expository_candidate_schema(cid: str | None = None) -> str:
+    """expo-candidate/v2 (a region's sentence units, cited and quoted word for word) when the
+    contract asks for units; expo-candidate/v1 (scopes by line range, as under v3) otherwise."""
+    want = spec(cid).get("expository-candidates")
+    return want["schema"] if want else "expo-candidate/v1"
+
+
 def missing_expository_inputs(candidate: dict, cid: str | None = None) -> list[str]:
     """What an S4 candidate lacks. A region with no units cannot be cited by unit."""
     want = spec(cid).get("expository-candidates")

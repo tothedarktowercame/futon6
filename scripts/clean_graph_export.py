@@ -48,47 +48,59 @@ def build(clean_dir, out, embed_json):
     theorems = set()
 
     for f in files:
-        d = load_clean(f)
-        pid = kw(d["proof"])
-        title = str(d.get("title", ""))
-        shape = {kw(k): v for k, v in dict(d["shape"]).items()}
-        macro = kw(shape["macro"])
-        boxes = boxes_of(d)
-        wires = wires_of(d)
+        # A proof enters the export whole or not at all: its nodes, edges and loader lines are
+        # built here and added only when all of them could be made. One CLean that could not
+        # be read used to raise and fail S8, and with it the run; it is now reported.
+        nodes, edges, lines, found = [], [], [], set()
+        try:
+            d = load_clean(f)
+            pid = kw(d["proof"])
+            title = str(d.get("title", ""))
+            shape = {kw(k): v for k, v in dict(d["shape"]).items()}
+            macro = kw(shape["macro"])
+            boxes = boxes_of(d)
+            wires = wires_of(d)
 
-        graph["nodes"].append({"label": "Proof", "id": pid, "title": title, "macro": macro})
-        cypher.append(f"MERGE (p_{pid}:Proof {{id:{cypher_str(pid)}}}) "
-                      f"SET p_{pid}.title={cypher_str(title)}, p_{pid}.macro={cypher_str(macro)};")
+            nodes.append({"label": "Proof", "id": pid, "title": title, "macro": macro})
+            lines.append(f"MERGE (p_{pid}:Proof {{id:{cypher_str(pid)}}}) "
+                         f"SET p_{pid}.title={cypher_str(title)}, p_{pid}.macro={cypher_str(macro)};")
 
-        for b in boxes:
-            sid = f"{pid}/{b['id']}"
-            node = {"label": "Step", "id": sid, "proof": pid, "method": b["method"],
-                    "text": b["text"], "has_hole": "hole" in b}
-            if "hole" in b:
-                node["satiety"] = b["hole"]["satiety"]
-                node["discharge"] = b["hole"]["discharge"]
-            graph["nodes"].append(node)
-            var = f"s_{pid}_{b['id']}"
-            props = (f"{{id:{cypher_str(sid)}, proof:{cypher_str(pid)}, "
-                     f"method:{cypher_str(b['method'])}, text:{cypher_str(b['text'])}, "
-                     f"has_hole:{str('hole' in b).lower()}")
-            if "hole" in b:
-                props += f", satiety:{cypher_str(b['hole']['satiety'])}, discharge:{cypher_str(b['hole']['discharge'])}"
-            props += "}"
-            cypher.append(f"MERGE ({var}:Step {props});")
-            cypher.append(f"MERGE (p_{pid})-[:HAS_STEP]->({var});")
-            if "discharges" in b:
-                thm = b["discharges"]["to"]
-                theorems.add(thm)
-                graph["edges"].append({"type": "DISCHARGES_TO", "from": sid, "to": thm})
-                cypher.append(f"MERGE (t_{thm.replace('-', '_')}:Theorem {{name:{cypher_str(thm)}}});")
-                cypher.append(f"MERGE ({var})-[:DISCHARGES_TO]->(t_{thm.replace('-', '_')});")
+            for b in boxes:
+                sid = f"{pid}/{b['id']}"
+                node = {"label": "Step", "id": sid, "proof": pid, "method": b["method"],
+                        "text": b["text"], "has_hole": "hole" in b}
+                if "hole" in b:
+                    node["satiety"] = b["hole"]["satiety"]
+                    node["discharge"] = b["hole"]["discharge"]
+                nodes.append(node)
+                var = f"s_{pid}_{b['id']}"
+                props = (f"{{id:{cypher_str(sid)}, proof:{cypher_str(pid)}, "
+                         f"method:{cypher_str(b['method'])}, text:{cypher_str(b['text'])}, "
+                         f"has_hole:{str('hole' in b).lower()}")
+                if "hole" in b:
+                    props += f", satiety:{cypher_str(b['hole']['satiety'])}, discharge:{cypher_str(b['hole']['discharge'])}"
+                props += "}"
+                lines.append(f"MERGE ({var}:Step {props});")
+                lines.append(f"MERGE (p_{pid})-[:HAS_STEP]->({var});")
+                if "discharges" in b:
+                    thm = b["discharges"]["to"]
+                    found.add(thm)
+                    edges.append({"type": "DISCHARGES_TO", "from": sid, "to": thm})
+                    lines.append(f"MERGE (t_{thm.replace('-', '_')}:Theorem {{name:{cypher_str(thm)}}});")
+                    lines.append(f"MERGE ({var})-[:DISCHARGES_TO]->(t_{thm.replace('-', '_')});")
 
-        for w in wires:
-            graph["edges"].append({"type": "WIRES", "from": f"{pid}/{w['from']}",
-                                   "to": f"{pid}/{w['to']}", "carries": w["carries"]})
-            cypher.append(f"MERGE (s_{pid}_{w['from']})-[:WIRES {{carries:{cypher_str(w['carries'])}}}]->(s_{pid}_{w['to']});")
-        cypher.append("")
+            for w in wires:
+                edges.append({"type": "WIRES", "from": f"{pid}/{w['from']}",
+                              "to": f"{pid}/{w['to']}", "carries": w["carries"]})
+                lines.append(f"MERGE (s_{pid}_{w['from']})-[:WIRES {{carries:{cypher_str(w['carries'])}}}]->(s_{pid}_{w['to']});")
+            lines.append("")
+        except Exception as exc:
+            print(f"  SKIP {os.path.basename(f)}: {type(exc).__name__}: {exc}")
+            continue
+        graph["nodes"] += nodes
+        graph["edges"] += edges
+        cypher += lines
+        theorems |= found
 
     os.makedirs(out, exist_ok=True)
     with open(os.path.join(out, "clean-graph.json"), "w") as fh:

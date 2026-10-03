@@ -217,6 +217,27 @@ def strip_comments(text: str) -> str:
     return "".join(out)
 
 
+def mask_comments(text: str) -> str:
+    """TEXT with each comment blanked, same length and offsets: for finding structure.
+
+    strip_comments' rule (a % not preceded by a backslash runs to the end of the
+    line), but the comment becomes spaces instead of disappearing, so a position
+    found in the masked text is the same position in TEXT. A commented-out
+    \\begin{proof} is not a proof.
+    """
+    out = []
+    for line in text.splitlines(keepends=True):
+        parts = line.splitlines()
+        body = parts[0] if parts else ""
+        cut = None
+        for i, ch in enumerate(body):
+            if ch == "%" and (i == 0 or body[i - 1] != "\\"):
+                cut = i
+                break
+        out.append(line if cut is None else body[:cut] + " " * (len(body) - cut) + line[len(body):])
+    return "".join(out)
+
+
 def _read_eprint_raw(path: Path) -> tuple[list[dict], dict]:
     """Text-ish files from an eprint archive, as bytes, including .sty/.cls."""
     files = []

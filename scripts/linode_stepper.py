@@ -373,7 +373,7 @@ def next_invocation(run_dir, stage, run_id=None, corpus_id=None):
         counts = {}
         for f in sorted((base / invocation).glob(f"{stage}.*.json")):
             try:
-                counts[f.name[len(stage) + 1:-len(".json")]] = json.loads(f.read_text())["counts"]
+                counts[f.name[len(stage) + 1:-len(".json")]] = accounting.read(f)["counts"]
             except (OSError, ValueError, KeyError):
                 counts[f.name] = "unreadable"
         with open(os.path.join(run_dir, ATTEMPTS), "a") as handle:
