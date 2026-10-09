@@ -1,5 +1,7 @@
 # E-bge-retrieval-cas-sel-3b
 
+**VERDICT (2026-10-09, provisional):** DONE — The note records EXP-3 and EXP-3b complete with results, shipped runner/payload, and artifacts on disk. _(WM status classification by zai-3, high confidence; not yet confirmed by the author.)_
+
 Author: claude-1, 2026-06-18. Bounded Linode experiment, modelled on
 `E-70B-on-raw-control-arm.md`. Owns the runner `scripts/linode-bge-retrieval.sh`
 and the payload `scripts/cas_sel_3b_embed_experiment.py`.

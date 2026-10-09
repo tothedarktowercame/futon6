@@ -1,5 +1,7 @@
 # E-70B-on-raw-control-arm
 
+**VERDICT (2026-10-09, provisional):** OPEN — Runner written and verified but the GPU run is send-gated to Joe and no result is recorded. _(WM status classification by zai-3, medium confidence; not yet confirmed by the author.)_
+
 Author: claude-2, 2026-06-18. Bounded experiment (RAW-CTL on the proofcheck
 readiness card). Owns the runner `scripts/linode-4gpu-run-raw.sh`.
 

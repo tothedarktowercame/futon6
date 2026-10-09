@@ -1,5 +1,7 @@
 # E-miner-v2-bv-combs — type the wiring diagrams with BV connectives (combs over :composes)
 
+**VERDICT (2026-10-09, provisional):** DONE — BV-typing pass, combs and the gap-list (the acceptance deliverable) were all delivered with an eustress verdict and a reproduce command. _(WM status classification by zai-5, high confidence; not yet confirmed by the author.)_
+
 **Excursion (bounded, single-owner). Spun out 2026-06-14. Owner: a Claude
 agent (conceptually rich — CT/BV typing). Bell claude-1 back with results + shas.**
 

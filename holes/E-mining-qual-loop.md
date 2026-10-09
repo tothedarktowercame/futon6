@@ -1,5 +1,7 @@
 # E-mining-qual-loop — in-run quality surveys, a CT qualifying exam, and the bridge to memory
 
+**VERDICT (2026-10-09, provisional):** OPEN — Design-stage status with progress notes ending 2026-08-05 and no completion or closure statement. _(WM status classification by zai-2, low confidence; not yet confirmed by the author.)_
+
 **Opened:** 2026-08-05 (Fable session; HEAD = Joe, same day). Status: design
 note — nothing dispatched. Siblings: `E-superpod-hardening.md` (runner
 defects), `futon1b/holes/M-xtdb-22x-benchmarking.md` (the store this feeds),

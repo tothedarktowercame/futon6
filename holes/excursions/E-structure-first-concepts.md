@@ -1,5 +1,7 @@
 # E-structure-first-concepts
 
+**VERDICT (2026-10-09, provisional):** ABANDONED — Core spine gates passed but D4, D5 and H-SFC2b are explicitly deferred and untouched since 2026-06-17. _(WM status classification by zai-2, medium confidence; not yet confirmed by the author.)_
+
 *Excursion · owner **claude-1** · chartered 2026-06-17 · the **foundational first step
 beneath** [[E-informal-proof-checking]]. Owned end-to-end; built via Codex handoffs that
 bell back for review.*

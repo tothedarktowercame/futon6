@@ -1,5 +1,7 @@
 # Excursion: E-iatc-expository-alignment — do IATC's "ignored" categories show up in expository prose?
 
+**VERDICT (2026-10-09, provisional):** OPEN — Pre-registered experiment designed but not yet run; the LLM harvest sub-step is marked done but the experiment itself has no outcome. _(WM status classification by zai-2, medium confidence; not yet confirmed by the author.)_
+
 **Date:** 2026-06-17 · owner: Joe + claude-6 (paired) · **Status:** EXPERIMENT DESIGN (pre-registered; not yet run)
 **Repo:** futon6 (scripts) + futon3c (close-reading artifacts).
 **Prior art:** Corneli, Martin, Murray-Rust, Rino Nesin & Pease, *Argumentation Theory for

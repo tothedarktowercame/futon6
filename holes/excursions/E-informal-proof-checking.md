@@ -1,5 +1,7 @@
 # E-informal-proof-checking
 
+**VERDICT (2026-10-09, provisional):** DONE — Deliverable (Clojure checkers for recovered semantics) built and gates passed: pytest 6 passed, iatc_semcheck 2 tests, iatc_closure_check 4 tests. _(WM status classification by zai-1, high confidence; not yet confirmed by the author.)_
+
 *Excursion · owner **claude-1** · chartered 2026-06-17 · scope-out from the mark4
 IATC pipeline. Bounded, owned end-to-end by one agent; built via Codex handoffs
 that bell back for review (author ≠ reviewer).*

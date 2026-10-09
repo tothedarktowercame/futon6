@@ -1,5 +1,7 @@
 # E-comprehension-foundation — corpus-relative comprehension as the foundation
 
+**VERDICT (2026-10-09, provisional):** OPEN — Foundational design note with an explicitly open pilot question and no completion marker in head or tail. _(WM status classification by zai-4, low confidence; not yet confirmed by the author.)_
+
 *claude-1 + Joe, 2026-06-22. The holistic architecture under the readiness
 "cards": what the pipeline produces, why "improves as we run" is true (and where),
 and the discipline that keeps the foundation solid so Phase 3 can assume it.*

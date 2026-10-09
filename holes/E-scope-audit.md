@@ -1,5 +1,7 @@
 # E-scope-audit — joint mission-mode scope audits (labeled misses → detector improvements)
 
+**VERDICT (2026-10-09, provisional):** OPEN — Session-based joint audit method with sessions 1+ delivered, but no closure recorded; it stands as an ongoing detector-improvement loop. _(WM status classification by zai-1, medium confidence; not yet confirmed by the author.)_
+
 **Type:** E-prefix excursion. **Spawned:** 2026-06-10 (Joe + Fable), from the
 capability-map review shortlist. **Method:** Joe opens a mission in
 `mission-mode`; we jointly inspect whether all relevant scopes are ascertained;

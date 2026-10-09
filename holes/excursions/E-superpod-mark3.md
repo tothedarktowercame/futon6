@@ -1,5 +1,7 @@
 # E-superpod-mark3 — handoff spec for Rob (LLM/neural phases over all arXiv)
 
+**VERDICT (2026-10-09, provisional):** OPEN — Handoff spec marked OUTLINE/planning; no run report or delivery of the mark3 arXiv-scale layer recorded. _(WM status classification by zai-5, medium confidence; not yet confirmed by the author.)_
+
 **Date:** 2026-06-16 · Joe + Claude owner · **Status: OUTLINE / planning**
 **For:** Rob (rjmeyers @ superpod.smu.edu — 20× DGX A100, 160 GPUs; batch partition
 18 nodes / 2-day walltime). Model: LLaMA-class (Joe).

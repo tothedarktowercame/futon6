@@ -1,5 +1,7 @@
 # Learning-as-we-go (mark7) ↔ FutonZero / AlphaZero — and the agent-in-the-loop
 
+**VERDICT (2026-10-09, provisional):** DONE — Comparative analysis note with sections 1-6 complete and a closing rationale; no open work items remain in the doc. _(WM status classification by zai-1, medium confidence; not yet confirmed by the author.)_
+
 *futon6 note, 2026-06-23. Companion to `mark7-superpod-run-playbook.md`,
 `holes/missions/M-metric-harness.md`, and futon2's `docs/futonzero-alphazero.md`.*
 

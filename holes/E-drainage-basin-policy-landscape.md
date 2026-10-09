@@ -1,5 +1,7 @@
 # E-drainage-basin-policy-landscape — paleo-topography first
 
+**VERDICT (2026-10-09, provisional):** DONE — RESULTS section marked DONE (claude-3, 2026-06-14) and artifacts committed. _(WM status classification by zai-4, high confidence; not yet confirmed by the author.)_
+
 **Excursion (bounded, single-owner). Spun out 2026-06-14. Owner: a Claude
 agent. Bell claude-1 back with results + shas.**
 

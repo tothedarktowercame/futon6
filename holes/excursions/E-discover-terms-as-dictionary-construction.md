@@ -1,5 +1,7 @@
 # Excursion: discover-terms as OED-shape dictionary construction
 
+**VERDICT (2026-10-09, provisional):** OPEN — Scoping document with staged effort estimates and success criteria; no evidence the extractor, seed loader or graduation tool were ever built. _(WM status classification by zai-5, medium confidence; not yet confirmed by the author.)_
+
 **Date:** 2026-05-19
 **Owner:** Joe + claude-13 (this draft)
 **Parent mission:** `M-hyperreal-dictionary-planning.md` (futon6; status IDENTIFY since 2026-04-29; this excursion scopes the §6.B "paper → concept bridge" buildable-now probe under Joe's 2026-05-19 OED-framing)

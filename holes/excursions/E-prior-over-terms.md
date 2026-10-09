@@ -1,5 +1,7 @@
 # Excursion: E-prior-over-terms
 
+**VERDICT (2026-10-09, provisional):** DONE — Deliverable (CT df-index term prior) shipped with known-limits section; but its verification checklist items are unchecked, so completion is stated in substance though not counter-signed. _(WM status classification by zai-5, medium confidence; not yet confirmed by the author.)_
+
 **Date:** 2026-06-15
 **Owner:** Claude owner (end-to-end; Agency down → built directly, gate-verified)
 **Parent mission:** [M-prior-mathematics](../missions/M-prior-mathematics.md)

@@ -1,5 +1,7 @@
 # E-clean — CLean: EDN-as-Lean-sketch for the CT treatment of a proof
 
+**VERDICT (2026-10-09, provisional):** OPEN — CLean format spec with the a93J05 example landed, but the doc still carries unconfirmed build checks ('confirm it builds 0-sorry') and no completion verdict. _(WM status classification by zai-4, low confidence; not yet confirmed by the author.)_
+
 *Author: claude-1, 2026-06-18. Spawned from the EXP-3/EXP-3b arc
 (`E-bge-retrieval-cas-sel-3b.md`) and Joe's de-scope: we don't have to **be** the
 structure-aware retriever — Rob's downstream already does Lean → neo4j + pgvector with

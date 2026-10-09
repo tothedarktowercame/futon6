@@ -1,5 +1,7 @@
 # E-prelim-anatomy-atlas — apply the CT anatomy markup to the 489 prelim problems
 
+**VERDICT (2026-10-09, provisional):** DONE — Atlas adapter built (git) and the tail records problem resolutions fully grounded with no debt. _(WM status classification by zai-2, medium confidence; not yet confirmed by the author.)_
+
 **Excursion (bounded, single-owner). Spun out 2026-06-14 to keep the main
 session on CT. Owner: a Codex agent. Bell claude-1 back with results + shas.**
 

@@ -1,5 +1,7 @@
 # E-strategy-recognizer — finding strategies in NL proofs (the means/ends discipline)
 
+**VERDICT (2026-10-09, provisional):** OPEN — Two-layer recognizer works end-to-end on real CT proofs but explicit Next items (vocab growth, attribution) remain unmet. _(WM status classification by zai-3, medium confidence; not yet confirmed by the author.)_
+
 *claude-1 + Joe, 2026-06-22. The plan for the informal-proof strategy/tactic
 recognizer that raises the strategy axis of the comprehension floor
 ([[E-comprehension-foundation]]). Written because the means/ends line drifts if
