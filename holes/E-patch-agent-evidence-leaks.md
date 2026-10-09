@@ -5,6 +5,8 @@
 forward leak is measured). Ingestion-time tagging (DERIVE-2) and the mesh-source stamp (DERIVE-3)
 remain deferred.
 
+**VERDICT (2026-10-09, provisional):** ABANDONED — DERIVE-1 is done but DERIVE-2 and DERIVE-3 are explicitly deferred and untouched since 2026-07-10 (90+ days). _(WM status classification by zai-2, medium confidence; not yet confirmed by the author.)_
+
 > **F1 (2026-06-25) — shared classifier shipped + forward leak measured.**
 > - **`scripts/transcript_provenance.py`** — the ONE test `classify(record) → operator|agent|harness|unknown`
 >   + `is_operator(record)`, seeded by the validated `c_mine_joint` promptSource logic and this memory's rules.

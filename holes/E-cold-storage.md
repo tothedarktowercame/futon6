@@ -20,6 +20,8 @@ by convention alone:
   ~/code/storage/") — a convention, not a strategy: no manifest, no
   integrity checks, no backup story, lives on the same disk as everything.
 
+**VERDICT (2026-10-09, provisional):** ABANDONED — Explicitly a parked stub by Joe's own direction, parked indefinitely since 2026-06-11 with note-taking only and no build. _(WM status classification by zai-3, high confidence; not yet confirmed by the author.)_
+
 ## What a strategy needs (first cut)
 
 1. One blessed location per artifact class (regenerable extraction outputs

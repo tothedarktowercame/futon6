@@ -5,6 +5,8 @@ WM piloted flight `futon3c/holes/flights/F-wm-piloted-2026-06-12.md` (sortie 11)
 **Status:** RUN — miners built and run once over the corpus; now in the
 DP/anytime improvement loop (mine → measure loss → fix the worst → re-mine).
 
+**VERDICT (2026-10-09, provisional):** DONE — Miners built, run once over the corpus with reviewed-PASS results ('What has landed'); the DP improvement loop is framed as a downstream backlog, not an unfinished deliverable of this excursion. _(WM status classification by zai-5, medium confidence; not yet confirmed by the author.)_
+
 ## Charter
 
 Mine the futon mission corpus for the triple each mission is a derivation of

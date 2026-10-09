@@ -10,6 +10,8 @@ CAS-SEL-2/4 registry+select-dispatch, rung-3-2 technique fill + rung-3-3 residue
 into CAS-CERT. What's left is (1) the LLM/GPU-run measurements, (2) deferred refinements, (3) honesty
 caveats to **preserve** (not fix), (4) verification gaps to close on the run.
 
+**VERDICT (2026-10-09, provisional):** ACTIVE — Deterministic checker spine complete (status line), but the checklist itself lists open GPU-gated run-time items and deferred refinements for the next GPU window — checklist purpose ongoing. _(WM status classification by zai-5, medium confidence; not yet confirmed by the author.)_
+
 Legend:  ☐ open · ✅ done this session · 🔒 honesty boundary (do NOT "fix") · ⏳ run-time/GPU-gated
 
 ---

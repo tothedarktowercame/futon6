@@ -14,6 +14,8 @@ Status legend: **OPEN** (needs a fix before the Superpod window) ·
 **DOCUMENTED** (no code change needed; contract now written down) ·
 **ASSET** (not a defect — something the probe made available).
 
+**VERDICT (2026-10-09, provisional):** OPEN — Hazard tracker with explicitly OPEN items still standing (H25 reporting fix, H24 incremental checkpointing) as of the last log entry. _(WM status classification by zai-1, medium confidence; not yet confirmed by the author.)_
+
 **Count (2026-08-10 audit):** 40 hazards — H1–H38 plus H11b, H12b, H19b; H8 is
 an ASSET, not a hazard. 37 closed. 3 carry an open remainder: **H1** (tier-2
 corpus-fresh substrate rebuild), **H10** (S4 region cap is an out-of-band trim,

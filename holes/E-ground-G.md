@@ -11,6 +11,8 @@ with the rest of the apparatus.*
 **Spawned:** 2026-06-10, by Joe, from the **A2/T1 result** in `C-falsifiable-missions` §5.
 **Status:** CHARTERED (IDENTIFY).
 
+**VERDICT (2026-10-09, provisional):** OPEN — Grounded-T1 landing is data-blocked with an explicit decision pending Joe; neither completed nor dropped. _(WM status classification by zai-4, medium confidence; not yet confirmed by the author.)_
+
 ## Why (the forcing result)
 
 A2/T1 measured the multi-step rollout paying **0 rent** (0/24 roots; futon2 `scripts/t1_rent.clj`,
