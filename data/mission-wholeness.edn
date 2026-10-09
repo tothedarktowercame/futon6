@@ -67,6 +67,7 @@
   {:mission "M-mission-coherence-patterns" :class :alive :L 59.4 :T 9 :H 6.6 :C 30.6 :N 7 :n 7 :pathology []}
   {:mission "M-peripheral-model" :class :alive :L 59.4 :T 9 :H 6.6 :C 30.6 :N 5 :n 5 :pathology ["missing-scale[3]"]}
   {:mission "C-pudding-prover" :class :alive :L 58.5 :T 9 :H 6.5 :C 31.5 :N 7 :n 6 :pathology []}
+  {:mission "M-diagramprover" :class :alive :L 58.5 :T 9 :H 6.5 :C 31.5 :N 6 :n 8 :pathology ["missing-scale[5]"]}
   {:mission "M-象-2000" :class :alive :L 58.5 :T 9 :H 6.5 :C 31.5 :N 6 :n 7 :pathology []}
   {:mission "M-futon-seams" :class :alive :L 58.4 :T 8 :H 7.3 :C 21.6 :N 6 :n 7 :pathology []}
   {:mission "M-points-de-fuite" :class :alive :L 58.4 :T 8 :H 7.3 :C 21.6 :N 6 :n 7 :pathology ["missing-scale[4]"]}
@@ -99,7 +100,6 @@
   {:mission "M-dispatch-peripheral-bridge" :class :alive :L 52.2 :T 9 :H 5.8 :C 37.8 :N 5 :n 6 :pathology ["missing-scale[3]"]}
   {:mission "M-futon3-last-mile" :class :alive :L 52.2 :T 9 :H 5.8 :C 37.8 :N 5 :n 5 :pathology []}
   {:mission "M-pattern-posteriors" :class :alive :L 52.2 :T 9 :H 5.8 :C 37.8 :N 5 :n 6 :pathology ["missing-scale[3]"]}
-  {:mission "M-diagramprover" :class :alive :L 52.0 :T 8 :H 6.5 :C 28.0 :N 6 :n 7 :pathology ["missing-scale[5]"]}
   {:mission "M-first-flights" :class :alive :L 52.0 :T 8 :H 6.5 :C 28.0 :N 6 :n 7 :pathology []}
   {:mission "M-futonzero-mvp" :class :alive :L 52.0 :T 8 :H 6.5 :C 28.0 :N 6 :n 7 :pathology ["missing-scale[5]"]}
   {:mission "M-live-geometric-stack" :class :alive :L 52.0 :T 8 :H 6.5 :C 28.0 :N 6 :n 7 :pathology []}
@@ -146,6 +146,7 @@
   {:mission "E-close-the-loop" :class :alive :L 42.7 :T 7 :H 6.1 :C 27.3 :N 4 :n 6 :pathology ["missing-scale[3]"]}
   {:mission "M-metric-harness" :class :alive :L 42.7 :T 7 :H 6.1 :C 27.3 :N 6 :n 6 :pathology []}
   {:mission "M-f6-arxiv" :class :alive :L 42.6 :T 6 :H 7.1 :C 17.4 :N 5 :n 6 :pathology []}
+  {:mission "E-outer-loop-improvement" :class :alive :L 42.0 :T 7 :H 6.0 :C 28.0 :N 6 :n 7 :pathology []}
   {:mission "E-superpod-hardening" :class :alive :L 42.0 :T 7 :H 6.0 :C 28.0 :N 5 :n 6 :pathology ["missing-scale[3]"]}
   {:mission "E-street-sweeper" :class :alive :L 41.6 :T 8 :H 5.2 :C 38.4 :N 5 :n 6 :pathology []}
   {:mission "M-f6-ingest" :class :alive :L 41.6 :T 8 :H 5.2 :C 38.4 :N 4 :n 6 :pathology ["missing-scale[3]"]}
@@ -177,6 +178,7 @@
   {:mission "E-futon1a-to-futon1b-migration-pipeline" :class :alive :L 37.1 :T 7 :H 5.3 :C 32.9 :N 5 :n 5 :pathology []}
   {:mission "M-psr-pur-mesh-peripheral" :class :alive :L 37.1 :T 7 :H 5.3 :C 32.9 :N 5 :n 5 :pathology []}
   {:mission "M-aif4iad" :class :mess :L 36.8 :T 8 :H 4.6 :C 43.2 :N 4 :n 6 :pathology ["missing-scale[3]"]}
+  {:mission "E-aif-cascade" :class :alive :L 36.6 :T 6 :H 6.1 :C 23.4 :N 5 :n 6 :pathology []}
   {:mission "E-wm-live-recommendation" :class :alive :L 36.6 :T 6 :H 6.1 :C 23.4 :N 5 :n 5 :pathology []}
   {:mission "M-typed-holes" :class :alive :L 36.6 :T 6 :H 6.1 :C 23.4 :N 4 :n 6 :pathology ["missing-scale[3, 4]"]}
   {:mission "M-editorial-assistant" :class :alive :L 36.4 :T 7 :H 5.2 :C 33.6 :N 5 :n 5 :pathology []}
@@ -244,6 +246,7 @@
   {:mission "M-labs-integration" :class :mess :L 28.8 :T 6 :H 4.8 :C 31.2 :N 4 :n 5 :pathology ["missing-scale[3]"]}
   {:mission "M-象-cascade" :class :mess :L 28.8 :T 6 :H 4.8 :C 31.2 :N 4 :n 5 :pathology ["missing-scale[3]"]}
   {:mission "E-kimi-task-42" :class :alive :L 28.4 :T 4 :H 7.1 :C 11.6 :N 4 :n 5 :pathology ["missing-scale[3]"]}
+  {:mission "E-the-dark-tower-3" :class :alive :L 28.4 :T 4 :H 7.1 :C 11.6 :N 4 :n 6 :pathology ["missing-scale[3, 4]"]}
   {:mission "E-convert-operator-turns-to-patterns" :class :alive :L 28.0 :T 5 :H 5.6 :C 22.0 :N 4 :n 5 :pathology []}
   {:mission "E-patterns-and-missions-live" :class :mess :L 28.0 :T 7 :H 4.0 :C 42.0 :N 5 :n 6 :pathology []}
   {:mission "E-policy-rollout-engine" :class :alive :L 28.0 :T 5 :H 5.6 :C 22.0 :N 4 :n 5 :pathology []}
@@ -297,7 +300,6 @@
   {:mission "M-explore-aiqa" :class :alive :L 22.8 :T 4 :H 5.7 :C 17.2 :N 5 :n 6 :pathology []}
   {:mission "M-what-is-it-who-is-it-for" :class :alive :L 22.8 :T 4 :H 5.7 :C 17.2 :N 4 :n 4 :pathology []}
   {:mission "E-half-mil-audit" :class :mess :L 22.5 :T 5 :H 4.5 :C 27.5 :N 4 :n 5 :pathology ["missing-scale[3]"]}
-  {:mission "E-outer-loop-improvement" :class :mess :L 22.5 :T 5 :H 4.5 :C 27.5 :N 4 :n 5 :pathology ["missing-scale[3]"]}
   {:mission "M-aif-faithfulness" :class :mess :L 22.5 :T 5 :H 4.5 :C 27.5 :N 5 :n 5 :pathology []}
   {:mission "M-f7-lead-report" :class :pipeline :L 22.5 :T 3 :H 7.5 :C 7.5 :N 3 :n 5 :pathology ["missing-scale[2]"]}
   {:mission "E-patch-agent-evidence-leaks" :class :alive :L 22.4 :T 4 :H 5.6 :C 17.6 :N 4 :n 4 :pathology []}
@@ -331,7 +333,6 @@
   {:mission "C-bayesian-structure-learning-family" :class :alive :L 20.0 :T 4 :H 5.0 :C 20.0 :N 4 :n 4 :pathology ["missing-scale[3]"]}
   {:mission "E-memory-v3-programme" :class :alive :L 20.0 :T 4 :H 5.0 :C 20.0 :N 4 :n 5 :pathology []}
   {:mission "E-the-dark-tower-2" :class :alive :L 20.0 :T 4 :H 5.0 :C 20.0 :N 4 :n 5 :pathology ["missing-scale[3]"]}
-  {:mission "M-aif-over-the-operator" :class :alive :L 20.0 :T 4 :H 5.0 :C 20.0 :N 4 :n 5 :pathology []}
   {:mission "M-forum-refactor-qa" :class :alive :L 20.0 :T 4 :H 5.0 :C 20.0 :N 4 :n 4 :pathology []}
   {:mission "M-plan-mermaid-viewer" :class :alive :L 20.0 :T 4 :H 5.0 :C 20.0 :N 3 :n 4 :pathology ["missing-scale[2]"]}
   {:mission "M-ws-emacs-log-stream" :class :alive :L 20.0 :T 4 :H 5.0 :C 20.0 :N 3 :n 5 :pathology ["missing-scale[2]"]}
@@ -353,6 +354,7 @@
   {:mission "E-mathse-xtdb-benchmark" :class :mess :L 18.8 :T 4 :H 4.7 :C 21.2 :N 5 :n 5 :pathology []}
   {:mission "E-queries-and-scopes" :class :mess :L 18.8 :T 4 :H 4.7 :C 21.2 :N 3 :n 4 :pathology ["missing-scale[2]"]}
   {:mission "M-a-wmc-scaling" :class :mess :L 18.8 :T 4 :H 4.7 :C 21.2 :N 4 :n 4 :pathology []}
+  {:mission "M-aif-over-the-operator" :class :mess :L 18.8 :T 4 :H 4.7 :C 21.2 :N 4 :n 5 :pathology []}
   {:mission "E-early-memories-review" :class :pipeline :L 18.6 :T 3 :H 6.2 :C 11.4 :N 3 :n 4 :pathology ["missing-scale[2]"]}
   {:mission "E-first-flights-policy-grade-G-closure" :class :mess :L 18.4 :T 4 :H 4.6 :C 21.6 :N 3 :n 3 :pathology []}
   {:mission "E-typed-holes-aif-alternate" :class :pipeline :L 18.3 :T 3 :H 6.1 :C 11.7 :N 3 :n 4 :pathology ["missing-scale[2]"]}
@@ -391,6 +393,7 @@
   {:mission "M-wm-capability-claim" :class :mess :L 16.0 :T 4 :H 4.0 :C 24.0 :N 3 :n 4 :pathology []}
   {:mission "C-cascade-real-rundeliver-cascade" :class :pipeline :L 15.9 :T 3 :H 5.3 :C 14.1 :N 4 :n 4 :pathology []}
   {:mission "E-vwm" :class :pipeline :L 15.9 :T 3 :H 5.3 :C 14.1 :N 3 :n 3 :pathology []}
+  {:mission "E-agency-work-orders" :class :mess :L 15.6 :T 4 :H 3.9 :C 24.4 :N 3 :n 5 :pathology ["missing-scale[2]"]}
   {:mission "E-cascade-sampler-sampler" :class :pipeline :L 15.6 :T 3 :H 5.2 :C 14.4 :N 4 :n 5 :pathology []}
   {:mission "E-r18-faithfulness-audit" :class :mess :L 15.6 :T 4 :H 3.9 :C 24.4 :N 4 :n 4 :pathology []}
   {:mission "E-btoa-evidence-sample-mapping-v0" :class :mess :L 15.2 :T 4 :H 3.8 :C 24.8 :N 3 :n 5 :pathology ["missing-scale[2]"]}
@@ -416,6 +419,7 @@
   {:mission "E-mo-query-phylogeny" :class :mess :L 14.4 :T 4 :H 3.6 :C 25.6 :N 3 :n 3 :pathology ["missing-scale[2]"]}
   {:mission "M-fold-self-play" :class :mess :L 14.4 :T 4 :H 3.6 :C 25.6 :N 4 :n 4 :pathology []}
   {:mission "E-cheesemonger" :class :pipeline :L 14.2 :T 2 :H 7.1 :C 5.8 :N 4 :n 5 :pathology ["missing-scale[3]"]}
+  {:mission "E-agency-work-orders-bells-discovery" :class :pipeline :L 14.1 :T 3 :H 4.7 :C 15.9 :N 4 :n 4 :pathology []}
   {:mission "E-aif2-partB" :class :pipeline :L 14.1 :T 3 :H 4.7 :C 15.9 :N 4 :n 4 :pathology []}
   {:mission "E-substrate-metrics" :class :pipeline :L 14.1 :T 3 :H 4.7 :C 15.9 :N 4 :n 5 :pathology []}
   {:mission "E-kimi-task-45" :class :pipeline :L 14.0 :T 2 :H 7.0 :C 6.0 :N 3 :n 4 :pathology ["missing-scale[2]"]}
@@ -533,6 +537,7 @@
   {:mission "E-kimi-task-7" :class :mess :L 8.8 :T 4 :H 2.2 :C 31.2 :N 3 :n 4 :pathology ["missing-scale[1]"]}
   {:mission "E-learning-across-levels" :class :mess :L 8.8 :T 4 :H 2.2 :C 31.2 :N 4 :n 4 :pathology []}
   {:mission "E-pilot-contract-compliance" :class :pipeline :L 8.8 :T 2 :H 4.4 :C 11.2 :N 4 :n 5 :pathology []}
+  {:mission "E-象-evaluation-strategy" :class :pipeline :L 8.8 :T 2 :H 4.4 :C 11.2 :N 4 :n 5 :pathology ["missing-scale[3]"]}
   {:mission "E-kimi-task-120" :class :pipeline :L 8.7 :T 3 :H 2.9 :C 21.3 :N 4 :n 4 :pathology []}
   {:mission "E-kimi-task-122" :class :pipeline :L 8.7 :T 3 :H 2.9 :C 21.3 :N 3 :n 4 :pathology ["missing-scale[2]"]}
   {:mission "E-kimi-task-123" :class :pipeline :L 8.7 :T 3 :H 2.9 :C 21.3 :N 3 :n 4 :pathology []}
@@ -585,6 +590,7 @@
   {:mission "E-bge-retrieval-cas-sel-3b" :class :pipeline :L 7.2 :T 3 :H 2.4 :C 22.8 :N 4 :n 4 :pathology ["missing-scale[3]"]}
   {:mission "E-causal-coupling-top-down" :class :pipeline :L 7.2 :T 2 :H 3.6 :C 12.8 :N 4 :n 5 :pathology ["missing-scale[3]"]}
   {:mission "E-live-loop-1-s2-escrow-design" :class :pipeline :L 7.2 :T 2 :H 3.6 :C 12.8 :N 4 :n 5 :pathology []}
+  {:mission "E-wm-algorithms" :class :pipeline :L 7.2 :T 2 :H 3.6 :C 12.8 :N 3 :n 3 :pathology []}
   {:mission "M-actuator-spec-substrate2-access" :class :pipeline :L 7.2 :T 2 :H 3.6 :C 12.8 :N 3 :n 3 :pathology []}
   {:mission "M-alfworld-pattern-discovery" :class :pipeline :L 7.2 :T 2 :H 3.6 :C 12.8 :N 3 :n 4 :pathology ["missing-scale[2]"]}
   {:mission "M-intent-curvature" :class :pipeline :L 7.2 :T 2 :H 3.6 :C 12.8 :N 3 :n 3 :pathology ["missing-scale[2]"]}
@@ -627,7 +633,6 @@
   {:mission "E-aif-daisyworld" :class :stub :L 6.0 :T 3 :H 2.0 :C 24.0 :N 3 :n 3 :pathology []}
   {:mission "E-aif-docs-live" :class :pipeline :L 6.0 :T 2 :H 3.0 :C 14.0 :N 3 :n 4 :pathology ["missing-scale[2]"]}
   {:mission "E-kimi-task-16" :class :stub :L 6.0 :T 3 :H 2.0 :C 24.0 :N 2 :n 2 :pathology []}
-  {:mission "E-wm-algorithms" :class :pipeline :L 6.0 :T 2 :H 3.0 :C 14.0 :N 3 :n 4 :pathology []}
   {:mission "M-demonstration-foundry.F1-removal-spec" :class :pipeline :L 6.0 :T 2 :H 3.0 :C 14.0 :N 3 :n 4 :pathology []}
   {:mission "E-crossed-bells" :class :pipeline :L 5.8 :T 2 :H 2.9 :C 14.2 :N 3 :n 4 :pathology ["missing-scale[2]"]}
   {:mission "E-globe4-candidate-bridge-v0" :class :pipeline :L 5.8 :T 2 :H 2.9 :C 14.2 :N 3 :n 3 :pathology []}
@@ -788,6 +793,10 @@
   {:mission "E-kimi-task-97" :class :stub :L 0.0 :T 1 :H 0.0 :C 10.0 :N 2 :n 3 :pathology ["missing-scale[1]"]}
   {:mission "E-kimi-task-98" :class :stub :L 0.0 :T 1 :H 0.0 :C 10.0 :N 2 :n 3 :pathology ["missing-scale[1]"]}
   {:mission "E-kimi-task-99" :class :stub :L 0.0 :T 0 :H 0.0 :C 0.0 :N 2 :n 3 :pathology []}
+  {:mission "E-mfuton-compiler-scope-connection-20261003" :class :stub :L 0.0 :T 2 :H 0.0 :C 20.0 :N 1 :n 1 :pathology []}
+  {:mission "E-mfuton-lisp-lifting-20261003" :class :stub :L 0.0 :T 1 :H 0.0 :C 10.0 :N 2 :n 2 :pathology []}
+  {:mission "E-mfuton-lisp-lookup-20261003" :class :stub :L 0.0 :T 0 :H 0.0 :C 0.0 :N 1 :n 1 :pathology []}
+  {:mission "E-mfuton-lisp-owner-20261003" :class :stub :L 0.0 :T 0 :H 0.0 :C 0.0 :N 1 :n 1 :pathology []}
   {:mission "E-sanitize-invalid-EDN" :class :stub :L 0.0 :T 1 :H 0.0 :C 10.0 :N 2 :n 2 :pathology []}
   {:mission "M-actuator-spec-fold-emits-clean" :class :mess :L 0.0 :T 4 :H 0.0 :C 40.0 :N 2 :n 3 :pathology []}
   {:mission "M-coupling-as-constraint" :class :stub :L 0.0 :T 1 :H 0.0 :C 10.0 :N 1 :n 2 :pathology []}
