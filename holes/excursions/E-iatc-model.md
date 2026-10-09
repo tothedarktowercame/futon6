@@ -416,3 +416,10 @@ defs, scopes) correct, IATC adds the *edges* (inferences) and *references*
 (anaphora). Candidate promotion: a mission to build out the missing IATC
 categories (performatives first) and export the marks as an IATC content graph
 (the Clojure form in §5 as an actual artifact).
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-3, medium confidence); not yet confirmed by the author._
+
+- [ ] Build the missing IATC categories, performatives first
+- [ ] Export the marks as an actual IATC content-graph artifact (the Clojure form in §5), not only a rendered demo

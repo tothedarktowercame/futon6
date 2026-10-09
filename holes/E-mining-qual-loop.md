@@ -184,3 +184,12 @@ own corpus-id, own out dir — no stream added, no bookkeeping blur).
   writing: S3 2-way, ~10 finals done.
 - 2026-08-05 (later) — §6 added: ct-causal-v0 corpus assembled, staged,
   queued behind shard-a.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-4, medium confidence); not yet confirmed by the author._
+
+- [ ] Run the in-run quality-survey loop over the mining run (survey every ~100 papers, escalated every 10 en route) with behaviour improvements recorded.
+- [ ] Write qualifying-exam problems from the top-100 category-theory papers.
+- [ ] Record whether a Zai agent who has not read the papers can answer and formalize them from the datamined contents alone.
+- [ ] Write the reflection on the bridge between datamined contents and the memory system.

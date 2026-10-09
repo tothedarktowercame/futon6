@@ -226,3 +226,13 @@ These are honest "weeks of focused effort" estimates; calendar-time will be long
 - Honest reality-check on T3 (LLM-assisted) and T4 (cross-paper) — what they cost, when they're worth running
 
 If those land, the **§2.A.2.20 feedback-loop gap closes** structurally: candidate-new-terms.jsonl becomes a *consumed* artefact, and the kernel evolves as the corpus grows.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-2, high confidence); not yet confirmed by the author._
+
+- [ ] PM seed loader produces ~19K canonical dictionary entries from existing PM .tex
+- [ ] Definition-extractor yields classified entries for the 64 demo candidates (definition-found/stopword/uncertain)
+- [ ] Graduation tool supports operator review of provisional entries
+- [ ] Kernel-TSV-from-dictionary roundtrip produces an equivalent-or-larger kernel than today
+- [ ] Reality-check on T3 and T4 records cost and when each is worth running

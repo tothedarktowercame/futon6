@@ -141,3 +141,11 @@ recognition — the recognizer is **grown on CT, not imported**:
 *Cross-refs:* [[E-comprehension-foundation]], [[E-clean]], `CLEAN-LEAN-RELATION.md`,
 `futon2/holes/M-wm-policies.md` (the G(π) checkpoint), Herald (arXiv 2410.10878),
 ProofBridge (arXiv 2510.15681).
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-5, high confidence); not yet confirmed by the author._
+
+- [ ] Grow the discursive tactic vocabulary on CT from the 562 recall misses via the co-learning loop, and record the new recall
+- [ ] Add per-step attribution to fix apply/suffices precision and the use over-tightening
+- [ ] Feed the two-layer (discursive + bookkeeping) proof profile into CLean/the comprehension floor

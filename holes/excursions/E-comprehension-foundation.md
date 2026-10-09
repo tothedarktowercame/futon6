@@ -136,3 +136,12 @@ rise as the corpus grows, and separate weak-extraction from weak-proof on a pilo
 
 *Cross-refs:* `E-clean.md`, `proofcheck-readiness.html` (R2d, rung-3),
 `clean-method-vocab.edn`, `scripts/{warrant_normalize,clean_hole_harvest}.py`.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-2, high confidence); not yet confirmed by the author._
+
+- [ ] Every proof record carries a corpus-relative comprehension score and an explicit gap-to-ceiling
+- [ ] Holes are grounded and keyed by (type, concept), extending R2d from concepts-used to the concept a hole wants
+- [ ] The verdict gate refuses weakness assertions below high comprehension and emits the study-more/ask-for-help path
+- [ ] A recorded pilot go/no-go shows the score rises with corpus growth and separates weak-extraction from weak-proof

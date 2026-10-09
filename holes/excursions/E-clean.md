@@ -107,3 +107,10 @@ to named theorems (extreme-value, Liouville) and carry no hole. The aux object f
 `futon3c/holes/missions/M-typed-holes*` (the mission-side sibling + the EDN↔Lean method);
 `mathlib4/DarkTower/{Comb,TypedHole,Fill,Discharge,BV,Examples}.lean` (the target types);
 `futon3/library/iching/` (the 64-concept method vocabulary); `holes/clean/a93J05.clean.edn`.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-1, high confidence); not yet confirmed by the author._
+
+- [ ] Confirm the a93J05 CLean example builds through the CLean-to-Lean path with zero sorry
+- [ ] Document the CLean format so Rob's DarkTower-consuming pipeline can ingest the structure-bearing artifacts

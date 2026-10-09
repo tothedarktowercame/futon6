@@ -100,3 +100,12 @@ fixes each finding implies.
   — the **practical/downstream** eval this complements.
 - M-bayesian-structure-learning — the "accumulate posteriors not counters" frame M-prior instances.
 - Skolem scope audit (agent memory) — vacuous/unused/free scopes; T3 overlaps (12 vacuous in first-proof).
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-5, high confidence); not yet confirmed by the author._
+
+- [ ] Deliver T1: a tf/NE Zipf fit with exponent and R² (not df-slopes)
+- [ ] Deliver T2: a ranked junk-tail by prior-surprise with mass %, and T3: scopes-per-paper distribution plus a verdict on low-count papers (failure vs sparse)
+- [ ] Deliver T4: a measured drop in floating-expr %, and publish the per-stage quality map with the specific fixes each finding implies
+- [ ] Flag the contaminated-mode finding back to M-prior-mathematics and run its step-2 posterior-vs-prior test

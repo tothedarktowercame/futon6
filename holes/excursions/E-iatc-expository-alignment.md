@@ -385,3 +385,10 @@ Mirror the IATC stage (Phase ④) with this vocab as the target:
 This finalizes Phase ⑤ on the arXiv side: the taxonomy is closed under what we now know
 survives publication, the GPU stage has a concrete typed-hole target, and the dialogue-only
 categories are explicitly out of scope rather than silently missing.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-3, high confidence); not yet confirmed by the author._
+
+- [ ] Run the pre-registered experiment and record its outcome in the document
+- [ ] An expository checker (iatc_argcheck sibling) validates every scope has a resolved :kind, a filled-or-held :slot, and a source locus

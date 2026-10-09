@@ -536,3 +536,11 @@ unlock is closure-data maturity, not more building.**
 apparatus + the reviewed grounded loop as a sidecar driving cascade/curriculum + coverage-gaps), OR
 (b) build the small `move-cost ← posteriors` bridge now and re-measure as closures accumulate, OR
 (c) log the degenerate 0-rent baseline for the record. Recommendation: (a) now, (b) as the real path.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-2, high confidence); not yet confirmed by the author._
+
+- [ ] A grounded-G T1 number is measured and reported either way
+- [ ] A proceed/re-scope decision is recorded (Joe choosing among options a/b/c)
+- [ ] If proceed, the grounding signal is named as the value the rollout should consume

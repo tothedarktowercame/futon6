@@ -434,3 +434,11 @@ multi-MSC generalization check the gh200 (CT-only) can't give.
   enriched paper. Relocate the `.edn` graph dir into `futon6/data/` so the run has
   one drop location and the renderer auto-picks-up.
 - **Partition:** batch (18 nodes / 2-day) for the full corpus; short for dev.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-5, medium confidence); not yet confirmed by the author._
+
+- [ ] Run the mark3 LLM/neural layer over the arXiv corpus on the superpod partition and produce standoff mark layers + .edn graphs per paper
+- [ ] Deliver the self-gating checker with the run so structural review is automated before human review
+- [ ] Complete the late-stage H13 held-out APM evaluation: run H2/H4/H11 over APM and report coverage-at-confidence per subject

@@ -214,3 +214,11 @@ vocabulary-gap*) and becomes a labeled example for improving
   (detector regex, ingest both dispatch sites, view fetch list, Drawbridge
   reload, rendered on M-smart-emacs-cursor §5.1 within minutes of the
   spoken assertion). Same minting path as plain-argument, one phase over.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-5, high confidence); not yet confirmed by the author._
+
+- [ ] Classify every miss (binder-miss/anchor-drift/parent-break/vocabulary-gap); land a fix for each detector-class miss
+- [ ] Run audit sessions over the shortlist: M-interim-director-proxy-metric-inventory, M-pudding-peradams, M-pattern-application-diagnostic
+- [ ] Re-detect and re-ingest the ~200-mission scope ensemble after the W3/W4 fixes

@@ -288,3 +288,12 @@ lifting.
   gap that motivates this work
 - `futon6/holes/missions/M-superpod-mark3.md` — substrate mission this
   excursion hangs from
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-4, medium confidence); not yet confirmed by the author._
+
+- [ ] Build a normalization layer that maps legacy arXiv TeX source into the canonical block vocabulary the existing parser understands, without weakening mark2/mark…
+- [ ] Each work-package deliverable written: bucketed reports with counts and 3-5 representative examples per WP.
+- [ ] Acceptance harness (WP5) run against both mfuton silver and old-batch reality.
+- [ ] Degraded or failed normalizations produce an explicit degraded/failure record, never a fake success.

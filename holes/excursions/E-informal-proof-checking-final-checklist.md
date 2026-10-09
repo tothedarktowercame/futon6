@@ -194,3 +194,11 @@ and genealogical select real, not text-only.
 proofs/moves by argument shape, not just prose), genealogical pattern inheritance (CAS-SEL-5), the
 ArSE open-question corpus (rung-3-3), and grounding NE/scope extraction against the literature — all
 of which want structure-first embeddings, i.e. the BGE+R-GCN fusion above.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-3, medium confidence); not yet confirmed by the author._
+
+- [ ] Record the LLM/GPU-run measurements (the ⏳ items) when GPUs are next available
+- [ ] Complete the deferred refinements from the checklist
+- [ ] Close the run-time verification gaps identified for the run

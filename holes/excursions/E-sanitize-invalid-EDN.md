@@ -90,3 +90,11 @@ This excursion closes when (1) the corpus scan has run and any historical silent
 remediated or shown absent, and (2) a decision is recorded on the tokenizer upgrade (do it, or
 document that the quote-toggle is sufficient for the IATC graph grammar). Until then the core
 fix stands on its own; this file is the standing reminder of what it does *not* yet guarantee.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-5, high confidence); not yet confirmed by the author._
+
+- [ ] Scan data/iatc-argument-graphs/** for control chars in string fields; re-repair and re-gate hits; quantify silent \t/\n passes
+- [ ] Switch to an EDN-aware tokenizer if char literals ever appear outside strings
+- [ ] A/B a prompt instruction to emit unicode operators instead of LaTeX backslashes on the next GPU run

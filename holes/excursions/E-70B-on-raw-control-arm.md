@@ -87,3 +87,10 @@ Specified + runner written and verified (syntax + dry-run: 10 raw candidates,
 253 enrichment marks stripped, all gate-pass). **Send-gated to Joe** (GPU spend).
 Box provisioned 2026-06-18; setup in progress. Hand the runner to the agent
 orchestrating the tests; run after steps 1–2 above.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-1, medium confidence); not yet confirmed by the author._
+
+- [ ] Run the send-gated GPU run of scripts/linode-4gpu-run-raw.sh after Joe approves spend
+- [ ] Record the raw-vs-enriched comparison verdict (raw comparable, or raw degrades) in this doc

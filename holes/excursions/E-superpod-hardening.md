@@ -1045,3 +1045,12 @@ kept rather than discarded.
   H24 remain open. H25 was narrowed after checking the code: R2d's NA handling
   is correct and deliberate; the real issue is R2c being un-failable by
   configuration while printed as a pass.
+
+## Closure criteria (provisional, 2026-10-09)
+
+_Drafted from this document's own stated goals during the War Machine status classification (zai-5, high confidence); not yet confirmed by the author._
+
+- [ ] Close H1 tier-2: wire a real corpus-fresh S2 substrate build (de-hardcode warp_run.py paths, per-run ids) beyond the ≥95% measured gate
+- [ ] Close H10: make the S4 region cap an in-band flag rather than an out-of-band trim
+- [ ] Close H38: unify the anchor checker and graphs onto one line basis so anchor faithfulness can become a gate
+- [ ] Keep the hazard tally block current: update the count whenever a hazard opens or closes
