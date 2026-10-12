@@ -1,0 +1,3873 @@
+{
+  "nodes": [
+    {
+      "id": "claim:corollary-1",
+      "type": "claim",
+      "env": "corollary",
+      "number": 1,
+      "label": "prop:abc_tensor",
+      "section": "2.4",
+      "char_span": [
+        110856,
+        111219
+      ]
+    },
+    {
+      "id": "claim:corollary-10",
+      "type": "claim",
+      "env": "corollary",
+      "number": 10,
+      "label": null,
+      "section": "4.5",
+      "char_span": [
+        285252,
+        285373
+      ]
+    },
+    {
+      "id": "claim:corollary-11",
+      "type": "claim",
+      "env": "corollary",
+      "number": 11,
+      "label": "cor:borelstoch_idempotents_split",
+      "section": "4.5",
+      "char_span": [
+        286200,
+        286340
+      ]
+    },
+    {
+      "id": "claim:corollary-12",
+      "type": "claim",
+      "env": "corollary",
+      "number": 12,
+      "label": "cor:chausstoch_idempotents_split",
+      "section": "4.5",
+      "char_span": [
+        293340,
+        293480
+      ]
+    },
+    {
+      "id": "claim:corollary-2",
+      "type": "claim",
+      "env": "corollary",
+      "number": 2,
+      "label": "cor:split_mono_supp",
+      "section": "3.1",
+      "char_span": [
+        136405,
+        136540
+      ]
+    },
+    {
+      "id": "claim:corollary-3",
+      "type": "claim",
+      "env": "corollary",
+      "number": 3,
+      "label": "cor:support_inclusion_self",
+      "section": "3.1",
+      "char_span": [
+        138295,
+        138422
+      ]
+    },
+    {
+      "id": "claim:corollary-4",
+      "type": "claim",
+      "env": "corollary",
+      "number": 4,
+      "label": "cor:support_det_borelstoch",
+      "section": "3.2",
+      "char_span": [
+        160521,
+        160797
+      ]
+    },
+    {
+      "id": "claim:corollary-5",
+      "type": "claim",
+      "env": "corollary",
+      "number": 5,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        161592,
+        161667
+      ]
+    },
+    {
+      "id": "claim:corollary-6",
+      "type": "claim",
+      "env": "corollary",
+      "number": 6,
+      "label": "cor:supp_iff_atomic",
+      "section": "3.2",
+      "char_span": [
+        171749,
+        171973
+      ]
+    },
+    {
+      "id": "claim:corollary-7",
+      "type": "claim",
+      "env": "corollary",
+      "number": 7,
+      "label": "cor:split_supp_mono",
+      "section": "3.6",
+      "char_span": [
+        234777,
+        235036
+      ]
+    },
+    {
+      "id": "claim:corollary-8",
+      "type": "claim",
+      "env": "corollary",
+      "number": 8,
+      "label": "cor:balanced_cat",
+      "section": "4.2",
+      "char_span": [
+        263667,
+        263875
+      ]
+    },
+    {
+      "id": "claim:corollary-9",
+      "type": "claim",
+      "env": "corollary",
+      "number": 9,
+      "label": "cor:char_suppbalanced",
+      "section": "4.4",
+      "char_span": [
+        272263,
+        272651
+      ]
+    },
+    {
+      "id": "claim:lemma-1",
+      "type": "claim",
+      "env": "lemma",
+      "number": 1,
+      "label": "lem:as_eq_new",
+      "section": "2.1",
+      "char_span": [
+        85650,
+        85874
+      ]
+    },
+    {
+      "id": "claim:lemma-10",
+      "type": "claim",
+      "env": "lemma",
+      "number": 10,
+      "label": "lem:inc_sim_p",
+      "section": "3.1",
+      "char_span": [
+        128969,
+        129232
+      ]
+    },
+    {
+      "id": "claim:lemma-11",
+      "type": "claim",
+      "env": "lemma",
+      "number": 11,
+      "label": "lem:supp_asfaithful",
+      "section": "3.1",
+      "char_span": [
+        129758,
+        130105
+      ]
+    },
+    {
+      "id": "claim:lemma-12",
+      "type": "claim",
+      "env": "lemma",
+      "number": 12,
+      "label": "lem:factoring_suppincs",
+      "section": "3.1",
+      "char_span": [
+        137134,
+        137567
+      ]
+    },
+    {
+      "id": "claim:lemma-13",
+      "type": "claim",
+      "env": "lemma",
+      "number": 13,
+      "label": "lem:suppdominance",
+      "section": "3.2",
+      "char_span": [
+        150353,
+        150505
+      ]
+    },
+    {
+      "id": "claim:lemma-14",
+      "type": "claim",
+      "env": "lemma",
+      "number": 14,
+      "label": "lem:atoms_univ",
+      "section": "3.2",
+      "char_span": [
+        153663,
+        153974
+      ]
+    },
+    {
+      "id": "claim:lemma-15",
+      "type": "claim",
+      "env": "lemma",
+      "number": 15,
+      "label": "lem:abscont_suppcompletion",
+      "section": "3.2",
+      "char_span": [
+        165971,
+        166238
+      ]
+    },
+    {
+      "id": "claim:lemma-16",
+      "type": "claim",
+      "env": "lemma",
+      "number": 16,
+      "label": "lem:suppcomp_complete",
+      "section": "3.2",
+      "char_span": [
+        167314,
+        167670
+      ]
+    },
+    {
+      "id": "claim:lemma-17",
+      "type": "claim",
+      "env": "lemma",
+      "number": 17,
+      "label": "lem:supp_proj",
+      "section": "3.6",
+      "char_span": [
+        224840,
+        225255
+      ]
+    },
+    {
+      "id": "claim:lemma-18",
+      "type": "claim",
+      "env": "lemma",
+      "number": 18,
+      "label": "lem:split_supp_is_supp",
+      "section": "3.6",
+      "char_span": [
+        225906,
+        226006
+      ]
+    },
+    {
+      "id": "claim:lemma-19",
+      "type": "claim",
+      "env": "lemma",
+      "number": 19,
+      "label": "lem:supp_factor",
+      "section": "3.6",
+      "char_span": [
+        228180,
+        228794
+      ]
+    },
+    {
+      "id": "claim:lemma-2",
+      "type": "claim",
+      "env": "lemma",
+      "number": 2,
+      "label": null,
+      "section": "2.2",
+      "char_span": [
+        94882,
+        94975
+      ]
+    },
+    {
+      "id": "claim:lemma-20",
+      "type": "claim",
+      "env": "lemma",
+      "number": 20,
+      "label": "prop:balanced_as_det",
+      "section": "4.1",
+      "char_span": [
+        258964,
+        259159
+      ]
+    },
+    {
+      "id": "claim:lemma-21",
+      "type": "claim",
+      "env": "lemma",
+      "number": 21,
+      "label": "lem:balanced_sharp",
+      "section": "4.5",
+      "char_span": [
+        276329,
+        276535
+      ]
+    },
+    {
+      "id": "claim:lemma-22",
+      "type": "claim",
+      "env": "lemma",
+      "number": 22,
+      "label": "lem:proj_balanced_split",
+      "section": "4.5",
+      "char_span": [
+        277640,
+        277881
+      ]
+    },
+    {
+      "id": "claim:lemma-23",
+      "type": "claim",
+      "env": "lemma",
+      "number": 23,
+      "label": "prop:blackwell_envelope_ase",
+      "section": "4.6",
+      "char_span": [
+        300571,
+        300932
+      ]
+    },
+    {
+      "id": "claim:lemma-24",
+      "type": "claim",
+      "env": "lemma",
+      "number": 24,
+      "label": "lem:as_shift",
+      "section": "5.2",
+      "char_span": [
+        312144,
+        312435
+      ]
+    },
+    {
+      "id": "claim:lemma-25",
+      "type": "claim",
+      "env": "lemma",
+      "number": 25,
+      "label": "lem:ase_detsplitmono",
+      "section": "5.2",
+      "char_span": [
+        313096,
+        313631
+      ]
+    },
+    {
+      "id": "claim:lemma-26",
+      "type": "claim",
+      "env": "lemma",
+      "number": 26,
+      "label": "lem:cond_unique",
+      "section": "5.2",
+      "char_span": [
+        314777,
+        315184
+      ]
+    },
+    {
+      "id": "claim:lemma-27",
+      "type": "claim",
+      "env": "lemma",
+      "number": 27,
+      "label": "lem:nabla_mono",
+      "section": "5.3",
+      "char_span": [
+        317774,
+        318578
+      ]
+    },
+    {
+      "id": "claim:lemma-28",
+      "type": "claim",
+      "env": "lemma",
+      "number": 28,
+      "label": "intervals",
+      "section": "6",
+      "char_span": [
+        331365,
+        331538
+      ]
+    },
+    {
+      "id": "claim:lemma-3",
+      "type": "claim",
+      "env": "lemma",
+      "number": 3,
+      "label": "lem:abs_cont_not_completely",
+      "section": "2.2",
+      "char_span": [
+        102214,
+        102614
+      ]
+    },
+    {
+      "id": "claim:lemma-4",
+      "type": "claim",
+      "env": "lemma",
+      "number": 4,
+      "label": "lem:factor_ac",
+      "section": "2.3",
+      "char_span": [
+        104568,
+        104731
+      ]
+    },
+    {
+      "id": "claim:lemma-5",
+      "type": "claim",
+      "env": "lemma",
+      "number": 5,
+      "label": "lem:ac_mon_comp",
+      "section": "2.3",
+      "char_span": [
+        105282,
+        105595
+      ]
+    },
+    {
+      "id": "claim:lemma-6",
+      "type": "claim",
+      "env": "lemma",
+      "number": 6,
+      "label": "lem:ac_mon_comp_split_mono",
+      "section": "2.3",
+      "char_span": [
+        106331,
+        106685
+      ]
+    },
+    {
+      "id": "claim:lemma-7",
+      "type": "claim",
+      "env": "lemma",
+      "number": 7,
+      "label": "lem:ac_mon_factor",
+      "section": "2.3",
+      "char_span": [
+        106923,
+        107256
+      ]
+    },
+    {
+      "id": "claim:lemma-8",
+      "type": "claim",
+      "env": "lemma",
+      "number": 8,
+      "label": "lem:epi_ac_max",
+      "section": "2.4",
+      "char_span": [
+        111281,
+        111532
+      ]
+    },
+    {
+      "id": "claim:lemma-9",
+      "type": "claim",
+      "env": "lemma",
+      "number": 9,
+      "label": "lem:supp_crit",
+      "section": "3.1",
+      "char_span": [
+        122437,
+        123110
+      ]
+    },
+    {
+      "id": "claim:proposition-1",
+      "type": "claim",
+      "env": "proposition",
+      "number": 1,
+      "label": "prop:ase_top",
+      "section": "2.1",
+      "char_span": [
+        88626,
+        89142
+      ]
+    },
+    {
+      "id": "claim:proposition-10",
+      "type": "claim",
+      "env": "proposition",
+      "number": 10,
+      "label": "prop:parametric_vs_unparametric",
+      "section": "3.4",
+      "char_span": [
+        208651,
+        208957
+      ]
+    },
+    {
+      "id": "claim:proposition-11",
+      "type": "claim",
+      "env": "proposition",
+      "number": 11,
+      "label": "prop:borelstoch_eq",
+      "section": "3.5",
+      "char_span": [
+        214486,
+        214604
+      ]
+    },
+    {
+      "id": "claim:proposition-12",
+      "type": "claim",
+      "env": "proposition",
+      "number": 12,
+      "label": null,
+      "section": "3.5",
+      "char_span": [
+        216916,
+        217016
+      ]
+    },
+    {
+      "id": "claim:proposition-13",
+      "type": "claim",
+      "env": "proposition",
+      "number": 13,
+      "label": "prop:equalizer_causal",
+      "section": "3.5",
+      "char_span": [
+        218173,
+        218396
+      ]
+    },
+    {
+      "id": "claim:proposition-14",
+      "type": "claim",
+      "env": "proposition",
+      "number": 14,
+      "label": "prop:split_support_universal",
+      "section": "3.6",
+      "char_span": [
+        231464,
+        232366
+      ]
+    },
+    {
+      "id": "claim:proposition-15",
+      "type": "claim",
+      "env": "proposition",
+      "number": 15,
+      "label": "prop:splitsupp_tensor",
+      "section": "3.6",
+      "char_span": [
+        235571,
+        235884
+      ]
+    },
+    {
+      "id": "claim:proposition-16",
+      "type": "claim",
+      "env": "proposition",
+      "number": 16,
+      "label": "prop:split_support_pull",
+      "section": "3.6",
+      "char_span": [
+        236420,
+        237091
+      ]
+    },
+    {
+      "id": "claim:proposition-17",
+      "type": "claim",
+      "env": "proposition",
+      "number": 17,
+      "label": "prop:support_not_split",
+      "section": "3.6",
+      "char_span": [
+        238362,
+        238549
+      ]
+    },
+    {
+      "id": "claim:proposition-18",
+      "type": "claim",
+      "env": "proposition",
+      "number": 18,
+      "label": "lem:balancednew",
+      "section": "4.1",
+      "char_span": [
+        255133,
+        255970
+      ]
+    },
+    {
+      "id": "claim:proposition-19",
+      "type": "claim",
+      "env": "proposition",
+      "number": 19,
+      "label": "prop:stoch_balanced_cat",
+      "section": "4.2",
+      "char_span": [
+        261185,
+        261298
+      ]
+    },
+    {
+      "id": "claim:proposition-2",
+      "type": "claim",
+      "env": "proposition",
+      "number": 2,
+      "label": "prop:ac_is_completely",
+      "section": "2.2",
+      "char_span": [
+        95615,
+        95966
+      ]
+    },
+    {
+      "id": "claim:proposition-20",
+      "type": "claim",
+      "env": "proposition",
+      "number": 20,
+      "label": "prop:proj_idempotent_support",
+      "section": "4.4",
+      "char_span": [
+        270037,
+        270602
+      ]
+    },
+    {
+      "id": "claim:proposition-21",
+      "type": "claim",
+      "env": "proposition",
+      "number": 21,
+      "label": "prop:karoubi_symm_monoidal",
+      "section": "4.6",
+      "char_span": [
+        296406,
+        296686
+      ]
+    },
+    {
+      "id": "claim:proposition-22",
+      "type": "claim",
+      "env": "proposition",
+      "number": 22,
+      "label": "prop:blackwellenv_markov",
+      "section": "4.6",
+      "char_span": [
+        298368,
+        298574
+      ]
+    },
+    {
+      "id": "claim:proposition-23",
+      "type": "claim",
+      "env": "proposition",
+      "number": 23,
+      "label": "prop:blackwell_causal",
+      "section": "4.6",
+      "char_span": [
+        301306,
+        301480
+      ]
+    },
+    {
+      "id": "claim:proposition-24",
+      "type": "claim",
+      "env": "proposition",
+      "number": 24,
+      "label": "prop:ase_props",
+      "section": "5.2",
+      "char_span": [
+        310119,
+        311189
+      ]
+    },
+    {
+      "id": "claim:proposition-25",
+      "type": "claim",
+      "env": "proposition",
+      "number": 25,
+      "label": "prop:reflect_aseq",
+      "section": "5.3",
+      "char_span": [
+        320836,
+        321688
+      ]
+    },
+    {
+      "id": "claim:proposition-26",
+      "type": "claim",
+      "env": "proposition",
+      "number": 26,
+      "label": "prop:obs_asrep",
+      "section": "5.3",
+      "char_span": [
+        324434,
+        324583
+      ]
+    },
+    {
+      "id": "claim:proposition-27",
+      "type": "claim",
+      "env": "proposition",
+      "number": 27,
+      "label": "prop:chausstoch_obs_rep",
+      "section": "5.3",
+      "char_span": [
+        327087,
+        327215
+      ]
+    },
+    {
+      "id": "claim:proposition-3",
+      "type": "claim",
+      "env": "proposition",
+      "number": 3,
+      "label": "prop:ac_tensor",
+      "section": "2.3",
+      "char_span": [
+        108643,
+        109047
+      ]
+    },
+    {
+      "id": "claim:proposition-4",
+      "type": "claim",
+      "env": "proposition",
+      "number": 4,
+      "label": "prop:abs_bicont_same_supp",
+      "section": "3.1",
+      "char_span": [
+        130679,
+        131147
+      ]
+    },
+    {
+      "id": "claim:proposition-5",
+      "type": "claim",
+      "env": "proposition",
+      "number": 5,
+      "label": "prop:support_pull",
+      "section": "3.1",
+      "char_span": [
+        132002,
+        132745
+      ]
+    },
+    {
+      "id": "claim:proposition-6",
+      "type": "claim",
+      "env": "proposition",
+      "number": 6,
+      "label": "prop:coregular_supports",
+      "section": "3.1",
+      "char_span": [
+        138689,
+        139427
+      ]
+    },
+    {
+      "id": "claim:proposition-7",
+      "type": "claim",
+      "env": "proposition",
+      "number": 7,
+      "label": "prop:suppcomp",
+      "section": "3.2",
+      "char_span": [
+        162928,
+        163156
+      ]
+    },
+    {
+      "id": "claim:proposition-8",
+      "type": "claim",
+      "env": "proposition",
+      "number": 8,
+      "label": "prop:precise_supports",
+      "section": "3.3",
+      "char_span": [
+        201235,
+        201395
+      ]
+    },
+    {
+      "id": "claim:proposition-9",
+      "type": "claim",
+      "env": "proposition",
+      "number": 9,
+      "label": "prop:stat_category",
+      "section": "3.4",
+      "char_span": [
+        205713,
+        205832
+      ]
+    },
+    {
+      "id": "claim:theorem-1",
+      "type": "claim",
+      "env": "theorem",
+      "number": 1,
+      "label": "thm:supp_multiplicativity",
+      "section": "3.1",
+      "char_span": [
+        140510,
+        140853
+      ]
+    },
+    {
+      "id": "claim:theorem-10",
+      "type": "claim",
+      "env": "theorem",
+      "number": 10,
+      "label": "thm:balanced_split",
+      "section": "4.5",
+      "char_span": [
+        281994,
+        282452
+      ]
+    },
+    {
+      "id": "claim:theorem-11",
+      "type": "claim",
+      "env": "theorem",
+      "number": 11,
+      "label": "thm:idemp_borel",
+      "section": "4.5",
+      "char_span": [
+        286910,
+        287595
+      ]
+    },
+    {
+      "id": "claim:theorem-12",
+      "type": "claim",
+      "env": "theorem",
+      "number": 12,
+      "label": "thm:not_support",
+      "section": "6",
+      "char_span": [
+        329864,
+        331291
+      ]
+    },
+    {
+      "id": "claim:theorem-2",
+      "type": "claim",
+      "env": "theorem",
+      "number": 2,
+      "label": "thm:supp_functorial",
+      "section": "3.1",
+      "char_span": [
+        144063,
+        144992
+      ]
+    },
+    {
+      "id": "claim:theorem-3",
+      "type": "claim",
+      "env": "theorem",
+      "number": 3,
+      "label": "thm:borelstoch_supports",
+      "section": "3.2",
+      "char_span": [
+        155778,
+        156744
+      ]
+    },
+    {
+      "id": "claim:theorem-4",
+      "type": "claim",
+      "env": "theorem",
+      "number": 4,
+      "label": "thm:supports_suppcompletion",
+      "section": "3.2",
+      "char_span": [
+        170501,
+        170843
+      ]
+    },
+    {
+      "id": "claim:theorem-5",
+      "type": "claim",
+      "env": "theorem",
+      "number": 5,
+      "label": "thm:suppcomp_universal",
+      "section": "3.2",
+      "char_span": [
+        175648,
+        176258
+      ]
+    },
+    {
+      "id": "claim:theorem-6",
+      "type": "claim",
+      "env": "theorem",
+      "number": 6,
+      "label": "thm:Rel_embedding",
+      "section": "3.3",
+      "char_span": [
+        192995,
+        193459
+      ]
+    },
+    {
+      "id": "claim:theorem-7",
+      "type": "claim",
+      "env": "theorem",
+      "number": 7,
+      "label": "thm:balanced_idempotent",
+      "section": "4.2",
+      "char_span": [
+        260751,
+        260904
+      ]
+    },
+    {
+      "id": "claim:theorem-8",
+      "type": "claim",
+      "env": "theorem",
+      "number": 8,
+      "label": "thm:split_props",
+      "section": "4.3",
+      "char_span": [
+        265381,
+        266089
+      ]
+    },
+    {
+      "id": "claim:theorem-9",
+      "type": "claim",
+      "env": "theorem",
+      "number": 9,
+      "label": "thm:proj_idemp_supp",
+      "section": "4.4",
+      "char_span": [
+        273058,
+        273687
+      ]
+    },
+    {
+      "id": "definition:def-1",
+      "type": "definition",
+      "env": null,
+      "number": 1,
+      "label": "def:as_eq",
+      "section": "2.1",
+      "char_span": [
+        84154,
+        84444
+      ]
+    },
+    {
+      "id": "definition:def-10",
+      "type": "definition",
+      "env": null,
+      "number": 10,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        172945,
+        173395
+      ]
+    },
+    {
+      "id": "definition:def-11",
+      "type": "definition",
+      "env": null,
+      "number": 11,
+      "label": "def:point_liftings",
+      "section": "3.3",
+      "char_span": [
+        190384,
+        190642
+      ]
+    },
+    {
+      "id": "definition:def-12",
+      "type": "definition",
+      "env": null,
+      "number": 12,
+      "label": "def:statC",
+      "section": "3.4",
+      "char_span": [
+        203741,
+        204408
+      ]
+    },
+    {
+      "id": "definition:def-13",
+      "type": "definition",
+      "env": null,
+      "number": 13,
+      "label": "def:equalizer_principle",
+      "section": "3.5",
+      "char_span": [
+        211049,
+        211656
+      ]
+    },
+    {
+      "id": "definition:def-14",
+      "type": "definition",
+      "env": null,
+      "number": 14,
+      "label": "def:relative_equalizer",
+      "section": "3.5",
+      "char_span": [
+        216237,
+        216910
+      ]
+    },
+    {
+      "id": "definition:def-15",
+      "type": "definition",
+      "env": null,
+      "number": 15,
+      "label": "def:split_support",
+      "section": "3.6",
+      "char_span": [
+        224272,
+        224598
+      ]
+    },
+    {
+      "id": "definition:def-16",
+      "type": "definition",
+      "env": null,
+      "number": 16,
+      "label": "def:idempotents",
+      "section": "4.1",
+      "char_span": [
+        245089,
+        245681
+      ]
+    },
+    {
+      "id": "definition:def-17",
+      "type": "definition",
+      "env": null,
+      "number": 17,
+      "label": "def:balanced_cat",
+      "section": "4.2",
+      "char_span": [
+        260390,
+        260627
+      ]
+    },
+    {
+      "id": "definition:def-18",
+      "type": "definition",
+      "env": null,
+      "number": 18,
+      "label": null,
+      "section": "4.6",
+      "char_span": [
+        295836,
+        296300
+      ]
+    },
+    {
+      "id": "definition:def-19",
+      "type": "definition",
+      "env": null,
+      "number": 19,
+      "label": null,
+      "section": "4.6",
+      "char_span": [
+        297915,
+        298168
+      ]
+    },
+    {
+      "id": "definition:def-2",
+      "type": "definition",
+      "env": null,
+      "number": 2,
+      "label": "def:ac",
+      "section": "2.2",
+      "char_span": [
+        92593,
+        93300
+      ]
+    },
+    {
+      "id": "definition:def-20",
+      "type": "definition",
+      "env": null,
+      "number": 20,
+      "label": null,
+      "section": "5.1",
+      "char_span": [
+        302547,
+        303378
+      ]
+    },
+    {
+      "id": "definition:def-21",
+      "type": "definition",
+      "env": null,
+      "number": 21,
+      "label": null,
+      "section": "5.1",
+      "char_span": [
+        303543,
+        303794
+      ]
+    },
+    {
+      "id": "definition:def-22",
+      "type": "definition",
+      "env": null,
+      "number": 22,
+      "label": null,
+      "section": "5.1",
+      "char_span": [
+        306871,
+        307049
+      ]
+    },
+    {
+      "id": "definition:def-23",
+      "type": "definition",
+      "env": null,
+      "number": 23,
+      "label": "def:markov_functor",
+      "section": "5.1",
+      "char_span": [
+        308857,
+        309518
+      ]
+    },
+    {
+      "id": "definition:def-24",
+      "type": "definition",
+      "env": null,
+      "number": 24,
+      "label": "def:observational",
+      "section": "5.3",
+      "char_span": [
+        323851,
+        324063
+      ]
+    },
+    {
+      "id": "definition:def-3",
+      "type": "definition",
+      "env": null,
+      "number": 3,
+      "label": "def:separability",
+      "section": "2.2",
+      "char_span": [
+        94027,
+        94578
+      ]
+    },
+    {
+      "id": "definition:def-4",
+      "type": "definition",
+      "env": null,
+      "number": 4,
+      "label": "def:abs_bicont",
+      "section": "2.4",
+      "char_span": [
+        110320,
+        110714
+      ]
+    },
+    {
+      "id": "definition:def-5",
+      "type": "definition",
+      "env": null,
+      "number": 5,
+      "label": "def:support",
+      "section": "3.1",
+      "char_span": [
+        119419,
+        120445
+      ]
+    },
+    {
+      "id": "definition:def-6",
+      "type": "definition",
+      "env": null,
+      "number": 6,
+      "label": "def:atomic",
+      "section": "3.2",
+      "char_span": [
+        151422,
+        151587
+      ]
+    },
+    {
+      "id": "definition:def-7",
+      "type": "definition",
+      "env": null,
+      "number": 7,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        152880,
+        153012
+      ]
+    },
+    {
+      "id": "definition:def-8",
+      "type": "definition",
+      "env": null,
+      "number": 8,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        162271,
+        162832
+      ]
+    },
+    {
+      "id": "definition:def-9",
+      "type": "definition",
+      "env": null,
+      "number": 9,
+      "label": "def:suppreg",
+      "section": "3.2",
+      "char_span": [
+        169454,
+        169843
+      ]
+    },
+    {
+      "id": "proof:proof-1",
+      "type": "proof",
+      "env": null,
+      "number": 1,
+      "label": null,
+      "section": "2.1",
+      "char_span": [
+        86066,
+        86540
+      ]
+    },
+    {
+      "id": "proof:proof-10",
+      "type": "proof",
+      "env": null,
+      "number": 10,
+      "label": null,
+      "section": "2.3",
+      "char_span": [
+        109049,
+        109738
+      ]
+    },
+    {
+      "id": "proof:proof-11",
+      "type": "proof",
+      "env": null,
+      "number": 11,
+      "label": null,
+      "section": "2.4",
+      "char_span": [
+        111594,
+        111880
+      ]
+    },
+    {
+      "id": "proof:proof-12",
+      "type": "proof",
+      "env": null,
+      "number": 12,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        123113,
+        125600
+      ]
+    },
+    {
+      "id": "proof:proof-13",
+      "type": "proof",
+      "env": null,
+      "number": 13,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        129235,
+        129597
+      ]
+    },
+    {
+      "id": "proof:proof-14",
+      "type": "proof",
+      "env": null,
+      "number": 14,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        130108,
+        130676
+      ]
+    },
+    {
+      "id": "proof:proof-15",
+      "type": "proof",
+      "env": null,
+      "number": 15,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        131150,
+        131708
+      ]
+    },
+    {
+      "id": "proof:proof-16",
+      "type": "proof",
+      "env": null,
+      "number": 16,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        132747,
+        135350
+      ]
+    },
+    {
+      "id": "proof:proof-17",
+      "type": "proof",
+      "env": null,
+      "number": 17,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        137569,
+        138291
+      ]
+    },
+    {
+      "id": "proof:proof-18",
+      "type": "proof",
+      "env": null,
+      "number": 18,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        138425,
+        138525
+      ]
+    },
+    {
+      "id": "proof:proof-19",
+      "type": "proof",
+      "env": null,
+      "number": 19,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        139430,
+        140383
+      ]
+    },
+    {
+      "id": "proof:proof-2",
+      "type": "proof",
+      "env": null,
+      "number": 2,
+      "label": null,
+      "section": "2.1",
+      "char_span": [
+        89145,
+        91910
+      ]
+    },
+    {
+      "id": "proof:proof-20",
+      "type": "proof",
+      "env": null,
+      "number": 20,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        140855,
+        143932
+      ]
+    },
+    {
+      "id": "proof:proof-21",
+      "type": "proof",
+      "env": null,
+      "number": 21,
+      "label": null,
+      "section": "3.1",
+      "char_span": [
+        145221,
+        147083
+      ]
+    },
+    {
+      "id": "proof:proof-22",
+      "type": "proof",
+      "env": null,
+      "number": 22,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        150508,
+        151278
+      ]
+    },
+    {
+      "id": "proof:proof-23",
+      "type": "proof",
+      "env": null,
+      "number": 23,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        153977,
+        155396
+      ]
+    },
+    {
+      "id": "proof:proof-24",
+      "type": "proof",
+      "env": null,
+      "number": 24,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        156747,
+        160518
+      ]
+    },
+    {
+      "id": "proof:proof-25",
+      "type": "proof",
+      "env": null,
+      "number": 25,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        160800,
+        161351
+      ]
+    },
+    {
+      "id": "proof:proof-26",
+      "type": "proof",
+      "env": null,
+      "number": 26,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        163158,
+        165840
+      ]
+    },
+    {
+      "id": "proof:proof-27",
+      "type": "proof",
+      "env": null,
+      "number": 27,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        166240,
+        167310
+      ]
+    },
+    {
+      "id": "proof:proof-28",
+      "type": "proof",
+      "env": null,
+      "number": 28,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        167672,
+        169327
+      ]
+    },
+    {
+      "id": "proof:proof-29",
+      "type": "proof",
+      "env": null,
+      "number": 29,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        170846,
+        171746
+      ]
+    },
+    {
+      "id": "proof:proof-3",
+      "type": "proof",
+      "env": null,
+      "number": 3,
+      "label": null,
+      "section": "2.2",
+      "char_span": [
+        94978,
+        95507
+      ]
+    },
+    {
+      "id": "proof:proof-30",
+      "type": "proof",
+      "env": null,
+      "number": 30,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        171975,
+        172515
+      ]
+    },
+    {
+      "id": "proof:proof-31",
+      "type": "proof",
+      "env": null,
+      "number": 31,
+      "label": null,
+      "section": "3.2",
+      "char_span": [
+        176373,
+        188541
+      ]
+    },
+    {
+      "id": "proof:proof-32",
+      "type": "proof",
+      "env": null,
+      "number": 32,
+      "label": null,
+      "section": "3.3",
+      "char_span": [
+        193462,
+        198634
+      ]
+    },
+    {
+      "id": "proof:proof-33",
+      "type": "proof",
+      "env": null,
+      "number": 33,
+      "label": null,
+      "section": "3.3",
+      "char_span": [
+        201398,
+        202633
+      ]
+    },
+    {
+      "id": "proof:proof-34",
+      "type": "proof",
+      "env": null,
+      "number": 34,
+      "label": null,
+      "section": "3.4",
+      "char_span": [
+        205946,
+        208646
+      ]
+    },
+    {
+      "id": "proof:proof-35",
+      "type": "proof",
+      "env": null,
+      "number": 35,
+      "label": null,
+      "section": "3.4",
+      "char_span": [
+        209240,
+        209866
+      ]
+    },
+    {
+      "id": "proof:proof-36",
+      "type": "proof",
+      "env": null,
+      "number": 36,
+      "label": null,
+      "section": "3.5",
+      "char_span": [
+        214610,
+        215890
+      ]
+    },
+    {
+      "id": "proof:proof-37",
+      "type": "proof",
+      "env": null,
+      "number": 37,
+      "label": null,
+      "section": "3.5",
+      "char_span": [
+        217019,
+        218167
+      ]
+    },
+    {
+      "id": "proof:proof-38",
+      "type": "proof",
+      "env": null,
+      "number": 38,
+      "label": null,
+      "section": "3.5",
+      "char_span": [
+        218466,
+        219760
+      ]
+    },
+    {
+      "id": "proof:proof-39",
+      "type": "proof",
+      "env": null,
+      "number": 39,
+      "label": null,
+      "section": "3.6",
+      "char_span": [
+        225262,
+        225692
+      ]
+    },
+    {
+      "id": "proof:proof-4",
+      "type": "proof",
+      "env": null,
+      "number": 4,
+      "label": null,
+      "section": "2.2",
+      "char_span": [
+        95969,
+        96770
+      ]
+    },
+    {
+      "id": "proof:proof-40",
+      "type": "proof",
+      "env": null,
+      "number": 40,
+      "label": null,
+      "section": "3.6",
+      "char_span": [
+        226013,
+        226863
+      ]
+    },
+    {
+      "id": "proof:proof-41",
+      "type": "proof",
+      "env": null,
+      "number": 41,
+      "label": null,
+      "section": "3.6",
+      "char_span": [
+        228797,
+        230006
+      ]
+    },
+    {
+      "id": "proof:proof-42",
+      "type": "proof",
+      "env": null,
+      "number": 42,
+      "label": null,
+      "section": "3.6",
+      "char_span": [
+        232372,
+        233671
+      ]
+    },
+    {
+      "id": "proof:proof-43",
+      "type": "proof",
+      "env": null,
+      "number": 43,
+      "label": null,
+      "section": "3.6",
+      "char_span": [
+        235039,
+        235338
+      ]
+    },
+    {
+      "id": "proof:proof-44",
+      "type": "proof",
+      "env": null,
+      "number": 44,
+      "label": null,
+      "section": "3.6",
+      "char_span": [
+        235887,
+        236303
+      ]
+    },
+    {
+      "id": "proof:proof-45",
+      "type": "proof",
+      "env": null,
+      "number": 45,
+      "label": null,
+      "section": "3.6",
+      "char_span": [
+        237094,
+        237857
+      ]
+    },
+    {
+      "id": "proof:proof-46",
+      "type": "proof",
+      "env": null,
+      "number": 46,
+      "label": null,
+      "section": "3.6",
+      "char_span": [
+        238661,
+        240509
+      ]
+    },
+    {
+      "id": "proof:proof-47",
+      "type": "proof",
+      "env": null,
+      "number": 47,
+      "label": null,
+      "section": "4.1",
+      "char_span": [
+        255973,
+        257652
+      ]
+    },
+    {
+      "id": "proof:proof-48",
+      "type": "proof",
+      "env": null,
+      "number": 48,
+      "label": null,
+      "section": "4.1",
+      "char_span": [
+        259162,
+        259837
+      ]
+    },
+    {
+      "id": "proof:proof-49",
+      "type": "proof",
+      "env": null,
+      "number": 49,
+      "label": null,
+      "section": "4.2",
+      "char_span": [
+        260907,
+        261182
+      ]
+    },
+    {
+      "id": "proof:proof-5",
+      "type": "proof",
+      "env": null,
+      "number": 5,
+      "label": null,
+      "section": "2.2",
+      "char_span": [
+        102617,
+        103268
+      ]
+    },
+    {
+      "id": "proof:proof-50",
+      "type": "proof",
+      "env": null,
+      "number": 50,
+      "label": null,
+      "section": "4.2",
+      "char_span": [
+        261301,
+        263664
+      ]
+    },
+    {
+      "id": "proof:proof-51",
+      "type": "proof",
+      "env": null,
+      "number": 51,
+      "label": null,
+      "section": "4.2",
+      "char_span": [
+        263877,
+        264129
+      ]
+    },
+    {
+      "id": "proof:proof-52",
+      "type": "proof",
+      "env": null,
+      "number": 52,
+      "label": null,
+      "section": "4.3",
+      "char_span": [
+        266095,
+        268098
+      ]
+    },
+    {
+      "id": "proof:proof-53",
+      "type": "proof",
+      "env": null,
+      "number": 53,
+      "label": null,
+      "section": "4.4",
+      "char_span": [
+        270608,
+        271967
+      ]
+    },
+    {
+      "id": "proof:proof-54",
+      "type": "proof",
+      "env": null,
+      "number": 54,
+      "label": null,
+      "section": "4.4",
+      "char_span": [
+        272654,
+        272866
+      ]
+    },
+    {
+      "id": "proof:proof-55",
+      "type": "proof",
+      "env": null,
+      "number": 55,
+      "label": null,
+      "section": "4.4",
+      "char_span": [
+        273691,
+        275303
+      ]
+    },
+    {
+      "id": "proof:proof-56",
+      "type": "proof",
+      "env": null,
+      "number": 56,
+      "label": null,
+      "section": "4.5",
+      "char_span": [
+        276538,
+        277462
+      ]
+    },
+    {
+      "id": "proof:proof-57",
+      "type": "proof",
+      "env": null,
+      "number": 57,
+      "label": null,
+      "section": "4.5",
+      "char_span": [
+        277884,
+        281606
+      ]
+    },
+    {
+      "id": "proof:proof-58",
+      "type": "proof",
+      "env": null,
+      "number": 58,
+      "label": null,
+      "section": "4.5",
+      "char_span": [
+        282455,
+        285004
+      ]
+    },
+    {
+      "id": "proof:proof-59",
+      "type": "proof",
+      "env": null,
+      "number": 59,
+      "label": null,
+      "section": "4.5",
+      "char_span": [
+        285376,
+        286060
+      ]
+    },
+    {
+      "id": "proof:proof-6",
+      "type": "proof",
+      "env": null,
+      "number": 6,
+      "label": null,
+      "section": "2.3",
+      "char_span": [
+        104855,
+        105005
+      ]
+    },
+    {
+      "id": "proof:proof-60",
+      "type": "proof",
+      "env": null,
+      "number": 60,
+      "label": null,
+      "section": "4.5",
+      "char_span": [
+        286346,
+        286786
+      ]
+    },
+    {
+      "id": "proof:proof-61",
+      "type": "proof",
+      "env": null,
+      "number": 61,
+      "label": null,
+      "section": "4.5",
+      "char_span": [
+        288068,
+        289441
+      ]
+    },
+    {
+      "id": "proof:proof-62",
+      "type": "proof",
+      "env": null,
+      "number": 62,
+      "label": null,
+      "section": "4.5",
+      "char_span": [
+        293484,
+        294240
+      ]
+    },
+    {
+      "id": "proof:proof-63",
+      "type": "proof",
+      "env": null,
+      "number": 63,
+      "label": null,
+      "section": "4.6",
+      "char_span": [
+        296689,
+        297721
+      ]
+    },
+    {
+      "id": "proof:proof-64",
+      "type": "proof",
+      "env": null,
+      "number": 64,
+      "label": null,
+      "section": "4.6",
+      "char_span": [
+        298577,
+        299240
+      ]
+    },
+    {
+      "id": "proof:proof-65",
+      "type": "proof",
+      "env": null,
+      "number": 65,
+      "label": null,
+      "section": "4.6",
+      "char_span": [
+        300935,
+        301300
+      ]
+    },
+    {
+      "id": "proof:proof-66",
+      "type": "proof",
+      "env": null,
+      "number": 66,
+      "label": null,
+      "section": "4.6",
+      "char_span": [
+        301486,
+        302425
+      ]
+    },
+    {
+      "id": "proof:proof-67",
+      "type": "proof",
+      "env": null,
+      "number": 67,
+      "label": null,
+      "section": "5.2",
+      "char_span": [
+        311193,
+        312140
+      ]
+    },
+    {
+      "id": "proof:proof-68",
+      "type": "proof",
+      "env": null,
+      "number": 68,
+      "label": null,
+      "section": "5.2",
+      "char_span": [
+        312439,
+        313092
+      ]
+    },
+    {
+      "id": "proof:proof-69",
+      "type": "proof",
+      "env": null,
+      "number": 69,
+      "label": null,
+      "section": "5.2",
+      "char_span": [
+        313634,
+        314373
+      ]
+    },
+    {
+      "id": "proof:proof-7",
+      "type": "proof",
+      "env": null,
+      "number": 7,
+      "label": null,
+      "section": "2.3",
+      "char_span": [
+        105598,
+        106179
+      ]
+    },
+    {
+      "id": "proof:proof-70",
+      "type": "proof",
+      "env": null,
+      "number": 70,
+      "label": null,
+      "section": "5.2",
+      "char_span": [
+        315433,
+        315856
+      ]
+    },
+    {
+      "id": "proof:proof-71",
+      "type": "proof",
+      "env": null,
+      "number": 71,
+      "label": null,
+      "section": "5.3",
+      "char_span": [
+        318667,
+        320606
+      ]
+    },
+    {
+      "id": "proof:proof-72",
+      "type": "proof",
+      "env": null,
+      "number": 72,
+      "label": null,
+      "section": "5.3",
+      "char_span": [
+        321692,
+        323847
+      ]
+    },
+    {
+      "id": "proof:proof-73",
+      "type": "proof",
+      "env": null,
+      "number": 73,
+      "label": null,
+      "section": "5.3",
+      "char_span": [
+        324585,
+        325140
+      ]
+    },
+    {
+      "id": "proof:proof-74",
+      "type": "proof",
+      "env": null,
+      "number": 74,
+      "label": null,
+      "section": "5.3",
+      "char_span": [
+        327218,
+        329759
+      ]
+    },
+    {
+      "id": "proof:proof-75",
+      "type": "proof",
+      "env": null,
+      "number": 75,
+      "label": null,
+      "section": "6",
+      "char_span": [
+        331542,
+        332293
+      ]
+    },
+    {
+      "id": "proof:proof-76",
+      "type": "proof",
+      "env": null,
+      "number": 76,
+      "label": null,
+      "section": "6",
+      "char_span": [
+        332297,
+        334496
+      ]
+    },
+    {
+      "id": "proof:proof-8",
+      "type": "proof",
+      "env": null,
+      "number": 8,
+      "label": null,
+      "section": "2.3",
+      "char_span": [
+        106687,
+        106776
+      ]
+    },
+    {
+      "id": "proof:proof-9",
+      "type": "proof",
+      "env": null,
+      "number": 9,
+      "label": null,
+      "section": "2.3",
+      "char_span": [
+        107258,
+        107798
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "d1-038deacdbf67",
+      "source": "claim:lemma-25",
+      "target": "claim:theorem-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-05059678134b",
+      "source": "claim:lemma-6",
+      "target": "claim:lemma-13",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-0b46de3e4120",
+      "source": "claim:lemma-10",
+      "target": "claim:proposition-10",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-0c6b732f036d",
+      "source": "claim:lemma-10",
+      "target": "claim:corollary-4",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-0e128cd28a6a",
+      "source": "claim:lemma-8",
+      "target": "claim:theorem-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-0f146adc3356",
+      "source": "definition:def-6",
+      "target": "claim:lemma-16",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-11fccdfd27c8",
+      "source": "claim:lemma-24",
+      "target": "claim:proposition-7",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-1253a4f64c15",
+      "source": "claim:proposition-26",
+      "target": "claim:theorem-10",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-15bebd18c199",
+      "source": "claim:lemma-9",
+      "target": "claim:proposition-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-1940faa840d7",
+      "source": "claim:lemma-9",
+      "target": "claim:lemma-16",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-19b4948b0ac4",
+      "source": "claim:theorem-8",
+      "target": "claim:theorem-10",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-1c7f136630f1",
+      "source": "claim:lemma-4",
+      "target": "claim:theorem-8",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-1f9fffe80885",
+      "source": "definition:def-3",
+      "target": "claim:proposition-19",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-25e347b5065d",
+      "source": "claim:lemma-19",
+      "target": "claim:theorem-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-2621fc25e44d",
+      "source": "claim:lemma-10",
+      "target": "claim:theorem-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-2943e608e76f",
+      "source": "claim:lemma-10",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-29f8541d4ec8",
+      "source": "claim:lemma-4",
+      "target": "claim:lemma-8",
+      "rule": "D1",
+      "style": "solid",
+      "location": "2.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-2af4fe3187a6",
+      "source": "claim:lemma-10",
+      "target": "claim:proposition-4",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-2f9c592f81d5",
+      "source": "claim:proposition-3",
+      "target": "claim:theorem-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-3043d83f8576",
+      "source": "claim:theorem-7",
+      "target": "claim:theorem-10",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-35e044cac07b",
+      "source": "claim:lemma-5",
+      "target": "claim:lemma-12",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-35f161c88c8c",
+      "source": "claim:proposition-18",
+      "target": "claim:theorem-8",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-383210ebded2",
+      "source": "claim:corollary-1",
+      "target": "claim:proposition-4",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-3a4e107e7785",
+      "source": "claim:theorem-8",
+      "target": "claim:proposition-20",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-3abd17b501b8",
+      "source": "claim:lemma-9",
+      "target": "claim:lemma-19",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-3b02be0222fa",
+      "source": "claim:lemma-16",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-3b9ca70899f7",
+      "source": "claim:lemma-19",
+      "target": "claim:proposition-14",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-3bf976bace66",
+      "source": "claim:corollary-7",
+      "target": "claim:proposition-15",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-3c8775457c95",
+      "source": "claim:proposition-4",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-3cdb4be7fe7b",
+      "source": "claim:lemma-11",
+      "target": "claim:lemma-17",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-3e0023afe899",
+      "source": "claim:proposition-24",
+      "target": "claim:lemma-19",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-41910d5b339e",
+      "source": "claim:lemma-14",
+      "target": "claim:theorem-3",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-47df8cc8a640",
+      "source": "claim:proposition-24",
+      "target": "claim:lemma-24",
+      "rule": "D1",
+      "style": "solid",
+      "location": "5.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-490db8d9c33f",
+      "source": "claim:proposition-25",
+      "target": "claim:lemma-21",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-4a5db7ecc7c0",
+      "source": "claim:lemma-11",
+      "target": "claim:lemma-19",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-4af2d13ce4c0",
+      "source": "claim:proposition-3",
+      "target": "claim:lemma-15",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-4e1229fd6b82",
+      "source": "claim:theorem-1",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-4e42c4c52e64",
+      "source": "claim:lemma-21",
+      "target": "claim:lemma-22",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-5340aee0904c",
+      "source": "claim:lemma-13",
+      "target": "claim:corollary-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-53ebfbaef627",
+      "source": "claim:lemma-9",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-553cb5f0e1fa",
+      "source": "claim:theorem-10",
+      "target": "claim:corollary-10",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-56a8fea682a4",
+      "source": "claim:lemma-4",
+      "target": "claim:theorem-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-5811ab828bb1",
+      "source": "claim:lemma-12",
+      "target": "claim:corollary-3",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-5a7505a8cd1f",
+      "source": "claim:lemma-22",
+      "target": "claim:theorem-10",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-5ad6f1a792b5",
+      "source": "claim:lemma-6",
+      "target": "claim:proposition-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-5d2ee2f69217",
+      "source": "claim:corollary-11",
+      "target": "claim:theorem-11",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-5ed27a9dd9c3",
+      "source": "claim:lemma-1",
+      "target": "claim:proposition-24",
+      "rule": "D1",
+      "style": "solid",
+      "location": "5.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-5fb322786f9a",
+      "source": "claim:proposition-20",
+      "target": "claim:corollary-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-63d662022269",
+      "source": "claim:lemma-9",
+      "target": "claim:proposition-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-650eea92ff24",
+      "source": "claim:lemma-15",
+      "target": "claim:lemma-16",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-65e78042c121",
+      "source": "claim:theorem-8",
+      "target": "claim:corollary-10",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-66ab50d0d3c3",
+      "source": "claim:lemma-24",
+      "target": "claim:proposition-23",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-66b5cf3a89da",
+      "source": "claim:theorem-4",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-6814716f4876",
+      "source": "definition:def-5",
+      "target": "claim:lemma-19",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-69666b10575c",
+      "source": "claim:lemma-10",
+      "target": "claim:theorem-1",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-6a64cff8217c",
+      "source": "claim:lemma-24",
+      "target": "claim:theorem-2",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-6ae6de4ed911",
+      "source": "claim:lemma-4",
+      "target": "claim:lemma-10",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-6be3c3d9ff98",
+      "source": "claim:lemma-5",
+      "target": "claim:theorem-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-6dd86f45c6fa",
+      "source": "claim:lemma-11",
+      "target": "claim:theorem-2",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-72d07d731f16",
+      "source": "claim:proposition-3",
+      "target": "claim:lemma-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-72fc57868290",
+      "source": "claim:lemma-24",
+      "target": "claim:proposition-13",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-7900c9094934",
+      "source": "claim:proposition-24",
+      "target": "claim:lemma-11",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-7920724be5df",
+      "source": "claim:proposition-3",
+      "target": "claim:proposition-7",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-7c4c0af5e755",
+      "source": "claim:lemma-25",
+      "target": "claim:lemma-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "2.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-7dc5f128adcb",
+      "source": "claim:corollary-7",
+      "target": "claim:proposition-20",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-8109715556bc",
+      "source": "claim:lemma-24",
+      "target": "claim:proposition-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-85ba374abd11",
+      "source": "claim:lemma-11",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-8871ebc67e55",
+      "source": "claim:lemma-15",
+      "target": "claim:theorem-4",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-90a9762aa4da",
+      "source": "claim:theorem-8",
+      "target": "claim:lemma-22",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-9134db88c255",
+      "source": "claim:theorem-3",
+      "target": "claim:corollary-4",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-928c57bfe830",
+      "source": "claim:lemma-10",
+      "target": "claim:lemma-13",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-92eee4168374",
+      "source": "claim:proposition-19",
+      "target": "claim:corollary-8",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-9476346400b3",
+      "source": "claim:lemma-7",
+      "target": "claim:theorem-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-9566741a2c1d",
+      "source": "claim:lemma-10",
+      "target": "claim:lemma-11",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-99d00815b4d1",
+      "source": "claim:corollary-2",
+      "target": "claim:theorem-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-9d18e7a93984",
+      "source": "claim:lemma-4",
+      "target": "claim:theorem-2",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-9ddd0ad0c9e9",
+      "source": "claim:proposition-18",
+      "target": "claim:lemma-21",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-9e1f4dc899b9",
+      "source": "claim:proposition-11",
+      "target": "claim:corollary-11",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-9fe271c8c688",
+      "source": "claim:proposition-4",
+      "target": "claim:corollary-7",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-9ffb88ee4162",
+      "source": "claim:proposition-3",
+      "target": "claim:proposition-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-a14664dfbbfe",
+      "source": "claim:lemma-4",
+      "target": "claim:lemma-13",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-a49ddc07a0ac",
+      "source": "claim:lemma-27",
+      "target": "claim:proposition-25",
+      "rule": "D1",
+      "style": "solid",
+      "location": "5.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-a64d9dd2c03a",
+      "source": "claim:proposition-3",
+      "target": "claim:proposition-15",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-a78e4ef98287",
+      "source": "claim:lemma-9",
+      "target": "claim:theorem-3",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-a83ed35909fc",
+      "source": "claim:lemma-1",
+      "target": "claim:lemma-18",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-a8753f732c37",
+      "source": "claim:theorem-8",
+      "target": "claim:theorem-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-aab433928181",
+      "source": "claim:theorem-7",
+      "target": "claim:corollary-8",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-aaed8c47b772",
+      "source": "claim:proposition-3",
+      "target": "claim:proposition-8",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-ac30017c5364",
+      "source": "claim:lemma-5",
+      "target": "claim:proposition-7",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-ad4020e587f1",
+      "source": "claim:proposition-3",
+      "target": "claim:theorem-1",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-af5c9066c085",
+      "source": "claim:lemma-23",
+      "target": "claim:proposition-23",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-b8380f622dde",
+      "source": "claim:lemma-4",
+      "target": "claim:theorem-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-b98175fc077e",
+      "source": "claim:theorem-2",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-ba4dc1768106",
+      "source": "claim:proposition-24",
+      "target": "claim:proposition-7",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-bb659281f8c1",
+      "source": "claim:theorem-10",
+      "target": "claim:corollary-11",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-bc8c26b6cb3a",
+      "source": "claim:corollary-2",
+      "target": "claim:proposition-8",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-bf7fe0c7cae8",
+      "source": "claim:lemma-11",
+      "target": "claim:proposition-20",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-bf80425186eb",
+      "source": "claim:lemma-5",
+      "target": "claim:theorem-2",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-bf85a080271f",
+      "source": "claim:lemma-15",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-c3345d5eeb24",
+      "source": "claim:proposition-5",
+      "target": "claim:proposition-16",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-c749d2493b13",
+      "source": "claim:proposition-19",
+      "target": "claim:corollary-11",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-c9a1b7aaec02",
+      "source": "claim:lemma-13",
+      "target": "claim:theorem-3",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-cb410d67f3bf",
+      "source": "claim:lemma-18",
+      "target": "claim:proposition-20",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-cb4371c8ced6",
+      "source": "claim:proposition-3",
+      "target": "claim:lemma-13",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-cbc62cfb4fcc",
+      "source": "claim:lemma-25",
+      "target": "claim:lemma-7",
+      "rule": "D1",
+      "style": "solid",
+      "location": "2.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-d0110734879d",
+      "source": "claim:proposition-18",
+      "target": "claim:lemma-20",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-d03a49070b96",
+      "source": "claim:theorem-4",
+      "target": "claim:corollary-6",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-d1f3292d71c8",
+      "source": "claim:corollary-7",
+      "target": "claim:theorem-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-d3cd0ad36e24",
+      "source": "claim:proposition-24",
+      "target": "claim:proposition-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-d484404eb252",
+      "source": "claim:lemma-17",
+      "target": "claim:proposition-14",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-d9194b5d4898",
+      "source": "claim:lemma-5",
+      "target": "claim:proposition-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-df3747dd81ca",
+      "source": "claim:lemma-9",
+      "target": "claim:lemma-18",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-e18a9f53e125",
+      "source": "claim:lemma-16",
+      "target": "claim:theorem-4",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-e7c9e2cdc179",
+      "source": "claim:lemma-4",
+      "target": "claim:proposition-8",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-e82963756698",
+      "source": "claim:lemma-4",
+      "target": "claim:proposition-20",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.4",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-e8c226ef5bd6",
+      "source": "claim:lemma-4",
+      "target": "claim:lemma-9",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-eaf60052a49a",
+      "source": "claim:lemma-10",
+      "target": "claim:corollary-7",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-efec3b6e96b4",
+      "source": "claim:theorem-8",
+      "target": "claim:theorem-11",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.5",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-f46b823adca0",
+      "source": "claim:lemma-5",
+      "target": "claim:proposition-8",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.3",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-f486b1e435a0",
+      "source": "claim:lemma-12",
+      "target": "claim:theorem-5",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.2",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-fa5b04ad11be",
+      "source": "claim:lemma-10",
+      "target": "claim:theorem-2",
+      "rule": "D1",
+      "style": "solid",
+      "location": "3.1",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d1-febc17fdc5db",
+      "source": "claim:proposition-21",
+      "target": "claim:proposition-22",
+      "rule": "D1",
+      "style": "solid",
+      "location": "4.6",
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d2-63c81b012b34",
+      "source": "definition:def-1",
+      "target": "claim:proposition-24",
+      "rule": "D2",
+      "style": "dashed",
+      "location": {
+        "file": "supports.tex",
+        "line": 4156
+      },
+      "evidence": {
+        "kind": "statement-ref",
+        "command": "cref",
+        "label": "def:as_eq"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d2-65790e912e77",
+      "source": "definition:def-23",
+      "target": "definition:def-10",
+      "rule": "D2",
+      "style": "dashed",
+      "location": {
+        "file": "supports.tex",
+        "line": 2012
+      },
+      "evidence": {
+        "kind": "statement-ref",
+        "command": "cref",
+        "label": "def:markov_functor"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d2-775b4674cb99",
+      "source": "claim:proposition-25",
+      "target": "definition:def-24",
+      "rule": "D2",
+      "style": "dashed",
+      "location": {
+        "file": "supports.tex",
+        "line": 4400
+      },
+      "evidence": {
+        "kind": "statement-ref",
+        "command": "cref",
+        "label": "prop:reflect_aseq"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d2-94ad6d2cd869",
+      "source": "claim:proposition-3",
+      "target": "claim:corollary-1",
+      "rule": "D2",
+      "style": "dashed",
+      "location": {
+        "file": "supports.tex",
+        "line": 1088
+      },
+      "evidence": {
+        "kind": "statement-ref",
+        "command": "cref",
+        "label": "prop:ac_tensor"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d2-aa3c89ab3ccb",
+      "source": "definition:def-4",
+      "target": "claim:lemma-10",
+      "rule": "D2",
+      "style": "dashed",
+      "location": {
+        "file": "supports.tex",
+        "line": 1323
+      },
+      "evidence": {
+        "kind": "statement-ref",
+        "command": "cref",
+        "label": "def:abs_bicont"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d2-be580ca1bb45",
+      "source": "definition:def-6",
+      "target": "claim:theorem-3",
+      "rule": "D2",
+      "style": "dashed",
+      "location": {
+        "file": "supports.tex",
+        "line": 1772
+      },
+      "evidence": {
+        "kind": "statement-ref",
+        "command": "cref",
+        "label": "def:atomic"
+      },
+      "cycle": false
+    },
+    {
+      "id": "d2-cfc3ba1d1228",
+      "source": "definition:def-13",
+      "target": "claim:theorem-10",
+      "rule": "D2",
+      "style": "dashed",
+      "location": {
+        "file": "supports.tex",
+        "line": 3724
+      },
+      "evidence": {
+        "kind": "statement-ref",
+        "command": "cref",
+        "label": "def:equalizer_principle"
+      },
+      "cycle": false
+    }
+  ],
+  "unresolved_refs": {
+    "eq": 7,
+    "ex": 1,
+    "it": 8
+  },
+  "counts": {
+    "D1": 122,
+    "D2": 7
+  },
+  "scc_count": 179,
+  "cycle_scc_count": 0,
+  "verdicts": [],
+  "paper": "2308.00651",
+  "built_at": "2026-10-12T20:18:36+00:00"
+}
