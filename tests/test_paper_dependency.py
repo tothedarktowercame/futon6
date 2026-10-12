@@ -30,6 +30,7 @@ def test_d1_d2_and_unresolved_equation_reference():
 CYCLE_FIXTURE = r"""
 \begin{lemma}\label{lem:a}See \ref{lem:b}.\end{lemma}
 \begin{lemma}\label{lem:b}See \ref{lem:a}.\end{lemma}
+\begin{lemma}\label{lem:c}Tail: by \ref{lem:a}.\end{lemma}
 """
 
 
@@ -37,7 +38,10 @@ def test_d2_cycle_flags_and_ids_are_stable():
     hg = extract_paper_hypergraph_classical(CYCLE_FIXTURE, "cycle")
     first = build_dependency_graph(hg, CYCLE_FIXTURE)
     second = build_dependency_graph(hg, CYCLE_FIXTURE)
-    assert first["counts"] == {"D2": 2}
+    assert first["counts"] == {"D2": 3}
     assert first["cycle_scc_count"] == 1
-    assert all(edge["cycle"] for edge in first["edges"])
+    # Only the two mutual edges are in the cycle; the tail edge a -> c is not.
+    flagged = {(e["source"], e["target"]) for e in first["edges"] if e["cycle"]}
+    assert flagged == {("claim:lemma-1", "claim:lemma-2"), ("claim:lemma-2", "claim:lemma-1")}
+    assert not next(e for e in first["edges"] if e["target"] == "claim:lemma-3")["cycle"]
     assert [edge["id"] for edge in first["edges"]] == [edge["id"] for edge in second["edges"]]
