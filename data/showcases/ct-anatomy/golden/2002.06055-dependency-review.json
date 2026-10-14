@@ -10128,6 +10128,27 @@
         "label": "intalpha-cartesian"
       },
       "cycle": false
+    },
+    {
+      "id": "d3-3c64e6172adc",
+      "source": "claim:lemma-90",
+      "target": "claim:theorem-24",
+      "rule": "D3",
+      "style": "solid",
+      "location": {
+        "file": "whitehead.tex",
+        "line": 1679
+      },
+      "evidence": {
+        "kind": "derivation",
+        "edge_type": "derivation"
+      },
+      "attrs": {
+        "title": "Proof of \\cref{theorem:Quillen-A-bicat}",
+        "label": "theorem:Quillen-A-bicat",
+        "displaced": null
+      },
+      "cycle": false
     }
   ],
   "unresolved_refs": {
@@ -10148,11 +10169,12 @@
   },
   "counts": {
     "D1": 69,
-    "D2": 154
+    "D2": 154,
+    "D3": 1
   },
   "scc_count": 545,
   "cycle_scc_count": 6,
   "verdicts": [],
   "paper": "2002.06055",
-  "built_at": "2026-10-12T20:18:40+00:00"
+  "built_at": "2026-10-14T23:18:06+00:00"
 }

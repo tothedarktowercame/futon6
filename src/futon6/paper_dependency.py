@@ -6,7 +6,8 @@ The review JSON has the shape ``{"paper", "built_at", "nodes", "edges",
 never writes verdicts itself.
 
 KnowTeX D1 is read from existing proof derivation edges.  D2 adds dashed
-statement-reference edges.  D3 and the H-rules deliberately belong to later
+statement-reference edges.  D3 applies an explicit proof-title reference as
+an override of the positional proof association; the H-rules belong to later
 packets.
 """
 
@@ -147,9 +148,10 @@ def build_dependency_graph(hg: Mapping[str, Any], blocks_or_text: Any,
     unresolved: Counter[str] = Counter()
 
     def add_edge(rule: str, source: str, target: str, style: str,
-                 location: Any, evidence: Any) -> None:
+                 location: Any, evidence: Any,
+                 attrs: Mapping[str, Any] | None = None) -> None:
         edge_id = _stable_edge_id(rule, source, target)
-        review_edges.setdefault(edge_id, {
+        record = {
             "id": edge_id,
             "source": source,
             "target": target,
@@ -157,9 +159,42 @@ def build_dependency_graph(hg: Mapping[str, Any], blocks_or_text: Any,
             "style": style,
             "location": location,
             "evidence": evidence,
-        })
+        }
+        if attrs is not None:
+            record["attrs"] = dict(attrs)
+        review_edges.setdefault(edge_id, record)
+
+    # Index proof blocks by their hypergraph node.  The classical arm stores
+    # the span on both objects, while deliberately leaving proof titles off
+    # the node, so the title must be read from the parsed block here.
+    blocks_by_span = {
+        tuple(getattr(block, "span", ())): block
+        for block in blocks
+        if getattr(block, "env", None) == "proof"
+    }
+    proof_headers: dict[str, dict[str, Any]] = {}
+    for proof_id, proof_node in source_nodes.items():
+        if proof_node.get("type") != "proof":
+            continue
+        span = tuple((proof_node.get("attrs") or {}).get("char_span", ()))
+        block = blocks_by_span.get(span)
+        title = getattr(block, "title", None) if block is not None else None
+        match = _REF_RE.search(title or "")
+        if match is None:
+            continue
+        label = match.group("label").strip()
+        referenced = labels.get(label)
+        if referenced is None or source_nodes.get(referenced, {}).get("type") != "claim":
+            unresolved["proof-header"] += 1
+            continue
+        proof_headers[proof_id] = {
+            "title": title,
+            "label": label,
+            "target": referenced,
+        }
 
     # D1: existing proof-level dependency ends.
+    derivation_proofs: set[str] = set()
     for edge in hg.get("edges", []):
         if edge.get("type") != "derivation":
             continue
@@ -168,13 +203,61 @@ def build_dependency_graph(hg: Mapping[str, Any], blocks_or_text: Any,
                        if role == "target" and node_id in source_nodes), None)
         if target is None or source_nodes[target].get("type") not in {"claim", "definition"}:
             continue
+        proof_id = next((node_id for node_id, role in roles.items()
+                         if role == "proof_of_target" and node_id in source_nodes), None)
+        if proof_id is not None:
+            derivation_proofs.add(proof_id)
+        header = proof_headers.get(proof_id)
+        edge_target = target
+        rule = "D1"
+        header_attrs: dict[str, Any] | None = None
+        if header is not None:
+            edge_target = header["target"]
+            if edge_target != target:
+                rule = "D3"
+                displaced: str | None = target
+            else:
+                displaced = None
+                header_attrs = {"header-confirmed": True}
+            header_attrs = {
+                "title": header["title"],
+                "label": header["label"],
+                "displaced": displaced,
+                **(header_attrs or {}),
+            }
         for source, role in roles.items():
             if role != "depends_on" or source not in source_nodes:
                 continue
             if source_nodes[source].get("type") not in {"claim", "definition"}:
                 continue
-            add_edge("D1", source, target, "solid", edge.get("attrs", {}).get("section"),
-                     {"kind": "derivation", "edge_type": edge.get("type")})
+            add_edge(rule, source, edge_target, "solid", edge.get("attrs", {}).get("section"),
+                     {"kind": "derivation", "edge_type": edge.get("type")}, header_attrs)
+
+    # A proof can be parsed without a classical derivation edge when it
+    # follows another proof (the positional pass has no current claim).  A
+    # resolved D3 title still gives that proof an explicit claim association;
+    # use its claim/definition references as the proof-level source and leave
+    # the displaced positional claim null.
+    for proof_id, header in proof_headers.items():
+        if proof_id in derivation_proofs:
+            continue
+        proof_node = source_nodes[proof_id]
+        span = tuple((proof_node.get("attrs") or {}).get("char_span", ()))
+        block = blocks_by_span.get(span)
+        if block is None:
+            continue
+        for match in _REF_RE.finditer(getattr(block, "body", "") or ""):
+            source = labels.get(match.group("label").strip())
+            if source is None or source == header["target"]:
+                continue
+            if source_nodes.get(source, {}).get("type") not in {"claim", "definition"}:
+                continue
+            add_edge(
+                "D3", source, header["target"], "solid",
+                _location(source_text, span[0] + match.start(), source_files),
+                {"kind": "derivation", "edge_type": "derivation"},
+                {"title": header["title"], "label": header["label"], "displaced": None},
+            )
 
     # D2: references in statement blocks, resolved only to claim/definition nodes.
     for block in blocks:
