@@ -24,6 +24,14 @@ MAX_MODEL_LEN="${MAX_MODEL_LEN:-16384}"   # >= futon6_config.SERVING_MIN_CONTEXT
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.95}"
 ENFORCE_EAGER="${ENFORCE_EAGER:-1}"       # preregistered go-live path; set 0 to allow CUDA graphs.
 INSTALL_LINODE_CLI="${INSTALL_LINODE_CLI:-1}"
+# vLLM 0.23.0 pulls torch built for CUDA 13, which needs NVIDIA driver >= 580.
+# A host whose image pins an older driver (Paperspace A100s hold 535, i.e. CUDA
+# 12.2) can name a CUDA 12 build instead. An older vLLM needs the transformers
+# of its own release, since pip otherwise takes the newest and the server dies
+# on import: VLLM_SPEC="vllm==0.10.1.1 transformers==4.55.4" (torch 2.7.1,
+# cu126; Paperspace A100, 2026-10-15). Machine configuration: the stack version is recorded
+# with each run by futon6_config.serving(), not fixed by the run contract.
+VLLM_SPEC="${VLLM_SPEC:-vllm==0.23.0}"
 
 if [ "$(id -u)" -eq 0 ]; then
   SUDO=""
@@ -140,12 +148,13 @@ if [ "$ENFORCE_EAGER" = "1" ] && [[ "$EAGER_FLAGS" != *"--enforce-eager"* ]]; th
   EAGER_FLAGS="$EAGER_FLAGS --enforce-eager"
 fi
 
-echo "== venv + vLLM 0.23.0 (pulls torch cu130) =="
+echo "== venv + $VLLM_SPEC =="
 python3 -m venv "$VENV"
 # shellcheck disable=SC1091
 source "$VENV/bin/activate"
 pip install -q --upgrade pip
-pip install -q "vllm==0.23.0"
+# shellcheck disable=SC2086  # word-split on purpose: VLLM_SPEC may list several requirements
+pip install -q $VLLM_SPEC
 
 echo "== serve $MODEL on :$PORT (TP=$TP), detached -> $LOG =="
 nohup python -m vllm.entrypoints.openai.api_server \
