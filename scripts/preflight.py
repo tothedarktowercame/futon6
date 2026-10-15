@@ -105,7 +105,31 @@ def check_gate_subprocess():
     graphs = [g for g in graphs if not g.endswith(".rung2.edn")]
     if not graphs:
         return rec("chain:gate-subprocess", True, "no graphs yet — nothing to exercise")
-    code, out = sh(shlex.join(['bb', script, graphs[0]]), timeout=300)
+    # The semcheck composer now loads each graph's candidate from
+    # <graphs-dir>/../candidates/<name>.candidate.json, the layout a run writes.
+    # The committed fixtures predate that and have no candidates beside them, so
+    # semcheck stopped at "candidate source-window not found" before R2d ever
+    # ran, on every host (2026-10-15). Give it the run layout: the fixture graph
+    # plus a candidate carrying the graph's own identity and line range. Its
+    # text is blank -- this check is about R2d's interpreter, not anchors.
+    import tempfile
+    import edn_format
+    with tempfile.TemporaryDirectory(prefix="futon6-preflight-") as tmp:
+        src = graphs[0]
+        name = os.path.basename(src)
+        gdir = os.path.join(tmp, "graphs")
+        cdir = os.path.join(tmp, "candidates")
+        os.makedirs(gdir)
+        os.makedirs(cdir)
+        shutil.copy(src, os.path.join(gdir, name))
+        g = edn_format.loads(open(src, encoding="utf-8").read())
+        kw = edn_format.Keyword
+        lo, hi = g[kw("source")][kw("lines")]
+        candidate = {"paper-id": g[kw("paper/id")], "passage-id": g[kw("passage/id")],
+                     "window-lines": [lo, hi], "source-window": "\n" * (hi - lo)}
+        with open(os.path.join(cdir, name[:-len(".edn")] + ".candidate.json"), "w") as f:
+            json.dump(candidate, f)
+        code, out = sh(shlex.join(['bb', script, os.path.join(gdir, name)]), timeout=300)
     # PASS or FAIL are both fine; what must not happen is R2d failing to report.
     ok = "R2d" in out and "concept-coverage" in out and "R2d concept coverage failed" not in out
     return rec("chain:gate-subprocess", ok,
