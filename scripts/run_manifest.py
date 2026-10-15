@@ -313,6 +313,33 @@ def _record_code_change(run_dir: Path, was: dict | None, now: dict) -> None:
     )
 
 
+LEXICON_ENV = "FUTON6_WARP_LEXICON_IDS"
+
+
+def declared_lexicon(papers: list[str]) -> dict | None:
+    """Lexicon-only papers for a new run: read by WARP (S2) as concept sources,
+    never mined. Named by FUTON6_WARP_LEXICON_IDS, one id per line.
+
+    A corpus that defines nothing grounds no concept; its subject's concept
+    index can be put in the eprint store as one more paper (the APM proofs and
+    Joe's Xi, 2026-10-15). It must not be in the mining list -- S3 would look
+    for proofs in it and S4 would read its notes as exposition -- so it is
+    pinned here, apart from the corpus, and only S2 adds it.
+    """
+    raw = os.environ.get(LEXICON_ENV)
+    if not raw:
+        return None
+    text = Path(raw).read_text()
+    ids = [line.strip() for line in text.splitlines()
+           if line.strip() and not line.lstrip().startswith("#")]
+    if not ids or len(ids) != len(set(ids)):
+        raise ValueError(f"{LEXICON_ENV} must name nonempty, unique paper IDs")
+    overlap = sorted(set(ids) & set(papers))
+    if overlap:
+        raise ValueError(f"{LEXICON_ENV} ids are also in the mining corpus: {overlap[:5]}")
+    return {"ids": ids, "sha256": hashlib.sha256("\n".join(ids).encode()).hexdigest()}
+
+
 def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path, *,
             warp: bool = True, tapestry: bool = True,
             model_call_budget: int | None = None,
@@ -328,6 +355,7 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path, *,
             raise ValueError(f"FUTON6_EXPOSITORY_CAP_PER_PAPER must be '{SCALED}' or a nonnegative integer")
         cap = int(cap)
     floor = declared_item_floor()
+    lexicon = declared_lexicon(papers)
     pinned = {"run-id": run_id, "corpus-id": corpus_id,
               "corpus-sha256": hashlib.sha256(raw).hexdigest(),
               "code": source_identity(), "substrate": substrate_identity(),
@@ -343,6 +371,8 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path, *,
                             # Deferred regions are accounted as deferred, never as accepted.
                             "expository-cap-rule": cap_rule(cap),
                             "expository-selection": EXPOSITORY_SELECTION if cap else "all-regions"}}
+    if lexicon:
+        pinned["lexicon"] = lexicon
     if (run_dir / NAME).exists():
         doc = load(run_dir)
         recorded, current = _identity_view(doc), _identity_view(pinned)

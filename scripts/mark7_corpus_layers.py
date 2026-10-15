@@ -35,7 +35,15 @@ def warp_phase(run_dir: Path, doc: dict) -> None:
         print("WARP disabled by run manifest")
         return
     env = config.child_environment()
-    env["FUTON6_CORPUS_IDS"] = str(run_dir / doc["ids"])
+    ids_path = run_dir / doc["ids"]
+    # Lexicon-only papers (run_manifest.declared_lexicon) join WARP's corpus,
+    # and only WARP's: every other stage reads the run's own id list.
+    lexicon = (doc.get("lexicon") or {}).get("ids")
+    if lexicon:
+        ids_path = config.warp() / "corpus-and-lexicon.ids.txt"
+        ids_path.parent.mkdir(parents=True, exist_ok=True)
+        ids_path.write_text("\n".join(list(doc["papers"]) + list(lexicon)) + "\n")
+    env["FUTON6_CORPUS_IDS"] = str(ids_path)
     argv = ["scripts/warp_run.py", "--manifest", str(config.warp() / "warp-manifest.json")]
     for stage in BASE_STAGES:
         argv.extend(("--stage", stage))
