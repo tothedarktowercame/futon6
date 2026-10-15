@@ -30,9 +30,12 @@ import os
 import shutil
 import subprocess
 import sys
+import re
 import shlex
+from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import futon6_config as config
+import anatomy_v0_sweep as sweep
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 R = []          # (name, ok, detail, remedy)
@@ -250,6 +253,107 @@ def check_eprints(ids_file, sample=25):
                if miss else "")
 
 
+# ---------------------------------------------------------------- vocabulary fit
+
+VOCAB_FLOOR_ENV = "FUTON6_VOCAB_FIT_FLOOR"
+
+
+def _canon_words(text: str) -> str:
+    text = re.sub(r"\$[^$]*\$|\\\(.*?\\\)", " ", text, flags=re.S)
+    text = re.sub(r"\\[A-Za-z]+", " ", text)
+    return " " + " ".join(re.findall(r"[a-z]+", text.lower())) + " "
+
+
+def _defined_terms(tex: str) -> set[str]:
+    """Terms a lexicon paper defines: \\emph/\\textbf inside definition environments."""
+    out = set()
+    for m in re.finditer(r"\\begin\{(?:definition|defn|dfn)\*?\}(.*?)\\end\{(?:definition|defn|dfn)\*?\}",
+                         tex, re.S):
+        for term in re.findall(r"\\(?:emph|textbf)\{([^{}]{3,60})\}", m.group(1)):
+            words = " ".join(re.findall(r"[a-z]+", re.sub(r"\$[^$]*\$", " ", term).lower()))
+            if 1 <= len(words.split()) <= 4 and len(words) > 3:
+                out.add(words)
+    return out
+
+
+def _paper_text(pid: str, root: str) -> str | None:
+    for ext in (".tex", ".tar.gz", ".gz", ""):
+        path = os.path.join(root, pid + ext)
+        if os.path.isfile(path):
+            try:
+                files, _meta = sweep.read_eprint_files(Path(path))
+            except Exception:
+                return None
+            return " ".join(f["text"] for f in files if f["file"].endswith(".tex"))
+    return None
+
+
+def check_vocabulary(ids_file, sample=200):
+    """Does the concept vocabulary belong to this corpus? A classical scan.
+
+    The staged vocabulary is a subject's (math.CT unless FUTON6_SUBJECT says
+    otherwise), and outside arXiv math.CT it is demo content. On 2026-10-15 a
+    corpus of analysis and topology proofs ran with it: S2 grounded nothing and
+    no check said so before GPU time was spent. This counts the distinct
+    vocabulary terms in a sample of the run's papers -- encyclopedia concepts
+    plus terms defined in FUTON6_WARP_LEXICON_IDS papers -- and warns when too
+    few papers carry at least three. Measured: math.CT papers with the CT
+    vocabulary, 98% (median 35 terms); APM proofs with it, 8% (median 1); APM
+    proofs with Joe's Xi as lexicon, 100% (median 11). A warning, not a
+    refusal: a corpus may legitimately build its vocabulary at S2.
+    """
+    d, _how = resolve_eprints()
+    if not d or not os.path.exists(ids_file):
+        return rec("vocabulary:fit", None, "no eprints or id list to scan", "")
+    vocab, sources = set(), []
+    enc = config.concept_encyclopedia()
+    if enc.exists():
+        try:
+            entries = json.loads(enc.read_text()).get("entries", [])
+            vocab |= {e["concept"].lower() for e in entries if e.get("concept")}
+            sources.append(f"{config.subject()} encyclopedia ({len(entries)})")
+        except (ValueError, OSError):
+            pass
+    lex_file = os.environ.get("FUTON6_WARP_LEXICON_IDS")
+    if lex_file and os.path.exists(lex_file):
+        for pid in [l.strip() for l in open(lex_file) if l.strip() and not l.startswith("#")]:
+            text = _paper_text(pid, d)
+            if text:
+                terms = _defined_terms(text)
+                vocab |= terms
+                sources.append(f"lexicon {pid} ({len(terms)})")
+    # main() exports FUTON6_SUBJECT before the checks run, so "was it set" cannot
+    # be asked here; the CT vocabulary is the demo one whoever chose it.
+    demo = config.subject() == "ct"
+    if not vocab:
+        return rec("vocabulary:fit", None, "no vocabulary to scan against",
+                   "stage a concept encyclopedia, or name a concept index with FUTON6_WARP_LEXICON_IDS")
+    ids = [l.strip() for l in open(ids_file) if l.strip()]
+    step = max(1, len(ids) // sample)
+    counts = []
+    for pid in ids[::step][:sample]:
+        text = _paper_text(pid, d)
+        if text is not None:
+            words = _canon_words(text)
+            counts.append(sum(1 for v in vocab if f" {v} " in words))
+    if not counts:
+        return rec("vocabulary:fit", None, "no sampled paper could be read", "")
+    counts.sort()
+    share = sum(c >= 3 for c in counts) / len(counts)
+    floor = float(os.environ.get(VOCAB_FLOOR_ENV, "0.5"))
+    detail = (f"{share:.0%} of {len(counts)} sampled papers carry >=3 vocabulary terms "
+              f"(median {counts[len(counts) // 2]}; floor {floor:.0%}); vocabulary: "
+              + ", ".join(sources))
+    if share >= floor:
+        return rec("vocabulary:fit", True, detail)
+    remedy = ("the vocabulary does not match these papers"
+              + (" -- it is the math.CT vocabulary, demo content outside arXiv math.CT"
+                 " (a custom or cross-classification collection needs its own)" if demo else "")
+              + ". Name the corpus's own concept index with FUTON6_WARP_LEXICON_IDS, or set"
+              " FUTON6_SUBJECT for a subject whose vocabulary S2 should build")
+    return rec("vocabulary:fit", None, detail, remedy)
+
+
 # ---------------------------------------------------------------- model endpoint
 
 def check_endpoint(url, model):
@@ -304,17 +408,25 @@ def main() -> int:
     check_gates()
     check_substrate()
     check_eprints(ids)
+    check_vocabulary(ids)
     check_endpoint(a.endpoint, a.model)
     check_disk(a.min_disk_gb)
 
     w = max(len(n) for n, _, _, _ in R)
-    bad = [x for x in R if not x[1]]
+    # ok is True (pass), False (fail: refuses the run) or None (warn: printed,
+    # does not refuse).
+    bad = [x for x in R if x[1] is False]
+    warned = [x for x in R if x[1] is None]
     print("preflight — can this run start?\n")
     for name, ok, detail, remedy in R:
-        print(f"  [{'OK  ' if ok else 'FAIL'}] {name:<{w}}  {detail}")
+        tag = "OK  " if ok else ("WARN" if ok is None else "FAIL")
+        print(f"  [{tag}] {name:<{w}}  {detail}")
         if not ok and remedy:
             print(f"         -> {remedy}")
-    print(f"\n{len(R) - len(bad)}/{len(R)} checks pass")
+    print(f"\n{len(R) - len(bad) - len(warned)}/{len(R)} checks pass"
+          + (f", {len(warned)} warning(s)" if warned else ""))
+    for name, _ok, _detail, remedy in warned:
+        print(f"\n  WARNING ({name}): {remedy}")
     if bad:
         print("\n  DO NOT START. Each failure above names its remedy; --fix attempts the\n"
               "  automatable ones. A setup script having been written is not evidence that\n"
