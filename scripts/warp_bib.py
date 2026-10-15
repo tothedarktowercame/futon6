@@ -311,6 +311,10 @@ def main() -> int:
         print(f"explicit limit: processing first {len(paths)} eprints", file=sys.stderr)
 
     bib_dir = args.out_dir / "bib"
+    # A declared output even when empty: a corpus that cites nothing (the APM
+    # informal proofs, 2026-10-15) wrote no per-paper file, so the directory was
+    # never made and S1c refused to run on a missing input.
+    bib_dir.mkdir(parents=True, exist_ok=True)
     papers: list[dict[str, Any]] = []
     skipped: list[dict[str, Any]] = []
     started = time.time()
