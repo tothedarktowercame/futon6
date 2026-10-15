@@ -286,7 +286,11 @@ def main() -> int:
     ap.add_argument("--endpoint", default=config.endpoint())
     ap.add_argument("--model", default=config.model())
     ap.add_argument("--fix", action="store_true", help="attempt the automatable remedies")
-    ap.add_argument("--min-disk-gb", type=int, default=50)
+    # 50 GB is sized for a full arXiv corpus. A host running a small corpus can
+    # lower it (machine configuration, like the endpoint); the stepper runs
+    # preflight without arguments, so the environment is how it reaches here.
+    ap.add_argument("--min-disk-gb", type=int,
+                    default=int(os.environ.get("FUTON6_MIN_DISK_GB", "50")))
     a = ap.parse_args()
     os.environ.update(OPENAI_BASE_URL=a.endpoint, MODEL=a.model)
     os.environ.update(config.child_environment())
