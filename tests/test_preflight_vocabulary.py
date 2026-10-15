@@ -63,3 +63,24 @@ def test_lexicon_definitions_count_as_vocabulary(tmp_path):
     _name, ok, detail, _remedy = run_check(ep, ids, enc, {"FUTON6_WARP_LEXICON_IDS": str(lex)})
     assert ok is True
     assert "lexicon lex (3)" in detail
+
+
+def test_tapestry_warns_when_the_corpus_cites_nothing(tmp_path):
+    ep, ids, _enc = corpus(tmp_path, "A solution with no references at all.")
+    pf.R.clear()
+    with patch.dict(os.environ, {"FUTON6_EPRINTS": str(ep), "FUTON6_ENABLE_TAPESTRY": "1"}):
+        pf.check_citations(str(ids))
+    _name, ok, detail, remedy = pf.R[-1]
+    assert ok is None and detail.startswith("0/2") and "--no-tapestry" in remedy
+
+
+def test_tapestry_check_passes_with_citations_and_is_silent_when_off(tmp_path):
+    ep, ids, _enc = corpus(tmp_path, "As shown in \\cite{Mac71}.")
+    pf.R.clear()
+    with patch.dict(os.environ, {"FUTON6_EPRINTS": str(ep), "FUTON6_ENABLE_TAPESTRY": "1"}):
+        pf.check_citations(str(ids))
+    assert pf.R[-1][1] is True
+    pf.R.clear()
+    with patch.dict(os.environ, {"FUTON6_EPRINTS": str(ep), "FUTON6_ENABLE_TAPESTRY": "0"}):
+        pf.check_citations(str(ids))
+    assert pf.R == []

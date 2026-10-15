@@ -370,6 +370,40 @@ def check_vocabulary(ids_file, sample=200):
     return rec("vocabulary:fit", None, detail, remedy)
 
 
+def check_citations(ids_file, sample=200):
+    """Is there a citation graph for TAPESTRY to weave over?
+
+    TAPESTRY (S12) types each concept activation by whether the paper cites an
+    earlier user of the concept, over the corpus's citation graph. A collection
+    whose papers cite nothing -- exam problems with their solutions, the APM
+    corpus of 2026-10-15 -- gives it no graph: every activation is "uncited" and
+    the phylogeny says nothing. Warn, and name --no-tapestry.
+    """
+    if os.environ.get("FUTON6_ENABLE_TAPESTRY") != "1":
+        return None
+    d, _how = resolve_eprints()
+    if not d or not os.path.exists(ids_file):
+        return None
+    ids = [l.strip() for l in open(ids_file) if l.strip()]
+    ids = ids[::max(1, len(ids) // sample)][:sample]
+    read = citing = 0
+    for pid in ids:
+        text = _paper_text(pid, d)
+        if text is None:
+            continue
+        read += 1
+        if re.search(r"\\(?:cite[a-zA-Z]*|bibitem)\b|\\begin\{thebibliography\}|\\bibliography\{", text):
+            citing += 1
+    if not read:
+        return None
+    detail = f"{citing}/{read} sampled papers cite anything"
+    if citing >= max(1, 0.1 * read):
+        return rec("citations:tapestry", True, detail)
+    return rec("citations:tapestry", None, detail,
+               "TAPESTRY (S12) weaves concept threads over the citation graph, and these "
+               "papers have almost none; run with --no-tapestry")
+
+
 # ---------------------------------------------------------------- model endpoint
 
 def check_endpoint(url, model):
@@ -425,6 +459,7 @@ def main() -> int:
     check_substrate()
     check_eprints(ids)
     check_vocabulary(ids)
+    check_citations(ids)
     check_endpoint(a.endpoint, a.model)
     check_disk(a.min_disk_gb)
 
