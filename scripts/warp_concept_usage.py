@@ -42,7 +42,10 @@ def main(argv=None):
     # A corpus-scale pass is otherwise a silent hour: say where it is as it goes.
     progress = int(argv[argv.index("--progress") + 1]) if "--progress" in argv else 500
     concepts = {h["concept"] for h in json.load(open(W / "hitlist.json"))["hitlist"]}
-    maxn = max(len(c.split()) for c in concepts)
+    # An empty hitlist is a real outcome, not an error: a corpus that defines
+    # nothing (the APM informal proofs, 2026-10-15) grounds no concept. Scan
+    # anyway so concept-usage.json records the papers read, with no concepts.
+    maxn = max((len(c.split()) for c in concepts), default=0)
     paper_use = {}
     scanned_ids = []
     ids = dp.corpus_paper_ids()
