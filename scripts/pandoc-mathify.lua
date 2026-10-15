@@ -180,6 +180,21 @@ local function replace_word(s, w, repl)
   return s
 end
 
+-- "int" is the integral sign only when there is something for it to
+-- integrate. In "e^{int}" (e^{i n t}, a Fourier mode) it is the product i*n*t:
+-- it opens an exponent and closes its group, and neither fits an integral.
+-- The blanket word rule turned it into \Integral (APM a95J03, 2026-10-15).
+local function replace_int(s)
+  return (s:gsub("()int%f[%A]()", function(a, b)
+    local before = s:sub(1, a - 1)
+    if before:match("[%a\\]$") then return nil end
+    if before:match("[%^_]%s*{?%s*$") then return nil end
+    local after = s:sub(b)
+    if after:match("^%s*$") or after:match("^%s*[})%],]") then return nil end
+    return "\\Integral"
+  end))
+end
+
 local function wrap_prose_word(s, w)
   return replace_word(s, w, "\\text{" .. w .. "}")
 end
@@ -527,7 +542,7 @@ local function normalize_expr(s)
   s = s:gsub("%-%>", "\\to ")
   s = s:gsub("<%-", "\\leftarrow ")
   s = replace_word(s, "eps", "\\epsilon")
-  s = replace_word(s, "int", "\\Integral")
+  s = replace_int(s)
   s = replace_word(s, "det", "\\det")
   s = replace_word(s, "max", "\\max")
   s = replace_word(s, "inf", "\\inf")
