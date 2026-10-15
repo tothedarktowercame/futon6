@@ -160,9 +160,17 @@ def declared_item_floor() -> float:
     return floor
 
 
-def declared_features(*, warp: bool = True, tapestry: bool = True) -> dict[str, bool]:
-    """Corpus-wide phases pinned into a run's immutable configuration."""
-    return {"warp": bool(warp), "tapestry": bool(tapestry)}
+def declared_features(*, warp: bool = True, tapestry: bool = True,
+                      build_lexicon: bool = False) -> dict[str, bool]:
+    """Corpus-wide phases pinned into a run's immutable configuration.
+
+    build-lexicon (S2 builds the run's concept lexicon from its own papers with a
+    classical scan, scripts/build_lexicon.py) is recorded only when on, so the
+    manifests of runs without it are unchanged."""
+    features = {"warp": bool(warp), "tapestry": bool(tapestry)}
+    if build_lexicon:
+        features["build-lexicon"] = True
+    return features
 
 
 def declared_allocation(model_call_budget: int | None = None,
@@ -341,7 +349,7 @@ def declared_lexicon(papers: list[str]) -> dict | None:
 
 
 def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path, *,
-            warp: bool = True, tapestry: bool = True,
+            warp: bool = True, tapestry: bool = True, build_lexicon: bool = False,
             model_call_budget: int | None = None,
             allocation_policy: str = ALLOCATION_POLICY) -> dict:
     """Caller holds lock. Never adopt unmanifested artifacts or mutate a resume identity."""
@@ -364,7 +372,8 @@ def prepare(run_dir: Path, run_id: str, corpus_id: str, ids: Path, *,
               "run-contract": run_contract.active(),
               "host-configuration": config.effective(),
               "model-revision": os.environ.get("FUTON6_MODEL_REVISION"),
-              "features": declared_features(warp=warp, tapestry=tapestry),
+              "features": declared_features(warp=warp, tapestry=tapestry,
+                                            build_lexicon=build_lexicon),
               "allocation": declared_allocation(model_call_budget, allocation_policy),
               "selection": {"all-proofs": True,
                             "expository-cap": cap,
@@ -411,7 +420,8 @@ def environment(run_dir: Path, doc: dict) -> dict[str, str]:
             "EVAL_REPORT": str(run_dir / "eval-report.json"),
             "EVAL_SUMMARY": str(run_dir / "eval-summary.md"),
             "FUTON6_ENABLE_WARP": "1" if features.get("warp") else "0",
-            "FUTON6_ENABLE_TAPESTRY": "1" if features.get("tapestry") else "0"}
+            "FUTON6_ENABLE_TAPESTRY": "1" if features.get("tapestry") else "0",
+            "FUTON6_BUILD_LEXICON": "1" if features.get("build-lexicon") else "0"}
     if features.get("warp"):
         env.update({
             "FUTON6_WARP_DIR": str(contained(run_dir, doc["artifacts"]["warp"])),

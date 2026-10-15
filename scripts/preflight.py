@@ -324,6 +324,19 @@ def check_vocabulary(ids_file, sample=200):
                 sources.append(f"lexicon {pid} ({len(terms)})")
     # main() exports FUTON6_SUBJECT before the checks run, so "was it set" cannot
     # be asked here; the CT vocabulary is the demo one whoever chose it.
+    building = os.environ.get("FUTON6_BUILD_LEXICON") == "1"
+    if building:
+        # --build-lexicon: S2 will scan the run's papers against the background
+        # index. Run the same scan on the sample now and judge that vocabulary.
+        import build_lexicon
+        sample_ids = [l.strip() for l in open(ids_file) if l.strip()]
+        sample_ids = sample_ids[::max(1, len(sample_ids) // sample)][:sample]
+        cand = build_lexicon.vocabulary(config.authority())
+        df, read = build_lexicon.scan(sample_ids, cand)
+        built = build_lexicon.select(df, read, cand, None, 0.9)
+        vocab |= {t["term"] for t in built}
+        top = ", ".join(f"{m}" for m, _n in build_lexicon.msc_profile(built)[:4])
+        sources.append(f"lexicon to be built at S2 ({len(built)} terms from the sample; MSC {top})")
     demo = config.subject() == "ct"
     if not vocab:
         return rec("vocabulary:fit", None, "no vocabulary to scan against",
@@ -349,8 +362,11 @@ def check_vocabulary(ids_file, sample=200):
     remedy = ("the vocabulary does not match these papers"
               + (" -- it is the math.CT vocabulary, demo content outside arXiv math.CT"
                  " (a custom or cross-classification collection needs its own)" if demo else "")
-              + ". Name the corpus's own concept index with FUTON6_WARP_LEXICON_IDS, or set"
-              " FUTON6_SUBJECT for a subject whose vocabulary S2 should build")
+              + (". Even the lexicon built from these papers is thin: check the eprints, or"
+                 " name a concept index with FUTON6_WARP_LEXICON_IDS" if building else
+                 ". Re-run with --build-lexicon to build one from these papers with the"
+                 " classical scanner (scripts/build_lexicon.py), or name the corpus's own"
+                 " concept index with FUTON6_WARP_LEXICON_IDS"))
     return rec("vocabulary:fit", None, detail, remedy)
 
 

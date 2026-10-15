@@ -669,6 +669,10 @@ def main():
                     help="refresh a run-local WARP substrate at S2 (default on for new runs)")
     ap.add_argument("--tapestry", action=argparse.BooleanOptionalAction, default=None,
                     help="resolve citations and build concept phylogeny at S12 (default on for new runs)")
+    ap.add_argument("--build-lexicon", action=argparse.BooleanOptionalAction, default=None,
+                    help="build the run's concept lexicon from its own papers at S2 with a classical "
+                         "scan (scripts/build_lexicon.py), for a corpus the staged subject vocabulary "
+                         "does not cover (default off; pinned for the run)")
     ap.add_argument("--reuse", nargs="+", action="extend", default=[], choices=["S0", "STAGE"], help="completed boot steps; repeated options accumulate; computational stages require ledger evidence")
     ap.add_argument("--mark-done", nargs="+", choices=["S0", "STAGE"], default=[], help="terminal boot bookkeeping; cannot combine with --run, --plan, --from, --to or --reuse")
     args = ap.parse_args()
@@ -728,8 +732,11 @@ def main():
                 recorded_features = {"warp": True, "tapestry": True}
             requested_warp = recorded_features["warp"] if args.warp is None else args.warp
             requested_tapestry = recorded_features["tapestry"] if args.tapestry is None else args.tapestry
+            requested_lexicon = (recorded_features.get("build-lexicon", False)
+                                 if args.build_lexicon is None else args.build_lexicon)
             doc = manifest.prepare(run_dir, run_id, corpus_id, source_ids,
-                                   warp=requested_warp, tapestry=requested_tapestry)
+                                   warp=requested_warp, tapestry=requested_tapestry,
+                                   build_lexicon=requested_lexicon)
             IDS = shlex.quote(str(run_dir / doc["ids"]))
             effective = doc["host-configuration"]
             print("host configuration: " + json.dumps(effective, sort_keys=True))
@@ -747,7 +754,7 @@ def main():
             # impossible to start.  The run-owned paths still become active
             # before any computational stage executes.
             run_environment = manifest.environment(run_dir, doc)
-            for name in ("FUTON6_ENABLE_WARP", "FUTON6_ENABLE_TAPESTRY"):
+            for name in ("FUTON6_ENABLE_WARP", "FUTON6_ENABLE_TAPESTRY", "FUTON6_BUILD_LEXICON"):
                 os.environ[name] = run_environment[name]
             rc = preflight_gate(str(run_dir / doc["ids"])) or conformance_gate(str(run_dir / doc["ids"]))
             if rc:

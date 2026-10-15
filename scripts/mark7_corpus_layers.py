@@ -30,6 +30,32 @@ def run_command(argv: list[str], env: dict[str, str]) -> None:
     subprocess.run([*config.python_argv(), *argv], cwd=ROOT, env=env, check=True)
 
 
+def eprint_view(run_dir: Path, ids: list[str], extra: Path) -> Path:
+    """A run-local eprint directory: a link to each paper wherever it lies, plus
+    the files in EXTRA (the built lexicon). Some WARP scripts read FUTON6_EPRINTS
+    as one directory, so a root list is not enough; nothing is written into the
+    corpus's own store."""
+    import eprint_corpus
+    view = run_dir / "artifacts" / "warp-eprints"
+    if view.exists():
+        for entry in view.iterdir():
+            entry.unlink()
+    view.mkdir(parents=True, exist_ok=True)
+    roots = config.eprint_roots()
+    for pid in ids:
+        source = eprint_corpus.find_corpus_eprint(pid, roots)
+        if source is not None:
+            (view / source.name).symlink_to(source.resolve())
+    for source in extra.glob("*.tex"):
+        (view / source.name).symlink_to(source.resolve())
+    return view
+
+
+def build_lexicon_id() -> str:
+    import build_lexicon
+    return build_lexicon.LEXICON_ID
+
+
 def warp_phase(run_dir: Path, doc: dict) -> None:
     if not enabled(doc, "warp"):
         print("WARP disabled by run manifest")
@@ -38,11 +64,19 @@ def warp_phase(run_dir: Path, doc: dict) -> None:
     ids_path = run_dir / doc["ids"]
     # Lexicon-only papers (run_manifest.declared_lexicon) join WARP's corpus,
     # and only WARP's: every other stage reads the run's own id list.
-    lexicon = (doc.get("lexicon") or {}).get("ids")
+    lexicon = list((doc.get("lexicon") or {}).get("ids") or [])
+    if enabled(doc, "build-lexicon"):
+        # A classical scan of the run's own papers (build_lexicon.py) writes one
+        # more lexicon paper into the run; WARP reads it through an extra eprint
+        # root, as it reads a hand-made index named in FUTON6_WARP_LEXICON_IDS.
+        built = run_dir / "artifacts" / "lexicon"
+        run_command(["scripts/build_lexicon.py", "--ids", str(ids_path), "--out", str(built)], env)
+        env["FUTON6_EPRINTS"] = str(eprint_view(run_dir, doc["papers"] + lexicon, built))
+        lexicon.append(build_lexicon_id())
     if lexicon:
         ids_path = config.warp() / "corpus-and-lexicon.ids.txt"
         ids_path.parent.mkdir(parents=True, exist_ok=True)
-        ids_path.write_text("\n".join(list(doc["papers"]) + list(lexicon)) + "\n")
+        ids_path.write_text("\n".join(list(doc["papers"]) + lexicon) + "\n")
     env["FUTON6_CORPUS_IDS"] = str(ids_path)
     argv = ["scripts/warp_run.py", "--manifest", str(config.warp() / "warp-manifest.json")]
     for stage in BASE_STAGES:

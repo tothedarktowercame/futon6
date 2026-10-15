@@ -63,7 +63,7 @@ class LexiconTests(unittest.TestCase):
         seen = []
         with patch.object(layers, "run_command", lambda argv, env: seen.append(env["FUTON6_CORPUS_IDS"])), \
                 patch.object(layers.config, "warp", return_value=warp_dir), \
-                patch.object(layers, "enabled", return_value=True):
+                patch.object(layers, "enabled", lambda doc, feature: feature == "warp"):
             layers.warp_phase(self.run_dir, doc)
         self.assertTrue(seen)
         self.assertEqual(Path(seen[0]).read_text().split(), ["a00J01", "a00J02", "xi"])
