@@ -841,6 +841,9 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
         raise SystemExit(f"no eprint for {paper} under {EPRINTS}")
 
     files, _meta = sweep.read_eprint_files(eprint)
+    # Inline \(...\) read as $...$ by every detector below, offsets unchanged
+    # (sweep.dollar_view): most of S1's patterns only know dollars.
+    files = [{**f, "text": sweep.dollar_view(f["text"])} for f in files]
     roles = sweep.load_latexml_roles(sweep.ROLE_TSV)
     plain = sweep.load_plain_cseq(sweep.PLAIN_CSEQ)
     macros = sweep.collect_macros(files, roles)
@@ -1086,7 +1089,8 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                 "layer": "dp", "kind": "math",
                 "tip": f"math: {(body.strip() or 'empty math span')[:60]}",
                 "fields": [["math", (body.strip() or "— empty span —")[:70]],
-                           ["delim", "display ($$)" if delim == "$$" else "inline ($)"]],
+                           ["delim", "display ($$)" if delim == "$$"
+                            else "inline (\\(\\))" if delim == "\\(" else "inline ($)"]],
             })
             # SATIETY (Joe): the $...$ scope is hungry for content — annotate
             # the symbols inside, not just control sequences. A bare $H$ whose

@@ -558,6 +558,27 @@ def math_spans(text: str):
                 return
             i = nl + 1
             continue
+        # LaTeX's own inline delimiters \(...\) are the same scope as $...$.
+        # Reading only dollars left whole papers' mathematics unmarked: the APM
+        # informal proofs (2026-10-15) write \(...\) throughout, and S1 found
+        # 12 clause units in a00J02 against 53 for the same text in dollars.
+        # The opening backslash must itself be unescaped (\\( is a line break
+        # followed by a parenthesis), the same parity rule as for `$`.
+        if ch == "\\" and i + 1 < n and text[i + 1] == "(" and _unescaped(text, i):
+            j = i + 2
+            while j < n:
+                if text[j] == "%" and text[j - 1] != "\\":
+                    nl = text.find("\n", j)
+                    if nl == -1:
+                        break
+                    j = nl + 1
+                    continue
+                if text.startswith("\\)", j) and _unescaped(text, j):
+                    yield i, j + 2, "\\(", text[i + 2:j]
+                    break
+                j += 1
+            i = j + 2 if j < n else i + 1
+            continue
         if ch != "$" or not _unescaped(text, i):
             i += 1
             continue
@@ -580,6 +601,24 @@ def math_spans(text: str):
             j += 1
         if not found:
             i = start + 1
+
+
+def dollar_view(text: str) -> str:
+    r"""The same text with each inline \(...\) written $...$, offsets kept.
+
+    Much of S1 (the binders, the scope manifest, proof moves) is regexes over
+    $...$; a paper written with \(...\) went largely unread. Rather than teach
+    every pattern a second delimiter, detectors read this view: "\(" becomes
+    " $" and "\)" becomes "$ ", so every character keeps its offset (marks and
+    line anchors still point into the source) and the math body is unchanged
+    ("Let \(f\) be" reads as "Let  $f$  be", binding f, not " f ").
+    """
+    out = list(text)
+    for start, end, delim, _body in math_spans(text):
+        if delim == "\\(":
+            out[start:start + 2] = [" ", "$"]
+            out[end - 2:end] = ["$", " "]
+    return "".join(out)
 
 
 def token_census(files: list[dict], macros: dict[str, dict], roles: dict[str, dict], plain: set[str]) -> dict:
