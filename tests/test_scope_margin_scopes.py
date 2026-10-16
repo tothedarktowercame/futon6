@@ -23,7 +23,7 @@ def fixture():
             ], "edges": [{"relation": "implies", "premises": ["n1"],
                            "conclusion": "n2", "warrant": "claim"}]},
             {"type": "region", "id": "region0", "scopes": [
-                {"scope": "s1", "kind": "connection", "span": [36, 48],
+                {"scope": "s1", "kind": "connection", "span": [34, 46],
                  "lines": [3, 3], "fill": "quoted scope", "flags": [],
                  "mock": {"verdict": "kept"}},
                 {"scope": "s2", "kind": "connection", "span": None,
@@ -49,6 +49,11 @@ def test_scopes_data_maps_all_three_layers():
     line_scope = next(span for span in data["spans"] if span["id"] == "region0-s2")
     assert [line_scope["start"], line_scope["end"]] == [payload["starts"][3],
                                                          payload["starts"][4]]
+    assert line_scope["weight"] == 0.6
+    quoted_scope = next(span for span in data["spans"] if span["id"] == "region0-s1")
+    assert [quoted_scope["start"], quoted_scope["end"]] == [34, 46]
+    assert quoted_scope["weight"] == 1.0
+    assert source[34:46] == "quoted scope"
     used = {span["kind"] for span in data["spans"]}
     used |= {edge["relation"] for edge in data["edges"]}
     used |= {edge["label"] for edge in data["edges"]}
