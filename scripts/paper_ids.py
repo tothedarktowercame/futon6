@@ -29,10 +29,18 @@ import re
 # old style first: `math__0608040`, `cond-mat__9901001`, `alg-geom__9601001`
 _OLD = re.compile(r"^([a-z][a-z-]*(?:\.[A-Za-z]{2})?__\d{7})")
 _NEW = re.compile(r"^(\d{4}\.\d{4,5})")
+# Any other corpus (the APM problems: a00J01, bpm-1-4-1) is read from the
+# pipeline's own file names, which carry the id in a fixed place:
+#   <pid>__p<N>.edn                      S3 proof graphs
+#   <pid>_<pid>-<region>_L<a>-<b>.edn    S4 scopes (the passage id, made path-safe)
+#   <pid>.<pid>-<region>.candidate.json  S4 candidates
+# Matching only arXiv ids returned None for every APM name, so S6 attached no S3
+# or S4 output to any of 501 papers (apm-501-xi-r1, 2026-10-16).
+_STAGE = re.compile(r"^(?P<pid>[^_.][^/]*?)(?:__p\d+(?=[._]|$)|[_.](?P=pid)-)")
 
 
 def paper_id_from_name(name: str) -> str | None:
-    """Leading arXiv paper id in a filename, or None if it does not start with one.
+    """Leading paper id in a filename, or None if it does not start with one.
 
     Works for any of the pipeline's naming conventions, because it anchors on the
     id itself rather than on whatever separator a given stage happened to use:
@@ -47,7 +55,8 @@ def paper_id_from_name(name: str) -> str | None:
         m = rx.match(base)
         if m:
             return m.group(1)
-    return None
+    m = _STAGE.match(base)
+    return m.group("pid") if m else None
 
 
 def proof_pid_from_graph_name(name: str) -> str:

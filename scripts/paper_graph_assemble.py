@@ -19,6 +19,7 @@ _sys.path.insert(0, str(_Path(__file__).resolve().parent))
 import futon6_config as config
 import stage_accounting as accounting
 from paper_ids import paper_id_from_name
+from statement_kinds import STATEMENT_KINDS
 
 import argparse
 import bisect
@@ -31,7 +32,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GOLDEN = str(config.marks())
 
-STMT_KINDS = {"env/theorem", "env/proposition", "env/corollary", "env/lemma"}
+STMT_KINDS = STATEMENT_KINDS
 DEF_KINDS = {"definiendum", "env/definition", "bind/define"}
 PROOF_KINDS = {"env/proof"}
 

@@ -30,6 +30,7 @@ import hashlib
 import json
 
 import candidate_spans
+from statement_kinds import STATEMENT_KINDS
 import markup_strategies
 import run_contract
 import re
@@ -78,8 +79,7 @@ def marks_of(marks: list[dict[str, Any]], *kinds: str) -> list[dict[str, Any]]:
 
 
 def env_marks(marks: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    good = {"env/theorem", "env/lemma", "env/proposition", "env/corollary"}
-    return [m for m in marks if m.get("kind") in good]
+    return [m for m in marks if m.get("kind") in STATEMENT_KINDS]
 
 
 def choose_passage(marks: list[dict[str, Any]], starts: list[int]) -> dict[str, Any] | None:
@@ -219,7 +219,6 @@ def _display(path: Path) -> str:
     return str(path.relative_to(REPO)) if path.is_relative_to(REPO) else str(path)
 
 
-STATEMENT_KINDS = {"env/theorem", "env/lemma", "env/proposition", "env/corollary"}
 STATEMENT_GAP = 20  # a statement ending further than this above its proof is not shown with it
 # v4: every candidate carries its S1 clause spans. v3 candidates had none, and
 # a loop given them fell back to the retype contract without saying so.
