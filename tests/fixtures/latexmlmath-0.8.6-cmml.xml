@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<math xmlns="http://www.w3.org/1998/Math/MathML" alttext="g(z)=f(z)-h(z)" display="block">
+  <apply>
+    <eq/>
+    <apply>
+      <times/>
+      <ci>𝑔</ci>
+      <ci>𝑧</ci>
+    </apply>
+    <apply>
+      <minus/>
+      <apply>
+        <times/>
+        <ci>𝑓</ci>
+        <ci>𝑧</ci>
+      </apply>
+      <apply>
+        <times/>
+        <ci>ℎ</ci>
+        <ci>𝑧</ci>
+      </apply>
+    </apply>
+  </apply>
+</math>

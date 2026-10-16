@@ -101,12 +101,17 @@ def batch(formulae):
     bb = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts", "sfc_def_structure.bb")
     groups = defaultdict(list)
     gaps = []   # SFC coverage gaps (:hole/unhandled) — flagged, not merged
+    batch.unread = []   # (formula, why) the transducer gave no structure for
     for f in formulae:
         try:
-            out = subprocess.run(["bb", bb, "-"], input=f, capture_output=True, text=True, timeout=30).stdout
-        except Exception:
+            done = subprocess.run(["bb", bb, "-"], input=f, capture_output=True, text=True, timeout=30)
+        except Exception as e:
+            batch.unread.append((f, str(e)[:200]))
             continue
+        out = done.stdout
         st = extract_structure(out)
+        if not st:
+            batch.unread.append((f, (done.stderr.strip().splitlines() or ["empty :structure"])[-1][:200]))
         k = canon_key(st) if st else None
         if k and k != "()":
             groups[k].append(f)
@@ -151,6 +156,15 @@ def main():
         forms = [l.strip() for l in open(a.formulae) if l.strip()]
         groups, gaps = batch(forms)
         nf = sum(len(v) for v in groups.values())
+        if forms and not groups and not gaps:
+            # Formulae went in and no structure came out: the transducer is broken
+            # on this host, not the corpus empty. On the APM box (LaTeXML 0.8.6,
+            # 2026-10-16) every formula read as an empty :structure and the stage
+            # recorded 0 shapes as a measurement.
+            first = batch.unread[0] if batch.unread else ("", "no output")
+            raise SystemExit(f"REFUSED: 0 of {len(forms)} formulae gave a structure; "
+                             f"sfc_def_structure.bb is not working here (first: {first[1]!r} "
+                             f"for {first[0][:60]!r})")
         print(f"=== structural normalization: {nf} parsed defs -> {len(groups)} canonical shapes "
               f"(ratio {nf / max(1, len(groups)):.2f}×) ; {len(gaps)} SFC coverage-gaps flagged ===\n")
         for k, fs in sorted(groups.items(), key=lambda kv: -len(kv[1]))[:8]:

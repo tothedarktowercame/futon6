@@ -71,7 +71,10 @@
                            {:in formula :out :string :err :string})]
     (when-not (zero? (:exit result))
       (throw (ex-info "latexmlmath failed" {:stderr (:err result)})))
-    (:out result)))
+    ;; LaTeXML 0.8.6 (Ubuntu 22.04) opens with <?xml ...?>, which the tokenizer
+    ;; read as text ahead of <math>, so every :structure came out empty: S11 on
+    ;; the APM box parsed 0 of 194 formulae that 0.8.8 parsed 161 of (2026-10-16).
+    (str/replace (:out result) #"(?s)<\?.*?\?>|<!--.*?-->|<!DOCTYPE[^>]*>" "")))
 
 (def token-re #"(?s)<(/?)([A-Za-z0-9:]+)([^>]*)>|([^<]+)")
 
