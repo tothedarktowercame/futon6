@@ -603,6 +603,25 @@ def math_spans(text: str):
             i = start + 1
 
 
+DISPLAY_MATH = re.compile(r"\\\[(.+?)\\\]|\\begin\{(equation|align|gather|multline|eqnarray|displaymath)"
+                          r"(\*?)\}(.+?)\\end\{\2\3\}", re.S)
+
+
+def math_extents(text: str) -> list[tuple[int, int, str]]:
+    """(start, end, body) of every formula, inline or display, in source order.
+
+    For code that cuts text into windows and must not cut a formula in two:
+    math_spans gives $...$, $$...$$ and \\(...\\); display math adds \\[...\\] and
+    the equation-like environments. A span inside a display is dropped.
+    """
+    spans = [(m.start(), m.end(), m.group(1) if m.group(1) is not None else m.group(4))
+             for m in DISPLAY_MATH.finditer(text)]
+    for start, end, _delim, body in math_spans(text):
+        if not any(a <= start < b for a, b, _ in spans):
+            spans.append((start, end, body))
+    return sorted(spans)
+
+
 def dollar_view(text: str) -> str:
     r"""The same text with each inline \(...\) written $...$, offsets kept.
 

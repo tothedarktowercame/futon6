@@ -12,6 +12,14 @@ with its paper. We take the display/inline math out of those snippets, scoped to
 the run's own manifest (corpus identity — H19), and drop fragments too small to
 have structure.
 
+A snippet is a window of its paper, and windows written before 2026-10-16 were
+cut at fixed widths, often inside a formula; pairing the dollars of such a
+window pairs them the wrong way round (on the APM run all 157 "formulae" were
+prose between formulae, and none parsed). So each snippet is found in its
+paper, and the formulae taken are the paper's own whole formulae that overlap
+it (anatomy_v0_sweep.math_extents). A snippet whose paper cannot be read is
+read on its own, as before.
+
   python scripts/def_formulae_extract.py --ids holes/mark7z-e2e16.ids.txt \\
       --out data/runs/mark7z/def-formulae.txt
 """
@@ -24,7 +32,9 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import anatomy_v0_sweep as sweep  # noqa: E402
 import futon6_config as config  # noqa: E402
+import warp_defined_pass as dp  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -48,6 +58,38 @@ def clean(f: str) -> str:
     return f.strip()
 
 
+def collapsed(text: str) -> tuple[str, list[int]]:
+    """text with whitespace runs made one space (as snippets are), and for each
+    character of that the offset it came from."""
+    out, where, k = [], [], 0
+    for m in re.finditer(r"\s+|\S+", text):
+        piece = " " if m.group(0).isspace() else m.group(0)
+        out.append(piece)
+        where.extend(range(m.start(), m.start() + len(piece)))
+    return "".join(out), where
+
+
+class Papers:
+    """Each paper read once: its collapsed text, offset map and formulae."""
+
+    def __init__(self):
+        self.cache = {}
+
+    def formulae_near(self, pid: str, snippet: str) -> list[str] | None:
+        if pid not in self.cache:
+            text = dp.read_text(pid)
+            self.cache[pid] = (collapsed(text), sweep.math_extents(text)) if text else None
+        entry = self.cache[pid]
+        if entry is None:
+            return None
+        (flat, where), extents = entry
+        at = flat.find(snippet)
+        if at < 0:
+            return None
+        lo, hi = where[at], where[at + len(snippet) - 1] + 1
+        return [body for start, end, body in extents if start < hi and end > lo]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--snippets", default=config.warp() / "def-snippets.json")
@@ -68,25 +110,25 @@ def main() -> int:
     snippets = d.get("snippets", d)
 
     seen, out = set(), []
-    concepts_used = 0
+    concepts_used = unanchored = 0
+    papers = Papers()
     for concept, rows in snippets.items():
         got = 0
         for row in rows if isinstance(rows, list) else [rows]:
             if want and row.get("paper") not in want:
                 continue
             text = row.get("snippet") or ""
-            for rx in PATTERNS:
-                for m in rx.finditer(text):
-                    f = clean(m.group(1))
-                    if len(f) < a.min_len or not RELATION.search(f):
-                        continue
-                    if f in seen:
-                        continue
-                    seen.add(f)
-                    out.append(f)
-                    got += 1
-                    if got >= a.max_per_concept:
-                        break
+            near = papers.formulae_near(row.get("paper"), text) if text else None
+            if near is None:
+                near = [m.group(1) for rx in PATTERNS for m in rx.finditer(text)]
+                unanchored += 1
+            for body in near:
+                f = clean(body)
+                if len(f) < a.min_len or not RELATION.search(f) or f in seen:
+                    continue
+                seen.add(f)
+                out.append(f)
+                got += 1
                 if got >= a.max_per_concept:
                     break
             if got >= a.max_per_concept:
@@ -99,7 +141,8 @@ def main() -> int:
     with open(op, "w") as fh:
         fh.write("\n".join(out) + "\n")
     scope = f" (scoped to {len(want)} manifest papers)" if want else ""
-    print(f"wrote {a.out}: {len(out)} formulae from {concepts_used} concepts{scope}")
+    print(f"wrote {a.out}: {len(out)} formulae from {concepts_used} concepts{scope}; "
+          f"{unanchored} snippet(s) read without their paper")
     return 0
 
 

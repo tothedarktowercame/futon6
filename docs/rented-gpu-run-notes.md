@@ -111,6 +111,34 @@ On mark4-70b, the S4 regions that had come back with a TAB for `\chi` and
 The price is that a line break written straight before a word (`\nThen`)
 comes back as the command `\nThen`.
 
+## Assumptions that held only for arXiv papers
+
+Several stages assumed what a math.CT paper looks like. A problem set broke
+each of them:
+
+- **Statements.** S3 (the statement shown with each proof) and S6 (the
+  paper object) recognised only theorem, lemma, proposition and corollary. APM
+  states problems: S1 marked 501 `env/problem`. S3 sent all 501 proofs with
+  no statement, and S6 refused 499 papers as "proofs attached to no
+  statement". There is now one list, `scripts/statement_kinds.py` (6d1db4f).
+  S3's output on that run was made without the problem statements.
+- **Paper ids.** `paper_id_from_name` knew only arXiv ids, so S6 attached no
+  S3 or S4 output to any APM paper. It now also reads the pipeline's own file
+  names (6d1db4f).
+- **Proofs per paper.** S11's whole-paper signature needed two proofs per
+  paper. APM has one, so S11 had no signatures and then crashed (17d1f7e).
+- **Snippet windows.** WARP's definition snippets were fixed-width cuts that
+  often began inside a formula. S11 paired their dollars the wrong way round,
+  and 0 of 157 "formulae" parsed. Windows are now widened to whole formulae,
+  and S11 takes formulae from the snippet's paper (161 of 194 parse).
+
+## Restarting a stopped box
+
+A Paperspace machine with a dynamic public IP comes back at a new address.
+vLLM does not restart on its own. A run's resume check compares the host
+configuration, so vLLM must be serving, and `FUTON6_SHARDS` and
+`FUTON6_CONCURRENCY` must be set as they were when the run started.
+
 ## S3
 
 In the 16-paper pilot, S3's batch substance gate failed the whole batch

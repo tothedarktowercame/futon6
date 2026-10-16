@@ -24,6 +24,7 @@ from collections import defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import anatomy_v0_sweep as sweep  # noqa: E402
 import warp_defined_pass as dp   # reuse EMPH/DEFENV/CALL/concept_norm/read_text
 
 EPRINTS = dp.EPRINTS
@@ -37,32 +38,47 @@ def canon(t):
     return re.sub(r"\s+", " ", t).strip()
 
 
-def window(text, a, b, pad=180):
+def window(text, a, b, pad=180, extents=()):
+    """The hit with pad characters either side, widened so no formula is cut.
+
+    A fixed cut started snippets inside a formula ("\\|f\\|_\\infty$. $\\blacksquare$
+    ..."), so a reader pairing dollars paired them the wrong way round: S11's
+    def_formulae_extract took prose between formulae for formulae, and none of
+    157 parsed (apm-501-xi-r1, 2026-10-16). extents are math_extents(text).
+    """
     s = max(0, a - pad)
     e = min(len(text), b + pad)
+    for start, end, _body in extents:
+        if start < s < end:
+            s = start
+        if start < e < end:
+            e = end
     return re.sub(r"\s+", " ", text[s:e]).strip()
 
 
 def hits_with_snippets(text):
     """(canon_concept, surface, snippet) for each definition hit."""
+    extents = sweep.math_extents(text)
     out = []
     for m in dp.EMPH.finditer(text):
         raw = m.group(1) or m.group(2) or ""
         c = dp.concept_norm(raw)
         if c:
-            out.append((canon(raw), raw.strip(), window(text, m.start(), m.end())))
+            out.append((canon(raw), raw.strip(),
+                        window(text, m.start(), m.end(), extents=extents)))
     for m in dp.DEFENV.finditer(text):
         for em in dp.EMPH.finditer(m.group(1)):
             raw = em.group(1) or em.group(2) or ""
             c = dp.concept_norm(raw)
             if c:
                 gs = m.start(1) + em.start()
-                out.append((canon(raw), raw.strip(), window(text, gs, gs + len(raw))))
+                out.append((canon(raw), raw.strip(),
+                            window(text, gs, gs + len(raw), extents=extents)))
     for m in dp.CALL.finditer(text):
         c = dp.concept_norm(m.group(1))
         if c:
             out.append((canon(m.group(1)), m.group(1).strip(),
-                        window(text, m.start(), m.end())))
+                        window(text, m.start(), m.end(), extents=extents)))
     return out
 
 
