@@ -50,16 +50,19 @@ def _range(start, end, length, owner):
     return start, end
 
 
+def _lines_range(lo, hi, starts, length, owner):
+    if type(lo) is not int or type(hi) is not int or lo < 1 or hi < lo:
+        raise ValueError(f"invalid {owner} lines {[lo, hi]!r}")
+    start = starts[lo - 1] if lo <= len(starts) else length
+    end = starts[hi] if hi < len(starts) else length
+    return _range(min(start, length), min(end, length), length, owner)
+
+
 def _scope_range(scope, starts, length):
     if scope.get("span") is not None:
         start, end = scope["span"]
         return (*_range(start, end, length, "S4 scope"), 1.0)
-    lo, hi = scope["lines"]
-    if type(lo) is not int or type(hi) is not int or lo < 1 or hi < lo:
-        raise ValueError(f"invalid S4 lines {scope['lines']!r}")
-    start = starts[lo - 1] if lo <= len(starts) else length
-    end = starts[hi] if hi < len(starts) else length
-    start, end = _range(min(start, length), min(end, length), length, "S4 lines")
+    start, end = _lines_range(*scope["lines"], starts, length, "S4")
     return start, end, 0.6
 
 
@@ -71,23 +74,35 @@ def scopes_data(payload: dict, source: str) -> dict:
     glossary = payload["glossary"]
     starts = payload["starts"]
     spans, edges, legend = [], [], {}
+    group_glosses = {"term": "symbols and terms", "clause": "clauses",
+                     "region": "environments and displays", "structure": "structure"}
+    groups_present = set()
 
     for index, mark in enumerate(payload["marks"]):
         start, end, kind_index, grounded, tip = mark
         _range(start, end, length, f"S1 mark {index}")
         try:
-            kind = kinds[kind_index][0]
+            kind, group = kinds[kind_index][:2]
             meaning = glossary["S1 mark kinds"][kind]
         except (IndexError, KeyError) as exc:
             raise ValueError(f"S1 mark {index} has no defined kind") from exc
+        if group not in group_glosses:
+            raise ValueError(f"S1 mark {index} has unknown group {group!r}")
+        groups_present.add(group)
         spans.append({"id": f"s1-{index}", "seg": "mark7-0708.2185",
-                      "start": start, "end": end, "layer": "s1", "kind": kind,
+                      "start": start, "end": end, "layer": f"s1-{group}", "kind": kind,
                       "weight": 1.0 if grounded else 0.5, "note": tip})
         legend[kind] = meaning
 
     node_spans = {}
     proofs = [note for note in payload["notes"] if note.get("type") == "proof"]
     for proof in proofs:
+        start, end = _lines_range(proof["lo"], proof["hi"], starts, length,
+                                  f"proof {proof['id']}")
+        spans.append({"id": f"{proof['id']}-body", "seg": "mark7-0708.2185",
+                      "start": start, "end": end, "layer": "s3", "kind": "proof-body",
+                      "weight": 0.3, "note": "proof S3 read; its nodes quote the darker ranges"})
+        legend["proof-body"] = "inside a proof S3 read, not quoted"
         for node in proof["nodes"]:
             at = node.get("at") or []
             if not at:
@@ -115,6 +130,15 @@ def scopes_data(payload: dict, source: str) -> dict:
                 edges.append({"from": node_spans[(proof["id"], premise)][0],
                               "to": conclusion, "relation": relation, "label": warrant})
 
+    refused = [note for note in payload["notes"] if note.get("type") == "refused"]
+    for note in refused:
+        start, end = _lines_range(note["lo"], note["hi"], starts, length,
+                                  f"refused proof {note['id']}")
+        spans.append({"id": f"{note['id']}-refused", "seg": "mark7-0708.2185",
+                      "start": start, "end": end, "layer": "s3", "kind": "proof-refused",
+                      "weight": 0.12, "note": f"{note['status']} · {note['why']}"})
+        legend["proof-refused"] = "a proof S3 read whose graph was refused"
+
     scope_count = 0
     for region in (note for note in payload["notes"] if note.get("type") == "region"):
         for scope in region["scopes"]:
@@ -130,23 +154,47 @@ def scopes_data(payload: dict, source: str) -> dict:
             legend[kind] = glossary["S4 scope kinds"][kind]
             scope_count += 1
 
+    carved_count = 0
+    for carved in payload.get("carved", []):
+        kind = f"carved/{carved['type']}"
+        try:
+            meaning = glossary["This page"][carved["type"]]
+        except KeyError as exc:
+            raise ValueError(f"carved region {carved['id']} has no defined type") from exc
+        start, end = _lines_range(*carved["lines"], starts, length,
+                                  f"carved region {carved['id']}")
+        lo, hi = carved["lines"]
+        spans.append({"id": f"carved-{carved['id']}", "seg": "mark7-0708.2185",
+                      "start": start, "end": end, "layer": "s4", "kind": kind,
+                      "weight": 0.14 if carved["type"] == "in-proof" else 0.3,
+                      "note": f"{carved['section']} · L{lo}–{hi}"})
+        legend[kind] = meaning
+        carved_count += 1
+
     premise_pairs = len(edges)
+    layers = [{"id": f"s1-{group}", "name": f"S1 marks: {group_glosses[group]}",
+               "ink": "c"}
+              for group in ("term", "clause", "region", "structure")
+              if group in groups_present]
+    layers.extend([{"id": "s3", "name": "S3 proof graph", "ink": "m"},
+                   {"id": "s4", "name": "S4 expository scopes", "ink": "y"}])
     return {
         "turn": "mark7-0708.2185", "record": summary["run"],
         "offset_unit": "unicode-codepoints-zero-based-end-exclusive",
         "segments": [{"id": "mark7-0708.2185", "role": "paper",
                       "label": f"0708.2185 · {summary['run']}", "text": source}],
-        "layers": [{"id": "s1", "name": "S1 source marks", "ink": "c"},
-                   {"id": "s3", "name": "S3 proof graph", "ink": "m"},
-                   {"id": "s4", "name": "S4 expository scopes", "ink": "y"}],
+        "layers": layers,
         "spans": spans, "edges": edges, "legend": legend,
         "spot_check": {
             "drawn": {"marks": len(payload["marks"]),
                       "nodes": sum(len(node["at"]) for proof in proofs for node in proof["nodes"]),
-                      "edges": premise_pairs, "scopes": scope_count},
+                      "edges": premise_pairs, "scopes": scope_count,
+                      "proof_bodies": len(proofs), "refused": len(refused),
+                      "carved": carved_count},
             "summary": {"marks": len(payload["marks"]), "nodes": summary["nodes"],
-                        "edges": summary["edges"], "scopes": summary["scopes"]},
-            "omitted_region_effects": "whole-proof 0.3 and refused-proof 0.12 shading",
+                        "edges": summary["edges"], "scopes": summary["scopes"],
+                        "proofs": summary["proofs"],
+                        "carved": summary["carving"]["now"]["regions"]},
         },
     }
 
