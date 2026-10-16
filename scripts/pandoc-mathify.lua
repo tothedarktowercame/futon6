@@ -395,10 +395,14 @@ local function normalize_infix_ops(s)
   local prev = nil
   while prev ~= s do
     prev = s
-    s = s:gsub("(%S+)%s+x%s+(%S+)", repl("\\times"))
-    s = s:gsub("(%S+)%s*%*%s*(%S+)", repl("\\ast"))
+    if not latex_authored then
+      s = s:gsub("(%S+)%s+x%s+(%S+)", repl("\\times"))
+      s = s:gsub("(%S+)%s*%*%s*(%S+)", repl("\\ast"))
+    end
     s = s:gsub("(%S+)%s+%-%s+(%S+)", repl("\\mBridgeOperator{-}"))
-    s = s:gsub("(%S+)%s+in%s+(%S+)", repl("\\in"))
+    if not latex_authored then
+      s = s:gsub("(%S+)%s+in%s+(%S+)", repl("\\in"))
+    end
   end
   return s
 end
@@ -482,6 +486,12 @@ local function operator_call(s, name, repl)
   s = s:gsub("([^\\%a])" .. name .. "%s*%(", "%1" .. repl .. "(")
   return s
 end
+
+-- True while normalizing a formula its author wrote in LaTeX: "in", a spaced
+-- "x" and "*" are then a product, i times x, and an asterisk, not \\in, \\times and
+-- \\ast. Those guesses are for plain-text mathematics ("x in A", "A x B"); applied
+-- to "$1/(2\\pi in^{2})$" (APM a95A07) they wrote 1/(2\\pi \\in^{2}).
+local latex_authored = false
 
 local function normalize_expr(s)
   s = trim(s)
@@ -686,8 +696,10 @@ local function normalize_expr(s)
   s = s:gsub("(%S)%s+%*$", "%1 \\ast")
   s = s:gsub("^%*%s+(%S)", "\\ast %1")
 
-  s = replace_word(s, "in", "\\in")
-  s = replace_word(s, "notin", "\\notin")
+  if not latex_authored then
+    s = replace_word(s, "in", "\\in")
+    s = replace_word(s, "notin", "\\notin")
+  end
   s = replace_word(s, "rtimes", "\\rtimes")
 
   for _, pair in ipairs(greek_words) do
@@ -1332,6 +1344,16 @@ local function bracket_depth(pieces)
   return o1 - c1
 end
 
+-- Append to a formula being merged, keeping a command apart from a letter after
+-- it: "$\\neg$UC" merged as "\\negUC", an undefined command (APM a93A01).
+local function append_piece(pieces, s)
+  local last = pieces[#pieces]
+  if last ~= nil and last:match("\\%a+$") and s:match("^%a") then
+    table.insert(pieces, " ")
+  end
+  table.insert(pieces, s)
+end
+
 local function merge_adjacent_math_fragments(inlines)
   local out = {}
   local i = 1
@@ -1344,7 +1366,7 @@ local function merge_adjacent_math_fragments(inlines)
       while j <= #inlines do
         local nxt = inlines[j]
         if nxt.t == "Math" and nxt.mathtype == "InlineMath" then
-          table.insert(pieces, nxt.text)
+          append_piece(pieces, nxt.text)
           math_count = math_count + 1
           j = j + 1
         elseif nxt.t == "Space" or nxt.t == "SoftBreak" then
@@ -1363,13 +1385,13 @@ local function merge_adjacent_math_fragments(inlines)
           -- comma of (a, b) -- and otherwise belongs to the sentence: two code
           -- spans `B = ...`, `|G| = ...` must not become one formula ending "."
           if bracket_depth(pieces) > 0 then
-            table.insert(pieces, nxt.text)
+            append_piece(pieces, nxt.text)
             j = j + 1
           else
             break
           end
         elseif nxt.t == "Str" and (is_symbolic_glue_str(nxt.text) or is_mathy_str_token(nxt.text)) then
-          table.insert(pieces, nxt.text)
+          append_piece(pieces, nxt.text)
           j = j + 1
         else
           break
@@ -1801,7 +1823,10 @@ function Code(el)
 end
 
 function Math(el)
-  return pandoc.Math(el.mathtype, normalize_expr(el.text))
+  latex_authored = el.text:match("\\%a") ~= nil
+  local out = pandoc.Math(el.mathtype, normalize_expr(el.text))
+  latex_authored = false
+  return out
 end
 
 function CodeBlock(el)

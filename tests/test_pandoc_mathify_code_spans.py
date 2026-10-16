@@ -61,3 +61,16 @@ def test_a_bracket_the_formula_never_opened_goes_back_to_the_sentence():
         depth = sum(s.count(c) for c in "([") - sum(s.count(c) for c in ")]")
         assert depth == 0, s
     assert r"\(({\mNumber{0}},{\mNumber{1}}]\)" in out
+
+
+def test_latex_authored_formula_keeps_in_as_a_product():
+    # "$1/(2\pi in^{2})$" (APM a95A07) became 1/(2\pi \in^{2}); plain-text "x in A" is still \in.
+    out = convert(r"the residue is $1/(2\pi in^{2})$ and plain x in A." + "\n")
+    assert r"\pi in^{" in out and r"\in^" not in out
+    assert r"\(x \in A\)" in out
+
+
+def test_merging_keeps_a_command_apart_from_a_following_letter():
+    # "$\neg$UC" merged as the undefined command \negUC (APM a93A01).
+    out = convert(r"Assume $\neg$UC: $\exists\varepsilon > 0$: done." + "\n")
+    assert r"\negUC" not in out and r"\neg UC" in out
