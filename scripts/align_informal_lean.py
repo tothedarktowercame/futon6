@@ -238,6 +238,10 @@ def align_paper(graph: dict, decls: list[dict], model: Tfidf, threshold: float) 
             s, shared = model.cos(sv, dvec[d["name"]])
             step_pairs.append((s, e["id"], d["name"], shared))
     step_pairs.sort(key=lambda x: -x[0])
+    candidates = defaultdict(list)          # the best few per step, for a later judge
+    for s, eid, dname, shared in step_pairs:
+        if len(candidates[eid]) < 3 and s > 0:
+            candidates[eid].append({"decl": dname, "score": round(s, 3), "shared": shared})
     lemma_of, taken = {}, set()
     for s, eid, dname, shared in step_pairs:
         if s < threshold:
@@ -255,6 +259,8 @@ def align_paper(graph: dict, decls: list[dict], model: Tfidf, threshold: float) 
         hit = lemma_of.get(e["id"])
         rec = {"edge": e["id"], "premises": e["premise"], "conclusion": e["conclusion"],
                "step": concl["gloss"] or concl["text"][:120], "warrant": e["warrant"][:120],
+               "premise_text": [(by_id[x]["gloss"] or by_id[x]["text"])[:160] for x in e["premise"] if x in by_id],
+               "conclusion_text": concl["text"][:200], "candidates": candidates.get(e["id"], []),
                "lemma": hit[0] if hit else None, "score": hit[1] if hit else 0.0,
                "shared": hit[2] if hit else [], "matched": bool(hit)}
         (holes if e["missing"] else others).append(rec)
