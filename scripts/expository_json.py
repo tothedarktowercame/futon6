@@ -63,7 +63,29 @@ def schema(lo: int, hi: int, kinds, units=()) -> dict:
                                "fill": scope["properties"]["fill"],
                                "held_reason": scope["properties"]["held_reason"]}
     return {"type": "object", "additionalProperties": False, "required": ["scopes"],
-            "properties": {"scopes": {"type": "array", "minItems": 1, "maxItems": MAX_SCOPES, "items": scope}}}
+            "properties": {"scopes": {"type": "array", "minItems": 1, "maxItems": MAX_SCOPES,
+                                      "items": {"anyOf": [filled(scope), held(scope)]}}}}
+
+
+def filled(scope: dict) -> dict:
+    """The scope with a fill and an empty held_reason.
+
+    "Exactly one of fill and held_reason" was said in the prompt and checked
+    afterwards, but not decoded: on apm-501-xi-r1 (2026-10-16) the model wrote
+    both ("fill": "PDE", "held_reason": "No") in 1167 of 4016 regions, and
+    problems() rightly refused each, taking S4 to 67% and under the run's floor.
+    The two branches put the rule in the grammar, so it cannot be broken.
+    """
+    return dict(scope, properties=dict(scope["properties"],
+                                       fill=dict(scope["properties"]["fill"], minLength=1),
+                                       held_reason={"type": "string", "maxLength": 0}))
+
+
+def held(scope: dict) -> dict:
+    """The scope held: an empty fill and a reason."""
+    return dict(scope, properties=dict(scope["properties"],
+                                       fill={"type": "string", "maxLength": 0},
+                                       held_reason=dict(scope["properties"]["held_reason"], minLength=1)))
 
 
 def problems(doc, lo: int, hi: int, kinds, units=()) -> list[str]:

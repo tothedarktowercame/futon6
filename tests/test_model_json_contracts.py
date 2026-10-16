@@ -149,8 +149,8 @@ class ExpositoryContract(unittest.TestCase):
         self.assertEqual(seen["response_format"]["json_schema"]["schema"],
                          expository_json.schema(20, 24, self.kinds, UNITS))
         # the model may only cite units this region actually has
-        scope_props = seen["response_format"]["json_schema"]["schema"]["properties"]["scopes"]["items"]["properties"]
-        self.assertEqual(scope_props["units"]["items"]["enum"], [u["id"] for u in UNITS])
+        for branch in seen["response_format"]["json_schema"]["schema"]["properties"]["scopes"]["items"]["anyOf"]:
+            self.assertEqual(branch["properties"]["units"]["items"]["enum"], [u["id"] for u in UNITS])
 
     def test_transport_and_malformed_envelope_are_item_level_errors(self):
         with patch("urllib.request.urlopen", side_effect=TimeoutError("timed out")):

@@ -30,6 +30,8 @@ def instance(schema: dict, seed: int, path: str = ""):
     """A schema-valid value (object/array/string/integer/enum), varied by seed."""
     if "enum" in schema:
         return schema["enum"][seed % len(schema["enum"])]
+    if "anyOf" in schema:
+        return instance(schema["anyOf"][seed % len(schema["anyOf"])], seed, path)
     kind = schema.get("type")
     if kind == "object":
         return {k: instance(v, _seed(f"{seed}/{path}/{k}"), f"{path}/{k}")
@@ -43,6 +45,8 @@ def instance(schema: dict, seed: int, path: str = ""):
         return lo + seed % (hi - lo + 1)
     if kind == "string":
         text = f"rehearsal {path.rsplit('/', 1)[-1]} {seed % 100000}"
+        if schema.get("maxLength") == 0:
+            return ""
         return text[: schema.get("maxLength", len(text))] or "x"
     return None
 
@@ -88,7 +92,8 @@ def derivations_document(schema: dict, seed: int) -> dict:
 
 
 def scopes_document(schema: dict, seed: int) -> dict:
-    item = schema["properties"]["scopes"]["items"]["properties"]
+    items = schema["properties"]["scopes"]["items"]
+    item = items.get("anyOf", [items])[0]["properties"]
     lo, hi = item["first_line"]["minimum"], item["first_line"]["maximum"]
     kinds = item["kind"]["enum"]
     return {"scopes": [{"kind": kinds[seed % len(kinds)], "first_line": lo, "last_line": hi,
