@@ -112,6 +112,7 @@ def lean_decls(path: Path, paper: str) -> list[dict]:
         k = before.rfind("/--")
         doc = DOC.search(before[k:]) if k >= 0 else None
         out.append({"paper": paper, "file": str(path), "kind": m.group(1), "name": m.group(2),
+                    "proved": not re.search(r"\bsorry\b", body) if body else None,
                     "line": text.count("\n", 0, m.start()) + 1,
                     "doc": " ".join(doc.group(1).split()) if doc else "",
                     "signature": " ".join(sig.split())[:600], "body": body})

@@ -165,9 +165,17 @@ names.
 
 ## Next
 
-1. Expose retrieval as a query tool for blueprint agents: given a problem id
-   (or free text), list the proved declarations that match each informal step,
-   with file and line.
+1. ~~Expose retrieval as a query tool~~ — done: `scripts/lean_retrieval.py`.
+   `index --root <repo> --glob 'problems/*/lean/*.lean' --glob
+   'ConstructionTargets/*.lean' --out <index.json>` indexes proved theorems
+   and lemmas (no `sorry`): 16,233 for apm-lean, in 22 s. `query --index
+   <index.json> "<informal claim>"` answers in about 0.3 s, with file and line;
+   `query --run-dir <run> --paper <id>` answers each S3 step of a paper,
+   leaving out the paper's own declarations. For t98A01 it also surfaced
+   `apm_t98a03_regular_threeFoldCover` (a regular cover built from a torus
+   rotation, complete). Nothing in it is APM-specific beyond the default
+   `problems/<id>/` owner rule, so it can be shipped to anyone with scopes and
+   Lean side by side.
 2. Re-run the hole test on the S3 output of a run over the repaired sources
    (apm-lean `34c53beba`), with problem statements included (futon6
    `6d1db4f`).
