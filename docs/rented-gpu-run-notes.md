@@ -91,14 +91,18 @@ branch, which guided decoding enforces (4ee3818).
 General rule: any constraint the checker enforces that the grammar can
 express belongs in the schema.
 
-**Truncation.** 142 of 4,016 S4 regions hit `max_tokens=2048`. S3, S4 and
-the S7 typing stage all threw a truncated answer's text away, so nothing was
-left to say why. They now keep it: S3 and S4 next to the attempt's other
-files (`<item>.partial.txt`, named in the attempt record), and S7 under
-`<out>/.failed-responses/`. Five of the 142, chosen at random and rerun by
-hand under the new fill/held schema, all finished, in 49 to 178 tokens. So
-the old schema caused the truncation, but without the text there is no saying
-how. The retry's own count of truncations is the measure for all 142.
+**Truncation is a loop.** A cut-off answer is almost always the model stuck
+in a loop, not a long proof. The four truncated S3 answers in the second run's
+50-paper pilot repeated one node 11 to 51 times, or one quoted span up to 78
+times in a single node. Accepted graphs show milder loops too: one node quotes
+79 spans, and 36 nodes carry a duplicated span. At temperature 0 nothing
+breaks a loop, and re-invoking the stage repeats it. JSON-schema
+`uniqueItems` would stop the duplicates, but vLLM's grammar rejects it
+("Unimplemented keys"). S3 and S4 now ask once more with
+`repetition_penalty` (`FUTON6_LOOP_RETRY_PENALTY`, default 1.1) and record it
+in the attempt (futon6 `1ad6550`). On the pilot's four, the retry gave 10–14
+distinct nodes each. S3, S4 and S7 keep the text of a truncated answer, so
+the cause can be read.
 
 **LaTeX in JSON.** A JSON string allows only `" \ / b f n r t u` after a
 backslash, and guided decoding enforces that, so most LaTeX commands cannot
