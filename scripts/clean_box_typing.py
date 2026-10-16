@@ -32,6 +32,7 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
@@ -69,7 +70,15 @@ def valid(typing, sk, methods):
 
 
 class TypingCallError(Exception):
-    """The endpoint could not produce a judgeable answer."""
+    """The endpoint could not produce a judgeable answer.
+
+    text is what the model returned, when it returned something (a truncated or
+    non-JSON answer), so the failure can be read afterwards.
+    """
+
+    def __init__(self, message: str, text: str | None = None):
+        super().__init__(message)
+        self.text = text
 
 
 def query_model(endpoint, model, prompt, sk, methods):
@@ -95,11 +104,13 @@ def query_model(endpoint, model, prompt, sk, methods):
     except (KeyError, IndexError, TypeError) as e:
         raise TypingCallError(f"malformed response envelope: {e}")
     if choice.get("finish_reason") == "length":
-        raise TypingCallError(f"output truncated at max_tokens={max_tokens}")
+        raise TypingCallError(f"output truncated at max_tokens={max_tokens}",
+                              text=(choice.get("message") or {}).get("content"))
     try:
         return json.loads(choice["message"]["content"])
     except ValueError as e:
-        raise TypingCallError(f"endpoint returned non-JSON despite the schema ({e}); check serving conformance")
+        raise TypingCallError(f"endpoint returned non-JSON despite the schema ({e}); check serving conformance",
+                              text=choice["message"]["content"])
 
 
 def wait_for_server(endpoint):
@@ -179,6 +190,10 @@ def main():
                 wait_for_server(args.endpoint)
                 answer = query_model(args.endpoint, args.model, prompt, sk0, methods)
         except TypingCallError as e:
+            if e.text is not None:
+                kept = Path(ROOT, args.out, ".failed-responses", f"{pid}.txt")
+                kept.parent.mkdir(parents=True, exist_ok=True)
+                kept.write_text(e.text)
             return pid, nodes, edges, sk0, None, str(e)
         return pid, nodes, edges, sk0, answer, None
 

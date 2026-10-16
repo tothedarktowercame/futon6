@@ -331,6 +331,22 @@ class Loop(unittest.TestCase):
         self.assertEqual({row["status"] for row in items}, {"errored"})
         self.assertEqual(items[0]["attempts"][0]["nodes-token-envelope"]["prompt-tokens"], 16200)
 
+    def test_truncated_answer_keeps_its_text(self):
+        def truncate(_prompt, _cand, _model, _schema):
+            raise loop.ModelCallError(0, "output truncated at max_tokens=8192",
+                                      partial='{"nodes": [{"text": "a a a a')
+        adir = self.base / "accounting" / "S3-partial"
+        args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
+                                  model="m", rung2_gate=False, loss_log_interval=0, gate_retries=0)
+        with patch.object(loop, "call_openai", truncate), \
+                patch.dict(os.environ, {accounting.DIR_ENV: str(adir),
+                                        accounting.INVOCATION_ENV: "S3-partial"}):
+            loop.run(args)
+        item = accounting.load(adir, "S3", "loop")["items"][0]
+        self.assertIn("nodes-partial", item["attempts"][0])
+        self.assertEqual(next(self.out.rglob("*.nodes.partial.txt")).read_text(),
+                         '{"nodes": [{"text": "a a a a')
+
     def test_raw_tab_in_json_string_is_restored_with_a_repair_ledger(self):
         # Exact serving defect observed for math__0103059__p1: the intended
         # LaTeX prefix `\\t` arrived as an unescaped tab byte.

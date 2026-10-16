@@ -21,6 +21,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -165,6 +166,23 @@ class ExpositoryContract(unittest.TestCase):
         with patch("urllib.request.urlopen", return_value=Response()):
             with self.assertRaisesRegex(expo_loop.ModelCallError, "malformed response envelope"):
                 expo_loop.call_openai("p", CANDIDATE, self.kinds, "m")
+
+
+    def test_truncated_output_keeps_its_text(self):
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+            def read(self):
+                return json.dumps({"choices": [{"finish_reason": "length",
+                                                "message": {"content": '{"scopes": [{"kind": "'}}]}).encode()
+
+        with patch("urllib.request.urlopen", return_value=Response()), \
+                tempfile.TemporaryDirectory() as d:
+            args = SimpleNamespace(backend="openai", model="m")
+            status, why, record = expo_loop.attempt_one(CANDIDATE, args, self.kinds, Path(d))
+            self.assertEqual(status, "errored")
+            self.assertIn("truncated", why)
+            self.assertEqual((Path(d) / Path(record["partial"]).name).read_text(), '{"scopes": [{"kind": "')
 
 
 class CleanTypingContract(unittest.TestCase):

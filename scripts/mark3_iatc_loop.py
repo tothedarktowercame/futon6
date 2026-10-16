@@ -186,9 +186,10 @@ Source, lines {lo}-{hi} (ABSOLUTE line numbers on the left):
 class ModelCallError(Exception):
     """The endpoint could not produce a judgeable answer (HTTP error, truncation)."""
 
-    def __init__(self, code, detail, *, envelope=None):
+    def __init__(self, code, detail, *, envelope=None, partial=None):
         self.code = code
         self.envelope = envelope
+        self.partial = partial      # the text of a truncated answer, kept for reading
         super().__init__(f"HTTP {code}: {detail}" if code else detail)
 
 
@@ -294,8 +295,10 @@ def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> ModelAnswe
     })
     choice = response["choices"][0]
     if choice.get("finish_reason") == "length":
-        # A truncated document is not the model's answer; nothing is salvaged from it.
-        raise ModelCallError(0, f"output truncated at max_tokens={max_tokens}")
+        # A truncated document is not the model's answer; nothing is salvaged from
+        # it, but its text is kept so the truncation can be read afterwards.
+        raise ModelCallError(0, f"output truncated at max_tokens={max_tokens}",
+                             partial=(choice.get("message") or {}).get("content"))
     return ModelAnswer(choice["message"]["content"], prompt_tokens, max_tokens,
                        MODEL_CONTEXT_TOKENS)
 
@@ -528,6 +531,10 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
         except ModelCallError as e:
             if e.envelope is not None:
                 record[f"{phase}-token-envelope"] = e.envelope
+            if e.partial is not None:
+                partial = tmp / f"{pid}.{phase}.partial.txt"
+                partial.write_text(e.partial)
+                record[f"{phase}-partial"] = accounting.relative(partial)
             record["result"] = f"{phase}: {e}"[:300]
             return "errored", f"{phase}: {e}", record
         if isinstance(answer, ModelAnswer):

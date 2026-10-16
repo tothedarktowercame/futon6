@@ -100,7 +100,16 @@ Source (ABSOLUTE line numbers on the left):
 
 
 class ModelCallError(Exception):
-    """The endpoint could not produce a judgeable answer (HTTP error, truncation)."""
+    """The endpoint could not produce a judgeable answer (HTTP error, truncation).
+
+    partial is whatever text the model did return, kept so a truncation can be
+    read afterwards: on apm-501-xi-r1, 142 regions hit max_tokens and the text
+    was dropped, leaving nothing to say why.
+    """
+
+    def __init__(self, message: str, partial: str | None = None):
+        super().__init__(message)
+        self.partial = partial
 
 
 def call_stub(prompt: str, candidate: dict[str, Any], kinds: dict[str, str]) -> str:
@@ -149,7 +158,8 @@ def call_openai(prompt: str, candidate: dict[str, Any], kinds: dict[str, str], m
     except (KeyError, IndexError, TypeError) as e:
         raise ModelCallError(f"endpoint returned a malformed response envelope: {e}")
     if choice.get("finish_reason") == "length":
-        raise ModelCallError(f"output truncated at max_tokens={MAX_TOKENS}")
+        raise ModelCallError(f"output truncated at max_tokens={MAX_TOKENS}",
+                             partial=(choice.get("message") or {}).get("content"))
     return choice["message"]["content"]
 
 
@@ -203,6 +213,10 @@ def attempt_one(candidate, args, kinds, attempts: Path) -> tuple[str, str, dict]
                else call_openai(build_prompt(candidate), candidate, kinds, args.model))
     except ModelCallError as e:
         record["result"] = str(e)[:300]
+        if e.partial is not None:
+            partial = attempts / f"{stem}.partial.txt"
+            partial.write_text(e.partial, encoding="utf-8")
+            record["partial"] = accounting.relative(partial)
         return "errored", str(e), record
     response = attempts / f"{stem}.response.json"
     response.write_text(raw, encoding="utf-8")

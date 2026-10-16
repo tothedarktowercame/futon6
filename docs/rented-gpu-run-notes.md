@@ -80,13 +80,21 @@ branch, which guided decoding enforces (4ee3818).
 General rule: any constraint the checker enforces that the grammar can
 express belongs in the schema.
 
-**Still open: truncation and control characters.**
-- 142 of 4,016 S4 regions hit `max_tokens=2048`. The text is discarded when
-  that happens, so the cause is unknown. The bounded schema (at most 8 scopes;
-  fill at most 400 characters, held_reason at most 200) should fit well under
-  2048 tokens. Suspect unbounded whitespace between JSON tokens, which guided
-  decoding allows.
-- 9 of 4,016 returned JSON with a raw control character inside a string.
+**Truncation.** 142 of 4,016 S4 regions hit `max_tokens=2048`. S3, S4 and
+the S7 typing stage all threw a truncated answer's text away, so nothing was
+left to say why. They now keep it: S3 and S4 next to the attempt's other
+files (`<item>.partial.txt`, named in the attempt record), and S7 under
+`<out>/.failed-responses/`. Five of the 142, chosen at random and rerun by
+hand under the new fill/held schema, all finished, in 49 to 178 tokens. So
+the old schema caused the truncation, but without the text there is no saying
+how. The retry's own count of truncations is the measure for all 142.
+
+**Control characters.** 9 of 4,016 S4 answers had a raw control character
+inside a JSON string. These were kept (`.response.json`). The one read shows
+a TAB followed by `chi` where `\chi` belonged. That is the same serving
+defect S3 already repairs for TAB followed by `imes` (`\times`;
+`sanitize_string_control_chars` in `mark3_iatc_loop.py`). S4 has no such
+repair, and S3 repairs only the one command it has seen.
 
 ## S3
 
