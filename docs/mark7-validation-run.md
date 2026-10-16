@@ -115,7 +115,10 @@ carrying the proofs accepted before the kill.
 If a stage fails, the runner halts with its item counts and reasons in
 `stage-attempts.jsonl` and `accounting/<stage>/<invocation>/`. Record them, then
 either re-invoke that stage with `--from`, which retries only non-accepted items,
-or stop and report. Never mark a failed stage done.
+or stop and report. Never mark a failed stage done. Model calls run at
+temperature 0, so re-invoking without a change to code, schema or serving gets
+the same refusals; on rented hardware, copy the run back and stop the box before
+diagnosing. See `rented-gpu-run-notes.md`.
 
 ## 6. Replay, retrieve, verify
 
