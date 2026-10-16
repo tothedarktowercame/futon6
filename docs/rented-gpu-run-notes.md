@@ -12,6 +12,17 @@ stopped, not while it waits.
 
 ## Before renting
 
+**Read the papers, not just compile them.** The APM papers all compiled and
+were free of Unicode, and still read badly. 2,886 formulae and 4,663 single
+symbols were set as verbatim code, because the markdown wrote math in
+backticks. 657 formulae had brackets the source never split. 1,069 places had
+escaped `_` or `^` in the prose. Every one of them went to the GPU. Count
+defect classes over the papers' text before renting (for the APM export:
+apm-lean `scripts/qc-mining-tex.py`, which fails when a class exceeds its
+allowance), and look at a few rendered pages. The fixes are in
+`pandoc-mathify.lua` (code spans holding math, and a bracket a formula never
+opened) and in the export.
+
 **Vocabulary.** The staged concept vocabulary is math.CT's. For CT it is right
 and for nothing else: on APM it is demo content. S2 (WARP) grounds concepts
 only from definitions the corpus contains, and a corpus of problem solutions

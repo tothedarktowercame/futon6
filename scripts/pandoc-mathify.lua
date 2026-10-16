@@ -1325,6 +1325,13 @@ local function is_symbolic_glue_str(s)
   return s:match("^[%s%(%[%{%)%]%,%+%-%*/=<>'`|\\%^_%d%.]+$") ~= nil
 end
 
+local function bracket_depth(pieces)
+  local s = table.concat(pieces)
+  local _, o1 = s:gsub("[%(%[]", "")
+  local _, c1 = s:gsub("[%)%]]", "")
+  return o1 - c1
+end
+
 local function merge_adjacent_math_fragments(inlines)
   local out = {}
   local i = 1
@@ -1351,12 +1358,27 @@ local function merge_adjacent_math_fragments(inlines)
           else
             break
           end
+        elseif nxt.t == "Str" and nxt.text:match("^[%.,;:]+$") then
+          -- Punctuation joins only inside a bracket the formula opened -- the
+          -- comma of (a, b) -- and otherwise belongs to the sentence: two code
+          -- spans `B = ...`, `|G| = ...` must not become one formula ending "."
+          if bracket_depth(pieces) > 0 then
+            table.insert(pieces, nxt.text)
+            j = j + 1
+          else
+            break
+          end
         elseif nxt.t == "Str" and (is_symbolic_glue_str(nxt.text) or is_mathy_str_token(nxt.text)) then
           table.insert(pieces, nxt.text)
           j = j + 1
         else
           break
         end
+      end
+      -- a trailing space is the sentence's, not the formula's
+      while #pieces > 1 and pieces[#pieces] == " " do
+        table.remove(pieces)
+        j = j - 1
       end
 
       if math_count >= 2 then
@@ -1716,10 +1738,61 @@ function Str(el)
   return nil
 end
 
+-- A code span written with a LaTeX command is mathematics: Lean source never
+-- writes \sigma or \, . The APM informal proofs put formulae in backticks
+-- (`\sigma_a = \rho(a)`), and is_mathy_inline() does not read commands, so
+-- 2,680 such spans in 176 papers were set verbatim, backslashes and all.
+local function is_latex_math(s)
+  return s:match("\\%a") or s:match("\\[,;!{}|]")
+end
+
+-- One symbol: a letter or a number, maybe with a Unicode sub/superscript or a
+-- simple _/^ index -- `f`, `X`, `2`, `S₅`, `x_n`. In the same papers these
+-- (4,663 of them) were \texttt{f}.
+local function is_bare_symbol(s)
+  return s:match("^%a$") or s:match("^%-?%d+$") or s:match("^%a[\128-\255]+$")
+      or s:match("^%a[_^]%w$") or s:match("^%a[_^]{[%w,]+}$")
+      or s:match("^%a%s*,%s*%a[%s,%a]*$")            -- `C,D`, `a, b`
+      or (s:match("^[\128-\255]+$") and #s <= 4)     -- one Greek letter: `ξ`, `φ`
+      or s:match("^[%a\128-\255]'+$")                -- `f'`, `φ''`
+      or s:match("^%d+%a$")                            -- `10V`, `2g`
+      or s:match("^|.*|$") or s:match("^‖.*‖")         -- `|f'|`, `‖v‖ → ∞`
+end
+
+-- A Unicode relation or set operator: `f_n ∈ K`, `λ ≠ 0`, `A ⊆ B`.
+local UNICODE_RELATIONS = {"∈", "∉", "≠", "≤", "≥", "⊂", "⊆", "⊃", "⊇", "∪", "∩", "≅", "≃", "∘", "↦",
+                           "×", "→", "‖", "∞", "∑", "∫", "∂", "√"}
+local function has_unicode_relation(s)
+  for _, op in ipairs(UNICODE_RELATIONS) do
+    if s:find(op, 1, true) then
+      return true
+    end
+  end
+  return false
+end
+
+-- A shell command in backticks is code: `rg -n "indicator" Mathlib/...`,
+-- `lake build`. is_mathy_inline() read the quotes and slashes as a formula.
+local SHELL = {rg = true, grep = true, lake = true, git = true, ls = true, cat = true,
+               find = true, sed = true, python = true, python3 = true, cd = true}
+local function is_shell_command(s)
+  local head = s:match("^%s*([%w_]+)%s")
+  return head ~= nil and SHELL[head] == true
+end
+
 function Code(el)
   local s = el.text
-  if keep_inline_code(s) then
+  -- Before keep_inline_code: its snake_case test reads \sigma_a (and f_n in
+  -- `f_n ∈ K`) as an identifier. A dotted Lean path stays code.
+  if is_latex_math(s) or (has_unicode_relation(s) and not s:match("%u[%w]*%.[%w_\128-\255]")
+                          and not is_shell_command(s)) then
+    return pandoc.Math("InlineMath", normalize_expr(s))
+  end
+  if keep_inline_code(s) or is_shell_command(s) then
     return nil
+  end
+  if is_bare_symbol(s) then
+    return pandoc.Math("InlineMath", normalize_expr(s))
   end
   if is_mathy_inline(s) then
     return pandoc.Math("InlineMath", normalize_expr(s))
@@ -1800,10 +1873,69 @@ function CodeBlock(el)
   return pandoc.Para({pandoc.Math("DisplayMath", "\\begin{aligned}\n" .. body .. "\n\\end{aligned}")})
 end
 
+-- A bracket the formula never opened belongs to the sentence. Merging glued a
+-- prose parenthesis's ")" into the formula before it -- "(with $0<\delta<1),
+-- (1-t^2)^{n/2} \le ...$", "(exponent $p = 2)$" -- which the reader sees as a
+-- stray bracket in the mathematics (143 formulae in the APM export). Split the
+-- formula at the first ")" or "]" that closes nothing: the bracket and any
+-- punctuation after it go back to the text, and what follows stays a formula.
+local function split_unopened_close(text)
+  local depth = 0
+  local i = 1
+  while i <= #text do
+    local c = text:sub(i, i)
+    if c == "\\" then
+      i = i + 2                              -- \{ \| \left( are not prose brackets
+    else
+      if c == "(" or c == "[" then
+        depth = depth + 1
+      elseif c == ")" or c == "]" then
+        if depth == 0 then
+          return text:sub(1, i - 1), c, text:sub(i + 1)
+        end
+        depth = depth - 1
+      end
+      i = i + 1
+    end
+  end
+  return nil
+end
+
+local function balance_math_edges(inlines)
+  local out = {}
+  for _, el in ipairs(inlines) do
+    local pending = el
+    while pending ~= nil do
+      local cur = pending
+      pending = nil
+      if cur.t == "Math" and cur.mathtype == "InlineMath" then
+        local before, bracket, after = split_unopened_close(cur.text)
+        if before ~= nil and trim(before) ~= "" then
+          table.insert(out, pandoc.Math("InlineMath", trim(before)))
+          local punct, rest = after:match("^([%s%.,;:]*)(.*)$")
+          table.insert(out, pandoc.Str(bracket .. trim(punct)))
+          if punct:match("%s") then
+            table.insert(out, pandoc.Space())
+          end
+          if trim(rest) ~= "" then
+            pending = pandoc.Math("InlineMath", trim(rest))
+          end
+        else
+          table.insert(out, cur)
+        end
+      else
+        table.insert(out, cur)
+      end
+    end
+  end
+  return out
+end
+
 function Para(el)
   el.content = convert_split_brace_math_inlines(el.content)
   el.content = convert_binary_operator_sequences(el.content)
   el.content = merge_adjacent_math_fragments(el.content)
+  el.content = balance_math_edges(el.content)
   return el
 end
 
@@ -1811,6 +1943,7 @@ function Plain(el)
   el.content = convert_split_brace_math_inlines(el.content)
   el.content = convert_binary_operator_sequences(el.content)
   el.content = merge_adjacent_math_fragments(el.content)
+  el.content = balance_math_edges(el.content)
   return el
 end
 
