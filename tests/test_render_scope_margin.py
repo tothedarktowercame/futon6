@@ -1,6 +1,7 @@
 """Margin notes judge each node's quote against its own gloss, and mock the fixes."""
 import sys
 from pathlib import Path
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -108,3 +109,34 @@ def test_a_refused_proof_is_read_from_the_run_s_own_accounting(tmp_path):
     assert got["proofs"]["p:__p60"]["attempts"] == 1
     assert got["regions"] == [{"id": "p-inflight-0002", "lines": [259, 265],
                                "status": "deferred", "why": "cap 30 per paper"}]
+
+
+def test_assemble_orders_margin_and_scope_blocks_and_preserves_json(tmp_path):
+    import json
+    import re
+
+    assets = ROOT / "scripts/scope_margin"
+    payload = {"source": "payload < sentinel"}
+    source = "paper < source"
+    scopes = {"segments": [{"text": "scope < text"}]}
+    renderer = "export function renderScopes() {}"
+    page = margin.assemble("<html><head></head><body></body></html>", payload, source,
+                           scopes, assets, renderer)
+    positions = [page.index(marker) for marker in
+                 ('id="m7-data"', "const rail", 'id="m7-source"',
+                  "Three layers at once", 'id="m7-scopes"', 'type="module"')]
+    assert positions == sorted(positions)
+    block = lambda ident: re.search(
+        rf'<script id="{ident}" type="application/json">(.*?)</script>', page, re.S).group(1)
+    assert json.loads(block("m7-data")) == payload
+    assert json.loads(block("m7-source")) == source
+    assert json.loads(block("m7-scopes")) == scopes
+    assert "<" not in block("m7-data") and "<" not in block("m7-source")
+    assert "<" not in block("m7-scopes")
+    module = re.search(r'<script type="module">(.*?)</script>', page, re.S).group(1)
+    assert "export function renderScopes" in module
+    assert "renderScopes(" in module
+    assert "backgroundColor" not in (assets / "plates.js").read_text()
+
+    with pytest.raises(FileNotFoundError, match="shared scope renderer not found"):
+        margin.read_scopes_renderer(tmp_path / "missing-scopes.js")

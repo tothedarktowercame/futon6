@@ -137,14 +137,11 @@
   const blockSet = new Set([...article.querySelectorAll('[data-sourcepos]')].filter(e => BLOCK.test(e.tagName) && pos(e) && !e.closest('math')));
   // Walk from the outermost blocks; a nested block resets the cursor to its own exact start.
   const blocks = [...blockSet].filter(e => { for (let a = e.parentElement; a; a = a.parentElement) if (blockSet.has(a)) return false; return true; });
-  // ---- ink ----------------------------------------------------------------------------
-  const INK = {c: 0.42, m: 0.42, y: 0.55};
-  const color = (c, m, y) => `rgb(${Math.round(255 * (1 - INK.c * c))},${Math.round(255 * (1 - INK.m * m))},${Math.round(255 * (1 - INK.y * y))})`;
+  // ---- readout data -------------------------------------------------------------------
   const proofs = data.notes.filter(n => n.type === 'proof'), regions = data.notes.filter(n => n.type === 'region');
   const refused = data.notes.filter(n => n.type === 'refused');
   const deferredAt = line => (data.deferred || []).find(r => r.lines[0] <= line && line <= r.lines[1]);
   const hit = (a, b, rs) => rs.some(([x, y]) => x < b && a < y);
-  let ctl;
   const carvedAt = line => data.carved.find(r => r.lines[0] <= line && line <= r.lines[1]);
   function quotes(mock) {
     const out = [];
@@ -153,25 +150,6 @@
       (mock && n.mock.verdict === 're-anchored' && n.proposal ? [n.proposal.at] : n.at).forEach(r => out.push([r[0], r[1], p, n]));
     }));
     return out;
-  }
-  function plate(u, mock, qs) {
-    const line = lineOf(u.a);
-    let c = 0;
-    if (ctl.c.checked) {
-      marksAt(u.a, u.b).forEach(i => { if (KINDS[MARKS[i][2]][1] === ctl.cg.value) c = Math.max(c, MARKS[i][3] ? 1 : 0.5); });
-    }
-    let m = 0;
-    if (ctl.m.checked) {
-      if (qs.some(q => q[0] < u.b && u.a < q[1])) m = 1;
-      else if (proofs.some(p => p.lo <= line && line <= p.hi)) m = 0.3;
-      else if (refused.some(p => p.lo <= line && line <= p.hi)) m = 0.12;   // read, refused
-    }
-    let y = 0;
-    if (ctl.y.checked) {
-      if (regions.some(r => r.scopes.some(s => !(mock && s.mock.verdict === 'rejected') && s.lines[0] <= line && line <= s.lines[1]))) y = 1;
-      else { const c = carvedAt(line); if (c) y = c.type === 'in-proof' ? 0.14 : 0.3; }
-    }
-    return [c, m, y];
   }
   const TERMCLS = {'tagged as defined': 'm7-t-def', 'tagged generically': 'm7-t-gen', 'untagged': 'm7-t-none'};
   const STRAT = data.strategies;
@@ -188,10 +166,7 @@
     return out.sort((x, y) => x.o.start - y.o.start);
   };
   function paint() {
-    const mock = document.body.classList.contains('m7-mock'), qs = quotes(mock);
     units.forEach(u => {
-      const [c, m, y] = plate(u, mock, qs);
-      u.e.style.backgroundColor = c || m || y ? color(c, m, y) : '';
       Object.values(TERMCLS).forEach(k => u.e.classList.remove(k));
       if (ctl.t.checked) { const o = occs.find(o => o.a < u.b && u.a < o.b); if (o) u.e.classList.add(TERMCLS[o.status]); }
     });
@@ -204,38 +179,22 @@
   el('h3', null, 'Three layers at once', box);
   const P = el('p', null, null, box);
   P.append('Each layer is an ink plate, as in colour printing, so all three show together and overlaps mix. ' +
-           'Hover (or tap) any word or formula to read every layer at that point.');
+           'Hover (or tap) any word or formula to read every layer at that point. ' +
+           'The mock toggle changes the readout verdicts, but no longer changes which passages the ink shows.');
   const row = el('p', 'm7-plate-row', null, box);
   const check = (label, sw, on) => { const l = el('label', null, null, row); const c = el('input', null, null, l); c.type = 'checkbox'; c.checked = on;
     const s = el('span', 'm7-sw', null, l); s.style.background = sw; l.append(' ' + label); return c; };
-  ctl = {};
-  ctl.c = check('C — S1 source marks:', color(1, 0, 0), true);
-  ctl.cg = el('select', null, null, row.lastChild);
-  [['term', 'symbols and terms'], ['clause', 'clauses'], ['region', 'environments and displays']].forEach(([v, t]) => { const o = el('option', null, t, ctl.cg); o.value = v; });
-  ctl.m = check('M — S3 proof graphs', color(0, 1, 0), true);
-  ctl.y = check('Y — S4 expository scopes', color(0, 0, 1), true);
+  const ctl = {};
   ctl.t = check('defined terms', 'transparent', true);
   row.lastChild.querySelector('.m7-sw').className = 'm7-sw m7-sw-term';
+  el('div', 'm7-scope-host', null, box);
   const legend = el('div', 'm7-legend-grid', null, box);
   const sw = (bg, text, cls) => { const d = el('div', null, null, legend); const s = el('span', 'm7-sw ' + (cls || ''), null, d); s.style.background = bg; d.append(' ' + text); };
-  sw(color(1, 0, 0), 'S1 tied it to a meaning (grounded)');
-  sw(color(0.5, 0, 0), 'S1 tagged it but found no meaning');
-  sw(color(0, 1, 0), 'a proof-graph node quotes it');
-  sw(color(0, 0.3, 0), 'inside a proof S3 read, not quoted');
-  sw(color(0, 0.12, 0), 'a proof S3 read whose graph was refused');
-  sw(color(0, 0, 1), 'an S4 scope cites this line');
-  sw(color(0, 0, 0.3), 'a region S4 would read now, no scope in this run');
-  sw(color(0, 0, 0.14), 'prose inside a proof, carved as an in-proof region');
-  sw(color(1, 1, 0), 'C + M: S1 grounded what a node quotes');
-  sw(color(0, 1, 1), 'M + Y: a node quotes a line a scope also reads');
-  sw(color(1, 0, 1), 'C + Y: S1 grounded what a scope reads');
   sw('transparent', 'defined term, S1 tagged it as defined', 'm7-sw-term m7-t-def');
   sw('transparent', 'defined term, S1 tagged it only generically', 'm7-sw-term m7-t-gen');
   sw('transparent', 'defined term, S1 did not tag it', 'm7-sw-term m7-t-none');
   const align = el('p', 'm7-legend', null, box);
-  ctl.cg.addEventListener('change', paint);
-  [ctl.c, ctl.m, ctl.y, ctl.t].forEach(c => c.addEventListener('change', paint));
-  document.querySelectorAll('.m7-banner input').forEach(c => c.addEventListener('change', paint));
+  ctl.t.addEventListener('change', paint);
 
   const SUM = data.summary;
   if (SUM['refused-proofs'] || SUM['deferred-regions']) {

@@ -46,6 +46,8 @@ import markup_strategies
 import expository_scope_audit as scope_audit
 import iatc_quote_check as quote_check
 import iatc_json
+import futon6_config
+import scope_margin_scopes
 
 # MOCK of the proposed S4 contract: a bare parent kind is not selectable, so the
 # scope takes a specific child or is held. These cues only suggest which child the
@@ -326,6 +328,30 @@ def stage_outcomes(run: Path, paper: str) -> dict:
     return out
 
 
+def assemble(page: str, payload: dict, source: str, scopes: dict,
+             assets: Path, scopes_js: str) -> str:
+    """Embed the classic margin scripts followed by the shared scope-view module."""
+    data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
+    source_json = json.dumps(source, ensure_ascii=False).replace("<", "\\u003c")
+    scopes_json = json.dumps(scopes, ensure_ascii=False).replace("<", "\\u003c")
+    page = page.replace("</head>", "<style>" + (assets / "margin.css").read_text()
+                        + "</style></head>", 1)
+    scripts = ('<script id="m7-data" type="application/json">' + data
+               + "</script><script>" + (assets / "margin.js").read_text()
+               + '</script><script id="m7-source" type="application/json">' + source_json
+               + "</script><script>" + (assets / "plates.js").read_text()
+               + '</script><script id="m7-scopes" type="application/json">' + scopes_json
+               + '</script><script type="module">' + scopes_js + "\n"
+               + (assets / "plates_view.js").read_text() + "</script>")
+    return page.replace("</body>", scripts + "</body>", 1)
+
+
+def read_scopes_renderer(path: Path) -> str:
+    if not path.is_file():
+        raise FileNotFoundError(f"shared scope renderer not found: {path}")
+    return path.read_text(encoding="utf-8")
+
+
 def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
     marks = json.loads((run / "artifacts/marks" / f"fable-{paper}-dp-emacs.json").read_text())
     source = marks["text"]
@@ -434,17 +460,14 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
                "marks": [[m["start"], m["end"], kind_ix[m["kind"]], int(grounded(m)), m.get("tip") or ""]
                          for m in marks["marks"]],
                "strategies": strat, "deferred": outcomes["regions"], "glossary": glossary}
+    scopes = scope_margin_scopes.scopes_data(payload, source)
     page = (typeset / f"{paper}-tufte.html").read_text()
     if "data-sourcepos=" not in page:
         raise ValueError("typeset page has no source positions")
     assets = Path(__file__).with_name("scope_margin")
-    data = json.dumps(payload, ensure_ascii=False).replace("<", "\\u003c")
-    page = page.replace("</head>", "<style>" + (assets / "margin.css").read_text() + "</style></head>", 1)
-    page = page.replace("</body>", '<script id="m7-data" type="application/json">' + data
-                        + "</script><script>" + (assets / "margin.js").read_text()
-                        + '</script><script id="m7-source" type="application/json">'
-                        + json.dumps(source, ensure_ascii=False).replace("<", "\\u003c")
-                        + "</script><script>" + (assets / "plates.js").read_text() + "</script></body>", 1)
+    scopes_js_path = futon6_config.sibling("futon3c") / "web/scopes/scopes.js"
+    page = assemble(page, payload, source, scopes, assets,
+                    read_scopes_renderer(scopes_js_path))
     return page, summary
 
 

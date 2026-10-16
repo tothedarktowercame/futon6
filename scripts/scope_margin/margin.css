@@ -60,6 +60,17 @@ table.m7-terms td:first-child{cursor:help}
 dl.m7-gloss{font-size:12px;margin:.2rem 0 .5rem;display:grid;grid-template-columns:max-content 1fr;gap:.1rem .7rem}
 dl.m7-gloss dt{font-family:ui-monospace,monospace;color:var(--m7-ink)}dl.m7-gloss dd{margin:0;color:var(--m7-soft)}
 .m7-plates h4{font:600 12.5px system-ui,sans-serif;margin:.5rem 0 .1rem}
+.m7-plates .scope-controls{display:flex;gap:2rem;align-items:start;margin-bottom:1rem}
+.m7-plates .scope-layers{display:flex;gap:1rem;border:1px solid #bbb;background:white}
+.m7-plates .scope-layer-toggle{display:flex;align-items:center;gap:.35rem}
+.m7-plates .scope-swatch{width:.9rem;height:.9rem;border:1px solid #777}
+.m7-plates .ink-c{background:cyan}.m7-plates .ink-m{background:magenta}.m7-plates .ink-y{background:yellow}
+.m7-plates .scope-legend{max-width:54rem}.m7-plates .scope-legend dl{columns:2}
+.m7-plates .scope-legend dt{font-weight:700;break-after:avoid}
+.m7-plates .scope-legend dt.undefined{color:#a21}
+.m7-plates .scope-legend dd{margin:0 0 .55rem;break-inside:avoid}
+.m7-plates [data-span].lit{outline:2px solid #111;outline-offset:1px}
+.m7-plates .scope-columns{display:none}
 .m7-read{position:fixed;right:12px;bottom:12px;width:min(30rem,calc(100vw - 24px));max-height:45vh;overflow:auto;z-index:60;
   font:12.5px/1.45 system-ui,sans-serif;background:#fffff8;border:1px solid var(--m7-rule);border-radius:4px;padding:.5rem .7rem;box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .m7-read-h code{font:12px ui-monospace,monospace}
