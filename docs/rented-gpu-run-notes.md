@@ -89,22 +89,27 @@ hand under the new fill/held schema, all finished, in 49 to 178 tokens. So
 the old schema caused the truncation, but without the text there is no saying
 how. The retry's own count of truncations is the measure for all 142.
 
-**Control characters.** Some answers carry a control byte where a backslash
-command belongs. The byte replaces the backslash and up to three letters:
-TAB + `sto` for `\mapsto`, TAB + `athbb` for `\mathbb`, TAB + `ightarrow`
-for `\rightarrow`, TAB + `ph{dense}` for `\emph`. The JSON is then invalid
-and the item errors (9 of 4,016 in S4). Separately, a model can write a
-JSON escape such as `"\theta"`, which parses, but as TAB + `heta`.
+**LaTeX in JSON.** A JSON string allows only `" \ / b f n r t u` after a
+backslash, and guided decoding enforces that, so most LaTeX commands cannot
+be written in an answer at all. S3 saw `\Sigma` forced into `\triangle`; S4
+on APM got a raw TAB where `\chi`, `\mathbb`, `\cup` or `\mapsto` belonged,
+which made 9 of 4,016 answers unparseable. A repair that guessed the lost
+letters afterwards was tried and dropped: two of the twelve could not be
+recovered, because the command was gone.
 
-`scripts/latex_json_repair.py` handles both cases, in S3 and S4. It
-restores a command only when the remaining letters name a standard command,
-or one the source passage uses (a paper's own macros). Each repair is
-recorded in the attempt record (`sanitization`), and the raw answer is kept
-beside the repaired one. A line break before a word counts as a command only
-inside mathematics. It repairs 10 of the 12 damaged APM answers. The other
-two are refused: one lost the whole command (TAB + `(`), and the other has
-BACKSPACE + `bZ`, which is neither standard nor in its paper. This replaces
-S3's earlier repair, which handled only TAB + `imes`.
+`scripts/latex_json.py` fixes it on both sides of the model, in S3 and S4:
+- `allow_latex` puts a pattern on every free text field: no control
+  characters, no unescaped quote, any character after a backslash. With it
+  the model writes LaTeX as in a paper, `$g = \chi_{[-h,h]}$`.
+- `loads` doubles every backslash that is not a JSON escape before
+  `json.loads`, so it decodes to the backslash the model wrote. `\theta`,
+  `\frac` and `\nabla` count as LaTeX: an escape letter followed by another
+  letter is a command.
+
+On mark4-70b, the S4 regions that had come back with a TAB for `\chi` and
+`\cup` now decode to `$g = \chi_{[-h,h]}$` and `$({0},{1}) \cup ({2},{3})$`.
+The price is that a line break written straight before a word (`\nThen`)
+comes back as the command `\nThen`.
 
 ## S3
 

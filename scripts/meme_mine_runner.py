@@ -18,6 +18,7 @@ Backend convention mirrors sfc_symbol_grounding.py (the SFC2b template): vLLM Op
 import argparse, glob, json, os, re, hashlib, urllib.request, sys
 from collections import Counter, defaultdict
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import latex_json  # noqa: E402
 from transcript_provenance import is_operator   # the ONE operator/agent/harness test (E-patch leak fix)
 
 HOME = os.path.expanduser("~")
@@ -116,7 +117,7 @@ Output STRICT JSON only: {"memes":[{"have":{"text":..,"ref":..,"tier":..,"eviden
 
 
 def _sanitize_json_escapes(s):  # 70B sometimes emits raw LaTeX/path backslashes that break json.loads
-    return re.sub(r'\\(?!["\\/bfnrtu])', r'\\\\', s)
+    return latex_json.escape_latex(s)
 
 
 def call_openai(ask, thread, hints, model):

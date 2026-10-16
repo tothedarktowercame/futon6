@@ -24,6 +24,8 @@ from __future__ import annotations
 
 import re
 
+import latex_json
+
 GENERATOR = "iatc-json/v1"
 NODE_KINDS = ("claim", "object", "definition", "ref")
 RELATIONS = ("implies", "iff", "by-definition", "by-construction", "by-contradiction",
@@ -104,8 +106,9 @@ def nodes_schema(lo: int, hi: int, symbols: "list[str] | tuple[str, ...]" = (),
         required.append("quote_spans")
     node = {"type": "object", "additionalProperties": False,
             "required": required, "properties": properties}
-    return {"type": "object", "additionalProperties": False, "required": ["nodes"],
-            "properties": {"nodes": {"type": "array", "minItems": 2, "maxItems": MAX_NODES, "items": node}}}
+    return latex_json.allow_latex(
+        {"type": "object", "additionalProperties": False, "required": ["nodes"],
+         "properties": {"nodes": {"type": "array", "minItems": 2, "maxItems": MAX_NODES, "items": node}}})
 
 
 SPAN_KINDS = ("bind/let", "assume/explicit", "quant/universal", "constrain/relation",
@@ -175,9 +178,10 @@ def steps_schema(lo: int, hi: int, node_count: int) -> dict:
                                      "warrant": {"type": "string", "minLength": 1, "maxLength": 240},
                                      "first_line": line, "last_line": line}}
         derivations[str(node)] = {"type": "array", "minItems": 1, "maxItems": 3, "items": derivation}
-    return {"type": "object", "additionalProperties": False, "required": ["derivations"],
-            "properties": {"derivations": {"type": "object", "additionalProperties": False,
-                                           "required": [], "properties": derivations}}}
+    return latex_json.allow_latex(
+        {"type": "object", "additionalProperties": False, "required": ["derivations"],
+         "properties": {"derivations": {"type": "object", "additionalProperties": False,
+                                        "required": [], "properties": derivations}}})
 
 
 def steps_of(doc: dict) -> list[dict]:

@@ -15,6 +15,7 @@ from pathlib import Path
 import subprocess
 
 import iatc_json
+import latex_json
 import region_units
 
 GENERATOR = "expository-json/v2"
@@ -62,9 +63,10 @@ def schema(lo: int, hi: int, kinds, units=()) -> dict:
                                "first_line": line, "last_line": line,
                                "fill": scope["properties"]["fill"],
                                "held_reason": scope["properties"]["held_reason"]}
-    return {"type": "object", "additionalProperties": False, "required": ["scopes"],
-            "properties": {"scopes": {"type": "array", "minItems": 1, "maxItems": MAX_SCOPES,
-                                      "items": {"anyOf": [filled(scope), held(scope)]}}}}
+    return latex_json.allow_latex(
+        {"type": "object", "additionalProperties": False, "required": ["scopes"],
+         "properties": {"scopes": {"type": "array", "minItems": 1, "maxItems": MAX_SCOPES,
+                                   "items": {"anyOf": [filled(scope), held(scope)]}}}})
 
 
 def filled(scope: dict) -> dict:

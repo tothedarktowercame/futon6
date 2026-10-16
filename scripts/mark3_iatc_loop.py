@@ -35,7 +35,7 @@ from typing import NamedTuple
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import iatc_json  # noqa: E402
 import stage_accounting as accounting  # noqa: E402
-import latex_json_repair  # noqa: E402
+import latex_json  # noqa: E402
 import run_contract  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
@@ -431,15 +431,15 @@ def load_candidates_for_run(cands: list[Path]) -> tuple[list[dict], list[tuple[d
 # 0919b probe as $\"mathcal{T}$ — \" for \mathcal, which also injects a stray
 # quote. quote_spans removes the exposure for a node's mathematics, but citation
 # and warrant are still free strings the model types, so the class is only latent
-# there rather than closed. latex_json_repair restores a command where the letters
-# left name one (a standard command or one the source uses) and records each
-# repair; a control character it cannot account for is still refused below.
+# there rather than closed. The schemas now let the model write LaTeX as LaTeX
+# (latex_json.allow_latex) and latex_json.loads reads it, so a parsed control
+# character means a JSON escape the model meant; it is still refused below.
 CONTROL_CHARS = {"\t": "\\t", "\b": "\\b", "\r": "\\r", "\f": "\\f", "\v": "\\v"}
 
 
-def parse_model_json(raw: str, source: str = "") -> tuple[dict, str | None, list[dict]]:
-    """Parse as-is, or with latex_json_repair's recorded command restorations."""
-    return latex_json_repair.parse(raw, source)
+def parse_model_json(raw: str) -> dict:
+    """The model's JSON, with LaTeX backslashes read as LaTeX (latex_json.loads)."""
+    return latex_json.loads(raw)
 
 
 def control_char_damage(value, path: str = "") -> list[str]:
@@ -498,17 +498,11 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
         raw_path.write_text(raw)
         record[f"{phase}-response"] = accounting.relative(raw_path)
         try:
-            part, sanitized, repairs = parse_model_json(raw, str(cand.get("source-window", "")))
+            part = parse_model_json(raw)
         except ValueError as e:
             why = f"{phase}: endpoint returned non-JSON despite the schema ({e}); check serving conformance"
             record["result"] = why
             return "errored", why, record
-        if sanitized is not None:
-            repaired_path = tmp / f"{pid}.{phase}.sanitized.json"
-            repaired_path.write_text(sanitized)
-            record[f"{phase}-sanitized-response"] = accounting.relative(repaired_path)
-        if repairs:
-            record[f"{phase}-sanitization"] = repairs
         damage = control_char_damage(part, phase)
         if damage:
             why = (f"{phase}: model output carries control characters — "
@@ -576,16 +570,10 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
         retry_path.write_text(raw)
         record[f"retry{retry}-response"] = accounting.relative(retry_path)
         try:
-            part, sanitized, repairs = parse_model_json(raw, str(cand.get("source-window", "")))
+            part = parse_model_json(raw)
         except ValueError as e:
             record[f"retry{retry}-result"] = f"retry failed: {e}"[:200]
             break
-        if sanitized is not None:
-            repaired_path = tmp / f"{pid}.steps.retry{retry}.sanitized.json"
-            repaired_path.write_text(sanitized)
-            record[f"retry{retry}-sanitized-response"] = accounting.relative(repaired_path)
-        if repairs:
-            record[f"retry{retry}-sanitization"] = repairs
         if control_char_damage(part, "steps"):
             record[f"retry{retry}-result"] = "retry carried control characters"
             break

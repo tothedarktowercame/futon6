@@ -27,6 +27,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import iatc_json
+import latex_json
 import mark3_iatc_loop as loop
 import mark3_extract_candidates as extract
 import stage_accounting as accounting
@@ -347,37 +348,18 @@ class Loop(unittest.TestCase):
         self.assertEqual(next(self.out.rglob("*.nodes.partial.txt")).read_text(),
                          '{"nodes": [{"text": "a a a a')
 
-    def test_raw_tab_in_json_string_is_restored_with_a_repair_ledger(self):
-        # Exact serving defect observed for math__0103059__p1: the intended
-        # LaTeX prefix `\\t` arrived as an unescaped tab byte.
-        raw = '{"warrant":"tensor by $\times$"}'
-        doc, sanitized, repairs = loop.parse_model_json(raw)
-        self.assertEqual(doc["warrant"], "tensor by $\\times$")
-        self.assertIsNotNone(sanitized)
-        self.assertEqual(repairs, [{"offset": 23, "codepoint": 9,
-                                    "restored-command": "\\times"}])
-        with self.assertRaises(json.JSONDecodeError):
-            loop.parse_model_json('{"warrant":"two\t words"}')
-        with self.assertRaises(json.JSONDecodeError):
-            loop.parse_model_json('{"warrant":"two\twords"}')
-
-    def test_raw_and_sanitized_responses_are_both_retained(self):
-        clean_nodes = json.dumps({"nodes": [node(text="tensor by $\\times$", lo=12, hi=12),
-                                             node(text="result", lo=14, hi=14)]})
-        damaged_nodes = clean_nodes.replace("\\\\t", "\t", 1)
-        answers = {"1111.0001__p0": [damaged_nodes, self.doc("x")[1]],
-                   "1111.0001__p1": self.doc("second"),
-                   "1111.0001__p2": self.doc("third")}
-        _, items = self.invoke("S3-sanitize", answers)
-        attempt = items["1111.0001__p0"]["attempts"][0]
-        self.assertEqual(items["1111.0001__p0"]["status"], "accepted")
-        self.assertIn("nodes-response", attempt)
-        self.assertIn("nodes-sanitized-response", attempt)
-        self.assertEqual(attempt["nodes-sanitization"][0]["restored-command"], "\\times")
-        raw = self.out / ".attempts/r/S3-sanitize/1111.0001__p0.nodes.json"
-        repaired = self.out / ".attempts/r/S3-sanitize/1111.0001__p0.nodes.sanitized.json"
-        self.assertIn("\t", raw.read_text())
-        self.assertIn("\\\\times", repaired.read_text())
+    def test_text_fields_admit_latex_and_answers_decode_it(self):
+        # The schemas carry latex_json.TEXT on free text, so the model can write
+        # \\in and \\Sigma instead of being forced onto \\t or \\notin; parsing
+        # then reads a non-JSON backslash as LaTeX's.
+        nodes = iatc_json.nodes_schema(10, 14)["properties"]["nodes"]["items"]["properties"]
+        self.assertEqual(nodes["text"]["pattern"], latex_json.TEXT)
+        self.assertEqual(nodes["citation"]["pattern"], latex_json.TEXT)
+        self.assertNotIn("pattern", nodes["kind"])
+        step = iatc_json.steps_schema(10, 14, 2)["properties"]["derivations"]["properties"]["2"]["items"]
+        self.assertEqual(step["properties"]["warrant"]["pattern"], latex_json.TEXT)
+        doc = loop.parse_model_json('{"warrant":"$x \\in \\Sigma$ and $\\theta \\times y$"}')
+        self.assertEqual(doc["warrant"], "$x \\in \\Sigma$ and $\\theta \\times y$")
 
     def test_derivation_prompt_names_topology_equivalence_and_contradiction(self):
         self.assertIn("topological", loop.STEPS_TASK)

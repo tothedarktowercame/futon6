@@ -23,7 +23,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import expository_json  # noqa: E402
-import latex_json_repair  # noqa: E402
+import latex_json  # noqa: E402
 import run_contract  # noqa: E402
 import stage_accounting as accounting  # noqa: E402
 
@@ -223,17 +223,11 @@ def attempt_one(candidate, args, kinds, attempts: Path) -> tuple[str, str, dict]
     response.write_text(raw, encoding="utf-8")
     record["response"] = accounting.relative(response)
     try:
-        doc, sanitized, repairs = latex_json_repair.parse(raw, str(candidate.get("source-window", "")))
+        doc = latex_json.loads(raw)
     except ValueError as e:
         why = f"endpoint returned non-JSON despite the schema ({e}); check serving conformance"
         record["result"] = why
         return "errored", why, record
-    if sanitized is not None:
-        repaired = attempts / f"{stem}.sanitized.json"
-        repaired.write_text(sanitized, encoding="utf-8")
-        record["sanitized-response"] = accounting.relative(repaired)
-    if repairs:
-        record["sanitization"] = repairs
     found = expository_json.problems(doc, lo, hi, kinds, candidate.get("units") or ())
     if found:
         why = "contract: " + "; ".join(found[:6])

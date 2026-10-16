@@ -27,6 +27,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import expository_json
+import latex_json
 import mark3_expository_loop as expo_loop
 import stage_accounting as accounting
 
@@ -185,25 +186,30 @@ class ExpositoryContract(unittest.TestCase):
             self.assertEqual((Path(d) / Path(record["partial"]).name).read_text(), '{"scopes": [{"kind": "')
 
 
-    def test_control_byte_for_a_command_is_restored_and_recorded(self):
-        damaged = json.dumps({"scopes": [scope(fill="Section 2 we define the notation $\\chi$")]})
-        damaged = damaged.replace("\\\\chi", "\tchi")       # the serving defect: TAB for a backslash
+    def test_latex_written_with_one_backslash_is_accepted_as_latex(self):
+        # What the model writes once the schema lets it (latex_json.TEXT): plain
+        # LaTeX, which is not valid JSON (\\c is no escape) until loads reads it.
+        raw = ('{"scopes": [{"kind": "rationale/telos/organization-roadmap", "units": ["L20-0a1b"],'
+               ' "fill": "Section 2 we define the notation $\\chi \\cup \\theta$", "held_reason": ""}]}')
 
         class Response:
             def __enter__(self): return self
             def __exit__(self, *a): return False
             def read(self):
                 return json.dumps({"choices": [{"finish_reason": "stop",
-                                                "message": {"content": damaged}}]}).encode()
+                                                "message": {"content": raw}}]}).encode()
 
-        self.assertIn("\t", damaged)
+        with self.assertRaises(ValueError):
+            json.loads(raw)
         with patch("urllib.request.urlopen", return_value=Response()), \
                 tempfile.TemporaryDirectory() as d:
             args = SimpleNamespace(backend="openai", model="m")
-            _status, _why, record = expo_loop.attempt_one(CANDIDATE, args, self.kinds, Path(d))
-            self.assertEqual(record["sanitization"][0]["restored-command"], "\\chi")
-            self.assertIn("sanitized-response", record)
-
+            status, why, record = expo_loop.attempt_one(CANDIDATE, args, self.kinds, Path(d))
+            self.assertNotEqual(status, "errored", why)
+            graph = (Path(d) / Path(record["graph"]).name).read_text()
+            self.assertIn("\\\\chi \\\\cup \\\\theta", graph)      # EDN spells one backslash as two
+        fill = expository_json.schema(20, 24, self.kinds, UNITS)["properties"]["scopes"]["items"]["anyOf"][0]
+        self.assertEqual(fill["properties"]["fill"]["pattern"], latex_json.TEXT)
 
 class CleanTypingContract(unittest.TestCase):
     GRAPH = """{:paper/id "9999.0003" :nodes [{:id :n1 :kind :claim :text "A"} {:id :n2 :kind :claim :text "B"}
