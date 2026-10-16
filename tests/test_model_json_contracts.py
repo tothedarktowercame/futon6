@@ -211,6 +211,30 @@ class ExpositoryContract(unittest.TestCase):
         fill = expository_json.schema(20, 24, self.kinds, UNITS)["properties"]["scopes"]["items"]["anyOf"][0]
         self.assertEqual(fill["properties"]["fill"]["pattern"], latex_json.TEXT)
 
+    def test_a_truncated_answer_is_retried_once_with_a_repetition_penalty(self):
+        sent = []
+        good = json.dumps({"scopes": [scope()]})
+
+        class Response:
+            def __init__(self, finish, content): self.finish, self.content = finish, content
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+            def read(self):
+                return json.dumps({"choices": [{"finish_reason": self.finish,
+                                                "message": {"content": self.content}}]}).encode()
+
+        def urlopen(request, timeout):
+            sent.append(json.loads(request.data))
+            return Response("length", '{"scopes": [') if len(sent) == 1 else Response("stop", good)
+
+        with patch("urllib.request.urlopen", urlopen), tempfile.TemporaryDirectory() as d:
+            status, why, record = expo_loop.attempt_one(CANDIDATE, SimpleNamespace(backend="openai", model="m"),
+                                                        self.kinds, Path(d))
+        self.assertNotIn("repetition_penalty", sent[0])          # the contract's decoding first
+        self.assertEqual(sent[1]["repetition_penalty"], expo_loop.LOOP_RETRY_PENALTY)
+        self.assertEqual(record["loop-retry"], {"repetition-penalty": expo_loop.LOOP_RETRY_PENALTY})
+        self.assertNotEqual(status, "errored", why)
+
 class CleanTypingContract(unittest.TestCase):
     GRAPH = """{:paper/id "9999.0003" :nodes [{:id :n1 :kind :claim :text "A"} {:id :n2 :kind :claim :text "B"}
  {:id :n3 :kind :claim :text "C"}]

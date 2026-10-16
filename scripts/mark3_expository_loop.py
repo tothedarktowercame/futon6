@@ -100,6 +100,10 @@ Source (ABSOLUTE line numbers on the left):
 {numbered_window(candidate)}"""
 
 
+LOOP_RETRY_PENALTY = float(os.environ.get("FUTON6_LOOP_RETRY_PENALTY", "1.1"))
+LAST_LOOP_RETRY = threading.local()      # set by call_openai, read by attempt_one in the same thread
+
+
 class ModelCallError(Exception):
     """The endpoint could not produce a judgeable answer (HTTP error, truncation).
 
@@ -128,20 +132,36 @@ def call_stub(prompt: str, candidate: dict[str, Any], kinds: dict[str, str]) -> 
 
 
 def call_openai(prompt: str, candidate: dict[str, Any], kinds: dict[str, str], model: str) -> str:
-    import urllib.error
-    import urllib.request
     base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1")
     key = os.environ.get("OPENAI_API_KEY", "x")
     lo, hi = candidate["window-lines"]
-    body = json.dumps({
+    request = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0,
         "max_tokens": MAX_TOKENS,
         "response_format": {"type": "json_schema", "json_schema": {
             "name": "expository_region", "strict": True, "schema": expository_json.schema(lo, hi, kinds, candidate.get("units") or ())}},
-    }).encode()
-    req = urllib.request.Request(f"{base}/chat/completions", data=body,
+    }
+    choice = _post(base, key, request)
+    retry = None
+    # A cut-off answer is the model in a loop (see mark3_iatc_loop.LOOP_RETRY_PENALTY):
+    # ask once more with a repetition penalty; the attempt record says so.
+    if choice.get("finish_reason") == "length" and LOOP_RETRY_PENALTY > 0:
+        retry = LOOP_RETRY_PENALTY
+        choice = _post(base, key, dict(request, repetition_penalty=retry))
+    if choice.get("finish_reason") == "length":
+        again = f", and again with repetition_penalty={retry}" if retry else ""
+        raise ModelCallError(f"output truncated at max_tokens={MAX_TOKENS}{again}",
+                             partial=(choice.get("message") or {}).get("content"))
+    LAST_LOOP_RETRY.value = retry
+    return choice["message"]["content"]
+
+
+def _post(base: str, key: str, request: dict) -> dict:
+    import urllib.error
+    import urllib.request
+    req = urllib.request.Request(f"{base}/chat/completions", data=json.dumps(request).encode(),
                                  headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"})
     try:
         with urllib.request.urlopen(req, timeout=int(os.environ.get("FUTON6_LLM_TIMEOUT", "300"))) as response:
@@ -155,13 +175,9 @@ def call_openai(prompt: str, candidate: dict[str, Any], kinds: dict[str, str], m
     except (json.JSONDecodeError, UnicodeDecodeError) as e:
         raise ModelCallError(f"endpoint returned an unreadable response envelope: {e}")
     try:
-        choice = payload["choices"][0]
+        return payload["choices"][0]
     except (KeyError, IndexError, TypeError) as e:
         raise ModelCallError(f"endpoint returned a malformed response envelope: {e}")
-    if choice.get("finish_reason") == "length":
-        raise ModelCallError(f"output truncated at max_tokens={MAX_TOKENS}",
-                             partial=(choice.get("message") or {}).get("content"))
-    return choice["message"]["content"]
 
 
 def gate_one(path: Path) -> tuple[bool, str]:
@@ -209,6 +225,7 @@ def attempt_one(candidate, args, kinds, attempts: Path) -> tuple[str, str, dict]
     lo, hi = candidate["window-lines"]
     stem = safe_output_name(candidate)[:-len(".edn")]
     record: dict = {"attempt": 0}
+    LAST_LOOP_RETRY.value = None
     try:
         raw = (call_stub(build_prompt(candidate), candidate, kinds) if args.backend == "stub"
                else call_openai(build_prompt(candidate), candidate, kinds, args.model))
@@ -219,6 +236,8 @@ def attempt_one(candidate, args, kinds, attempts: Path) -> tuple[str, str, dict]
             partial.write_text(e.partial, encoding="utf-8")
             record["partial"] = accounting.relative(partial)
         return "errored", str(e), record
+    if getattr(LAST_LOOP_RETRY, "value", None):
+        record["loop-retry"] = {"repetition-penalty": LAST_LOOP_RETRY.value}
     response = attempts / f"{stem}.response.json"
     response.write_text(raw, encoding="utf-8")
     record["response"] = accounting.relative(response)

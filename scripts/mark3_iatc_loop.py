@@ -199,6 +199,18 @@ class ModelAnswer(NamedTuple):
     prompt_tokens: int
     max_tokens: int
     context_tokens: int
+    loop_retry: float | None = None      # the repetition penalty of a loop retry, if one was needed
+
+
+# A cut-off answer is almost always the model caught in a loop, not a long proof:
+# the four truncated S3 answers of the 50-paper APM pilot (2026-10-16) repeated one
+# node 11 to 51 times, or one quoted span up to 78 times in a single node. At
+# temperature 0 nothing breaks a loop before the token limit, and re-invoking the
+# stage only repeats it. So a truncated answer is asked for once more with a
+# repetition penalty; all four then gave 10-14 distinct nodes. The first attempt
+# always uses the contract's decoding, and an answer obtained by the retry says so
+# in its attempt record. 0 disables the retry.
+LOOP_RETRY_PENALTY = float(os.environ.get("FUTON6_LOOP_RETRY_PENALTY", "1.1"))
 
 
 def call_stub(prompt: str, cand: dict, schema: dict) -> str:
@@ -286,22 +298,27 @@ def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> ModelAnswe
                f"context_tokens={MODEL_CONTEXT_TOKENS}, available_output_tokens={available}, "
                f"minimum_output_tokens={MIN_OUTPUT_TOKENS}", envelope=envelope)
     max_tokens = min(MAX_TOKENS, available)
-    response = _openai_json("/chat/completions", {
+    body = {
         "model": model,
         "messages": messages,
         "temperature": CONTRACT["decoding"]["temperature"],
         "max_tokens": max_tokens,
         "response_format": {"type": "json_schema", "json_schema": {
             "name": "iatc_proof", "strict": True, "schema": schema}},
-    })
-    choice = response["choices"][0]
+    }
+    choice = _openai_json("/chat/completions", body)["choices"][0]
+    retry = None
+    if choice.get("finish_reason") == "length" and LOOP_RETRY_PENALTY > 0:
+        retry = LOOP_RETRY_PENALTY
+        choice = _openai_json("/chat/completions", dict(body, repetition_penalty=retry))["choices"][0]
     if choice.get("finish_reason") == "length":
         # A truncated document is not the model's answer; nothing is salvaged from
         # it, but its text is kept so the truncation can be read afterwards.
-        raise ModelCallError(0, f"output truncated at max_tokens={max_tokens}",
+        again = f", and again with repetition_penalty={retry}" if retry else ""
+        raise ModelCallError(0, f"output truncated at max_tokens={max_tokens}{again}",
                              partial=(choice.get("message") or {}).get("content"))
     return ModelAnswer(choice["message"]["content"], prompt_tokens, max_tokens,
-                       MODEL_CONTEXT_TOKENS)
+                       MODEL_CONTEXT_TOKENS, retry)
 
 
 
@@ -492,6 +509,8 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
                 "max-output-tokens": answer.max_tokens,
                 "context-tokens": answer.context_tokens,
             }
+            if answer.loop_retry:
+                record[f"{phase}-loop-retry"] = {"repetition-penalty": answer.loop_retry}
         else:  # stub and test doubles do not need a serving-tokenizer dependency
             raw = answer
         raw_path = tmp / f"{pid}.{phase}.json"

@@ -348,6 +348,33 @@ class Loop(unittest.TestCase):
         self.assertEqual(next(self.out.rglob("*.nodes.partial.txt")).read_text(),
                          '{"nodes": [{"text": "a a a a')
 
+    def test_a_truncated_answer_is_retried_once_with_a_repetition_penalty(self):
+        sent = []
+
+        def fake(path, payload):
+            if path == "/tokenize":
+                return {"count": 100, "max_model_len": loop.MODEL_CONTEXT_TOKENS}
+            sent.append(payload)
+            finish = "length" if len(sent) == 1 else "stop"
+            return {"choices": [{"finish_reason": finish, "message": {"content": '{"nodes": []}'}}]}
+
+        with patch.object(loop, "_openai_json", fake):
+            answer = loop.call_openai("p", CAND, "m", iatc_json.nodes_schema(10, 14))
+        self.assertNotIn("repetition_penalty", sent[0])
+        self.assertEqual(sent[1]["repetition_penalty"], loop.LOOP_RETRY_PENALTY)
+        self.assertEqual(answer.loop_retry, loop.LOOP_RETRY_PENALTY)
+
+        sent.clear()
+        def always_long(path, payload):
+            if path == "/tokenize":
+                return {"count": 100, "max_model_len": loop.MODEL_CONTEXT_TOKENS}
+            sent.append(payload)
+            return {"choices": [{"finish_reason": "length", "message": {"content": '{"nodes": [{"kind'}}]}
+        with patch.object(loop, "_openai_json", always_long), \
+                self.assertRaisesRegex(loop.ModelCallError, "and again with repetition_penalty"):
+            loop.call_openai("p", CAND, "m", iatc_json.nodes_schema(10, 14))
+        self.assertEqual(len(sent), 2)
+
     def test_text_fields_admit_latex_and_answers_decode_it(self):
         # The schemas carry latex_json.TEXT on free text, so the model can write
         # \\in and \\Sigma instead of being forced onto \\t or \\notin; parsing
