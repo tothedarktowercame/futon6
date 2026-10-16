@@ -38,7 +38,14 @@ FEATS = ["n_boxes", "n_wires", "n_holes", "n_discharges_known", "max_fanout",
          "depth", "n_sources", "n_sinks"]
 
 
-def signatures(ids, breakdowns, min_proofs=2):
+def signatures(ids, breakdowns, min_proofs=1):
+    """Per-paper proof-shape signatures, z-scored across papers.
+
+    A paper with one typed proof has a signature too: its proof's shape. The
+    default was two, which left a problem set with nothing (the APM corpus has
+    one proof per paper: 496 papers, 0 signatures) and then failed taking the
+    mean of an empty column (apm-501-xi-r1 S11, 2026-10-16).
+    """
     macros = sorted({b["macro"] for b in breakdowns})
     feats = [f for f in FEATS if isinstance(breakdowns[0].get(f), (int, float))]
     bypaper = defaultdict(list)
@@ -56,7 +63,7 @@ def signatures(ids, breakdowns, min_proofs=2):
         fp = [mc.get(m, 0) / n for m in macros]
         prof = [sum(float(b.get(f, 0) or 0) for b in bs) / n for f in feats]
         sig[p] = [fp, prof]
-    for j in range(len(feats)):
+    for j in range(len(feats) if papers else 0):
         col = [sig[p][1][j] for p in papers]
         m, s = st.mean(col), (st.pstdev(col) or 1)
         for p in papers:
@@ -90,12 +97,17 @@ def main():
     print("\nwhole-paper structural twins (paper-level NN):")
     sims = []
     for p in papers:
-        q, s = sorted([(x, cos(vec(sig, p), vec(sig, x))) for x in papers if x != p],
-                      key=lambda z: -z[1])[0]
+        others = [(x, cos(vec(sig, p), vec(sig, x))) for x in papers if x != p]
+        if not others:          # one paper has no twin to name
+            continue
+        q, s = max(others, key=lambda z: z[1])
         sims.append(s)
         print(f"  {p}  ≈  {q}   (paper-sim {s:.2f})")
-    print(f"\npaper-twin sim: mean {st.mean(sims):.2f}, range {min(sims):.2f}–{max(sims):.2f} "
-          f"— papers cluster by argument-shape composition, not topic")
+    if sims:
+        print(f"\npaper-twin sim: mean {st.mean(sims):.2f}, range {min(sims):.2f}–{max(sims):.2f} "
+              f"— papers cluster by argument-shape composition, not topic")
+    else:
+        print("\nno paper twins: fewer than two papers have a typed proof")
 
     # PERSIST (E-superpod-hardening S11). This stage computed a shape census and
     # a signature per paper and then printed both into a terminal, so learning
@@ -123,11 +135,12 @@ def main():
                 {"paper": p,
                  "n_proofs": len(bypaper[p]),
                  "profile": dict(Counter(b["macro"] for b in bypaper[p])),
-                 "nearest": sorted([(x, round(cos(vec(sig, p), vec(sig, x)), 4))
-                                    for x in papers if x != p], key=lambda z: -z[1])[0]}
+                 "nearest": max([(x, round(cos(vec(sig, p), vec(sig, x)), 4))
+                                 for x in papers if x != p], key=lambda z: z[1], default=None)}
                 for p in papers],
-            "paper_twin_sim": {"mean": round(st.mean(sims), 4),
-                               "min": round(min(sims), 4), "max": round(max(sims), 4)},
+            "paper_twin_sim": ({"mean": round(st.mean(sims), 4),
+                                "min": round(min(sims), 4), "max": round(max(sims), 4)}
+                               if sims else None),
         }
         path = os.path.join(out_dir, "structural-canon.json")
         with open(path, "w") as fh:
