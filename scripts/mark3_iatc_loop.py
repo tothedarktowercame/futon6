@@ -29,6 +29,7 @@ import subprocess
 import sys
 import threading
 import time
+from collections import Counter
 from pathlib import Path
 from typing import NamedTuple
 
@@ -271,7 +272,8 @@ def _openai_json(path: str, payload: dict) -> dict:
         raise ModelCallError(0, f"request timed out: {exc}")
 
 
-def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> ModelAnswer:
+def call_openai(prompt: str, cand: dict, model: str, schema: dict,
+                penalty: float | None = None) -> ModelAnswer:
     """Call only after the serving tokenizer proves the request fits its context."""
     messages = [{"role": "user", "content": prompt}]
     tokenized = _openai_json("/tokenize", {"model": model, "messages": messages})
@@ -306,9 +308,11 @@ def call_openai(prompt: str, cand: dict, model: str, schema: dict) -> ModelAnswe
         "response_format": {"type": "json_schema", "json_schema": {
             "name": "iatc_proof", "strict": True, "schema": schema}},
     }
+    if penalty:                          # an explicit loop retry (see node_loop)
+        body["repetition_penalty"] = penalty
     choice = _openai_json("/chat/completions", body)["choices"][0]
-    retry = None
-    if choice.get("finish_reason") == "length" and LOOP_RETRY_PENALTY > 0:
+    retry = penalty
+    if choice.get("finish_reason") == "length" and LOOP_RETRY_PENALTY > 0 and not penalty:
         retry = LOOP_RETRY_PENALTY
         choice = _openai_json("/chat/completions", dict(body, repetition_penalty=retry))["choices"][0]
     if choice.get("finish_reason") == "length":
@@ -475,6 +479,40 @@ def control_char_damage(value, path: str = "") -> list[str]:
     return found
 
 
+def dedupe_lists(part: dict) -> int:
+    """Drop repeated ids from each node's quote_spans and symbols, keeping order.
+
+    A span cited twice says nothing more than once. Repeats are a loop that
+    ended inside the list's limit: one accepted APM graph (b96A01) cites one span
+    68 times in a node. Returns how many entries were dropped.
+    """
+    dropped = 0
+    for n in part.get("nodes") or []:
+        for key in ("quote_spans", "symbols"):
+            items = n.get(key)
+            if isinstance(items, list):
+                kept = list(dict.fromkeys(items))
+                dropped += len(items) - len(kept)
+                n[key] = kept
+    return dropped
+
+
+def node_loop(part: dict) -> str | None:
+    """Why a node list looks like the model looping, or None.
+
+    Loops that fit within the limits are rare (4 of 500 accepted APM graphs held
+    an identical node 3+ times), but a repeated node is never information.
+    """
+    nodes = part.get("nodes") or []
+    keys = [(n.get("kind"), n.get("text"), tuple(n.get("quote_spans") or ())) for n in nodes]
+    worst = max(Counter(keys).values()) if keys else 0
+    if worst >= 3:
+        return f"a node repeated {worst} times"
+    if len(nodes) >= iatc_json.MAX_NODES and worst >= 2:
+        return f"the node limit ({iatc_json.MAX_NODES}) reached with repeated nodes"
+    return None
+
+
 def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
     """(status, reason, attempt record) for one model call on one proof."""
     pid = cand["proof-id"]
@@ -522,6 +560,29 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             why = f"{phase}: endpoint returned non-JSON despite the schema ({e}); check serving conformance"
             record["result"] = why
             return "errored", why, record
+        if phase == "nodes":
+            loop = node_loop(part)
+            if loop and args.backend != "stub" and LOOP_RETRY_PENALTY > 0 and not (
+                    isinstance(answer, ModelAnswer) and answer.loop_retry):
+                record["nodes-loop"] = loop
+                try:
+                    answer = call_openai(prompt, cand, args.model, schema, penalty=LOOP_RETRY_PENALTY)
+                    raw = answer.text
+                    (tmp / f"{pid}.nodes.loop-retry.json").write_text(raw)
+                    part = parse_model_json(raw)
+                    record["nodes-loop-retry"] = {"repetition-penalty": LOOP_RETRY_PENALTY,
+                                                  "response": accounting.relative(tmp / f"{pid}.nodes.loop-retry.json")}
+                except (ModelCallError, ValueError) as e:
+                    record["result"] = f"nodes: {loop}; the loop retry failed: {e}"[:300]
+                    return "errored", record["result"], record
+                loop = node_loop(part)
+            if loop:
+                why = f"nodes: repetition loop ({loop})"
+                record["result"] = why
+                return "rejected", why, record
+            dropped = dedupe_lists(part)
+            if dropped:
+                record["nodes-deduplicated"] = dropped
         damage = control_char_damage(part, phase)
         if damage:
             why = (f"{phase}: model output carries control characters — "

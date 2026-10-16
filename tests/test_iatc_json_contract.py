@@ -375,6 +375,43 @@ class Loop(unittest.TestCase):
             loop.call_openai("p", CAND, "m", iatc_json.nodes_schema(10, 14))
         self.assertEqual(len(sent), 2)
 
+    def test_repeated_span_ids_are_dropped_and_repeated_nodes_are_a_loop(self):
+        part = {"nodes": [{"kind": "claim", "text": "a", "quote_spans": ["L1", "L2", "L1", "L1"], "symbols": ["f", "f"]},
+                          {"kind": "claim", "text": "b", "quote_spans": ["L3"]}]}
+        self.assertEqual(loop.dedupe_lists(part), 3)
+        self.assertEqual(part["nodes"][0]["quote_spans"], ["L1", "L2"])
+        self.assertEqual(part["nodes"][0]["symbols"], ["f"])
+        self.assertIsNone(loop.node_loop(part))
+        same = {"kind": "claim", "text": "x", "quote_spans": ["L1"]}
+        self.assertIn("repeated 3 times", loop.node_loop({"nodes": [same, dict(same), dict(same)]}))
+        full = [{"kind": "claim", "text": str(i), "quote_spans": [f"L{i}"]} for i in range(iatc_json.MAX_NODES - 1)]
+        self.assertIn("node limit", loop.node_loop({"nodes": full + [dict(full[0])]}))
+        self.assertIsNone(loop.node_loop({"nodes": full + [{"kind": "claim", "text": "new", "quote_spans": ["Lx"]}]}))
+
+    def test_a_looping_node_list_is_asked_for_again_with_a_penalty(self):
+        calls = []
+        looping = json.dumps({"nodes": [node(text="the same", lo=12, hi=12)] * 4})
+        good_nodes, steps = self.doc("fresh")
+
+        def fake(prompt, cand, model, schema, penalty=None):
+            calls.append(penalty)
+            if "derivations" in schema["properties"]:
+                return loop.ModelAnswer(steps, 10, 100, 16384)
+            return loop.ModelAnswer(looping if penalty is None else good_nodes, 10, 100, 16384, penalty)
+
+        adir = self.base / "accounting" / "S3-loop"
+        args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
+                                  model="m", rung2_gate=False, loss_log_interval=0, gate_retries=0)
+        with patch.object(loop, "call_openai", fake), \
+                patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: "S3-loop"}):
+            loop.run(args)
+        item = accounting.load(adir, "S3", "loop")["items"][0]
+        attempt = item["attempts"][0]
+        self.assertIn(loop.LOOP_RETRY_PENALTY, calls)
+        self.assertIn("repeated 4 times", attempt["nodes-loop"])
+        self.assertEqual(attempt["nodes-loop-retry"]["repetition-penalty"], loop.LOOP_RETRY_PENALTY)
+        self.assertEqual(item["status"], "accepted", item["reason"])
+
     def test_text_fields_admit_latex_and_answers_decode_it(self):
         # The schemas carry latex_json.TEXT on free text, so the model can write
         # \\in and \\Sigma instead of being forced onto \\t or \\notin; parsing
