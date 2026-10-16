@@ -102,7 +102,19 @@ breaks a loop, and re-invoking the stage repeats it. JSON-schema
 `repetition_penalty` (`FUTON6_LOOP_RETRY_PENALTY`, default 1.1) and record it
 in the attempt (futon6 `1ad6550`). On the pilot's four, the retry gave 10–14
 distinct nodes each. S3, S4 and S7 keep the text of a truncated answer, so
-the cause can be read.
+the cause can be read. Loops that end within the limits are rarer (in 500
+accepted APM graphs: 10 cite one span 3+ times in a node, and 4 hold an
+identical node 3+ times). S3 now drops repeated span ids, and gives a node
+list with repeated nodes the same penalty retry (futon6 `e15c1de`). This is
+not a mark8 regression. mark7master showed no repeats only because its model
+cited units by counting them; real citations, and with them occasional
+repeats, began with mark7-v4 (`75f2c58`).
+
+**Restarting a stage by hand: watch the pkill pattern.** `pkill -f` matches
+whole command lines, including the shell that runs it. A command that both
+kills `linode_stepper.py --run` and relaunches it on one line kills its own
+shell halfway through, leaving the stage's worker orphaned. Kill by process
+id, or relaunch in a separate command.
 
 **LaTeX in JSON.** A JSON string allows only `" \ / b f n r t u` after a
 backslash, and guided decoding enforces that, so most LaTeX commands cannot
