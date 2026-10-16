@@ -35,6 +35,7 @@ from typing import NamedTuple
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import iatc_json  # noqa: E402
 import stage_accounting as accounting  # noqa: E402
+import latex_json_repair  # noqa: E402
 import run_contract  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
@@ -430,68 +431,15 @@ def load_candidates_for_run(cands: list[Path]) -> tuple[list[dict], list[tuple[d
 # 0919b probe as $\"mathcal{T}$ — \" for \mathcal, which also injects a stray
 # quote. quote_spans removes the exposure for a node's mathematics, but citation
 # and warrant are still free strings the model types, so the class is only latent
-# there rather than closed. Parsed control characters are still refused; the
-# pre-parse sanitizer below handles only an unescaped command-prefix byte.
+# there rather than closed. latex_json_repair restores a command where the letters
+# left name one (a standard command or one the source uses) and records each
+# repair; a control character it cannot account for is still refused below.
 CONTROL_CHARS = {"\t": "\\t", "\b": "\\b", "\r": "\\r", "\f": "\\f", "\v": "\\v"}
-# Repairs are evidence-derived, not guesses over the whole JSON control alphabet.
-# The Mark8 rhgrh run observed a literal TAB followed by "imes", i.e. a serving
-# serializer had materialised JSON's \t while emitting the LaTeX command \times.
-CONTROL_COMMAND_SUFFIXES = {"\t": ("imes",)}
 
 
-def sanitize_string_control_chars(raw: str) -> tuple[str, list[dict]]:
-    """Restore an unescaped control byte only when it occurs inside a JSON string.
-
-    vLLM has emitted a literal tab for the first two characters of ``\\times``.
-    In a JSON string, replacing that byte with the JSON spelling ``\\\\t`` restores
-    the intended backslash-plus-letter sequence.  Legal whitespace outside strings
-    is untouched; unknown controls and malformed quoting are left for json.loads to
-    refuse.  The caller keeps both the raw bytes and this explicit repair ledger.
-    """
-    out: list[str] = []
-    repairs: list[dict] = []
-    in_string = False
-    escaped = False
-    for offset, char in enumerate(raw):
-        if in_string and char in CONTROL_COMMAND_SUFFIXES:
-            suffix = next((suffix for suffix in CONTROL_COMMAND_SUFFIXES[char]
-                           if raw.startswith(suffix, offset + 1)
-                           and (offset + 1 + len(suffix) == len(raw)
-                                or not raw[offset + 1 + len(suffix)].isalpha())), None)
-            if suffix is not None:
-                command = "\\" + CONTROL_CHARS[char][1:] + suffix
-                # Two source backslashes decode to one literal LaTeX backslash.
-                out.append("\\\\" + CONTROL_CHARS[char][1:])
-                repairs.append({"offset": offset, "codepoint": ord(char),
-                                "restored-command": command})
-                escaped = False
-                continue
-        out.append(char)
-        if not in_string:
-            if char == '"':
-                in_string = True
-            continue
-        if escaped:
-            escaped = False
-        elif char == "\\":
-            escaped = True
-        elif char == '"':
-            in_string = False
-    return "".join(out), repairs
-
-
-def parse_model_json(raw: str) -> tuple[dict, str | None, list[dict]]:
-    """Parse as-is, or apply the one auditable serving repair above."""
-    try:
-        return json.loads(raw), None, []
-    except json.JSONDecodeError as original:
-        sanitized, repairs = sanitize_string_control_chars(raw)
-        if not repairs:
-            raise original
-        try:
-            return json.loads(sanitized), sanitized, repairs
-        except json.JSONDecodeError:
-            raise original
+def parse_model_json(raw: str, source: str = "") -> tuple[dict, str | None, list[dict]]:
+    """Parse as-is, or with latex_json_repair's recorded command restorations."""
+    return latex_json_repair.parse(raw, source)
 
 
 def control_char_damage(value, path: str = "") -> list[str]:
@@ -550,7 +498,7 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
         raw_path.write_text(raw)
         record[f"{phase}-response"] = accounting.relative(raw_path)
         try:
-            part, sanitized, repairs = parse_model_json(raw)
+            part, sanitized, repairs = parse_model_json(raw, str(cand.get("source-window", "")))
         except ValueError as e:
             why = f"{phase}: endpoint returned non-JSON despite the schema ({e}); check serving conformance"
             record["result"] = why
@@ -559,6 +507,7 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             repaired_path = tmp / f"{pid}.{phase}.sanitized.json"
             repaired_path.write_text(sanitized)
             record[f"{phase}-sanitized-response"] = accounting.relative(repaired_path)
+        if repairs:
             record[f"{phase}-sanitization"] = repairs
         damage = control_char_damage(part, phase)
         if damage:
@@ -627,7 +576,7 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
         retry_path.write_text(raw)
         record[f"retry{retry}-response"] = accounting.relative(retry_path)
         try:
-            part, sanitized, repairs = parse_model_json(raw)
+            part, sanitized, repairs = parse_model_json(raw, str(cand.get("source-window", "")))
         except ValueError as e:
             record[f"retry{retry}-result"] = f"retry failed: {e}"[:200]
             break
@@ -635,6 +584,7 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             repaired_path = tmp / f"{pid}.steps.retry{retry}.sanitized.json"
             repaired_path.write_text(sanitized)
             record[f"retry{retry}-sanitized-response"] = accounting.relative(repaired_path)
+        if repairs:
             record[f"retry{retry}-sanitization"] = repairs
         if control_char_damage(part, "steps"):
             record[f"retry{retry}-result"] = "retry carried control characters"

@@ -89,12 +89,22 @@ hand under the new fill/held schema, all finished, in 49 to 178 tokens. So
 the old schema caused the truncation, but without the text there is no saying
 how. The retry's own count of truncations is the measure for all 142.
 
-**Control characters.** 9 of 4,016 S4 answers had a raw control character
-inside a JSON string. These were kept (`.response.json`). The one read shows
-a TAB followed by `chi` where `\chi` belonged. That is the same serving
-defect S3 already repairs for TAB followed by `imes` (`\times`;
-`sanitize_string_control_chars` in `mark3_iatc_loop.py`). S4 has no such
-repair, and S3 repairs only the one command it has seen.
+**Control characters.** Some answers carry a control byte where a backslash
+command belongs. The byte replaces the backslash and up to three letters:
+TAB + `sto` for `\mapsto`, TAB + `athbb` for `\mathbb`, TAB + `ightarrow`
+for `\rightarrow`, TAB + `ph{dense}` for `\emph`. The JSON is then invalid
+and the item errors (9 of 4,016 in S4). Separately, a model can write a
+JSON escape such as `"\theta"`, which parses, but as TAB + `heta`.
+
+`scripts/latex_json_repair.py` handles both cases, in S3 and S4. It
+restores a command only when the remaining letters name a standard command,
+or one the source passage uses (a paper's own macros). Each repair is
+recorded in the attempt record (`sanitization`), and the raw answer is kept
+beside the repaired one. A line break before a word counts as a command only
+inside mathematics. It repairs 10 of the 12 damaged APM answers. The other
+two are refused: one lost the whole command (TAB + `(`), and the other has
+BACKSPACE + `bZ`, which is neither standard nor in its paper. This replaces
+S3's earlier repair, which handled only TAB + `imes`.
 
 ## S3
 

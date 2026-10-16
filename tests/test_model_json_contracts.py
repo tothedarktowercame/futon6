@@ -185,6 +185,26 @@ class ExpositoryContract(unittest.TestCase):
             self.assertEqual((Path(d) / Path(record["partial"]).name).read_text(), '{"scopes": [{"kind": "')
 
 
+    def test_control_byte_for_a_command_is_restored_and_recorded(self):
+        damaged = json.dumps({"scopes": [scope(fill="Section 2 we define the notation $\\chi$")]})
+        damaged = damaged.replace("\\\\chi", "\tchi")       # the serving defect: TAB for a backslash
+
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+            def read(self):
+                return json.dumps({"choices": [{"finish_reason": "stop",
+                                                "message": {"content": damaged}}]}).encode()
+
+        self.assertIn("\t", damaged)
+        with patch("urllib.request.urlopen", return_value=Response()), \
+                tempfile.TemporaryDirectory() as d:
+            args = SimpleNamespace(backend="openai", model="m")
+            _status, _why, record = expo_loop.attempt_one(CANDIDATE, args, self.kinds, Path(d))
+            self.assertEqual(record["sanitization"][0]["restored-command"], "\\chi")
+            self.assertIn("sanitized-response", record)
+
+
 class CleanTypingContract(unittest.TestCase):
     GRAPH = """{:paper/id "9999.0003" :nodes [{:id :n1 :kind :claim :text "A"} {:id :n2 :kind :claim :text "B"}
  {:id :n3 :kind :claim :text "C"}]
