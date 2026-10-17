@@ -23,9 +23,11 @@ import os
 import re
 import sys
 from collections import Counter, defaultdict
+from functools import partial
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
+import futon6_config as config  # noqa: E402
 
 _FORMAL = re.compile(r"\\judge|\\justifies|prooftree|\\infer|\\inferrule|mathpartir")
 _NAMES_FORMAL = re.compile(r"judge|justif|infer|proof.?tree", re.I)
@@ -81,11 +83,15 @@ def _pid_of(fname):
         return base.rsplit("__p", 1)[0]
 
 
-def _graph_record(f, lines, pid):
+def _graph_record(f, lines, pid, skip_unreadable=False):
     """What one graph adds to the harvest, in the order it adds it, or why it was skipped."""
     try:
         t = open(f).read()
-    except (OSError, UnicodeDecodeError) as exc:     # one unreadable graph is skipped
+    except (OSError, UnicodeDecodeError) as exc:
+        # An unreadable graph fails the harvest, as before, unless FUTON6_CONTINUE_PAST_ITEM_ERRORS
+        # is set (SKIP_UNREADABLE): then it is skipped and reported.
+        if not skip_unreadable:
+            raise
         return {"skip": f"  SKIP {os.path.basename(f)}: {type(exc).__name__}: {exc}"}
     expository = ":scopes" in t or ":slot-fill" in t
     adds, grammar, flattened = [], [], []
@@ -120,23 +126,26 @@ def _graph_record(f, lines, pid):
     return {"pid": pid, "adds": adds, "grammar": grammar, "flattened": flattened}
 
 
-def _paper_records(paper):
+def _paper_records(paper, skip_unreadable=False):
     """The records of one paper's graphs, `paper` = (pid, files), its text built once."""
     pid, files = paper
     lines = _text_lines(pid, {})
-    return [_graph_record(f, lines, pid) for f in files]
+    return [_graph_record(f, lines, pid, skip_unreadable) for f in files]
 
 
 def graph_records(files, workers=None):
     """Each graph's record, in the order of `files` (rung-2 graphs left out). Papers are read in
-    FUTON6_WORKERS processes (paper_pool), each paper's text built once."""
+    FUTON6_WORKERS processes (paper_pool), each paper's text built once. Whether an unreadable
+    graph is skipped is read here and handed to them: a worker started from a pool's server
+    has that server's environment, not this process's."""
     import paper_pool
     files = [f for f in files if "rung2" not in f]
     papers = {}
     for f in files:
         papers.setdefault(_pid_of(f), []).append(f)
     records = {}
-    for (_pid, group), paper_records in paper_pool.map_in_order(_paper_records, list(papers.items()), workers):
+    work = partial(_paper_records, skip_unreadable=config.continue_past_item_errors())
+    for (_pid, group), paper_records in paper_pool.map_in_order(work, list(papers.items()), workers):
         records.update(zip(group, paper_records))
     return [records[f] for f in files]
 

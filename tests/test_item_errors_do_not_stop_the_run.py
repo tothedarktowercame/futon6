@@ -1,14 +1,17 @@
-"""One item's error never stops a run: the item is recorded, and the stage goes on.
+"""One item's error: recorded and weighed against the run's floor, or left out of a stage.
 
 A Mark7 run is judged item by item. A stage records each paper, proof or graph it could not
 handle as rejected or errored, and the runner weighs those refusals against the run's floor
-(stage_accounting.blocking). Several stages exited 1 over any single refusal instead, and so
-stopped the whole run over one item: S6 over 0810.0425, whose acknowledgements are typeset as a
-proof (run mark7rhgrh100-20260928); S7 over any proof that failed to type or an off-vocabulary
-CLean; S1, S1b and the S3 and S4 extractions over one paper without a source or marks.
+(stage_accounting.blocking). S1 records a paper without an e-print so (dp_paper_view raised
+SystemExit for it, which escaped S1's per-paper `except Exception`), and S7 a proof that fails
+to type.
 
-The later stages (S5 and S7-S12) and the S3 and S4 measurements keep no ledger. They report an
-item they cannot read and leave it out, and fail only when they could handle no item at all.
+Other stages fail over one item, as upstream has them, and that stays the default: S1b over a
+paper without marks, the S4 extraction over an errored paper, and the later stages (S5 and
+S7-S12) and the S3 and S4 measurements, which keep no ledger, over an input they cannot read.
+With FUTON6_CONTINUE_PAST_ITEM_ERRORS set (futon6_config.continue_past_item_errors) they report
+the item and leave it out, and fail only when they could handle no item at all. The classes
+that test that run with it set; UnsetFailsTheStage tests the default.
 """
 from __future__ import annotations
 
@@ -39,8 +42,20 @@ def run_script(script: str, *args: str, env: dict[str, str]) -> subprocess.Compl
                           capture_output=True, text=True, env={**os.environ, **env})
 
 
+def item_errors(case: unittest.TestCase, setting: str | None) -> None:
+    """Run CASE with FUTON6_CONTINUE_PAST_ITEM_ERRORS at SETTING (None: unset), in process and in
+    the scripts it starts."""
+    environment = {k: v for k, v in os.environ.items() if k != "FUTON6_CONTINUE_PAST_ITEM_ERRORS"}
+    if setting is not None:
+        environment["FUTON6_CONTINUE_PAST_ITEM_ERRORS"] = setting
+    patcher = mock.patch.dict(os.environ, environment, clear=True)
+    patcher.start()
+    case.addCleanup(patcher.stop)
+
+
 class PapersWithoutInputs(unittest.TestCase):
     def setUp(self):
+        item_errors(self, "1")
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         self.base = Path(directory.name)
@@ -161,10 +176,11 @@ def clean_text(pid: str) -> str:
 
 
 class LaterStagesLeaveOutWhatTheyCannotRead(unittest.TestCase):
-    """S5 and S7-S12 keep no ledger: an item they cannot read is reported and left out, and only a
-    stage that could handle no item at all fails."""
+    """S5 and S7-S12 keep no ledger: with FUTON6_CONTINUE_PAST_ITEM_ERRORS set, an item they cannot
+    read is reported and left out, and only a stage that could handle no item at all fails."""
 
     def setUp(self):
+        item_errors(self, "1")
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         self.base = Path(directory.name)
@@ -295,9 +311,11 @@ class LaterStagesLeaveOutWhatTheyCannotRead(unittest.TestCase):
 
 @unittest.skipUnless(shutil.which("bb"), "bb reads the graphs, as in a run")
 class MeasurementsLeaveOutWhatTheyCannotRead(unittest.TestCase):
-    """The S3 and S4 measurements read every graph through one bb process."""
+    """The S3 and S4 measurements read every graph through one bb process; with
+    FUTON6_CONTINUE_PAST_ITEM_ERRORS set, one they cannot read is reported and left out."""
 
     def setUp(self):
+        item_errors(self, "1")
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         self.base = Path(directory.name)
@@ -353,6 +371,57 @@ class MeasurementsLeaveOutWhatTheyCannotRead(unittest.TestCase):
         done = run_script("expository_scope_audit.py", "--run-dir", str(run), env={})
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
         self.assertIn("top kind - -; bare parent kinds -", done.stdout)
+
+
+class UnsetFailsTheStage(unittest.TestCase):
+    """Without FUTON6_CONTINUE_PAST_ITEM_ERRORS a stage fails over one item, as upstream's do."""
+
+    def setUp(self):
+        item_errors(self, None)
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.base = Path(directory.name)
+
+    def folder(self, name: str) -> Path:
+        path = self.base / name
+        path.mkdir()
+        return path
+
+    def test_s1b_and_the_s4_extraction_fail_over_one_paper(self):
+        marks, ids = self.folder("marks"), self.base / "ids.txt"
+        (marks / "fable-1111.0001-dp-emacs.json").write_text(
+            json.dumps({"paper": "1111.0001", "text": "Let $x$ be a real number.", "marks": []}))
+        ids.write_text(f"1111.0001\n{MISSING}\n")
+        done = run_script("markup_strategies.py", "--list", str(ids), "--marks", str(marks),
+                          "--out", str(self.base / "strategies"), env={})
+        self.assertEqual(done.returncode, 1, done.stdout + done.stderr)
+        ids.write_text(f"{MISSING}\n")
+        done = run_script("mark3_extract_expository_candidates.py", "--list", str(ids), "--out", str(self.base / "out"),
+                          env={"FUTON6_MARKS": str(marks), accounting.DIR_ENV: str(self.base / "accounting")})
+        self.assertEqual(done.returncode, 1, done.stdout + done.stderr)
+
+    def test_s5_fails_on_a_graph_it_cannot_read(self):
+        graphs, steps = self.folder("graphs"), self.folder("steps")
+        bad = graphs / "g2__p0.edn"
+        bad.write_text("{:nodes [", encoding="utf-8")
+        done = run_script("cas_segment.py", str(graph_file(graphs, "g1")), str(bad), "--out-dir", str(steps), env={})
+        self.assertNotEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assertNotIn("SKIP", done.stderr)
+
+    def test_s8_fails_on_a_clean_it_cannot_read(self):
+        import clean_graph_export as export
+        clean = self.folder("clean")
+        (clean / "p1.clean.edn").write_text(clean_text("p1"), encoding="utf-8")
+        (clean / "p3.clean.edn").write_text("{:proof", encoding="utf-8")
+        with self.assertRaises(Exception), contextlib.redirect_stdout(io.StringIO()):
+            export.build(str(clean), str(self.base / "ingest"), str(self.base / "no-embed.json"))
+
+    def test_s10_and_s12_fail_on_a_candidate_they_cannot_read(self):
+        import iatc_move_reground as reground
+        candidates = self.folder("candidates")
+        (candidates / "g2__p0.candidate.json").write_text("{", encoding="utf-8")
+        with self.assertRaises(ValueError):
+            reground.candidate_windows(str(candidates))
 
 
 if __name__ == "__main__":

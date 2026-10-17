@@ -365,6 +365,8 @@ def build(run: Path, paper: str, typeset: Path) -> tuple[str, dict]:
     graph_paths = sorted(p for p in (run / "artifacts/graphs").glob(f"{paper}__p*.edn")
                          if not p.name.endswith(".rung2.edn"))
     for path, graph in zip(graph_paths, read_edn(graph_paths)):
+        if graph is None and futon6_config.continue_past_item_errors():     # left out, reported by read_edn
+            continue
         cand = run / "artifacts/candidates" / (path.stem + ".candidate.json")
         notes.append(proof_note(graph, json.loads(cand.read_text()) if cand.is_file() else None, starts))
     audit = scope_audit.audit(run / "artifacts/expo", run / "artifacts/expo-candidates")

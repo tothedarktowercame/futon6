@@ -265,10 +265,10 @@ def main() -> int:
                                                       if args.cap_per_paper else "all-regions"}, indent=2),
                                           encoding="utf-8")
     print(f"\n{len(manifest)} selected of {len(carved)} candidates -> {outdir}")
-    # A paper that could not be extracted is an errored item in the ledger; the runner weighs
-    # refusals against the run's floor (stage_accounting.blocking), as it does the loop's.
-    # Exiting 1 on any of them stopped the whole run over one paper.
-    return 0
+    # A paper that could not be extracted is an errored item in the ledger, and fails the stage,
+    # as before. With FUTON6_CONTINUE_PAST_ITEM_ERRORS set the runner weighs it against the run's
+    # floor (stage_accounting.blocking) instead, as it does the loop's and S3's extraction.
+    return 1 if extract_ledger.failed() and not config.continue_past_item_errors() else 0
 
 
 if __name__ == "__main__":

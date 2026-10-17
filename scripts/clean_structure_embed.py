@@ -269,14 +269,17 @@ def main():
 
     ids, titles, macros, struct_rows, breakdowns, texts, text_srcs = [], [], [], [], [], [], []
     for f in files:
-        # A CLean that cannot be read or measured is that proof's failure: it is reported and
-        # left out of the embedding. It used to raise and fail S7, and so the run.
+        # A CLean that cannot be read or measured fails the stage, as before, unless
+        # FUTON6_CONTINUE_PAST_ITEM_ERRORS is set: then it is that proof's failure, reported and
+        # left out of the embedding.
         try:
             d = load_clean(f)
             pid = kw(d["proof"])
             vec, bd, boxes = structure_vector(d)
             txt, src = proof_text(pid, boxes, args.apm_dir)
         except Exception as exc:
+            if not config.continue_past_item_errors():
+                raise
             print(f"  SKIP {os.path.basename(f)}: {type(exc).__name__}: {exc}")
             continue
         ids.append(pid)

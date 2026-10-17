@@ -140,10 +140,13 @@ class S10S12ParallelTests(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, self.tmp)
-        # No paper text: dp_paper_view finds no e-print here, in this process and in workers.
+        # No paper text: dp_paper_view finds no e-print here, in this process and in workers. The
+        # corpus holds an unreadable graph, which these runs leave out as the reference does
+        # (FUTON6_CONTINUE_PAST_ITEM_ERRORS; unset, it fails the harvest).
         eprints = self.tmp / "eprints"
         eprints.mkdir()
-        patcher = mock.patch.dict(os.environ, {"FUTON6_EPRINTS": str(eprints)})
+        patcher = mock.patch.dict(os.environ, {"FUTON6_EPRINTS": str(eprints),
+                                               "FUTON6_CONTINUE_PAST_ITEM_ERRORS": "1"})
         patcher.start()
         self.addCleanup(patcher.stop)
 

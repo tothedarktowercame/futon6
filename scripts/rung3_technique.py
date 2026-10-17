@@ -19,6 +19,7 @@ if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
 import cas_select  # noqa: E402
+import futon6_config as config  # noqa: E402
 from rung3_residue_spike import AUTHOR_DECLARED_GAP_RE, VERIFIABLE_PATTERNS  # noqa: E402
 
 DEFAULT_STEPS_DIR = ROOT / "data" / "cas-select-steps" / "loop-run-70b"
@@ -182,12 +183,15 @@ def run_steps_paths(args: argparse.Namespace, paths: list[Path]) -> list[dict[st
     patterns = cas_select.load_patterns(index_path=args.index, library_dir=args.library)
     out = []
     for path in sorted(paths):
-        # A steps file that cannot be read or classified is that paper's failure: it is
-        # reported and the other gap maps are still written. It used to raise and stop S5.
+        # A steps file that cannot be read or classified stops S5, as before, unless
+        # FUTON6_CONTINUE_PAST_ITEM_ERRORS is set: then it is that paper's failure, reported, and
+        # the other gap maps are still written.
         try:
             steps_doc = cas_select.load_steps(path)
             out.append(gapmap_for_steps(steps_doc, patterns, k=args.k))
         except Exception as exc:
+            if not config.continue_past_item_errors():
+                raise
             print(f"  SKIP {path.name}: {type(exc).__name__}: {exc}", file=sys.stderr)
     return out
 

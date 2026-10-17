@@ -17,6 +17,7 @@ if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
 from r2d_concept_coverage import load_edn  # noqa: E402
+import futon6_config as config  # noqa: E402
 
 DEFAULT_OUT_DIR = ROOT / "data" / "cas-select-steps" / "loop-run-70b"
 
@@ -191,13 +192,15 @@ def main(argv: list[str] | None = None) -> int:
     dropped = len(args.graphs) - len(graphs)
     if dropped:
         print(f"  ({dropped} rung-2 sidecar(s) refused — they are reports, not graphs)")
-    # A graph that cannot be segmented is that proof's failure: it is reported and the others
-    # are still written. It used to raise and stop S5, and with it the run.
+    # A graph that cannot be segmented stops S5, as before, unless FUTON6_CONTINUE_PAST_ITEM_ERRORS
+    # is set: then it is that proof's failure, reported, and the others are still written.
     paths = []
     for graph in graphs:
         try:
             paths.append(write_steps(graph, args.out_dir, args.out))
         except Exception as exc:
+            if not config.continue_past_item_errors():
+                raise
             print(f"  SKIP {graph.name}: {type(exc).__name__}: {exc}", file=sys.stderr)
     for path in paths:
         print(path)

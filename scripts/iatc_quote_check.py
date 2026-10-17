@@ -33,6 +33,7 @@ import sys
 from pathlib import Path
 
 import expository_scope_audit as scope_audit
+import futon6_config as config
 
 ALIGNED = 0.5            # share of a gloss's content words found in a quote
 BETTER = 0.25            # how much better another unit must match to be proposed
@@ -108,14 +109,16 @@ def main() -> int:
     paths = sorted(p for p in a.graphs.glob("*.edn") if not p.name.endswith(".rung2.edn"))
     out = []
     for path, graph in zip(paths, scope_audit.read_edn(paths)):
-        if graph is None:     # unreadable, reported by read_edn; the check goes on
+        if graph is None and config.continue_past_item_errors():     # unreadable, reported by read_edn
             continue
         cand = a.candidates / f"{path.stem}.candidate.json"
-        # A graph or candidate the check cannot read is reported and left out. One such file
-        # used to raise and fail S3, and with it the run.
+        # A graph or candidate the check cannot read fails S3, as before, unless
+        # FUTON6_CONTINUE_PAST_ITEM_ERRORS is set: then it is reported and left out.
         try:
             out.append(check_graph(graph, json.loads(cand.read_text()) if cand.is_file() else None))
         except Exception as exc:
+            if not config.continue_past_item_errors():
+                raise
             print(f"  SKIP {path.name}: {type(exc).__name__}: {exc}", file=sys.stderr)
     summary = tally(out)
     if a.out:

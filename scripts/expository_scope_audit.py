@@ -41,6 +41,7 @@ import sys
 from pathlib import Path
 
 import expository_json
+import futon6_config as config
 import run_manifest
 
 STOP = set("the a an of in to for and or on with by is are as its it this that these those "
@@ -52,10 +53,18 @@ CHECKS = ("echo", "unanchored", "bare-noun")
 def read_edn(paths: list[Path]) -> list[dict | None]:
     """EDN -> JSON through babashka, the reader the gates use (see expository_json).
 
-    One entry per path, in order, and None for a file that cannot be read, which is reported.
-    One unreadable file used to fail the whole read, and with it S3 or S4."""
+    One entry per path, in order. A file that cannot be read fails the whole read, and with it
+    S3 or S4, as before, unless FUTON6_CONTINUE_PAST_ITEM_ERRORS is set: then its entry is None
+    and it is reported."""
     if not paths:
         return []
+    if not config.continue_past_item_errors():
+        program = ("(require '[cheshire.core :as json]) "
+                   "(doseq [p *command-line-args*] "
+                   "  (println (json/generate-string (clojure.edn/read-string (slurp p)))))")
+        out = subprocess.run(["bb", "-e", program, *map(str, paths)],
+                             capture_output=True, text=True, check=True).stdout
+        return [json.loads(line) for line in out.splitlines() if line.strip()]
     program = ("(require '[cheshire.core :as json]) "
                "(doseq [p *command-line-args*] "
                "  (println (try (json/generate-string (clojure.edn/read-string (slurp p))) "
@@ -130,10 +139,11 @@ def audit(expo_dir: Path, candidates_dir: Path, vocab: Path = expository_json.VO
     graphs = read_edn(paths)
     records, kinds, held, passages = [], collections.Counter(), 0, 0
     for path, g in zip(paths, graphs):
-        if g is None:     # unreadable, reported by read_edn
+        if g is None and config.continue_past_item_errors():     # unreadable, reported by read_edn
             continue
-        # A passage whose graph the audit cannot read is reported and left out whole: its
-        # records count only when all of them could be made. One such graph used to fail S4.
+        # A passage whose graph the audit cannot read fails S4, as before, unless
+        # FUTON6_CONTINUE_PAST_ITEM_ERRORS is set: then it is reported and left out whole, its
+        # records counting only when all of them could be made.
         graph_records, graph_kinds, graph_held = [], collections.Counter(), 0
         try:
             paper, passage = g["paper/id"], g["passage/id"]
@@ -165,6 +175,8 @@ def audit(expo_dir: Path, candidates_dir: Path, vocab: Path = expository_json.VO
                     record["flags"] = flags(fill, cited, definitions.values())
                 graph_records.append(record)
         except Exception as exc:
+            if not config.continue_past_item_errors():
+                raise
             print(f"  SKIP {path.name}: {type(exc).__name__}: {exc}", file=sys.stderr)
             continue
         records += graph_records

@@ -44,6 +44,7 @@ from pathlib import Path
 
 import build_golden_paper
 import expository_region_extract as regions
+import futon6_config as config
 import paper_pool
 from dp_capabilities.intervals import Stabbing
 
@@ -477,9 +478,9 @@ def main() -> int:
             total["s1-compared"] += su["s1-compared"]
             total["s1-agrees"] += su["s1-agrees"]
         print(json.dumps(total))
-        # A paper without S1 marks is listed as missing and the stage goes on; it fails only when
-        # no paper resolves. Failing on any missing paper stopped the run over one paper.
-        return 1 if total["missing"] and not total["papers"] else 0
+        # A paper without S1 marks is listed as missing, and the stage fails, as before. With
+        # FUTON6_CONTINUE_PAST_ITEM_ERRORS set it fails only when no paper resolves.
+        return 1 if total["missing"] and not (config.continue_past_item_errors() and total["papers"]) else 0
     if not a.marks:
         ap.error("give a marks file, or --list with --marks and --out")
     data = json.loads(a.marks.read_text())

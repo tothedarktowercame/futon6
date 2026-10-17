@@ -197,6 +197,17 @@ def workers() -> int:
     return 1
 
 
+def continue_past_item_errors() -> bool:
+    """Whether a stage goes on past an input it cannot read or process.
+
+    FUTON6_CONTINUE_PAST_ITEM_ERRORS=1: the input (a graph, a CLean, a steps or candidate file,
+    a paper) is reported and left out, and the stage fails only when none could be done; an
+    accounted stage's errored items are weighed against the run's floor. Unset: such an input
+    fails the stage, as before.
+    """
+    return os.environ.get("FUTON6_CONTINUE_PAST_ITEM_ERRORS", "").strip().lower() in {"1", "true", "yes", "on"}
+
+
 def accounting_journal() -> tuple[int | None, float]:
     """When a stage's accounting document journals its items (stage_accounting).
 

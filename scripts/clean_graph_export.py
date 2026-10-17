@@ -29,6 +29,7 @@ import edn_format as edn
 
 # reuse the loader helpers from the embedder
 from clean_structure_embed import kw, load_clean, boxes_of, wires_of
+import futon6_config as config
 
 
 def cypher_str(s):
@@ -49,8 +50,9 @@ def build(clean_dir, out, embed_json):
 
     for f in files:
         # A proof enters the export whole or not at all: its nodes, edges and loader lines are
-        # built here and added only when all of them could be made. One CLean that could not
-        # be read used to raise and fail S8, and with it the run; it is now reported.
+        # built here and added only when all of them could be made. A CLean that cannot be
+        # read fails S8, as before, unless FUTON6_CONTINUE_PAST_ITEM_ERRORS is set: then it is
+        # reported and left out.
         nodes, edges, lines, found = [], [], [], set()
         try:
             d = load_clean(f)
@@ -95,6 +97,8 @@ def build(clean_dir, out, embed_json):
                 lines.append(f"MERGE (s_{pid}_{w['from']})-[:WIRES {{carries:{cypher_str(w['carries'])}}}]->(s_{pid}_{w['to']});")
             lines.append("")
         except Exception as exc:
+            if not config.continue_past_item_errors():
+                raise
             print(f"  SKIP {os.path.basename(f)}: {type(exc).__name__}: {exc}")
             continue
         graph["nodes"] += nodes

@@ -19,6 +19,7 @@ from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
+import futon6_config as config  # noqa: E402
 import strategy_recognizer as sr  # noqa: E402
 from iatc_lexicon_harvest import harvest  # noqa: E402
 
@@ -61,11 +62,14 @@ def cluster_cues(lex, min_count=2, top=None):
 
 
 def candidate_windows(cand_dir):
-    """The source windows of the candidates in cand_dir. A candidate that cannot be read is
-    reported and left out; one such file used to raise and stop S10, and S12, which measures
-    with the same windows."""
+    """The source windows of the candidates in cand_dir. A candidate that cannot be read stops
+    S10, and S12, which measures with the same windows, as before, unless
+    FUTON6_CONTINUE_PAST_ITEM_ERRORS is set: then it is reported and left out."""
     windows = []
     for f in glob.glob(os.path.join(cand_dir, "*.candidate.json")):
+        if not config.continue_past_item_errors():
+            windows.append(json.load(open(f)).get("source-window", ""))
+            continue
         try:
             windows.append(str(json.load(open(f)).get("source-window") or ""))
         except (OSError, ValueError, AttributeError) as exc:
