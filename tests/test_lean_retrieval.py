@@ -49,3 +49,20 @@ def test_command_line_round_trip(tmp_path):
     res = subprocess.run([sys.executable, str(ROOT / "scripts/lean_retrieval.py"), "query", "--index", str(out),
                           "--json", "Euler characteristic connected sum"], check=True, capture_output=True, text=True)
     assert json.loads(res.stdout)[0]["hits"][0]["decl"] == "eulerCharacteristic_connectedSum"
+
+
+def test_greek_variables_and_primes_are_not_words(tmp_path):
+    import align_informal_lean as A
+    assert A.tokens("Let π:Σ→Σ′ be a regular covering") == ["regular", "cover"]
+    assert "chi" in A.tokens(r"$\chi(\Sigma) = 5\chi(\Sigma')$")       # χ is the Euler characteristic
+    assert "product" in A.tokens(r"$T^2 = S^1\times S^1$")
+
+
+def test_an_informal_solution_is_read_sentence_by_sentence(tmp_path):
+    md = ("<!-- source: agent -->\n# Title\n\nEuler characteristic multiplies under a finite cover. "
+          "So the torus covers itself. Then $x = y. z$ holds here.\n\n```lean\ntheorem foo : True := trivial\n```\n")
+    got = R.sentences(md)
+    assert got == ["Euler characteristic multiplies under a finite cover.", "So the torus covers itself."]
+    # a full stop inside a formula does not end the sentence
+    assert R.sentences("The covering map $p. Q$ is regular on every torus component.") == \
+        ["The covering map $p. Q$ is regular on every torus component."]

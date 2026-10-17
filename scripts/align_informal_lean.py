@@ -44,7 +44,8 @@ UNICODE_WORDS = {
     "≃": "homeomorphic", "≅": "isomorphic", "→": "to", "↦": "mapsto", "∫": "integral",
     "∑": "sum", "∂": "boundary", "∘": "compose", "×": "product", "#": "connected sum",
 }
-LATEX_WORDS = {"mathbb": "", "mathcal": "", "mathrm": "", "operatorname": "", "text": "",
+LATEX_WORDS = {"times": "product", "otimes": "tensor", "oplus": "sum",
+               "mathbb": "", "mathcal": "", "mathrm": "", "operatorname": "", "text": "",
                "cdot": "", "left": "", "right": "", "quad": "", "qquad": "", "frac": "",
                "infty": "infinity", "to": "to", "le": "", "leq": "", "ge": "", "geq": "",
                "in": "", "subseteq": "subset", "cong": "isomorphic", "simeq": "homeomorphic",
@@ -54,7 +55,8 @@ STOP = set("""a an the of to in on at by for with from and or not is are be as t
 those it its we our let then so thus hence since if iff any every each all some there exists
 such which where when one two use using via into also only both has have can must may will
 proof lemma theorem def abbrev instance noncomputable private protected fun by exact show
-type prop true false nat real complex int sorry have intro refine apply simp""".split())
+type prop true false nat real complex int sorry have intro refine apply simp define defined
+consider suppose assume""".split())
 # a few morphological equivalences the tokenizer cannot see
 SYNONYMS = {"covering": "cover", "covers": "cover", "coverings": "cover", "sheeted": "sheet",
             "sheets": "sheet", "fold": "sheet", "nfold": "sheet", "homeomorphism": "homeomorphic",
@@ -85,7 +87,22 @@ def stem(word: str) -> str:
     return word
 
 
+# Greek letters are mostly variable names (Σ, π, σ, λ), and as words they match any
+# Lean name that happens to contain them: with the second APM run's glosses, which
+# quote formulae ("π:Σ→Σ′"), "sigma" sent t98A01's covering map to
+# sigma_coordinates. χ is the exception: in these proofs it is the Euler
+# characteristic.
+GREEK_VARIABLES = set("αβγδεϵζηθϑικλμνξπρϱστυφϕψωΓΔΘΛΞΠΣΥΦΨΩ")
+GREEK_COMMANDS = {"alpha", "beta", "gamma", "delta", "epsilon", "varepsilon", "zeta", "eta", "theta",
+                  "vartheta", "iota", "kappa", "lambda", "mu", "nu", "xi", "pi", "rho", "varrho", "sigma",
+                  "tau", "upsilon", "phi", "varphi", "psi", "omega", "Gamma", "Delta", "Theta", "Lambda",
+                  "Xi", "Pi", "Sigma", "Upsilon", "Phi", "Psi", "Omega"}
+
+
 def tokens(text: str) -> list[str]:
+    text = "".join(" " if ch in GREEK_VARIABLES or ch in "′″" else ch for ch in text)
+    text = re.sub(r"\\prime(?![A-Za-z])", " ", text)        # Σ′ is not the word "prime"
+    text = re.sub(r"\\(" + "|".join(sorted(GREEK_COMMANDS, key=len, reverse=True)) + r")(?![A-Za-z])", " ", text)
     for ch, w in UNICODE_WORDS.items():
         text = text.replace(ch, f" {w} ")
     text = re.sub(r"\\mathbb\{?([A-Z])\}?", lambda m: " " + BLACKBOARD.get(m.group(1), m.group(1)) + " ", text)

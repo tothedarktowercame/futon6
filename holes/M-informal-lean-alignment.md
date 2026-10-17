@@ -175,7 +175,14 @@ names.
    `apm_t98a03_regular_threeFoldCover` (a regular cover built from a torus
    rotation, complete). Nothing in it is APM-specific beyond the default
    `problems/<id>/` owner rule, so it can be shipped to anyone with scopes and
-   Lean side by side.
+   Lean side by side. Updated 2026-10-17 for the second APM run. Its S3
+   glosses quote formulae ("π:Σ→Σ′") where the first run's were prose, so
+   Greek letters used as variable names (all but χ) and primes are no longer
+   words: "sigma" had sent t98A01's covering map to `sigma_coordinates`.
+   `\times` reads as "product". A step is now queried together with the
+   stated reason for it. `query --informal <file>` reads an informal solution
+   sentence by sentence, with no mining run needed, and `--min-score`
+   (default 0.2) hides weak matches.
 2. Re-run the hole test on the S3 output of a run over the repaired sources
    (apm-lean `34c53beba`), with problem statements included (futon6
    `6d1db4f`).

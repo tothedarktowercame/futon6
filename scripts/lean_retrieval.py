@@ -14,10 +14,15 @@ Index once, query many times:
       --glob 'ConstructionTargets/*.lean' --out lean-index.json
   lean_retrieval.py query --index lean-index.json "Euler characteristic of a connected sum"
   lean_retrieval.py query --index lean-index.json --run-dir RUN --paper t98A01
+  lean_retrieval.py query --index lean-index.json --informal problems/t98A01/informal-solution.md \
+      [--exclude t98A01]
 
 The second query form takes the informal steps of a paper from a mining run
-(its S3 proof graph) and answers each in turn; that paper's own declarations
-are left out of its answers. Each hit gives the declaration, its file and
+(its S3 proof graph) and answers each in turn, reading each step's claim with
+the stated reason for it; that paper's own declarations are left out of its
+answers. The third reads an informal solution directly, one sentence at a
+time (code blocks skipped), so no mining run is needed; --exclude leaves a
+problem's own declarations out. Each hit gives the declaration, its file and
 line, a score, and the terms that matched. Only declarations whose proofs
 contain no `sorry` are indexed unless --include-sorry is given.
 
@@ -30,6 +35,7 @@ from __future__ import annotations
 import argparse
 import glob
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -68,22 +74,44 @@ class Retriever:
         self.model = align.Tfidf([d["terms"] for d in self.decls])
         self.vecs = [self.model.vec(d["terms"]) for d in self.decls]
 
-    def query_terms(self, terms: list[str], k: int = 5, exclude: str | None = None) -> list[dict]:
+    def query_terms(self, terms: list[str], k: int = 5, exclude: str | None = None,
+                    min_score: float = 0.0) -> list[dict]:
         qv = self.model.vec(terms)
         scored = []
         for d, v in zip(self.decls, self.vecs):
             if exclude and d["paper"] == exclude:
                 continue
             s, shared = self.model.cos(qv, v)
-            if s > 0:
+            if s > max(min_score, 0):
                 scored.append((s, shared, d))
         scored.sort(key=lambda x: -x[0])
         return [{"decl": d["name"], "owner": d["paper"], "file": d["file"], "line": d["line"],
                  "score": round(s, 3), "shared": shared, "doc": d["doc"][:160]}
                 for s, shared, d in scored[:k]]
 
-    def query(self, text: str, k: int = 5, exclude: str | None = None) -> list[dict]:
-        return self.query_terms(align.tokens(text), k, exclude)
+    def query(self, text: str, k: int = 5, exclude: str | None = None, min_score: float = 0.0) -> list[dict]:
+        return self.query_terms(align.tokens(text), k, exclude, min_score)
+
+
+def sentences(markdown: str, min_terms: int = 3) -> list[str]:
+    """The sentences of an informal solution worth asking about: prose and
+    formulae, outside code blocks and headings, with enough content words."""
+    text = re.sub(r"```.*?```|<!--.*?-->", " ", markdown, flags=re.S)
+    text = re.sub(r"(?m)^#.*$", " ", text)
+    out = []
+    for para in re.split(r"\n\s*\n", text):
+        flat = " ".join(para.split())
+        # a sentence ends at . ! ? followed by a space and a capital or $, outside $...$
+        pieces, buf, in_math = [], [], False
+        for i, ch in enumerate(flat):
+            buf.append(ch)
+            if ch == "$":
+                in_math = not in_math
+            elif ch in ".!?" and not in_math and flat[i + 1:i + 3].strip()[:1] in tuple("ABCDEFGHIJKLMNOPQRSTUVWXYZ$("):
+                pieces.append("".join(buf)); buf = []
+        pieces.append("".join(buf))
+        out += [s.strip() for s in pieces if len(align.tokens(s)) >= min_terms]
+    return out
 
 
 def show(label: str, hits: list[dict]) -> None:
@@ -104,8 +132,11 @@ def main() -> int:
     q.add_argument("--index", required=True, type=Path)
     q.add_argument("text", nargs="*")
     q.add_argument("--run-dir", type=Path)
+    q.add_argument("--informal", type=Path, help="an informal solution (markdown) to read sentence by sentence")
+    q.add_argument("--exclude", help="leave this owner's declarations out (with --informal)")
     q.add_argument("--paper")
     q.add_argument("-k", type=int, default=5)
+    q.add_argument("--min-score", type=float, default=0.2, help="hide weaker matches (0 shows all)")
     q.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
@@ -120,7 +151,7 @@ def main() -> int:
     results = []
     if args.text:
         text = " ".join(args.text)
-        results.append({"query": text, "hits": r.query(text, args.k)})
+        results.append({"query": text, "hits": r.query(text, args.k, min_score=args.min_score)})
     if args.paper:
         if not args.run_dir:
             ap.error("--paper needs --run-dir")
@@ -128,15 +159,25 @@ def main() -> int:
         if graph is None:
             print(f"no accepted S3 graph for {args.paper} in {args.run_dir}", file=sys.stderr)
             return 1
+        reasons = {}
+        for e in graph["edges"]:
+            reasons.setdefault(e["conclusion"], []).append(e["warrant"])
         for n in graph["nodes"]:
+            terms = n["terms"] + [t for w in reasons.get(n["id"], []) for t in align.tokens(w)]
             results.append({"query": n["gloss"] or n["text"], "node": n["id"],
-                            "hits": r.query_terms(n["terms"], args.k, exclude=args.paper)})
+                            "hits": r.query_terms(terms, args.k, exclude=args.paper, min_score=args.min_score)})
+    if args.informal:
+        for n, s in enumerate(sentences(args.informal.read_text()), 1):
+            results.append({"query": s, "node": f"s{n}",
+                            "hits": r.query(s, args.k, exclude=args.exclude, min_score=args.min_score)})
     if not results:
-        ap.error("give query text, or --run-dir with --paper")
+        ap.error("give query text, --run-dir with --paper, or --informal")
     if args.json:
         print(json.dumps(results, indent=1, ensure_ascii=False))
     else:
         for res in results:
+            if not res["hits"]:
+                continue
             show(f"\n{res.get('node', 'query')}: {res['query'][:100]}", res["hits"])
     return 0
 
