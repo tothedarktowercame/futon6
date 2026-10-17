@@ -11,6 +11,7 @@ import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parent))
 import futon6_config as config
+import paper_pool
 import run_manifest
 import stage_accounting as accounting
 
@@ -26,15 +27,18 @@ from typing import Any
 REPO = Path(__file__).resolve().parent.parent
 MARKS_DIR = config.marks()
 VOCAB = REPO / "holes" / "excursions" / "expository-superpod-vocab.edn"
-# v2: every candidate carries the region's sentence units, so a scope cites what it
-# reads (region_units) instead of a line range, and its fill is quoted from them.
-SCHEMA = "expo-candidate/v2"
 
 sys.path.insert(0, str(REPO / "scripts"))
 import expository_region_extract as expo  # noqa: E402
 import region_units  # noqa: E402
+import run_contract  # noqa: E402
 import mark3_extract_candidates as iatc_candidates  # noqa: E402
 import run_contract  # noqa: E402
+
+# v2: every candidate carries the region's sentence units, so a scope cites what it
+# reads (region_units) instead of a line range, and its fill is quoted from them.
+# The run contract chooses: v2 under mark7-v4, v1 (line ranges, no units) under mark7-v3.
+SCHEMA = run_contract.expository_candidate_schema()
 
 
 def line_starts(text: str) -> list[int]:
@@ -76,7 +80,7 @@ def extract(paper_id: str) -> list[dict[str, Any]]:
                 "region-type": region["type"],
                 "window-lines": [lo, hi],
                 "source-window": window_text(text, starts, lo, hi),
-                "units": region_units.units_for(text, starts, lo, hi),
+                **({"units": region_units.units_for(text, starts, lo, hi)} if SCHEMA != "expo-candidate/v1" else {}),
                 "enrichment": iatc_candidates.window_enrichment(marks, starts, lo, hi),
                 "vocab-path": str(VOCAB.relative_to(REPO)),
                 "marks-path": iatc_candidates._display(marks_path),
@@ -154,6 +158,13 @@ def reconcile_stale_selection(outdir: Path, regions: Path, selected_names: set[s
         removed.append(path.name)
     return removed
 
+def extract_paper(paper_id: str) -> dict:
+    """One paper's expository regions; runs in a worker process, so failures are returned."""
+    try:
+        return {"candidates": extract(paper_id)}
+    except Exception as exc:
+        return {"error": f"{type(exc).__name__}: {exc}", "message": str(exc)}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -179,13 +190,14 @@ def main() -> int:
     regions.mkdir(parents=True, exist_ok=True)
     extract_ledger = accounting.Accounting("S4", "extract", papers)
     carved: list[dict[str, Any]] = []
-    for paper_id in papers:
-        try:
-            candidates = extract(paper_id)
-        except Exception as exc:
-            extract_ledger.record(paper_id, "errored", f"{type(exc).__name__}: {exc}", paper=paper_id)
-            print(f"  ERROR {paper_id}: {exc}")
+    # Papers are carved on every CPU the job may use; written, accounted and
+    # reported here in list order, as the serial loop did.
+    for paper_id, result in paper_pool.map_papers(extract_paper, papers):
+        if "error" in result:
+            extract_ledger.record(paper_id, "errored", result["error"], paper=paper_id)
+            print(f"  ERROR {paper_id}: {result['message']}")
             continue
+        candidates = result["candidates"]
         paths = []
         for candidate in candidates:
             path = regions / safe_name(candidate)
@@ -253,7 +265,10 @@ def main() -> int:
                                                       if args.cap_per_paper else "all-regions"}, indent=2),
                                           encoding="utf-8")
     print(f"\n{len(manifest)} selected of {len(carved)} candidates -> {outdir}")
-    return 1 if extract_ledger.failed() else 0
+    # A paper that could not be extracted is an errored item in the ledger; the runner weighs
+    # refusals against the run's floor (stage_accounting.blocking), as it does the loop's.
+    # Exiting 1 on any of them stopped the whole run over one paper.
+    return 0
 
 
 if __name__ == "__main__":

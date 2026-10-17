@@ -79,6 +79,21 @@ List them in the order the proof introduces them, hypotheses first and the final
 conclusion last. Include every intermediate claim the argument passes through; the
 number of nodes follows the proof."""
 
+if not run_contract.lists_units():
+    # mark7-v3 (the 2026-09-21 runs): the units are not listed; the schema numbers them s1..sn.
+    NODES_TASK = NODES_TASK.replace(
+        """  "quote_spans" — the ids of the marked source units that STATE this node, chosen
+    from the list of units below. Their text is taken from the source verbatim, so
+    you never have to reproduce a symbol. Read the unit's text and pick the ones
+    that say what your gloss says; the ids carry no order to follow. Pick only what
+    this node needs: a hypothesis and the conclusion drawn from it are SEPARATE
+    units and must not be selected together for one node.""",
+        """  "quote_spans" — the ids of the marked source units that STATE this node. Pick
+    the units; their text is taken from the source verbatim, so you never have to
+    reproduce a symbol. Pick only what this node needs: a hypothesis and the
+    conclusion drawn from it are SEPARATE units and must not be selected together
+    for one node.""")
+
 STEPS_TASK = """Now give the argument over the nodes you listed, as JSON with an
 object "derivations".
 
@@ -146,6 +161,16 @@ def render_units(cand: dict) -> str:
     return "\n".join(rows)
 
 
+def unit_listing(cand: dict) -> str:
+    """The prompt's list of units under their ids, or nothing under a contract that does not list them."""
+    if not run_contract.lists_units():
+        return ""
+    return ("Marked source units. \"quote_spans\" takes the ids from THIS list, and each unit's\n"
+            "text is then taken from the source by code. An id names the unit's line; there is\n"
+            "no order to follow, so read the unit before citing it:\n"
+            f"{render_units(cand)}\n\n")
+
+
 def build_prompt(cand: dict, task: str, nodes: list | None = None) -> str:
     # The bindings for the symbols this window actually uses, each with the rule that
     # chose it; candidates cut before that carry the old unscoped binder list.
@@ -175,12 +200,7 @@ Deterministic anatomy detected in this source (symbol typings, definitions,
 quantifiers, citations — consistent with the text; do not contradict them):
 {render_enrichment(cand)}
 
-Marked source units. "quote_spans" takes the ids from THIS list, and each unit's
-text is then taken from the source by code. An id names the unit's line; there is
-no order to follow, so read the unit before citing it:
-{render_units(cand)}
-
-Source, lines {lo}-{hi} (ABSOLUTE line numbers on the left):
+{unit_listing(cand)}Source, lines {lo}-{hi} (ABSOLUTE line numbers on the left):
 {numbered_window(cand)}
 {listing}"""
 
@@ -243,6 +263,7 @@ def call_stub(prompt: str, cand: dict, schema: dict) -> str:
 
 
 def _openai_json(path: str, payload: dict) -> dict:
+    import http.client
     import urllib.error
     import urllib.request
     base = os.environ.get("OPENAI_BASE_URL", "http://localhost:8000/v1").rstrip("/")
@@ -270,6 +291,11 @@ def _openai_json(path: str, payload: dict) -> dict:
         # to escape the worker aborts the pool and leaves every in-flight item
         # unaccounted.
         raise ModelCallError(0, f"request timed out: {exc}")
+    except (OSError, http.client.HTTPException) as exc:
+        # urllib wraps a failure while sending the request as URLError, but one while reading
+        # the answer (a dropped connection, a reset) arrives bare. It is the same endpoint
+        # failure and belongs to this item, not to the whole stage.
+        raise ModelCallError(0, f"{type(exc).__name__}: {exc}")
 
 
 def call_openai(prompt: str, cand: dict, model: str, schema: dict,

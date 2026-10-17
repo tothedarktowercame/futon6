@@ -47,7 +47,7 @@ def signatures(ids, breakdowns, min_proofs=1):
     mean of an empty column (apm-501-xi-r1 S11, 2026-10-16).
     """
     macros = sorted({b["macro"] for b in breakdowns})
-    feats = [f for f in FEATS if isinstance(breakdowns[0].get(f), (int, float))]
+    feats = [f for f in FEATS if isinstance((breakdowns[0] if breakdowns else {}).get(f), (int, float))]
     bypaper = defaultdict(list)
     for i, b in zip(ids, breakdowns):
         # split("__")[0] collapses every legacy id (math__0310337 -> "math"), which
@@ -63,7 +63,7 @@ def signatures(ids, breakdowns, min_proofs=1):
         fp = [mc.get(m, 0) / n for m in macros]
         prof = [sum(float(b.get(f, 0) or 0) for b in bs) / n for f in feats]
         sig[p] = [fp, prof]
-    for j in range(len(feats) if papers else 0):
+    for j in range(len(feats) if papers else 0):     # with no paper there is no column to normalise
         col = [sig[p][1][j] for p in papers]
         m, s = st.mean(col), (st.pstdev(col) or 1)
         for p in papers:

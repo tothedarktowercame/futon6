@@ -1,5 +1,7 @@
 """Well-formedness reconciliation helpers for DP paper marks."""
 
+from .intervals import Stabbing
+
 BINDER_KINDS = {"let-binder", "definiendum", "definiens"}
 
 
@@ -10,13 +12,15 @@ def _snap_marks_to_math_atoms(marks, spans):
     detectors also produce structural extents, and those extents must not split
     a $...$ or display-math atom. A start strictly inside a math span moves to
     that span's end; an end strictly inside moves to that span's start.
+
+    Each boundary meets only the spans containing it, in the order a pass over
+    the span list would, so a long paper costs marks x containing spans rather
+    than marks x spans.
     """
+    atoms = Stabbing(spans)
     for mark in marks:
-        for s, e in spans:
-            if s < mark["start"] < e:
-                mark["start"] = e
-            if s < mark["end"] < e:
-                mark["end"] = s
+        mark["start"] = atoms.settle(mark["start"], to_end=True)
+        mark["end"] = atoms.settle(mark["end"], to_end=False)
     return [m for m in marks if m["end"] > m["start"]]
 
 
@@ -54,7 +58,8 @@ def _reconcile_structural_crossings(marks):
         for i, a in enumerate(structural):
             if a["end"] <= a["start"]:
                 continue
-            for b in structural[i + 1:]:
+            for j in range(i + 1, len(structural)):  # by index: slicing copied the rest for every scope
+                b = structural[j]
                 if b["start"] >= a["end"]:
                     break
                 if b["end"] <= b["start"]:
@@ -95,7 +100,8 @@ def scope_crossings(marks):
                 key=lambda m: (m["start"], -m["end"]))
     out = []
     for i, a in enumerate(sc):
-        for b in sc[i + 1:]:
+        for j in range(i + 1, len(sc)):  # by index: slicing copied the rest for every scope
+            b = sc[j]
             if b["start"] >= a["end"]:
                 break
             if _crosses(a, b):
@@ -112,7 +118,8 @@ def reconcile_all_scopes(marks):
         for i, a in enumerate(sc):
             if a["end"] <= a["start"]:
                 continue
-            for b in sc[i + 1:]:
+            for j in range(i + 1, len(sc)):  # by index: slicing copied the rest for every scope
+                b = sc[j]
                 if b["start"] >= a["end"]:
                     break
                 if b["end"] <= b["start"] or not _crosses(a, b):

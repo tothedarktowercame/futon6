@@ -16,9 +16,12 @@ a line.
 """
 from __future__ import annotations
 
+from bisect import bisect_left, bisect_right
 import hashlib
 import json
 from pathlib import Path
+
+import run_contract
 
 SPAN_KINDS = ("bind/let", "assume/explicit", "quant/universal", "constrain/relation",
               "bind/typed", "definiendum", "definiens", "let-binder",
@@ -40,28 +43,61 @@ def unit_id(line: int, text: str) -> str:
     return f"L{line}-{hashlib.sha1(text.encode()).hexdigest()[:4]}"
 
 
+class _DocumentRows:
+    """A marks document's line starts and its SPAN_KINDS marks sorted by start, built once.
+
+    Every candidate of a paper asks for the units in its window. Recomputing the line
+    starts and scanning every mark for each candidate was quadratic in a long paper.
+    Rows sort by (start, position in the marks list), so the first row seen for an
+    extent is the mark the marks-order scan kept.
+    """
+
+    def __init__(self, marks_doc: dict):
+        self.doc = marks_doc
+        self.text = marks_doc.get("text", "")
+        self.count = len(marks_doc.get("marks", ()))
+        self.starts = line_starts(self.text)
+        rows = [(mark["start"], position, mark["end"], mark["kind"])
+                for position, mark in enumerate(marks_doc.get("marks", ()))
+                if mark.get("kind") in SPAN_KINDS and "start" in mark]
+        rows.sort(key=lambda row: (row[0], row[1]))
+        self.rows = rows
+        self.row_starts = [row[0] for row in rows]
+
+
+_ROWS: _DocumentRows | None = None
+
+
+def _document_rows(marks_doc: dict) -> _DocumentRows:
+    global _ROWS
+    if (_ROWS is None or _ROWS.doc is not marks_doc or _ROWS.text is not marks_doc.get("text", "")
+            or _ROWS.count != len(marks_doc.get("marks", ()))):
+        _ROWS = _DocumentRows(marks_doc)
+    return _ROWS
+
+
 def spans_for(candidate: dict, marks_doc: dict) -> list[dict]:
     """In-window marked units, source-ordered, deduplicated by (start, end)."""
-    text = marks_doc.get("text", "")
-    starts = line_starts(text)
+    rows = _document_rows(marks_doc)
+    text, starts = rows.text, rows.starts
     lo, hi = candidate.get("window-lines") or [1, 1]
     begin = starts[lo - 1] if 0 <= lo - 1 < len(starts) else 0
     end = starts[hi] if hi < len(starts) else len(text)
 
     seen, out = set(), []
-    for mark in marks_doc.get("marks", ()):
-        if mark.get("kind") not in SPAN_KINDS or "start" not in mark:
-            continue
-        a, b = mark["start"], mark["end"]
-        if not (begin <= a and b <= end) or not (MIN_CHARS < b - a < MAX_CHARS):
+    for a, _position, b, kind in rows.rows[bisect_left(rows.row_starts, begin):bisect_right(rows.row_starts, end)]:
+        if not (b <= end) or not (MIN_CHARS < b - a < MAX_CHARS):
             continue
         if (a, b) in seen:
             continue
         seen.add((a, b))
-        line = max(1, sum(1 for st in starts if st <= a))
-        out.append({"kind": mark["kind"], "start": a, "end": b, "text": text[a:b],
+        line = max(1, bisect_right(starts, a))  # the line starts at or before a
+        out.append({"kind": kind, "start": a, "end": b, "text": text[a:b],
                     "line": line, "id": unit_id(line, text[a:b])})
     out.sort(key=lambda sp: (sp["start"], sp["end"]))
+    if not run_contract.lists_units():
+        # The selected contract numbers the units s1..sn at prompt time (mark7-v3).
+        return [{k: v for k, v in sp.items() if k not in ("line", "id")} for sp in out]
     # Two identical clauses on one line would share an id; the second gets a suffix.
     seen_ids: dict[str, int] = {}
     for sp in out:

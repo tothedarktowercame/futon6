@@ -191,10 +191,17 @@ def main(argv: list[str] | None = None) -> int:
     dropped = len(args.graphs) - len(graphs)
     if dropped:
         print(f"  ({dropped} rung-2 sidecar(s) refused — they are reports, not graphs)")
-    paths = [write_steps(path, args.out_dir, args.out) for path in graphs]
+    # A graph that cannot be segmented is that proof's failure: it is reported and the others
+    # are still written. It used to raise and stop S5, and with it the run.
+    paths = []
+    for graph in graphs:
+        try:
+            paths.append(write_steps(graph, args.out_dir, args.out))
+        except Exception as exc:
+            print(f"  SKIP {graph.name}: {type(exc).__name__}: {exc}", file=sys.stderr)
     for path in paths:
         print(path)
-    return 0
+    return 1 if graphs and not paths else 0
 
 
 if __name__ == "__main__":

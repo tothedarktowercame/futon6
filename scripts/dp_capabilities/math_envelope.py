@@ -8,9 +8,15 @@ CSEQ_RE = re.compile(r"\\([A-Za-z@]+)|\\([^A-Za-z\s])")
 # "Let $X$ be a <concept> ..." — the most regular binder in mathematics
 # (W2: was dark). Subject = the $-symbol; concept = the noun phrase to the
 # first clause boundary. Also catches "and $Y$ a <concept>" conjuncts.
+# \[ and \] delimit display math only when their backslash is not the second half
+# of a \\ line break: "\\[2pt]" is a line break with extra spacing. Read as \[, it
+# opened a "display" running to the next \], 45,301 characters in 1402.0031, and
+# the snap pass then removed every clause mark inside it. An even run of up to
+# four backslashes before it is line breaks followed by a real \[.
+_OWN_BACKSLASH = r"(?:(?<!\\)|(?<=(?<!\\)\\\\)|(?<=(?<!\\)\\\\\\\\))"
 DISPLAY_RE = re.compile(
     r"\\begin\{(equation|eqnarray|align|displaymath|gather|multline)\*?\}"
-    r"(.*?)\\end\{\1\*?\}|\\\[(.*?)\\\]", re.S)
+    r"(.*?)\\end\{\1\*?\}|" + _OWN_BACKSLASH + r"\\\[(.*?)" + _OWN_BACKSLASH + r"\\\]", re.S)
 
 LENGTH_UNITS = {"cm", "mm", "pt", "pc", "in", "ex", "em", "bp", "dd", "sp", "mu"}
 # text-mode commands whose brace argument is genuine TEXT MODE — prose, not math
@@ -157,6 +163,20 @@ def script_base_grounding(body, pos, ground_fn, base_off):
 # this only flips ungrounded->grounded at the ground() seam: no marks, no denom.
 _ASSIGN_RE = re.compile(r"([A-Za-z][A-Za-z0-9]*)\s*:=")
 _ASSIGN_SEP = re.compile(r"(?:\$|&|\\\\|\\quad|\\qquad|\\,|\\;|\\:|\[|^)\s*$")
+# _ASSIGN_SEP's separators as literals, so a prefix's tail can be read in place.
+_ASSIGN_SEPARATORS = ("$", "&", "\\\\", "\\quad", "\\qquad", "\\,", "\\;", "\\:", "[")
+
+
+def _standalone_lhs(text, start):
+    """_ASSIGN_SEP.search(text[:start]) without copying or scanning the prefix:
+    whitespace aside, the text before START is empty or ends at a math delimiter
+    or hard separator. Searching every copied prefix made the harvest quadratic in
+    the paper's length (minutes for one long paper)."""
+    i = start
+    while i > 0 and text[i - 1].isspace():
+        i -= 1
+    return i == 0 or any(i >= len(sep) and text.startswith(sep, i - len(sep), i)
+                         for sep in _ASSIGN_SEPARATORS)
 
 
 def harvest_display_assigns(text):
@@ -165,7 +185,7 @@ def harvest_display_assigns(text):
     the whole LHS, so a factor/subscript/diagram-internal letter is never taken."""
     defs = {}
     for m in _ASSIGN_RE.finditer(text):
-        if _ASSIGN_SEP.search(text[:m.start(1)]):
+        if _standalone_lhs(text, m.start(1)):
             defs.setdefault(m.group(1), []).append(m.start(1))
     for k in defs:
         defs[k].sort()

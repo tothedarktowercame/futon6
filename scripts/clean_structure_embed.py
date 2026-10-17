@@ -269,10 +269,16 @@ def main():
 
     ids, titles, macros, struct_rows, breakdowns, texts, text_srcs = [], [], [], [], [], [], []
     for f in files:
-        d = load_clean(f)
-        pid = kw(d["proof"])
-        vec, bd, boxes = structure_vector(d)
-        txt, src = proof_text(pid, boxes, args.apm_dir)
+        # A CLean that cannot be read or measured is that proof's failure: it is reported and
+        # left out of the embedding. It used to raise and fail S7, and so the run.
+        try:
+            d = load_clean(f)
+            pid = kw(d["proof"])
+            vec, bd, boxes = structure_vector(d)
+            txt, src = proof_text(pid, boxes, args.apm_dir)
+        except Exception as exc:
+            print(f"  SKIP {os.path.basename(f)}: {type(exc).__name__}: {exc}")
+            continue
         ids.append(pid)
         titles.append(str(d.get("title", "")))
         macros.append(bd["macro"])
@@ -327,12 +333,16 @@ def main():
     print(f"embedded {len(ids)} proofs  |  structure {S.shape}  text {T.shape} ({text_model})")
     print("\nstructure nearest-neighbor (top-1 each):")
     for pid in ids:
+        if not payload["structure_nn"][pid]:     # a lone proof has no neighbour
+            continue
         nn = payload["structure_nn"][pid][0]
         nn_macro = macros[ids.index(nn["id"])]
         print(f"  {pid:8s} ({macros[ids.index(pid)]:26s}) -> {nn['id']:8s} "
               f"({nn_macro:26s}) sim={nn['sim']}")
     print("\ntext nearest-neighbor (top-1 each):")
     for pid in ids:
+        if not payload["text_nn"][pid]:
+            continue
         nn = payload["text_nn"][pid][0]
         print(f"  {pid:8s} -> {nn['id']:8s} sim={nn['sim']}")
 

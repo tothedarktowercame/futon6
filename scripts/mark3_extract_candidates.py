@@ -21,12 +21,15 @@ import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parent))
 import futon6_config as config
+import paper_pool
 import stage_accounting as accounting
 
 
 import argparse
 import bisect
 import hashlib
+
+from functools import partial
 import json
 
 import candidate_spans
@@ -120,17 +123,84 @@ def window_text(text: str, starts: list[int], lo_line: int, hi_line: int) -> tup
     return text[start_char:end_char], [a, b]
 
 
+BINDER_CONTEXT_KINDS = {"let-binder", "bind/let", "definiendum", "definiens"}
+
+
+class _MarkRows:
+    """The rows of one paper's marks that the per-window helpers read, built once.
+
+    Every proof (S3) and every expository region (S4) of a paper asks for its
+    window's binders and enrichment. Scanning all of the paper's marks for each
+    window was quadratic in a long paper: 1,164 proofs over 960,969 marks in
+    math__0409584. Rows keep the marks' order where the answers depend on it.
+    """
+
+    def __init__(self, marks: list[dict[str, Any]], starts: list[int]):
+        self.marks, self.starts, self.count = marks, starts, len(marks)
+        self.binders: list[tuple[int, str]] = []            # (line, text), in marks order
+        enrich: list[tuple[int, int, str, str]] = []         # (line, marks position, kind, tip)
+        for position, m in enumerate(marks):
+            kind = m.get("kind")
+            if kind in BINDER_CONTEXT_KINDS and m.get("tip"):
+                self.binders.append((mark_line(m, starts), f"({m['kind']}) {m['tip']}"))
+            if kind in ENRICH_KINDS and m.get("tip"):
+                enrich.append((mark_line(m, starts), position, kind, m["tip"]))
+        enrich.sort()  # by line, then marks order
+        self.enrich = enrich
+        self.enrich_lines = [row[0] for row in enrich]
+
+
+_ROWS: _MarkRows | None = None
+
+
+def _rows(marks: list[dict[str, Any]], starts: list[int]) -> _MarkRows:
+    """The rows for these marks, kept while one paper's windows are extracted."""
+    global _ROWS
+    if _ROWS is None or _ROWS.marks is not marks or _ROWS.starts is not starts or _ROWS.count != len(marks):
+        _ROWS = _MarkRows(marks, starts)
+    return _ROWS
+
+
 def binder_context(marks: list[dict[str, Any]], starts: list[int], before_line: int) -> list[str]:
     """let-binders/definienda before the passage — the variable typing the model needs."""
     out = []
-    for m in marks:
-        if m.get("kind") in {"let-binder", "bind/let", "definiendum", "definiens"} \
-                and mark_line(m, starts) < before_line and m.get("tip"):
-            out.append(f"({m['kind']}) {m['tip']}")
-    return out[-12:]  # nearest dozen
+    for line, row in reversed(_rows(marks, starts).binders):  # the last dozen in marks order
+        if line < before_line:
+            out.append(row)
+            if len(out) == 12:
+                break
+    return out[::-1]  # nearest dozen
 
 
 BINDING_CAP = 24
+
+
+class _StratLines:
+    """Each symbol's occurrence lines and each term's use lines, when in line order.
+
+    A window's uses are then a slice found by bisection instead of a scan of every
+    occurrence of every symbol for every window; None keeps the scan for a list that
+    is not in line order."""
+
+    def __init__(self, strat: dict[str, Any]):
+        self.strat = strat
+
+        def ordered(rows):
+            lines = [r["line"] for r in rows]
+            return lines if all(a <= b for a, b in zip(lines, lines[1:])) else None
+
+        self.symbols = [ordered(edge["occurrences"]) for edge in strat["symbols"]]
+        self.terms = [ordered(term["uses"]) for term in strat["terms"]]
+
+
+_STRAT: _StratLines | None = None
+
+
+def _strat_lines(strat: dict[str, Any]) -> _StratLines:
+    global _STRAT
+    if _STRAT is None or _STRAT.strat is not strat:
+        _STRAT = _StratLines(strat)
+    return _STRAT
 
 
 def window_bindings(strat: dict[str, Any], lo_line: int, hi_line: int) -> list[str]:
@@ -142,8 +212,9 @@ def window_bindings(strat: dict[str, Any], lo_line: int, hi_line: int) -> list[s
     the rule that picked it, so an assumed binding says so.
     """
     out = []
-    for edge in strat["symbols"]:
-        uses = [o for o in edge["occurrences"] if lo_line <= o["line"] <= hi_line]
+    for edge, lines in zip(strat["symbols"], _strat_lines(strat).symbols):
+        uses = (edge["occurrences"][bisect.bisect_left(lines, lo_line):bisect.bisect_right(lines, hi_line)]
+                if lines is not None else [o for o in edge["occurrences"] if lo_line <= o["line"] <= hi_line])
         if not uses:
             continue
         bound = [o for o in uses if o["binder"] is not None]
@@ -162,8 +233,10 @@ def window_bindings(strat: dict[str, Any], lo_line: int, hi_line: int) -> list[s
 def window_terms(strat: dict[str, Any], lo_line: int, hi_line: int) -> list[str]:
     """Terms the paper defines that this window uses, with where they are defined."""
     out = []
-    for term in strat["terms"]:
-        used = [u for u in term["uses"] if lo_line <= u["line"] <= hi_line and not u["definition-site"]]
+    for term, lines in zip(strat["terms"], _strat_lines(strat).terms):
+        near = (term["uses"][bisect.bisect_left(lines, lo_line):bisect.bisect_right(lines, hi_line)]
+                if lines is not None else [u for u in term["uses"] if lo_line <= u["line"] <= hi_line])
+        used = [u for u in near if not u["definition-site"]]
         if used:
             out.append(f"{term['term']} — defined at L{term['line']}")
     return out[:BINDING_CAP]
@@ -175,12 +248,10 @@ def window_enrichment(marks: list[dict[str, Any]], starts: list[int],
     symbol->type groundings, definitions, quantifiers, proof-moves, citations. This
     is the enrichment that previously never reached the model (marks-path was a dead
     pointer); inlining it here is what makes the candidate self-contained."""
-    out = []
-    for m in marks:
-        if m.get("kind") in ENRICH_KINDS and m.get("tip"):
-            ln = mark_line(m, starts)
-            if lo_line <= ln <= hi_line:
-                out.append({"line": ln, "kind": m["kind"], "tip": m["tip"]})
+    rows = _rows(marks, starts)
+    # the window's rows are a slice by line; in marks order within a line, as before
+    window = rows.enrich[bisect.bisect_left(rows.enrich_lines, lo_line):bisect.bisect_right(rows.enrich_lines, hi_line)]
+    out = [{"line": line, "kind": kind, "tip": tip} for line, _position, kind, tip in window]
     out.sort(key=lambda r: (r["line"], r["kind"]))
     return out[:ENRICH_CAP]
 
@@ -225,7 +296,7 @@ STATEMENT_GAP = 20  # a statement ending further than this above its proof is no
 # v5: each span carries its line and an id cut from its text, and the prompt lists
 # them. Under v4 the ids were s1..sn, assigned positionally at prompt time and never
 # shown, so a node could only guess which unit it was citing.
-SCHEMA_PROOF = "iatc-candidate/v5-proof"  # one candidate per S1-identified proof
+SCHEMA_PROOF = run_contract.proof_candidate_schema()  # one candidate per S1-identified proof (v5-proof under mark7-v4)
 
 
 def proof_regions(marks: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -260,13 +331,14 @@ def extract_all(paper_id: str) -> list[dict[str, Any]]:
     starts = line_starts(text)
     marks = [m for m in data["marks"] if "start" in m and "end" in m]
     statements = sorted((m for m in marks if m.get("kind") in STATEMENT_KINDS), key=lambda m: m["start"])
+    statement_starts = [m["start"] for m in statements]
     strat = markup_strategies.strategies(text, marks)      # same name, same thing: bindings and terms
     cands = []
     for i, proof in enumerate(proof_regions(marks)):
         p_lo = line_for(starts, proof["start"])
         p_hi = line_for(starts, max(proof["start"], proof["end"] - 1))
-        before = [m for m in statements if m["start"] <= proof["start"]]
-        statement = before[-1] if before else None
+        k = bisect.bisect_right(statement_starts, proof["start"])  # the last statement starting by the proof
+        statement = statements[k - 1] if k else None
         lo = p_lo
         proved = None
         if statement is not None:
@@ -408,6 +480,15 @@ def record_reused_snapshot(doc: dict, outdir: Path, papers: list[str]) -> None:
                       paper=paper, artifacts=artifacts,
                       outputs=[row["proof-id"] for row in rows])
 
+def extract_paper(pid: str, all_proofs: bool = True) -> dict:
+    """One paper's candidates; runs in a worker process, so failures are returned."""
+    if not (MARKS_DIR / f"fable-{pid}-dp-emacs.json").exists():
+        return {"missing": True}
+    try:
+        return {"cands": extract_all(pid) if all_proofs else ([c] if (c := extract(pid)) else [])}
+    except Exception as exc:
+        return {"error": f"{type(exc).__name__}: {exc}", "message": str(exc)}
+
 
 def main() -> int:
     ap = argparse.ArgumentParser()
@@ -443,17 +524,18 @@ def main() -> int:
     # an errored item, not a silent omission from the frozen corpus.
     ledger = accounting.Accounting("S3", "extract", papers)
     manifest = []
-    for pid in papers:
-        if not (MARKS_DIR / f"fable-{pid}-dp-emacs.json").exists():
+    # Papers are extracted on every CPU the job may use; written, accounted and
+    # reported here in list order, as the serial loop did.
+    for pid, result in paper_pool.map_papers(partial(extract_paper, all_proofs=a.all_proofs), papers):
+        if result.get("missing"):
             ledger.record(pid, "errored", f"no S1 marks at {MARKS_DIR}", paper=pid)
             print(f"  ERROR {pid}: no marks")
             continue
-        try:
-            cands = extract_all(pid) if a.all_proofs else ([c] if (c := extract(pid)) else [])
-        except Exception as exc:
-            ledger.record(pid, "errored", f"extraction raised {type(exc).__name__}: {exc}", paper=pid)
-            print(f"  ERROR {pid}: {exc}")
+        if "error" in result:
+            ledger.record(pid, "errored", f"extraction raised {result['error']}", paper=pid)
+            print(f"  ERROR {pid}: {result['message']}")
             continue
+        cands = result["cands"]
         written = []
         for cand in cands:
             fid = cand.get("proof-id", pid)

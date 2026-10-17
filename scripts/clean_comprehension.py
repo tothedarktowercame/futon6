@@ -143,34 +143,34 @@ def main():
     for path in _graph_paths:
         pid = path.stem
         try:  # per-graph isolation: a single malformed graph (e.g. illegal EDN from the
-            # model) must not sink the whole comprehension batch
+            # model), or an unreadable steps, gap-map or candidate file for it, must not sink
+            # the whole comprehension batch
             res = r2d.check_graph(r2d.load_edn(path), path, substrate)
+            N = res["rate"]
+            nb = res["buckets"]
+            S_r3, sb = strategy_score(strategy_buckets(pid, steps_dir, rung3_dir, patterns),
+                                      args.thin_credit)
+            # prose-sourced recognition on the candidate source-window — strategy
+            # gestures live in the prose, not the distilled IATC claims (E-strategy-recognizer)
+            S_prose = None
+            cf = ROOT / args.candidates / f"{pid}.candidate.json"
+            if cf.exists():
+                window = json.load(open(cf)).get("source-window", "")
+                pb, _ = sr.recognize_text(window, vocab)
+                S_prose = sr.strat_score(pb, args.thin_credit)
+            cands = [x for x in (S_r3, S_prose) if x is not None]
+            S = max(cands) if cands else None   # comprehended if EITHER method grounds the strategy
+            ung, conj = sb.get("ungrounded", 0), sb.get("conjecture", 0)
+            v, comp = verdict(N, S, ung, conj, args.lo, args.hi)
+            rows.append({"pid": pid, "noun": N, "strategy": S, "strategy_rung3": S_r3,
+                         "strategy_prose": S_prose, "comprehension": comp,
+                         "verdict": v, "undefined_nouns": res["undefined"][:6],
+                         "ungrounded_moves": ung, "conjectures": conj,
+                         "noun_buckets": nb, "strategy_buckets": sb,
+                         "gap_to_ceiling": (None if comp is None else round(1 - comp, 3))})
         except Exception as exc:
             skipped.append((pid, str(exc)[:80]))
             print(f"  SKIP {pid}: {type(exc).__name__} {str(exc)[:80]}")
-            continue
-        N = res["rate"]
-        nb = res["buckets"]
-        S_r3, sb = strategy_score(strategy_buckets(pid, steps_dir, rung3_dir, patterns),
-                                  args.thin_credit)
-        # prose-sourced recognition on the candidate source-window — strategy
-        # gestures live in the prose, not the distilled IATC claims (E-strategy-recognizer)
-        S_prose = None
-        cf = ROOT / args.candidates / f"{pid}.candidate.json"
-        if cf.exists():
-            window = json.load(open(cf)).get("source-window", "")
-            pb, _ = sr.recognize_text(window, vocab)
-            S_prose = sr.strat_score(pb, args.thin_credit)
-        cands = [x for x in (S_r3, S_prose) if x is not None]
-        S = max(cands) if cands else None   # comprehended if EITHER method grounds the strategy
-        ung, conj = sb.get("ungrounded", 0), sb.get("conjecture", 0)
-        v, comp = verdict(N, S, ung, conj, args.lo, args.hi)
-        rows.append({"pid": pid, "noun": N, "strategy": S, "strategy_rung3": S_r3,
-                     "strategy_prose": S_prose, "comprehension": comp,
-                     "verdict": v, "undefined_nouns": res["undefined"][:6],
-                     "ungrounded_moves": ung, "conjectures": conj,
-                     "noun_buckets": nb, "strategy_buckets": sb,
-                     "gap_to_ceiling": (None if comp is None else round(1 - comp, 3))})
 
     # A run OWNS its output. --out defaults to a showcase path in the checkout,
     # which no caller overrides, so every run overwrote the same file: outside

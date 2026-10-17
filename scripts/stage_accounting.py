@@ -8,6 +8,16 @@ bulk transforms may defer writes and explicitly checkpoint once complete.
 
     <run>/accounting/<stage>/<invocation>/<stage>.<producer>.json
 
+A small document is rewritten whole after every checkpointed item. Rewriting a large
+one per item costs time in proportion to its size: S4's select spent hours rewriting
+JSON over 99,458 regions (2026-09-28) and now defers its writes, while the paid loops
+record each item and reach thousands of them. Past JOURNAL_ABOVE_BYTES such an item
+is instead appended as one line to
+`<stage>.<producer>.json.journal` beside the document, which is rewritten whole
+every JOURNAL_REWRITE_SECONDS and when the process ends, and the journal removed.
+`read` (and so `load`) folds any journal lines into the document, so every reader
+and every crash sees what a rewrite after each item gave.
+
 The runner decides acceptance from these documents. Two different things can be
 wrong with one, and conflating them halted a 124-paper mining run over three
 proofs the contract called circular:
@@ -28,8 +38,11 @@ ledger row, and every downstream stage expects only the items actually accepted.
 """
 from __future__ import annotations
 
+import atexit
 import json
 import os
+import threading
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -49,10 +62,33 @@ STAGES = {
     "S7": [("typing", "S3.loop")],
 }
 INVOCATION_ENV = "FUTON6_STAGE_INVOCATION"
+# Up to this size a document is rewritten whole after every item; past it, items go
+# to the journal between whole rewrites (see the module docstring).
+JOURNAL_ABOVE_BYTES = 1 << 20
+JOURNAL_REWRITE_SECONDS = 30.0
+JOURNAL_SUFFIX = ".journal"
 
 
 def filename(stage: str, producer: str) -> str:
     return f"{stage}.{producer}.json"
+
+
+def journal_path(path: Path) -> Path:
+    return path.with_name(path.name + JOURNAL_SUFFIX)
+
+
+def _now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _counts(items, expected) -> dict[str, int]:
+    items = list(items)
+    counts = {status: 0 for status in STATUSES}
+    for entry in items:
+        counts[entry["status"]] += 1
+    counts["expected"] = len(expected)
+    counts["unaccounted"] = len(set(expected) - {entry["id"] for entry in items})
+    return counts
 
 
 class Accounting:
@@ -67,6 +103,11 @@ class Accounting:
         self.stage, self.producer = stage, producer
         self.expected = list(dict.fromkeys(str(item) for item in expected))
         self.items: dict[str, dict] = {}
+        self.updated = _now()
+        self._lock = threading.RLock()
+        self._journal = None            # open journal while items wait there
+        self._written_bytes = 0         # size of the last whole-document write
+        self._written_at = 0.0          # time.monotonic() of that write
         directory = directory if directory is not None else os.environ.get(DIR_ENV)
         self.path = Path(directory) / filename(stage, producer) if directory else None
         if self.path is not None and self.path.exists():
@@ -78,48 +119,118 @@ class Accounting:
         item = str(item)
         if status not in STATUSES:
             raise ValueError(f"unknown accounting status {status!r} for {item}")
-        if item in self.items:
-            raise ValueError(f"{self.stage}.{self.producer}: {item} accounted twice")
-        if status in ("rejected", "errored", "deferred") and not reason:
-            raise ValueError(f"{self.stage}.{self.producer}: {status} {item} needs a reason")
-        self.items[item] = {"id": item, "status": status, "reason": reason,
-                            "paper": paper, "artifacts": [str(a) for a in artifacts],
-                            "outputs": [str(o) for o in outputs], "attempts": list(attempts)}
-        if checkpoint:
-            self.checkpoint()
+        with self._lock:
+            if item in self.items:
+                raise ValueError(f"{self.stage}.{self.producer}: {item} accounted twice")
+            if status in ("rejected", "errored", "deferred") and not reason:
+                raise ValueError(f"{self.stage}.{self.producer}: {status} {item} needs a reason")
+            entry = {"id": item, "status": status, "reason": reason,
+                     "paper": paper, "artifacts": [str(a) for a in artifacts],
+                     "outputs": [str(o) for o in outputs], "attempts": list(attempts)}
+            self.items[item] = entry
+            self.updated = _now()
+            if not checkpoint:          # deferred by the caller, which checkpoints once complete
+                return
+            if (self.path is None or self._written_bytes <= JOURNAL_ABOVE_BYTES
+                    or time.monotonic() - self._written_at >= JOURNAL_REWRITE_SECONDS):
+                self.checkpoint()
+            else:
+                self._append_to_journal(entry)
 
     def counts(self) -> dict[str, int]:
-        counts = {status: 0 for status in STATUSES}
-        for entry in self.items.values():
-            counts[entry["status"]] += 1
-        counts["expected"] = len(self.expected)
-        counts["unaccounted"] = len(set(self.expected) - set(self.items))
-        return counts
+        return _counts(self.items.values(), self.expected)
 
     def document(self) -> dict:
         return {"schema": SCHEMA, "stage": self.stage, "producer": self.producer,
                 "invocation": os.environ.get(INVOCATION_ENV),
-                "updated": datetime.now(timezone.utc).isoformat(),
+                "updated": self.updated,
                 "expected": self.expected, "counts": self.counts(),
                 "items": list(self.items.values())}
 
     def checkpoint(self):
+        """Write the whole document; items waiting in the journal are then in it."""
         if self.path is None:
             return
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        partial = self.path.with_suffix(".partial")
-        partial.write_text(json.dumps(self.document(), indent=1) + "\n")
-        os.replace(partial, self.path)
+        with self._lock:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            text = json.dumps(self.document(), indent=1) + "\n"
+            partial = self.path.with_suffix(".partial")
+            partial.write_text(text)
+            os.replace(partial, self.path)
+            self._written_bytes = len(text)
+            self._written_at = time.monotonic()
+            self._close_journal(remove=True)
+
+    def _append_to_journal(self, entry: dict):
+        if self._journal is None:
+            self._journal = open(journal_path(self.path), "a", encoding="utf-8")
+            _WAITING[id(self)] = self
+        self._journal.write(json.dumps({"updated": self.updated, "item": entry}) + "\n")
+        self._journal.flush()
+
+    def _close_journal(self, *, remove: bool):
+        if self._journal is None:
+            return
+        self._journal.close()
+        self._journal = None
+        _WAITING.pop(id(self), None)
+        if remove:
+            journal_path(self.path).unlink(missing_ok=True)
 
     def failed(self) -> bool:
         return any(e["status"] in ("rejected", "errored") for e in self.items.values())
+
+
+# Accountings with items still only in their journal; written whole when the process ends.
+_WAITING: dict[int, Accounting] = {}
+
+
+@atexit.register
+def _write_waiting_documents():
+    for ledger in list(_WAITING.values()):
+        if ledger.path.parent.is_dir():
+            ledger.checkpoint()
+        else:                               # its directory is gone; nothing left to complete
+            ledger._close_journal(remove=False)
+
+
+def read(path: Path) -> dict:
+    """The accounting document at `path`, with any items still in its journal.
+
+    What this returns is what the document held when it was rewritten after every
+    item: the journal's items in order, its last `updated`, and counts over both. A
+    line cut short by a killed process is dropped, as that item's rewrite would have
+    been.
+    """
+    path = Path(path)
+    doc = json.loads(path.read_text())
+    journal = journal_path(path)
+    if not journal.is_file():
+        return doc
+    seen = {entry["id"] for entry in doc.get("items") or ()}
+    added = False
+    for line in journal.read_text(encoding="utf-8").splitlines():
+        try:
+            row = json.loads(line)
+            entry = row["item"]
+        except (ValueError, KeyError, TypeError):
+            continue
+        if entry["id"] in seen:              # also in the document already
+            continue
+        doc["items"].append(entry)
+        seen.add(entry["id"])
+        doc["updated"] = row["updated"]
+        added = True
+    if added:
+        doc["counts"] = _counts(doc["items"], doc["expected"])
+    return doc
 
 
 def load(directory: Path, stage: str, producer: str) -> dict:
     path = Path(directory) / filename(stage, producer)
     if not path.is_file():
         raise ValueError(f"missing accounting {path.name} in {directory}")
-    doc = json.loads(path.read_text())
+    doc = read(path)
     if (doc.get("schema"), doc.get("stage"), doc.get("producer")) != (SCHEMA, stage, producer):
         raise ValueError(f"{path}: accounting schema/stage/producer mismatch")
     return doc

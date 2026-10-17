@@ -51,38 +51,59 @@ def base_vocab():
     return {"tactics": {}, "heuristic": heur, "residue": [], "conjecture": []}
 
 
-def harvest_cues():
+def _paper_text(pid):
+    """(True, dpv's text of a paper), or (False, why it could not be built)."""
+    try:
+        return True, dpv.build(pid)["text"]
+    except Exception as e:
+        return False, str(e)
+
+
+def _paper_lines(texts, pid):
+    built, text = texts[pid]
+    try:
+        return text.split("\n") if built else []
+    except Exception:
+        return []
+
+
+def paper_texts(pids, workers=None):
+    """pid -> `_paper_text(pid)`, each paper built once in a worker process on the CPUs the job
+    may use. dpv.build() re-parses the whole paper (seconds a paper), and this stage reads every
+    scope's paper and every measured paper."""
+    import paper_pool
+    return dict(paper_pool.map_in_order(_paper_text, list(dict.fromkeys(pids)), workers))
+
+
+def _scope_pid(f):
+    # split("_")[0] collapsed old-style ids (math__0310337 -> "math") and
+    # aborted the stage on the missing eprint (H19b); one shared parser now.
+    try:
+        import sys as _sys
+        _h = os.path.dirname(os.path.abspath(__file__))
+        if _h not in _sys.path:
+            _sys.path.insert(0, _h)
+        from paper_ids import paper_id_from_name
+        return paper_id_from_name(f)
+    except Exception:
+        return os.path.basename(f).split("_")[0]
+
+
+def harvest_cues(texts=None):
     """The corpus's own expository signals: discourse-marker phrases in the classified
-    scope spans (3-word windows around a discourse stem)."""
+    scope spans (3-word windows around a discourse stem). `texts` holds the papers already
+    built (`paper_texts`); the scopes' papers are built otherwise."""
     cues = Counter()
     # dpv.build() re-parses the whole paper; without a cache this ran once per
     # SCOPE FILE rather than once per PAPER. On 12 papers / 280 scopes that is a
     # 23x waste; at 4,616 papers x ~30 regions it is ~138k rebuilds and the stage
-    # never finishes (E-superpod-hardening H20, 2026-08-06). Same cache shape
-    # iatc_lexicon_harvest._text_lines already uses.
-    _text_cache = {}
-
-    def _lines_for(pid):
-        if pid not in _text_cache:
-            try:
-                _text_cache[pid] = dpv.build(pid)["text"].split("\n")
-            except Exception:
-                _text_cache[pid] = []
-        return _text_cache[pid]
-
-    for f in glob.glob(os.path.join(SCOPES, "*.edn")):
-        # split("_")[0] collapsed old-style ids (math__0310337 -> "math") and
-        # aborted the stage on the missing eprint (H19b); one shared parser now.
-        try:
-            import sys as _sys
-            _h = os.path.dirname(os.path.abspath(__file__))
-            if _h not in _sys.path:
-                _sys.path.insert(0, _h)
-            from paper_ids import paper_id_from_name
-            pid = paper_id_from_name(f)
-        except Exception:
-            pid = os.path.basename(f).split("_")[0]
-        lines = _lines_for(pid) if pid else []
+    # never finishes (E-superpod-hardening H20, 2026-08-06). Each paper is built once.
+    files = glob.glob(os.path.join(SCOPES, "*.edn"))
+    pids = [_scope_pid(f) for f in files]
+    if texts is None:
+        texts = paper_texts([pid for pid in pids if pid])
+    for f, pid in zip(files, pids):
+        lines = _paper_lines(texts, pid) if pid else []
         t = open(f).read()
         lm = re.search(r":lines \[(\d+) (\d+)\]", t)
         if not lm or not lines:
@@ -97,10 +118,7 @@ def harvest_cues():
 
 
 def score(vocab, windows):
-    bs = Counter()
-    for w in windows:
-        b, _ = sr.recognize_text(w, vocab)
-        bs.update(b)
+    bs = sr.bucket_counts(vocab, windows)
     g, t, u = bs["grounded"], bs["thin"], bs["ungrounded"]
     tot = g + t + u
     return {"thin": t, "ungrounded": u, "expository-move-recognition": round(t / tot, 3) if tot else 0.0}
@@ -117,23 +135,26 @@ def main():
                           "any run but the original (E-superpod-hardening H19c)")
     _a = _ap.parse_args()
     SCOPES = _a.scopes if os.path.isabs(_a.scopes) else os.path.join(ROOT, _a.scopes)
-    base = base_vocab()
-    cues = harvest_cues()
-    print(f"base expository cues: {sum(len(v) for v in base['heuristic'].values())} "
-          f"across {len(base['heuristic'])} kinds")
-    print(f"harvested corpus discourse-cues ({len(cues)}): {', '.join(cues)}\n")
-    aug = {**base, "heuristic": {**base["heuristic"], "corpus-discourse": cues}}
     # measure over the goldens' expository prose (full dpv text; proof sentences stay
     # ungrounded in both, so the delta is the pure expository-cue lift)
     pids = ["0705.0452", "0706.1286", "0708.2185", "0712.0724", "0801.0199"]
     if _a.measure_ids:
         pids = [ln.strip() for ln in open(_a.measure_ids) if ln.strip()]
+    scope_pids = [_scope_pid(f) for f in glob.glob(os.path.join(SCOPES, "*.edn"))]
+    texts = paper_texts([pid for pid in scope_pids if pid] + pids)
+    base = base_vocab()
+    cues = harvest_cues(texts)
+    print(f"base expository cues: {sum(len(v) for v in base['heuristic'].values())} "
+          f"across {len(base['heuristic'])} kinds")
+    print(f"harvested corpus discourse-cues ({len(cues)}): {', '.join(cues)}\n")
+    aug = {**base, "heuristic": {**base["heuristic"], "corpus-discourse": cues}}
     windows = []
     for p in pids:            # a missing eprint must not abort the stage
-        try:
-            windows.append(dpv.build(p)["text"])
-        except Exception as e:
-            print(f"  (skip {p}: {e})")
+        built, text = texts[p]
+        if built:
+            windows.append(text)
+        else:
+            print(f"  (skip {p}: {text})")
     if not windows:
         print("no measurable papers — skipping expository reground lift")
         return

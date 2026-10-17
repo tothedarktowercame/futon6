@@ -21,6 +21,7 @@ import json
 import os
 import re
 from collections import Counter
+from functools import partial
 import edn_format as edn
 
 
@@ -45,14 +46,33 @@ def load_vocab(path):
             "conjecture": [str(x) for x in v["conjecture-markers"]]}
 
 
+# Compiled once per process. `re` keeps 512 compiled patterns, and a vocabulary augmented with a
+# corpus's harvested cues holds thousands, so `re.search(p, text)` recompiled nearly every pattern
+# for every sentence (run mark7rhgrh100-20260928: about 54 of S10's 87 minutes).
+_MATCHERS: dict = {}
+
+
+def _matcher(pattern):
+    """`pattern` as `matches` applies it: a compiled regular expression, or the pattern itself
+    where the test is a substring test - a pattern without regex syntax, whose regex search is
+    that test, or one that is not a valid regex."""
+    found = _MATCHERS.get(pattern)
+    if found is None:
+        found = pattern
+        if re.escape(pattern) != pattern:
+            try:
+                found = re.compile(pattern)
+            except re.error:
+                pass
+        _MATCHERS[pattern] = found
+    return found
+
+
 def matches(text, patterns):
     for p in patterns:
-        try:
-            if re.search(p, text):
-                return p
-        except re.error:
-            if p in text:
-                return p
+        m = _matcher(p)
+        if (p in text) if isinstance(m, str) else m.search(text):
+            return p
     return None
 
 
@@ -92,6 +112,27 @@ def recognize_text(text, vocab):
         if bucket == "grounded" and t:
             tac[t] += 1
     return b, tac
+
+
+def _window_buckets(vocab, windows):
+    total = Counter()
+    for window in windows:
+        total.update(recognize_text(window, vocab)[0])
+    return total
+
+
+def bucket_counts(vocab, windows, workers=None):
+    """The buckets of every sentence of `windows`, summed. Chunks of windows go to worker
+    processes on the CPUs the job may use; a sum does not depend on how they were split."""
+    import futon6_config as config
+    import paper_pool
+    windows = list(windows)
+    count = max(1, min(workers or config.workers(), len(windows)))
+    chunks = [windows[i::4 * count] for i in range(4 * count)] if count > 1 else [windows]
+    total = Counter()
+    for _chunk, part in paper_pool.map_in_order(partial(_window_buckets, vocab), chunks, count):
+        total.update(part)
+    return total
 
 
 def strat_score(b, thin_credit=0.5):

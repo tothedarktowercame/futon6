@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import re
 import shlex
 import shutil
 import subprocess
@@ -153,8 +154,11 @@ def warp() -> Path:
 
 def subject() -> str:
     """The MSC-class slug the vocabulary describes; it names the term prior and the
-    encyclopedia (`ct` = math.CT)."""
-    return os.environ.get("FUTON6_SUBJECT") or "ct"
+    encyclopedia (`ct` = math.CT). A plain name, since it becomes part of file names."""
+    name = os.environ.get("FUTON6_SUBJECT") or "ct"
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", name):
+        raise ValueError(f"FUTON6_SUBJECT must be a plain name, not {name!r}")
+    return name
 
 
 def subject_data() -> Path:
@@ -177,6 +181,17 @@ def prose_source() -> str:
     if source not in PROSE_SOURCES:
         raise ValueError(f"FUTON6_PROSE_SOURCE must be one of {PROSE_SOURCES}, not {source!r}")
     return source
+
+
+def workers() -> int:
+    """Worker processes a per-paper CPU stage runs: FUTON6_WORKERS, else every CPU this job may use."""
+    requested = os.environ.get("FUTON6_WORKERS")
+    if requested and requested.isdigit() and int(requested) > 0:
+        return int(requested)
+    try:
+        return len(os.sched_getaffinity(0))
+    except (AttributeError, OSError):
+        return os.cpu_count() or 1
 
 
 def python_argv() -> list[str]:
@@ -299,8 +314,11 @@ def _requested_devices() -> tuple[list[str], str, str]:
 
 
 # Where the run happened, not what it ran on. Recorded, never pinned: a resume is
-# always a different job and may be a different node.
-VOLATILE_HARDWARE_FIELDS = ("slurm-job", "node")
+# always a different job and may be a different node, and Slurm may hand it a
+# different GPU of the same kind ("requested" is the indices it assigned; the
+# count stays pinned). Pinning the indices refused a resume whose next job got
+# GPU 4 instead of GPU 0.
+VOLATILE_HARDWARE_FIELDS = ("slurm-job", "node", "requested")
 
 
 def hardware() -> dict:
@@ -497,6 +515,9 @@ def effective() -> dict:
         "eprints": str(eprints()),
         "anatomy": str(anatomy()),
         "concept-authority": str(authority()),
+        "subject": subject(),
+        "warp": str(warp()),
+        "concept-encyclopedia": str(concept_encyclopedia()),
         "scopes": str(path("FUTON6_SCOPES", storage() / "mark2/ct-fresh-scopes")),
         "ner-terms": str(path("FUTON6_NER_TERMS", storage() / "mark2/ct-handoff/output/ner-terms.json")),
         "siblings": {name: str(sibling(name)) for name in

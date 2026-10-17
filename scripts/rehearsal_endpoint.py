@@ -10,6 +10,9 @@ Nothing produced against it is evidence about extraction quality or acceptance:
 its answers are synthetic. Runs against it should use MODEL=rehearsal-double, so
 the run manifest records that no model was involved.
 
+Like vLLM it also serves /tokenize at the origin, which S3 asks before every call;
+it counts about four characters a token and reports the context the run contract pins.
+
   python scripts/rehearsal_endpoint.py --port 8765
   OPENAI_BASE_URL=http://127.0.0.1:8765/v1 MODEL=rehearsal-double ...
 """
@@ -20,6 +23,8 @@ import hashlib
 import json
 import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+import run_contract
 
 
 def _seed(text: str) -> int:
@@ -62,6 +67,11 @@ def nodes_document(schema: dict, seed: int) -> dict:
                       for i in range(n)]}
 
 
+# S3 refuses an endpoint whose context is not the contract's, so the stand-in serves that
+# context, read as mark3_iatc_loop reads it.
+CONTEXT_TOKENS = int(os.environ.get("FUTON6_MODEL_CONTEXT_TOKENS")
+                     or run_contract.spec()["decoding"].get("context-tokens", 16384))
+
 # Every Nth proof comes back circular, to rehearse the refusal path. Off by default.
 CYCLE_EVERY = int(os.environ.get("FUTON6_REHEARSAL_CYCLE_EVERY", "0") or "0")
 
@@ -72,14 +82,23 @@ def derivations_document(schema: dict, seed: int) -> dict:
     nodes = sorted(int(k) for k in properties)
     kinds = ["stated", "citation", "missing"]
     derivations = {}
-    for i, node in enumerate(nodes[1:], start=1):
+    for i, node in enumerate(nodes, start=1):
         entry = properties[str(node)]["items"]["properties"]
+        # Each node from the latest node it may cite. Since 2026-10-01 the schema lists
+        # the derivable nodes 2..n, each citing only nodes before it.
+        earlier = entry["premises"]["items"].get("enum", [])
+        if not earlier:
+            continue
         line = entry["first_line"]
-        derivations[str(node)] = [{"relation": "implies", "premises": [nodes[i - 1]],
+        derivations[str(node)] = [{"relation": "implies", "premises": [earlier[-1]],
                                    "warrant_kind": kinds[(seed + i) % 3],
                                    "warrant": f"rehearsal warrant {seed % 100000}-{i}",
                                    "first_line": line["minimum"], "last_line": line["maximum"]}]
-    if CYCLE_EVERY and len(nodes) > 2 and seed % CYCLE_EVERY == 0:
+    first_cites = properties[str(nodes[0])]["items"]["properties"]["premises"]["items"].get("enum", []) \
+        if nodes else []
+    # That schema cannot express a cycle at all, so the circular answer below is given
+    # only where the schema lets the first node cite the second (as before 2026-10-01).
+    if CYCLE_EVERY and len(nodes) > 2 and seed % CYCLE_EVERY == 0 and nodes[1] in first_cites:
         # Derive the first node from the second as well, so the pair is circular.
         # A double that can only return acceptable output cannot rehearse what the
         # run does with a refusal, which is the half of the pipeline that failed.
@@ -91,13 +110,45 @@ def derivations_document(schema: dict, seed: int) -> dict:
     return {"derivations": derivations}
 
 
-def scopes_document(schema: dict, seed: int) -> dict:
+def unit_text(prompt_text: str, unit: str) -> str:
+    """A unit's words as the S4 prompt lists them ("  <id>  <text>"), or "" if not listed."""
+    prefix = f"  {unit}  "
+    for line in prompt_text.splitlines():
+        if line.startswith(prefix):
+            return line[len(prefix):].strip()
+    return ""
+
+
+def scopes_document(schema: dict, seed: int, prompt_text: str = "") -> dict:
+    # A scope is filled or held (expository_json's anyOf); the filled branch's properties
+    # carry its anchor: the units it cites, or its lines for a pre-v2 candidate.
     items = schema["properties"]["scopes"]["items"]
     item = items.get("anyOf", [items])[0]["properties"]
-    lo, hi = item["first_line"]["minimum"], item["first_line"]["maximum"]
     kinds = item["kind"]["enum"]
-    return {"scopes": [{"kind": kinds[seed % len(kinds)], "first_line": lo, "last_line": hi,
+    kind = kinds[seed % len(kinds)]
+    if "units" in item:
+        # Scopes that cite units must quote their fill from them, as
+        # mark3_expository_loop.call_stub does; a unit the prompt does not list is held.
+        ids = item["units"]["items"]["enum"]
+        unit = ids[seed % len(ids)]
+        quote = unit_text(prompt_text, unit)[:120]
+        return {"scopes": [{"kind": kind, "units": [unit], "fill": quote,
+                            "held_reason": "" if quote else f"rehearsal held {seed % 100000}"}]}
+    lo, hi = item["first_line"]["minimum"], item["first_line"]["maximum"]
+    return {"scopes": [{"kind": kind, "first_line": lo, "last_line": hi,
                         "fill": f"rehearsal fill {seed % 100000}", "held_reason": ""}]}
+
+
+def token_count(body: dict) -> int:
+    """A /tokenize count that grows with the prompt, so a prompt too long for the context
+    is refused against the stand-in as it would be against the served model."""
+    messages = body.get("messages")
+    if isinstance(messages, list):
+        text = "\n".join(m["content"] for m in messages
+                         if isinstance(m, dict) and isinstance(m.get("content"), str))
+    else:
+        text = str(body.get("prompt") or "")
+    return max(1, len(text) // 4)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -120,6 +171,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
+        if self.path.rstrip("/").endswith("/tokenize"):
+            return self._send({"count": token_count(body), "max_model_len": CONTEXT_TOKENS})
         prompt = json.dumps(body.get("messages", []))
         seed = _seed(prompt)
         fmt = (body.get("response_format") or {}).get("json_schema")
@@ -130,7 +183,9 @@ class Handler(BaseHTTPRequestHandler):
             elif name == "iatc_proof":
                 content = derivations_document(schema, seed)
             elif name == "expository_region":
-                content = scopes_document(schema, seed)
+                messages = body.get("messages", [])
+                content = scopes_document(schema, seed, "\n".join(
+                    m["content"] for m in messages if isinstance(m, dict) and isinstance(m.get("content"), str)))
             else:
                 content = instance(schema, seed)
             text, tokens = json.dumps(content), 64

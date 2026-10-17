@@ -116,8 +116,8 @@ def main():
         try:
             for w in collect_wanted(f):
                 slug_papers.setdefault(w, set()).add(pid)
-        except Exception:
-            pass
+        except Exception as exc:     # logged, not silent: the graph is skipped, the stage goes on
+            print(f"  SKIP {pid}: {type(exc).__name__}: {exc}")
 
     slugs = sorted(slug_papers)
     if not slugs:

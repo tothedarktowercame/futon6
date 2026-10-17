@@ -60,11 +60,21 @@ def cluster_cues(lex, min_count=2, top=None):
     return [w for w, c in ranked if c >= min_count]
 
 
+def candidate_windows(cand_dir):
+    """The source windows of the candidates in cand_dir. A candidate that cannot be read is
+    reported and left out; one such file used to raise and stop S10, and S12, which measures
+    with the same windows."""
+    windows = []
+    for f in glob.glob(os.path.join(cand_dir, "*.candidate.json")):
+        try:
+            windows.append(str(json.load(open(f)).get("source-window") or ""))
+        except (OSError, ValueError, AttributeError) as exc:
+            print(f"  SKIP {os.path.basename(f)}: {type(exc).__name__}: {exc}", file=sys.stderr)
+    return windows
+
+
 def score(vocab, windows):
-    bs = Counter()
-    for w in windows:
-        b, _ = sr.recognize_text(w, vocab)
-        bs.update(b)
+    bs = sr.bucket_counts(vocab, windows)
     g, t, u = bs["grounded"], bs["thin"], bs["ungrounded"]
     tot = g + t + u
     return {"grounded": g, "thin": t, "ungrounded": u,
@@ -86,10 +96,8 @@ def main():
     print("  " + ", ".join(cues) + "\n")
     vocab = sr.load_vocab(os.path.join(ROOT, "holes/clean/tactic-gesture-vocab.edn"))
     aug = {**vocab, "heuristic": {**vocab["heuristic"], "corpus-move": cues}}
-    windows = [json.load(open(f)).get("source-window", "")
-               for f in glob.glob(os.path.join(
-                   _a.candidates if os.path.isabs(_a.candidates) else os.path.join(ROOT, _a.candidates),
-                   "*.candidate.json"))]
+    windows = candidate_windows(_a.candidates if os.path.isabs(_a.candidates)
+                                else os.path.join(ROOT, _a.candidates))
     print(f"measuring proof-move grounding over {len(windows)} proof windows:\n")
     base = score(vocab, windows)
     augd = score(aug, windows)

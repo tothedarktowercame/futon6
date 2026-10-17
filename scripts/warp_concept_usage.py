@@ -43,8 +43,9 @@ def main(argv=None):
     progress = int(argv[argv.index("--progress") + 1]) if "--progress" in argv else 500
     concepts = {h["concept"] for h in json.load(open(W / "hitlist.json"))["hitlist"]}
     # An empty hitlist is a real outcome, not an error: a corpus that defines
-    # nothing (the APM informal proofs, 2026-10-15) grounds no concept. Scan
-    # anyway so concept-usage.json records the papers read, with no concepts.
+    # nothing (the APM informal proofs, 2026-10-15; a 2-paper rehearsal) grounds
+    # no concept. Scan anyway so concept-usage.json records the papers read, with
+    # no concepts.
     maxn = max((len(c.split()) for c in concepts), default=0)
     paper_use = {}
     scanned_ids = []

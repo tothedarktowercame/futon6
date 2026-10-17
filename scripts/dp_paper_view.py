@@ -17,6 +17,7 @@ _sys.path.insert(0, str(_Path(__file__).resolve().parents[0]))
 import futon6_config as config
 
 
+from bisect import bisect_right
 import json
 import re
 import os
@@ -68,6 +69,7 @@ from dp_capabilities.math_envelope import (
     mathalpha_regions,
     script_base_grounding,
 )
+from dp_capabilities.intervals import Extents
 from dp_capabilities.proof_moves import detect_proof_moves
 from dp_capabilities.references import _harvest_labels, detect_references
 from dp_capabilities.scopes import detect_scope_manifest
@@ -530,7 +532,7 @@ def _last_clause(raw, base):
 def detect_inferences(text, marks):
     proofs = [(m["start"], m["end"]) for m in marks
               if str(m.get("kind", "")) in _PROOF_KINDS]
-    in_proof = lambda p: any(a <= p < b for a, b in proofs)
+    in_proof = Extents(proofs).hold  # any(a <= p < b for a, b in proofs)
     # Illatives fire in FREE BODY too, not only inside proof/theorem envs — a
     # paper can carry its whole argument in running prose with no \begin{proof}
     # (e.g. 1005.2653). We no longer gate on in_proof; instead we tag each
@@ -539,9 +541,16 @@ def detect_inferences(text, marks):
     # recorded rather than used to drop the mark.
     register = lambda p: "deductive" if in_proof(p) else "body"
 
+    # A break of the whole text that ends by p is also a break of text[:p] (the
+    # pattern never reads past its own match), so only the stretch after the last
+    # such break is rescanned, as if the text ended at p. Rescanning every prefix
+    # made this quadratic in the paper's length.
+    break_ends = [b.end() for b in _BREAK_RE.finditer(text)]
+
     def sent_bounds(p):
-        lo = 0
-        for b in _BREAK_RE.finditer(text[:p]):
+        k = bisect_right(break_ends, p)
+        lo = break_ends[k - 1] if k else 0
+        for b in _BREAK_RE.finditer(text, lo, p):
             lo = b.end()
         m = _BREAK_RE.search(text, p)
         return lo, (m.start() if m else len(text))
@@ -726,17 +735,19 @@ def detect_inferences(text, marks):
         return any(sp[0] <= mid < sp[1]
                    for sp in (outer["subj_span"], outer["obj_span"]))
 
+    # Whether A nests B depends on the spans alone, never on "nest", so the pairs
+    # are found once instead of on each of the four passes; the passes then make
+    # the same updates in the same order.
+    feeders = [[A for A in infs if A is not B and (
+                    _arrow_in(A, B)
+                    or (not _arrow_in(B, A) and A["start"] < B["start"]
+                        and A["obj_span"][0] < B["subj_span"][1]
+                        and B["subj_span"][0] < A["obj_span"][1]))]
+               for B in infs]
     for _ in range(4):
-        for B in infs:
-            for A in infs:
-                if A is B:
-                    continue
-                contained = _arrow_in(A, B)
-                chain = (not _arrow_in(B, A) and A["start"] < B["start"]
-                         and A["obj_span"][0] < B["subj_span"][1]
-                         and B["subj_span"][0] < A["obj_span"][1])
-                if contained or chain:
-                    B["nest"] = max(B["nest"], A["nest"] + 1)
+        for B, into in zip(infs, feeders):
+            for A in into:
+                B["nest"] = max(B["nest"], A["nest"] + 1)
     return out
 
 
@@ -811,6 +822,12 @@ def expand_macro(cs: str, macros: dict, depth: int = 4) -> str:
     return body[:80]
 
 
+class EprintNotFound(FileNotFoundError):
+    """No e-print is held for the paper. build() raised SystemExit for this, which no caller's
+    `except Exception` catches: S1's pool re-raised it and ended S1 for every paper, and S10's
+    "a missing eprint must not abort the stage" guard aborted the stage."""
+
+
 def build(paper: str, with_ca: bool = False, with_binders: bool = False,
           with_scopes: bool = False, with_xref: bool = False) -> dict:
     ca = None
@@ -838,7 +855,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
         if eprint is not None:
             break
     if eprint is None:
-        raise SystemExit(f"no eprint for {paper} under {EPRINTS}")
+        raise EprintNotFound(f"no eprint for {paper} under {EPRINTS}")
 
     files, _meta = sweep.read_eprint_files(eprint)
     # Inline \(...\) read as $...$ by every detector below, offsets unchanged
@@ -956,11 +973,13 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
                         _add_binding(sym, typ, pos)
         for k in bindings:
             bindings[k].sort()
+    binding_positions = {k: [p for p, _lab in v] for k, v in bindings.items()}
 
     def ground(sym, g):
         """Latest binding of SYM at-or-before global offset G (its scope)."""
-        cand = [(p, lab) for p, lab in bindings.get(sym, []) if p <= g]
-        return cand[-1][1] if cand else None
+        # bindings[sym] is sorted, so its at-or-before entries are a prefix of it.
+        at = bisect_right(binding_positions.get(sym, ()), g)
+        return bindings[sym][at - 1][1] if at else None
 
     # REFERENCE GRAPH pre-pass: collect every \label key across the WHOLE paper
     # first, so a \ref to a forward label (later section/file) still resolves.
@@ -972,6 +991,9 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     for f in tex_files:
         base = bases[f["file"]]
         ftext = f["text"]
+        # Environments and displays are found in the text with its comments
+        # blanked (same offsets): commented-out LaTeX is not the paper's structure.
+        structure_text = sweep.mask_comments(ftext)
         bm = []
         sm = []
         if with_binders:
@@ -986,7 +1008,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             # scope-manifest-only pass to binder marks too, then reconcile the
             # two structural layers so manifest-vs-binder scopes never cross.
             spans = [(base + s, base + e) for s, e, _d, _b in sweep.math_spans(ftext)]
-            spans += [(base + dm.start(), base + dm.end()) for dm in DISPLAY_RE.finditer(ftext)]
+            spans += [(base + dm.start(), base + dm.end()) for dm in DISPLAY_RE.finditer(structure_text)]
             structural = _snap_marks_to_math_atoms(bm + sm, spans)
             structural = _clamp_structural_sentence_markers(structural, text)
             structural = _snap_marks_to_math_atoms(structural, spans)
@@ -1002,7 +1024,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
         # this pass; DO mark the whole thing a display-math scope and surface
         # the variables it relates (+ := => a definition). "Going inside" the
         # mess: at minimum, this is a display equation relating these symbols.
-        for dm in DISPLAY_RE.finditer(ftext):
+        for dm in DISPLAY_RE.finditer(structure_text):
             envname = dm.group(1) or "\\[ \\]"
             dbody = dm.group(2) or dm.group(3) or ""
             counts["display"] = counts.get("display", 0) + 1
@@ -1066,7 +1088,7 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
             counts["implies"] = counts.get("implies", 0) + 1
             marks.append(imark)
         # DC-9: LaTeX environment scopes (\begin..\end, delimiters included).
-        for emark in detect_tex_environments(ftext, base, learned_envs):
+        for emark in detect_tex_environments(structure_text, base, learned_envs):
             counts[emark["kind"]] = counts.get(emark["kind"], 0) + 1
             marks.append(emark)
         # REFERENCE GRAPH (Joe): \label/\ref/\cite harvest — the in-paper
@@ -1210,21 +1232,22 @@ def build(paper: str, with_ca: bool = False, with_binders: bool = False,
     # Author proof-delimiter macros (\prf…\eprf) → proof regions, BEFORE the
     # inference pass (which is proof-restricted).
     seen_starts = {(m["kind"], m["start"]) for m in marks}
-    for mm in detect_macro_environments(text, learned_envs):
+    structure = sweep.mask_comments(text)  # comments blanked, offsets kept: not structure
+    for mm in detect_macro_environments(structure, learned_envs):
         if (mm["kind"], mm["start"]) not in seen_starts:
             counts[mm["kind"]] = counts.get(mm["kind"], 0) + 1
             marks.append(mm)
             seen_starts.add((mm["kind"], mm["start"]))
     statement_spans = [(m["start"], m["end"]) for m in marks
                        if m.get("kind") in ("env/theorem", "env/lemma", "env/proposition", "env/corollary")]
-    for sm in detect_text_statements(text):
+    for sm in detect_text_statements(structure):
         if not any(a <= sm["start"] < b for a, b in statement_spans):
             counts[sm["kind"]] = counts.get(sm["kind"], 0) + 1
             marks.append(sm)
-    for pm in detect_proof_macros(text):
+    for pm in detect_proof_macros(structure):
         counts["env/proof"] = counts.get("env/proof", 0) + 1
         marks.append(pm)
-    for pm in detect_text_proofs(text):
+    for pm in detect_text_proofs(structure):
         counts["env/proof"] = counts.get("env/proof", 0) + 1
         marks.append(pm)
     # IATC reference layer: enumerate-item bindings + short-range anaphors.
@@ -1292,8 +1315,11 @@ def main(argv=None) -> int:
     with_binders = "--with-binders" in argv[1:]
     with_scopes = "--with-scopes" in argv[1:]
     with_xref = "--with-xref" in argv[1:]
-    data = build(paper, with_ca=with_ca, with_binders=with_binders,
-                 with_scopes=with_scopes, with_xref=with_xref)
+    try:
+        data = build(paper, with_ca=with_ca, with_binders=with_binders,
+                     with_scopes=with_scopes, with_xref=with_xref)
+    except EprintNotFound as exc:     # the command line's one-line refusal, as before
+        raise SystemExit(str(exc)) from None
     GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
     out = GOLDEN_DIR / f"fable-{paper}-dp-emacs.json"
     out.write_text(json.dumps({k: v for k, v in data.items() if k != "_counts"}))
