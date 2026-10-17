@@ -412,6 +412,31 @@ class Loop(unittest.TestCase):
         self.assertEqual(attempt["nodes-loop-retry"]["repetition-penalty"], loop.LOOP_RETRY_PENALTY)
         self.assertEqual(item["status"], "accepted", item["reason"])
 
+    def test_a_collapsed_retry_loses_to_the_first_answer_without_its_repeats(self):
+        first = json.dumps({"nodes": [node(text="a", lo=12, hi=12), node(text="b", lo=13, hi=13),
+                                      node(text="c", lo=14, hi=14)] + [node(text="c", lo=14, hi=14)] * 3})
+        collapsed = json.dumps({"nodes": [node(text="only", lo=12, hi=12), node(text="two", lo=14, hi=14)]})
+        _nodes, steps = self.doc("x")
+        steps = json.dumps({"derivations": {"2": [{"relation": "implies", "premises": [1], "warrant_kind": "stated",
+                                                   "warrant": "w", "first_line": 12, "last_line": 14}],
+                                            "3": [{"relation": "implies", "premises": [2], "warrant_kind": "stated",
+                                                   "warrant": "w", "first_line": 13, "last_line": 14}]}})
+
+        def fake(prompt, cand, model, schema, penalty=None):
+            if "derivations" in schema["properties"]:
+                return loop.ModelAnswer(steps, 10, 100, 16384)
+            return loop.ModelAnswer(first if penalty is None else collapsed, 10, 100, 16384, penalty)
+
+        adir = self.base / "accounting" / "S3-collapse"
+        args = argparse.Namespace(candidates=str(self.cands), out=str(self.out), backend="openai",
+                                  model="m", rung2_gate=False, loss_log_interval=0, gate_retries=0)
+        with patch.object(loop, "call_openai", fake), \
+                patch.dict(os.environ, {accounting.DIR_ENV: str(adir), accounting.INVOCATION_ENV: "S3-collapse"}):
+            loop.run(args)
+        attempt = accounting.load(adir, "S3", "loop")["items"][0]["attempts"][0]
+        self.assertEqual(attempt["nodes-loop-kept"], {"from": "first answer, repeats dropped", "nodes": 3,
+                                                      "first-answer-distinct": 3})
+
     def test_text_fields_admit_latex_and_answers_decode_it(self):
         # The schemas carry latex_json.TEXT on free text, so the model can write
         # \\in and \\Sigma instead of being forced onto \\t or \\notin; parsing

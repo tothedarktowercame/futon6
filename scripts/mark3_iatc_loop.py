@@ -497,6 +497,24 @@ def dedupe_lists(part: dict) -> int:
     return dropped
 
 
+def node_key(n: dict) -> tuple:
+    return (n.get("kind"), n.get("text"), tuple(n.get("quote_spans") or ()))
+
+
+def dedupe_nodes(part: dict) -> dict:
+    """The node list with each repeated node kept once, first occurrence first.
+
+    Steps are asked for after the nodes, against this list, so no reference
+    needs renumbering.
+    """
+    seen, kept = set(), []
+    for n in part.get("nodes") or []:
+        if node_key(n) not in seen:
+            seen.add(node_key(n))
+            kept.append(n)
+    return dict(part, nodes=kept)
+
+
 def node_loop(part: dict) -> str | None:
     """Why a node list looks like the model looping, or None.
 
@@ -504,7 +522,7 @@ def node_loop(part: dict) -> str | None:
     an identical node 3+ times), but a repeated node is never information.
     """
     nodes = part.get("nodes") or []
-    keys = [(n.get("kind"), n.get("text"), tuple(n.get("quote_spans") or ())) for n in nodes]
+    keys = [node_key(n) for n in nodes]
     worst = max(Counter(keys).values()) if keys else 0
     if worst >= 3:
         return f"a node repeated {worst} times"
@@ -561,25 +579,34 @@ def attempt_one(cand: dict, args, tmp: Path) -> tuple[str, str, dict]:
             record["result"] = why
             return "errored", why, record
         if phase == "nodes":
+            # A node list that loops: ask once more with a repetition penalty, drop
+            # the repeats from BOTH answers, and keep whichever says more. The retry
+            # alone usually helps (20 of 29 kept >= 80% of the distinct nodes on the
+            # second APM run) but sometimes collapses: a93J01 went from 16 distinct
+            # nodes to 2, and two proofs whose retry looped again were refused
+            # although their first answers held 10-11 distinct nodes.
             loop = node_loop(part)
-            if loop and args.backend != "stub" and LOOP_RETRY_PENALTY > 0 and not (
-                    isinstance(answer, ModelAnswer) and answer.loop_retry):
-                record["nodes-loop"] = loop
-                try:
-                    answer = call_openai(prompt, cand, args.model, schema, penalty=LOOP_RETRY_PENALTY)
-                    raw = answer.text
-                    (tmp / f"{pid}.nodes.loop-retry.json").write_text(raw)
-                    part = parse_model_json(raw)
-                    record["nodes-loop-retry"] = {"repetition-penalty": LOOP_RETRY_PENALTY,
-                                                  "response": accounting.relative(tmp / f"{pid}.nodes.loop-retry.json")}
-                except (ModelCallError, ValueError) as e:
-                    record["result"] = f"nodes: {loop}; the loop retry failed: {e}"[:300]
-                    return "errored", record["result"], record
-                loop = node_loop(part)
             if loop:
-                why = f"nodes: repetition loop ({loop})"
-                record["result"] = why
-                return "rejected", why, record
+                record["nodes-loop"] = loop
+                first = dedupe_nodes(part)
+                chosen, source = first, "first answer, repeats dropped"
+                if args.backend != "stub" and LOOP_RETRY_PENALTY > 0 and not (
+                        isinstance(answer, ModelAnswer) and answer.loop_retry):
+                    retry_path = tmp / f"{pid}.nodes.loop-retry.json"
+                    try:
+                        again = call_openai(prompt, cand, args.model, schema, penalty=LOOP_RETRY_PENALTY)
+                        retry_path.write_text(again.text)
+                        second = dedupe_nodes(parse_model_json(again.text))
+                        record["nodes-loop-retry"] = {"repetition-penalty": LOOP_RETRY_PENALTY,
+                                                      "response": accounting.relative(retry_path)}
+                        if len(second["nodes"]) > len(first["nodes"]):
+                            chosen, source = second, "retry, repeats dropped"
+                    except (ModelCallError, ValueError) as e:
+                        record["nodes-loop-retry"] = {"repetition-penalty": LOOP_RETRY_PENALTY,
+                                                      "error": str(e)[:200]}
+                record["nodes-loop-kept"] = {"from": source, "nodes": len(chosen["nodes"]),
+                                             "first-answer-distinct": len(first["nodes"])}
+                part = chosen
             dropped = dedupe_lists(part)
             if dropped:
                 record["nodes-deduplicated"] = dropped

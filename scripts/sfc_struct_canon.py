@@ -92,9 +92,68 @@ SELFTEST = [
 ]
 
 
+RELATION = re.compile(r"=|\\in\b|\\subseteq|\\subset|\\to\b|\\mapsto|\\cong|\\simeq|\\le|\\ge|<|>|:")
+
+
+def _drop_group(s: str, command: str, keep: bool) -> str:
+    """Remove (keep=False) or unwrap (keep=True) every \\command{...}, braces balanced."""
+    out, i, key = [], 0, "\\" + command + "{"
+    while True:
+        j = s.find(key, i)
+        if j < 0:
+            return "".join(out) + s[i:]
+        k, depth = j + len(key), 1
+        while k < len(s) and depth:
+            depth += {"{": 1, "}": -1}.get(s[k], 0)
+            k += 1
+        out.append(s[i:j] + (s[j + len(key):k - 1] if keep else " "))
+        i = k
+
+
+def split_formula(line: str) -> list[str]:
+    """One extracted line as the formulae it holds.
+
+    The structure reader takes one formula at a time. On the second APM run,
+    19 of 247 lines held several side by side ("P_M^2 = P_M, \\qquad P_M^* = P_M",
+    "H_0(M) = Z, \\quad H_1(M) = Z/2, ...") or a \\boxed result, and were read only
+    in part; 3 used bracket-colon notation ([G:H], [K:k], [z_1 : z_2]) and 2 a
+    \\tag or a phrase in \\text, and gave no structure at all.
+    """
+    s = _drop_group(_drop_group(line, "tag", keep=False), "boxed", keep=True)
+    s = _drop_group(s, "text", keep=False)
+    s = re.sub(r"\\ensuremath\{([^{}]*)\}", r"\1", s)
+    # [A:B] -- an index, a degree, projective coordinates -- as a two-place operator
+    s = re.sub(r"\[([^\[\]:,]+):([^\[\]:,]+)\]", r"\\operatorname{bracket}(\1,\2)", s)
+    parts, depth, cur, i = [], 0, [], 0
+    while i < len(s):
+        c = s[i]
+        depth += {"{": 1, "}": -1, "(": 1, ")": -1}.get(c, 0)
+        sep = None
+        if depth == 0:
+            m = re.match(r",?\s*\\q?quad(?![A-Za-z])|,\s*\\\s", s[i:])
+            if m:
+                sep = m
+        if sep:
+            parts.append("".join(cur))
+            cur = []
+            i += sep.end()
+            continue
+        cur.append(c)
+        i += 1
+    parts.append("".join(cur))
+    out = []
+    for part in parts:
+        part = part.strip().strip(",.;").strip()
+        if len(part) >= 3 and RELATION.search(part):
+            out.append(part)
+    return out or [line.strip()]
+
+
 def batch(formulae):
     """Run sfc_def_structure on each formula, canonicalize, cluster by structural key.
-    Returns {key: [formulae]} — the canonical definition shapes."""
+    Returns {key: [formulae]} — the canonical definition shapes. A line holding
+    several formulae is read as each of them (split_formula)."""
+    formulae = [part for line in formulae for part in split_formula(line)]
     import os
     import subprocess
     from collections import defaultdict
