@@ -1,10 +1,12 @@
-"""Run a per-paper CPU stage over its papers in parallel, bounded by the CPUs the job may use.
+"""Run a per-paper CPU stage over its papers in as many processes as FUTON6_WORKERS asks.
 
 Papers are independent, so a stage that takes them one at a time on a many-core
 host leaves every core but one idle. `map_papers` runs a function over the papers
-in worker processes and yields the results in input order, so what a stage
-prints and records is what its serial loop printed and recorded. `map_in_order`
-does the same for any picklable items (a paper's graph files, chunks of windows).
+in config.workers() processes (FUTON6_WORKERS: a count, or `all` for every CPU the
+job may use; unset, one, which is the serial loop) and yields the results in input
+order, so what a stage prints and records is what its serial loop printed and
+recorded. `map_in_order` does the same for any picklable items (a paper's graph
+files, chunks of windows).
 
 The function must be defined at module level (worker processes import it) and
 should return its failures rather than raise them, as a serial loop that catches

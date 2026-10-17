@@ -8,11 +8,12 @@ bulk transforms may defer writes and explicitly checkpoint once complete.
 
     <run>/accounting/<stage>/<invocation>/<stage>.<producer>.json
 
-A small document is rewritten whole after every checkpointed item. Rewriting a large
-one per item costs time in proportion to its size: S4's select spent hours rewriting
+A document is rewritten whole after every checkpointed item. Rewriting a large one
+per item costs time in proportion to its size: S4's select spent hours rewriting
 JSON over 99,458 regions (2026-09-28) and now defers its writes, while the paid loops
-record each item and reach thousands of them. Past JOURNAL_ABOVE_BYTES such an item
-is instead appended as one line to
+record each item and reach thousands of them. Journaling is opt-in
+(futon6_config.accounting_journal): with FUTON6_ACCOUNTING_JOURNAL_ABOVE_BYTES set,
+past that size such an item is instead appended as one line to
 `<stage>.<producer>.json.journal` beside the document, which is rewritten whole
 every JOURNAL_REWRITE_SECONDS and when the process ends, and the journal removed.
 `read` (and so `load`) folds any journal lines into the document, so every reader
@@ -46,6 +47,8 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+import futon6_config as config
+
 SCHEMA = "futon6-stage-accounting/v1"
 STATUSES = ("accepted", "rejected", "errored", "deferred")
 # Why an accounting does not show every item accepted: the record itself is
@@ -62,10 +65,10 @@ STAGES = {
     "S7": [("typing", "S3.loop")],
 }
 INVOCATION_ENV = "FUTON6_STAGE_INVOCATION"
-# Up to this size a document is rewritten whole after every item; past it, items go
-# to the journal between whole rewrites (see the module docstring).
-JOURNAL_ABOVE_BYTES = 1 << 20
-JOURNAL_REWRITE_SECONDS = 30.0
+# None (the default): a document is rewritten whole after every item. A size: up to it
+# the same, past it items go to the journal between whole rewrites (see the module
+# docstring).
+JOURNAL_ABOVE_BYTES, JOURNAL_REWRITE_SECONDS = config.accounting_journal()
 JOURNAL_SUFFIX = ".journal"
 
 
@@ -105,6 +108,7 @@ class Accounting:
         self.items: dict[str, dict] = {}
         self.updated = _now()
         self._lock = threading.RLock()
+        self._journal_above = JOURNAL_ABOVE_BYTES   # None: never journals
         self._journal = None            # open journal while items wait there
         self._written_bytes = 0         # size of the last whole-document write
         self._written_at = 0.0          # time.monotonic() of that write
@@ -131,7 +135,8 @@ class Accounting:
             self.updated = _now()
             if not checkpoint:          # deferred by the caller, which checkpoints once complete
                 return
-            if (self.path is None or self._written_bytes <= JOURNAL_ABOVE_BYTES
+            if (self.path is None or self._journal_above is None
+                    or self._written_bytes <= self._journal_above
                     or time.monotonic() - self._written_at >= JOURNAL_REWRITE_SECONDS):
                 self.checkpoint()
             else:
@@ -143,7 +148,9 @@ class Accounting:
     def document(self) -> dict:
         return {"schema": SCHEMA, "stage": self.stage, "producer": self.producer,
                 "invocation": os.environ.get(INVOCATION_ENV),
-                "updated": self.updated,
+                # when the document was written, as always; a journaling ledger gives its last
+                # item's time, so a whole rewrite says what a rewrite after that item said
+                "updated": self.updated if self._journal_above is not None else _now(),
                 "expected": self.expected, "counts": self.counts(),
                 "items": list(self.items.values())}
 

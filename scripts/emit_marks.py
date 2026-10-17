@@ -69,7 +69,7 @@ def main():
     ids = args.papers or [l.strip() for l in open(args.list) if l.strip()]
     os.makedirs(args.out, exist_ok=True)
     ok = fail = 0
-    # Papers are independent: mark them on every CPU the job may use, and report
+    # Papers are independent: mark them in FUTON6_WORKERS processes, and report
     # and record them here in list order, as the serial loop did.
     print(f"marking {len(ids)} papers on up to {config.workers()} worker processes")
     work = partial(mark_paper, out=args.out, coverage=bool(mh))

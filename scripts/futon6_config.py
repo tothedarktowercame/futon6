@@ -184,14 +184,30 @@ def prose_source() -> str:
 
 
 def workers() -> int:
-    """Worker processes a per-paper CPU stage runs: FUTON6_WORKERS, else every CPU this job may use."""
+    """Worker processes a per-paper CPU stage runs (paper_pool). FUTON6_WORKERS: a count, or `all`
+    for every CPU this job may use. Unset, one: the stage's serial loop, as before the pool."""
     requested = os.environ.get("FUTON6_WORKERS")
+    if requested == "all":
+        try:
+            return len(os.sched_getaffinity(0))
+        except (AttributeError, OSError):
+            return os.cpu_count() or 1
     if requested and requested.isdigit() and int(requested) > 0:
         return int(requested)
-    try:
-        return len(os.sched_getaffinity(0))
-    except (AttributeError, OSError):
-        return os.cpu_count() or 1
+    return 1
+
+
+def accounting_journal() -> tuple[int | None, float]:
+    """When a stage's accounting document journals its items (stage_accounting).
+
+    FUTON6_ACCOUNTING_JOURNAL_ABOVE_BYTES: the size past which a document's checkpointed items go
+    to its journal instead of a whole rewrite each; FUTON6_ACCOUNTING_JOURNAL_SECONDS: how often it
+    is still rewritten whole (default 30). Unset, None: every item rewrites the document, as before.
+    """
+    above = os.environ.get("FUTON6_ACCOUNTING_JOURNAL_ABOVE_BYTES")
+    seconds = os.environ.get("FUTON6_ACCOUNTING_JOURNAL_SECONDS")
+    return (int(above) if above and above.isdigit() else None,
+            float(seconds) if seconds and seconds.replace(".", "", 1).isdigit() else 30.0)
 
 
 def python_argv() -> list[str]:

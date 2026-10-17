@@ -236,7 +236,12 @@ def load(run_dir: Path) -> dict:
 # with S1-S9 already ledgered and nothing about the run itself changed. This is
 # the half that makes the split mean anything: placement is still recorded in
 # full, and the comparison does not look at it. (june, 2026-09-21)
-VOLATILE_CONFIG_KEYS = ("hardware-placement",)
+#
+# The subject substrate's settings ("subject", "warp", "concept-encyclopedia") are
+# recorded as well, but what they name is pinned by content under "substrate"
+# (substrate_identity), and a manifest written before they were recorded lacks
+# them: comparing them refused such a run's resume over fields it never had.
+VOLATILE_CONFIG_KEYS = ("hardware-placement", "subject", "warp", "concept-encyclopedia")
 
 
 def _identity_view(doc: dict) -> dict:

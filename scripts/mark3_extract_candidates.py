@@ -524,7 +524,7 @@ def main() -> int:
     # an errored item, not a silent omission from the frozen corpus.
     ledger = accounting.Accounting("S3", "extract", papers)
     manifest = []
-    # Papers are extracted on every CPU the job may use; written, accounted and
+    # Papers are extracted in FUTON6_WORKERS processes; written, accounted and
     # reported here in list order, as the serial loop did.
     for pid, result in paper_pool.map_papers(partial(extract_paper, all_proofs=a.all_proofs), papers):
         if result.get("missing"):

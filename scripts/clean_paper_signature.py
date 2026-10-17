@@ -63,7 +63,7 @@ def signatures(ids, breakdowns, min_proofs=1):
         fp = [mc.get(m, 0) / n for m in macros]
         prof = [sum(float(b.get(f, 0) or 0) for b in bs) / n for f in feats]
         sig[p] = [fp, prof]
-    for j in range(len(feats) if papers else 0):     # with no paper there is no column to normalise
+    for j in range(len(feats) if papers else 0):
         col = [sig[p][1][j] for p in papers]
         m, s = st.mean(col), (st.pstdev(col) or 1)
         for p in papers:

@@ -40,6 +40,12 @@ def test_a_single_paper_has_no_twin_and_does_not_fail(tmp_path):
     assert canon["signatures"][0]["nearest"] is None
 
 
+def test_no_typed_proof_gives_no_signature_and_does_not_fail(tmp_path):
+    # S10 typed no proof: there is no first breakdown to read the features from.
+    canon = run(tmp_path, [], [])
+    assert canon["n_papers"] == 0 and canon["signatures"] == [] and canon["paper_twin_sim"] is None
+
+
 def test_twins_are_named_when_there_are_several(tmp_path):
     canon = run(tmp_path, ["a__p0", "b__p0", "c__p0"],
                 [breakdown("chain", 3), breakdown("chain", 3), breakdown("split", 9)])

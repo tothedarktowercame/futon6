@@ -129,7 +129,7 @@ def _paper_records(paper):
 
 def graph_records(files, workers=None):
     """Each graph's record, in the order of `files` (rung-2 graphs left out). Papers are read in
-    worker processes on the CPUs the job may use, each paper's text built once."""
+    FUTON6_WORKERS processes (paper_pool), each paper's text built once."""
     import paper_pool
     files = [f for f in files if "rung2" not in f]
     papers = {}

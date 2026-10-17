@@ -467,7 +467,7 @@ def main() -> int:
         ids = [x.strip() for x in a.ids.read_text().splitlines() if x.strip()]
         total = {"papers": 0, "missing": [], "occurrences": 0, "bound": 0, "s1-compared": 0, "s1-agrees": 0}
         work = partial(paper_strategies, marks_dir=a.marks_dir, out_dir=a.out_dir)
-        for pid, su in paper_pool.map_papers(work, ids):  # on every CPU the job may use
+        for pid, su in paper_pool.map_papers(work, ids):  # in FUTON6_WORKERS processes
             if su is None:
                 total["missing"].append(pid)
                 continue

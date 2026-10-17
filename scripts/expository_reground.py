@@ -68,8 +68,8 @@ def _paper_lines(texts, pid):
 
 
 def paper_texts(pids, workers=None):
-    """pid -> `_paper_text(pid)`, each paper built once in a worker process on the CPUs the job
-    may use. dpv.build() re-parses the whole paper (seconds a paper), and this stage reads every
+    """pid -> `_paper_text(pid)`, each paper built once, in FUTON6_WORKERS processes (paper_pool).
+    dpv.build() re-parses the whole paper (seconds a paper), and this stage reads every
     scope's paper and every measured paper."""
     import paper_pool
     return dict(paper_pool.map_in_order(_paper_text, list(dict.fromkeys(pids)), workers))

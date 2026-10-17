@@ -455,7 +455,7 @@ def corpus(golden_dir=GOLDEN_DIR, loss_dir=LOSS_DIR):
     loss_dir = Path(loss_dir)
     loss_dir.mkdir(parents=True, exist_ok=True)
     reps = []
-    # Papers are checked on every CPU the job may use; reported and aggregated
+    # Papers are checked in FUTON6_WORKERS processes; reported and aggregated
     # here in file order, as the serial loop did.
     files = [str(f) for f in sorted(golden_dir.glob("fable-*-dp-emacs.json"))]
     for _, rep in paper_pool.map_papers(partial(_check_marks_file, loss_dir=str(loss_dir)), files):

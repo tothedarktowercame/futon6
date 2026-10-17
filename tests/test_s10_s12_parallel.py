@@ -1,10 +1,11 @@
-"""S10 and S12 compile each recognizer pattern once, use every CPU the job may use, and give the serial result.
+"""S10 and S12 compile each recognizer pattern once, use FUTON6_WORKERS processes, and give the serial result.
 
 In run mark7rhgrh100-20260928 S10 took 87 min and S12 115 min in one process: the recognizer
 recompiled almost every one of its 3,365 harvested cues for every sentence (`re` caches 512
 patterns), S10 built each paper's text four times, and S12 copied and re-harvested its graphs from
-scratch at each of its 12 checkpoints. Re-run with these changes on that run's data, S10 and S12
-wrote byte-identical products and logs in 9.5 and 2.3 min.
+scratch at each of its 12 checkpoints. Re-run with these changes on that run's data, on every CPU
+the job could use (now FUTON6_WORKERS=all), S10 and S12 wrote byte-identical products and logs in
+9.5 and 2.3 min.
 
 Each test compares the new code with the code it replaced, kept here as the reference.
 """

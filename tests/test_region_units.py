@@ -94,31 +94,3 @@ def test_a_candidate_without_units_is_refused_under_the_contract():
     import run_contract
     assert run_contract.missing_expository_inputs({"units": []}) == ["units"]
     assert run_contract.missing_expository_inputs({"units": UNITS}) == []
-
-
-
-def _unit(text, start=100):
-    return {"id": "L1-x", "start": start, "end": start + len(text), "text": text}
-
-
-def test_a_fill_whose_latex_command_lost_its_backslash_is_found():
-    # A fill is a JSON string. mark7rhgrh12-20260927, 0704.2030 inflight-0030: the source's \cS
-    # arrived as cS, because \c is no JSON escape.
-    u = _unit("Applying this to a site~$\\cS$\nor a topological space~$X$, we obtain")
-    at = region_units.locate_in_units("a site~$cS$ or a topological space~$X$", [u])
-    assert at is not None
-    assert u["text"][at[0] - 100:at[1] - 100] == "a site~$\\cS$\nor a topological space~$X$"
-
-
-def test_a_fill_whose_command_letter_became_a_json_escape_is_found():
-    # \to as the JSON escape \t (a tab) followed by "o"; \colon without its backslash.
-    u = _unit("so $f\\colon A\\to B$ is onto")
-    assert region_units.locate_in_units("$fcolon A\to B$", [u]) is not None
-
-
-def test_a_fill_in_other_words_is_still_not_located():
-    # The backslash tolerance finds only the source's own words; S4 records such a fill as
-    # unquoted (6e0987f) rather than locating it.
-    u = _unit("Elements of $\\wh H^0(X, \\overline L)$ are called \\emph{effective sections}")
-    assert region_units.locate_in_units("Elements of $H^0(X, L)$ are called effective sections", [u]) is None
-    assert region_units.locate_in_units("a site or a space", [_unit("a site~$\\cS$ or")]) is None

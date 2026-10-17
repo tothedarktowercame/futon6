@@ -191,6 +191,17 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(entry["was"]["source-sha256"], "code")
         self.assertEqual(entry["now"]["source-sha256"], "edited")
 
+    def test_a_run_recorded_before_the_subject_settings_were_recorded_resumes(self):
+        """The subject substrate's settings are recorded in the host configuration; what they
+        name is pinned as "substrate", so a manifest written without them still resumes."""
+        recorded = {k: v for k, v in manifest.config.effective().items()
+                    if k not in ("subject", "warp", "concept-encyclopedia")}
+        with patch.object(manifest.config, "effective", return_value=recorded):
+            self.prepare()
+        original = (self.run_dir / manifest.NAME).read_bytes()
+        self.prepare()
+        self.assertEqual((self.run_dir / manifest.NAME).read_bytes(), original)
+
     def test_a_new_job_on_another_gpu_resumes_but_another_gpu_count_refuses(self):
         """Slurm places a resumed run anew: job, node and which GPU are placement, not identity.
 

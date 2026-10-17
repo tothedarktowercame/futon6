@@ -122,8 +122,8 @@ def _window_buckets(vocab, windows):
 
 
 def bucket_counts(vocab, windows, workers=None):
-    """The buckets of every sentence of `windows`, summed. Chunks of windows go to worker
-    processes on the CPUs the job may use; a sum does not depend on how they were split."""
+    """The buckets of every sentence of `windows`, summed. Chunks of windows go to
+    FUTON6_WORKERS processes (paper_pool); a sum does not depend on how they were split."""
     import futon6_config as config
     import paper_pool
     windows = list(windows)

@@ -1,4 +1,4 @@
-"""Per-paper stages run their papers on every CPU the job may use, reporting in list order."""
+"""Per-paper stages run their papers in FUTON6_WORKERS processes, reporting in list order."""
 from __future__ import annotations
 
 import os
@@ -23,9 +23,11 @@ class PaperPoolTests(unittest.TestCase):
         self.assertEqual(list(paper_pool.map_papers(len, ["ab"], workers=1)), [("ab", 2)])
         self.assertEqual(list(paper_pool.map_papers(len, [])), [])
 
-    def test_workers_default_to_the_cpus_this_job_may_use(self):
+    def test_workers_default_to_one_and_all_is_the_cpus_this_job_may_use(self):
         environment = {k: v for k, v in os.environ.items() if k != "FUTON6_WORKERS"}
         with patch.dict(os.environ, environment, clear=True):
+            self.assertEqual(config.workers(), 1)        # the serial loop, as before the pool
+        with patch.dict(os.environ, {**environment, "FUTON6_WORKERS": "all"}, clear=True):
             self.assertEqual(config.workers(), len(os.sched_getaffinity(0)))
         with patch.dict(os.environ, {**environment, "FUTON6_WORKERS": "3"}, clear=True):
             self.assertEqual(config.workers(), 3)

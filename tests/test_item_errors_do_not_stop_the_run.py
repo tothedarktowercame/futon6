@@ -51,7 +51,11 @@ class PapersWithoutInputs(unittest.TestCase):
     def test_s1_records_a_paper_without_an_eprint_as_its_own_failure(self):
         empty = self.base / "eprints"
         empty.mkdir()
-        with mock.patch.object(emit_marks.dpv, "EPRINTS", empty):
+        # build() loads the concept authority (data/background-corpus-index.json, local data
+        # that a checkout need not hold) and the scope detector before it looks for the e-print.
+        with mock.patch.object(emit_marks.dpv, "EPRINTS", empty), \
+                mock.patch("concept_authority.ConceptAuthority"), \
+                mock.patch.object(emit_marks.dpv, "_load_nlab_wiring", return_value=None):
             result = emit_marks.mark_paper(MISSING, out=str(self.marks), coverage=False)
         self.assertTrue(result["error"].startswith("EprintNotFound: no eprint for"), result)
 
@@ -287,23 +291,6 @@ class LaterStagesLeaveOutWhatTheyCannotRead(unittest.TestCase):
                           env={"FUTON6_EPRINTS": str(self.base / "no-eprints")})
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
         self.assertIn(f"(skip {MISSING}: no eprint for {MISSING}", done.stdout)
-
-    def test_s11_signatures_take_fewer_than_two_papers(self):
-        import clean_paper_signature as signature
-        shape = {"macro": "construct-exploit-discharge", "n_boxes": 2, "n_wires": 1, "n_holes": 0,
-                 "n_discharges_known": 0, "max_fanout": 1, "depth": 2, "n_sources": 1, "n_sinks": 1}
-        embed_json, run = self.base / "clean-embed.json", self.folder("run")
-        # one paper with two proofs, then one with one: a one-proof paper's signature is its proof's
-        # shape (17d1f7e), and a lone paper has no twin to name
-        for ids in (["p1__p0", "p1__p1"], ["p1__p0"]):
-            embed_json.write_text(json.dumps({"ids": ids, "breakdowns": [shape] * len(ids)}))
-            argv = ["clean_paper_signature.py", "--embed", str(embed_json), "--run-dir", str(run)]
-            with mock.patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()):
-                signature.main()
-            canon = json.loads((run / "structural-canon.json").read_text())
-            self.assertEqual([s["paper"] for s in canon["signatures"]], ["p1"])
-            self.assertTrue(all(s["nearest"] is None for s in canon["signatures"]))
-            self.assertIsNone(canon["paper_twin_sim"])
 
 
 @unittest.skipUnless(shutil.which("bb"), "bb reads the graphs, as in a run")

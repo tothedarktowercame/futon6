@@ -27,6 +27,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+import futon6_config as config
 import run_manifest as manifest
 import stage_accounting as accounting
 import linode_stepper as stepper
@@ -244,8 +245,25 @@ class StepperAttempts(StageFixture, unittest.TestCase):
 
 
 class LargeAccountingKeepsItsEvidence(StageFixture, unittest.TestCase):
-    """Past JOURNAL_ABOVE_BYTES items wait in a journal between whole rewrites; every
-    reader, a crash and the finished document still give what a rewrite per item gave."""
+    """With journaling set (FUTON6_ACCOUNTING_JOURNAL_ABOVE_BYTES), past that size items wait in a
+    journal between whole rewrites; every reader, a crash and the finished document still give
+    what a rewrite per item gave. Unset, every item rewrites the document, as before."""
+
+    def test_without_the_setting_every_item_rewrites_the_document(self):
+        unset = {k: v for k, v in os.environ.items() if not k.startswith("FUTON6_ACCOUNTING_JOURNAL_")}
+        with patch.dict(os.environ, unset, clear=True):
+            self.assertEqual(config.accounting_journal(), (None, 30.0))
+        with patch.dict(os.environ, {**unset, "FUTON6_ACCOUNTING_JOURNAL_ABOVE_BYTES": "1048576",
+                                     "FUTON6_ACCOUNTING_JOURNAL_SECONDS": "7.5"}, clear=True):
+            self.assertEqual(config.accounting_journal(), (1 << 20, 7.5))
+        items = [f"p:r{n}" for n in range(5)]
+        with patch.object(accounting, "JOURNAL_ABOVE_BYTES", None), \
+                patch.object(accounting, "JOURNAL_REWRITE_SECONDS", 1e9):
+            ledger = accounting.Accounting("S4", "select", items, self.base / "unset")
+            for n, item in enumerate(items):
+                ledger.record(item, "accepted", paper="p", outputs=[item])
+                self.assertEqual(len(json.loads(ledger.path.read_text())["items"]), n + 1)
+        self.assertFalse(accounting.journal_path(ledger.path).exists())
 
     def record_all(self, directory, items, *, above, stamps):
         stamps = iter(stamps)

@@ -129,19 +129,6 @@ def _in_paper(placed: list[tuple[int, dict]], pos: int) -> int:
     return unit["start"] + min(pos - off, unit["end"] - unit["start"])
 
 
-# A fill travels as a JSON string. Under a JSON-schema decoder a backslash may only start a
-# legal escape, so a LaTeX command such as \cS or \wp arrives without its backslash, and one
-# such as \to or \frac arrives with its first letter turned into a control character (the
-# \t and \f escapes). Neither is the model changing the passage's words.
-_ESCAPE_LETTERS = {"\t": "t", "\x0c": "f", "\x08": "b", "\r": "r"}
-
-
-def _word_pattern(word: str) -> str:
-    """WORD as a pattern in which a LaTeX command may have lost its backslash, also where the
-    command follows a letter ($f\\colon$ written $fcolon$): only backslashes are skipped."""
-    return "".join((r"\\?" if ch.isalpha() else "") + re.escape(ch) for ch in word)
-
-
 def locate_in_units(fill: str, units: list[dict]) -> list[int] | None:
     """Where a fill sits inside the units it cites, as [start, end) in the paper.
 
@@ -152,14 +139,11 @@ def locate_in_units(fill: str, units: list[dict]) -> list[int] | None:
     searched alone first, so a quote inside one keeps exactly the offsets it had;
     only then are contiguous runs searched. Units far apart in the paper are
     never joined: a match across that gap would claim a span the scope never read.
-    A LaTeX command that JSON could not carry, having lost its backslash or had its
-    first letter turned into an escape, still matches (_word_pattern).
     """
-    fill = re.sub(r"[\t\x0c\x08\r](?=[A-Za-z])", lambda m: "\\" + _ESCAPE_LETTERS[m.group(0)], fill or "")
-    words = [w for w in re.split(r"\s+", fill.strip().rstrip(".")) if w]
+    words = [w for w in re.split(r"\s+", (fill or "").strip().rstrip(".")) if w]
     if not words:
         return None
-    pattern = r"\s+".join(_word_pattern(w) for w in words)
+    pattern = r"\s+".join(re.escape(w) for w in words)
     for u in units:
         m = re.search(pattern, u["text"], re.I)
         if m:

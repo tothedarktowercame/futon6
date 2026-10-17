@@ -190,7 +190,7 @@ def main() -> int:
     regions.mkdir(parents=True, exist_ok=True)
     extract_ledger = accounting.Accounting("S4", "extract", papers)
     carved: list[dict[str, Any]] = []
-    # Papers are carved on every CPU the job may use; written, accounted and
+    # Papers are carved in FUTON6_WORKERS processes; written, accounted and
     # reported here in list order, as the serial loop did.
     for paper_id, result in paper_pool.map_papers(extract_paper, papers):
         if "error" in result:
