@@ -3,14 +3,14 @@
     [
       "mission-anchored-scan",
       "mission-unlocks-eoi",
-      2,
+      3,
       "upvote:kit-outbox"
     ],
     [
       "model-recompute-schedule",
       "prototype-maturity-lifecycle",
-      1,
-      "seed:kit-cadence"
+      2,
+      "upvote:kit-cadence"
     ]
   ],
   "descent": [],

@@ -39,6 +39,11 @@
     "beta": 0,
     "mean": 0.666667
   },
+  "two-projections-of-one-quantity": {
+    "alpha": 1,
+    "beta": 0,
+    "mean": 0.666667
+  },
   "typed-kolmogorov-arrows": {
     "alpha": 1,
     "beta": 0,
