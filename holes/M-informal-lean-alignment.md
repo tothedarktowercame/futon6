@@ -4,6 +4,8 @@
 after the first mark8 run over the APM informal solutions.
 **Status:** prototype built (`scripts/align_informal_lean.py`); first results below.
 
+**Linked excursion (planned, 2026-10-25):** `holes/excursions/E-apm-cross-paper-dependency-graph.md`, a cross-paper dependency graph from the aligned step–lemma pairs. It feeds pudding-prover T3.3.
+
 ## The question this answers
 
 What is the mined markup *for*? On the APM corpus the run's S4 expository
