@@ -1,4 +1,5 @@
 # E-bge-retrieval-cas-sel-3b
+**Status:** DONE — confirmed 2026-10-29 (Giraffe closing check): EXP-3 and EXP-3b ran with decisive results, with runner, payload, and per-model result artifacts retained. Evidence: /home/joe/code/futon6/scripts/linode-bge-retrieval.sh, /home/joe/code/futon6/scripts/cas_sel_3b_embed_experiment.py, /home/joe/code/futon6/data/exp-20260618/bge-cas-sel-3b/BAAI_bge-large-en-v1.5__full.json, /home/joe/code/futon6/data/exp-20260618/exp3b-context/BAAI_bge-small-en-v1.5__ctx2.json.
 
 **VERDICT (2026-10-09, provisional):** DONE — The note records EXP-3 and EXP-3b complete with results, shipped runner/payload, and artifacts on disk. _(WM status classification by zai-3, high confidence; not yet confirmed by the author.)_
 
