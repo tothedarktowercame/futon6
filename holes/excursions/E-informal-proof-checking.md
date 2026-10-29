@@ -1,4 +1,5 @@
 # E-informal-proof-checking
+**Status:** DONE — confirmed 2026-10-29 (Giraffe closing check): Rung-2 deterministic semantic checkers (iatc_semcheck.bb, iatc_closure_check.bb plus their test namespaces) were built and their gates passed. Evidence: /home/joe/code/futon6/scripts/iatc_semcheck.bb, /home/joe/code/futon6/scripts/iatc_closure_check.bb, /home/joe/code/futon6/tests/iatc_semcheck_test.clj.
 
 **VERDICT (2026-10-09, provisional):** DONE — Deliverable (Clojure checkers for recovered semantics) built and gates passed: pytest 6 passed, iatc_semcheck 2 tests, iatc_closure_check 4 tests. _(WM status classification by zai-1, high confidence; not yet confirmed by the author.)_
 

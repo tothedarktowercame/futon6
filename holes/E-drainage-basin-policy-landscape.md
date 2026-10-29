@@ -1,4 +1,5 @@
 # E-drainage-basin-policy-landscape — paleo-topography first
+**Status:** DONE — confirmed 2026-10-29 (Giraffe closing check): Paleo-topography (81 basins) built first, drainage/flow on top, citation-interface design sketch delivered; scripts and design docs committed on 2026-06-14. Evidence: 0d604ca, /home/joe/code/futon6/scripts/paleo_topography.py, /home/joe/code/futon6/holes/drainage-citation-interface.md.
 
 **VERDICT (2026-10-09, provisional):** DONE — RESULTS section marked DONE (claude-3, 2026-06-14) and artifacts committed. _(WM status classification by zai-4, high confidence; not yet confirmed by the author.)_
 
