@@ -1,4 +1,5 @@
 # E-prelim-anatomy-atlas — apply the CT anatomy markup to the 489 prelim problems
+**Status:** DONE — confirmed 2026-10-29 (Giraffe closing check): The 489/489 marking run completed with 0 worker failures and exemplars surfaced; the adapter was committed (futon6 a8247a1) and the adapter script exists (the atlas data itself is gitignored by its own acceptance clause). Evidence: a8247a1, /home/joe/code/futon6/scripts/prelim_anatomy_atlas.py.
 
 **VERDICT (2026-10-09, provisional):** DONE — Atlas adapter built (git) and the tail records problem resolutions fully grounded with no debt. _(WM status classification by zai-2, medium confidence; not yet confirmed by the author.)_
 

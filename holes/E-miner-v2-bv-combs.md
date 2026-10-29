@@ -1,4 +1,5 @@
 # E-miner-v2-bv-combs — type the wiring diagrams with BV connectives (combs over :composes)
+**Status:** DONE — confirmed 2026-10-29 (Giraffe closing check): BV-typing pass, combs and the 5-gap eustress list were delivered (futon6 commit 9cd66b5), with the typer script and the EDN artifact both present. Evidence: 9cd66b5, /home/joe/code/futon6/scripts/bv_comb_typer.py, /home/joe/code/futon6/holes/bv-comb-typing.edn.
 
 **VERDICT (2026-10-09, provisional):** DONE — BV-typing pass, combs and the gap-list (the acceptance deliverable) were all delivered with an eustress verdict and a reproduce command. _(WM status classification by zai-5, high confidence; not yet confirmed by the author.)_
 

@@ -1,4 +1,5 @@
 # Learning-as-we-go (mark7) ↔ FutonZero / AlphaZero — and the agent-in-the-loop
+**Status:** DONE — confirmed 2026-10-29 (Giraffe closing check): Comparative analysis note complete (sections 1-6 incl. the agent-in-the-loop proposal R2 and the falsifiable test), committed to futon6 with no open items in the doc. Evidence: ae1b0e0.
 
 **VERDICT (2026-10-09, provisional):** DONE — Comparative analysis note with sections 1-6 complete and a closing rationale; no open work items remain in the doc. _(WM status classification by zai-1, medium confidence; not yet confirmed by the author.)_
 
