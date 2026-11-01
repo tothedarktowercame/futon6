@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Structure embeddings for MISSIONS (+ a text baseline for contrast).
+"""Structure embeddings for task documents (+ a mission text baseline).
 
 The port of clean_structure_embed.py (proofs) to missions, for criterion (2) of
 M-aif-wiring R16: give the rollout's move-mining a *structural* notion of "a
@@ -7,7 +7,13 @@ mission like this one," so a mined move borrows its provenance/prior from a
 structurally-similar mission instead of the weak nearest-TEXT neighbour
 (cos 0.31, below E-vwm's 0.5 stall line).
 
-Two embeddings per mission, compared:
+The original mission rows remain the first rows of the artifact, byte for byte.
+Every retained M-/E-/T- task document is appended on the same structural basis,
+so consumers can ask about the complete task population without inventing a
+text similarity.  ``stems`` remains the legacy mission-only prefix consumed by
+mission_mine_moves.py; ``targets`` is the full-ID, row-aligned authority.
+
+Two embeddings per original mission are compared:
   - STRUCTURE : a deterministic feature vector over the mission's scope-tree
                 (phase presence/detached, class, binder histogram, shape
                 scalars, phase-transition bigrams, applied-pattern presence).
@@ -27,7 +33,7 @@ Inputs (all live):
 
 Usage: futon6/.venv/bin/python scripts/mission_structure_embed.py [--out DIR]
 """
-import argparse, glob, json, os, re
+import argparse, hashlib, json, os, re
 from collections import Counter, defaultdict
 import numpy as np
 import sys as _sys
@@ -42,6 +48,7 @@ WHOLE = f"{F6}/data/mission-wholeness.edn"
 PSCOPES = f"{F6}/data/mission-pattern-scopes.edn"
 MINILM = f"{ROOT}/futon3a/resources/notions/minilm_mission_embeddings.json"
 MOVES = f"{F6}/data/diffsub-moves.edn"
+TASK_DIRS = ("holes/missions", "holes/excursions", "holes/tickets", "holes")
 
 CANON_PHASES = ["head", "identify", "map", "derive", "argue", "verify", "instantiate", "document"]
 CLASSES = ["mess", "pipeline", "alive", "stub", "neutral"]
@@ -73,7 +80,78 @@ def applied_patterns():
     return out
 
 
-def build():
+def task_documents():
+    """One deterministic source document for each retained task identifier.
+
+    The producer deliberately includes completed and cancelled documents too:
+    retention is about whether a task has an auditable source, not whether it is
+    currently eligible for selection.  Repository and path ordering make a
+    duplicate ID resolve the same way on every run.
+    """
+    found = {}
+    for repo in sorted(_Path(ROOT).iterdir()):
+        if not repo.is_dir():
+            continue
+        for rel in TASK_DIRS:
+            directory = repo / rel
+            if not directory.is_dir():
+                continue
+            for path in sorted(directory.glob("*.md")):
+                if re.match(r"^[MET]-[^/]+$", path.stem):
+                    found.setdefault(path.stem, path)
+    return found
+
+
+def document_features(path, bigrams, bidx, pat_vocab, pidx):
+    """Project a task document onto the mission scope-tree feature vocabulary.
+
+    Headings are scopes, canonical phase headings are eightfold phases, list
+    entries are map items, Relations references are relates-to binders, and
+    path-like Markdown links are source-material binders.  This uses no prose
+    embedding and no target label as a feature.
+    """
+    text = path.read_text(encoding="utf-8", errors="replace")
+    lines = text.splitlines()
+    headings = [m.group(1).strip().lower()
+                for line in lines if (m := re.match(r"^#{1,6}\s+(.+?)\s*$", line))]
+    present = {phase for phase in CANON_PHASES
+               if any(re.search(rf"\b{re.escape(phase)}\b", heading) for heading in headings)}
+    # A checked phase/status is retained evidence that the structural scope is
+    # no longer detached; otherwise phase headings remain open structural work.
+    checked = {m.group(1).lower() for line in lines
+               if (m := re.search(r"\[x\].*\b(" + "|".join(CANON_PHASES) + r")\b", line, re.I))}
+    det_present = present - checked
+    list_items = sum(bool(re.match(r"^\s*(?:[-*+] |\d+[.)] )", line)) for line in lines)
+    relations = sum(len(re.findall(r"\[\[(?:M|E|T)-[^\]]+\]\]", line)) for line in lines)
+    sources = sum(len(re.findall(r"\[[^\]]+\]\((?:[^)#]+/|https?://)[^)]+\)", line)) for line in lines)
+    binder_ct = Counter({"eightfold-phase": len(present),
+                         "loose-section": len(headings),
+                         "map-item": list_items,
+                         "relates-to": relations,
+                         "source-material": sources})
+    n = sum(binder_ct.values()) or 1
+    phase_idx = [CANON_PHASES.index(p) for p in present]
+    span = (max(phase_idx) - min(phase_idx)) / 7.0 if phase_idx else 0.0
+    f_phase = np.array([1.0 if p in present else 0.0 for p in CANON_PHASES])
+    f_detph = np.array([1.0 if p in det_present else 0.0 for p in CANON_PHASES])
+    f_class = np.array([1.0 if k == "neutral" else 0.0 for k in CLASSES])
+    f_binder = np.array([binder_ct.get(b, 0) / n for b in BINDERS])
+    f_scalar = np.array([n / 12.0, len(det_present) / max(len(present), 1), 0.0,
+                         0.0, 0.0, list_items / n, span])
+    phase_seq = [p for p in CANON_PHASES if p in det_present]
+    f_bi = np.zeros(len(bigrams))
+    for pair in zip(phase_seq, phase_seq[1:]):
+        if pair in bidx:
+            f_bi[bidx[pair]] = 1.0
+    f_pat = np.zeros(len(pat_vocab))
+    return (np.concatenate([f_phase, f_detph, f_class, f_binder, f_scalar, f_bi, f_pat]),
+            {"class": "neutral", "n_scopes": n, "n_detached": len(det_present),
+             "phases": sorted(present), "detached_phases": sorted(det_present),
+             "source": str(path),
+             "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
+
+
+def build(base_dir=None):
     scopes = json.load(open(SCOPES))
     cls = mission_classes()
     applied = applied_patterns()
@@ -134,15 +212,53 @@ def build():
         meta.append({"class": c, "n_scopes": n, "n_detached": n_det,
                      "phases": sorted(present), "detached_phases": sorted(det_present)})
 
-    S = np.vstack(rows)
+    raw = np.vstack(rows)
     # WIDEN-DYNAMIC-RANGE (mirror clean_structure_embed): z-normalize columns across the
     # corpus so no feature dominates, then L2 per row.
-    sd = S.std(axis=0); sd[sd == 0] = 1.0
-    S = (S - S.mean(axis=0)) / sd
+    mean = raw.mean(axis=0)
+    sd = raw.std(axis=0); sd[sd == 0] = 1.0
+    S = (raw - mean) / sd
     rn = np.linalg.norm(S, axis=1, keepdims=True); rn[rn == 0] = 1.0
     S = S / rn
-    return stems, S, meta, {"pat_vocab": len(pat_vocab), "bigrams": len(bigrams),
-                            "struct_dim": int(S.shape[1])}
+
+    targets = ["M-" + stem for stem in stems]
+    task_rows, task_meta = [], []
+    for target, path in task_documents().items():
+        if target in targets:
+            continue
+        row, item_meta = document_features(path, bigrams, bidx, pat_vocab, pidx)
+        normalized = (row - mean) / sd
+        norm = np.linalg.norm(normalized) or 1.0
+        task_rows.append(normalized / norm)
+        task_meta.append(item_meta)
+        targets.append(target)
+    if task_rows:
+        S = np.vstack([S, np.vstack(task_rows)])
+        meta.extend(task_meta)
+    # A pinned embedding is an append-only identity authority.  Recomputing an
+    # existing row from mutable live scope inputs would silently change earlier
+    # relation receipts.  Preserve every row the base artifact already names;
+    # only newly retained task documents receive freshly projected rows.
+    anchor_targets = list(targets[:len(stems)])
+    if base_dir:
+        base_json = _Path(base_dir) / "mission-embed.json"
+        base_npy = _Path(base_dir) / "structure-embeddings.npy"
+        if base_json.is_file() and base_npy.is_file():
+            base_payload = json.loads(base_json.read_text())
+            base_targets = base_payload.get("targets") or ["M-" + s for s in base_payload["stems"]]
+            anchor_targets = (base_payload.get("anchor_targets")
+                              or ["M-" + stem for stem in base_payload["stems"]])
+            base_rows = np.load(base_npy)
+            if len(base_targets) != len(base_rows) or base_rows.shape[1] != S.shape[1]:
+                raise ValueError("base embedding rows do not match its target authority or structural dimension")
+            target_index = {target: i for i, target in enumerate(targets)}
+            for i, target in enumerate(base_targets):
+                if target in target_index:
+                    S[target_index[target]] = base_rows[i]
+    return stems, targets, anchor_targets, S, meta, {
+        "pat_vocab": len(pat_vocab), "bigrams": len(bigrams),
+        "struct_dim": int(S.shape[1]), "mission_rows": len(stems),
+        "task_rows": len(targets)}
 
 
 def text_matrix(stems):
@@ -177,10 +293,12 @@ def nn(stems, vecs, i, mask=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=f"{F6}/data/mission-structure-embed")
+    ap.add_argument("--base", default=f"{F6}/data/mission-structure-embed",
+                    help="pinned artifact whose existing rows are preserved (default: current output)")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
 
-    stems, S, meta, dims = build()
+    stems, targets, anchor_targets, S, meta, dims = build(args.base)
     Slist = [S[i] for i in range(len(stems))]
     T, have_text = text_matrix(stems)
     have_moves = move_missions()
@@ -228,7 +346,8 @@ def main():
         print(f"   TEXT       -> {rec['text_provenance']}")
 
     np.save(os.path.join(args.out, "structure-embeddings.npy"), S)
-    json.dump({"stems": stems, "meta": meta, "dims": dims,
+    json.dump({"stems": stems, "targets": targets, "anchor_targets": anchor_targets,
+               "meta": meta, "dims": dims,
                "class_match": {"structure": sm, "text": tm},
                "witness_provenance": payload_nn},
               open(os.path.join(args.out, "mission-embed.json"), "w"), indent=2)
