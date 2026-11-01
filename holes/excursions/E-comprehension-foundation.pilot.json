@@ -1,0 +1,113 @@
+{
+  "decision": {
+    "go": true,
+    "no_weak_proof_below_hi": true,
+    "rises_with_corpus": true,
+    "separates_weak_extraction_from_weak_proof": true
+  },
+  "go_no_go": "go",
+  "graphs": "data/iatc-argument-graphs/loop-run-70b",
+  "hi": 0.8,
+  "lo": 0.5,
+  "question": "does the corpus-relative comprehension score rise with corpus growth and separate weak-extraction from weak-proof?",
+  "schema": "comprehension-pilot-v1",
+  "separation_probe": {
+    "high_comprehension": {
+      "comp": 0.9,
+      "noun": 0.95,
+      "path": "weakness-assertable",
+      "strategy": 0.9,
+      "verdict": "weak-proof"
+    },
+    "low_comprehension": {
+      "comp": 0.2,
+      "noun": 0.2,
+      "path": "study-more/ask-for-help",
+      "strategy": 0.3,
+      "verdict": "weak-extraction"
+    },
+    "same_gaps": 5
+  },
+  "sizes": [
+    {
+      "corpus": "2",
+      "mean_comprehension": 0.4007936507936508,
+      "n_papers_scoped": 2,
+      "per_proof": {
+        "0705.0452": 0.5,
+        "0706.1286": 0.25,
+        "0708.1921": 0.0,
+        "0708.2067": 0.5,
+        "0709.0248": 0.2857142857142857,
+        "0711.0473": 0.5714285714285714,
+        "0712.0724": 0.625,
+        "0801.0199": 0.3333333333333333,
+        "0801.3843": 0.5416666666666666
+      },
+      "verdict_distribution": {
+        "partial-comprehension": 5,
+        "weak-extraction": 4
+      }
+    },
+    {
+      "corpus": "5",
+      "mean_comprehension": 0.45623897707231037,
+      "n_papers_scoped": 5,
+      "per_proof": {
+        "0705.0452": 0.5,
+        "0706.1286": 0.25,
+        "0708.1921": 0.0,
+        "0708.2067": 0.5,
+        "0709.0248": 0.5555555555555556,
+        "0711.0473": 0.5714285714285714,
+        "0712.0724": 0.625,
+        "0801.0199": 0.5625,
+        "0801.3843": 0.5416666666666666
+      },
+      "verdict_distribution": {
+        "partial-comprehension": 7,
+        "weak-extraction": 2
+      }
+    },
+    {
+      "corpus": "all",
+      "mean_comprehension": 0.45623897707231037,
+      "n_papers_scoped": 9,
+      "per_proof": {
+        "0705.0452": 0.5,
+        "0706.1286": 0.25,
+        "0708.1921": 0.0,
+        "0708.2067": 0.5,
+        "0709.0248": 0.5555555555555556,
+        "0711.0473": 0.5714285714285714,
+        "0712.0724": 0.625,
+        "0801.0199": 0.5625,
+        "0801.3843": 0.5416666666666666
+      },
+      "verdict_distribution": {
+        "partial-comprehension": 7,
+        "weak-extraction": 2
+      }
+    },
+    {
+      "corpus": "full-substrate",
+      "mean_comprehension": 0.5082671957671958,
+      "n_papers_scoped": 9,
+      "per_proof": {
+        "0705.0452": 0.5,
+        "0706.1286": 0.25,
+        "0708.1921": 0.35714285714285715,
+        "0708.2067": 0.5,
+        "0709.0248": 0.6666666666666666,
+        "0711.0473": 0.5714285714285714,
+        "0712.0724": 0.625,
+        "0801.0199": 0.5625,
+        "0801.3843": 0.5416666666666666
+      },
+      "verdict_distribution": {
+        "partial-comprehension": 7,
+        "weak-extraction": 2
+      }
+    }
+  ]
+}

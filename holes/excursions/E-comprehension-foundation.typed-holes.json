@@ -1,0 +1,216 @@
+{
+  "n_distinct_keys": 14,
+  "n_holes_keyed": 17,
+  "recurring": [],
+  "typed_holes": [
+    {
+      "concept": "cofibration",
+      "occurrences": 2,
+      "papers": [
+        "0708.2067"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-cofibrant-domains-from-commutative-square",
+        "tractability-implies-cofibrant-domains"
+      ]
+    },
+    {
+      "concept": "generating cofibration",
+      "occurrences": 2,
+      "papers": [
+        "0708.2067"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-cofibrant-domains-from-commutative-square",
+        "tractability-implies-cofibrant-domains"
+      ]
+    },
+    {
+      "concept": "small set",
+      "occurrences": 2,
+      "papers": [
+        "0708.2067"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-cofibrant-domains-from-commutative-square",
+        "tractability-implies-cofibrant-domains"
+      ]
+    },
+    {
+      "concept": "bicategory",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "ring-isomorphism-equivalence-for-calmod-like-bicats"
+      ]
+    },
+    {
+      "concept": "cartesian closed",
+      "occurrences": 1,
+      "papers": [
+        "0709.0248"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "parameterized-rules-imply-extensionality"
+      ]
+    },
+    {
+      "concept": "cartesian closed category",
+      "occurrences": 1,
+      "papers": [
+        "0709.0248"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "parameterized-rules-imply-extensionality"
+      ]
+    },
+    {
+      "concept": "closed category",
+      "occurrences": 1,
+      "papers": [
+        "0709.0248"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "parameterized-rules-imply-extensionality"
+      ]
+    },
+    {
+      "concept": "diagram morphism",
+      "occurrences": 1,
+      "papers": [
+        "0705.0452"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "commutativity-from-definition"
+      ]
+    },
+    {
+      "concept": "extensional category",
+      "occurrences": 1,
+      "papers": [
+        "0709.0248"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "parameterized-rules-imply-extensionality"
+      ]
+    },
+    {
+      "concept": "groupoid",
+      "occurrences": 1,
+      "papers": [
+        "0705.0452"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "groupoid-structure-from-commutative-diagram"
+      ]
+    },
+    {
+      "concept": "left adjoint",
+      "occurrences": 1,
+      "papers": [
+        "0712.0724"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "identification-of-functors"
+      ]
+    },
+    {
+      "concept": "locally cartesian closed",
+      "occurrences": 1,
+      "papers": [
+        "0709.0248"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "parameterized-rules-imply-extensionality"
+      ]
+    },
+    {
+      "concept": "locally cartesian closed category",
+      "occurrences": 1,
+      "papers": [
+        "0709.0248"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "parameterized-rules-imply-extensionality"
+      ]
+    },
+    {
+      "concept": "ring isomorphism",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "ring-isomorphism-equivalence-for-calmod-like-bicats"
+      ]
+    }
+  ],
+  "ungrounded": [
+    {
+      "pid": "0705.0452",
+      "type": "missing-warrant",
+      "wanted": "functor-definition-from-groupoid-structure"
+    },
+    {
+      "pid": "0708.1921",
+      "type": "missing-warrant",
+      "wanted": "reduction-to-subgoals"
+    },
+    {
+      "pid": "0708.1921",
+      "type": "missing-warrant",
+      "wanted": "equality-of-pasting-composites"
+    },
+    {
+      "pid": "0708.1921",
+      "type": "missing-warrant",
+      "wanted": "equality-of-pasting-composites"
+    },
+    {
+      "pid": "0711.0473",
+      "type": "missing-warrant",
+      "wanted": "inductive-step-for-compatible-arrangements-with-two-or-more-squares"
+    },
+    {
+      "pid": "0712.0724",
+      "type": "missing-warrant",
+      "wanted": "phi-respects-morphism"
+    },
+    {
+      "pid": "0712.0724",
+      "type": "missing-warrant",
+      "wanted": "functor-over-category"
+    },
+    {
+      "pid": "0801.0199",
+      "type": "missing-warrant",
+      "wanted": "equivalence-of-less-than-and-congruence"
+    },
+    {
+      "pid": "0801.0199",
+      "type": "missing-warrant",
+      "wanted": "sufficiency-of-considering-Z-equal-to-E"
+    },
+    {
+      "pid": "0801.3843",
+      "type": "missing-warrant",
+      "wanted": "verification-of-2-group-axioms"
+    }
+  ]
+}

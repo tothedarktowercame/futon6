@@ -85,6 +85,32 @@ def verdict(N, S, ungrounded, conj, lo, hi):
     return "well-formed", comp
 
 
+def next_path(comp, hi):
+    """The ArSE question path the gate emits for a proof at this comprehension.
+
+    Below hi the gate REFUSES any weakness assertion and emits the
+    study-more/ask-for-help path (E-comprehension-foundation, build step 3):
+    the honest signal is 'I did not understand this proof', never 'it is
+    flawed'."""
+    if comp is None or comp < hi:
+        return "study-more/ask-for-help"
+    return "weakness-assertable"
+
+
+def assert_weakness(pid, comp, hi):
+    """The gate itself: calling a proof weak requires comprehension >= hi.
+
+    Raises if the proof is not comprehended; returns the assertion path
+    otherwise.  Any weakness assertion routed through the verdict layer must
+    pass through here, so 'weak-proof' can never appear below the floor."""
+    if comp is None or comp < hi:
+        raise ValueError(
+            f"weakness assertion refused for {pid}: comprehension "
+            f"{comp if comp is not None else 'unmeasured'} < hi={hi}; "
+            f"path=study-more/ask-for-help")
+    return "weakness-assertable"
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--graphs", default="data/iatc-argument-graphs/loop-run-70b")
@@ -167,6 +193,7 @@ def main():
                          "verdict": v, "undefined_nouns": res["undefined"][:6],
                          "ungrounded_moves": ung, "conjectures": conj,
                          "noun_buckets": nb, "strategy_buckets": sb,
+                         "path": next_path(comp, args.hi),
                          "gap_to_ceiling": (None if comp is None else round(1 - comp, 3))})
         except Exception as exc:
             skipped.append((pid, str(exc)[:80]))
