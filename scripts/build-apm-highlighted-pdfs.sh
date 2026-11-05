@@ -5,6 +5,12 @@ input_dir=${1:-/home/joe/code/futon3c/data/apm-informal-proofs}
 output_dir=${2:-/tmp/apm-highlighted-pdfs}
 jobs=${JOBS:-8}
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+style_dir=${MATH_PROOFREAD_STYLE_DIR:-/home/joe/code/storage/futon6/data/first-proof/latex}
+
+if [[ ! -f "$style_dir/math-proofread-style.sty" ]]; then
+  printf 'Missing math-proofread-style.sty in %s\n' "$style_dir" >&2
+  exit 2
+fi
 
 mkdir -p "$output_dir/logs"
 find "$input_dir" -maxdepth 1 -type f -name '*.md' ! -name '*.failed.*' -print0 |
@@ -13,7 +19,9 @@ find "$input_dir" -maxdepth 1 -type f -name '*.md' ! -name '*.failed.*' -print0 
     src=$1
     output_dir=$2
     script_dir=$3
+    style_dir=$4
     base=$(basename "$src" .md)
+    export TEXINPUTS="$style_dir:${TEXINPUTS:-}"
     common=(--lua-filter "$script_dir/pandoc-mathify.lua" --standalone
       --include-in-header "$script_dir/apm-math-highlight-header.tex"
       --pdf-engine=xelatex -o "$output_dir/$base.pdf")
@@ -27,7 +35,7 @@ find "$input_dir" -maxdepth 1 -type f -name '*.md' ! -name '*.failed.*' -print0 
       printf "%s\n" "$src" >"$output_dir/logs/$base.failed"
       exit 1
     fi
-  ' _ {} "$output_dir" "$script_dir"
+  ' _ {} "$output_dir" "$script_dir" "$style_dir"
 
 pdf_count=$(find "$output_dir" -maxdepth 1 -type f -name '*.pdf' | wc -l)
 failure_count=$(find "$output_dir/logs" -type f -name '*.failed' | wc -l)
