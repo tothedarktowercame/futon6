@@ -455,3 +455,12 @@ Remaining gaps:
 
 Gates passed: `python3 -m py_compile scripts/sfc_concept_aggregate.py`,
 `pytest -q tests/test_sfc_concept_aggregate.py`, and full `pytest -q tests/`.
+
+## Completion criteria
+
+- D1/H-SFC1 concept-definition coverage run: coverage % at N∈{100,500} plus the ranked undefined list, deterministic, evidence report committed — check: `/home/joe/code/futon6/holes/excursions/sfc-concept-coverage.md` **Met.**
+- D2 corpus-wide genuine-concept ranking (term-prior de-noised) — check: the ranking artefact produced by `/home/joe/code/futon6/scripts/sfc_concept_coverage.py` and named in the coverage report **Met.**
+- D3 the concept→papers annotate-everywhere index as a first-class artefact — check: `/home/joe/code/futon6/scripts/sfc_concept_index.py` output committed and referenced from the coverage/aggregate reports **Met.**
+- H-SFC2a the deterministic `:structure` lift (LaTeXML → Clojure skeleton with ungrounded-symbol list) — check: `/home/joe/code/futon6/holes/excursions/sfc-def-structure-evidence.md` **Met.**
+- H-SFC2b symbol grounding: per-paper defeasible bindings fill `:grounding` holes, checked against each paper's own definitions — check: a dated evidence report under `/home/joe/code/futon6/holes/excursions/` showing grounded bindings beyond the fixture (tool `scripts/sfc_symbol_grounding.py` exists but no such report found) **Not met.**
+- D5 bridge: concept-coverage of proofs (do the concepts a proof uses have definitions in the substrate) measured for at least one proof — check: an R2d report in `/home/joe/code/futon6/holes/excursions/` or E-informal-proof-checking **Not started.**
