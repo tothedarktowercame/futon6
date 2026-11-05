@@ -20,3 +20,10 @@ It is a concrete answer to "what is mark8 useful for?", at a scale already teste
 
 - Edge rule: an aligned step proved by another paper's lemma, or a match above a threshold.
 - What counts as a useful demo: a number, a rendered example, or both.
+
+## Completion criteria
+
+- The edge rule is decided and recorded (aligned-step-proved-by-foreign-lemma, or threshold match) — check: a decision line replacing the 'Not yet decided' edge-rule bullet in the file **Not met.**
+- The cross-paper dependency graph is built over the APM corpus and stored — check: an artifact file (e.g. under `futon6/data/` or `futon6/holes/`) plus the script that built it, with the node/edge counts recorded **Not met.**
+- The two questions are answered in writing: corpus connectivity, and which papers' lemmas could reuse toward an open sorry (e.g. t98A01) — check: a findings section in the file with both answers **Not met.**
+- A demo artifact exists in the form decided (number, rendered example, or both) suitable for showing Rob as the mark8 case — check: the demo output file cited in the file **Not met.**
