@@ -53,12 +53,61 @@ local unicode_ops = {
   {"λ", "\\lambda "}, {"ν", "\\nu "}, {"ξ", "\\xi "},
   {"ρ", "\\rho "}, {"σ", "\\sigma "}, {"τ", "\\tau "},
   {"φ", "\\phi "}, {"χ", "\\chi "},
-  {"×", "\\times "}, {"π", "\\pi "}, {"Γ", "\\Gamma "},
+  {"×", "\\times "}, {"·", "\\cdot "}, {"π", "\\pi "}, {"Γ", "\\Gamma "},
   {"Φ", "\\Phi "}, {"μ", "\\mu "}, {"ω", "\\omega "},
   {"Δ", "\\Delta "}, {"Θ", "\\Theta "}, {"Λ", "\\Lambda "},
-  {"Ξ", "\\Xi "}, {"Σ", "\\Sigma "}, {"Ω", "\\Omega "},
+  {"Ξ", "\\Xi "}, {"Σ", "\\sum "}, {"Ω", "\\Omega "},
   {"√", "\\sqrt "},
+  {"∑", "\\sum "}, {"∫", "\\int "}, {"∂", "\\partial "},
+  {"∈", "\\in "},
 }
+
+-- APM prose frequently writes whole formulae with Unicode super/subscript
+-- glyphs (Σₙ₌₀ⁿ, Sₙ, xᵏ) instead of Markdown math delimiters.  Preserve a
+-- consecutive run as one TeX script; translating each glyph separately would
+-- produce illegal double scripts such as _{n}_{=}_{0}.
+local unicode_subscript = {
+  ["₀"]="0", ["₁"]="1", ["₂"]="2", ["₃"]="3", ["₄"]="4",
+  ["₅"]="5", ["₆"]="6", ["₇"]="7", ["₈"]="8", ["₉"]="9",
+  ["₊"]="+", ["₋"]="-", ["₌"]="=", ["₍"]="(", ["₎"]=")",
+  ["ₐ"]="a", ["ₑ"]="e", ["ₕ"]="h", ["ᵢ"]="i", ["ⱼ"]="j",
+  ["ₖ"]="k", ["ₗ"]="l", ["ₘ"]="m", ["ₙ"]="n", ["ₒ"]="o",
+  ["ₚ"]="p", ["ᵣ"]="r", ["ₛ"]="s", ["ₜ"]="t", ["ₓ"]="x",
+}
+local unicode_superscript = {
+  ["⁰"]="0", ["¹"]="1", ["²"]="2", ["³"]="3", ["⁴"]="4",
+  ["⁵"]="5", ["⁶"]="6", ["⁷"]="7", ["⁸"]="8", ["⁹"]="9",
+  ["⁺"]="+", ["⁻"]="-", ["⁼"]="=", ["⁽"]="(", ["⁾"]=")",
+  ["ᵃ"]="a", ["ᵇ"]="b", ["ᶜ"]="c", ["ᵈ"]="d", ["ᵉ"]="e",
+  ["ᶠ"]="f", ["ᵍ"]="g", ["ʰ"]="h", ["ⁱ"]="i", ["ʲ"]="j",
+  ["ᵏ"]="k", ["ˡ"]="l", ["ᵐ"]="m", ["ⁿ"]="n", ["ᵒ"]="o",
+  ["ᵖ"]="p", ["ʳ"]="r", ["ˢ"]="s", ["ᵗ"]="t", ["ˣ"]="x",
+}
+
+local function normalize_unicode_scripts(s)
+  local out, run, run_kind = {}, {}, nil
+  local function flush()
+    if #run > 0 then
+      table.insert(out, (run_kind == "sub" and "_{" or "^{") .. table.concat(run) .. "}")
+      run, run_kind = {}, nil
+    end
+  end
+  for _, cp in utf8.codes(s) do
+    local ch = utf8.char(cp)
+    local value, kind = unicode_subscript[ch], "sub"
+    if value == nil then value, kind = unicode_superscript[ch], "sup" end
+    if value ~= nil then
+      if run_kind ~= nil and run_kind ~= kind then flush() end
+      run_kind = kind
+      table.insert(run, value)
+    else
+      flush()
+      table.insert(out, ch)
+    end
+  end
+  flush()
+  return table.concat(out)
+end
 
 local function trim(s)
   return (s:gsub("^%s+", ""):gsub("%s+$", ""))
@@ -283,6 +332,12 @@ local function is_math_atom(atom)
   if atom:match("^[A-Za-z]$") then
     return true
   end
+  -- Differentials belong to an adjacent integral chain.  Recognising them as
+  -- atoms lets the paragraph pass merge `\int ... dx = log(2)` as one formula
+  -- instead of stranding dx in prose and thereby cutting off the RHS.
+  if atom:match("^d[A-Za-z]$") then
+    return true
+  end
   if greek_token_names[atom] then
     return true
   end
@@ -311,6 +366,20 @@ local function is_math_atom(atom)
     end
   end
   if atom:match("^%b()$") or atom:match("^%b[]$") then
+    return true
+  end
+  -- Rational/function expressions written as ordinary APM prose tokens.
+  -- These must join a neighbouring relation/arrow rather than leaving that
+  -- operator as a one-node formula: S_n(x) -> 1/(1+x).
+  if atom:match("^%d+/%b()$") or atom:match("^[A-Za-z]%b()$") then
+    return true
+  end
+  if atom:match("^[A-Za-z][A-Za-z0-9]*%b()/%w+$") then
+    return true
+  end
+  -- Real intervals are mathematical even when half-open, hence deliberately
+  -- not balanced as one bracket kind: [0,1), (0,1], [0,1].
+  if atom:match("^[%[(][%w{}_^%+%-]+,[%w{}_^%+%-]+[%])]$") then
     return true
   end
   if atom:match("[\\{}_^]") then
@@ -496,6 +565,52 @@ local latex_authored = false
 local function normalize_expr(s)
   s = trim(s)
   s = s:gsub("%$", "")
+  -- normalize_expr may see the same fragment more than once while paragraph
+  -- pieces are merged.  Park delimiter markup from an earlier pass so its
+  -- literal glyph is not mistaken for fresh source and wrapped recursively.
+  local delimiter_slots = {}
+  local function park_semantic_delimiters(text)
+    local function park(kind, body)
+      delimiter_slots[#delimiter_slots + 1] = "\\math" .. kind .. body
+      return "ZzMPDELIM" .. index_to_letters(#delimiter_slots) .. "ENDZz"
+    end
+    text = text:gsub("\\math(open)(%b{})", park)
+    text = text:gsub("\\math(close)(%b{})", park)
+    text = text:gsub("\\mathbin(%b{})", function(body)
+      if body == "{\\mBridgeOperator{/}}" then
+        delimiter_slots[#delimiter_slots + 1] = "\\mathbin" .. body
+        return "ZzMPDELIM" .. index_to_letters(#delimiter_slots) .. "ENDZz"
+      end
+      return "\\mathbin" .. body
+    end)
+    text = text:gsub("\\([%(%)])", function(ch)
+      delimiter_slots[#delimiter_slots + 1] = "\\" .. ch
+      return "ZzMPDELIM" .. index_to_letters(#delimiter_slots) .. "ENDZz"
+    end)
+    return text
+  end
+  local function restore_semantic_delimiters(text)
+    return (text:gsub("ZzMPDELIM(%u+)ENDZz", function(letters)
+      return delimiter_slots[letters_to_index(letters)] or ""
+    end))
+  end
+  s = park_semantic_delimiters(s)
+  s = normalize_unicode_scripts(s)
+  -- Lean's compact iterate notation f^[n] is also readable mathematics, but
+  -- raw `^[` is not valid TeX.  Preserve the brackets as part of the exponent.
+  s = s:gsub("([A-Za-z])%^%[([^%]]+)%]", "%1^{[%2]}")
+
+  -- Authored LaTeX commonly writes norms as \|x\|.  The backslashes are TeX
+  -- delimiter escapes, not literal glyphs; remove them before the paired-bar
+  -- rule or they survive as `\\mathopen` and make the generated TeX invalid.
+  s = s:gsub("\\|", "|")
+
+  -- Paired absolute-value bars are delimiters, not anonymous text glyphs.
+  -- Use the semantic commands which math-proofread-style colours and which
+  -- MathML exposes as stretchy delimiters.
+  s = s:gsub("|([^|]+)|",
+    "\\mathopen{\\mDelimiter{|}}%1\\mathclose{\\mDelimiter{|}}")
+
   local parked
   s, parked = park_text_bodies(s)
   s = s:gsub("thetransfere→Hisallowed∈TO", "the transfer e -> H is allowed in T_O")
@@ -511,6 +626,14 @@ local function normalize_expr(s)
 
   s = s:gsub("{%[}", "[")
   s = s:gsub("{%]}", "]")
+  -- Half-open intervals pair by role even though their glyphs mismatch.
+  -- Do this after undoing escaped bracket artifacts above, or that cleanup
+  -- would strip the braces from \mDelimiter{[} itself.
+  s = s:gsub("([%[(])([%w\\{}_^%+%-]+),([%w\\{}_^%+%-]+)([%])])",
+    function(open, left, right, close)
+      return "\\mathopen{\\mDelimiter{" .. open .. "}}" .. left .. "," .. right
+          .. "\\mathclose{\\mDelimiter{" .. close .. "}}"
+    end)
   s = s:gsub("\\textbar%s*_%s*", "|_")
   s = s:gsub("\\textbar%s*%^%s*", "|^")
   s = s:gsub("\\textbar%s*{}", "|")
@@ -544,6 +667,12 @@ local function normalize_expr(s)
   end
 
   s = s:gsub("<=>", "\\Leftrightarrow ")
+  -- In APM Green-function notation, x_<=... means x_< = ..., not a
+  -- subscripted less-or-equal command.
+  s = s:gsub("([A-Za-z])_<=", "%1_{\\mSubLess} =")
+  s = s:gsub("([A-Za-z])_>=", "%1_{\\mSubGreater} =")
+  s = s:gsub("_<", "_{\\mSubLess}")
+  s = s:gsub("_>", "_{\\mSubGreater}")
   s = s:gsub("!=", "\\neq ")
   s = s:gsub(">=", "\\ge ")
   s = s:gsub("<=", "\\le ")
@@ -556,10 +685,19 @@ local function normalize_expr(s)
   s = replace_word(s, "det", "\\det")
   s = replace_word(s, "max", "\\max")
   s = replace_word(s, "inf", "\\inf")
+  s = replace_word(s, "lim", "\\lim")
   s = replace_word(s, "sqrt", "\\sqrt")
   s = replace_word(s, "sin", "\\sin")
   s = replace_word(s, "cos", "\\cos")
   s = replace_word(s, "log", "\\log")
+  -- Common APM shorthands are not standard LaTeX commands on their own.
+  s = s:gsub("\\R%f[%A]", "\\mathbb{R}")
+  s = s:gsub("\\C%f[%A]", "\\mathbb{C}")
+  s = s:gsub("\\Z%f[%A]", "\\mathbb{Z}")
+  s = s:gsub("\\Q%f[%A]", "\\mathbb{Q}")
+  s = s:gsub("\\N%f[%A]", "\\mathbb{N}")
+  s = s:gsub("\\esssup%f[%A]", "\\operatorname*{ess\\,sup}")
+  s = s:gsub("\\longhookrightarrow%f[%A]", "\\hookrightarrow")
   s = replace_word(s, "bigcup", "\\bigcup")
   s = replace_word(s, "subseteq", "\\subseteq")
   s = replace_word(s, "subset", "\\subset")
@@ -632,6 +770,19 @@ local function normalize_expr(s)
   s = s:gsub("%f[%a]dmu_%{([^}]+)%}", "d\\mu_{%1}")
   s = s:gsub("%f[%a]dmu_([A-Za-z0-9%+%-]+)", "d\\mu_%1")
   s = s:gsub("%f[%a]dmu%f[%A]", "d\\mu")
+
+  -- Group balanced parenthesized command/script arguments before ordinary
+  -- parentheses become semantic delimiter atoms.  Otherwise TeX reads only
+  -- `\mathopen` as the argument of `\sqrt` or `^` and reports "Missing {".
+  s = s:gsub("\\sqrt%s*(%b())", function(group)
+    return "\\sqrt{" .. group .. "}"
+  end)
+  s = s:gsub("%^%s*(%b())", function(group)
+    return "^{" .. group .. "}"
+  end)
+  s = s:gsub("_%s*(%b())", function(group)
+    return "_{" .. group .. "}"
+  end)
 
   -- Parenthesized exponents/subscripts (Q^(abgd) -> Q^{abgd}).
   s = s:gsub("%^%{%}%(([^()]+)%)", "^{%1}")
@@ -763,13 +914,141 @@ local function normalize_expr(s)
   end
   s = s:gsub("\\sqrt%s*(\\%a+)", "\\sqrt{%1}")
 
+  -- The proof colour style makes < and > active relations; as raw subscript
+  -- glyphs (`x_<`) they need a non-active mathchar to avoid a missing-group
+  -- error while retaining comparison colouring.
+  s = s:gsub("_{<}", "_{\\mSubLess}")
+  s = s:gsub("_{>}", "_{\\mSubGreater}")
+
+  -- Pandoc's \tag argument is text mode, while APM labels often use Lean-like
+  -- subscripts.  Put those labels in an explicit math context before number
+  -- colouring introduces another nested group.
+  s = s:gsub("\\tag{([A-Za-z])_{([^}]+)}}", "\\tag{$%1_{%2}$}")
+
   s = mark_integer_literals(s)
+
+  -- A solidus between mathematical operands is division: give it binary
+  -- spacing and the same bridge-operator colour as raw `+`.  Existing markup
+  -- was parked at the start of normalize_expr, making this idempotent.
+  s = s:gsub("/", "\\mathbin{\\mBridgeOperator{/}}")
+
+  -- Classify ordinary mathematical parentheses explicitly.  The stylesheet's
+  -- global colour hooks do not reliably survive LaTeXML's conversion of raw
+  -- `(` and `)`, so make their delimiter role part of the generated LaTeX.
+  -- Park interval/absolute-value delimiters created during this pass too.
+  s = park_semantic_delimiters(s)
+  s = s:gsub("%(", "\\mathopen{\\mDelimiter{(}}")
+  s = s:gsub("%)", "\\mathclose{\\mDelimiter{)}}")
+  s = restore_semantic_delimiters(s)
+
+  -- TeX sizing prefixes cannot precede a semantic atom: `\left\mathopen`
+  -- and `\right\mathclose` raise "Missing delimiter".  Parentheses and bars
+  -- have already been classified explicitly, so retain that classification
+  -- and remove only the now-redundant visual sizing command.  The same issue
+  -- occurs with the Bigl/bigl family in authored display mathematics.
+  for _, sizing in ipairs({"left", "right", "big", "Big", "bigg", "Bigg",
+                           "bigl", "bigr", "Bigl", "Bigr", "biggl", "biggr", "Biggl", "Biggr"}) do
+    s = s:gsub("\\" .. sizing .. "%s*(\\mathopen%b{})", "%1")
+    s = s:gsub("\\" .. sizing .. "%s*(\\mathclose%b{})", "%1")
+    s = s:gsub("\\" .. sizing .. "%s*(\\mathbin%b{})", "%1")
+    s = s:gsub("\\" .. sizing .. "%s*\\{", "\\{")
+    s = s:gsub("\\" .. sizing .. "%s*\\}", "\\}")
+  end
+  s = s:gsub("\\left%s*%[", "\\mathopen{\\mDelimiter{[}}")
+  s = s:gsub("\\right%s*%]", "\\mathclose{\\mDelimiter{]}}")
+  s = s:gsub("\\left%s*\\{", "\\{")
+  s = s:gsub("\\right%s*\\}", "\\}")
+
+  local function group_semantic_delimited_argument(text, command, open_glyph, close_glyph)
+    local open = "\\mathopen{\\mDelimiter{" .. open_glyph .. "}}"
+    local close = "\\mathclose{\\mDelimiter{" .. close_glyph .. "}}"
+    local search_from = 1
+    while true do
+      local cmd_start, cmd_end = text:find(command, search_from, true)
+      if cmd_start == nil then break end
+      local arg_start = cmd_end + 1
+      while text:sub(arg_start, arg_start):match("%s") do arg_start = arg_start + 1 end
+      if text:sub(arg_start, arg_start + #open - 1) ~= open then
+        search_from = cmd_end + 1
+      else
+        local depth, cursor, arg_end = 0, arg_start, nil
+        while cursor <= #text do
+          local next_open = text:find(open, cursor, true)
+          local next_close = text:find(close, cursor, true)
+          if next_close == nil then break end
+          if next_open ~= nil and next_open < next_close then
+            depth = depth + 1
+            cursor = next_open + #open
+          else
+            depth = depth - 1
+            cursor = next_close + #close
+            if depth == 0 then arg_end = cursor - 1; break end
+          end
+        end
+        if arg_end == nil then
+          search_from = cmd_end + 1
+        else
+          local argument = text:sub(arg_start, arg_end)
+          text = text:sub(1, cmd_end) .. "{" .. argument .. "}" .. text:sub(arg_end + 1)
+          search_from = cmd_end + #argument + 3
+        end
+      end
+    end
+    return text
+  end
+  s = group_semantic_delimited_argument(s, "\\sqrt", "(", ")")
+  s = group_semantic_delimited_argument(s, "\\xrightarrow", "[", "]")
+  s = group_semantic_delimited_argument(s, "\\xleftarrow", "[", "]")
 
   -- Escape only characters that are not escaped already. The APM sources write
   -- \# for cardinality; escaping unconditionally yields \\# , which ends the
   -- row in display math instead of printing a hash.
   s = s:gsub("\\#", "\1"):gsub("#", "\\#"):gsub("\1", "\\#")
   s = s:gsub("\\%%", "\2"):gsub("%%", "\\%%"):gsub("\2", "\\%%")
+
+  -- Markdown frequently splits set-builder notation across inline nodes,
+  -- leaving a literal `{` or `}` unmatched in this fragment.  Such a brace
+  -- cannot be a valid TeX group delimiter.  Escape only the unmatched braces
+  -- after all generated macros are complete; balanced command arguments and
+  -- scripts remain untouched.
+  local function escape_unmatched_braces(text)
+    local stack, unmatched = {}, {}
+    local i = 1
+    while i <= #text do
+      local ch = text:sub(i, i)
+      if ch == "\\" and text:sub(i + 1, i + 1) == "\\" then
+        -- A TeX row break followed by `{...}` is not an escaped brace.
+        i = i + 2
+      elseif ch == "\\" and (text:sub(i + 1, i + 1) == "{" or text:sub(i + 1, i + 1) == "}") then
+        i = i + 2
+      elseif ch == "{" then
+        stack[#stack + 1] = i
+        i = i + 1
+      elseif ch == "}" then
+        if #stack > 0 then
+          table.remove(stack)
+        else
+          unmatched[i] = true
+        end
+        i = i + 1
+      else
+        i = i + 1
+      end
+    end
+    for _, pos in ipairs(stack) do unmatched[pos] = true end
+    if next(unmatched) == nil then return text end
+    local out = {}
+    for pos = 1, #text do
+      if unmatched[pos] then out[#out + 1] = "\\" end
+      out[#out + 1] = text:sub(pos, pos)
+    end
+    return table.concat(out)
+  end
+  s = escape_unmatched_braces(s)
+
+  -- A tag argument is text mode; Lean-style subscripts inside it need an
+  -- explicit math context (`\tag{D_n}` otherwise raises "Missing $").
+  s = s:gsub("\\tag{([^{}]-_[^{}]-)}", "\\tag{$%1$}")
 
   s = s:gsub("%s+", " ")
   s = unpark_text_bodies(s, parked)
@@ -1129,6 +1408,19 @@ local function extract_binary_side(el)
   if core:match("^[A-Za-z0-9]+/[A-Za-z0-9]+$") then
     return core, punct, false
   end
+  -- Relations provide strong local evidence that otherwise ambiguous compact
+  -- tokens are mathematical operands.  Keep this recognition here rather
+  -- than in the global Str filter so prose words are unaffected.
+  if core:match("^[A-Za-z][A-Za-z0-9]*'+%b()$")       -- f'(0), f''(x)
+      or core:match("^|.+|$")                         -- |f'(0)|, |z|
+      or (core:match("^[\128-\255]+$") and #core <= 4) -- Δ, ℂ, ℝ, θ
+      or core:match("^[\128-\255]+%b()$")            -- γ(0), φ(x)
+      or (not core:find("%s") and has_balanced_delimiters(core)
+          and is_mathy_inline(core)
+          and (core:match("%d") or core:match("[()|_^]") or #core <= 3))
+    then
+    return core, punct, false
+  end
   if core == "infinity" or core == "Infinity" or core == "inf" then
     return core, punct, false
   end
@@ -1354,6 +1646,31 @@ local function append_piece(pieces, s)
   table.insert(pieces, s)
 end
 
+local math_function_words = {
+  log = true, lim = true, exp = true,
+  sin = true, cos = true, tan = true,
+  inf = true, sup = true, max = true, min = true,
+}
+
+-- A relation at the right edge is almost always awaiting its other operand in
+-- inline mathematics.  This is deliberately narrower than merely accepting a
+-- function word everywhere: prose can legitimately mention a "log", whereas
+-- `... = log 2` must keep log and its argument in the formula.
+local function formula_awaits_rhs(pieces)
+  local s = trim(table.concat(pieces))
+  if s:match("[=<>]$") then
+    return true
+  end
+  local command = s:match("(\\%a+)$")
+  return command ~= nil and is_relation_cmd(command)
+end
+
+local function is_pending_relation_rhs_token(s)
+  local core = parse_token_with_punct(s)
+  return core ~= nil and core ~= "" and not core:find("%s")
+      and is_mathy_inline(core)
+end
+
 local function merge_adjacent_math_fragments(inlines)
   local out = {}
   local i = 1
@@ -1361,6 +1678,7 @@ local function merge_adjacent_math_fragments(inlines)
     local cur = inlines[i]
     if cur ~= nil and cur.t == "Math" and cur.mathtype == "InlineMath" then
       local pieces = {cur.text}
+      local started_awaiting_rhs = formula_awaits_rhs(pieces)
       local j = i + 1
       local math_count = 1
       while j <= #inlines do
@@ -1373,7 +1691,12 @@ local function merge_adjacent_math_fragments(inlines)
           local look = inlines[j + 1]
           if look ~= nil and (
               (look.t == "Math" and look.mathtype == "InlineMath") or
-              (look.t == "Str" and (is_symbolic_glue_str(look.text) or is_mathy_str_token(look.text)))
+              (look.t == "Str" and (
+                is_symbolic_glue_str(look.text) or
+                is_mathy_str_token(look.text) or
+                (formula_awaits_rhs(pieces) and is_pending_relation_rhs_token(look.text)) or
+                (math_function_words[look.text] and formula_awaits_rhs(pieces))
+              ))
             ) then
             table.insert(pieces, " ")
             j = j + 1
@@ -1390,7 +1713,24 @@ local function merge_adjacent_math_fragments(inlines)
           else
             break
           end
-        elseif nxt.t == "Str" and (is_symbolic_glue_str(nxt.text) or is_mathy_str_token(nxt.text)) then
+        elseif nxt.t == "Str" and nxt.text:match("^[%)%]]+$") then
+          -- A prose parenthesis following a complete formula is not another
+          -- mathematical delimiter.  Only absorb it when the formula really
+          -- has an unmatched opener.  This matters once delimiters carry
+          -- explicit \mathopen/\mathclose markup: blindly merging the prose
+          -- close produced a synthetic delimiter whose glyph was `\)\(`.
+          if bracket_depth(pieces) > 0 then
+            append_piece(pieces, nxt.text)
+            j = j + 1
+          else
+            break
+          end
+        elseif nxt.t == "Str" and (
+            is_symbolic_glue_str(nxt.text) or
+            is_mathy_str_token(nxt.text) or
+            (formula_awaits_rhs(pieces) and is_pending_relation_rhs_token(nxt.text)) or
+            (math_function_words[nxt.text] and formula_awaits_rhs(pieces))
+          ) then
           append_piece(pieces, nxt.text)
           j = j + 1
         else
@@ -1403,7 +1743,12 @@ local function merge_adjacent_math_fragments(inlines)
         j = j - 1
       end
 
-      if math_count >= 2 then
+      -- Usually require two Math nodes before replacing the original node.
+      -- A trailing relation is the important exception: Unicode input such as
+      -- `|S_n(x)| ≤ n+1` may put the entire LHS and relation in one Math node,
+      -- followed by an ordinary string operand.  Keeping the absorbed operand
+      -- is precisely the relation's left+right extensionality.
+      if math_count >= 2 or (started_awaiting_rhs and j > i + 1) then
         table.insert(out, pandoc.Math("InlineMath", normalize_expr(table.concat(pieces))))
         i = j
       else
@@ -1435,6 +1780,28 @@ local function convert_simple_str_token_to_inlines(s)
   })[s]
   if op_tex ~= nil then
     return {pandoc.Math("InlineMath", op_tex)}
+  end
+
+  local formula_core, formula_punct = s:match("^(.-)([%.,;:]*)$")
+  if formula_core ~= nil and (
+      formula_core:match("^%d+/%b()$") or
+      formula_core:match("^[A-Za-z]%b()$") or
+      formula_core:match("^[A-Za-z][A-Za-z0-9]*%b()/%w+$") or
+      formula_core:match("^[%[(][%w{}_^%+%-]+,[%w{}_^%+%-]+[%])]$")
+    ) then
+    local out = {pandoc.Math("InlineMath", normalize_expr(formula_core))}
+    if formula_punct ~= "" then table.insert(out, pandoc.Str(formula_punct)) end
+    return out
+  end
+
+  -- A function at the end of a parenthetical formula often carries the prose
+  -- parenthesis too: `... = lim_{x->1^-} f(x))`.  Lift f(x), but leave the
+  -- unmatched close for balance_math_edges to keep with the sentence.
+  local call, prose_close, call_punct = s:match("^([A-Za-z][A-Za-z0-9]*%b())([%)]+)([%.,;:]*)$")
+  if call ~= nil then
+    local out = {pandoc.Math("InlineMath", normalize_expr(call)), pandoc.Str(prose_close)}
+    if call_punct ~= "" then table.insert(out, pandoc.Str(call_punct)) end
+    return out
   end
 
   local abs_inner, abs_punct = s:match("^|([^|]+)|([%.,;:]*)$")
@@ -1753,6 +2120,36 @@ function Str(el)
     return nil
   end
 
+  -- Undelimited Unicode mathematics is common in the APM Markdown corpus.
+  -- Lift the whole token, not just a relation embedded in it, so scripts and
+  -- their base remain one expression and receive the syntax-class colours.
+  for _, ch in ipairs({"∈", "∉", "≠", "≤", "≥", "⊂", "⊆", "⊃", "⊇",
+                        "∪", "∩", "≅", "≃", "∘", "↦", "×", "·", "→", "‖",
+                        "∞", "∑", "∫", "∂", "√", "Σ"}) do
+    if s:find(ch, 1, true) then
+      local core, punct = s:match("^(.-)([%.,;:]*)$")
+      local out = {pandoc.Math("InlineMath", normalize_expr(core))}
+      if punct ~= "" then table.insert(out, pandoc.Str(punct)) end
+      return out
+    end
+  end
+  for ch, _ in pairs(unicode_subscript) do
+    if s:find(ch, 1, true) then
+      local core, punct = s:match("^(.-)([%.,;:]*)$")
+      local out = {pandoc.Math("InlineMath", normalize_expr(core))}
+      if punct ~= "" then table.insert(out, pandoc.Str(punct)) end
+      return out
+    end
+  end
+  for ch, _ in pairs(unicode_superscript) do
+    if s:find(ch, 1, true) then
+      local core, punct = s:match("^(.-)([%.,;:]*)$")
+      local out = {pandoc.Math("InlineMath", normalize_expr(core))}
+      if punct ~= "" then table.insert(out, pandoc.Str(punct)) end
+      return out
+    end
+  end
+
   local conv = convert_simple_str_token_to_inlines(s)
   if conv ~= nil then
     return conv
@@ -1804,6 +2201,15 @@ end
 
 function Code(el)
   local s = el.text
+  -- Lean expressions whose punctuation resembles prose mathematics.  These
+  -- are executable identifiers/applications, not formulae to be normalized.
+  if s:find(".indicator", 1, true)
+      or s:find("fun _ =>", 1, true)
+      or s:find("^[", 1, true)
+      or s:find("Function.iterate", 1, true)
+    then
+    return nil
+  end
   -- Before keep_inline_code: its snake_case test reads \sigma_a (and f_n in
   -- `f_n ∈ K`) as an identifier. A dotted Lean path stays code.
   if is_latex_math(s) or (has_unicode_relation(s) and not s:match("%u[%w]*%.[%w_\128-\255]")
@@ -1907,11 +2313,42 @@ end
 local function split_unopened_close(text)
   local depth = 0
   local i = 1
+  local semantic_open = {
+    ["\\mathopen{\\mDelimiter{(}}"] = "(",
+    ["\\mathopen{\\mDelimiter{[}}"] = "[",
+  }
+  local semantic_close = {
+    ["\\mathclose{\\mDelimiter{)}}"] = ")",
+    ["\\mathclose{\\mDelimiter{]}}"] = "]",
+  }
   while i <= #text do
-    local c = text:sub(i, i)
-    if c == "\\" then
-      i = i + 2                              -- \{ \| \left( are not prose brackets
-    else
+    local consumed = false
+    for macro, _ in pairs(semantic_open) do
+      if text:sub(i, i + #macro - 1) == macro then
+        depth = depth + 1
+        i = i + #macro
+        consumed = true
+        break
+      end
+    end
+    if not consumed then
+      for macro, glyph in pairs(semantic_close) do
+        if text:sub(i, i + #macro - 1) == macro then
+          if depth == 0 then
+            return text:sub(1, i - 1), glyph, text:sub(i + #macro)
+          end
+          depth = depth - 1
+          i = i + #macro
+          consumed = true
+          break
+        end
+      end
+    end
+    if not consumed then
+      local c = text:sub(i, i)
+      if c == "\\" then
+        i = i + 2                            -- \{ \| \left( are not prose brackets
+      else
       if c == "(" or c == "[" then
         depth = depth + 1
       elseif c == ")" or c == "]" then
@@ -1921,6 +2358,7 @@ local function split_unopened_close(text)
         depth = depth - 1
       end
       i = i + 1
+      end
     end
   end
   return nil

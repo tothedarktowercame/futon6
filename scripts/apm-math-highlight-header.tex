@@ -1,0 +1,17 @@
+% APM Markdown -> highlighted LaTeX/PDF support for XeLaTeX.
+%
+% DejaVu covers the Unicode used in APM prose and Lean listings much more
+% completely than Pandoc's Latin Modern defaults.  Keep the two remaining
+% mathematical glyphs semantic instead of relying on font fallback.
+\setmainfont{DejaVu Serif}
+\setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]
+
+\usepackage{newunicodechar}
+\usepackage{mathtools}
+\newunicodechar{∎}{\ensuremath{\blacksquare}}
+\newunicodechar{𝓝}{\ensuremath{\mathcal{N}}}
+
+\usepackage{math-proofread-style}
+\newcommand{\mSubLess}{{\color{MPSyntaxComparisonColor}\mathchar"313C}}
+\newcommand{\mSubGreater}{{\color{MPSyntaxComparisonColor}\mathchar"313E}}
+\EnableMathProofColors

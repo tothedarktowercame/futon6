@@ -27,7 +27,7 @@ def convert(markdown: str) -> str:
 
 
 @pytest.mark.parametrize("span, expect", [
-    (r"\sigma_a = \rho(a)", r"\(\sigma_{a} = \rho(a)\)"),
+    (r"\sigma_a = \rho(a)", r"\(\sigma_{a} = \rho\mathopen{\mDelimiter{(}}a"),
     ("f", r"\(f\)"),
     ("C,D", r"\(C,D\)"),
     ("ξ", r"\(\xi\)"),
@@ -60,7 +60,8 @@ def test_a_bracket_the_formula_never_opened_goes_back_to_the_sentence():
     for s in spans:
         depth = sum(s.count(c) for c in "([") - sum(s.count(c) for c in ")]")
         assert depth == 0, s
-    assert r"\(({\mNumber{0}},{\mNumber{1}}]\)" in out
+    assert (r"\(\mathopen{\mDelimiter{(}}{\mNumber{0}},{\mNumber{1}}"
+            r"\mathclose{\mDelimiter{]}}\)" in out)
 
 
 def test_latex_authored_formula_keeps_in_as_a_product():
@@ -74,3 +75,106 @@ def test_merging_keeps_a_command_apart_from_a_following_letter():
     # "$\neg$UC" merged as the undefined command \negUC (APM a93A01).
     out = convert(r"Assume $\neg$UC: $\exists\varepsilon > 0$: done." + "\n")
     assert r"\negUC" not in out and r"\neg UC" in out
+
+
+def test_unicode_apm_arrow_has_both_operands_and_intervals_are_math():
+    out = convert("For each x ∈ [0,1), Sₙ(x) → 1/(1+x).\n")
+    spans = re.findall(r"\\\((.*?)\\\)", out)
+    assert any(
+        r"x \in \mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}"
+        r"\mathclose{\mDelimiter{)}}" in span
+        for span in spans
+    )
+    assert any(
+        r"S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} \to "
+        r"{\mNumber{1}}\mathbin{\mBridgeOperator{/}}"
+        r"\mathopen{\mDelimiter{(}}{\mNumber{1}}+x" in span
+        for span in spans
+    )
+
+
+def test_unicode_sum_scripts_stay_one_large_operator_expression():
+    out = convert("Σₙ₌₀ⁿ (-1)ⁿxⁿ.\n")
+    assert r"\sum_{n={\mNumber{0}}}^{n}" in out
+
+
+def test_integral_differential_relation_and_rhs_form_one_expression():
+    out = convert("∫₀¹ 1/(1+x) dx = log(2).\n")
+    spans = re.findall(r"\\\((.*?)\\\)", out)
+    assert len(spans) == 1
+    assert (r"\mathrm{d}x = \log\mathopen{\mDelimiter{(}}{\mNumber{2}}"
+            r"\mathclose{\mDelimiter{)}}" in spans[0])
+
+
+def test_absolute_value_bars_are_semantic_delimiters():
+    out = convert("|Sₙ(x)| ≤ 2.\n")
+    assert (r"\mathopen{\mDelimiter{|}}S_{n}\mathopen{\mDelimiter{(}}x"
+            r"\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}}"
+            r" \le {\mNumber{2}}" in out)
+
+
+def test_limit_operator_keeps_its_rhs_function_in_the_expression():
+    out = convert("(then Σ aₙ = lim_{x→1⁻} f(x)), afterwards.\n")
+    spans = re.findall(r"\\\((.*?)\\\)", out)
+    assert any(
+        r"\lim_{x\to {\mNumber{1}}^{-}} f\mathopen{\mDelimiter{(}}x"
+        r"\mathclose{\mDelimiter{)}}" in span
+        for span in spans
+    )
+    assert all("lim_{" not in span or r"\lim_{" in span for span in spans)
+
+
+def test_integral_function_fraction_and_differential_form_one_expression():
+    out = convert("∫₀¹ log(1+x)/x dx = π²/12.\n")
+    spans = re.findall(r"\\\((.*?)\\\)", out)
+    assert len(spans) == 1
+    assert (r"\log\mathopen{\mDelimiter{(}}{\mNumber{1}}+x"
+            r"\mathclose{\mDelimiter{)}}\mathbin{\mBridgeOperator{/}}x "
+            r"\mathrm{d}x = \pi^{{\mNumber{2}}}"
+            in spans[0])
+
+
+def test_solidus_is_a_coloured_binary_operator():
+    out = convert("1/(1+x).\n")
+    assert r"{\mNumber{1}}\mathbin{\mBridgeOperator{/}}" in out
+
+
+def test_equality_extends_right_through_spaced_log_application():
+    out = convert("Therefore Σₙ₌₀^∞ (-1)ⁿ/(n+1) = log 2.\n")
+    spans = re.findall(r"\\\((.*?)\\\)", out)
+    assert len(spans) == 1
+    assert r"= \log {\mNumber{2}}" in spans[0]
+    assert "log 2" not in re.sub(r"\\\(.*?\\\)", "", out)
+
+
+def test_unicode_inequality_extends_right_through_compound_operand():
+    out = convert("|Sₙ(x)| ≤ n+1 — not a fixed bound.\n")
+    spans = re.findall(r"\\\((.*?)\\\)", out)
+    assert len(spans) == 1
+    assert r"\le n+{\mNumber{1}}" in spans[0]
+    assert "not a fixed bound" in out
+
+
+def test_semantic_close_delimiter_is_not_split_inside_its_macro():
+    out = convert("The function f(z) = z (since |z| < 1), fixes.\n")
+    assert r"\mDelimiter{\))\(}" not in out
+    assert (r"\mathopen{\mDelimiter{|}}z\mathclose{\mDelimiter{|}} < "
+            r"{\mNumber{1}}" in out)
+    assert "(since" in out and "), fixes" in out
+
+
+def test_relation_context_recognizes_derivative_and_absolute_value_operands():
+    out = convert("The bounds f'(0) = 1 and |f'(0)| ≤ 1 hold.\n")
+    spans = re.findall(r"\\\((.*?)\\\)", out)
+    assert any(r"f'\mathopen{\mDelimiter{(}}{\mNumber{0}}" in span
+               and r"= {\mNumber{1}}" in span for span in spans)
+    assert any(r"\mathopen{\mDelimiter{|}}f'" in span
+               and r"\le {\mNumber{1}}" in span for span in spans)
+
+
+def test_relation_context_recognizes_unicode_function_and_domain_operands():
+    out = convert("Since γ(0) = π, take f : Δ → Δ.\n")
+    spans = re.findall(r"\\\((.*?)\\\)", out)
+    assert any(r"\gamma \mathopen{\mDelimiter{(}}{\mNumber{0}}" in span
+               and r"= \pi" in span for span in spans)
+    assert any(r"\Delta \to \Delta" in span for span in spans)
