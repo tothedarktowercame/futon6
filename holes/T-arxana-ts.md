@@ -4,6 +4,8 @@
 with Claude. **Status:** open. **Companions:** `T-neo4j-scope-store.md` (store side),
 `M-informal-lean-alignment.md` (the Lean substrate this is meant to serve),
 `futon4/README-essays.md` (the file-role convention this keeps).
+`excursions/E-native-lean-scopes.md` (scopes generated from Lean via EmitPython,
+the formal half of phase 5).
 
 ## 0. What is being asked
 
