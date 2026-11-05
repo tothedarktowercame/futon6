@@ -40,3 +40,10 @@ by convention alone:
 Parked until Joe has the thumbdrive + an hour. Committed data isn't the end
 of the world; the note exists so the fix is designed once, not improvised
 per-repo.
+
+## Completion criteria
+
+- Each artifact class has one blessed location, with regenerable outputs documented by their generating command — check: a storage-strategy note or manifest naming the classes and locations **Not started.**
+- A manifest exists for the irreplaceable class (what lives where, generated-by, date, size, checksum) — check: a manifest file under ~/code/storage/ or its successor location **Not started.**
+- futon6 repo hygiene is mechanical: data/ gitignored and the legacy tracked data files untracked — check: git -C futon6 ls-files data/ returns nothing **Not met.** (1 modified tracked file, tracked entries remain)
+- The cold tier decision is recorded (thumbdrive or successor) with a first copy made — check: a dated note in this item naming the medium and the first copied class **Not started.**
