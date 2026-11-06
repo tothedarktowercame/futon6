@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+"""mark3 — arXiv batch coordinator for superpod Mark 3.
+
+Mark 3 extends the Mark 2 coordinator rather than replacing it (mission
+M-superpod-mark3, "extend rather than replace the Mark 2 substrate").  Every
+Mark 2 subcommand is delegated to the inherited mark2 module unchanged; what
+Mark 3 adds is:
+
+  * a SEPARATE home (MARK3_HOME, default ~/mark3) and a SEPARATE manifest
+    (mark3_manifest.sqlite) so Mark 3 batches never touch Mark 2 state, and
+  * a tested `rollback` subcommand that hands coordination back to Mark 2:
+    it verifies the Mark 2 home and manifest are intact, records a
+    generation marker in the Mark 3 home, and never modifies anything under
+    the Mark 2 home.
+
+Usage mirrors mark2:
+
+    python scripts/mark3 status
+    python scripts/mark3 rollback          # verified hand-back to Mark 2
+    MARK3_HOME=/tmp/mark3 python scripts/mark3 status
+
+The Mark 2 regression checks (tests/test_mark2.py) apply unchanged: mark3
+does not edit, move, or special-case any mark2 code path — it rebinds the
+module's home/manifest globals and calls the inherited functions.
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib.machinery
+import importlib.util
+import json
+import os
+import sys
+from pathlib import Path
+
+MARK2_SCRIPT = Path(__file__).resolve().parent / "mark2"
+
+
+def load_mark2_module():
+    """Load the inherited mark2 coordinator as a module (repo copy)."""
+    loader = importlib.machinery.SourceFileLoader("mark2_script", str(MARK2_SCRIPT))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    assert spec is not None
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def default_mark3_home(script_file: str | None) -> Path:
+    """Default Mark 3 home: MARK3_HOME env, deployed dir, else ~/mark3.
+
+    Deliberately independent of MARK2_HOME so a deployed Mark 3 never
+    shares a home with Mark 2.
+    """
+    if "MARK3_HOME" in os.environ:
+        return Path(os.environ["MARK3_HOME"])
+
+    if script_file is not None:
+        script_path = Path(script_file).resolve()
+        if script_path.name == "mark3" and script_path.parent.name == "mark3":
+            return script_path.parent
+
+    return Path.home() / "mark3"
+
+
+GENERATION_MARKER = "generation.json"
+
+
+def generation_path(home: Path) -> Path:
+    return home / GENERATION_MARKER
+
+
+def write_generation(home: Path, generation: str, note: str) -> None:
+    home.mkdir(parents=True, exist_ok=True)
+    marker = {
+        "generation": generation,
+        "note": note,
+    }
+    generation_path(home).write_text(
+        json.dumps(marker, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+
+def cmd_rollback(mark2_home, mark2_manifest, args) -> int:
+    """Verified hand-back of coordination to Mark 2.
+
+    Refuses (exit 1) unless the Mark 2 home exists with a readable state
+    file and its manifest DB is present — a rollback is only recorded when
+    there is a working Mark 2 to roll back to.  Nothing under the Mark 2
+    home is created, written, or deleted by this command.
+    """
+    mark2_state = mark2_home / "state.json"
+
+    problems = []
+    if not mark2_home.is_dir():
+        problems.append(f"mark2 home missing: {mark2_home}")
+    if not mark2_state.is_file():
+        problems.append(f"mark2 state missing: {mark2_state}")
+    if not Path(mark2_manifest).is_file():
+        problems.append(f"mark2 manifest missing: {mark2_manifest}")
+    if problems:
+        for p in problems:
+            print(f"error: {p}", file=sys.stderr)
+        print("rollback refused: Mark 2 is not intact", file=sys.stderr)
+        return 1
+
+    write_generation(
+        Path(args.mark3_home),
+        "mark2",
+        "coordination rolled back to Mark 2; mark3 state and manifest retained",
+    )
+    print(f"rollback verified: mark2 home intact at {mark2_home}")
+    print(f"  mark2 manifest: {mark2_manifest}")
+    print(f"  marker written: {generation_path(Path(args.mark3_home))}")
+    print("mark3 home untouched by mark2; batches resume under mark2")
+    return 0
+
+
+def main(argv=None) -> int:
+    mark3_home = default_mark3_home(__file__)
+    mark2 = load_mark2_module()
+    # Capture the REAL Mark 2 home/manifest (as mark2 itself computes them)
+    # before rebinding, so `rollback` verifies the genuine Mark 2 state.
+    mark2_home_real = mark2.MARK2_HOME
+    mark2_manifest_real = mark2.MANIFEST_DB
+    # Separate home and manifest: Mark 3 rebinds the inherited module's
+    # path globals.  Every mark2 helper computes paths from these globals
+    # at call time, so all inherited subcommands operate inside the Mark 3
+    # home and read the Mark 3 manifest.
+    mark2.MARK2_HOME = mark3_home
+    mark2.MANIFEST_DB = Path(
+        os.environ.get("MARK3_MANIFEST_DB", mark3_home / "mark3_manifest.sqlite")
+    )
+
+    raw = list(sys.argv[1:] if argv is None else argv)
+    command = raw[0] if raw else None
+
+    if command == "rollback":
+        ap = argparse.ArgumentParser(
+            prog="mark3 rollback",
+            description="Verify Mark 2 intact and record rollback to Mark 2")
+        ap.add_argument("--mark3-home", default=str(mark3_home),
+                        help="Mark 3 home to write the generation marker in")
+        return cmd_rollback(
+            mark2_home_real, mark2_manifest_real, ap.parse_args(raw[1:]))
+
+    if command is None:
+        ap = argparse.ArgumentParser(
+            prog="mark3",
+            description="arXiv batch coordinator for superpod Mark 3 "
+                        "(extends mark2; separate home and manifest; "
+                        "tested rollback)")
+        ap.print_help()
+        return 0
+
+    # Everything else is forwarded verbatim (options included) to mark2's
+    # own parser, so mark3 adds no divergent flag semantics.
+    mark2_sys_argv = sys.argv
+    try:
+        sys.argv = [str(MARK2_SCRIPT), *raw]
+        return mark2.main()
+    finally:
+        sys.argv = mark2_sys_argv
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
