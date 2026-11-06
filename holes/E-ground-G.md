@@ -11,6 +11,8 @@ with the rest of the apparatus.*
 **Spawned:** 2026-06-10, by Joe, from the **A2/T1 result** in `C-falsifiable-missions` §5.
 **Status:** CHARTERED (IDENTIFY).
 
+**Gate:** operator-decision — awaiting Joe: the questions recorded for this item in futon2 holes/tickets/T-giraffe-undetermined-triage.md (2026-11-06). Not for automated work until answered.
+
 **VERDICT (2026-10-09, provisional):** OPEN — Grounded-T1 landing is data-blocked with an explicit decision pending Joe; neither completed nor dropped. _(WM status classification by zai-4, medium confidence; not yet confirmed by the author.)_
 
 ## Why (the forcing result)
