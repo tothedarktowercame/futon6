@@ -1,30 +1,19 @@
 # ---------------------------------------------------------------------------
-# KNOWN FAILING WITHOUT THE INPUTS BELOW (recorded 2026-09-23)
+# TAXONOMY DRIFT ABSORBED 2026-11-06 (was the "KNOWN FAILING" block of
+# 2026-09-23). The futon3 library changes behind the 17/18 recorded
+# failures are now handled in arxiv_pattern_prompt.py:
 #
-# Documented rather than repaired. Each cause is stated so a reader can tell a
-# missing input or upstream drift from a defect in the code under test.
+# - 2026-08-13 (futon3 363d1727): clarification-meta is a meta-tag, not a
+#   pattern; its flexiarg was removed, definition/routing live in
+#   PAPER-SHAPES-INDEX.md section 5. The prompt keeps it a valid family (the
+#   explicit coverage escape); library resolution no longer requires a
+#   flexiarg for it and the loader synthesizes it from the index.
+# - 2026-08-17 (MANIFEST-math-split-RULED.md): subject-coded leaves moved to
+#   math-informal-<CODE>/ siblings; the loader walks all of them, and
+#   math-informal/complexity-classification is now
+#   math-informal-LO/complexity-classification (expectation updated below).
 #
-# 17 of 18 failures - missing futon3 family parent:
-#   The futon3 library no longer carries
-#   `library/math-strategy/clarification-meta.flexiarg`. It was removed upstream
-#   on 2026-08-13 (futon3 363d1727, "clarification-meta -> spec") because it was
-#   titled "Clarification (Meta-Tag, not a Pattern)" and said of itself that it
-#   was not a pattern; its substance moved into README-flexiarg.md section 3a,
-#   while the exemplars and routing stayed in PAPER-SHAPES-INDEX.md section 5.
-#
-#   arxiv_pattern_prompt.FAMILY_PARENTS still lists it, and
-#   `_has_paper_shape_families` requires EVERY parent to have a file, so that one
-#   absent file disqualifies every candidate library root and resolution falls
-#   through to the DEFAULT_FUTON3_LIBRARY (~/code/futon3/library). The reported
-#   path is therefore a fallback nobody configured, which makes this look like a
-#   path bug when it is a taxonomy change futon6 has not absorbed.
-#
-# The remaining one is the TMPDIR class:
-#   The test builds a literal path under TMPDIR and compares it against a path
-#   the code under test has resolved. Wherever TMPDIR is reached through a
-#   symlink, literal != resolved and the assertion fails over the spelling of a
-#   path rather than over behaviour. Setting TMPDIR to an already-resolved
-#   directory is not always sufficient, since a test runner may set its own.
+# The TMPDIR spelling class noted on 2026-09-23 did not reproduce here.
 # ---------------------------------------------------------------------------
 """Tests for the arxiv-aware Stage 3 prompt builder.
 
@@ -101,7 +90,9 @@ class TestTaxonomyLoad(unittest.TestCase):
                 "math-strategy/characterization-result",
             "math-informal/structural-characterization":
                 "math-strategy/characterization-result",
-            "math-informal/complexity-classification":
+            # renamed from math-informal/ by the futon3 math split
+            # (2026-08-17, MANIFEST-math-split-RULED.md)
+            "math-informal-LO/complexity-classification":
                 "math-strategy/characterization-result",
             "math-informal/structural-inclusion":
                 "math-strategy/structural-relation-result",

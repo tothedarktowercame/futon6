@@ -38,17 +38,29 @@ _CONTEXT_RE = re.compile(r"^\s*\+\s*context:\s*(.*)$")
 
 
 DEFAULT_FUTON3_LIBRARY = Path.home() / "code" / "futon3" / "library"
-FAMILY_PARENTS = [
+
+# Taxonomy change absorbed 2026-11-06 (upstream futon3 363d1727, 2026-08-13):
+# `math-strategy/clarification-meta` is a meta-tag, not a pattern. Its
+# flexiarg was removed; its definition and routing live in
+# `math-strategy/PAPER-SHAPES-INDEX.md` section 5. It stays a valid prompt
+# family (the explicit no-nulls coverage escape), but library resolution no
+# longer requires a flexiarg for it, and the taxonomy loader synthesizes its
+# entry from the index (falling back to a flexiarg on older libraries).
+STRATEGIC_FAMILY_PARENTS = [
     "math-strategy/existence-result",
     "math-strategy/characterization-result",
     "math-strategy/structural-relation-result",
     "math-strategy/property-of-object-result",
-    "math-strategy/clarification-meta",
 ]
+META_FAMILY_ID = "math-strategy/clarification-meta"
+FAMILY_PARENTS = STRATEGIC_FAMILY_PARENTS + [META_FAMILY_ID]
 
 
 def _has_paper_shape_families(library_root: Path) -> bool:
-    return all((library_root / f"{parent_id}.flexiarg").is_file() for parent_id in FAMILY_PARENTS)
+    return all(
+        (library_root / f"{parent_id}.flexiarg").is_file()
+        for parent_id in STRATEGIC_FAMILY_PARENTS
+    )
 
 
 def _default_futon3_library() -> Path:
@@ -141,24 +153,72 @@ def _parse_one_flexiarg(path: Path) -> Optional[Pattern]:
     )
 
 
+_META_SECTION_RE = re.compile(
+    r"^###\s+\d+\.\s+Clarification \(meta-tag\)\s+`(\S+)`\s*$", re.MULTILINE
+)
+
+
+def _load_clarification_meta_family(library_root: Path) -> "Pattern":
+    """Load the clarification-meta meta-tag family.
+
+    Preferred source: `PAPER-SHAPES-INDEX.md` section 5 (where upstream moved
+    its definition on 2026-08-13, futon3 363d1727). Older libraries that still
+    carry `clarification-meta.flexiarg` keep working; if neither is readable a
+    constant fallback keeps the family in the prompt vocabulary rather than
+    silently dropping the coverage escape.
+    """
+    legacy = library_root / f"{META_FAMILY_ID}.flexiarg"
+    pat = _parse_one_flexiarg(legacy)
+    if pat is not None:
+        return pat
+
+    index_path = library_root / "math-strategy" / "PAPER-SHAPES-INDEX.md"
+    one_liner = (
+        "Not a strategic pattern. Marks papers where the "
+        "(context, tension, move) triple cannot be meaningfully decomposed."
+    )
+    try:
+        index_text = index_path.read_text(encoding="utf-8")
+    except OSError:
+        index_text = ""
+    if index_text:
+        m = _META_SECTION_RE.search(index_text)
+        if m:
+            section = index_text[m.end():]
+            # First blockquote sentence of the section is the one-liner.
+            bq = re.search(r"^>\s*(.+)$", section, re.MULTILINE)
+            if bq:
+                one_liner = bq.group(1).strip()
+    return Pattern(
+        pattern_id=META_FAMILY_ID,
+        title="Clarification (Meta-Tag, not a Pattern)",
+        family=None,
+        one_liner=one_liner,
+    )
+
+
 def load_paper_shape_taxonomy(library_root: Optional[Path] = None) -> PaperShapeTaxonomy:
     """Load the 5-family + leaves paper-shape taxonomy from futon3 flexiargs.
 
-    Family parents declare member-pattern lists; leaves declare @family.
-    Reverse-link members from the parents into the leaves table when a
-    leaf's @family is missing (e.g. existing patterns that pre-date the
-    taxonomy and haven't been retrofitted with @family).
+    The four strategic family parents declare member-pattern lists; leaves
+    declare @family. The fifth family (clarification-meta) is a meta-tag
+    defined in PAPER-SHAPES-INDEX.md section 5 since futon3 363d1727
+    (2026-08-13); see `_load_clarification_meta_family`. Reverse-link
+    members from the parents into the leaves table when a leaf's @family is
+    missing (e.g. existing patterns that pre-date the taxonomy and haven't
+    been retrofitted with @family).
     """
     if library_root is None:
         library_root = _default_futon3_library()
     families: dict[str, Pattern] = {}
-    for parent_id in FAMILY_PARENTS:
+    for parent_id in STRATEGIC_FAMILY_PARENTS:
         rel = parent_id + ".flexiarg"
         path = library_root / rel
         pat = _parse_one_flexiarg(path)
         if pat is None:
             raise FileNotFoundError(f"Family parent missing: {path}")
         families[parent_id] = pat
+    families[META_FAMILY_ID] = _load_clarification_meta_family(library_root)
 
     leaves: dict[str, Pattern] = {}
     # Walk math-informal/ and math-strategy/ for any pattern with @family or
@@ -168,15 +228,18 @@ def load_paper_shape_taxonomy(library_root: Optional[Path] = None) -> PaperShape
         for member in fam.members:
             declared_member_to_family[member] = fid
 
-    for subdir in ("math-informal", "math-strategy"):
-        for path in (library_root / subdir).glob("*.flexiarg"):
-            pat = _parse_one_flexiarg(path)
-            if pat is None or pat.pattern_id in families:
-                continue
-            if not pat.family and pat.pattern_id in declared_member_to_family:
-                pat.family = declared_member_to_family[pat.pattern_id]
-            if pat.family:
-                leaves[pat.pattern_id] = pat
+    # Since the futon3 math split (2026-08-17, MANIFEST-math-split-RULED.md)
+    # subject-coded leaves live in `math-informal-<CODE>/` siblings of the
+    # universal `math-informal/`; walk them all.
+    leaf_dirs = sorted(library_root.glob("math-informal*")) + [library_root / "math-strategy"]
+    for path in sorted(p for d in leaf_dirs for p in d.glob("*.flexiarg")):
+        pat = _parse_one_flexiarg(path)
+        if pat is None or pat.pattern_id in families:
+            continue
+        if not pat.family and pat.pattern_id in declared_member_to_family:
+            pat.family = declared_member_to_family[pat.pattern_id]
+        if pat.family:
+            leaves[pat.pattern_id] = pat
     return PaperShapeTaxonomy(families=families, leaves=leaves)
 
 
