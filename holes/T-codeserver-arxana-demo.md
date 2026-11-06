@@ -75,41 +75,59 @@ No step touches futon1b, the DERIVE artifacts, or Emacs code beyond reading.
 
 ## 3. Client-side requirements for codex-21 (the deliverable this demo drafts)
 
-Each item is written against the D-item it asks about; none redesigns the
-architecture (ARGUE discipline carries over).
+Each item below records the confirmed/corrected form **as dispositioned by
+codex-21 on 2026-11-07** (job `invoke-1793996309343-14300-e2a9d5fd`).
+Baseline note: DERIVE closed at futon4 `f42b39f`, client proof-presentation
+requirements at `0fd5ad1`, final ARGUE synthesis
+(`A2-final-design-fitness-argument.md`) at `f19eafe`; this ticket's
+`84f999d`/`37ba0dc` references are historical baselines and the obligations
+named below are no longer open.
 
-- **R1 (→ D3/D7):** the TS `Store` interface must have an `arxana.v1`
-  adapter as its network transport — not direct futon1 HTTP (which D7 routes
-  through the headless service). T-arxana-ts's futon1 store adapter remains
-  valid only for pre-service JSON/compat work. Ask: confirm the JSON
-  AnnotationSet wire shape can ride inside D3 envelopes unchanged
-  (`revision/ingest` for segments; `assertion/promote` for spans/scholia).
-- **R2 (→ D2):** publish the mapping between T-arxana-ts `Resolution` kinds
-  and D2 result statuses (`exact`→`resolved` with `verified-hash`; `located`
-  → `resolved-unverified` with `via` evidence; `unanchored`→`missing` with
-  reason; hash mismatch → `stale-input`), so one span's status reads the
-  same in Emacs, the web view and VS Code. Object-qualified labels (D5)
-  apply: `resolution: …`.
-- **R3 (→ D1/D4):** TS `Segment` must carry the artifact revision **ID**
-  (content-addressed), not merely a hash for checking; and spans that
-  correspond to semantic roles should be able to reference manifestation IDs
-  when the registry exists (O-D4c/O-D7f pending — the demo can mint
-  client-local IDs explicitly marked non-authoritative).
-- **R4 (→ D5):** the VS Code extension's UTF-16→codepoint conversion must
-  implement D5 test 1 exactly (reject positions inside a surrogate pair);
-  decorations carry response/candidate IDs only; no extension-local
-  database becomes identity authority.
-- **R5 (→ D5/D7):** client-side anchor resolution is *preview* (D7-DR2);
-  the UI must distinguish preview evidence from promotable evidence, and
-  the promotion path (`assertion/promote` with attributable acceptance)
-  must be reachable from the client contract.
-- **R6 (→ D7/O-D7d):** the canonical response digest field set must be
-  fixed (O-D7d) so the demo's "same answer in Emacs and code-server" check
-  is a real equality, not a JSON diff.
-- **R7 (→ O-D7f):** client requirements should state which writes, if any,
-  the demo issues to the store during the pre-service phase (recommend:
-  none; JSON only) so the namespace-enforcement decision (O-D7f) is not
-  pre-empted by demo traffic.
+- **R1 (→ D3/D7) — confirmed with correction.** TS `Store` network transport
+  targets `arxana.v1`, never direct futon1 writes. The AnnotationSet remains
+  the client/domain payload inside a versioned envelope, but not wholly
+  unchanged: `revision/ingest` carries canonical segment bytes/digest,
+  artifact identity and expected head; the AnnotationSet must name the
+  resulting artifact revision ID; `assertion/promote` requires the
+  authority-produced D2 result/evidence digest; unverified/ambiguous
+  promotion additionally requires attributable `resolution-acceptance`.
+  Frozen JSON is fixture input, not an authority message.
+- **R2 (→ D2) — confirmed with two corrections.** `exact` → `resolved`
+  (`verified-hash`). `located` → `resolved-unverified` *only* when exactly
+  one explicitly permitted fuzzy/advisory candidate remains; multiple
+  candidates → `ambiguous`; disallowed fuzzy recovery stays `missing` with
+  diagnostic evidence. `unanchored` → `missing` with typed reason. Named
+  revision bytes failing their SHA-256 identity → `stale-input`; but a span
+  content-hash mismatch inside otherwise correct revision bytes is *not*
+  `stale-input` — it drives later anchor stages toward `missing`,
+  `ambiguous` or `resolved-unverified`.
+- **R3 (→ D1/D4) — confirmed.** `Segment` carries `artifact/revision-id`,
+  not merely a checking hash. Preview IDs use an unmistakably local
+  namespace (`client-preview:*`), never `arxana:manifestation:*`, never
+  persisted or presented as registry identity; semantic spans reference
+  authority-minted manifestation IDs once the service exists.
+- **R4 (→ D5) — confirmed exactly.** Conversion uses digest-matched revision
+  bytes, UTF-16 → Unicode-codepoint half-open ranges, rejecting positions
+  inside surrogate pairs; decorations carry response/candidate IDs only;
+  local caches are disposable projections.
+- **R5 (→ D7-DR2) — confirmed with promotion boundary.** Client anchor
+  recovery is labelled `preview`; promotion requires authority replay
+  against immutable bytes returning a promotable result digest; the client
+  may request promotion but cannot promote its own preview evidence.
+  Attributable acceptance applies to ambiguous/unverified evidence, not
+  ordinary uniquely verified resolution.
+- **R6 (→ D5/O-D7d) — already settled.** The canonical semantic projection
+  includes protocol/semantics version, operation, domain status, revision
+  IDs, ordered candidate IDs and canonical locations, verification states
+  and semantic evidence digests; excludes request/message ID, principal,
+  timestamps, duration, transport/trace metadata, presentation strings and
+  operational diagnostics. The pre-service JSON digest is a fixture
+  stand-in, labelled as such, not evidence of D5 semantic equality.
+- **R7 (→ O-D7f) — confirmed.** The pre-service demo performs no
+  futon1/futon1b writes; it reads frozen JSON and local source only. Direct
+  futon1 adapters may support compatibility experiments but must not write
+  `arxana/*` records (now reserved at futon1b for authenticated conditional
+  writes with atomic uniqueness validation).
 
 ## 4. What this demo is not
 
