@@ -1,6 +1,8 @@
 {
   "n_distinct_keys": 14,
+  "n_graph_sets": 1,
   "n_holes_keyed": 17,
+  "n_papers": 9,
   "recurring": [],
   "typed_holes": [
     {
@@ -8,6 +10,9 @@
       "occurrences": 2,
       "papers": [
         "0708.2067"
+      ],
+      "sets": [
+        "loop-run-70b"
       ],
       "type": "missing-warrant",
       "wanted": [
@@ -21,6 +26,9 @@
       "papers": [
         "0708.2067"
       ],
+      "sets": [
+        "loop-run-70b"
+      ],
       "type": "missing-warrant",
       "wanted": [
         "construction-of-cofibrant-domains-from-commutative-square",
@@ -32,6 +40,9 @@
       "occurrences": 2,
       "papers": [
         "0708.2067"
+      ],
+      "sets": [
+        "loop-run-70b"
       ],
       "type": "missing-warrant",
       "wanted": [
@@ -45,6 +56,9 @@
       "papers": [
         "0706.1286"
       ],
+      "sets": [
+        "loop-run-70b"
+      ],
       "type": "missing-warrant",
       "wanted": [
         "ring-isomorphism-equivalence-for-calmod-like-bicats"
@@ -55,6 +69,9 @@
       "occurrences": 1,
       "papers": [
         "0709.0248"
+      ],
+      "sets": [
+        "loop-run-70b"
       ],
       "type": "missing-warrant",
       "wanted": [
@@ -67,6 +84,9 @@
       "papers": [
         "0709.0248"
       ],
+      "sets": [
+        "loop-run-70b"
+      ],
       "type": "missing-warrant",
       "wanted": [
         "parameterized-rules-imply-extensionality"
@@ -77,6 +97,9 @@
       "occurrences": 1,
       "papers": [
         "0709.0248"
+      ],
+      "sets": [
+        "loop-run-70b"
       ],
       "type": "missing-warrant",
       "wanted": [
@@ -89,6 +112,9 @@
       "papers": [
         "0705.0452"
       ],
+      "sets": [
+        "loop-run-70b"
+      ],
       "type": "missing-warrant",
       "wanted": [
         "commutativity-from-definition"
@@ -99,6 +125,9 @@
       "occurrences": 1,
       "papers": [
         "0709.0248"
+      ],
+      "sets": [
+        "loop-run-70b"
       ],
       "type": "missing-warrant",
       "wanted": [
@@ -111,6 +140,9 @@
       "papers": [
         "0705.0452"
       ],
+      "sets": [
+        "loop-run-70b"
+      ],
       "type": "missing-warrant",
       "wanted": [
         "groupoid-structure-from-commutative-diagram"
@@ -121,6 +153,9 @@
       "occurrences": 1,
       "papers": [
         "0712.0724"
+      ],
+      "sets": [
+        "loop-run-70b"
       ],
       "type": "missing-warrant",
       "wanted": [
@@ -133,6 +168,9 @@
       "papers": [
         "0709.0248"
       ],
+      "sets": [
+        "loop-run-70b"
+      ],
       "type": "missing-warrant",
       "wanted": [
         "parameterized-rules-imply-extensionality"
@@ -144,6 +182,9 @@
       "papers": [
         "0709.0248"
       ],
+      "sets": [
+        "loop-run-70b"
+      ],
       "type": "missing-warrant",
       "wanted": [
         "parameterized-rules-imply-extensionality"
@@ -154,6 +195,9 @@
       "occurrences": 1,
       "papers": [
         "0706.1286"
+      ],
+      "sets": [
+        "loop-run-70b"
       ],
       "type": "missing-warrant",
       "wanted": [

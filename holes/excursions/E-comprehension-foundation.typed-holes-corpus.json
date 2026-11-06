@@ -1,0 +1,2938 @@
+{
+  "n_distinct_keys": 107,
+  "n_graph_sets": 10,
+  "n_holes_keyed": 185,
+  "n_papers": 125,
+  "recurring": [
+    {
+      "concept": "bicategory",
+      "occurrences": 9,
+      "papers": [
+        "0706.1286",
+        "0706.1286__p1",
+        "0706.1286__p13",
+        "0706.1286__p24",
+        "0706.1286__p29",
+        "0706.1286__p3",
+        "0706.1286__p5",
+        "0706.1286__p6",
+        "0708.1921__p2"
+      ],
+      "sets": [
+        "linode-stageA-20260618",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "categorical-structure-of-framed-bicategories",
+        "difference-between-cat-like-and-calmod-like-bicategories",
+        "extension-of-framed-bicategory-structure-to-weak-bc-case",
+        "factorization-uniqueness-implies-globular-representation",
+        "lax-naturality-of-d-via-diagonal",
+        "local-coequalizers-in-span-category",
+        "parametrized-spectra-motivate-framed-bicategories",
+        "preservation-of-cartesian-and-opcartesian-arrows-implies-framed-bicategory"
+      ]
+    },
+    {
+      "concept": "subcategory",
+      "occurrences": 8,
+      "papers": [
+        "0708.3398__p15",
+        "0708.3398__p16",
+        "0708.3398__p25",
+        "0806.1324__p12",
+        "0806.1324__p14",
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "cohomological-functors-preserve-triangulated-structure",
+        "construction-of-quotient-category-from-minimal-triangulated-subcategory",
+        "construction-of-quotient-category-from-strongly-semiflat-complexes",
+        "distinguished-triangle-characterizes-maximal-orthogonal-subcategory",
+        "factorization-through-triangulated-subcategory",
+        "semiorthogonal-decomposition-implies-distinguished-triangle",
+        "small-generating-set-yields-proper-subcategory",
+        "two-step-factorization-lemma"
+      ]
+    },
+    {
+      "concept": "comodule",
+      "occurrences": 6,
+      "papers": [
+        "0708.3398__p18",
+        "0708.3398__p23",
+        "0708.3398__p25"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "characterization-of-quite-injective-via-coinduced",
+        "coinduction-from-projective-module-is-coprojective",
+        "coker-of-truncated-complex-is-injective-complex",
+        "distinguished-triangle-characterizes-maximal-orthogonal-subcategory",
+        "exact-functor-implies-projective-module",
+        "semiorthogonal-decomposition-implies-distinguished-triangle"
+      ]
+    },
+    {
+      "concept": "symmetric monoidal",
+      "occurrences": 6,
+      "papers": [
+        "0706.1286__p17",
+        "0706.1286__p24",
+        "0706.1286__p25",
+        "0905.0465__p1",
+        "0905.0465__p17",
+        "0905.0465__p9"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "example-of-symmetric-monoidal-infty1-category",
+        "existence-of-duals-from-compatible-evaluation-coevaluation",
+        "extension-of-framed-bicategory-structure-to-weak-bc-case",
+        "reduction-technique-from-kumma-section",
+        "retractions-form-bifibration",
+        "symmetry-implies-symmetric-monoidal-involution"
+      ]
+    },
+    {
+      "concept": "homotopy category",
+      "occurrences": 5,
+      "papers": [
+        "0708.3398__p16",
+        "0708.3398__p25",
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-quotient-category-from-strongly-semiflat-complexes",
+        "construction-via-chain-complexes",
+        "distinguished-triangle-characterizes-maximal-orthogonal-subcategory",
+        "generalization-to-A-flat-and-F-flat-bisemimodules",
+        "semiorthogonal-decomposition-implies-distinguished-triangle"
+      ]
+    },
+    {
+      "concept": "direct summands",
+      "occurrences": 4,
+      "papers": [
+        "0705.0102",
+        "0705.0102__p1"
+      ],
+      "sets": [
+        "gh200",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "closure-under-summands-is-preserved-by-inverse-shift",
+        "inverse-suspension-reflects-retracts",
+        "suspension-equivalence-preserves-retracts"
+      ]
+    },
+    {
+      "concept": "factors through",
+      "occurrences": 4,
+      "papers": [
+        "0806.1324__p12",
+        "0806.1324__p3"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-exact-triangle-for-composable-pair",
+        "factorization-through-triangulated-subcategory",
+        "localization-functor-factorization-through-localization",
+        "two-step-factorization-lemma"
+      ]
+    },
+    {
+      "concept": "natural transformation",
+      "occurrences": 4,
+      "papers": [
+        "0706.1286__p20",
+        "0706.1286__p28",
+        "0708.1921__p2",
+        "2311.05789__p1"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-2-natural-transformation-from-forgetful-morphisms",
+        "monoidal-structure-on-module-endofunctors",
+        "naturality-plus-definitions-imply-lax-naturality",
+        "oplax-naturality-check"
+      ]
+    },
+    {
+      "concept": "triangulated subcategory",
+      "occurrences": 4,
+      "papers": [
+        "0708.3398__p15",
+        "0806.1324__p12",
+        "0806.1324__p14"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "cohomological-functors-preserve-triangulated-structure",
+        "construction-of-quotient-category-from-minimal-triangulated-subcategory",
+        "factorization-through-triangulated-subcategory",
+        "two-step-factorization-lemma"
+      ]
+    },
+    {
+      "concept": "base change",
+      "occurrences": 3,
+      "papers": [
+        "0706.1286__p1",
+        "0706.1286__p2",
+        "0706.1286__p3"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "factorization-uniqueness-implies-globular-representation",
+        "fibration-automatically-includes-base-change-and-coherence",
+        "parametrized-spectra-motivate-framed-bicategories"
+      ]
+    },
+    {
+      "concept": "fibration",
+      "occurrences": 3,
+      "papers": [
+        "0706.1286__p2",
+        "0706.1286__p21"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "any-cleavage-modifiable-to-normal",
+        "base-change-functors-unique-up-to-iso",
+        "pointwise-tensor-lifts-monoidal-structure-to-fibration"
+      ]
+    },
+    {
+      "concept": "monoidal category",
+      "occurrences": 3,
+      "papers": [
+        "1201.4981",
+        "2311.05789__p0",
+        "2311.05789__p1"
+      ],
+      "sets": [
+        "gh200",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "bialgebroid-axioms-imply-skew-monoidal-coherence",
+        "monoidal-structure-on-module-endofunctors",
+        "naturality-and-coherence-for-monoidal-structure"
+      ]
+    },
+    {
+      "concept": "small set",
+      "occurrences": 3,
+      "papers": [
+        "0806.1324__p11",
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "no-small-generating-set-in-K-Ab",
+        "representatives-form-small-set-of-b-small-perfect-generators",
+        "small-generating-set-yields-proper-subcategory"
+      ]
+    },
+    {
+      "concept": "base change functor",
+      "occurrences": 2,
+      "papers": [
+        "0706.1286__p2",
+        "0706.1286__p3"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "factorization-uniqueness-implies-globular-representation",
+        "fibration-automatically-includes-base-change-and-coherence"
+      ]
+    },
+    {
+      "concept": "bimodule",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p1",
+        "1406.4204"
+      ],
+      "sets": [
+        "gh200",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "semialgebra-defines-harish-chandra-module-category",
+        "transported-bimodule-actions-satisfy-coherence-by-adjunction-triangle-identities"
+      ]
+    },
+    {
+      "concept": "directed colimits",
+      "occurrences": 2,
+      "papers": [
+        "0708.2185",
+        "0708.2185__p0"
+      ],
+      "sets": [
+        "linode-stageA-20260618",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "cofinal-subdiagram-preserves-colimits",
+        "embedding-of-cd_i-to-cd-is-cofinal"
+      ]
+    },
+    {
+      "concept": "distinguished triangle",
+      "occurrences": 2,
+      "papers": [
+        "0705.0102__p0",
+        "0708.3398__p25"
+      ],
+      "sets": [
+        "anchortest",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "semiorthogonal-decomposition-implies-distinguished-triangle",
+        "trivial-case-reduction-for-triangulated-categories"
+      ]
+    },
+    {
+      "concept": "double category",
+      "occurrences": 2,
+      "papers": [
+        "0706.1286__p3",
+        "0711.0473"
+      ],
+      "sets": [
+        "linode-stageA-20260618",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "induction-on-number-of-squares",
+        "vertical-iso-composition-reduction-to-identity-case"
+      ]
+    },
+    {
+      "concept": "isomorphism class",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p12",
+        "0806.1324__p11"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "axiom-of-choice-for-isomorphism-classes",
+        "surjectivity-on-objects-from-chain"
+      ]
+    },
+    {
+      "concept": "localization functor",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p12",
+        "0806.1324__p2"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "invertible-adjunction-implies-localization-functor",
+        "localization-equivalence-from-chain-condition"
+      ]
+    },
+    {
+      "concept": "natural map",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p10",
+        "0708.3398__p19"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "surjectivity-from-iterated-cohomomorphism-isomorphisms",
+        "surjectivity-of-natural-map-when-iterated-semitensor-defined"
+      ]
+    },
+    {
+      "concept": "quotient category",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p15",
+        "0708.3398__p16"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-quotient-category-from-minimal-triangulated-subcategory",
+        "construction-of-quotient-category-from-strongly-semiflat-complexes"
+      ]
+    },
+    {
+      "concept": "small coproducts",
+      "occurrences": 2,
+      "papers": [
+        "0806.1324__p14",
+        "0806.1324__p15"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "functor-preserving-coproducts-closes-under-coproducts",
+        "yoneda-functor-is-cohomological"
+      ]
+    },
+    {
+      "concept": "thick subcategory",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p16",
+        "0708.3398__p25"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-quotient-category-from-strongly-semiflat-complexes",
+        "distinguished-triangle-characterizes-maximal-orthogonal-subcategory"
+      ]
+    },
+    {
+      "concept": "uniquely determined",
+      "occurrences": 2,
+      "papers": [
+        "0706.1286__p2",
+        "0806.1324__p7"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "base-change-functors-unique-up-to-iso",
+        "uniqueness-of-exact-triangle-from-adjunction"
+      ]
+    }
+  ],
+  "typed_holes": [
+    {
+      "concept": "bicategory",
+      "occurrences": 9,
+      "papers": [
+        "0706.1286",
+        "0706.1286__p1",
+        "0706.1286__p13",
+        "0706.1286__p24",
+        "0706.1286__p29",
+        "0706.1286__p3",
+        "0706.1286__p5",
+        "0706.1286__p6",
+        "0708.1921__p2"
+      ],
+      "sets": [
+        "linode-stageA-20260618",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "categorical-structure-of-framed-bicategories",
+        "difference-between-cat-like-and-calmod-like-bicategories",
+        "extension-of-framed-bicategory-structure-to-weak-bc-case",
+        "factorization-uniqueness-implies-globular-representation",
+        "lax-naturality-of-d-via-diagonal",
+        "local-coequalizers-in-span-category",
+        "parametrized-spectra-motivate-framed-bicategories",
+        "preservation-of-cartesian-and-opcartesian-arrows-implies-framed-bicategory"
+      ]
+    },
+    {
+      "concept": "subcategory",
+      "occurrences": 8,
+      "papers": [
+        "0708.3398__p15",
+        "0708.3398__p16",
+        "0708.3398__p25",
+        "0806.1324__p12",
+        "0806.1324__p14",
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "cohomological-functors-preserve-triangulated-structure",
+        "construction-of-quotient-category-from-minimal-triangulated-subcategory",
+        "construction-of-quotient-category-from-strongly-semiflat-complexes",
+        "distinguished-triangle-characterizes-maximal-orthogonal-subcategory",
+        "factorization-through-triangulated-subcategory",
+        "semiorthogonal-decomposition-implies-distinguished-triangle",
+        "small-generating-set-yields-proper-subcategory",
+        "two-step-factorization-lemma"
+      ]
+    },
+    {
+      "concept": "comodule",
+      "occurrences": 6,
+      "papers": [
+        "0708.3398__p18",
+        "0708.3398__p23",
+        "0708.3398__p25"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "characterization-of-quite-injective-via-coinduced",
+        "coinduction-from-projective-module-is-coprojective",
+        "coker-of-truncated-complex-is-injective-complex",
+        "distinguished-triangle-characterizes-maximal-orthogonal-subcategory",
+        "exact-functor-implies-projective-module",
+        "semiorthogonal-decomposition-implies-distinguished-triangle"
+      ]
+    },
+    {
+      "concept": "symmetric monoidal",
+      "occurrences": 6,
+      "papers": [
+        "0706.1286__p17",
+        "0706.1286__p24",
+        "0706.1286__p25",
+        "0905.0465__p1",
+        "0905.0465__p17",
+        "0905.0465__p9"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "example-of-symmetric-monoidal-infty1-category",
+        "existence-of-duals-from-compatible-evaluation-coevaluation",
+        "extension-of-framed-bicategory-structure-to-weak-bc-case",
+        "reduction-technique-from-kumma-section",
+        "retractions-form-bifibration",
+        "symmetry-implies-symmetric-monoidal-involution"
+      ]
+    },
+    {
+      "concept": "homotopy category",
+      "occurrences": 5,
+      "papers": [
+        "0708.3398__p16",
+        "0708.3398__p25",
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-quotient-category-from-strongly-semiflat-complexes",
+        "construction-via-chain-complexes",
+        "distinguished-triangle-characterizes-maximal-orthogonal-subcategory",
+        "generalization-to-A-flat-and-F-flat-bisemimodules",
+        "semiorthogonal-decomposition-implies-distinguished-triangle"
+      ]
+    },
+    {
+      "concept": "direct summands",
+      "occurrences": 4,
+      "papers": [
+        "0705.0102",
+        "0705.0102__p1"
+      ],
+      "sets": [
+        "gh200",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "closure-under-summands-is-preserved-by-inverse-shift",
+        "inverse-suspension-reflects-retracts",
+        "suspension-equivalence-preserves-retracts"
+      ]
+    },
+    {
+      "concept": "factors through",
+      "occurrences": 4,
+      "papers": [
+        "0806.1324__p12",
+        "0806.1324__p3"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-exact-triangle-for-composable-pair",
+        "factorization-through-triangulated-subcategory",
+        "localization-functor-factorization-through-localization",
+        "two-step-factorization-lemma"
+      ]
+    },
+    {
+      "concept": "natural transformation",
+      "occurrences": 4,
+      "papers": [
+        "0706.1286__p20",
+        "0706.1286__p28",
+        "0708.1921__p2",
+        "2311.05789__p1"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-2-natural-transformation-from-forgetful-morphisms",
+        "monoidal-structure-on-module-endofunctors",
+        "naturality-plus-definitions-imply-lax-naturality",
+        "oplax-naturality-check"
+      ]
+    },
+    {
+      "concept": "triangulated subcategory",
+      "occurrences": 4,
+      "papers": [
+        "0708.3398__p15",
+        "0806.1324__p12",
+        "0806.1324__p14"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "cohomological-functors-preserve-triangulated-structure",
+        "construction-of-quotient-category-from-minimal-triangulated-subcategory",
+        "factorization-through-triangulated-subcategory",
+        "two-step-factorization-lemma"
+      ]
+    },
+    {
+      "concept": "base change",
+      "occurrences": 3,
+      "papers": [
+        "0706.1286__p1",
+        "0706.1286__p2",
+        "0706.1286__p3"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "factorization-uniqueness-implies-globular-representation",
+        "fibration-automatically-includes-base-change-and-coherence",
+        "parametrized-spectra-motivate-framed-bicategories"
+      ]
+    },
+    {
+      "concept": "closed morphism",
+      "occurrences": 3,
+      "papers": [
+        "0905.2621__p13"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "application-of-general-fact-to-mu2192i-cone",
+        "construction-of-injective-resolution-in-homotopy-category",
+        "splitting-implies-contractibility-in-dg-category"
+      ]
+    },
+    {
+      "concept": "fibration",
+      "occurrences": 3,
+      "papers": [
+        "0706.1286__p2",
+        "0706.1286__p21"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "any-cleavage-modifiable-to-normal",
+        "base-change-functors-unique-up-to-iso",
+        "pointwise-tensor-lifts-monoidal-structure-to-fibration"
+      ]
+    },
+    {
+      "concept": "monoidal category",
+      "occurrences": 3,
+      "papers": [
+        "1201.4981",
+        "2311.05789__p0",
+        "2311.05789__p1"
+      ],
+      "sets": [
+        "gh200",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "bialgebroid-axioms-imply-skew-monoidal-coherence",
+        "monoidal-structure-on-module-endofunctors",
+        "naturality-and-coherence-for-monoidal-structure"
+      ]
+    },
+    {
+      "concept": "small set",
+      "occurrences": 3,
+      "papers": [
+        "0806.1324__p11",
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "no-small-generating-set-in-K-Ab",
+        "representatives-form-small-set-of-b-small-perfect-generators",
+        "small-generating-set-yields-proper-subcategory"
+      ]
+    },
+    {
+      "concept": "base change functor",
+      "occurrences": 2,
+      "papers": [
+        "0706.1286__p2",
+        "0706.1286__p3"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "factorization-uniqueness-implies-globular-representation",
+        "fibration-automatically-includes-base-change-and-coherence"
+      ]
+    },
+    {
+      "concept": "bimodule",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p1",
+        "1406.4204"
+      ],
+      "sets": [
+        "gh200",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "semialgebra-defines-harish-chandra-module-category",
+        "transported-bimodule-actions-satisfy-coherence-by-adjunction-triangle-identities"
+      ]
+    },
+    {
+      "concept": "canonical map",
+      "occurrences": 2,
+      "papers": [
+        "0806.1324__p5"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "coproduct-characterized-by-hom-bijection",
+        "surjectivity-via-left-fractions-and-equivalence"
+      ]
+    },
+    {
+      "concept": "cartesian closed",
+      "occurrences": 2,
+      "papers": [
+        "0709.0248"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "interpretation-extensionality-rule",
+        "parameterization-equivalence-rule"
+      ]
+    },
+    {
+      "concept": "cartesian closed category",
+      "occurrences": 2,
+      "papers": [
+        "0709.0248"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "interpretation-extensionality-rule",
+        "parameterization-equivalence-rule"
+      ]
+    },
+    {
+      "concept": "closed category",
+      "occurrences": 2,
+      "papers": [
+        "0709.0248"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "interpretation-extensionality-rule",
+        "parameterization-equivalence-rule"
+      ]
+    },
+    {
+      "concept": "cofibrantly generated",
+      "occurrences": 2,
+      "papers": [
+        "0905.0595"
+      ],
+      "sets": [
+        "loop-run-dpdemo-fixed"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "bounded-category-implies-cofibrantly-generated-weak-factorization-system",
+        "weak-factorization-system-in-Set-ca-op-implies-cofibrantly-generated-weak-factorization-system"
+      ]
+    },
+    {
+      "concept": "colocalization functor",
+      "occurrences": 2,
+      "papers": [
+        "0806.1324__p9"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-ga-from-exact-triangle",
+        "duality-between-localization-and-colocalization"
+      ]
+    },
+    {
+      "concept": "compact object",
+      "occurrences": 2,
+      "papers": [
+        "0806.1324__p11"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "axiom-of-choice-for-isomorphism-classes",
+        "representatives-form-small-set-of-b-small-perfect-generators"
+      ]
+    },
+    {
+      "concept": "directed colimits",
+      "occurrences": 2,
+      "papers": [
+        "0708.2185",
+        "0708.2185__p0"
+      ],
+      "sets": [
+        "linode-stageA-20260618",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "cofinal-subdiagram-preserves-colimits",
+        "embedding-of-cd_i-to-cd-is-cofinal"
+      ]
+    },
+    {
+      "concept": "distinguished triangle",
+      "occurrences": 2,
+      "papers": [
+        "0705.0102__p0",
+        "0708.3398__p25"
+      ],
+      "sets": [
+        "anchortest",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "semiorthogonal-decomposition-implies-distinguished-triangle",
+        "trivial-case-reduction-for-triangulated-categories"
+      ]
+    },
+    {
+      "concept": "double category",
+      "occurrences": 2,
+      "papers": [
+        "0706.1286__p3",
+        "0711.0473"
+      ],
+      "sets": [
+        "linode-stageA-20260618",
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "induction-on-number-of-squares",
+        "vertical-iso-composition-reduction-to-identity-case"
+      ]
+    },
+    {
+      "concept": "essentially surjective",
+      "occurrences": 2,
+      "papers": [
+        "0706.1286__p8"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "iso-construction-from-vertical-and-distributor-surjectivity",
+        "pullback-of-distributor-along-isomorphisms"
+      ]
+    },
+    {
+      "concept": "extensional category",
+      "occurrences": 2,
+      "papers": [
+        "0709.0248"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "interpretation-extensionality-rule",
+        "parameterization-equivalence-rule"
+      ]
+    },
+    {
+      "concept": "factorization system",
+      "occurrences": 2,
+      "papers": [
+        "0905.0595"
+      ],
+      "sets": [
+        "loop-run-dpdemo-fixed"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "bounded-category-implies-cofibrantly-generated-weak-factorization-system",
+        "weak-factorization-system-in-Set-ca-op-implies-cofibrantly-generated-weak-factorization-system"
+      ]
+    },
+    {
+      "concept": "hochschild homology",
+      "occurrences": 2,
+      "papers": [
+        "0905.0465__p13"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "hochschild-homology-for-s1-integral",
+        "hochschild-homology-formula"
+      ]
+    },
+    {
+      "concept": "isomorphism class",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p12",
+        "0806.1324__p11"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "axiom-of-choice-for-isomorphism-classes",
+        "surjectivity-on-objects-from-chain"
+      ]
+    },
+    {
+      "concept": "localization functor",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p12",
+        "0806.1324__p2"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "invertible-adjunction-implies-localization-functor",
+        "localization-equivalence-from-chain-condition"
+      ]
+    },
+    {
+      "concept": "locally cartesian closed",
+      "occurrences": 2,
+      "papers": [
+        "0709.0248"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "interpretation-extensionality-rule",
+        "parameterization-equivalence-rule"
+      ]
+    },
+    {
+      "concept": "locally cartesian closed category",
+      "occurrences": 2,
+      "papers": [
+        "0709.0248"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "interpretation-extensionality-rule",
+        "parameterization-equivalence-rule"
+      ]
+    },
+    {
+      "concept": "natural map",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p10",
+        "0708.3398__p19"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "surjectivity-from-iterated-cohomomorphism-isomorphisms",
+        "surjectivity-of-natural-map-when-iterated-semitensor-defined"
+      ]
+    },
+    {
+      "concept": "projective module",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "coinduction-from-projective-module-is-coprojective",
+        "exact-functor-implies-projective-module"
+      ]
+    },
+    {
+      "concept": "quotient category",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p15",
+        "0708.3398__p16"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-quotient-category-from-minimal-triangulated-subcategory",
+        "construction-of-quotient-category-from-strongly-semiflat-complexes"
+      ]
+    },
+    {
+      "concept": "small coproducts",
+      "occurrences": 2,
+      "papers": [
+        "0806.1324__p14",
+        "0806.1324__p15"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "functor-preserving-coproducts-closes-under-coproducts",
+        "yoneda-functor-is-cohomological"
+      ]
+    },
+    {
+      "concept": "thick subcategory",
+      "occurrences": 2,
+      "papers": [
+        "0708.3398__p16",
+        "0708.3398__p25"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-quotient-category-from-strongly-semiflat-complexes",
+        "distinguished-triangle-characterizes-maximal-orthogonal-subcategory"
+      ]
+    },
+    {
+      "concept": "uniquely determined",
+      "occurrences": 2,
+      "papers": [
+        "0706.1286__p2",
+        "0806.1324__p7"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "base-change-functors-unique-up-to-iso",
+        "uniqueness-of-exact-triangle-from-adjunction"
+      ]
+    },
+    {
+      "concept": "weak factorization system",
+      "occurrences": 2,
+      "papers": [
+        "0905.0595"
+      ],
+      "sets": [
+        "loop-run-dpdemo-fixed"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "bounded-category-implies-cofibrantly-generated-weak-factorization-system",
+        "weak-factorization-system-in-Set-ca-op-implies-cofibrantly-generated-weak-factorization-system"
+      ]
+    },
+    {
+      "concept": "abelian category",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p15"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "yoneda-functor-is-cohomological"
+      ]
+    },
+    {
+      "concept": "accessible category",
+      "occurrences": 1,
+      "papers": [
+        "0708.2185__p2"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "accessibility-of-small-injectivity-classes-in-arrow-categories"
+      ]
+    },
+    {
+      "concept": "additive category",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-via-chain-complexes"
+      ]
+    },
+    {
+      "concept": "adjoint pair",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p0"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "definition-of-adjunction-via-bijections"
+      ]
+    },
+    {
+      "concept": "canonical morphism",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p14"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "definition-of-T-prime-implies-canon-morphism-invertible"
+      ]
+    },
+    {
+      "concept": "cartesian arrows",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p29"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "counit-isomorphism-implies-preservation-of-cartesian-arrows"
+      ]
+    },
+    {
+      "concept": "category small",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p15"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "yoneda-functor-is-cohomological"
+      ]
+    },
+    {
+      "concept": "central extension",
+      "occurrences": 1,
+      "papers": [
+        "0708.3398__p1"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "canonical-central-extension-as-morphism"
+      ]
+    },
+    {
+      "concept": "chain complexes",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-via-chain-complexes"
+      ]
+    },
+    {
+      "concept": "classifying space",
+      "occurrences": 1,
+      "papers": [
+        "0905.0465__p9"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "reduction-technique-from-slabun-section"
+      ]
+    },
+    {
+      "concept": "cohomological functor",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "insight-from-universal-functors"
+      ]
+    },
+    {
+      "concept": "cohomology module",
+      "occurrences": 1,
+      "papers": [
+        "1503.05523"
+      ],
+      "sets": [
+        "gh200"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "finite-homological-dimension-lifts-cohomology-fixedness"
+      ]
+    },
+    {
+      "concept": "commutative square",
+      "occurrences": 1,
+      "papers": [
+        "0708.2067"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "completion-of-commutative-squares-with-cofibrant-domains"
+      ]
+    },
+    {
+      "concept": "commuting square",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p22"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "isomorphism-of-beck-chevalley-implies-cartesian"
+      ]
+    },
+    {
+      "concept": "covariant functor",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "covariant-representability-question"
+      ]
+    },
+    {
+      "concept": "derived functor",
+      "occurrences": 1,
+      "papers": [
+        "0708.3398__p16"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "construction-of-double-sided-derived-functor-from-semitor-definition"
+      ]
+    },
+    {
+      "concept": "direct summand",
+      "occurrences": 1,
+      "papers": [
+        "0708.3398__p23"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "characterization-of-quite-injective-via-coinduced"
+      ]
+    },
+    {
+      "concept": "dual pair",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p11"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "strong-framed-functor-preserves-dual-pairs"
+      ]
+    },
+    {
+      "concept": "duality functor",
+      "occurrences": 1,
+      "papers": [
+        "0905.0465__p17"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "absence-of-natural-evaluation-coevaluation-in-Cat-infty1"
+      ]
+    },
+    {
+      "concept": "dualizable object",
+      "occurrences": 1,
+      "papers": [
+        "0905.0465__p2"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "restriction-to-dualizable-objects"
+      ]
+    },
+    {
+      "concept": "exact triangle",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p7"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "uniqueness-of-exact-triangle-from-adjunction"
+      ]
+    },
+    {
+      "concept": "filtered colimits",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p15"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "yoneda-functor-is-cohomological"
+      ]
+    },
+    {
+      "concept": "forgetful functor",
+      "occurrences": 1,
+      "papers": [
+        "0712.0724"
+      ],
+      "sets": [
+        "loop-run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "forgetful-functor-definition"
+      ]
+    },
+    {
+      "concept": "frobenius algebra",
+      "occurrences": 1,
+      "papers": [
+        "0801.2567"
+      ],
+      "sets": [
+        "loop-run-dpdemo-final"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "higher-differential-parametrization"
+      ]
+    },
+    {
+      "concept": "fully faithful",
+      "occurrences": 1,
+      "papers": [
+        "0801.0199"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "yoneda-embedding-preserves-and-reflects-isomorphisms"
+      ]
+    },
+    {
+      "concept": "groupoid",
+      "occurrences": 1,
+      "papers": [
+        "0705.0452"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "groupoid-verification"
+      ]
+    },
+    {
+      "concept": "homotopy inverse",
+      "occurrences": 1,
+      "papers": [
+        "0905.0465__p2"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "homotopy-inverse-construction"
+      ]
+    },
+    {
+      "concept": "horizontal composition",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p29"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "counit-isomorphism-implies-preservation-of-cartesian-arrows"
+      ]
+    },
+    {
+      "concept": "identity morphism",
+      "occurrences": 1,
+      "papers": [
+        "1908.02202__p0"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "identity-morphisms-coincide-when-morphisms-do"
+      ]
+    },
+    {
+      "concept": "induced functor",
+      "occurrences": 1,
+      "papers": [
+        "0708.3398__p13"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "localization-equivalence-criterion"
+      ]
+    },
+    {
+      "concept": "internal category",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p13"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "local-coequalizers-in-span-category"
+      ]
+    },
+    {
+      "concept": "lax functor",
+      "occurrences": 1,
+      "papers": [
+        "0708.1921__p2"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "lax-naturality-of-d-via-diagonal"
+      ]
+    },
+    {
+      "concept": "lax natural transformation",
+      "occurrences": 1,
+      "papers": [
+        "0708.1921__p2"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "naturality-plus-definitions-imply-lax-naturality"
+      ]
+    },
+    {
+      "concept": "left adjoint",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p1"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "adjoint-functor-construction-from-bijective-homs"
+      ]
+    },
+    {
+      "concept": "left adjoints",
+      "occurrences": 1,
+      "papers": [
+        "0905.0465__p14"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "coev-adjoint-from-ev-adjoint"
+      ]
+    },
+    {
+      "concept": "lie algebra",
+      "occurrences": 1,
+      "papers": [
+        "0708.3398__p1"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "tate-harish-chandra-pair-generalizes-algebraic-pair"
+      ]
+    },
+    {
+      "concept": "localizing subcategory",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "small-generating-set-yields-proper-subcategory"
+      ]
+    },
+    {
+      "concept": "model structures",
+      "occurrences": 1,
+      "papers": [
+        "1308.1804"
+      ],
+      "sets": [
+        "gh200"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "tilting-derived-equivalence-lifts-to-Quillen-equivalence-for-model-structures"
+      ]
+    },
+    {
+      "concept": "module functor",
+      "occurrences": 1,
+      "papers": [
+        "2311.05789__p1"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "definition-of-module-functor-via-constraints"
+      ]
+    },
+    {
+      "concept": "monad",
+      "occurrences": 1,
+      "papers": [
+        "0708.1921__p2"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "lax-naturality-of-d-via-diagonal"
+      ]
+    },
+    {
+      "concept": "monoidal fibration",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p21"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "pointwise-tensor-lifts-monoidal-structure-to-fibration"
+      ]
+    },
+    {
+      "concept": "monoidal morphism",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p20"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "straightforward-check-of-strong-monoidal-morphism"
+      ]
+    },
+    {
+      "concept": "monoidal structure",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p17"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "retractions-form-bifibration"
+      ]
+    },
+    {
+      "concept": "monoidal unit",
+      "occurrences": 1,
+      "papers": [
+        "2311.05789__p0"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "semi-groupal-composition-is-closed-under-composition"
+      ]
+    },
+    {
+      "concept": "multiplicative system",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p6"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "verifier-lemma-ii-2-1-8"
+      ]
+    },
+    {
+      "concept": "n category",
+      "occurrences": 1,
+      "papers": [
+        "0905.0465__p1"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "example-of-symmetric-monoidal-infty1-category"
+      ]
+    },
+    {
+      "concept": "natural bijection",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p7"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "natural-bijection-for-framed-functor"
+      ]
+    },
+    {
+      "concept": "natural isomorphism",
+      "occurrences": 1,
+      "papers": [
+        "2311.05789__p0"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "semi-groupal-composition-is-closed-under-composition"
+      ]
+    },
+    {
+      "concept": "non degenerate",
+      "occurrences": 1,
+      "papers": [
+        "0705.0102__p2"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "non-degeneracy-criterion-for-co-t-structures"
+      ]
+    },
+    {
+      "concept": "oplax functor",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p5"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "definition-of-double-transformation"
+      ]
+    },
+    {
+      "concept": "oplax natural transformation",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p28"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "oplax-naturality-check"
+      ]
+    },
+    {
+      "concept": "projective functor",
+      "occurrences": 1,
+      "papers": [
+        "0708.3398__p23"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "analogous-characterization-for-quite-projective"
+      ]
+    },
+    {
+      "concept": "pullback square",
+      "occurrences": 1,
+      "papers": [
+        "1512.07573"
+      ],
+      "sets": [
+        "gh200"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "segal-condition-implies-pullback-square-condition"
+      ]
+    },
+    {
+      "concept": "quillen equivalence",
+      "occurrences": 1,
+      "papers": [
+        "1308.1804"
+      ],
+      "sets": [
+        "gh200"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "tilting-derived-equivalence-lifts-to-Quillen-equivalence-for-model-structures"
+      ]
+    },
+    {
+      "concept": "restriction along",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p10"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "redefinition-of-f1-along-isomorphisms-in-framed-bicategory"
+      ]
+    },
+    {
+      "concept": "ring isomorphism",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286"
+      ],
+      "sets": [
+        "linode-stageA-20260618"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "difference-between-cat-like-and-calmod-like-bicategories"
+      ]
+    },
+    {
+      "concept": "segal condition",
+      "occurrences": 1,
+      "papers": [
+        "1512.07573"
+      ],
+      "sets": [
+        "gh200"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "induction-from-special-pullbacks-to-segal-condition"
+      ]
+    },
+    {
+      "concept": "smash product",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p17"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "external-smash-product-induced-by-fibration"
+      ]
+    },
+    {
+      "concept": "strict monoidal",
+      "occurrences": 1,
+      "papers": [
+        "2311.05789__p1"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "monoidal-structure-on-module-endofunctors"
+      ]
+    },
+    {
+      "concept": "strict monoidal category",
+      "occurrences": 1,
+      "papers": [
+        "2311.05789__p1"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "monoidal-structure-on-module-endofunctors"
+      ]
+    },
+    {
+      "concept": "strong monoidal",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p20"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "straightforward-check-of-strong-monoidal-morphism"
+      ]
+    },
+    {
+      "concept": "symmetric monoidal structure",
+      "occurrences": 1,
+      "papers": [
+        "0706.1286__p17"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "retractions-form-bifibration"
+      ]
+    },
+    {
+      "concept": "triangulated category",
+      "occurrences": 1,
+      "papers": [
+        "0806.1324__p18"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "existence-of-non-well-generated-examples"
+      ]
+    },
+    {
+      "concept": "type theory",
+      "occurrences": 1,
+      "papers": [
+        "1211.2851"
+      ],
+      "sets": [
+        "gh200"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "essentially-algebraic-syntax-has-initial-model"
+      ]
+    },
+    {
+      "concept": "universal property",
+      "occurrences": 1,
+      "papers": [
+        "0905.0459"
+      ],
+      "sets": [
+        "gh200"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "fiber-product-localization-yields-structure-universal-property"
+      ]
+    },
+    {
+      "concept": "vector bundles",
+      "occurrences": 1,
+      "papers": [
+        "0905.0465__p9"
+      ],
+      "sets": [
+        "run"
+      ],
+      "type": "missing-warrant",
+      "wanted": [
+        "reduction-technique-from-slabun-section"
+      ]
+    }
+  ],
+  "ungrounded": [
+    {
+      "pid": "0705.0102__p0",
+      "type": "missing-warrant",
+      "wanted": "preenvelope-criterion-via-hom-surjections"
+    },
+    {
+      "pid": "0705.0102__p0",
+      "type": "missing-warrant",
+      "wanted": "hom-functor-applied-to-distinguished-triangle"
+    },
+    {
+      "pid": "0705.0102",
+      "type": "missing-warrant",
+      "wanted": "dual-retract-closure-for-B"
+    },
+    {
+      "pid": "0809.3031",
+      "type": "missing-warrant",
+      "wanted": "fun-G-module-descent-equivariantization-equivalence"
+    },
+    {
+      "pid": "1003.4394",
+      "type": "missing-warrant",
+      "wanted": "order-inequalities-for-componentwise-units-counits"
+    },
+    {
+      "pid": "1003.4394",
+      "type": "missing-warrant",
+      "wanted": "componentwise-compact-closed-coherence"
+    },
+    {
+      "pid": "1004.0993",
+      "type": "missing-warrant",
+      "wanted": "double-category-interchange-pasting-computation"
+    },
+    {
+      "pid": "1201.4981",
+      "type": "missing-warrant",
+      "wanted": "compute-gamma-RRR-under-H-tensor-H-identifications"
+    },
+    {
+      "pid": "1211.2851",
+      "type": "missing-warrant",
+      "wanted": "initial-model-terms-correspond-to-syntactic-derivations"
+    },
+    {
+      "pid": "1405.3221",
+      "type": "missing-warrant",
+      "wanted": "matrix-idempotents-force-biproduct-additivity-of-M"
+    },
+    {
+      "pid": "1405.3221",
+      "type": "missing-warrant",
+      "wanted": "yoneda-identifies-representable-Hom-map-with-component-morphism"
+    },
+    {
+      "pid": "1405.3221",
+      "type": "missing-warrant",
+      "wanted": "componentwise-Yoneda-reconstruction-is-inverse-to-phi"
+    },
+    {
+      "pid": "1805.03776",
+      "type": "missing-warrant",
+      "wanted": "Hom-perpU-exactness-from-AB-approximations"
+    },
+    {
+      "pid": "1805.03776",
+      "type": "missing-warrant",
+      "wanted": "truncating-AB-resolution-from-Ext-vanishing"
+    },
+    {
+      "pid": "1901.01453",
+      "type": "missing-warrant",
+      "wanted": "preadditive-module-to-set-completion-equivalence"
+    },
+    {
+      "pid": "math__0204218",
+      "type": "missing-warrant",
+      "wanted": "split-idempotent-Hom-summand-represents-direct-summand-functor"
+    },
+    {
+      "pid": "0706.1286",
+      "type": "missing-warrant",
+      "wanted": "other-situations-with-similar-equivalence-issues"
+    },
+    {
+      "pid": "0708.1921",
+      "type": "missing-warrant",
+      "wanted": "pasting-composites-equality"
+    },
+    {
+      "pid": "0708.1921",
+      "type": "missing-warrant",
+      "wanted": "pasting-composites-equality"
+    },
+    {
+      "pid": "0711.0473",
+      "type": "missing-warrant",
+      "wanted": "symmetry-reduction"
+    },
+    {
+      "pid": "0801.3843",
+      "type": "missing-warrant",
+      "wanted": "verification-of-2-group-properties"
+    },
+    {
+      "pid": "0712.0724",
+      "type": "missing-warrant",
+      "wanted": "pitchfork-functor-definition"
+    },
+    {
+      "pid": "0712.0724",
+      "type": "missing-warrant",
+      "wanted": "pitchfork-map-definition"
+    },
+    {
+      "pid": "0712.0724",
+      "type": "missing-warrant",
+      "wanted": "adjointness-definition"
+    },
+    {
+      "pid": "0801.2567",
+      "type": "missing-warrant",
+      "wanted": "edge-boundary-cancelation"
+    },
+    {
+      "pid": "0801.2567",
+      "type": "missing-warrant",
+      "wanted": "higher-differential-parametrization"
+    },
+    {
+      "pid": "0801.2567",
+      "type": "missing-warrant",
+      "wanted": "edge-boundary-cancelation"
+    },
+    {
+      "pid": "0801.2567",
+      "type": "missing-warrant",
+      "wanted": "edge-boundary-cancelation"
+    },
+    {
+      "pid": "0801.2567",
+      "type": "missing-warrant",
+      "wanted": "edge-boundary-cancelation"
+    },
+    {
+      "pid": "0905.0595",
+      "type": "missing-warrant",
+      "wanted": "bounded-category-implies-cofibrantly-generated-weak-factorization-system"
+    },
+    {
+      "pid": "0905.0595",
+      "type": "missing-warrant",
+      "wanted": "weak-factorization-system-in-Set-ca-op-implies-cofibrantly-generated-weak-factorization-system"
+    },
+    {
+      "pid": "0705.0102__p1",
+      "type": "missing-warrant",
+      "wanted": "interchange-of-A-and-B-yields-t-structure"
+    },
+    {
+      "pid": "0705.0102__p2",
+      "type": "missing-warrant",
+      "wanted": "five-lemma-on-long-exact-sequence"
+    },
+    {
+      "pid": "0705.0102__p2",
+      "type": "missing-warrant",
+      "wanted": "generating-set-implies-intersection-zero"
+    },
+    {
+      "pid": "0706.1286__p10",
+      "type": "missing-warrant",
+      "wanted": "adjoint-implies-dbladjs-conditions"
+    },
+    {
+      "pid": "0706.1286__p10",
+      "type": "missing-warrant",
+      "wanted": "univ-arrow-univ-twocell-imply-adjoints"
+    },
+    {
+      "pid": "0706.1286__p12",
+      "type": "missing-warrant",
+      "wanted": "restriction-of-involution-to-strict-case"
+    },
+    {
+      "pid": "0706.1286__p13",
+      "type": "missing-warrant",
+      "wanted": "local-coequalizers-in-mat-category"
+    },
+    {
+      "pid": "0706.1286__p16",
+      "type": "missing-warrant",
+      "wanted": "self-indexing-is-monoidal-bifibration-under-cartesian-structure"
+    },
+    {
+      "pid": "0706.1286__p17",
+      "type": "missing-warrant",
+      "wanted": "monoidal-fibration-is-bifibration-when-total-cartesian"
+    },
+    {
+      "pid": "0706.1286__p18",
+      "type": "missing-warrant",
+      "wanted": "definition-of-local-adjoints-from-closed-fibers"
+    },
+    {
+      "pid": "0706.1286__p18",
+      "type": "missing-warrant",
+      "wanted": "definition-of-local-adjoints-from-closed-fibers"
+    },
+    {
+      "pid": "0706.1286__p18",
+      "type": "missing-warrant",
+      "wanted": "definition-of-global-adjoints-from-local-ones"
+    },
+    {
+      "pid": "0706.1286__p18",
+      "type": "missing-warrant",
+      "wanted": "definition-of-global-adjoints-from-local-ones"
+    },
+    {
+      "pid": "0706.1286__p2",
+      "type": "missing-warrant",
+      "wanted": "normal-pseudofunctors-come-from-normal-cleavages"
+    },
+    {
+      "pid": "0706.1286__p2",
+      "type": "missing-warrant",
+      "wanted": "strict-pseudofunctors-come-from-split-normal-cleavages"
+    },
+    {
+      "pid": "0706.1286__p20",
+      "type": "missing-warrant",
+      "wanted": "definition-of-retraction"
+    },
+    {
+      "pid": "0706.1286__p20",
+      "type": "missing-warrant",
+      "wanted": "definition-of-disjoint-section"
+    },
+    {
+      "pid": "0706.1286__p20",
+      "type": "missing-warrant",
+      "wanted": "straightforward-check-of-monfib-adjn-satisfaction"
+    },
+    {
+      "pid": "0706.1286__p22",
+      "type": "missing-warrant",
+      "wanted": "unique-lifting-through-cartesian-opcartesian-arrows"
+    },
+    {
+      "pid": "0706.1286__p22",
+      "type": "missing-warrant",
+      "wanted": "cartesian-square-implies-beck-chevalley-isomorphism"
+    },
+    {
+      "pid": "0706.1286__p23",
+      "type": "missing-warrant",
+      "wanted": "composition-of-functors-is-functor"
+    },
+    {
+      "pid": "0706.1286__p23",
+      "type": "missing-warrant",
+      "wanted": "functoriality-of-unit-via-unique-factorization"
+    },
+    {
+      "pid": "0706.1286__p24",
+      "type": "missing-warrant",
+      "wanted": "reduction-to-preservation-of-opcartesian-arrows-under-tensor"
+    },
+    {
+      "pid": "0706.1286__p25",
+      "type": "missing-warrant",
+      "wanted": "construction-of-strict-involution-on-bbFr"
+    },
+    {
+      "pid": "0706.1286__p28",
+      "type": "missing-warrant",
+      "wanted": "constraint-compatibility-via-comp-along-vert"
+    },
+    {
+      "pid": "0706.1286__p29",
+      "type": "missing-warrant",
+      "wanted": "adjoint-equivalence-implies-counit-isomorphism"
+    },
+    {
+      "pid": "0706.1286__p3",
+      "type": "missing-warrant",
+      "wanted": "cartesian-arrows-in-pullback-characterization"
+    },
+    {
+      "pid": "0706.1286__p6",
+      "type": "missing-warrant",
+      "wanted": "double-transformation-induces-2functor-on-span"
+    },
+    {
+      "pid": "0706.1286__p6",
+      "type": "missing-warrant",
+      "wanted": "pullback-preserving-functors-map-to-frbi"
+    },
+    {
+      "pid": "0706.1286__p6",
+      "type": "missing-warrant",
+      "wanted": "framed-functors-induce-pseudo-2functors"
+    },
+    {
+      "pid": "0706.1286__p6",
+      "type": "missing-warrant",
+      "wanted": "framed-transformations-do-not-clearly-induce-pseudo-2functors"
+    },
+    {
+      "pid": "0706.1286__p7",
+      "type": "missing-warrant",
+      "wanted": "full-faithful-on-vertical-and-horizontal-implies-full-faithful"
+    },
+    {
+      "pid": "0706.1286__p9",
+      "type": "missing-warrant",
+      "wanted": "essential-surjectivity-gives-lifts-for-isomorphisms"
+    },
+    {
+      "pid": "0706.1286__p9",
+      "type": "missing-warrant",
+      "wanted": "composition-with-cartesian-2-cell-yields-alpha-M"
+    },
+    {
+      "pid": "0706.1286__p9",
+      "type": "missing-warrant",
+      "wanted": "quasi-inverse-construction-for-double-equivalence"
+    },
+    {
+      "pid": "0706.1286__p9",
+      "type": "missing-warrant",
+      "wanted": "combination-of-framed-ff-and-vert-invar-eso"
+    },
+    {
+      "pid": "0706.1286__p9",
+      "type": "missing-warrant",
+      "wanted": "framed-functor-criteria-from-framed-ff"
+    },
+    {
+      "pid": "0708.1921__p0",
+      "type": "missing-warrant",
+      "wanted": "suffices-to-show-equalities-for-natural-transformations"
+    },
+    {
+      "pid": "0708.1921__p0",
+      "type": "missing-warrant",
+      "wanted": "invertible-morphism-equality-via-pasting-composites"
+    },
+    {
+      "pid": "0708.1921__p1",
+      "type": "missing-warrant",
+      "wanted": "counit-pasting-commutes-in-bicategories"
+    },
+    {
+      "pid": "0708.1921__p2",
+      "type": "missing-warrant",
+      "wanted": "diagram-substitution-preservation"
+    },
+    {
+      "pid": "0708.1921__p2",
+      "type": "missing-warrant",
+      "wanted": "similar-derivation-for-second-equation"
+    },
+    {
+      "pid": "0708.1921__p3",
+      "type": "missing-warrant",
+      "wanted": "tensor-product-of-invertibles-is-invertible"
+    },
+    {
+      "pid": "0708.2185__p0",
+      "type": "missing-warrant",
+      "wanted": "union-of-subcategories-closed-under-pure-subobjects"
+    },
+    {
+      "pid": "0708.2185__p1",
+      "type": "missing-warrant",
+      "wanted": "cone-reflection-factorization-lemma"
+    },
+    {
+      "pid": "0708.2185__p1",
+      "type": "missing-warrant",
+      "wanted": "cone-reflection-closed-under-retracts"
+    },
+    {
+      "pid": "0708.3398__p1",
+      "type": "missing-warrant",
+      "wanted": "koszul-duality-avoids-vector-space-duals"
+    },
+    {
+      "pid": "0708.3398__p1",
+      "type": "missing-warrant",
+      "wanted": "base-coalgebra-duality-generalizes-relative-duality"
+    },
+    {
+      "pid": "0708.3398__p1",
+      "type": "missing-warrant",
+      "wanted": "pbw-theorem-implies-derived-equivalence"
+    },
+    {
+      "pid": "0708.3398__p1",
+      "type": "missing-warrant",
+      "wanted": "harish-chandra-pair-defines-semialgebra"
+    },
+    {
+      "pid": "0708.3398__p10",
+      "type": "missing-warrant",
+      "wanted": "associativity-of-cotensor-products-with-semitensor"
+    },
+    {
+      "pid": "0708.3398__p10",
+      "type": "missing-warrant",
+      "wanted": "isomorphism-condition-implies-iterated-semitensor"
+    },
+    {
+      "pid": "0708.3398__p11",
+      "type": "missing-warrant",
+      "wanted": "functorial-preservation-reduces-to-exact-triples"
+    },
+    {
+      "pid": "0708.3398__p11",
+      "type": "missing-warrant",
+      "wanted": "coacyclicity-of-total-complex-of-exact-triple"
+    },
+    {
+      "pid": "0708.3398__p12",
+      "type": "missing-warrant",
+      "wanted": "bijectivity-on-morphisms-from-chain"
+    },
+    {
+      "pid": "0708.3398__p12",
+      "type": "missing-warrant",
+      "wanted": "functors-preserve-localizing-class"
+    },
+    {
+      "pid": "0708.3398__p13",
+      "type": "missing-warrant",
+      "wanted": "fraction-representation-bijectivity"
+    },
+    {
+      "pid": "0708.3398__p16",
+      "type": "missing-warrant",
+      "wanted": "applicability-of-semitor-definition-to-semitensor-product-functor"
+    },
+    {
+      "pid": "0708.3398__p16",
+      "type": "missing-warrant",
+      "wanted": "simplification-for-cotensor-product-using-coflat-complexes"
+    },
+    {
+      "pid": "0708.3398__p2",
+      "type": "missing-warrant",
+      "wanted": "bar-construction-functoriality"
+    },
+    {
+      "pid": "0708.3398__p20",
+      "type": "missing-warrant",
+      "wanted": "coprojective-comodule-vanishing-cohomology"
+    },
+    {
+      "pid": "0708.3398__p21",
+      "type": "missing-warrant",
+      "wanted": "hom-group-well-definition-in-quotient-categories"
+    },
+    {
+      "pid": "0708.3398__p22",
+      "type": "missing-warrant",
+      "wanted": "functorial-construction-of-acyclic-cones"
+    },
+    {
+      "pid": "0708.3398__p22",
+      "type": "missing-warrant",
+      "wanted": "semiinjective-complexes-preserved-under-acyclic-cone-construction"
+    },
+    {
+      "pid": "0708.3398__p24",
+      "type": "missing-warrant",
+      "wanted": "hom-functor-preserves-exactness-in-homotopy-category"
+    },
+    {
+      "pid": "0708.3398__p25",
+      "type": "missing-warrant",
+      "wanted": "construction-of-e-complex-from-injective-embeddings"
+    },
+    {
+      "pid": "0708.3398__p26",
+      "type": "missing-warrant",
+      "wanted": "gorenstein-implies-derived-correspondence"
+    },
+    {
+      "pid": "0708.3398__p26",
+      "type": "missing-warrant",
+      "wanted": "flat-projective-coring-enables-derived-correspondence"
+    },
+    {
+      "pid": "0708.3398__p28",
+      "type": "missing-warrant",
+      "wanted": "derived-functor-adjointness-for-coring-extensions"
+    },
+    {
+      "pid": "0708.3398__p28",
+      "type": "missing-warrant",
+      "wanted": "coext-Ext-adjunction-via-Ru03a8"
+    },
+    {
+      "pid": "0708.3398__p28",
+      "type": "missing-warrant",
+      "wanted": "coext-Ext-adjunction-via-Lu03a6"
+    },
+    {
+      "pid": "0708.3398__p28",
+      "type": "missing-warrant",
+      "wanted": "cotor-Ctrtor-adjunction-via-Lu03a6"
+    },
+    {
+      "pid": "0806.1324__p0",
+      "type": "missing-warrant",
+      "wanted": "mutually-inverse-bijections-define-adjunction"
+    },
+    {
+      "pid": "0806.1324__p10",
+      "type": "missing-warrant",
+      "wanted": "brown-representability-for-right-adjoint"
+    },
+    {
+      "pid": "0806.1324__p10",
+      "type": "missing-warrant",
+      "wanted": "brown-representability-for-left-adjoint"
+    },
+    {
+      "pid": "0806.1324__p11",
+      "type": "missing-warrant",
+      "wanted": "union-of-b-localizing-subcategories-recovers-T"
+    },
+    {
+      "pid": "0806.1324__p13",
+      "type": "missing-warrant",
+      "wanted": "equivalence-of-a-smallness-and-pg2-for-sc0-and-sc"
+    },
+    {
+      "pid": "0806.1324__p13",
+      "type": "missing-warrant",
+      "wanted": "decomposition-of-coproduct-as-filtered-colimit"
+    },
+    {
+      "pid": "0806.1324__p13",
+      "type": "missing-warrant",
+      "wanted": "expression-of-coproduct-as-a-filtered-colimit"
+    },
+    {
+      "pid": "0806.1324__p14",
+      "type": "missing-warrant",
+      "wanted": "T-a-objects-satisfy-canon-morphism-isomorphism"
+    },
+    {
+      "pid": "0806.1324__p14",
+      "type": "missing-warrant",
+      "wanted": "generation-of-T-by-T-a-closed-under-coproducts-and-triangulation"
+    },
+    {
+      "pid": "0806.1324__p15",
+      "type": "missing-warrant",
+      "wanted": "restriction-of-extension-to-reflective-subcategory"
+    },
+    {
+      "pid": "0806.1324__p16",
+      "type": "missing-warrant",
+      "wanted": "annihilation-by-localizing-subcategory"
+    },
+    {
+      "pid": "0806.1324__p17",
+      "type": "missing-warrant",
+      "wanted": "localizing-subcategory-generated-by-ker-functor"
+    },
+    {
+      "pid": "0806.1324__p17",
+      "type": "missing-warrant",
+      "wanted": "inductive-sequence-generates-localizing-subcategory"
+    },
+    {
+      "pid": "0806.1324__p18",
+      "type": "missing-warrant",
+      "wanted": "fullness-criterion-for-universal-functors"
+    },
+    {
+      "pid": "0806.1324__p19",
+      "type": "missing-warrant",
+      "wanted": "adjoint-functor-natural-isomorphism"
+    },
+    {
+      "pid": "0806.1324__p19",
+      "type": "missing-warrants",
+      "wanted": "exactness-via-pointwise-sequences-and-colimits"
+    },
+    {
+      "pid": "0806.1324__p19",
+      "type": "missing-warrant",
+      "wanted": "exactness-via-pointwise-sequences-and-colimits"
+    },
+    {
+      "pid": "0806.1324__p2",
+      "type": "missing-warrant",
+      "wanted": "unit-counit-implies-adjunction-morphism-isomorphism"
+    },
+    {
+      "pid": "0806.1324__p3",
+      "type": "missing-warrant",
+      "wanted": "adjoint-inverse-identity"
+    },
+    {
+      "pid": "0806.1324__p4",
+      "type": "missing-warrant",
+      "wanted": "fraction-reduction-from-criterion"
+    },
+    {
+      "pid": "0806.1324__p4",
+      "type": "missing-warrant",
+      "wanted": "lf1-lf3-check-for-subcategory-calculus"
+    },
+    {
+      "pid": "0806.1324__p4",
+      "type": "missing-warrant",
+      "wanted": "injectivity-of-induced-map-on-fractions"
+    },
+    {
+      "pid": "0806.1324__p5",
+      "type": "missing-warrant",
+      "wanted": "coproduct-in-localization-is-coproduct-in-original"
+    },
+    {
+      "pid": "0806.1324__p5",
+      "type": "missing-warrant",
+      "wanted": "equivalence-of-left-fractions-in-localization"
+    },
+    {
+      "pid": "0806.1324__p6",
+      "type": "missing-warrant",
+      "wanted": "exact-functor-kernel-is-thick"
+    },
+    {
+      "pid": "0806.1324__p6",
+      "type": "missing-warrant",
+      "wanted": "cohomological-functor-intersection-kernel-is-thick"
+    },
+    {
+      "pid": "0806.1324__p7",
+      "type": "missing-warrant",
+      "wanted": "right-adjoint-image-in-subcategory"
+    },
+    {
+      "pid": "0806.1324__p7",
+      "type": "missing-warrant",
+      "wanted": "vanishing-hom-from-subcategory-in-exact-triangle"
+    },
+    {
+      "pid": "0806.1324__p7",
+      "type": "missing-warrant",
+      "wanted": "definition-of-orthogonal-subcategory"
+    },
+    {
+      "pid": "0806.1324__p8",
+      "type": "missing-warrant",
+      "wanted": "completion-of-adjunction-morphism-to-distinguished-triangle"
+    },
+    {
+      "pid": "0806.1324__p8",
+      "type": "missing-warrant",
+      "wanted": "orthogonality-via-adjunction-bijectivity"
+    },
+    {
+      "pid": "0806.1324__p9",
+      "type": "missing-warrant",
+      "wanted": "kernel-image-relations-in-triangulated-categories"
+    },
+    {
+      "pid": "0806.1324__p9",
+      "type": "missing-warrant",
+      "wanted": "representation-of-colocalization-as-adjoint-composition"
+    },
+    {
+      "pid": "0905.0465__p0",
+      "type": "missing-warrant",
+      "wanted": "higher-categorical-dualizability-requires-morphism-duals"
+    },
+    {
+      "pid": "0905.0465__p1",
+      "type": "missing-warrant",
+      "wanted": "uniqueness-up-to-iso-determines-category-up-to-equivalence"
+    },
+    {
+      "pid": "0905.0465__p12",
+      "type": "missing-warrant",
+      "wanted": "universal-property-implies-existence-and-uniqueness-of-truncation"
+    },
+    {
+      "pid": "0905.0465__p12",
+      "type": "missing-warrant",
+      "wanted": "recursive-construction-for-m-truncation-existence"
+    },
+    {
+      "pid": "0905.0465__p13",
+      "type": "missing-warrant",
+      "wanted": "loop-space-carries-en-action"
+    },
+    {
+      "pid": "0905.0465__p13",
+      "type": "missing-warrant",
+      "wanted": "chiral-homology-identification-for-n-connective"
+    },
+    {
+      "pid": "0905.0465__p13",
+      "type": "missing-warrant",
+      "wanted": "chiral-homology-remains-commutative"
+    },
+    {
+      "pid": "0905.0465__p13",
+      "type": "missing-warrant",
+      "wanted": "universal-property-of-chiral-homology"
+    },
+    {
+      "pid": "0905.0465__p14",
+      "type": "missing-warrant",
+      "wanted": "adjoint-morphism-decomposition"
+    },
+    {
+      "pid": "0905.0465__p17",
+      "type": "missing-warrant",
+      "wanted": "compatibility-of-evaluation-coevaluation-via-OHom"
+    },
+    {
+      "pid": "0905.0465__p2",
+      "type": "missing-warrant",
+      "wanted": "manifold-duality-in-homotopy-category"
+    },
+    {
+      "pid": "0905.0465__p2",
+      "type": "missing-warrant",
+      "wanted": "yoneda-for-groupoid-equivalences"
+    },
+    {
+      "pid": "0905.0465__p3",
+      "type": "missing-warrant",
+      "wanted": "homotopy-invariance-of-tangential-embeddings"
+    },
+    {
+      "pid": "0905.0465__p3",
+      "type": "missing-warrant",
+      "wanted": "functoriality-of-manifold-construction"
+    },
+    {
+      "pid": "0905.0465__p4",
+      "type": "missing-warrant",
+      "wanted": "evaluation-of-bordism-functor-on-disk-bordism"
+    },
+    {
+      "pid": "0905.0465__p5",
+      "type": "missing-warrant",
+      "wanted": "orthogonal-group-decomposition-by-rotation-paths"
+    },
+    {
+      "pid": "0905.0465__p9",
+      "type": "missing-warrant",
+      "wanted": "swisher10-needs-careful-formulation-for-n-leq-1"
+    },
+    {
+      "pid": "0905.2621__p1",
+      "type": "missing-warrant",
+      "wanted": "computation-of-d-squared-zero-in-hom-complex"
+    },
+    {
+      "pid": "0905.2621__p1",
+      "type": "missing-warrant",
+      "wanted": "leibniz-rule-for-differentials-in-graded-hom-complexes"
+    },
+    {
+      "pid": "0905.2621__p11",
+      "type": "missing-warrant",
+      "wanted": "thick-subcategory-closure-properties"
+    },
+    {
+      "pid": "0905.2621__p12",
+      "type": "missing-warrant",
+      "wanted": "hom-functor-preserves-exactness-for-injectives"
+    },
+    {
+      "pid": "0905.2621__p13",
+      "type": "missing-warrant",
+      "wanted": "total-module-of-exact-triple-is-absolutely-acyclic"
+    },
+    {
+      "pid": "1205.6522__p0",
+      "type": "missing-warrant",
+      "wanted": "invertibility-of-unit-characterizes-left-normality"
+    },
+    {
+      "pid": "1908.02202__p0",
+      "type": "missing-warrant",
+      "wanted": "coKl-f-identity-on-objects-implies-morphism-coincidence"
+    },
+    {
+      "pid": "1908.02202__p0",
+      "type": "missing-warrant",
+      "wanted": "composition-formulas-coincide-when-morphisms-do"
+    },
+    {
+      "pid": "1908.02202__p0",
+      "type": "missing-warrant",
+      "wanted": "categories-isomorphic-when-objects-morphisms-identities-composition-coincide"
+    },
+    {
+      "pid": "2311.05789__p1",
+      "type": "missing-warrant",
+      "wanted": "free-action-of-automorphism-group-on-pivotal-structures"
+    },
+    {
+      "pid": "2311.05789__p1",
+      "type": "missing-warrant",
+      "wanted": "definition-of-spherical-category-via-trace"
+    },
+    {
+      "pid": "2311.05789__p1",
+      "type": "missing-warrant",
+      "wanted": "definition-of-module-natural-transformation"
+    },
+    {
+      "pid": "math__9810017__p0",
+      "type": "missing-warrant",
+      "wanted": "definition-of-homomorphism"
+    },
+    {
+      "pid": "math__9810017__p0",
+      "type": "missing-warrant",
+      "wanted": "definition-of-strict-homomorphism"
+    }
+  ]
+}

@@ -142,6 +142,7 @@ rise as the corpus grows, and separate weak-extraction from weak-proof on a pilo
 _Drafted from this document's own stated goals during the War Machine status classification (zai-2, high confidence); not yet confirmed by the author._
 
 - [x] Every proof record carries a corpus-relative comprehension score and an explicit gap-to-ceiling
-- [ ] Holes are grounded and keyed by (type, concept), extending R2d from concepts-used to the concept a hole wants
+- [x] Holes are grounded and keyed by (type, concept), extending R2d from concepts-used to the concept a hole wants
+  _(ticked 2026-11-06: `clean_typed_holes.py` extended to aggregate across all IATC graph sets with per-paper dedupe; corpus run over 125 papers / 10 sets keys 185 holes into 107 (type, concept) keys with **25 recurring across distinct papers** — e.g. `missing-warrant` wanting *bicategory* in 9 papers — recurrence the raw `:wanted` slug never showed (zero cross-paper recurrence, warrant_normalize 2026-06-22). Artifact: `E-comprehension-foundation.typed-holes-corpus.json`; 167 ungrounded holes are reported, not dropped.)_
 - [x] The verdict gate refuses weakness assertions below high comprehension and emits the study-more/ask-for-help path
 - [x] A recorded pilot go/no-go shows the score rises with corpus growth and separates weak-extraction from weak-proof

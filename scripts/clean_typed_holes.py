@@ -18,6 +18,15 @@ Usage:
   futon6/.venv/bin/python scripts/clean_typed_holes.py \
       [--graphs data/iatc-argument-graphs/loop-run-70b] \
       [--out holes/excursions/E-comprehension-foundation.typed-holes.json]
+
+  Corpus-wide (2026-11-06): pass several set directories to aggregate across
+  graph sets.  A paper reprocessed in a later set (run/run-retry) is the SAME
+  paper: it contributes its pid once, and the key's "sets" field records where
+  it was seen.
+  futon6/.venv/bin/python scripts/clean_typed_holes.py \
+      --graphs data/iatc-argument-graphs/anchortest \
+               data/iatc-argument-graphs/gh200 ... \
+      --out holes/excursions/E-comprehension-foundation.typed-holes-corpus.json
 """
 import argparse
 import json
@@ -80,48 +89,97 @@ def typed_holes_for_graph(graph, substrate):
     return out
 
 
-def inventory(graph_paths, substrate):
-    """Aggregate the typed-hole inventory: keyed entries with recurrence."""
-    keyed = defaultdict(lambda: {"papers": set(), "n": 0, "wanted": []})
-    ungrounded = []
-    for path in graph_paths:
-        pid = Path(path).stem
-        graph = r2d.load_edn(Path(path))
-        for kind, concept, wanted in typed_holes_for_graph(graph, substrate):
-            if concept is None:
-                ungrounded.append({"pid": pid, "type": kind,
-                                   "wanted": str(wanted).lstrip(":")})
-                continue
-            key = (kind, concept)
-            keyed[key]["papers"].add(pid)
-            keyed[key]["n"] += 1
-            if wanted is not None:
-                keyed[key]["wanted"].append(str(wanted).lstrip(":"))
+def _add_paper(path, substrate, keyed, ungrounded, set_name):
+    pid = Path(path).stem
+    graph = r2d.load_edn(Path(path))
+    for kind, concept, wanted in typed_holes_for_graph(graph, substrate):
+        if concept is None:
+            ungrounded.append({"pid": pid, "type": kind,
+                               "wanted": str(wanted).lstrip(":")})
+            continue
+        key = (kind, concept)
+        keyed[key]["papers"].add(pid)
+        keyed[key]["sets"].add(set_name)
+        keyed[key]["n"] += 1
+        if wanted is not None:
+            keyed[key]["wanted"].append(str(wanted).lstrip(":"))
+
+
+def _rows(keyed, ungrounded):
     rows = [{"type": k[0], "concept": k[1], "occurrences": v["n"],
-             "papers": sorted(v["papers"]), "wanted": sorted(set(v["wanted"]))}
+             "papers": sorted(v["papers"]), "sets": sorted(v["sets"]),
+             "wanted": sorted(set(v["wanted"]))}
             for k, v in sorted(keyed.items())]
     rows.sort(key=lambda r: (-r["occurrences"], r["type"], r["concept"]))
-    return {"n_holes_keyed": sum(r["occurrences"] for r in rows),
+    return rows
+
+
+def inventory(graph_paths, substrate, set_name="default"):
+    """Aggregate the typed-hole inventory for one graph set: keyed entries
+    with recurrence.  (Paper ids are unique within a set, so no dedupe here.)"""
+    keyed = defaultdict(lambda: {"papers": set(), "sets": set(), "n": 0,
+                                 "wanted": []})
+    ungrounded = []
+    for path in graph_paths:
+        _add_paper(path, substrate, keyed, ungrounded, set_name)
+    rows = _rows(keyed, ungrounded)
+    return {"n_graph_sets": 1, "n_papers": len(graph_paths),
+            "n_holes_keyed": sum(r["occurrences"] for r in rows),
             "n_distinct_keys": len(rows),
-            "recurring": [r for r in rows if len(r["papers"]) >= 2],
+            "recurring": [r for r in rows if len(r["papers"]) > 1],
+            "ungrounded": ungrounded,
+            "typed_holes": rows}
+
+
+def corpus_inventory(graph_set_pairs, substrate):
+    """Aggregate across graph SETS.  A paper reprocessed in a later set
+    (run/run-retry) is the SAME paper: each pid is counted once, from its
+    first set, and each key's "sets" field records where it was seen."""
+    keyed = defaultdict(lambda: {"papers": set(), "sets": set(), "n": 0,
+                                 "wanted": []})
+    ungrounded = []
+    seen = {}
+    for path, set_name in graph_set_pairs:
+        pid = Path(path).stem
+        if pid in seen:
+            continue
+        seen[pid] = set_name
+        _add_paper(path, substrate, keyed, ungrounded, set_name)
+    rows = _rows(keyed, ungrounded)
+    return {"n_graph_sets": len({s for _, s in graph_set_pairs}),
+            "n_papers": len(seen),
+            "n_holes_keyed": sum(r["occurrences"] for r in rows),
+            "n_distinct_keys": len(rows),
+            "recurring": [r for r in rows if len(r["papers"]) > 1],
             "ungrounded": ungrounded,
             "typed_holes": rows}
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--graphs", default="data/iatc-argument-graphs/loop-run-70b")
+    ap.add_argument("--graphs", nargs="+",
+                    default=["data/iatc-argument-graphs/loop-run-70b"])
     ap.add_argument("--out", default="holes/excursions/E-comprehension-foundation.typed-holes.json")
     args = ap.parse_args()
 
     substrate = r2d.load_substrate(r2d.parse_args([]))
-    graph_dir = ROOT / args.graphs
-    paths = sorted(p for p in graph_dir.glob("*.edn") if not p.name.endswith(".rung2.edn"))
-    result = inventory(paths, substrate)
+    per_set = []
+    for graphs in args.graphs:
+        graph_dir = ROOT / graphs
+        paths = [p for p in sorted(graph_dir.glob("*.edn"))
+                 if not p.name.endswith(".rung2.edn")]
+        per_set.append((paths, Path(graphs).name))
+    if len(per_set) == 1:
+        paths, name = per_set[0]
+        result = inventory(paths, substrate, set_name=name)
+    else:
+        pairs = [(p, name) for paths, name in per_set for p in paths]
+        result = corpus_inventory(pairs, substrate)
     out = ROOT / args.out
     out.parent.mkdir(parents=True, exist_ok=True)
     json.dump(result, open(out, "w"), indent=2, sort_keys=True)
     print(f"wrote {out}")
+    print(f"papers: {result['n_papers']} across {result['n_graph_sets']} sets")
     print(f"holes keyed by (type, concept): {result['n_holes_keyed']} "
           f"into {result['n_distinct_keys']} distinct keys; "
           f"{len(result['recurring'])} recurring across papers; "

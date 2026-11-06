@@ -92,6 +92,27 @@ class TestTypedHoles:
         assert rows["recurring"], rows
         assert rows["recurring"][0]["papers"] == ["0706.1286", "0801.0199"]
 
+    def test_corpus_dedupe_counts_reprocessed_paper_once(self, tmp_path):
+        # the exact case corpus_inventory is named for: the SAME paper
+        # (same pid) harvested in run and run-retry is one paper, never a
+        # self-recurrence; recurrence comes from a genuinely distinct paper
+        sub = Substrate({"calmod like bicategory": {}})
+        a = tmp_path / "run"; b = tmp_path / "run-retry"
+        a.mkdir(); b.mkdir()
+        (a / "0706.1286.edn").write_text(FIXTURE_GRAPH)
+        (b / "0706.1286.edn").write_text(FIXTURE_GRAPH)          # reprocess
+        (b / "0801.0199.edn").write_text(
+            FIXTURE_GRAPH.replace("0706.1286", "0801.0199"))
+        pairs = [(a / "0706.1286.edn", "run"),
+                 (b / "0706.1286.edn", "run-retry"),
+                 (b / "0801.0199.edn", "run-retry")]
+        rows = cth.corpus_inventory(pairs, sub)
+        assert rows["n_papers"] == 2
+        rec = rows["recurring"][0]
+        assert rec["papers"] == ["0706.1286", "0801.0199"]
+        assert rec["occurrences"] == 2          # not 3: retry not double-counted
+        assert rec["sets"] == ["run", "run-retry"]
+
 
 class TestPilotGoNoGo:
     def _sizes(self, comps, weak_proof_comp=None):
