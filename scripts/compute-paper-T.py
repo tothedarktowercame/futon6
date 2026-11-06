@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from collections import Counter
 from pathlib import Path
@@ -86,6 +87,79 @@ def compute_one_paper(paper: dict) -> dict:
         "T_total": T_total,
         "top_support_id": top_id,
         "top_support_count": top_count,
+        # Geometry-artifact fields (mark3, mission M-superpod-mark3 R-3
+        # geometry artifact): the explicit unpaired-claim ids and the full
+        # Δ-Laplacian incidence map, sorted for deterministic output.
+        "unpaired_claim_ids": sorted(unpaired),
+        "laplacian_summary": {
+            "incidence": {k: incidence[k] for k in sorted(incidence)},
+            "top_support_id": top_id,
+            "top_support_count": top_count,
+        },
+    }
+
+
+GEOMETRY_SCHEMA_VERSION = "mark3-geometry-v1"
+
+
+def compute_batch_geometry(rows: list[dict]) -> dict:
+    """Batch-level geometry: tension and Laplacian summary over all papers.
+
+    Batch tension is total_unpaired / total_claims across the whole batch
+    (empty-claim papers contribute no claims), with the per-paper mean over
+    papers that have claims reported alongside.  The batch Laplacian summary
+    aggregates the per-paper incidence maps: a concept ranked high here is
+    adjacent to unpaired claims across many papers.
+    """
+    with_claims = [r for r in rows if r["n_claims"] > 0]
+    total_claims = sum(r["n_claims"] for r in rows)
+    total_unpaired = sum(r["n_unpaired"] for r in rows)
+    agg: Counter[str] = Counter()
+    for r in rows:
+        for vid, count in r["laplacian_summary"]["incidence"].items():
+            agg[vid] += count
+    if agg:
+        top_id, top_count = agg.most_common(1)[0]
+    else:
+        top_id, top_count = "", 0
+    return {
+        "n_papers": len(rows),
+        "n_papers_with_claims": len(with_claims),
+        "total_claims": total_claims,
+        "total_unpaired": total_unpaired,
+        "batch_T_total": (total_unpaired / total_claims) if total_claims else -1.0,
+        "mean_paper_T_total": (
+            sum(r["T_total"] for r in with_claims) / len(with_claims)
+        ) if with_claims else -1.0,
+        "laplacian_summary": {
+            "incidence": {k: agg[k] for k in sorted(agg)},
+            "top_support_id": top_id,
+            "top_support_count": top_count,
+        },
+    }
+
+
+def build_geometry_document(papers: list[dict], rows: list[dict]) -> dict:
+    """Assemble the deterministic geometry.json artifact for a batch.
+
+    No timestamps: running the generator twice over the same input yields
+    byte-identical output (fixed-point requirement for generated artifacts).
+    """
+    return {
+        "schema_version": GEOMETRY_SCHEMA_VERSION,
+        "n_papers": len(rows),
+        "batch": compute_batch_geometry(rows),
+        "papers": [
+            {
+                "paper_id": r["paper_id"],
+                "n_claims": r["n_claims"],
+                "n_unpaired": r["n_unpaired"],
+                "T_total": r["T_total"],
+                "unpaired_claim_ids": r["unpaired_claim_ids"],
+                "laplacian_summary": r["laplacian_summary"],
+            }
+            for r in rows
+        ],
     }
 
 
@@ -95,6 +169,11 @@ def main() -> int:
                     help="Path to the batch directory (containing output/paper-hypergraphs.json)")
     ap.add_argument("--out", type=Path, default=None,
                     help="Output TSV path (default: <batch_root>/output/paper-T.tsv)")
+    ap.add_argument("--json-out", type=Path, default=None,
+                    help="Output geometry.json path (default: "
+                         "<batch_root>/output/geometry.json; use --no-json to skip)")
+    ap.add_argument("--no-json", action="store_true",
+                    help="Do not emit the geometry.json artifact (TSV only)")
     args = ap.parse_args()
 
     pdir = args.batch_root
@@ -121,6 +200,16 @@ def main() -> int:
                     f"\t{r['T_total']:.4f}\t{r['top_support_id']}"
                     f"\t{r['top_support_count']}\n")
     print(f"[compute-paper-T] wrote {out}", file=sys.stderr)
+
+    if not args.no_json:
+        json_out = args.json_out or (pdir / "geometry.json")
+        geometry = build_geometry_document(papers, rows)
+        tmp_json = json_out.with_suffix(json_out.suffix + ".tmp")
+        with tmp_json.open("w") as f:
+            json.dump(geometry, f, ensure_ascii=False, indent=2, sort_keys=True)
+            f.write("\n")
+        os.replace(tmp_json, json_out)
+        print(f"[compute-paper-T] wrote {json_out}", file=sys.stderr)
 
     # Distribution summary to stderr.
     valid = [r["T_total"] for r in rows if r["T_total"] >= 0]
