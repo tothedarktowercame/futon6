@@ -21,7 +21,8 @@
 ;; ReplicationPlan and total DecisionRule existed, so a prospective registration
 ;; cannot honestly be attached to it. This registers its CONFIRMATION.
 
-{:clean/experiment "slice5-confirmation"
+{:clean/schema-version 1
+ :clean/experiment "slice5-confirmation"
  :clean/title  "Do any AIF terms in the ant forager carry a measurable explore/exploit effect?"
  :clean/source {:mission "futon2/holes/M-aif-stack.md"
                 :pilot   "futon2/holes/labs/ants-faithfulness/slice5.md"
