@@ -91,6 +91,10 @@ class ArxanaClient {
   async correspondenceQuery(body) {
     return this.send('correspondence/query', body);
   }
+
+  async scopeAtPosition(body) {
+    return this.send('scope/at-position', body);
+  }
 }
 
 module.exports = { ArxanaClient, TypedRefusal, envelope, unwrap };

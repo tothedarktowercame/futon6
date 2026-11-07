@@ -14,7 +14,8 @@
       { "command": "arxana.resolveScope", "title": "Arxana: Resolve scope for active fixture document" },
       { "command": "arxana.correspondence", "title": "Arxana: Query correspondence (code ↔ rendered document)" },
       { "command": "arxana.openCorrespondenceTarget", "title": "Arxana: Open rendered target (navigate correspondence)" },
-      { "command": "arxana.goToCandidate", "title": "Arxana: Go to candidate (explicit choice)" }
+      { "command": "arxana.goToCandidate", "title": "Arxana: Go to candidate (explicit choice)" },
+      { "command": "arxana.apmDemo", "title": "Arxana: APM two-pane demo (LaTeX ↔ rendered LaTeXML-oxide)" }
     ],
     "configuration": {
       "title": "Arxana",

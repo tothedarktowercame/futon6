@@ -1,0 +1,297 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{math-proofread-style}
+\EnableMathProofColors
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\hypertarget{apm-a93j02-ux3c3--1ux207fn1-log-2-via-dominated-convergence}{%
+\section{\texorpdfstring{APM a93J02:
+\(\sum \mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{n}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}n+{\mNumber{1}}\mathclose{\mDelimiter{)}} = \log {\mNumber{2}}\)
+via dominated
+convergence}{APM a93J02: \textbackslash sum \textbackslash mathopen\{\textbackslash mDelimiter\{(\}\}-\{\textbackslash mNumber\{1\}\}\textbackslash mathclose\{\textbackslash mDelimiter\{)\}\}\^{}\{n\}\textbackslash mathbin\{\textbackslash mBridgeOperator\{/\}\}\textbackslash mathopen\{\textbackslash mDelimiter\{(\}\}n+\{\textbackslash mNumber\{1\}\}\textbackslash mathclose\{\textbackslash mDelimiter\{)\}\} = \textbackslash log \{\textbackslash mNumber\{2\}\} via dominated convergence}}\label{apm-a93j02-ux3c3--1ux207fn1-log-2-via-dominated-convergence}}
+
+\hypertarget{informal-proof}{%
+\subsection{1. Informal proof}\label{informal-proof}}
+
+\textbf{Why it's hard.} The geometric series
+\({\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} = \sum \mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}^{n}\)
+converges only for \(|x| < {\mNumber{1}}\), yet we need to integrate up
+to \(x = {\mNumber{1}}\) (where the series converges conditionally but
+not absolutely). Interchanging the sum and integral requires
+justification beyond termwise integration of a uniformly convergent
+series, since the convergence is not uniform on
+\(\mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}\mathclose{\mDelimiter{]}}\).
+
+\textbf{The key insight.} Integrate the \emph{partial sums}
+\(S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} = \sum_{k={\mNumber{0}}}^{n} \mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}^{k} = \mathopen{\mDelimiter{(}}{\mNumber{1}}-\mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}^{n+{\mNumber{1}}}\mathclose{\mDelimiter{)}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}}\)
+over
+\(\mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}\mathclose{\mDelimiter{]}}\).
+Each partial sum is a polynomial (hence integrable), and
+\(\mathopen{\mDelimiter{|}}S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}} \le {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}-\mathopen{\mDelimiter{|}}\mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}}\mathclose{\mDelimiter{)}}\)
+\ldots{} no, we need a uniform dominator. Since
+\(\mathopen{\mDelimiter{|}}S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}} = \mathopen{\mDelimiter{|}}{\mNumber{1}}-\mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}^{n+{\mNumber{1}}}\mathclose{\mDelimiter{|}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{|}}{\mNumber{1}}+x\mathclose{\mDelimiter{|}} \le {\mNumber{2}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} \le {\mNumber{2}}\)
+for
+\(x \in \mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}\mathclose{\mDelimiter{]}}\),
+or more simply: each term
+\(\mathopen{\mDelimiter{|}}\mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}^{k}\mathclose{\mDelimiter{|}} \le {\mNumber{1}}\),
+so
+\(\mathopen{\mDelimiter{|}}S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}} \le n+{\mNumber{1}}\)
+--- not a fixed bound. Better: use
+\({\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}}\)
+directly as the dominator. We have
+\(S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} \to {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}}\)
+pointwise on
+\(\mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}\mathclose{\mDelimiter{)}}\),
+and
+\(\mathopen{\mDelimiter{|}}S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}} \le {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}-x\mathclose{\mDelimiter{)}}\)
+is not integrable. Actually
+\(\mathopen{\mDelimiter{|}}\mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}^{k}\mathclose{\mDelimiter{|}} = x^{k} \le {\mNumber{1}}\),
+so
+\(\mathopen{\mDelimiter{|}}S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}} \le \mathopen{\mDelimiter{(}}n+{\mNumber{1}}\mathclose{\mDelimiter{)}}\),
+which is not uniformly bounded. The right approach is different.
+
+\textbf{Proof.}
+
+\emph{Step 1: Set up the integral.} We have
+\(\int_{{\mNumber{0}}}^{{\mNumber{1}}} {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} \mathrm{d}x = \log\mathopen{\mDelimiter{(}}{\mNumber{2}}\mathclose{\mDelimiter{)}}\).
+
+The geometric series gives, for
+\(x \in \mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}\mathclose{\mDelimiter{)}}\):
+\({\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} = \sum_{n={\mNumber{0}}}^{\infty} \mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{n}x^{n}\).
+
+The partial sums are
+\(S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} = \sum_{k={\mNumber{0}}}^{n} \mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{k}x^{k}\).
+By direct computation:
+
+\(\int_{{\mNumber{0}}}^{{\mNumber{1}}} \mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{k}x^{k} \mathrm{d}x = \mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{k}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}k+{\mNumber{1}}\mathclose{\mDelimiter{)}}\).
+
+So
+\(\int_{{\mNumber{0}}}^{{\mNumber{1}}} S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} \mathrm{d}x = \sum_{k={\mNumber{0}}}^{n} \mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{k}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}k+{\mNumber{1}}\mathclose{\mDelimiter{)}}\).
+
+\emph{Step 2: Apply DCT.} We need to show
+\(\int_{{\mNumber{0}}}^{{\mNumber{1}}} S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} \mathrm{d}x \to \int_{{\mNumber{0}}}^{{\mNumber{1}}} {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} \mathrm{d}x.\)
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Pointwise convergence:} For each
+  \(x \in \mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}\mathclose{\mDelimiter{)}}\),
+  \(S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} \to {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}}\)
+  (geometric series).
+\item
+  \textbf{Domination:}
+  \(\mathopen{\mDelimiter{|}}S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}} = \mathopen{\mDelimiter{|}}{\mNumber{1}}-\mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}^{n+{\mNumber{1}}}\mathclose{\mDelimiter{|}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} \le \mathopen{\mDelimiter{(}}{\mNumber{1}}+x^{n+{\mNumber{1}}}\mathclose{\mDelimiter{)}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} \le \mathopen{\mDelimiter{(}}{\mNumber{1}}+{\mNumber{1}}\mathclose{\mDelimiter{)}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+{\mNumber{0}}\mathclose{\mDelimiter{)}} = {\mNumber{2}}\)
+  for
+  \(x \in \mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}\mathclose{\mDelimiter{]}}\).
+  More precisely:
+  \(\mathopen{\mDelimiter{|}}S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}} = \mathopen{\mDelimiter{|}}\mathopen{\mDelimiter{(}}{\mNumber{1}}-\mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}^{n+{\mNumber{1}}}\mathclose{\mDelimiter{)}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}} \le {\mNumber{2}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} \le {\mNumber{2}}\).
+  The constant function 2 is integrable on
+  \(\mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}\mathclose{\mDelimiter{]}}\).
+\end{itemize}
+
+By the dominated convergence theorem:
+
+\(\int_{{\mNumber{0}}}^{{\mNumber{1}}} S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} \mathrm{d}x \to \int_{{\mNumber{0}}}^{{\mNumber{1}}} {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} \mathrm{d}x.\)
+
+\emph{Step 3: Combine.}
+
+\(\sum_{k={\mNumber{0}}}^{n} \mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{k}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}k+{\mNumber{1}}\mathclose{\mDelimiter{)}} = \int_{{\mNumber{0}}}^{{\mNumber{1}}} S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} \mathrm{d}x \to \int_{{\mNumber{0}}}^{{\mNumber{1}}} {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}} \mathrm{d}x = [\log\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}}]_{{\mNumber{0}}}^{{\mNumber{1}}} = \log {\mNumber{2}}.\)
+
+Therefore
+\(\sum_{n={\mNumber{0}}}^{\infty} \mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{n}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}n+{\mNumber{1}}\mathclose{\mDelimiter{)}} = \log {\mNumber{2}}.\)
+∎
+
+\textbf{What connects.} This is a model application of the DCT to
+justify termwise integration of a power series at the boundary of its
+disk of convergence. The Abel summation theorem gives the same result
+(if \(\sum a_{n}\) converges and
+\(f\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}} = \sum a_{n}x^{n}\),
+then
+\(\sum a_{n} = \lim_{x\to {\mNumber{1}}^{-}} f\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}}\)),
+but the DCT approach is more elementary and directly justifies the
+interchange of sum and integral. The dominator
+\(\mathopen{\mDelimiter{|}}S_{n}\mathclose{\mDelimiter{|}} \le {\mNumber{2}}\)
+comes from the closed-form formula for geometric partial sums, which is
+the key algebraic input. The same technique proves
+\(\int_{{\mNumber{0}}}^{{\mNumber{1}}} \log\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}}\mathbin{\mBridgeOperator{/}}x \mathrm{d}x = \pi^{{\mNumber{2}}}\mathbin{\mBridgeOperator{/}}{\mNumber{12}}\)
+and many other series-integral identities.
+
+\hypertarget{lean-4-theorem-statement}{%
+\subsection{2. Lean 4 theorem
+statement}\label{lean-4-theorem-statement}}
+
+\begin{verbatim}
+import Mathlib.MeasureTheory.Integral.IntervalIntegral
+import Mathlib.MeasureTheory.Integral.FundThmCalculus
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Mathlib.Analysis.SpecificLimits.Normed
+import Mathlib.Topology.Algebra.InfiniteSum.Basic
+
+open MeasureTheory Set Filter Topology Real
+
+noncomputable section
+
+/-- Main theorem: Σ (-1)ⁿ/(n+1) = log 2. -/
+theorem alternating_harmonic_eq_log_two :
+    HasSum (fun n : ℕ => (-1 : ℝ) ^ n / (↑n + 1)) (log 2) := by
+  sorry
+
+/-- Equivalent tsum formulation. -/
+theorem tsum_alternating_harmonic :
+    ∑' n : ℕ, (-1 : ℝ) ^ n / (↑n + 1) = log 2 := by
+  sorry
+
+/-- ∫₀¹ 1/(1+x) dx = log 2. -/
+lemma integral_inv_one_plus :
+    ∫ x in (0:ℝ)..1, 1 / (1 + x) = log 2 := by
+  sorry
+
+/-- The partial sum Sₙ(x) = Σₖ₌₀ⁿ (-x)ᵏ = (1-(-x)^{n+1})/(1+x). -/
+lemma geom_partial_sum (x : ℝ) (hx : x ≠ -1) (n : ℕ) :
+    ∑ k in Finset.range (n + 1), (-x) ^ k =
+      (1 - (-x) ^ (n + 1)) / (1 + x) := by
+  sorry
+
+/-- ∫₀¹ (-1)ᵏ xᵏ dx = (-1)ᵏ/(k+1). -/
+lemma integral_pow_term (k : ℕ) :
+    ∫ x in (0:ℝ)..1, (-1 : ℝ) ^ k * x ^ k =
+      (-1) ^ k / (↑k + 1) := by
+  sorry
+
+/-- ∫₀¹ Sₙ(x) dx = Σₖ₌₀ⁿ (-1)ᵏ/(k+1). -/
+lemma integral_partial_sum (n : ℕ) :
+    ∫ x in (0:ℝ)..1, ∑ k in Finset.range (n + 1), (-1 : ℝ) ^ k * x ^ k =
+      ∑ k in Finset.range (n + 1), (-1) ^ k / (↑k + 1) := by
+  sorry
+
+/-- Domination: |Sₙ(x)| ≤ 2 for x ∈ [0,1]. -/
+lemma partial_sum_bound (n : ℕ) (x : ℝ) (hx : x ∈ Icc (0:ℝ) 1) :
+    |∑ k in Finset.range (n + 1), (-1 : ℝ) ^ k * x ^ k| ≤ 2 := by
+  sorry
+
+/-- Pointwise convergence: Sₙ(x) → 1/(1+x) for x ∈ [0,1). -/
+lemma partial_sum_tendsto (x : ℝ) (hx : x ∈ Ico (0:ℝ) 1) :
+    Tendsto (fun n => ∑ k in Finset.range (n + 1), (-1 : ℝ) ^ k * x ^ k)
+      atTop (𝓝 (1 / (1 + x))) := by
+  sorry
+
+/-- DCT application: ∫₀¹ Sₙ → ∫₀¹ 1/(1+x). -/
+lemma integral_partial_sum_tendsto :
+    Tendsto
+      (fun n => ∫ x in (0:ℝ)..1,
+        ∑ k in Finset.range (n + 1), (-1 : ℝ) ^ k * x ^ k)
+      atTop (𝓝 (∫ x in (0:ℝ)..1, 1 / (1 + x))) := by
+  sorry
+
+end
+\end{verbatim}
+
+\hypertarget{mathlib-cross-references}{%
+\subsection{3. Mathlib
+cross-references}\label{mathlib-cross-references}}
+
+\textbf{Types/structures:} - \texttt{HasSum\ f\ s} --- the series
+\(\sum f\mathopen{\mDelimiter{(}}n\mathclose{\mDelimiter{)}}\) converges
+to s - \texttt{tsum} --- the unconditional sum (when HasSum holds) -
+\texttt{intervalIntegral} / \(\int x \in a..b, f x\) ---
+Riemann/Lebesgue integral on intervals - \texttt{Finset.range\ (n+1)}
+--- the finite set \{0, \ldots, n\} for partial sums -
+\texttt{Filter.atTop} --- for \(n \to \infty\)
+
+\textbf{Key lemmas:} -
+\texttt{MeasureTheory.tendsto\_integral\_of\_dominated\_convergence} ---
+DCT: the core tool. Pointwise convergence + integrable dominator ⟹
+integral convergence - \texttt{geom\_sum\_eq} /
+\texttt{Finset.geom\_sum} ---
+\(\sum_{k={\mNumber{0}}}^{n} r^{k} = \mathopen{\mDelimiter{(}}{\mNumber{1}} \mBridgeOperator{-} r^{n+{\mNumber{1}}}\))/(1-r).
+In \texttt{Mathlib.Algebra.GeomSum} -
+\texttt{hasSum\_geometric\_of\_abs\_lt\_one} ---
+\(\sum r^{n} = {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}-r\mathclose{\mDelimiter{)}}\)
+for \(|r| < {\mNumber{1}}\) -
+\texttt{intervalIntegral.integral\_comp\_mul\_deriv} --- for computing
+\(\int x^{k} -\) \texttt{integral\_pow} ---
+\(\int_{{\mNumber{0}}}^{{\mNumber{1}}} x^{n} \mathrm{d}x = {\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}n+{\mNumber{1}}\mathclose{\mDelimiter{)}}\).
+May be in \texttt{Mathlib.Analysis.SpecialFunctions.Integrals} -
+\texttt{Real.log\_eq\_integral\_inv} ---
+\(\log\mathopen{\mDelimiter{(}}b\mathbin{\mBridgeOperator{/}}a\mathclose{\mDelimiter{)}} = \int_{a}^{b}\)
+1/x dx (or related FTC form) - \texttt{intervalIntegral.integral\_sum}
+--- interchanging finite sum and integral -
+\texttt{HasSum.tendsto\_sum\_nat} --- relating HasSum to the limit of
+partial sums - \texttt{abs\_neg\_one\_pow\_mul\_pow\_le} --- bounding
+\(\mathopen{\mDelimiter{|}}\mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{k}x^{k}\mathclose{\mDelimiter{|}}\)
+(may not exist by this name)
+
+\textbf{Tactic hints:} - \texttt{apply\ HasSum.of\_tendsto\_sum\_range}
+--- converting the limit of partial sums to HasSum -
+\texttt{rw\ {[}integral\_partial\_sum,\ integral\_inv\_one\_plus{]}} ---
+chain of equalities -
+\texttt{apply\ tendsto\_integral\_of\_dominated\_convergence\ (fun\ \_\ =\textgreater{}\ (2:ℝ))}
+--- applying DCT with constant dominator 2 -
+\texttt{simp\ {[}Finset.sum\_range\_succ{]}} --- unfolding partial sums
+- \texttt{norm\_num} --- for computing
+\(\mathopen{\mDelimiter{(}}-{\mNumber{1}}\mathclose{\mDelimiter{)}}^{k}\)
+and
+\({\mNumber{1}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}k+{\mNumber{1}}\mathclose{\mDelimiter{)}}\)
+- \texttt{ring} --- for algebraic identity
+\(\mathopen{\mDelimiter{(}}{\mNumber{1}}-\mathopen{\mDelimiter{(}}-x\mathclose{\mDelimiter{)}}^{n+{\mNumber{1}}}\mathclose{\mDelimiter{)}}\mathbin{\mBridgeOperator{/}}\mathopen{\mDelimiter{(}}{\mNumber{1}}+x\mathclose{\mDelimiter{)}}\)
+- \texttt{field\_simp} --- clearing denominators - \texttt{positivity}
+--- for \({\mNumber{1}}+x > {\mNumber{0}}\) on
+\(\mathopen{\mDelimiter{[}}{\mNumber{0}},{\mNumber{1}}\mathclose{\mDelimiter{]}}\)
+- \texttt{gcongr} --- for bounding
+\(\mathopen{\mDelimiter{|}}S_{n}\mathopen{\mDelimiter{(}}x\mathclose{\mDelimiter{)}}\mathclose{\mDelimiter{|}} \le {\mNumber{2}}\)
+- \texttt{exact?} --- finding the geometric series and integral lemmas
+
+\end{document}

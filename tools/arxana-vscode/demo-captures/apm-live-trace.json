@@ -1,0 +1,116 @@
+{
+ "generated": "2026-11-07T05:27:09.289Z",
+ "service": "http://127.0.0.1:7184",
+ "steps": [
+  {
+   "step": "capabilities",
+   "ok": true
+  },
+  {
+   "step": "move",
+   "scope": "a93J02/informal-p1",
+   "position": 3040,
+   "status": "resolved",
+   "innermost": {
+    "start": 2727,
+    "end": 3353
+   },
+   "targets": [
+    {
+     "subject": "a93J02/informal-p1",
+     "assertion": "arxana:correspondence:sha256:b7685bbab63cfdc677fb7e0ad55e860bb29901a2227fb93d5254202a9bec3a62",
+     "dom": "Sx1.SSx1.p1",
+     "verification": ":partial",
+     "innermost": true,
+     "presentInRenderedPage": true
+    },
+    {
+     "subject": "a93J02/subsection-1",
+     "assertion": "arxana:correspondence:sha256:a9f8b1f24e78acf1ce47fd7c78485af363259dcd5746a069149b8eea7e1c35b8",
+     "dom": "Sx1.SSx1",
+     "verification": ":verified",
+     "innermost": false,
+     "presentInRenderedPage": true
+    }
+   ],
+   "digest": "059dfe58e0058c5c645f9c30b9dff43dc7b45829d92aa7264d87c2d052a4bc5f"
+  },
+  {
+   "step": "move",
+   "scope": "a93J02/subsection-2",
+   "position": 13293,
+   "status": "resolved",
+   "innermost": {
+    "start": 12215,
+    "end": 14371
+   },
+   "targets": [
+    {
+     "subject": "a93J02/subsection-2",
+     "assertion": "arxana:correspondence:sha256:c8d961682d5db7b83ac3df4d64fc202f9aafe3b5e3df0ffbe2d5729f16548c96",
+     "dom": "Sx1.SSx2",
+     "verification": ":verified",
+     "innermost": true,
+     "presentInRenderedPage": true
+    }
+   ],
+   "digest": "ca2bf5a3179cf85a3a3519d9b2d513610535dc6a94fca41789f433fe7427ce6d"
+  },
+  {
+   "step": "move",
+   "scope": "a93J02/informal-p16",
+   "position": 11671,
+   "status": "resolved",
+   "innermost": {
+    "start": 11171,
+    "end": 12172
+   },
+   "targets": [
+    {
+     "subject": "a93J02/informal-p16",
+     "assertion": "arxana:correspondence:sha256:185018ce33598b0bb6374b4bade0583bc889a1b07a9a5c4268f5b9ff9f71e975",
+     "dom": "Sx1.SSx1.p16",
+     "verification": ":partial",
+     "innermost": true,
+     "presentInRenderedPage": true
+    },
+    {
+     "subject": "a93J02/subsection-1",
+     "assertion": "arxana:correspondence:sha256:a9f8b1f24e78acf1ce47fd7c78485af363259dcd5746a069149b8eea7e1c35b8",
+     "dom": "Sx1.SSx1",
+     "verification": ":verified",
+     "innermost": false,
+     "presentInRenderedPage": true
+    }
+   ],
+   "digest": "d7cf9a13477caa9abfb3e3a1164bbd7e662b0e6a57518b1e747f50c2e2f3f058"
+  },
+  {
+   "step": "typed-refusal",
+   "position": 10,
+   "status": "cleared",
+   "refusal": {
+    "kind": ":arxana.scope/no-enclosing-scope",
+    "category": ":missing",
+    "detail": {
+     "artifact/revision-id": "arxana:revision:sha256:12c634868eff45da23da832910e8ab6106b174c259b605accd03f00341d3440c",
+     "position/codepoint": 10
+    }
+   }
+  },
+  {
+   "step": "rapid-movement-suppression",
+   "submitted": 3,
+   "painted": 1,
+   "paintedStatus": "resolved",
+   "paintedInnermost": {
+    "start": 11171,
+    "end": 12172
+   }
+  }
+ ],
+ "capabilities": {
+  "advertised": true,
+  "ready": true
+ }
+}

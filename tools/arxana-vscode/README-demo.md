@@ -79,3 +79,36 @@ was modified.
 - Extension host difference (code-server vs desktop): none for authority
   behavior — the extension uses only `fetch` against loopback and the webview
   API; identical code runs on desktop VS Code.
+
+## APM two-pane demo (2026-11-07 increment)
+
+`Arxana: APM two-pane demo (LaTeX ↔ rendered LaTeXML-oxide)` — command
+`arxana.apmDemo` — opens the fixture's authored `apm-a93J02.tex` (left) and
+the RENDERED LaTeXML-oxide page in a webview (right; stylesheets inlined,
+strict CSP, never raw HTML source). Moving the cursor resolves the smallest
+enclosing REGISTERED scope through the service's `:scope/at-position`
+(position converted to codepoints only against the digest-matched pinned
+revision), then highlights the innermost source range plus every enclosing
+scope in the left pane and every corresponding rendered target (producer DOM
+ids — locator evidence only) in the right pane, with assertion IDs and
+verification standings surfaced on hover/banner. Ambiguous scope sets paint
+every assertion — never a silent first choice. Typed refusals (including
+`:arxana.scope/no-enclosing-scope` outside any registered scope, stale
+revisions, service unavailability) clear all highlights. Cursor events are
+debounced and sequence-gated: rapid movement cannot repaint an older scope.
+Clicking a highlighted target reveals the source range of the SAME authority
+assertion (target→source navigation).
+
+Fixture: `fixtures/apm/` — exact bytes of the public presentation reference
+(zone.hyperreal.enterprises/wip/apm-highlight-demo, latexml_oxide 0.7.5;
+producer log digest retained) with `manifest.json` sha256 revision ids and an
+11-entry scope table (3 subsection scopes verified by title evidence, 8
+paragraph scopes partial by >=4-word text alignment; math-only paragraphs are
+deliberately NOT registered — no invented symbol-level semantics).
+Presentation resources (LaTeXML.css, ltx-article.css) are pinned by the same
+manifest and inlined: presentation, not semantic artifacts.
+
+Live trace: `demo-captures/apm-live-trace.json` (semantic digests, scope and
+assertion IDs, rapid-movement suppression evidence). Service side:
+futon3c `resources/arxana/apm-demo` (same manifest; byte-identical copies)
+and `futon3c.arxana.apm-fixture` / `:scope/at-position`.

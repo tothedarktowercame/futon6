@@ -1,0 +1,139 @@
+{
+ "schema": "arxana/apm-demo-fixture-v1",
+ "generated": "2026-11-07",
+ "authority": "zone.hyperreal.enterprises/apm-highlight-demo",
+ "family": "apm/a93J02",
+ "producer": {
+  "tool": "latexml_oxide",
+  "version": "0.7.5",
+  "log-digest": "3b65504af07eb81231138c5520ce84b56f8360e49a6cca6752314a9606e64133",
+  "source-corpus": "futon3c/data/apm-informal-proofs/apm-a93J02.md",
+  "published-url": "https://zone.hyperreal.enterprises/wip/apm-highlight-demo/"
+ },
+ "artifacts": {
+  "apm-a93J02.tex": {
+   "media-type": "text/x-tex",
+   "sha256": "12c634868eff45da23da832910e8ab6106b174c259b605accd03f00341d3440c",
+   "role": "authored"
+  },
+  "index.html": {
+   "media-type": "text/html",
+   "sha256": "b04e3543f358af0fe784fcf5df5ae314f6b07295503de13fcae66466b144d127",
+   "role": "generated"
+  },
+  "LaTeXML.css": {
+   "media-type": "text/css",
+   "sha256": "e9a9a43459416855fe58f81ec4266b288ccc0eaa9ab93b58645231b78c6c2421",
+   "role": "presentation"
+  },
+  "ltx-article.css": {
+   "media-type": "text/css",
+   "sha256": "ff496feba79de089ccd24a97da63bb0db859b10c1c68d2d9576f402a0473a102",
+   "role": "presentation"
+  }
+ },
+ "scopes": [
+  {
+   "id": "a93J02/subsection-1",
+   "dom-id": "Sx1.SSx1",
+   "kind": "subsection",
+   "tex-start": 2672,
+   "tex-end": 12215,
+   "title": "1. Informal proof",
+   "verification": "verified",
+   "evidence-quote": "1. Informal proof"
+  },
+  {
+   "id": "a93J02/informal-p1",
+   "dom-id": "Sx1.SSx1.p1",
+   "kind": "paragraph",
+   "tex-start": 2727,
+   "tex-end": 3353,
+   "verification": "partial",
+   "evidence-quote": "why hard the geometric series converges only for yet need integrate where the series converges conditionally but not absolutely interchanging the sum and integral requires justification beyond termwise integration uniformly convergent series since the convergence not uniform"
+  },
+  {
+   "id": "a93J02/informal-p2",
+   "dom-id": "Sx1.SSx1.p2",
+   "kind": "paragraph",
+   "tex-start": 3355,
+   "tex-end": 6292,
+   "verification": "partial",
+   "evidence-quote": "the key insight integrate the partial sums over each partial sum polynomial hence integrable and need uniform dominator since for more simply each term not fixed bound better use directly the dominator have pointwise and not integrable actually which not uniformly bounded the right approach different"
+  },
+  {
+   "id": "a93J02/informal-p4",
+   "dom-id": "Sx1.SSx1.p4",
+   "kind": "paragraph",
+   "tex-start": 6311,
+   "tex-end": 6588,
+   "verification": "partial",
+   "evidence-quote": "step set the integral have"
+  },
+  {
+   "id": "a93J02/informal-p5",
+   "dom-id": "Sx1.SSx1.p5",
+   "kind": "paragraph",
+   "tex-start": 6590,
+   "tex-end": 6934,
+   "verification": "partial",
+   "evidence-quote": "the geometric series gives for"
+  },
+  {
+   "id": "a93J02/informal-p6",
+   "dom-id": "Sx1.SSx1.p6",
+   "kind": "paragraph",
+   "tex-start": 6936,
+   "tex-end": 7146,
+   "verification": "partial",
+   "evidence-quote": "the partial sums are direct computation"
+  },
+  {
+   "id": "a93J02/informal-p9",
+   "dom-id": "Sx1.SSx1.p9",
+   "kind": "paragraph",
+   "tex-start": 7755,
+   "tex-end": 8070,
+   "verification": "partial",
+   "evidence-quote": "step apply dct need show"
+  },
+  {
+   "id": "a93J02/informal-p11",
+   "dom-id": "Sx1.SSx1.p11",
+   "kind": "paragraph",
+   "tex-start": 9999,
+   "tex-end": 10036,
+   "verification": "partial",
+   "evidence-quote": "the dominated convergence theorem"
+  },
+  {
+   "id": "a93J02/informal-p16",
+   "dom-id": "Sx1.SSx1.p16",
+   "kind": "paragraph",
+   "tex-start": 11171,
+   "tex-end": 12172,
+   "verification": "partial",
+   "evidence-quote": "what connects this model application the dct justify termwise integration power series the boundary its disk convergence the abel summation theorem gives the same result converges and then but the dct approach more elementary and directly justifies the interchange sum and integral the dominator comes from the closed form formula for geometric partial sums which the key algebraic input the same technique proves and many other series integral identities"
+  },
+  {
+   "id": "a93J02/subsection-2",
+   "dom-id": "Sx1.SSx2",
+   "kind": "subsection",
+   "tex-start": 12215,
+   "tex-end": 14371,
+   "title": "2. Lean 4 theorem statement",
+   "verification": "verified",
+   "evidence-quote": "2. Lean 4 theorem statement"
+  },
+  {
+   "id": "a93J02/subsection-3",
+   "dom-id": "Sx1.SSx3",
+   "kind": "subsection",
+   "tex-start": 14371,
+   "tex-end": 17804,
+   "title": "3. Mathlib cross-references",
+   "verification": "verified",
+   "evidence-quote": "3. Mathlib cross-references"
+  }
+ ]
+}

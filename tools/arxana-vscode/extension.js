@@ -15,6 +15,10 @@ const {
 } = require('./lib/utf16');
 const { resolveView, correspondenceView, refusalView, renderHtml } = require('./lib/view');
 const { navigationChoice } = require('./lib/navigation');
+const live = require('./lib/live');
+const apmweb = require('./lib/apmweb');
+const { utf16ToCodepoint } = require('./lib/utf16');
+const { revisionIdFromSha } = require('./lib/digest');
 
 let panel = null;
 
@@ -180,6 +184,144 @@ function activate(context) {
       display('Arxana candidate', refusalView('navigation', e));
     }
   });
+
+  // ── APM two-pane demo (M-jvm-arxana increment, 2026-11-07) ─────────────
+  // Left pane: the authored .tex. Right pane: the RENDERED LaTeXML-oxide
+  // page in a webview. Cursor movement resolves the smallest enclosing
+  // REGISTERED scope via :scope/at-position, then every corresponding
+  // target is highlighted in both panes. Debounced + sequence-gated so
+  // rapid movement cannot repaint an older scope; typed refusals clear.
+  {
+    const apmDir = path.join(__dirname, 'fixtures', 'apm');
+    const apmManifest = JSON.parse(fs.readFileSync(path.join(apmDir, 'manifest.json'), 'utf8'));
+    const texName = 'apm-a93J02.tex';
+    const texSha = apmManifest.artifacts[texName]['sha256'];
+    const texRevisionId = revisionIdFromSha(texSha);
+    let apmPanel = null;
+    let apmEditor = null;
+    let lastPresentation = null;
+    const gate = live.sequenceGate();
+    const debounce = live.debouncer(200);
+    const log = vscode.window.createOutputChannel('Arxana APM demo');
+
+    const scopeDecoration = vscode.window.createTextEditorDecorationType({
+      backgroundColor: 'rgba(152,195,121,0.18)',
+      border: '1px solid rgba(152,195,121,0.5)',
+    });
+    const enclosingDecoration = vscode.window.createTextEditorDecorationType({
+      borderBottom: '1px dashed rgba(209,154,102,0.6)',
+    });
+
+    function clearSourceHighlights() {
+      if (apmEditor) {
+        apmEditor.setDecorations(scopeDecoration, []);
+        apmEditor.setDecorations(enclosingDecoration, []);
+      }
+    }
+
+    function paint(presentation) {
+      lastPresentation = presentation;
+      clearSourceHighlights();
+      if (apmPanel) {
+        apmPanel.webview.postMessage({
+          type: 'arxana/highlight',
+          status: presentation.status,
+          targets: presentation.targets,
+          refusal: presentation.refusal || null,
+        });
+      }
+      if (presentation.status === 'cleared') {
+        if (presentation.refusal) {
+          log.appendLine(`cleared: typed refusal ${presentation.refusal.kind}`
+            + (presentation.refusal.category ? ` (${presentation.refusal.category})` : ''));
+        }
+        return;
+      }
+      if (!apmEditor || !presentation.sourceRange) return;
+      const text = apmEditor.document.getText();
+      try {
+        const inner = codepointRangeToUtf16Range(text, presentation.sourceRange.start, presentation.sourceRange.end);
+        apmEditor.setDecorations(scopeDecoration, [{
+          range: new vscode.Range(apmEditor.document.positionAt(inner.start), apmEditor.document.positionAt(inner.end)),
+          hoverMessage: `arxana innermost scope (${presentation.status}) digest ${presentation.digest || 'n/a'}`,
+        }]);
+        const enclosing = presentation.targets.filter((t) => !t.innermost && t.range);
+        apmEditor.setDecorations(enclosingDecoration, enclosing.map((t) => {
+          const u = codepointRangeToUtf16Range(text, t.range.start, t.range.end);
+          return {
+            range: new vscode.Range(apmEditor.document.positionAt(u.start), apmEditor.document.positionAt(u.end)),
+            hoverMessage: `arxana enclosing scope ${t.subjectId} (${t.verification}) ${t.assertionId}`,
+          };
+        }));
+      } catch (e) {
+        log.appendLine(`paint refused: ${e && e.message}`);
+      }
+    }
+
+    async function resolveAt(editor) {
+      const seq = gate.next();
+      try {
+        // Digest-match the live document against the pinned revision first:
+        // position conversion is legal only against matched bytes.
+        const bytes = Buffer.from(editor.document.getText(), 'utf8');
+        const m = matchRevision(bytes, { [texName]: texRevisionId });
+        if (m.kind !== 'matched') {
+          paint({ status: 'cleared', sourceRange: null, targets: [],
+                  refusal: { kind: 'client/revision-unmatched', sha256: m.sha256 } });
+          return;
+        }
+        const text = editor.document.getText();
+        const offset = editor.document.offsetAt(editor.selection.active);
+        const codepoint = utf16ToCodepoint(text, offset);
+        const response = await client().scopeAtPosition({
+          'artifact/revision-id': texRevisionId,
+          'position/codepoint': codepoint,
+        });
+        if (!gate.admit(seq)) return; // stale/out-of-order: repaint nothing
+        paint(live.presentationFor(response));
+      } catch (e) {
+        if (!gate.admit(seq)) return;
+        paint(live.presentationFor({ error: { 'error/code': (e && e.kind) || 'client/unknown' } }));
+      }
+    }
+
+    reg('arxana.apmDemo', async () => {
+      const doc = await vscode.workspace.openTextDocument(path.join(apmDir, texName));
+      apmEditor = await vscode.window.showTextDocument(doc, vscode.ViewColumn.One);
+      if (!apmPanel) {
+        apmPanel = vscode.window.createWebviewPanel('arxana-apm', 'APM a93J02 — rendered (LaTeXML-oxide)',
+          vscode.ViewColumn.Beside, { enableScripts: true });
+        apmPanel.webview.html = apmweb.apmWebviewHtml(apmDir, apmPanel.webview.cspSource);
+        apmPanel.webview.onDidReceiveMessage((msg) => {
+          if (!msg) return;
+          if (msg.type === 'arxana/targets-missing') {
+            log.appendLine(`webview: target elements absent from rendered page: ${msg.domIds.join(', ')}`);
+          }
+          if (msg.type === 'arxana/target-click' && lastPresentation) {
+            // Target→source: reveal the source range of the SAME authority
+            // assertion that produced this highlight (presentation-only).
+            const t = lastPresentation.targets.find((x) => x.domId === msg.domId);
+            if (t && t.range && apmEditor) {
+              const text = apmEditor.document.getText();
+              const u = codepointRangeToUtf16Range(text, t.range.start, t.range.end);
+              const start = apmEditor.document.positionAt(u.start);
+              const end = apmEditor.document.positionAt(u.end);
+              apmEditor.selection = new vscode.Selection(start, end);
+              apmEditor.revealRange(new vscode.Range(start, end), vscode.TextEditorRevealType.InCenter);
+            }
+          }
+        });
+        apmPanel.onDidDispose(() => { apmPanel = null; clearSourceHighlights(); });
+      } else {
+        apmPanel.reveal();
+      }
+      vscode.window.showInformationMessage('Arxana APM demo: move the cursor in the .tex pane; scopes resolve through the service');
+    });
+
+    context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection((ev) => {
+      if (apmPanel && ev.textEditor === apmEditor) debounce.push(() => resolveAt(apmEditor));
+    }));
+  }
 }
 
 /** Decorations carry response/candidate IDs only (D5): the hover message is
