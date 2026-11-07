@@ -25,7 +25,7 @@ function navigationChoice(assertions, chosenAssertionId) {
   if (list.length === 1) {
     return { assertion: list[0] };
   }
-  if (chosenAssertionId == null) {
+  if (chosenAssertionId === undefined) {
     return { choose: ids };
   }
   const a = list.find((x) => String(x.assertionId) === String(chosenAssertionId));

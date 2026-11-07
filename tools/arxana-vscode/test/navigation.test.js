@@ -34,7 +34,7 @@ test('multiple assertions never select the first implicitly', () => {
   assert.equal(view.assertions.length, 3);
   // No choice made yet: the decision must be "choose among ALL ids",
   // never a navigation of assertions[0].
-  const pending = navigationChoice(view.assertions, null);
+  const pending = navigationChoice(view.assertions);
   assert.ok(pending.choose, 'multi-assertion state must demand an explicit choice');
   assert.equal(pending.choose.length, 3);
   assert.ok(!pending.assertion, 'no implicit assertion selection');
@@ -42,7 +42,7 @@ test('multiple assertions never select the first implicitly', () => {
 
   // Cancelled choice (null) is still a typed refusal listing every id —
   // not a fallback to the first assertion.
-  const cancelled = navigationChoice(view.assertions, '__cancelled__');
+  const cancelled = navigationChoice(view.assertions, null);
   assert.equal(cancelled.refusal.kind, 'client/selection-required');
   assert.deepEqual(cancelled.refusal.detail.assertionIds,
                    view.assertions.map((a) => a.assertionId));

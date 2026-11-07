@@ -133,7 +133,7 @@ function activate(context) {
       const view = correspondenceView(ok, pathsByLogicalId());
       // D4 ambiguity preservation: never silently select the first
       // assertion (see lib/navigation.js navigationChoice).
-      let choice = navigationChoice(view.assertions, null);
+      let choice = navigationChoice(view.assertions);
       if (choice.choose) {
         const picked = await vscode.window.showQuickPick(
           choice.choose.map((id) => ({ label: String(id) })),
