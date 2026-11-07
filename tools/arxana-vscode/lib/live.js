@@ -70,6 +70,15 @@ function latestDelivery(send) {
   };
 }
 
+/** Circular guided-tour navigation.  The caller supplies only fixture-backed
+ * scopes; this function chooses presentation order, never correspondence. */
+function tourMove(current, count, direction) {
+  if (!Number.isInteger(count) || count < 1) return null;
+  const at = Number.isInteger(current) ? current : -1;
+  if (direction === 'previous') return (at <= 0 ? count - 1 : at - 1);
+  return (at + 1) % count;
+}
+
 /** Presentation projection of a :scope/at-position authority response.
  * Never selects among ambiguous scopes: an ambiguous response paints every
  * scope's targets (all assertion ids visible) and marks status 'ambiguous';
@@ -113,4 +122,4 @@ function presentationFor(response) {
   };
 }
 
-module.exports = { debouncer, sequenceGate, latestDelivery, presentationFor };
+module.exports = { debouncer, sequenceGate, latestDelivery, tourMove, presentationFor };

@@ -16,12 +16,30 @@ const HIGHLIGHT_CSS = `
 .arxana-ambiguous-banner { position: fixed; top: 0; left: 0; right: 0;
   background: #2d2a3b; color: #e6edf7; font: 12px system-ui; padding: 4px 8px;
   border-bottom: 1px solid #d19a66; z-index: 99; }
+#arxana-tour { position: fixed; left: 8px; right: 8px; bottom: 8px; z-index: 100;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 8px; border: 1px solid #98c379; border-radius: 8px;
+  background: rgba(32,35,42,0.96); color: #e6edf7; font: 14px system-ui; }
+#arxana-tour button { min-width: 92px; min-height: 44px; border: 1px solid #98c379;
+  border-radius: 6px; background: #343a46; color: #fff; font: 600 14px system-ui; }
+#arxana-tour-status { min-width: 7em; text-align: center; }
+body { padding-bottom: 72px; }
 </style>`;
 
 const WEBVIEW_SCRIPT = `
 <script>
 'use strict';
 const vscode = acquireVsCodeApi();
+const tour = document.createElement('div');
+tour.id = 'arxana-tour';
+tour.innerHTML = '<button id="arxana-tour-prev" type="button">◀ Previous</button>'
+  + '<span id="arxana-tour-status">Loading scopes…</span>'
+  + '<button id="arxana-tour-next" type="button">Next ▶</button>';
+document.body.appendChild(tour);
+document.getElementById('arxana-tour-prev').addEventListener('click', () =>
+  vscode.postMessage({ type: 'arxana/tour', direction: 'previous' }));
+document.getElementById('arxana-tour-next').addEventListener('click', () =>
+  vscode.postMessage({ type: 'arxana/tour', direction: 'next' }));
 function clearHighlights() {
   document.querySelectorAll('.arxana-active').forEach((el) =>
     el.classList.remove('arxana-active', 'arxana-innermost'));
@@ -31,6 +49,10 @@ function clearHighlights() {
 window.addEventListener('message', (event) => {
   const msg = event.data;
   if (!msg || msg.type !== 'arxana/highlight') return;
+  if (msg.tour) {
+    document.getElementById('arxana-tour-status').textContent =
+      msg.tour.position + ' / ' + msg.tour.count;
+  }
   clearHighlights();
   if (msg.status === 'cleared') return;   // stale/missing/typed refusal: old highlights cleared
   let first = null;

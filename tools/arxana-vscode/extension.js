@@ -197,6 +197,8 @@ function activate(context) {
     const texName = 'apm-a93J02.tex';
     const texSha = apmManifest.artifacts[texName]['sha256'];
     const texRevisionId = revisionIdFromSha(texSha);
+    const tourScopes = apmManifest.scopes.filter((scope) => scope.kind === 'paragraph');
+    let tourIndex = -1;
     let apmPanel = null;
     let apmEditor = null;
     let lastPresentation = null;
@@ -224,7 +226,7 @@ function activate(context) {
       }
     }
 
-    function paint(presentation) {
+    function paint(presentation, tour = null) {
       lastPresentation = presentation;
       clearSourceHighlights();
       if (apmPanel) {
@@ -233,6 +235,7 @@ function activate(context) {
           status: presentation.status,
           targets: presentation.targets,
           refusal: presentation.refusal || null,
+          tour,
         });
       }
       if (presentation.status === 'cleared') {
@@ -264,6 +267,12 @@ function activate(context) {
     }
 
     async function resolveAt(editor) {
+      const offset = editor.document.offsetAt(editor.selection.active);
+      const codepoint = utf16ToCodepoint(editor.document.getText(), offset);
+      return resolveAtCodepoint(editor, codepoint);
+    }
+
+    async function resolveAtCodepoint(editor, codepoint, tour = null) {
       const seq = gate.next();
       try {
         // Digest-match the live document against the pinned revision first:
@@ -279,19 +288,32 @@ function activate(context) {
                   refusal: { kind: 'client/revision-unmatched', sha256: m.sha256 } });
           return;
         }
-        const text = editor.document.getText();
-        const offset = editor.document.offsetAt(editor.selection.active);
-        const codepoint = utf16ToCodepoint(text, offset);
         const response = await client().scopeAtPosition({
           'artifact/revision-id': texRevisionId,
           'position/codepoint': codepoint,
         });
         if (!gate.admit(seq)) return; // stale/out-of-order: repaint nothing
-        paint(live.presentationFor(response));
+        paint(live.presentationFor(response), tour);
       } catch (e) {
         if (!gate.admit(seq)) return;
         paint(live.presentationFor({ error: { 'error/code': (e && e.kind) || 'client/unknown' } }));
       }
+    }
+
+    function moveTour(direction) {
+      tourIndex = live.tourMove(tourIndex, tourScopes.length, direction);
+      if (tourIndex === null || !apmEditor) return;
+      const scope = tourScopes[tourIndex];
+      const codepoint = scope['tex-start'] + 1;
+      const text = apmEditor.document.getText();
+      const u = codepointRangeToUtf16Range(text, codepoint, codepoint);
+      const position = apmEditor.document.positionAt(u.start);
+      apmEditor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenter);
+      resolveAtCodepoint(apmEditor, codepoint, {
+        position: tourIndex + 1,
+        count: tourScopes.length,
+        subjectId: scope.id,
+      });
     }
 
     reg('arxana.apmDemo', async () => {
@@ -305,7 +327,11 @@ function activate(context) {
           if (!msg) return;
           if (msg.type === 'arxana/ready') {
             webviewDelivery.markReady();
-            if (apmEditor) resolveAt(apmEditor);
+            moveTour('next');
+            return;
+          }
+          if (msg.type === 'arxana/tour') {
+            moveTour(msg.direction === 'previous' ? 'previous' : 'next');
             return;
           }
           if (msg.type === 'arxana/targets-missing') {

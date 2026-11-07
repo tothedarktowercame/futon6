@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
-const { debouncer, sequenceGate, latestDelivery, presentationFor } = require('../lib/live');
+const { debouncer, sequenceGate, latestDelivery, tourMove, presentationFor } = require('../lib/live');
 const { apmWebviewHtml } = require('../lib/apmweb');
 
 test('debounce coalesces rapid movement into one resolve', () => {
@@ -54,6 +54,15 @@ test('webview delivery holds only the newest presentation until ready', () => {
   assert.deepEqual(sent.at(-1), { scope: 'live' });
   delivery.markReady();
   assert.deepEqual(sent.at(-1), { scope: 'after-recreate' });
+});
+
+test('guided tour moves circularly without inventing scopes', () => {
+  assert.equal(tourMove(-1, 8, 'next'), 0);
+  assert.equal(tourMove(0, 8, 'next'), 1);
+  assert.equal(tourMove(7, 8, 'next'), 0);
+  assert.equal(tourMove(0, 8, 'previous'), 7);
+  assert.equal(tourMove(4, 8, 'previous'), 3);
+  assert.equal(tourMove(0, 0, 'next'), null);
 });
 
 test('resolved response paints innermost source range and every target', () => {
@@ -130,6 +139,8 @@ test('webview document renders the page, not raw source, with pinned styles', ()
   assert.ok(html.includes('Content-Security-Policy'));
   assert.ok(html.includes('arxana/highlight'), 'webview script injected');
   assert.ok(html.includes("type: 'arxana/ready'"), 'webview readiness handshake injected');
+  assert.ok(html.includes('arxana-tour-next'), 'mobile next-scope control injected');
+  assert.ok(html.includes("type: 'arxana/tour'"), 'tour controls report intent to extension');
   assert.ok(html.includes('.ltx_page_main'), 'LaTeXML stylesheet inlined');
   assert.ok(!/rel="stylesheet"/.test(html), 'no external stylesheet loads remain');
   assert.ok(!html.includes('lean-proofread'), 'public demo highlight style not carried');
