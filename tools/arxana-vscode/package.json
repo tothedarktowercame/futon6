@@ -1,0 +1,33 @@
+{
+  "name": "arxana-codeserver-demo",
+  "displayName": "Arxana code-server demo (M-jvm-arxana)",
+  "description": "Projection-only arxana.v1 client: capability view, scope resolution with all candidates, and code↔rendered-document correspondence for the draft8 fixture.",
+  "version": "0.1.0",
+  "publisher": "futon6",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "arxana.showCapabilities", "title": "Arxana: Show capabilities (handshake)" },
+      { "command": "arxana.resolveScope", "title": "Arxana: Resolve scope for active fixture document" },
+      { "command": "arxana.correspondence", "title": "Arxana: Query correspondence (code ↔ rendered document)" },
+      { "command": "arxana.openCorrespondenceTarget", "title": "Arxana: Open rendered target (navigate correspondence)" },
+      { "command": "arxana.goToCandidate", "title": "Arxana: Go to candidate (explicit choice)" }
+    ],
+    "configuration": {
+      "title": "Arxana",
+      "properties": {
+        "arxana.serviceUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:7084",
+          "description": "Isolated loopback arxana.v1 service URL (futon3c.arxana.demo)."
+        }
+      }
+    }
+  },
+  "scripts": { "test": "node --test test/" },
+  "devDependencies": {},
+  "dependencies": {}
+}

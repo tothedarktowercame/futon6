@@ -1,7 +1,13 @@
 # T-codeserver-arxana-demo — a code-server client for Arxana scopes, alongside Emacs
 
 **Type:** T-prefix ticket (demo + client-side requirements, no implementation
-yet). **Raised:** 2026-11-07 by Joe, with Zai-1. **Status:** open.
+yet). **Raised:** 2026-11-07 by Joe, with Zai-1. **Status:** implementation
+slice delivered 2026-11-07 by zai-10 — see
+`holes/M-jvm-arxana-codeserver-demo-report.md` and `tools/arxana-vscode/`
+(additive code-server extension consuming the live arxana.v1 JVM surface over
+the draft8 fixture; §2 step 5 is no longer future work). §2 steps 1–4 of the
+original plan (frozen a00J02 substrate) were superseded by this slice's
+instruction to consume the real service and the repaired draft8 fixture.
 **Companions:** `T-arxana-ts.md` (futon6 `f5e5461`), `E-native-lean-scopes.md`
 (futon6 `26512d2`), `futon4/holes/labs/M-jvm-arxana/` D1–D7 DERIVE artifacts
 (baseline `84f999d`) and `A1-design-fitness-argument.md` (ARGUE, `37ba0dc`).
@@ -142,3 +148,12 @@ VS Code-class client, feeding requirements back into the design it consumes.
   `substrate-vscode` in code-server;
 - anchor-recovery results after scripted edits (per T-arxana-ts phase 4);
 - the R1–R7 confirmations or corrections from codex-21 as they land.
+
+**Evidence 2026-11-07 (zai-10, implementation slice):** 18/18 unit tests plus
+a live acceptance run against the isolated arxana.v1 JVM service (loopback
+7084) with semantic digests equal to the committed futon4a transcript (resolve
+`0397248a…`, correspondence `9c91f35e…`); ambiguity, mid-surrogate refusal,
+digest-match and typed-refusal behaviors tested; extension enumerated by a
+private code-server instance. Full record:
+`holes/M-jvm-arxana-codeserver-demo-report.md`. The a00J02 frozen-substrate
+step was not exercised in this slice (superseded by the live-service lane).

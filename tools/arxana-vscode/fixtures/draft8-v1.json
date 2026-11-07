@@ -1,0 +1,31 @@
+{
+  "fixture/id": "m-jvm-arxana/draft8-v1",
+  "provenance": {
+    "note": "Fixture stand-in config (R1: frozen JSON is fixture input, not an authority message). Artifact revisions are copied from the committed futon5 fixture manifest at gate 17dc53a; the strategy revision id is copied from the committed futon4a demo transcript. The extension never mints arxana:* ids and never treats this file as authority output.",
+    "futon5-manifest": "holes/tech-notes/paper/html-build/wysiwyg/arxana-fixture/manifest.json",
+    "futon5-gate": "17dc53a",
+    "futon4a-transcript": "examples/demo-transcript.json"
+  },
+  "service": { "default-url": "http://127.0.0.1:7084" },
+  "subject/id": "draft8/introduction",
+  "strategy/revision-id": "arxana:strategy-revision:sha256:a5ac1c97c5c2105a92c75d95fe87f7b7755c6b829bc26d45e504b3efe1d503b2",
+  "artifacts": {
+    "draft8.tex": {
+      "revision-id": "arxana:revision:sha256:de7d8f8ac0bc2440698d0335be0e3870df982a114b2499946d2801c5a0b6cf95",
+      "path": "/home/joe/code/futon5/holes/tech-notes/paper/html-build/wysiwyg/sandbox/draft8.tex"
+    },
+    "intro-generated.tex": {
+      "revision-id": "arxana:revision:sha256:bccb3369c12b3cc0e96dbae3a58fc8d1b797dbd649a375be35290e2c38b64f4c",
+      "path": "/home/joe/code/futon5/holes/tech-notes/paper/html-build/wysiwyg/sandbox/intro-generated.tex"
+    },
+    "part3-exotype.tex": {
+      "revision-id": "arxana:revision:sha256:3983ea06ae49f13f97eab0a9af1d2cf6a9c2eb1dacb55454e03ad308e1e78ff1",
+      "path": "/home/joe/code/futon5/holes/tech-notes/paper/html-build/wysiwyg/sandbox/part3-exotype.tex"
+    },
+    "draft8.html": {
+      "revision-id": "arxana:revision:sha256:7ae3821ffcf2265d5f3615b7424d227bab48d66b2cca52e122fe221d13a60ca7",
+      "path": "/home/joe/code/futon5/holes/tech-notes/paper/html-build/wysiwyg/arxana-fixture/draft8.html",
+      "note": "the gated fixture copy the authority ingests (page/draft8.html has drifted; it is not the revision)"
+    }
+  }
+}
