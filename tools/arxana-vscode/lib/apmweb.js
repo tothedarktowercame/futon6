@@ -11,8 +11,12 @@ const path = require('path');
 
 const HIGHLIGHT_CSS = `
 <style id="arxana-demo-highlighting">
-.arxana-active { outline: 3px solid #d19a66; outline-offset: 2px; background: rgba(209,154,102,0.15); }
-.arxana-innermost { outline-color: #98c379; }
+.arxana-active { outline: 5px solid #ff2da1 !important; outline-offset: 3px !important;
+  background: #fff176 !important; color: #111 !important;
+  box-shadow: 0 0 0 4px #111, 0 0 24px 10px rgba(255,45,161,0.85) !important;
+  border-radius: 4px; }
+.arxana-active * { color: #111 !important; }
+.arxana-innermost { outline-color: #00e676 !important; }
 .arxana-ambiguous-banner { position: fixed; top: 0; left: 0; right: 0;
   background: #2d2a3b; color: #e6edf7; font: 12px system-ui; padding: 4px 8px;
   border-bottom: 1px solid #d19a66; z-index: 99; }
@@ -49,12 +53,13 @@ function clearHighlights() {
 window.addEventListener('message', (event) => {
   const msg = event.data;
   if (!msg || msg.type !== 'arxana/highlight') return;
-  if (msg.tour) {
-    document.getElementById('arxana-tour-status').textContent =
-      msg.tour.position + ' / ' + msg.tour.count;
-  }
+  const status = document.getElementById('arxana-tour-status');
+  if (msg.tour) status.textContent = 'Scope ' + msg.tour.position + ' / ' + msg.tour.count;
   clearHighlights();
-  if (msg.status === 'cleared') return;   // stale/missing/typed refusal: old highlights cleared
+  if (msg.status === 'cleared') {
+    status.textContent = 'No matching scope';
+    return;   // stale/missing/typed refusal: old highlights cleared
+  }
   let first = null;
   const missing = [];
   for (const t of msg.targets || []) {
@@ -71,7 +76,12 @@ window.addEventListener('message', (event) => {
       + (msg.targets || []).map((t) => t.assertionId).join(', ');
     document.body.appendChild(banner);
   }
-  if (first) first.scrollIntoView({ block: 'center' });
+  if (first) {
+    first.scrollIntoView({ block: 'center' });
+    status.textContent += ' — highlighted';
+  } else {
+    status.textContent += ' — target missing';
+  }
   if (missing.length) vscode.postMessage({ type: 'arxana/targets-missing', domIds: missing });
 });
 // Target→source navigation: click a highlighted element posts its scope

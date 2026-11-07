@@ -139,6 +139,8 @@ test('webview document renders the page, not raw source, with pinned styles', ()
   assert.ok(html.includes('Content-Security-Policy'));
   assert.ok(html.includes('arxana/highlight'), 'webview script injected');
   assert.ok(html.includes("type: 'arxana/ready'"), 'webview readiness handshake injected');
+  assert.ok(html.includes('background: #fff176 !important'), 'mobile highlight is high contrast');
+  assert.ok(html.includes("' — highlighted'"), 'tour visibly confirms the target was painted');
   assert.ok(html.includes('arxana-tour-next'), 'mobile next-scope control injected');
   assert.ok(html.includes("type: 'arxana/tour'"), 'tour controls report intent to extension');
   assert.ok(html.includes('.ltx_page_main'), 'LaTeXML stylesheet inlined');
