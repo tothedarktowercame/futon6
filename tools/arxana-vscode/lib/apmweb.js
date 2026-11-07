@@ -57,7 +57,8 @@ window.addEventListener('message', (event) => {
   if (msg.tour) status.textContent = 'Scope ' + msg.tour.position + ' / ' + msg.tour.count;
   clearHighlights();
   if (msg.status === 'cleared') {
-    status.textContent = 'No matching scope';
+    status.textContent = 'No matching scope — '
+      + ((msg.refusal && msg.refusal.kind) || 'unknown refusal');
     return;   // stale/missing/typed refusal: old highlights cleared
   }
   let first = null;

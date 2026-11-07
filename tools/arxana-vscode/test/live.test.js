@@ -71,6 +71,14 @@ test('extension distinguishes user selection events from editor initialization',
     'initial selection event cannot overwrite the guided scope with position zero');
 });
 
+test('APM source opens through a read-only fixture provider', () => {
+  const extension = fs.readFileSync(path.join(__dirname, '..', 'extension.js'), 'utf8');
+  assert.ok(extension.includes("registerTextDocumentContentProvider('arxana-fixture'"));
+  assert.ok(extension.includes('openTextDocument(fixtureDocumentUri)'));
+  assert.ok(!extension.includes("openTextDocument(path.join(apmDir, texName))"),
+    'the mutable deployed fixture path is never opened as the demo document');
+});
+
 test('resolved response paints innermost source range and every target', () => {
   const p = presentationFor({ ok: {
     'result/status': 'resolved',

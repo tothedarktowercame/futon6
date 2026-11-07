@@ -195,6 +195,7 @@ function activate(context) {
     const apmDir = path.join(__dirname, 'fixtures', 'apm');
     const apmManifest = JSON.parse(fs.readFileSync(path.join(apmDir, 'manifest.json'), 'utf8'));
     const texName = 'apm-a93J02.tex';
+    const fixtureDocumentUri = vscode.Uri.parse(`arxana-fixture:/${texName}`);
     const texSha = apmManifest.artifacts[texName]['sha256'];
     const texRevisionId = revisionIdFromSha(texSha);
     const tourScopes = apmManifest.scopes.filter((scope) => scope.kind === 'paragraph');
@@ -210,6 +211,12 @@ function activate(context) {
     const webviewDelivery = live.latestDelivery((message) => {
       if (apmPanel) apmPanel.webview.postMessage(message);
     });
+    context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('arxana-fixture', {
+      provideTextDocumentContent(uri) {
+        if (uri.path !== `/${texName}`) return '';
+        return fs.readFileSync(path.join(apmDir, texName), 'utf8');
+      },
+    }));
 
     const scopeDecoration = vscode.window.createTextEditorDecorationType({
       backgroundColor: 'rgba(152,195,121,0.18)',
@@ -274,6 +281,7 @@ function activate(context) {
 
     async function resolveAtCodepoint(editor, codepoint, tour = null) {
       const seq = gate.next();
+      log.appendLine(`resolve submit seq=${seq} codepoint=${codepoint} tour=${tour ? tour.position : 'cursor'}`);
       try {
         // Digest-match the live document against the pinned revision first:
         // position conversion is legal only against matched bytes.
@@ -292,9 +300,13 @@ function activate(context) {
           'artifact/revision-id': texRevisionId,
           'position/codepoint': codepoint,
         });
+        log.appendLine(`resolve response seq=${seq} ${response.error
+          ? `error=${response.error['error/code']}`
+          : `status=${response.ok && response.ok['result/status']}`}`);
         if (!gate.admit(seq)) return; // stale/out-of-order: repaint nothing
         paint(live.presentationFor(response), tour);
       } catch (e) {
+        log.appendLine(`resolve exception seq=${seq} kind=${(e && e.kind) || 'client/unknown'} detail=${JSON.stringify(e && e.detail || {})}`);
         if (!gate.admit(seq)) return;
         paint(live.presentationFor({ error: { 'error/code': (e && e.kind) || 'client/unknown' } }));
       }
@@ -317,7 +329,11 @@ function activate(context) {
     }
 
     reg('arxana.apmDemo', async () => {
-      const doc = await vscode.workspace.openTextDocument(path.join(apmDir, texName));
+      // A content-provider document is read-only.  The prior file-backed demo
+      // allowed accidental keystrokes to mutate the pinned fixture, after
+      // which revision matching correctly refused every guided scope.
+      let doc = await vscode.workspace.openTextDocument(fixtureDocumentUri);
+      doc = await vscode.languages.setTextDocumentLanguage(doc, 'latex');
       apmEditor = await vscode.window.showTextDocument(doc, vscode.ViewColumn.One);
       if (!apmPanel) {
         apmPanel = vscode.window.createWebviewPanel('arxana-apm', 'APM a93J02 — rendered (LaTeXML-oxide)',
