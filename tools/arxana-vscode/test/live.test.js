@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
-const { debouncer, sequenceGate, presentationFor } = require('../lib/live');
+const { debouncer, sequenceGate, latestDelivery, presentationFor } = require('../lib/live');
 const { apmWebviewHtml } = require('../lib/apmweb');
 
 test('debounce coalesces rapid movement into one resolve', () => {
@@ -37,6 +37,23 @@ test('sequence gate refuses stale and out-of-order responses', () => {
   assert.equal(gate.admit(0), false);
   assert.equal(gate.admit(-1), false);
   assert.equal(gate.admit('3'), false, 'non-integer sequences refused');
+});
+
+test('webview delivery holds only the newest presentation until ready', () => {
+  const sent = [];
+  const delivery = latestDelivery((message) => sent.push(message));
+  delivery.publish({ scope: 'old' });
+  delivery.publish({ scope: 'newest' });
+  assert.deepEqual(sent, [], 'nothing is lost into an unready webview');
+  delivery.markReady();
+  assert.deepEqual(sent, [{ scope: 'newest' }], 'only current state is replayed');
+  delivery.publish({ scope: 'live' });
+  assert.deepEqual(sent.at(-1), { scope: 'live' }, 'ready webviews receive immediately');
+  delivery.reset();
+  delivery.publish({ scope: 'after-recreate' });
+  assert.deepEqual(sent.at(-1), { scope: 'live' });
+  delivery.markReady();
+  assert.deepEqual(sent.at(-1), { scope: 'after-recreate' });
 });
 
 test('resolved response paints innermost source range and every target', () => {
@@ -112,6 +129,7 @@ test('webview document renders the page, not raw source, with pinned styles', ()
   const html = apmWebviewHtml(path.join(__dirname, '..', 'fixtures', 'apm'), 'vscode-webview-test:');
   assert.ok(html.includes('Content-Security-Policy'));
   assert.ok(html.includes('arxana/highlight'), 'webview script injected');
+  assert.ok(html.includes("type: 'arxana/ready'"), 'webview readiness handshake injected');
   assert.ok(html.includes('.ltx_page_main'), 'LaTeXML stylesheet inlined');
   assert.ok(!/rel="stylesheet"/.test(html), 'no external stylesheet loads remain');
   assert.ok(!html.includes('lean-proofread'), 'public demo highlight style not carried');

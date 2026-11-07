@@ -60,6 +60,9 @@ document.addEventListener('click', (ev) => {
   if (!el) return;
   vscode.postMessage({ type: 'arxana/target-click', domId: el.id });
 });
+// The extension may resolve a scope while this document is still parsing.
+// Declare the listener ready only after both handlers above are installed.
+vscode.postMessage({ type: 'arxana/ready' });
 </script>`;
 
 /** Build the full webview document. `htmlPath` etc. resolve inside the

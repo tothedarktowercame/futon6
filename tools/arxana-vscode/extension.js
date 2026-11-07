@@ -200,9 +200,14 @@ function activate(context) {
     let apmPanel = null;
     let apmEditor = null;
     let lastPresentation = null;
+    let matchedDocumentVersion = null;
+    let matchedRevision = null;
     const gate = live.sequenceGate();
-    const debounce = live.debouncer(200);
+    const debounce = live.debouncer(75);
     const log = vscode.window.createOutputChannel('Arxana APM demo');
+    const webviewDelivery = live.latestDelivery((message) => {
+      if (apmPanel) apmPanel.webview.postMessage(message);
+    });
 
     const scopeDecoration = vscode.window.createTextEditorDecorationType({
       backgroundColor: 'rgba(152,195,121,0.18)',
@@ -223,7 +228,7 @@ function activate(context) {
       lastPresentation = presentation;
       clearSourceHighlights();
       if (apmPanel) {
-        apmPanel.webview.postMessage({
+        webviewDelivery.publish({
           type: 'arxana/highlight',
           status: presentation.status,
           targets: presentation.targets,
@@ -263,8 +268,12 @@ function activate(context) {
       try {
         // Digest-match the live document against the pinned revision first:
         // position conversion is legal only against matched bytes.
-        const bytes = Buffer.from(editor.document.getText(), 'utf8');
-        const m = matchRevision(bytes, { [texName]: texRevisionId });
+        if (matchedDocumentVersion !== editor.document.version) {
+          const bytes = Buffer.from(editor.document.getText(), 'utf8');
+          matchedRevision = matchRevision(bytes, { [texName]: texRevisionId });
+          matchedDocumentVersion = editor.document.version;
+        }
+        const m = matchedRevision;
         if (m.kind !== 'matched') {
           paint({ status: 'cleared', sourceRange: null, targets: [],
                   refusal: { kind: 'client/revision-unmatched', sha256: m.sha256 } });
@@ -294,6 +303,11 @@ function activate(context) {
         apmPanel.webview.html = apmweb.apmWebviewHtml(apmDir, apmPanel.webview.cspSource);
         apmPanel.webview.onDidReceiveMessage((msg) => {
           if (!msg) return;
+          if (msg.type === 'arxana/ready') {
+            webviewDelivery.markReady();
+            if (apmEditor) resolveAt(apmEditor);
+            return;
+          }
           if (msg.type === 'arxana/targets-missing') {
             log.appendLine(`webview: target elements absent from rendered page: ${msg.domIds.join(', ')}`);
           }
@@ -311,7 +325,11 @@ function activate(context) {
             }
           }
         });
-        apmPanel.onDidDispose(() => { apmPanel = null; clearSourceHighlights(); });
+        apmPanel.onDidDispose(() => {
+          apmPanel = null;
+          webviewDelivery.reset();
+          clearSourceHighlights();
+        });
       } else {
         apmPanel.reveal();
       }

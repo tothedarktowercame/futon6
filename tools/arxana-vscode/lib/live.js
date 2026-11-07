@@ -43,6 +43,33 @@ function sequenceGate() {
   };
 }
 
+/** Hold only the newest presentation until the webview says its listener is
+ * ready.  This prevents the first cursor result from being lost during page
+ * construction without replaying stale intermediate highlights. */
+function latestDelivery(send) {
+  let ready = false;
+  let pending = null;
+  return {
+    publish(message) {
+      if (ready) send(message);
+      else pending = message;
+    },
+    markReady() {
+      ready = true;
+      if (pending !== null) {
+        const message = pending;
+        pending = null;
+        send(message);
+      }
+    },
+    reset() {
+      ready = false;
+      pending = null;
+    },
+    ready() { return ready; },
+  };
+}
+
 /** Presentation projection of a :scope/at-position authority response.
  * Never selects among ambiguous scopes: an ambiguous response paints every
  * scope's targets (all assertion ids visible) and marks status 'ambiguous';
@@ -86,4 +113,4 @@ function presentationFor(response) {
   };
 }
 
-module.exports = { debouncer, sequenceGate, presentationFor };
+module.exports = { debouncer, sequenceGate, latestDelivery, presentationFor };
