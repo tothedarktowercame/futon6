@@ -14,6 +14,7 @@ const {
   utf16RangeToCodepointRange, codepointRangeToUtf16Range, MidSurrogateError,
 } = require('./lib/utf16');
 const { resolveView, correspondenceView, refusalView, renderHtml } = require('./lib/view');
+const { navigationChoice } = require('./lib/navigation');
 
 let panel = null;
 
@@ -130,7 +131,20 @@ function activate(context) {
       const { ok, error } = await client().correspondenceQuery({ 'subject/id': fixture()['subject/id'] });
       if (error) { display('Arxana correspondence', refusalView('correspondence', error)); return; }
       const view = correspondenceView(ok, pathsByLogicalId());
-      const a = view.assertions[0];
+      // D4 ambiguity preservation: never silently select the first
+      // assertion (see lib/navigation.js navigationChoice).
+      let choice = navigationChoice(view.assertions, null);
+      if (choice.choose) {
+        const picked = await vscode.window.showQuickPick(
+          choice.choose.map((id) => ({ label: String(id) })),
+          { placeHolder: 'Multiple correspondence assertions: choose one to open (no implicit first selection)' });
+        choice = navigationChoice(view.assertions, picked ? picked.label : null);
+      }
+      if (choice.refusal) {
+        display('Arxana correspondence', refusalView('navigation', new TypedRefusal(choice.refusal.kind, choice.refusal.detail)));
+        return;
+      }
+      const a = choice.assertion;
       if (!a || !a.navigateTarget) {
         display('Arxana correspondence', refusalView('navigation', new TypedRefusal('client/locator-unsupported', {})));
         return;
