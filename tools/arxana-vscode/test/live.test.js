@@ -65,6 +65,12 @@ test('guided tour moves circularly without inventing scopes', () => {
   assert.equal(tourMove(0, 0, 'next'), null);
 });
 
+test('extension distinguishes user selection events from editor initialization', () => {
+  const extension = fs.readFileSync(path.join(__dirname, '..', 'extension.js'), 'utf8');
+  assert.ok(extension.includes('ev.kind !== undefined'),
+    'initial selection event cannot overwrite the guided scope with position zero');
+});
+
 test('resolved response paints innermost source range and every target', () => {
   const p = presentationFor({ ok: {
     'result/status': 'resolved',

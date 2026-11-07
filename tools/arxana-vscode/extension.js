@@ -363,7 +363,12 @@ function activate(context) {
     });
 
     context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection((ev) => {
-      if (apmPanel && ev.textEditor === apmEditor) debounce.push(() => resolveAt(apmEditor));
+      // Opening/revealing an editor emits selection events with no user kind.
+      // Those must not overwrite the guided-tour result with position zero.
+      // Mouse/touch and keyboard cursor changes remain available on desktop.
+      if (apmPanel && ev.textEditor === apmEditor && ev.kind !== undefined) {
+        debounce.push(() => resolveAt(apmEditor));
+      }
     }));
   }
 }
