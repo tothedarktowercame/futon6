@@ -136,9 +136,8 @@ cp -R extension.js package.json lib fixtures "$dest/"
 
 Start the private authority with
 `/home/joe/code/futon4a/scripts/launch-f2-demo.sh`. Set
-`arxana.f2ServiceUrl` to `http://127.0.0.1:7088`, and copy the
-`:manifest/revision-id` from its ready file into
-`arxana.f2ManifestRevisionId`. Run the three commands above from the Command
+`arxana.f2ServiceUrl` to `http://127.0.0.1:7088` (the default). The manifest
+is read from the demo's ready file unless `arxana.f2ManifestRevisionId` is set. Run the three commands above from the Command
 Palette. Stop only that pid-owned demo with
 `/home/joe/code/futon4a/scripts/stop-f2-demo.sh`.
 

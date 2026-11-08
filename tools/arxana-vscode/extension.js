@@ -205,7 +205,21 @@ function activate(context) {
   context.subscriptions.push(f2Status, f2Resolved, f2Ambiguous);
 
   function f2Key(document) { return document.uri.toString(); }
-  function f2Manifest() { return vscode.workspace.getConfiguration('arxana').get('f2ManifestRevisionId') || ''; }
+  // The setting wins; otherwise read the manifest the pid-owned F2 demo
+  // announced in its ready file (futon4a scripts/launch-f2-demo.sh).
+  function f2Manifest() {
+    const configured = vscode.workspace.getConfiguration('arxana').get('f2ManifestRevisionId');
+    if (configured) return configured;
+    const uid = require('os').userInfo().uid;
+    const ready = require('path').join(process.env.XDG_RUNTIME_DIR || `/run/user/${uid}`,
+      `futon4a-f2-${uid}`, 'ready.edn');
+    try {
+      const m = require('fs').readFileSync(ready, 'utf8').match(/:manifest\/revision-id "([^"]+)"/);
+      if (m) return m[1];
+    } catch (_) { /* no running demo: fall through */ }
+    vscode.window.showWarningMessage(`Arxana F2: no manifest — start the F2 demo (${ready}) or set arxana.f2ManifestRevisionId`);
+    return '';
+  }
   function showRefusal(prefix, refusal) {
     const code = refusal && (refusal['error/code'] || refusal.kind) || 'unknown';
     const recovery = refusal && (refusal['error/recovery'] || refusal.detail && refusal.detail.recovery) || [];
