@@ -1,5 +1,7 @@
 # Excursion: E-patch-agent-evidence-leaks — the Evidence Landscape commingles operator, agent, and harness turns
 
+> **Closure check 2026-11-08: partly done.** Done: the shared classifier `scripts/transcript_provenance.py` exists (in tree since a07ddd7) and is used by `c_mine_joint.py`, `meme_mine_runner.py`, `session_scope_view.py`, `audit_transcript_provenance.py` and `postfilter_meme_mine_leak.py`; the forward leak was measured and the data cleaned (F1 below). Remains against the Scope section's Exit: `scripts/mission_mine_memes.py` (`collect_asks`) still reads every `type == "user"` turn from the transcripts as an operator ask without calling the classifier, so not every futon6 miner goes through it; and no memory file named `reference_transcript_operator_provenance` exists any more under the Claude memory directories, so the pointer clause cannot be confirmed. DERIVE-2 and DERIVE-3 are optional or out of scope by this doc's own Scope section. Checked by misc in the closure pass (claude-6, FIX/WONTFIX sheet).
+
 **Date:** 2026-06-25
 **Status:** DERIVE-1 DONE (the shared classifier is built and both miners route through it; the
 forward leak is measured). Ingestion-time tagging (DERIVE-2) and the mesh-source stamp (DERIVE-3)

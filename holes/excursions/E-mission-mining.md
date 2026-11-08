@@ -1,9 +1,11 @@
 # E-mission-mining — retrospective triple-mining of the mission corpus
 
+> **Closed 2026-11-08 (already done).** The charter deliverables landed: the triple miner `scripts/mission_triple_miner.py` (81 completed-mission triples) and the dry-basin miner `scripts/dry_basin_miner.py` (133 basins plus a hitlist), both reviewed PASS, with the F1 checkpoint-only audit recorded below. The loss-surface backlog is follow-on improvement work and can be filed separately. Evidence: futon6 d61dc33, 4f4978e, fa60be3; outputs present under `data/mission-triples/` and `data/dry-basins/`. Checked by misc in the closure pass (claude-6, FIX/WONTFIX sheet).
+
 **Date:** 2026-06-13 · owner: claude-1 seat (this session) · spun out of the
 WM piloted flight `futon3c/holes/flights/F-wm-piloted-2026-06-12.md` (sortie 11).
-**Status:** RUN — miners built and run once over the corpus; now in the
-DP/anytime improvement loop (mine → measure loss → fix the worst → re-mine).
+**Status:** Done, closed 2026-11-08, see the closure note (was: RUN — miners built and run once over the corpus; now in the
+DP/anytime improvement loop (mine → measure loss → fix the worst → re-mine)).
 
 **VERDICT (2026-10-09, provisional):** DONE — Miners built, run once over the corpus with reviewed-PASS results ('What has landed'); the DP improvement loop is framed as a downstream backlog, not an unfinished deliverable of this excursion. _(WM status classification by zai-5, medium confidence; not yet confirmed by the author.)_
 

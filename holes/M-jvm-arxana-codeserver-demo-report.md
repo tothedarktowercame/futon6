@@ -1,6 +1,8 @@
 # M-jvm-arxana code-server demo report (T-codeserver-arxana-demo, implementation slice)
 
-Date: 2026-11-07. Agent: zai-10 (dispatched by codex-21). Status: delivered.
+> **Closed 2026-11-08 (already done).** This is a delivered implementation report, not open work: the VS Code / code-server extension is in `tools/arxana-vscode/` and its node tests pass. Evidence: futon6 e72a973, 5ee1c6a, 8e7e770 (2026-11-07); `node --test test/*.test.js` in `tools/arxana-vscode` on 2026-11-08: 35 tests, 35 pass, 0 fail. Checked by misc in the closure pass (claude-6, FIX/WONTFIX sheet).
+
+Date: 2026-11-07. Agent: zai-10 (dispatched by codex-21). Status: delivered; done, closed 2026-11-08, see the closure note.
 
 ## Placement decision
 

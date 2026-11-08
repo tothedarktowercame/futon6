@@ -1,6 +1,8 @@
 # E-clean — CLean: EDN-as-Lean-sketch for the CT treatment of a proof
 
-**VERDICT (2026-10-09, provisional):** OPEN — CLean format spec with the a93J05 example landed, but the doc still carries unconfirmed build checks ('confirm it builds 0-sorry') and no completion verdict. _(WM status classification by zai-4, low confidence; not yet confirmed by the author.)_
+> **Closed 2026-11-08 (already done).** The round-trip, the emitter and the IATC producer all exist: `scripts/clean_to_lean.py` renders CLean to DarkTower Lean as a build-checked gate, `mathlib4/DarkTower/CLeanProofs.lean` holds `namespace CLeanProof_a93J05` with no tactic `sorry`, and its compiled `CLeanProofs.olean` is present in the mathlib4 build (dated 2026-09-05, after the file's last change), so the real-mode build has run; the format is documented for Rob in `holes/clean/CLEAN-LEAN-RELATION.md` and `holes/clean/NEO4J-PGVECTOR-MAPPING.md`, with `scripts/iatc_to_clean.py` + `holes/clean/IATC-PRODUCER.md` as the producer. Evidence: futon6 8a3d0e1, 4fa5f4b, 416b191, e7a2224 (+ `tests/test_clean_to_lean_experiment.py`); mathlib4 7110297cf1. Checked by misc in the closure pass (claude-6, FIX/WONTFIX sheet).
+
+**VERDICT (2026-10-09, provisional):** Done, closed 2026-11-08, see the closure note (was: OPEN — CLean format spec with the a93J05 example landed, but the doc still carries unconfirmed build checks ('confirm it builds 0-sorry') and no completion verdict. _(WM status classification by zai-4, low confidence; not yet confirmed by the author.)_)
 
 *Author: claude-1, 2026-06-18. Spawned from the EXP-3/EXP-3b arc
 (`E-bge-retrieval-cas-sel-3b.md`) and Joe's de-scope: we don't have to **be** the
@@ -112,5 +114,5 @@ to named theorems (extreme-value, Liouville) and carry no hole. The aux object f
 
 _Drafted from this document's own stated goals during the War Machine status classification (zai-1, high confidence); not yet confirmed by the author._
 
-- [ ] Confirm the a93J05 CLean example builds through the CLean-to-Lean path with zero sorry
-- [ ] Document the CLean format so Rob's DarkTower-consuming pipeline can ingest the structure-bearing artifacts
+- [x] Confirm the a93J05 CLean example builds through the CLean-to-Lean path with zero sorry (8a3d0e1, e7a2224; mathlib4 7110297cf1)
+- [x] Document the CLean format so Rob's DarkTower-consuming pipeline can ingest the structure-bearing artifacts (8a3d0e1, 4fa5f4b)

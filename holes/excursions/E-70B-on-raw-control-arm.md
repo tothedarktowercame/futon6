@@ -1,6 +1,8 @@
 # E-70B-on-raw-control-arm
 
-**VERDICT (2026-10-09, provisional):** OPEN — Runner written and verified but the GPU run is send-gated to Joe and no result is recorded. _(WM status classification by zai-3, medium confidence; not yet confirmed by the author.)_
+> **Closed 2026-11-08 (already done).** The RAW-CTL run executed on the Linode on 2026-06-18 (artifacts in `data/exp-20260618/loop-run-70b-raw` plus `mark3-eval-*-70b-raw`), and was re-analysed in `holes/TN-raw-ctl-reanalysis.md`: paper-matched on 8 papers the arms differ by one resolved warrant edge (enriched 12.0%, raw 15.4%), so the run is underpowered and does not show that enrichment helps or hurts. A powered rerun over the 16-paper corpus would be a new item. Evidence: futon6 a8204c8 (TN-raw-ctl-reanalysis.md), `data/exp-20260618/` present on disk (gitignored). Checked by misc in the closure pass (claude-6, FIX/WONTFIX sheet).
+
+**VERDICT (2026-10-09, provisional):** Done, closed 2026-11-08, see the closure note (was: OPEN — Runner written and verified but the GPU run is send-gated to Joe and no result is recorded. _(WM status classification by zai-3, medium confidence; not yet confirmed by the author.)_)
 
 Author: claude-2, 2026-06-18. Bounded experiment (RAW-CTL on the proofcheck
 readiness card). Owns the runner `scripts/linode-4gpu-run-raw.sh`.
@@ -83,7 +85,7 @@ All ON the provisioned 4-GPU Linode, from the `futon6` checkout (`$REPO`).
 
 ## Status
 
-Specified + runner written and verified (syntax + dry-run: 10 raw candidates,
+Done, closed 2026-11-08, see the closure note. Was: Specified + runner written and verified (syntax + dry-run: 10 raw candidates,
 253 enrichment marks stripped, all gate-pass). **Send-gated to Joe** (GPU spend).
 Box provisioned 2026-06-18; setup in progress. Hand the runner to the agent
 orchestrating the tests; run after steps 1–2 above.
@@ -92,5 +94,5 @@ orchestrating the tests; run after steps 1–2 above.
 
 _Drafted from this document's own stated goals during the War Machine status classification (zai-1, medium confidence); not yet confirmed by the author._
 
-- [ ] Run the send-gated GPU run of scripts/linode-4gpu-run-raw.sh after Joe approves spend
-- [ ] Record the raw-vs-enriched comparison verdict (raw comparable, or raw degrades) in this doc
+- [x] Run the send-gated GPU run of scripts/linode-4gpu-run-raw.sh after Joe approves spend (ran 2026-06-18; a8204c8)
+- [x] Record the raw-vs-enriched comparison verdict (raw comparable, or raw degrades) in this doc (underpowered, see closure note; a8204c8)

@@ -1,6 +1,8 @@
 # E-comprehension-foundation — corpus-relative comprehension as the foundation
 
-**VERDICT (2026-10-09, provisional):** OPEN — Foundational design note with an explicitly open pilot question and no completion marker in head or tail. _(WM status classification by zai-4, low confidence; not yet confirmed by the author.)_
+> **Closed 2026-11-08 (already done).** All four closure criteria are ticked with artifacts: the verdict gate emits the study-more path, holes are keyed by (type, concept) over 125 papers in `E-comprehension-foundation.typed-holes-corpus.json`, and the pilot go/no-go is recorded in `E-comprehension-foundation.pilot.json` (`go_no_go: go`, rises with corpus and separates weak extraction from weak proof). Evidence: futon6 c654441, a75dd42; `tests/test_comprehension_foundation.py` 11 passed on 2026-11-08. Checked by misc in the closure pass (claude-6, FIX/WONTFIX sheet).
+
+**VERDICT (2026-10-09, provisional):** Done, closed 2026-11-08, see the closure note (was: OPEN — Foundational design note with an explicitly open pilot question and no completion marker in head or tail. _(WM status classification by zai-4, low confidence; not yet confirmed by the author.)_)
 
 *claude-1 + Joe, 2026-06-22. The holistic architecture under the readiness
 "cards": what the pipeline produces, why "improves as we run" is true (and where),
