@@ -95,6 +95,30 @@ class ArxanaClient {
   async scopeAtPosition(body) {
     return this.send('scope/at-position', body);
   }
+
+  async revisionHead(artifactId) {
+    return this.send('revision/head', { 'artifact/id': artifactId });
+  }
+
+  async revisionGet(revisionId) {
+    return this.send('revision/get', { 'artifact/revision-id': revisionId });
+  }
+
+  async entityGet(id) {
+    return this.send('entity/get', { 'entity/id': id });
+  }
+
+  async formalF1Outline(manifestRevisionId) {
+    return this.send('formal-f1/outline', { 'manifest/revision-id': manifestRevisionId });
+  }
+
+  async textSubmitPatch(artifactId, patch) {
+    return this.send('text/submit-patch', { 'artifact/id': artifactId, patch });
+  }
+
+  async textChoose(body) {
+    return this.send('text/choose', body);
+  }
 }
 
 module.exports = { ArxanaClient, TypedRefusal, envelope, unwrap };

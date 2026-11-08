@@ -108,6 +108,45 @@ deliberately NOT registered — no invented symbol-level semantics).
 Presentation resources (LaTeXML.css, ltx-article.css) are pinned by the same
 manifest and inlined: presentation, not semantic artifacts.
 
+## Formal Arxana F2 collaborative editing
+
+The extension is the second writer for the F1 conversation. It uses the same
+CAS sequencer and stored relocation evidence as futon4a Emacs:
+
+- `Arxana F2: Open collaborative conversation` remembers the authority head
+  as the document's base, decorates resolved/ambiguous scopes, and lists the
+  count and identities of missing scopes in the Arxana F2 status item.
+- `Arxana F2: Submit edits` computes a Unicode-codepoint patch against that
+  remembered base. Applied/rebased edits reload the authority head. A
+  conflict displays both full alternatives and chooses neither.
+- `Arxana F2: Choose conflict alternative` requires an explicit quick-pick,
+  writes the attributable choice, then reloads the originating document so a
+  losing edit cannot accidentally be submitted again on its old base.
+
+Install after review into the existing code-server on `:8097` (documented
+only; this increment did not run these commands):
+
+```sh
+cd /home/joe/code/futon6/tools/arxana-vscode
+dest="$HOME/.local/share/code-server/extensions/futon6.arxana-codeserver-demo-0.1.0"
+mkdir -p "$dest"
+cp -R extension.js package.json lib fixtures "$dest/"
+# Reload its existing extension host; do not start a second :8097 process.
+```
+
+Start the private authority with
+`/home/joe/code/futon4a/scripts/launch-f2-demo.sh`. Set
+`arxana.f2ServiceUrl` to `http://127.0.0.1:7088`, and copy the
+`:manifest/revision-id` from its ready file into
+`arxana.f2ManifestRevisionId`. Run the three commands above from the Command
+Palette. Stop only that pid-owned demo with
+`/home/joe/code/futon4a/scripts/stop-f2-demo.sh`.
+
+`scripts/f2-cross-client.sh` starts its own ephemeral authority, drives one
+batch Emacs writer and this JS writer through rebase, missing-scope, conflict
+and explicit-choice cases, compares exact `revision/get` bytes, and stops only
+the process it launched.
+
 Live trace: `demo-captures/apm-live-trace.json` (semantic digests, scope and
 assertion IDs, rapid-movement suppression evidence). Service side:
 futon3c `resources/arxana/apm-demo` (same manifest; byte-identical copies)

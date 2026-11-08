@@ -15,7 +15,10 @@
       { "command": "arxana.correspondence", "title": "Arxana: Query correspondence (code ↔ rendered document)" },
       { "command": "arxana.openCorrespondenceTarget", "title": "Arxana: Open rendered target (navigate correspondence)" },
       { "command": "arxana.goToCandidate", "title": "Arxana: Go to candidate (explicit choice)" },
-      { "command": "arxana.apmDemo", "title": "Arxana: APM two-pane demo (LaTeX ↔ rendered LaTeXML-oxide)" }
+      { "command": "arxana.apmDemo", "title": "Arxana: APM two-pane demo (LaTeX ↔ rendered LaTeXML-oxide)" },
+      { "command": "arxana.f2Open", "title": "Arxana F2: Open collaborative conversation" },
+      { "command": "arxana.f2Submit", "title": "Arxana F2: Submit edits" },
+      { "command": "arxana.f2Choose", "title": "Arxana F2: Choose conflict alternative" }
     ],
     "configuration": {
       "title": "Arxana",
@@ -24,6 +27,14 @@
           "type": "string",
           "default": "http://127.0.0.1:7084",
           "description": "Isolated loopback arxana.v1 service URL (futon3c.arxana.demo)."
+        },
+        "arxana.f2ServiceUrl": {
+          "type": "string", "default": "http://127.0.0.1:7088",
+          "description": "Private Formal Arxana F2 collaborative-editing service URL."
+        },
+        "arxana.f2ManifestRevisionId": {
+          "type": "string", "default": "",
+          "description": "Manifest revision from the F2 demo ready.edn file."
         }
       }
     }

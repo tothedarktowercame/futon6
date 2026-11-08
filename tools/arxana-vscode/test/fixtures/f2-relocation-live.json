@@ -1,0 +1,30 @@
+{
+  "provenance": "Captured 2026-11-08 from a private futon3c.arxana.formal-f2-demo after prepending X\\n; entity/get returned this stored attestation.",
+  "subjectId": "arxana:clusion:sha256:dc230e64fa0036456fa9299cd8aaed625130431b479831a345fc0e4567cfbb8b",
+  "revisionId": "arxana:revision:sha256:3afce68fa449b0a57e6b0aed03751c639d429c94b967b4bf0d43f03289b06fcd",
+  "text": "X\n# Formal Arxana F1 conversation\n\n## turn-4qzbnC\n\n🈳: Please don't get distracted with the futon1b stuff yourself, send that to claude-19 to investigate and fix\n\n## turn-pHxXNI\n\n🈯: Please send out the rest of MAP\n",
+  "record": {
+    "coverage": ":complete",
+    "method": {"id":"arxana.resolve/anchor","strategy/revision-id":"arxana:strategy-revision:sha256:9daa6d8faf01119ce8f781f4a2535862714a1b04e51999f3e6e80f27ac6f8c52","version":1},
+    "id": "arxana:attestation:sha256:4e4599146ced1b3238adee7f24285aad21219176e715c7abc1c031959723fb52",
+    "standing": ":verified",
+    "producer": "futon3c.arxana.resolve",
+    "content": {
+      "application/from-revision-id":"arxana:revision:sha256:0551377d217597ef413cc197b08b36b89971ee47727eaa6732a905f1965dfb19",
+      "application/hunks":[{"end":0,"replacement":"X\n","start":0}],
+      "application/id":"arxana:clusion:sha256:935086d93b0eca65a985ba707eafc422d14cd6181d0bdf5739cdf41616cde8b6",
+      "candidates":[{
+        "candidate/id":"cf491002169eca96234cd0b17d02574d24f9d9d8466bf6285490b5f46b4b8302",
+        "finder/id":"arxana:strategy-revision:sha256:9daa6d8faf01119ce8f781f4a2535862714a1b04e51999f3e6e80f27ac6f8c52#0",
+        "location":{"artifact/revision-id":"arxana:revision:sha256:3afce68fa449b0a57e6b0aed03751c639d429c94b967b4bf0d43f03289b06fcd","range":{"end":160,"start":51},"unit":":unicode-codepoint"},
+        "matched-text-digest":"0c84093e00da73b7657f973a3868dc41b195f04dad240821e63743c014e846e2",
+        "score-components":{"context":1},"verification":":verified-hash"
+      }],
+      "resolution/status":":resolved",
+      "source/revision-id":"arxana:revision:sha256:0551377d217597ef413cc197b08b36b89971ee47727eaa6732a905f1965dfb19",
+      "target/revision-id":"arxana:revision:sha256:3afce68fa449b0a57e6b0aed03751c639d429c94b967b4bf0d43f03289b06fcd"
+    },
+    "basis":":parser",
+    "subject-clusion-id":"arxana:clusion:sha256:dc230e64fa0036456fa9299cd8aaed625130431b479831a345fc0e4567cfbb8b"
+  }
+}
