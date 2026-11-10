@@ -1,0 +1,3 @@
+{ "mcpServers": { "futon-relay-channel": { "command": "node",
+  "args": ["/home/joe/code/futon6/tools/futon-relay-channel/probe.mjs"],
+  "env": { "PROBE_LOG": "/home/joe/notes/claude-cs/channel-probe/server.log" } } } }
