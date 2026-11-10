@@ -57,11 +57,31 @@ async function check(log) {
       }
       const text = fs.readFileSync(claimed, 'utf8');
       const sid = sessionId(seat);
-      await vscode.commands.executeCommand('claude-vscode.editor.open', sid, text);
+      // Claude Code ignores an initialPrompt when the conversation is already
+      // open ("Session is already open. Your prompt was not applied"), which
+      // is the usual case here (Joe, 2026-11-10).  So: reveal the
+      // conversation WITHOUT a prompt, focus its input, put the text on the
+      // clipboard and try to paste it; a notification keeps the text
+      // reachable ("Copy again") until Joe dismisses it.
+      await vscode.commands.executeCommand('claude-vscode.editor.open', sid);
+      await vscode.commands.executeCommand('claude-vscode.focus');
+      await vscode.env.clipboard.writeText(text);
+      let pasted = true;
+      try {
+        await vscode.commands.executeCommand('editor.action.clipboardPasteAction');
+      } catch (_) {
+        pasted = false;
+      }
       fs.mkdirSync(path.join(dir, 'done'), { recursive: true });
-      fs.renameSync(claimed, path.join(dir, 'done', name));
-      log.appendLine(`${new Date().toISOString()} relayed ${name} into ${seat} (session ${sid || 'new'})`);
-      vscode.window.setStatusBarMessage(`futon relay: prompt for ${seat} is in the Claude input`, 8000);
+      const kept = path.join(dir, 'done', name);
+      fs.renameSync(claimed, kept);
+      log.appendLine(`${new Date().toISOString()} relayed ${name} for ${seat} (session ${sid || 'new'}); paste ${pasted ? 'sent' : 'failed'}; kept ${kept}`);
+      const first = text.split('\n').slice(0, 2).join(' ').slice(0, 120);
+      vscode.window.showInformationMessage(
+        `futon relay → ${seat}: "${first}…" is on the clipboard${pasted ? ' and pasted into the Claude input' : ''}. If the input is empty, paste (Ctrl-V), then Enter.`,
+        'Copy again').then((choice) => {
+          if (choice === 'Copy again') vscode.env.clipboard.writeText(text);
+        });
     }
   } catch (err) {
     log.appendLine(`${new Date().toISOString()} error: ${err && err.stack || err}`);

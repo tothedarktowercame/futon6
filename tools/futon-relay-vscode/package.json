@@ -2,7 +2,7 @@
   "name": "futon-relay",
   "displayName": "futon relay: Emacs subprompts into Claude Code",
   "description": "Watches a relay folder and puts each relayed text into a Claude Code conversation as the next prompt (Joe, 2026-11-10).",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "futon6",
   "engines": { "vscode": "^1.85.0" },
   "extensionDependencies": ["anthropic.claude-code"],
