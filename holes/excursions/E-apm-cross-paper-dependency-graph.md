@@ -1,5 +1,7 @@
 # E-apm-cross-paper-dependency-graph — which APM papers can reuse each other's Lean
 
+**Status:** OPEN (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as open; this document had no status line. Correct it if wrong.)
+
 **Type:** excursion, linked to M-informal-lean-alignment. **Status:** PLANNED (not started).
 **Raised:** 2026-10-25 by Joe, to come back to separately and with more focus.
 **Feeds:** pudding-prover T3.3 (ArXiv math.CT mining). This excursion is one rung of an implicit curriculum toward T3.3, not a one-shot discharge of it.

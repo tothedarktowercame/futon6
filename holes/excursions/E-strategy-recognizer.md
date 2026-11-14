@@ -1,5 +1,7 @@
 # E-strategy-recognizer — finding strategies in NL proofs (the means/ends discipline)
 
+**Status:** OPEN (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as open; this document had no status line. Correct it if wrong.)
+
 **VERDICT (2026-10-09, provisional):** OPEN — Two-layer recognizer works end-to-end on real CT proofs but explicit Next items (vocab growth, attribution) remain unmet. _(WM status classification by zai-3, medium confidence; not yet confirmed by the author.)_
 
 *claude-1 + Joe, 2026-06-22. The plan for the informal-proof strategy/tactic

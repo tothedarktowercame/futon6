@@ -1,5 +1,7 @@
 # E-informal-proof-checking — final checklist
 
+**Status:** OPEN (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as open; this document had no status line. Correct it if wrong.)
+
 *Distilled 2026-06-18 (claude-1) from a full sweep of the readiness card, the excursion + specs
 (`cas-cert-spec`, `rung-3-spec`), every handoff/breakdown, and the run/infra docs. One place for the
 caveats, gaps, deferred refinements, and the questions to answer **when GPUs are next available**.*

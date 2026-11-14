@@ -1,5 +1,7 @@
 # E-clean — CLean: EDN-as-Lean-sketch for the CT treatment of a proof
 
+**Status:** COMPLETE (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as done but unmarked. Correct it if wrong.)
+
 > **Closed 2026-11-08 (already done).** The round-trip, the emitter and the IATC producer all exist: `scripts/clean_to_lean.py` renders CLean to DarkTower Lean as a build-checked gate, `mathlib4/DarkTower/CLeanProofs.lean` holds `namespace CLeanProof_a93J05` with no tactic `sorry`, and its compiled `CLeanProofs.olean` is present in the mathlib4 build (dated 2026-09-05, after the file's last change), so the real-mode build has run; the format is documented for Rob in `holes/clean/CLEAN-LEAN-RELATION.md` and `holes/clean/NEO4J-PGVECTOR-MAPPING.md`, with `scripts/iatc_to_clean.py` + `holes/clean/IATC-PRODUCER.md` as the producer. Evidence: futon6 8a3d0e1, 4fa5f4b, 416b191, e7a2224 (+ `tests/test_clean_to_lean_experiment.py`); mathlib4 7110297cf1. Checked by misc in the closure pass (claude-6, FIX/WONTFIX sheet).
 
 **VERDICT (2026-10-09, provisional):** Done, closed 2026-11-08, see the closure note (was: OPEN — CLean format spec with the a93J05 example landed, but the doc still carries unconfirmed build checks ('confirm it builds 0-sorry') and no completion verdict. _(WM status classification by zai-4, low confidence; not yet confirmed by the author.)_)

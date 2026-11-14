@@ -1,5 +1,7 @@
 # E-70B-on-raw-control-arm
 
+**Status:** COMPLETE (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as done but unmarked. Correct it if wrong.)
+
 > **Closed 2026-11-08 (already done).** The RAW-CTL run executed on the Linode on 2026-06-18 (artifacts in `data/exp-20260618/loop-run-70b-raw` plus `mark3-eval-*-70b-raw`), and was re-analysed in `holes/TN-raw-ctl-reanalysis.md`: paper-matched on 8 papers the arms differ by one resolved warrant edge (enriched 12.0%, raw 15.4%), so the run is underpowered and does not show that enrichment helps or hurts. A powered rerun over the 16-paper corpus would be a new item. Evidence: futon6 a8204c8 (TN-raw-ctl-reanalysis.md), `data/exp-20260618/` present on disk (gitignored). Checked by misc in the closure pass (claude-6, FIX/WONTFIX sheet).
 
 **VERDICT (2026-10-09, provisional):** Done, closed 2026-11-08, see the closure note (was: OPEN — Runner written and verified but the GPU run is send-gated to Joe and no result is recorded. _(WM status classification by zai-3, medium confidence; not yet confirmed by the author.)_)

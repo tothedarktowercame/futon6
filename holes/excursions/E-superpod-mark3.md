@@ -1,5 +1,7 @@
 # E-superpod-mark3 — handoff spec for Rob (LLM/neural phases over all arXiv)
 
+**Status:** OPEN (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as open; this document had no status line. Correct it if wrong.)
+
 **VERDICT (2026-10-09, provisional):** OPEN — Handoff spec marked OUTLINE/planning; no run report or delivery of the mark3 arXiv-scale layer recorded. _(WM status classification by zai-5, medium confidence; not yet confirmed by the author.)_
 
 **Date:** 2026-06-16 · Joe + Claude owner · **Status: OUTLINE / planning**

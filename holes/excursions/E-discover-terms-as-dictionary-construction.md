@@ -1,5 +1,7 @@
 # Excursion: discover-terms as OED-shape dictionary construction
 
+**Status:** OPEN (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as open; this document had no status line. Correct it if wrong.)
+
 **VERDICT (2026-10-09, provisional):** OPEN — Scoping document with staged effort estimates and success criteria; no evidence the extractor, seed loader or graduation tool were ever built. _(WM status classification by zai-5, medium confidence; not yet confirmed by the author.)_
 
 **Date:** 2026-05-19

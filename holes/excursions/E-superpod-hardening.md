@@ -1,5 +1,7 @@
 # E-superpod-hardening — findings from running the mark7 harness off-Superpod
 
+**Status:** OPEN (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as open; this document had no status line. Correct it if wrong.)
+
 **Opened:** 2026-08-05 (Fable session, Joe driving).
 **Method:** the Zone CPU probe (256 GB box, GLM-4.5-Air Q4 via llama.cpp's
 OpenAI endpoint, top-100 citation-ranked math.CT, run-id `mark7z`) doubles as

@@ -1,5 +1,7 @@
 # M-informal-lean-alignment — tie informal proof steps to the Lean that proves them
 
+**Status:** OPEN (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as open; this document had no status line. Correct it if wrong.)
+
 **Type:** mission (design note and prototype). **Raised:** 2026-10-16 by Joe,
 after the first mark8 run over the APM informal solutions.
 **Status:** prototype built (`scripts/align_informal_lean.py`); first results below.

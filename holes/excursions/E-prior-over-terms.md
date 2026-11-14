@@ -1,5 +1,7 @@
 # Excursion: E-prior-over-terms
 
+**Status:** COMPLETE (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as done but unmarked. Correct it if wrong.)
+
 **VERDICT (2026-10-09, provisional):** DONE — Deliverable (CT df-index term prior) shipped with known-limits section; but its verification checklist items are unchecked, so completion is stated in substance though not counter-signed. _(WM status classification by zai-5, medium confidence; not yet confirmed by the author.)_
 
 **Date:** 2026-06-15

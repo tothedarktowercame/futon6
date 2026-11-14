@@ -1,5 +1,7 @@
 # E-superpod-ct-nlp-intrinsic-eval — evaluate the Superpod CT NLP pipeline *on its own terms*
 
+**Status:** OPEN (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as open; this document had no status line. Correct it if wrong.)
+
 **VERDICT (2026-10-09, provisional):** OPEN — Status 'IDENTIFY + first findings' from 2026-06-12; no completed intrinsic evaluation verdict recorded. _(WM status classification by zai-1, medium confidence; not yet confirmed by the author.)_
 
 **Date:** 2026-06-12 · Joe + claude-6 · **Status: IDENTIFY + first findings**

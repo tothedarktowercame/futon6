@@ -1,5 +1,7 @@
 # Excursion: E-cold-storage — a reliable non-git storage strategy
 
+**Status:** CANCELLED (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as abandoned. Correct it if wrong.)
+
 **Date:** 2026-06-11 (stub — parked by Joe; "we'll sort this out later")
 **Type:** E-prefix excursion. **Status:** :parked — note-taking only, no build.
 

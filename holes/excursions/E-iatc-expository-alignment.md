@@ -1,5 +1,7 @@
 # Excursion: E-iatc-expository-alignment — do IATC's "ignored" categories show up in expository prose?
 
+**Status:** OPEN (set 2026-11-14 by claude-13 from Giraffe's latest reading, which read it as open; this document had no status line. Correct it if wrong.)
+
 > **Closure check 2026-11-08: partly done.** Done: Pass A ran and its results are recorded in sections 9-10, section 11 consolidated the outcome into `holes/excursions/expository-superpod-vocab.edn`, and the expository checker exists as `scripts/expository_argcheck.bb` (cfec4f9), which reads that vocab and fails scopes with an unresolved `:kind`, no `:slot-fill`/`:held` reason, or no `:source` lines. Remains: Pass B, the seeded re-vote that section 4 calls the controlled test, has not run, and this doc does not record a decision to defer or drop it (only the Tier-2 MO/SE exemplars are marked deferred); the Status line still reads EXPERIMENT DESIGN. Closing needs either the Pass B run or a recorded decision that Pass A plus section 11 suffice. Checked by misc in the closure pass (claude-6, FIX/WONTFIX sheet).
 
 **VERDICT (2026-10-09, provisional):** OPEN — Pre-registered experiment designed but not yet run; the LLM harvest sub-step is marked done but the experiment itself has no outcome. _(WM status classification by zai-2, medium confidence; not yet confirmed by the author.)_
