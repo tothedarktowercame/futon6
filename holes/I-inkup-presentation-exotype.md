@@ -34,29 +34,48 @@ scopes.  They do **not** yet support the assertion that a proof is clearly
 written.  The first slice therefore produces inspectable measurements and
 specific objections, not a scalar quality verdict.
 
-## CMYK scope account
+## Inherited CMY scope account
 
-Each local proof scope receives four non-exclusive ink channels.  The names
-are provisional; keeping the four-channel vector and its evidence is the
-contract.
+The Mark7 margin-scope example fixes what the colours mean.  They are pipeline
+provenance layers over shared character spans, not abbreviations for
+reader-facing qualities:
 
-| Channel | Reader-facing work | Typical material |
+| Ink | Mark7 layer | Contents in the 0708.2185 example |
 |---|---|---|
-| C — context | Establish what is locally in force | assumptions, definitions, notation, branch conditions |
-| M — method | Make the proof strategy and reductions visible | overview, decomposition, lemma choice, why a move advances the proof |
-| Y — yield | State what the scope contributes | intermediate claims, examples, consequences, discharged goals |
-| K — kernel | Expose or compress formal support | calculations, rewrites, citations, routine closure, administrative steps |
+| C — cyan | S1 marks | symbols, terms, clauses, environments, displays, and structure |
+| M — magenta | S3 proof graph | proof bodies, claims, objects, references, and definitions |
+| Y — yellow | S4 expository scopes | connections, characterizations, auxiliary constructions, status, generalisations, difficulty assessments, and carved regions |
 
-An item can contribute to several channels.  Ink is measured from spans or
-typed nodes and is never inferred merely from a colour label.  Every LeanEmit
-node must be accounted for as `show`, `compress`, or `omit`; compression and
-omission require a reason and preserve a link to the typed source.
+The renderer mixes these as subtractive ink.  Overlap is therefore the
+important observation: a passage can be read simultaneously by several
+stages.  Mark7 has no K layer.  Adding one merely to complete the printing
+acronym would erase the empirical meaning of the display.
 
-The plan also records rhetorical roles beneath the channels, including
+InkUp inherits this CMY observation coordinate system as `mining_layers`; it
+does not rename the colours.  Presentation planning is an orthogonal axis.
+Every LeanEmit node must be accounted for as `show`, `compress`, or `omit`;
+compression and omission require a reason and preserve a link to the typed
+source.
+
+The plan records rhetorical roles separately, including
 `overview`, `example`, `reduction`, `bridge`, `calculation`, `citation`, and
-`closure`.  This is what permits two proofs with the same CMYK proportions to
-be distinguished: for example, Y ink may consist entirely of intermediate
-claims and contain no example.
+`closure`.  This is what permits two proofs with the same CMY proportions to
+be distinguished: identical stage coverage may conceal very different amounts
+of overview, calculation, and example work.
+
+## Mark8 boundary
+
+Mark8 improves selection and auditability around the existing stages: it pins
+the model-call budget and allocation policy, adds deterministic pre-call
+features, compares S4 selection policies at equal budget, preserves recovery
+reasons, and gates new signals before they can steer allocation.  Its declared
+mission and implemented slices do not replace the S1/S3/S4 scope vocabularies
+or define a new composition law among their spans and proof-graph edges.
+
+Accordingly, InkUp should inherit two different things without conflating
+them: Mark7 supplies the observed scope kinds, shared spans, and CMY overlay;
+Mark8 supplies the experimental protocol by which a proposed presentation
+signal can graduate from report-only observation to generative control.
 
 ## First diagnostics (specific, not “clear”)
 
@@ -69,10 +88,10 @@ claims and contain no example.
 3. **Unintroduced dependency.** A shown claim depends on a hypothesis not
    introduced in its visible context.  This generalizes the failure exposed by
    the PaperPrinter C23 audit.
-4. **Strategy deficit.** The proof contains many K/Y details but no M span that
-   covers their common branch or decomposition.
-5. **Administrative dominance.** K ink dominates a local scope while its
-   typed steps admit a named compression boundary.
+4. **Strategy deficit.** The planned proof contains many calculation/yield
+   roles but no overview that covers their common branch or decomposition.
+5. **Administrative dominance.** Calculation or closure roles dominate a
+   local scope while its typed steps admit a named compression boundary.
 
 Diagnostics are objections with witnesses, not penalties.  Several may be
 true simultaneously, and absence of these five is not evidence of clarity.
@@ -81,8 +100,8 @@ true simultaneously, and absence of these five is not evidence of clarity.
 
 `holes/inkup/presentation-plan.schema.json` is the first interchange contract.
 One plan names its source kind and immutable source reference, contains a tree
-of scopes, accounts for typed nodes, assigns evidenced CMYK weights and roles,
-and records report-only diagnostics.  A concrete valid instance is
+of scopes, accounts for typed nodes, retains evidenced CMY mining coverage,
+assigns presentation roles, and records report-only diagnostics.  A concrete valid instance is
 `holes/inkup/example-plan.json`.
 
 PaperPrinter may consume `show` and `compress` directives only after a later
@@ -103,7 +122,7 @@ the five diagnostics, then ask readers for pairwise, actionable judgements:
 which version better exposes the strategy, which dependency is missing, and
 whether an example changes understanding.  Do not initially ask for a single
 “clearly written” label.  Pairwise disagreements become evidence for refining
-the roles and channels rather than noise hidden by an average.
+the roles and evidence model rather than noise hidden by an average.
 
 ## Promotion gates
 
@@ -117,8 +136,8 @@ InkUp may influence generated presentation only after all of these hold:
    repeated connective count;
 6. prospective evidence that a proposed change improves the targeted reader
    judgement without increasing dependency loss or proof error;
-7. an exploration share remains, so a preferred CMYK profile cannot become a
-   self-confirming house style.
+7. an exploration share remains, so a preferred presentation profile cannot
+   become a self-confirming house style.
 
 Only after these gates should a flexiarg select presentation actions.  A later
 proof-generation use is then structurally straightforward: generation proposes
@@ -131,10 +150,11 @@ prior to that choice.
 1. Adapt Mark7 candidate records into the plan schema without changing their
    content.
 2. Adapt one accepted PaperPrinter proof and retain its typed-node identities.
-3. Hand-annotate CMYK weights and roles for ten matched or comparable local
-   scopes, including an example-rich scope and a sufficiency wall.
-4. Render a side-by-side scope tree with channel proportions and diagnostic
-   witnesses.
+3. Retain CMY mining coverage and hand-annotate presentation roles for ten
+   matched or comparable local scopes, including an example-rich scope and a
+   sufficiency wall.
+4. Render a side-by-side scope tree with CMY coverage, presentation roles, and
+   diagnostic witnesses.
 5. Freeze that set as the v0 fixture before implementing an automatic
    detector.
 

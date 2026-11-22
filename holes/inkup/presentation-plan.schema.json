@@ -54,18 +54,18 @@
   "$defs": {
     "scope": {
       "type": "object",
-      "required": ["id", "parent", "channels", "roles", "evidence"],
+      "required": ["id", "parent", "mining_layers", "roles", "evidence"],
       "properties": {
         "id": {"type": "string", "minLength": 1},
         "parent": {"type": ["string", "null"]},
-        "channels": {
+        "mining_layers": {
           "type": "object",
-          "required": ["C", "M", "Y", "K"],
+          "description": "Observed Mark7 coverage, preserving C=S1, M=S3, Y=S4 rather than treating inks as rhetorical roles.",
+          "required": ["C", "M", "Y"],
           "properties": {
             "C": {"type": "number", "minimum": 0, "maximum": 1},
             "M": {"type": "number", "minimum": 0, "maximum": 1},
-            "Y": {"type": "number", "minimum": 0, "maximum": 1},
-            "K": {"type": "number", "minimum": 0, "maximum": 1}
+            "Y": {"type": "number", "minimum": 0, "maximum": 1}
           },
           "additionalProperties": false
         },

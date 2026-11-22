@@ -8,7 +8,7 @@
     {
       "id": "proof0",
       "parent": null,
-      "channels": {"C": 0.25, "M": 0.25, "Y": 0.25, "K": 0.25},
+      "mining_layers": {"C": 1.0, "M": 1.0, "Y": 0.0},
       "roles": ["overview", "reduction", "citation", "closure"],
       "evidence": ["source-window:L349-366"]
     }
