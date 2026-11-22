@@ -1,5 +1,6 @@
 {
   "schema": "inkup.presentation-plan/v0",
+  "overlay_schema": "proof-ink.overlay/v0",
   "source": {
     "kind": "human",
     "ref": "mark7probe-20260921:0705.0102:proof0:L349-366"
@@ -14,10 +15,11 @@
     }
   ],
   "typed_node_accounting": [
-    {"node": "proof0:definition-cot:3", "action": "show"},
-    {"node": "proof0:orthogonality:2", "action": "show"},
-    {"node": "proof0:extension-closure", "action": "compress", "reason": "two analogous consequences share one cited support boundary"}
+    {"node": "proof0:definition-cot:3", "node_stability": "stable", "scope": "proof0", "action": "show"},
+    {"node": "proof0:orthogonality:2", "node_stability": "stable", "scope": "proof0", "action": "show"},
+    {"node": "proof0:extension-closure", "node_stability": "stable", "scope": "proof0", "action": "compress", "reason": "two analogous consequences share one cited support boundary"}
   ],
+  "realization_feedback": [],
   "diagnostics": [
     {
       "kind": "example-scarcity",

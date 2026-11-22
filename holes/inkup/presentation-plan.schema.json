@@ -3,9 +3,10 @@
   "$id": "https://futon.example/schema/inkup-presentation-plan-v0.json",
   "title": "InkUp presentation plan v0",
   "type": "object",
-  "required": ["schema", "source", "scopes", "typed_node_accounting", "diagnostics"],
+  "required": ["schema", "overlay_schema", "source", "scopes", "typed_node_accounting", "diagnostics"],
   "properties": {
     "schema": {"const": "inkup.presentation-plan/v0"},
+    "overlay_schema": {"const": "proof-ink.overlay/v0", "description": "Per-mark interchange envelope shared with PaperPrinter residual ink."},
     "source": {
       "type": "object",
       "required": ["kind", "ref"],
@@ -23,16 +24,33 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["node", "action"],
+        "required": ["node", "node_stability", "scope", "action"],
         "properties": {
           "node": {"type": "string", "minLength": 1},
-          "action": {"enum": ["show", "compress", "omit"]},
+          "node_stability": {"enum": ["stable", "process-local", "binder-name"]},
+          "scope": {"type": "string", "minLength": 1},
+          "action": {"enum": ["show", "compress", "omit", "nest"]},
           "reason": {"type": "string"}
         },
         "allOf": [{
-          "if": {"properties": {"action": {"enum": ["compress", "omit"]}}},
+          "if": {"properties": {"action": {"enum": ["compress", "omit", "nest"]}}},
           "then": {"required": ["reason"], "properties": {"reason": {"minLength": 1}}}
         }],
+        "additionalProperties": false
+      }
+    },
+    "realization_feedback": {
+      "type": "array",
+      "description": "Report-only facts returned by realization. The planner, not the realizer, decides whether they justify compression or relocation.",
+      "items": {
+        "type": "object",
+        "required": ["kind", "nodes", "witnesses", "status"],
+        "properties": {
+          "kind": {"enum": ["nodes-print-alike", "empty-realization", "anchor-shifted", "layout-collision"]},
+          "nodes": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true},
+          "witnesses": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1},
+          "status": {"const": "report-only"}
+        },
         "additionalProperties": false
       }
     },
@@ -42,7 +60,7 @@
         "type": "object",
         "required": ["kind", "scope", "witnesses", "status"],
         "properties": {
-          "kind": {"enum": ["example-scarcity", "sufficiency-wall", "unintroduced-dependency", "strategy-deficit", "administrative-dominance"]},
+          "kind": {"enum": ["example-scarcity", "sufficiency-wall", "unintroduced-dependency", "strategy-deficit", "administrative-dominance", "repeated-expression", "level-mix", "uninformative-citation"]},
           "scope": {"type": "string"},
           "witnesses": {"type": "array", "items": {"type": "string"}, "minItems": 1},
           "status": {"const": "report-only"}
@@ -71,7 +89,7 @@
         },
         "roles": {
           "type": "array",
-          "items": {"enum": ["overview", "example", "reduction", "bridge", "calculation", "citation", "closure"]},
+          "items": {"enum": ["overview", "assumption", "example", "reduction", "case-split", "bridge", "calculation", "citation", "closure", "administrative"]},
           "uniqueItems": true
         },
         "evidence": {"type": "array", "items": {"type": "string"}, "minItems": 1}

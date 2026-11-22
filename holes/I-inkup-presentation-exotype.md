@@ -4,16 +4,17 @@ Status: proposed, report-only
 
 ## Claim
 
-Put a presentation-planning layer between typed proof emission and prose
-realization:
+Put a presentation-planning layer between typed step capture and prose
+layout:
 
-`LeanEmit -> InkUp -> PaperPrinter`
+`LeanEmit -> Step capture -> InkUp -> realization/layout`
 
 The provisional name is **InkUp**.  The architectural boundary, not the name,
-is the proposal.  LeanEmit says what is justified.  InkUp accounts for what a
-reader must be shown, where, and at what resolution.  PaperPrinter realizes
-that plan as text.  InkUp must not invent a proof fact, and PaperPrinter must
-not silently change the plan.
+is the proposal.  LeanEmit says what is justified; Step capture exposes the
+typed walk.  InkUp accounts for what a reader must be shown, where, and at
+what resolution.  The last PaperPrinter stages realize that plan as text.
+InkUp must not invent a proof fact, and realization must report rather than
+silently change the plan.
 
 This makes proof presentation a generative object rather than a score assigned
 after prose exists.  Initially InkUp is report-only: it annotates an existing
@@ -53,9 +54,17 @@ acronym would erase the empirical meaning of the display.
 
 InkUp inherits this CMY observation coordinate system as `mining_layers`; it
 does not rename the colours.  Presentation planning is an orthogonal axis.
-Every LeanEmit node must be accounted for as `show`, `compress`, or `omit`;
-compression and omission require a reason and preserve a link to the typed
-source.
+Every LeanEmit node must be accounted for as `show`, `compress`, `omit`, or
+`nest`; compression, omission, and relocation require a reason and preserve a
+link to the typed source.
+
+The interoperable per-mark envelope is futon4's
+`proof-ink.overlay/v0`.  It keeps analytic layer, residual class,
+presentation role, and plan action as independent axes.  A rendered text span
+is identified by `(head, module, declaration)`, offsets, text hash, and local
+anchor.  Offsets never survive a changed render.  A durable cross-render join
+therefore requires a stable typed-node key; process-local Step identifiers and
+repeated binder names are explicitly marked as unstable.
 
 The plan records rhetorical roles separately, including
 `overview`, `example`, `reduction`, `bridge`, `calculation`, `citation`, and
@@ -92,6 +101,11 @@ signal can graduate from report-only observation to generative control.
    roles but no overview that covers their common branch or decomposition.
 5. **Administrative dominance.** Calculation or closure roles dominate a
    local scope while its typed steps admit a named compression boundary.
+6. **Level mixing.** A displayed chain moves from its owning expression into
+   a subterm or side goal and later returns, so an expression appears twice at
+   one display level.
+7. **Uninformative citation.** A citation is visible but does not name the
+   result or role on which the current move depends.
 
 Diagnostics are objections with witnesses, not penalties.  Several may be
 true simultaneously, and absence of these five is not evidence of clarity.
@@ -100,14 +114,25 @@ true simultaneously, and absence of these five is not evidence of clarity.
 
 `holes/inkup/presentation-plan.schema.json` is the first interchange contract.
 One plan names its source kind and immutable source reference, contains a tree
-of scopes, accounts for typed nodes, retains evidenced CMY mining coverage,
-assigns presentation roles, and records report-only diagnostics.  A concrete valid instance is
+of scopes, accounts for typed nodes and their owning scopes, retains evidenced
+CMY mining coverage, assigns presentation roles, and records report-only
+diagnostics.  A concrete valid instance is
 `holes/inkup/example-plan.json`.
 
-PaperPrinter may consume `show` and `compress` directives only after a later
-gate.  Until then the same schema is used to annotate both human Mark7 source
-windows and generated proofs, which prevents the measurement vocabulary from
-being tailored only to PaperPrinter's current pathologies.
+Realization may consume `show`, `compress`, `omit`, and `nest` directives only
+after a later gate.  If two nodes print alike or a node prints empty, it emits
+`realization_feedback`; it does not drop or coalesce the node on its own.
+Until then the same schema is used to annotate both human Mark7 source windows
+and generated proofs, which prevents the measurement vocabulary from being
+tailored only to PaperPrinter's current pathologies.
+
+The residual classes already provide empirical seeds: C23 and the missing-
+subproof classes exercise scope preservation; P-sufficiency-wall,
+P-nonprop-suffices, and C22 exercise frontier reduction; the setup, closer,
+opaque-proof, citation, reasonless-chain, and decided-case classes exercise
+role-typed exposition budgets.  C4/N2 exercises level mixing.  Pure notation
+classes such as C5, C7, C12, and C19 remain realization defects rather than
+presentation-plan evidence.
 
 ## Calibration design
 
