@@ -1,0 +1,150 @@
+{
+  "schema": "inkup.blueprint-lineage/v0",
+  "problem": "a96J06",
+  "sources": {
+    "proof-plan": {
+      "path": "/home/joe/code/apm-lean/problems/a96J06/proof-plan.edn",
+      "sha256": "44f0e8ffd9cdf2f9267a084af2cc230c80b42f0d5018f2cd9adefc4e417ddac0"
+    },
+    "informal": {
+      "path": "/home/joe/code/apm-lean/problems/a96J06/informal-solution.md",
+      "sha256": "d0d7f5c0dbf70e139787dd7188bfad98cbf08da5e08a651500f5c23278bfb366"
+    },
+    "lean": {
+      "path": "/home/joe/code/apm-lean/problems/a96J06/lean/Main.lean",
+      "sha256": "b93980bb718864100e5f7e3bb52392d5faf16d2a340b164d9e2e1de0b19898c1"
+    },
+    "mark8-candidate": {
+      "path": "/home/joe/storage/apm/mining/runs/apm-501-xi-r1/artifacts/candidates/a96J06__p0.candidate.json",
+      "sha256": "768dc409dc8c8dee61be1d56721d0bf77cccb40e8010197bbbbd85c44ccb7106"
+    },
+    "mark8-s3": {
+      "path": "/home/joe/storage/apm/mining/runs/apm-501-xi-r1/artifacts/graphs/a96J06__p0.edn",
+      "sha256": "a3242a7ca944b560f9293e13db65f9bfdfa7dd35f47dad90744a0fd37b2207dd"
+    }
+  },
+  "nodes": [
+    {
+      "id": "a96J06:B0",
+      "parent": null,
+      "obligation": "For every positive radius, find a point in the centered disk whose image under the normalized non-linear polynomial has norm greater than the radius.",
+      "depends_on": ["a96J06:B6"],
+      "argument_roles": ["goal"],
+      "expository_roles": ["overview"],
+      "reader_obligations": ["State the quantified goal and identify the nonzero higher coefficient as the source of non-linearity."],
+      "anchors": [
+        {"source": "proof-plan", "ref": ":goal", "relation": "states", "review": "human-reviewed"},
+        {"source": "lean", "ref": "theorem apm_a96j06", "relation": "implements", "review": "human-reviewed"},
+        {"source": "mark8-s3", "ref": ":n14", "relation": "states", "review": "model-proposed", "note": "The conclusion is correctly recognizable, but the mined graph is not the authority for the theorem statement."}
+      ]
+    },
+    {
+      "id": "a96J06:B1",
+      "parent": "a96J06:B0",
+      "obligation": "Assume for a fixed positive radius that every point of the disk is mapped to norm at most that radius.",
+      "depends_on": [],
+      "argument_roles": ["assumption", "contradiction"],
+      "expository_roles": ["assumption"],
+      "reader_obligations": ["Keep the fixed radius and the negated existential visibly in scope until the contradiction closes."],
+      "anchors": [
+        {"source": "informal", "ref": "Stage 1 / Complete proof: Suppose there is an r>0", "relation": "explains", "review": "human-reviewed"},
+        {"source": "lean", "ref": "apm_a96j06: intro r hr; by_contra hcontra; push_neg at hcontra", "relation": "implements", "review": "human-reviewed"},
+        {"source": "mark8-s3", "ref": ":n7", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a96J06:B2",
+      "parent": "a96J06:B0",
+      "obligation": "Normalize the radius-r disk to the unit disk by defining g(z) = r⁻¹ p(rz), preserving g(0)=0 and g'(0)=1.",
+      "depends_on": ["a96J06:B1"],
+      "argument_roles": ["normalization", "identity"],
+      "expository_roles": ["motivation", "definition", "bridge"],
+      "reader_obligations": ["Explain why rescaling is the hinge that makes Schwarz rigidity applicable.", "State which properties survive the rescaling."],
+      "anchors": [
+        {"source": "proof-plan", "ref": ":strategy :s1", "relation": "states", "review": "human-reviewed"},
+        {"source": "informal", "ref": "Stage 1 / Key insight: q(w)=p(r w)/r", "relation": "explains", "review": "human-reviewed"},
+        {"source": "lean", "ref": "apm_a96J06_rescaled_hasDerivAt_zero; apm_a96j06: let g", "relation": "implements", "review": "human-reviewed"},
+        {"source": "mark8-s3", "ref": ":n2,:n3", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a96J06:B3",
+      "parent": "a96J06:B0",
+      "obligation": "Verify that the normalized map is differentiable on the unit disk and maps it into the closed unit disk.",
+      "depends_on": ["a96J06:B2"],
+      "argument_roles": ["side-condition"],
+      "expository_roles": ["calculation", "audit-detail"],
+      "reader_obligations": ["For audit, expose the domain, codomain, differentiability, fixed-point, and derivative hypotheses consumed by the Schwarz equality case."],
+      "anchors": [
+        {"source": "lean", "ref": "apm_a96j06: hgzero, hgdiff, hgmap, hgderiv", "relation": "implements", "review": "human-reviewed"},
+        {"source": "mark8-s3", "ref": ":n9,:n10,:n11", "relation": "supports", "review": "model-proposed", "note": "The graph notices fixed point and derivative but omits the maps-to and differentiability obligations."}
+      ]
+    },
+    {
+      "id": "a96J06:B4",
+      "parent": "a96J06:B0",
+      "obligation": "Apply the equality case of Schwarz's lemma to conclude that the normalized map is the identity on the unit disk.",
+      "depends_on": ["a96J06:B3"],
+      "argument_roles": ["lemma-application", "identity"],
+      "expository_roles": ["citation", "bridge"],
+      "reader_obligations": ["Name the equality-case result, not merely Schwarz's inequality, and state why derivative norm one triggers rigidity."],
+      "anchors": [
+        {"source": "proof-plan", "ref": ":strategy :s2", "relation": "states", "review": "human-reviewed"},
+        {"source": "informal", "ref": "Stage 1 / Complete proof: equality holds, so Schwarz's lemma forces q(w)=e^{iθ}w", "relation": "explains", "review": "human-reviewed", "note": "The informal proof allows a rotation; the normalized derivative 1 specializes the rotation to the identity."},
+        {"source": "lean", "ref": "apm_a96j06: haffine; hgeq", "relation": "implements", "review": "human-reviewed"},
+        {"source": "mark8-s3", "ref": ":n12,:e7", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a96J06:B5",
+      "parent": "a96J06:B0",
+      "obligation": "Lift identity on the disk to polynomial identity and compare the top coefficient with that of X.",
+      "depends_on": ["a96J06:B4"],
+      "argument_roles": ["identity", "contradiction"],
+      "expository_roles": ["bridge", "calculation"],
+      "reader_obligations": ["Explain the bridge from equality on infinitely many points to polynomial equality.", "Name coefficient comparison as a separate inference rather than repeating the rotation formula."],
+      "anchors": [
+        {"source": "informal", "ref": "Stage 1 / Complete proof: Comparing coefficients", "relation": "explains", "review": "human-reviewed"},
+        {"source": "lean", "ref": "apm_a96j06: heval, hset, hpoly, hcoeff, hXN", "relation": "implements", "review": "human-reviewed"},
+        {"source": "mark8-s3", "ref": ":n13,:e8", "relation": "supports", "review": "rejected", "note": "The mined node gloss says coefficient vanishing but its text and quote span repeat q(w)=e^{iθ}w; retain this as a negative anchoring example."}
+      ]
+    },
+    {
+      "id": "a96J06:B6",
+      "parent": "a96J06:B0",
+      "obligation": "Contradict the assumed nonzero top coefficient and discharge the fixed-radius contradiction, yielding the existential point for every positive radius.",
+      "depends_on": ["a96J06:B5"],
+      "argument_roles": ["contradiction", "closure"],
+      "expository_roles": ["closure"],
+      "reader_obligations": ["Say which assumption is contradicted and restore the outer universal quantifier over the radius."],
+      "anchors": [
+        {"source": "informal", "ref": "Stage 1 / Complete proof: contradicting c_N≠0; Therefore our supposition is false", "relation": "explains", "review": "human-reviewed"},
+        {"source": "lean", "ref": "apm_a96j06: exact hcN (hcoeff.trans hXN)", "relation": "implements", "review": "human-reviewed"},
+        {"source": "mark8-s3", "ref": ":e9", "relation": "supports", "review": "model-proposed"}
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "id": "expert-reference",
+      "audience": "A mathematician who knows Schwarz's lemma and wants the decisive route.",
+      "purpose": "reference",
+      "mandatory_nodes": ["a96J06:B1", "a96J06:B2", "a96J06:B4", "a96J06:B5", "a96J06:B6"],
+      "compression": "Compress B3 to the statement that the normalized map satisfies the equality-case hypotheses; retain the infinite-root coefficient bridge in B5."
+    },
+    {
+      "id": "teaching",
+      "audience": "A student who may not see why scaling unlocks Schwarz rigidity.",
+      "purpose": "teaching",
+      "mandatory_nodes": ["a96J06:B0", "a96J06:B1", "a96J06:B2", "a96J06:B3", "a96J06:B4", "a96J06:B5", "a96J06:B6"],
+      "compression": "Show every node; spend the most exposition on B2 and B4, and distinguish Schwarz inequality from its equality case."
+    },
+    {
+      "id": "formal-audit",
+      "audience": "A reviewer comparing the prose with the compiled Lean proof.",
+      "purpose": "audit",
+      "mandatory_nodes": ["a96J06:B0", "a96J06:B1", "a96J06:B2", "a96J06:B3", "a96J06:B4", "a96J06:B5", "a96J06:B6"],
+      "compression": "Do not compress side conditions; expose the closed-ball codomain, derivative identity, infinite evaluation set, and top-coefficient contradiction."
+    }
+  ]
+}

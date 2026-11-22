@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "InkUp Blueprint lineage pilot v0",
+  "type": "object",
+  "required": ["schema", "problem", "sources", "nodes", "profiles"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "inkup.blueprint-lineage/v0"},
+    "problem": {"const": "a96J06"},
+    "sources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/node"},
+      "minItems": 1
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "audience", "purpose", "mandatory_nodes", "compression"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "audience": {"type": "string", "minLength": 1},
+          "purpose": {"enum": ["reference", "teaching", "audit"]},
+          "mandatory_nodes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "compression": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "anchor": {
+      "type": "object",
+      "required": ["source", "ref", "relation", "review"],
+      "properties": {
+        "source": {"type": "string", "minLength": 1},
+        "ref": {"type": "string", "minLength": 1},
+        "relation": {"enum": ["states", "implements", "supports", "explains", "motivates", "audits"]},
+        "review": {"enum": ["human-reviewed", "model-proposed", "rejected"]},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "parent", "obligation", "depends_on", "argument_roles", "expository_roles", "reader_obligations", "anchors"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^a96J06:B[0-9]+$"},
+        "parent": {"type": ["string", "null"]},
+        "obligation": {"type": "string", "minLength": 1},
+        "depends_on": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "argument_roles": {
+          "type": "array",
+          "items": {"enum": ["goal", "assumption", "normalization", "side-condition", "lemma-application", "identity", "contradiction", "closure"]},
+          "uniqueItems": true
+        },
+        "expository_roles": {
+          "type": "array",
+          "items": {"enum": ["overview", "motivation", "assumption", "definition", "bridge", "calculation", "citation", "closure", "audit-detail"]},
+          "uniqueItems": true
+        },
+        "reader_obligations": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1},
+        "anchors": {"type": "array", "items": {"$ref": "#/$defs/anchor"}, "minItems": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}
