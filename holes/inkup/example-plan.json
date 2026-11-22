@@ -1,0 +1,29 @@
+{
+  "schema": "inkup.presentation-plan/v0",
+  "source": {
+    "kind": "human",
+    "ref": "mark7probe-20260921:0705.0102:proof0:L349-366"
+  },
+  "scopes": [
+    {
+      "id": "proof0",
+      "parent": null,
+      "channels": {"C": 0.25, "M": 0.25, "Y": 0.25, "K": 0.25},
+      "roles": ["overview", "reduction", "citation", "closure"],
+      "evidence": ["source-window:L349-366"]
+    }
+  ],
+  "typed_node_accounting": [
+    {"node": "proof0:definition-cot:3", "action": "show"},
+    {"node": "proof0:orthogonality:2", "action": "show"},
+    {"node": "proof0:extension-closure", "action": "compress", "reason": "two analogous consequences share one cited support boundary"}
+  ],
+  "diagnostics": [
+    {
+      "kind": "example-scarcity",
+      "scope": "proof0",
+      "witnesses": ["roles contains no example"],
+      "status": "report-only"
+    }
+  ]
+}
