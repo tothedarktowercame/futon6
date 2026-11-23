@@ -42,6 +42,12 @@ rewritten well.  `realizations.md` contains the first candidate prose produced
 from each profile, followed by six concrete reader tasks.  The node labels are
 evaluation markup that makes omissions and misplaced details countable.
 
+`generative-ink.tsv` makes the positive presentation choices countable.  For
+each profile it assigns every Blueprint node an action (`show`, `compress`, or
+`expand`) and a percentage of the profile's exposition budget.  These
+percentages describe where explanation is spent, not how much of the proof is
+correct.  They therefore remain separate from PaperPrinter residual ink.
+
 ## Validation
 
 Run:

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 import re
@@ -94,10 +95,43 @@ for profile in doc["profiles"]:
     if missing:
         fail(f"profile {profile['id']}: realization omits mandatory nodes {missing}")
 
+with (HERE / "generative-ink.tsv").open(newline="") as stream:
+    ink_rows = list(csv.DictReader(stream, delimiter="\t"))
+profile_ids = {profile["id"] for profile in doc["profiles"]}
+allowed_actions = {"show", "compress", "expand", "omit"}
+for row in ink_rows:
+    if row["profile"] not in profile_ids:
+        fail(f"generative ink: unknown profile {row['profile']}")
+    if row["node"] not in nodes:
+        fail(f"generative ink: unknown node {row['node']}")
+    if row["action"] not in allowed_actions:
+        fail(f"generative ink: unknown action {row['action']}")
+for profile_id in profile_ids:
+    rows = [row for row in ink_rows if row["profile"] == profile_id]
+    if {row["node"] for row in rows} != set(nodes):
+        fail(f"generative ink: {profile_id} does not account for every node exactly once")
+    if len(rows) != len(nodes):
+        fail(f"generative ink: {profile_id} has duplicate node rows")
+    budget = sum(int(row["budget_percent"]) for row in rows)
+    if budget != 100:
+        fail(f"generative ink: {profile_id} budget is {budget}, not 100")
+    mandatory = next(
+        set(profile["mandatory_nodes"])
+        for profile in doc["profiles"]
+        if profile["id"] == profile_id
+    )
+    omitted_mandatory = sorted(
+        row["node"] for row in rows
+        if row["action"] == "omit" and row["node"] in mandatory
+    )
+    if omitted_mandatory:
+        fail(f"generative ink: {profile_id} omits mandatory nodes {omitted_mandatory}")
+
 counts = {state: 0 for state in allowed_review}
 for node in nodes.values():
     for anchor in node["anchors"]:
         counts[anchor["review"]] += 1
 
 print(f"valid a96J06 lineage: {len(nodes)} nodes, {len(doc['profiles'])} profiles")
+print(f"generative ink: {len(ink_rows)} profile-node decisions, 100% budget per profile")
 print("anchor review states: " + ", ".join(f"{key}={counts[key]}" for key in sorted(counts)))

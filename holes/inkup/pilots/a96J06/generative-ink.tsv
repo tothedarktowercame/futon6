@@ -1,0 +1,22 @@
+profile	node	action	budget_percent	reason
+expert-reference	a96J06:B0	compress	5	State the target without tutorial framing.
+expert-reference	a96J06:B1	show	10	Keep the contradiction assumption in scope.
+expert-reference	a96J06:B2	expand	20	Scaling is the strategic hinge.
+expert-reference	a96J06:B3	compress	5	Bundle routine analytic side conditions.
+expert-reference	a96J06:B4	show	20	Name the equality case and its trigger.
+expert-reference	a96J06:B5	expand	30	Retain the infinite-root and coefficient bridge.
+expert-reference	a96J06:B6	show	10	Close the contradiction and restore the quantifier.
+teaching	a96J06:B0	show	10	Preview the route and the source of non-linearity.
+teaching	a96J06:B1	show	10	Make the negated existential explicit.
+teaching	a96J06:B2	expand	25	Explain why scaling unlocks Schwarz rigidity.
+teaching	a96J06:B3	show	10	List the hypotheses consumed by Schwarz.
+teaching	a96J06:B4	expand	20	Distinguish the inequality from its equality case.
+teaching	a96J06:B5	expand	15	Explain equality on infinitely many points.
+teaching	a96J06:B6	show	10	Name the contradicted assumption.
+formal-audit	a96J06:B0	show	5	Expose the quantified construction target.
+formal-audit	a96J06:B1	show	10	Expose the pushed negation.
+formal-audit	a96J06:B2	show	15	Record the normalized map and preserved identities.
+formal-audit	a96J06:B3	expand	20	Expose every domain and differentiability condition.
+formal-audit	a96J06:B4	show	15	Identify the exact rigidity lemma application.
+formal-audit	a96J06:B5	expand	25	Expose the evaluation-set and coefficient steps.
+formal-audit	a96J06:B6	show	10	Connect the Lean contradiction to the theorem goal.

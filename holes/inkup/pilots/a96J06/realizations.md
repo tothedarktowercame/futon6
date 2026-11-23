@@ -8,7 +8,7 @@ for the final paper.
 ## Expert reference
 
 **[B1]** Fix (r>0) and suppose, for a contradiction, that
-(lVert p(z)Vertle r) throughout the radius-(r) disk.  **[B2]** Rescale
+(\lVert p(z)\rVert \le r) throughout the radius-(r) disk.  **[B2]** Rescale
 by
 
 \[
@@ -21,7 +21,7 @@ Then (g) maps the unit disk to the closed unit disk, fixes (0), and has
 disk; since the two polynomials agree on infinitely many points, they are
 identical.  Comparing their degree-(N) coefficients gives (c_N=0), contrary
 to hypothesis.  **[B6]** Thus every radius-(r) disk contains a point
-(zeta) with (lVert p(zeta)Vert>r).
+(zeta) with (\lVert p(zeta)\rVert>r).
 
 ## Teaching
 
@@ -30,7 +30,7 @@ is stated on the unit disk.  The useful move is therefore to remove the scale
 before doing any coefficient estimates.
 
 **[B1]** Fix (r>0).  Suppose, contrary to the desired conclusion, that
-(lVert p(z)Vertle r) whenever (lVert zVert<r).  **[B2]** A point
+(\lVert p(z)\rVert \le r) whenever (\lVert z\rVert<r).  **[B2]** A point
 (w) in the unit disk corresponds to (rw) in the radius-(r) disk, so set
 
 \[
@@ -38,12 +38,12 @@ g(w)=\frac{p(rw)}{r}.
 \]
 
 This normalization divides the output bound by the same (r): it turns our
-assumption into (lVert g(w)Vertle1) on the unit disk.  It also preserves
+assumption into (\lVert g(w)\rVert \le 1) on the unit disk.  It also preserves
 the two decisive normalizations, (g(0)=0) and (g'(0)=1).
 
 **[B3]** The function (g) is holomorphic, maps the unit disk into the closed
 unit disk, and fixes its centre.  Schwarz's lemma first gives the usual bound
-(lVert g(w)VertlelVert wVert).  **[B4]** More is true here: the
+(\lVert g(w)\rVert \le \lVert w\rVert).  **[B4]** More is true here: the
 derivative already has the maximal possible norm at the origin.  The equality
 case says that (g) must be a rotation.  Since (g'(0)=1), that rotation is
 the identity, so (g(w)=w).
@@ -54,26 +54,26 @@ therefore all coefficients of degree at least two vanish.  In particular
 (c_N=0), contradicting the assumption that the top coefficient is nonzero.
 **[B6]** Our disk-boundedness supposition was false.  Since (r>0) was
 arbitrary, every such disk contains a (zeta) for which
-(lVert p(zeta)Vert>r).
+(\lVert p(zeta)\rVert>r).
 
 ## Formal audit
 
 **[B0]** Audit target: for each (r>0), construct a (zeta) with
-(lVertzetaVert<r) and (r<lVert p(zeta)Vert).  **[B1]** After
+(\lVert \zeta\rVert<r) and (r<\lVert p(zeta)\rVert).  **[B1]** After
 introducing (r>0), negating the existential conclusion gives
 
 \[
-orall z,quad lVert zVert<r\Longrightarrow
-lVert p(z)Vertle r.
+\forall z,\quad \lVert z\rVert<r\Longrightarrow
+\lVert p(z)\rVert \le r.
 \]
 
 **[B2]** Define (g(z)=r^{-1}p(rz)).  The separately proved rescaling lemma
 gives (g'(0)=1), and direct simplification gives (g(0)=0).
 
 **[B3]** Polynomial differentiability establishes differentiability of (g)
-on the unit ball.  If (lVert wVert<1), then
-(lVert rwVert<r); the negated conclusion therefore yields
-(lVert g(w)Vertle1).  Thus (g) maps the open unit ball into the closed
+on the unit ball.  If (\lVert w\rVert<1), then
+(\lVert rw\rVert<r); the negated conclusion therefore yields
+(\lVert g(w)\rVert \le 1).  Thus (g) maps the open unit ball into the closed
 unit ball centred at (g(0)).
 
 **[B4]** `Complex.affine_of_mapsTo_ball_of_norm_dslope_eq_div`, applied with
@@ -90,9 +90,9 @@ identity to (r^{-1}zeta) and clear the nonzero factor (r).  This gives
 
 The sequence (r/(n+2)) supplies an infinite set of such evaluation points,
 so polynomial extensionality gives
-(operatorname{poly} p=X).  Taking the coefficient of degree (N), the
+(\operatorname{poly} p=X).  Taking the coefficient of degree (N), the
 left side is (c_N), while the coefficient of (X) is zero because
-(2le N).
+(2 \le N).
 
 **[B6]** Hence (c_N=0), contradicting the input hypothesis (c_N\ne0).
 This discharges the contradiction for the arbitrary positive radius (r) and
