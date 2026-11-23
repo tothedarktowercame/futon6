@@ -1,0 +1,208 @@
+{
+ "schema": "inkup.retrieval-query/v0",
+ "problem": "a96J06",
+ "terms": [
+  {
+   "term": "polynomial $p(z)=z+\\sum_{n=2}^{N}c_n z^n$",
+   "kind": "object",
+   "source": "statement",
+   "quote": "p(z)=z+\\sum_{n=2}^{N}c_n z^n"
+  },
+  {
+   "term": "nonzero leading coefficient $c_N\\neq 0$",
+   "kind": "object",
+   "source": "statement",
+   "quote": "c_N\\neq 0"
+  },
+  {
+   "term": "for every radius $r>0$",
+   "kind": "surface",
+   "source": "statement",
+   "quote": "for every $r>0$"
+  },
+  {
+   "term": "point $\\zeta$ in the open disk $|z|<r$",
+   "kind": "object",
+   "source": "statement",
+   "quote": "|z|<r"
+  },
+  {
+   "term": "$r<|p(\\zeta)|$",
+   "kind": "object",
+   "source": "statement",
+   "quote": "$r<|p(\\zeta)|$"
+  },
+  {
+   "term": "rescale",
+   "kind": "transformation",
+   "source": "informal",
+   "quote": "Students often forget to rescale"
+  },
+  {
+   "term": "normalize the disk to the unit disk",
+   "kind": "transformation",
+   "source": "informal",
+   "quote": "normalize the disk to the unit disk"
+  },
+  {
+   "term": "change of variables $q(w)=p(r w)/r$",
+   "kind": "transformation",
+   "source": "informal",
+   "quote": "After the change of variables $q(w)=p(r w)/r$"
+  },
+  {
+   "term": "$q'(0)=1$",
+   "kind": "object",
+   "source": "informal",
+   "quote": "Here $q'(0)=1$"
+  },
+  {
+   "term": "Schwarz's lemma",
+   "kind": "named-method",
+   "source": "informal",
+   "quote": "Schwarz’s lemma then forces"
+  },
+  {
+   "term": "holomorphic self-map of the unit disk fixing 0",
+   "kind": "object",
+   "source": "informal",
+   "quote": "holomorphic self-map of the unit disk fixing 0 with derivative 1 at 0"
+  },
+  {
+   "term": "rotation $e^{i\\theta}w$",
+   "kind": "object",
+   "source": "informal",
+   "quote": "forces $q(w)=e^{i\\theta}w$"
+  },
+  {
+   "term": "comparing coefficients",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "Comparing coefficients shows every higher-order coefficient must vanish"
+  },
+  {
+   "term": "proof by contradiction",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "Assume towards contradiction that some disk is mapped inside itself"
+  },
+  {
+   "term": "chasing inequalities on coefficients",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "tempting to chase inequalities on coefficients"
+  },
+  {
+   "term": "Open Mapping Theorem",
+   "kind": "named-method",
+   "source": "informal",
+   "quote": "baby case of the Open Mapping Theorem"
+  },
+  {
+   "term": "automorphisms of the disk",
+   "kind": "object",
+   "source": "informal",
+   "quote": "automorphisms of the disk"
+  },
+  {
+   "term": "bounded holomorphic functions with fixed points",
+   "kind": "object",
+   "source": "informal",
+   "quote": "bounded holomorphic functions with fixed points"
+  },
+  {
+   "term": "non-linear polynomial cannot be a self-map of a disk",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "a non-linear polynomial cannot be a self-map of a disk fixing the center with derivative 1"
+  },
+  {
+   "term": "normalization",
+   "kind": "transformation",
+   "source": "proof-plan",
+   "quote": "Scale the disk of radius r to the unit disk"
+  },
+  {
+   "term": "Schwarz lemma",
+   "kind": "named-method",
+   "source": "proof-plan",
+   "quote": "Schwarz lemma"
+  },
+  {
+   "term": "contradiction setup",
+   "kind": "strategic-move",
+   "source": "proof-plan",
+   "quote": "Assume |p(z)|≤r on the disk |z|≤r and derive properties of q"
+  },
+  {
+   "term": "self-map of the unit disk",
+   "kind": "object",
+   "source": "proof-plan",
+   "quote": "Reduce the general r>0 case to a self-map of the unit disk"
+  },
+  {
+   "term": "rescaling $g(z) = r⁻¹ p(rz)$",
+   "kind": "transformation",
+   "source": "alignment:B2",
+   "quote": "Normalize the radius-r disk to the unit disk by defining g(z) = r⁻¹ p(rz)"
+  },
+  {
+   "term": "equality case of Schwarz's lemma",
+   "kind": "named-method",
+   "source": "alignment:B4",
+   "quote": "Apply the equality case of Schwarz's lemma to conclude that the normalized map is the identity on the unit disk"
+  },
+  {
+   "term": "maps into the closed unit disk",
+   "kind": "object",
+   "source": "alignment:B3",
+   "quote": "maps it into the closed unit disk"
+  },
+  {
+   "term": "polynomial identity by coefficient comparison",
+   "kind": "strategic-move",
+   "source": "alignment:B5",
+   "quote": "Lift identity on the disk to polynomial identity and compare the top coefficient with that of X"
+  },
+  {
+   "term": "equality on infinitely many points",
+   "kind": "strategic-move",
+   "source": "alignment:B5",
+   "quote": "Explain the bridge from equality on infinitely many points to polynomial equality."
+  },
+  {
+   "term": "nonzero higher coefficient as source of non-linearity",
+   "kind": "object",
+   "source": "alignment:B0",
+   "quote": "identify the nonzero higher coefficient as the source of non-linearity"
+  },
+  {
+   "term": "Polynomial.eq_of_infinite_eval_eq",
+   "kind": "named-method",
+   "source": "lean",
+   "quote": "Polynomial.eq_of_infinite_eval_eq"
+  }
+ ],
+ "embedding_queries": [
+  {
+   "text": "A polynomial of the form z plus higher-order terms, with nonzero top coefficient, takes some point of every centered disk to a value of larger modulus than the radius.",
+   "source": "statement"
+  },
+  {
+   "text": "Assume some closed disk of radius r is mapped into itself, rescale the polynomial by q(w)=p(rw)/r to get a holomorphic self-map of the unit disk fixing the origin with derivative one, and apply the equality case of Schwarz's lemma to get a rotation.",
+   "source": "informal"
+  },
+  {
+   "text": "A holomorphic function from the unit disk to itself that fixes zero and has derivative of modulus one at zero is a rotation, so a polynomial with a nonzero higher-order coefficient cannot be such a map.",
+   "source": "informal"
+  },
+  {
+   "text": "If two polynomials agree on infinitely many points they are equal, so comparing the top coefficient gives a contradiction.",
+   "source": "alignment:a96J06:B5"
+  },
+  {
+   "text": "The conclusion looks geometric, so one is tempted to estimate coefficients, but the working approach is to normalize to the unit disk and use Schwarz rigidity rather than inequalities.",
+   "source": "informal"
+  }
+ ]
+}
