@@ -85,6 +85,8 @@
    "from": "programme gate for P3 and P4"
   }
  ],
+ "target_words": 120,
+ "max_words": 168,
  "nodes": [
   {
    "node": "a96J06:B0",

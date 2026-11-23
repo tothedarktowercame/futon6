@@ -32,6 +32,58 @@ def profile_section_id(profile: str) -> str:
     return headings[profile]
 
 
+def adapt_publication_plan(publication: dict, content: dict) -> tuple[dict, list[str]]:
+    """Adapt a checked publication plan to the existing content-plan interface."""
+    errors: list[str] = []
+    content_questions = {question["id"]: question for question in content.get("questions", [])}
+    publication_questions = publication.get("questions")
+    if not isinstance(publication_questions, dict) or \
+            set(publication_questions) != set(content_questions):
+        errors.append("SC015 publication-plan question ids must exactly match the content plan")
+        publication_questions = publication_questions if isinstance(publication_questions, dict) else {}
+    for qid, decision in publication_questions.items():
+        if qid in content_questions and isinstance(decision, dict) and \
+                decision.get("action") == "anticipate" and \
+                content_questions[qid].get("support_state") != "supported":
+            errors.append(f"SC016 publication-plan question {qid}: only supported questions may be anticipated")
+
+    mandatory = [item["node"] for item in content.get("mandatory_nodes", [])]
+    publication_nodes = publication.get("nodes")
+    node_ids = [item.get("node") for item in publication_nodes] \
+        if isinstance(publication_nodes, list) and all(isinstance(item, dict) for item in publication_nodes) else []
+    nodes_valid = len(node_ids) == len(set(node_ids)) and set(node_ids) == set(mandatory)
+    if not nodes_valid:
+        errors.append("SC017 publication-plan node ids must exactly match the mandatory nodes")
+    budgets = [item.get("budget_percent") for item in publication_nodes] \
+        if isinstance(publication_nodes, list) and all(isinstance(item, dict) for item in publication_nodes) else []
+    if nodes_valid and (not budgets or
+                        not all(isinstance(value, (int, float)) for value in budgets) or
+                        sum(budgets) != 100):
+        errors.append("SC018 publication-plan node budgets must sum to 100")
+
+    profile = publication.get("profile")
+    heading = publication.get("heading")
+    if not isinstance(profile, str) or not profile or not isinstance(heading, str) or not heading:
+        errors.append("SC000 publication plan needs non-empty profile and heading")
+    if not isinstance(publication.get("target_words"), (int, float)) or \
+            not isinstance(publication.get("max_words"), (int, float)):
+        errors.append("SC000 publication plan needs numeric target_words and max_words")
+
+    adapted = {
+        "mandatory_nodes": content.get("mandatory_nodes", []),
+        "questions": [
+            {
+                **question,
+                "decisions": {
+                    profile: publication_questions.get(question["id"], {})
+                },
+            }
+            for question in content.get("questions", [])
+        ],
+    }
+    return adapted, errors
+
+
 def parse_sections(text: str) -> dict[str, str]:
     """Heading text (without ``##``) -> section body."""
     sections: dict[str, str] = {}
@@ -87,17 +139,33 @@ def repo_path(reference: str) -> Path:
 
 def validate(sidecar: Path, plan_path: Path | None = None,
              realizations: Path | None = None,
-             ink_path: Path = HERE / "generative-ink.tsv") -> tuple[dict, list[str]]:
+             ink_path: Path = HERE / "generative-ink.tsv",
+             publication_plan: Path | None = None) -> tuple[dict, list[str]]:
     errors: list[str] = []
     try:
         sidecar_doc = json.loads(sidecar.read_text())
-        plan_path = plan_path or repo_path(sidecar_doc["content_plan"])
+        publication = json.loads(publication_plan.read_text()) if publication_plan else None
+        if publication is not None:
+            plan_path = repo_path(publication["content_plan"])
+        else:
+            plan_path = plan_path or repo_path(sidecar_doc["content_plan"])
         realizations = realizations or repo_path(sidecar_doc["realizations"])
         plan = json.loads(plan_path.read_text())
         ink = load_ink(ink_path)
         sections = parse_sections(realizations.read_text())
     except (OSError, ValueError, KeyError, csv.Error) as exc:
         return {}, [f"SC000 cannot read inputs: {exc}"]
+    if publication is not None:
+        plan, plan_errors = adapt_publication_plan(publication, plan)
+        if plan_errors:
+            return {}, plan_errors
+        publication_profile = publication["profile"]
+        publication_heading = publication["heading"]
+        publication_nodes = {item["node"]: item for item in publication["nodes"]}
+    else:
+        publication_profile = publication_heading = None
+        publication_nodes = {}
+
     mandatory = [item["node"] for item in plan.get("mandatory_nodes", [])]
     questions = plan.get("questions", [])
     question_plans = {q["id"]: q for q in questions}
@@ -118,13 +186,24 @@ def validate(sidecar: Path, plan_path: Path | None = None,
         report[profile] = {"nodes": Counter(), "questions": Counter(), "node_rows": [], "unplanned": 0}
         if profile not in profiles_planned:
             continue
-        section_id = profile_section_id(profile)
+        section_id = publication_heading if profile == publication_profile else profile_section_id(profile)
         section = sections.get(section_id)
         if section is None:
             errors.append(f"SC002 {profile}: no section '{section_id}' in realizations.md")
             continue
         passages = parse_nodes(section)
         total = sum(words(passage) for passage in passages.values())
+        if profile == publication_profile:
+            report[profile]["words"] = {
+                "actual": total,
+                "target": publication["target_words"],
+                "max": publication["max_words"],
+            }
+            if total > publication["max_words"]:
+                errors.append(
+                    f"SC019 {profile}: section has {total} words, above max_words "
+                    f"{publication['max_words']} (target {publication['target_words']})"
+                )
 
         # ---- nodes -------------------------------------------------------
         entries = doc.get("nodes")
@@ -165,7 +244,8 @@ def validate(sidecar: Path, plan_path: Path | None = None,
             if not isinstance(entry.get("ink_percent"), (int, float)) or \
                     abs(entry["ink_percent"] - expected_percent) > 1e-9:
                 errors.append(f"SC006 {where}: ink_percent {entry.get('ink_percent')} != {expected_percent}")
-            planned = ink.get((profile, node), {})
+            planned = publication_nodes.get(node, {}) if profile == publication_profile \
+                else ink.get((profile, node), {})
             if entry.get("planned_percent") != int(planned.get("budget_percent", -1)):
                 errors.append(f"SC007 {where}: planned_percent {entry.get('planned_percent')} "
                               f"!= {planned.get('budget_percent')}")
@@ -306,6 +386,9 @@ def print_summary(report: dict, errors: list[str]) -> None:
               f"unplanned answers={row['unplanned']}")
         print("  planned vs actual percent: " + ", ".join(
             f"{node.split(':')[1]} {planned}->{actual}" for node, planned, actual in row["node_rows"]))
+        if "words" in row:
+            count = row["words"]
+            print(f"  words: {count['actual']} (target {count['target']}, max {count['max']})")
     if not errors:
         print("valid telling sidecar")
 
@@ -313,8 +396,9 @@ def print_summary(report: dict, errors: list[str]) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("sidecar", type=Path, nargs="?", default=HERE / "realizations.sidecar.json")
+    parser.add_argument("--plan", type=Path, help="publication plan defining the sidecar profile")
     args = parser.parse_args()
-    report, errors = validate(args.sidecar)
+    report, errors = validate(args.sidecar, publication_plan=args.plan)
     print_summary(report, errors)
     if errors:
         raise SystemExit(1)

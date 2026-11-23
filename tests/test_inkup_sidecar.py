@@ -20,6 +20,62 @@ def validate_doc(tmp_path, doc):
     return module.validate(path)[1]
 
 
+def publication_fixture(tmp_path):
+    plan = json.loads((PILOT / "publication-plan.json").read_text())
+    telling = tmp_path / "publication.md"
+    telling.write_text(
+        "## Publication\n\n"
+        "**[B1]** one\n\n**[B2]** two\n\n**[B3]** three\n\n"
+        "**[B4]** four\n\n**[B5]** five\n\n**[B6]** six conclusion\n"
+    )
+    node_words = {"a96J06:B0": 0, "a96J06:B1": 1, "a96J06:B2": 1,
+                  "a96J06:B3": 1, "a96J06:B4": 1, "a96J06:B5": 1,
+                  "a96J06:B6": 2}
+    total = sum(node_words.values())
+    plan_nodes = {item["node"]: item for item in plan["nodes"]}
+    nodes = []
+    for node, count in node_words.items():
+        planned = plan_nodes[node]
+        row = {
+            "node": node,
+            "status": "merged" if node == "a96J06:B0" else "realized",
+            "ink_words": count,
+            "ink_percent": module.percent(count, total),
+            "planned_percent": planned["budget_percent"],
+            "planned_action": planned["action"],
+        }
+        if node == "a96J06:B0":
+            row.update({"merged_into": "a96J06:B6", "quote": "six conclusion"})
+        nodes.append(row)
+    question_nodes = {
+        "scaling-strategy": ("a96J06:B2", "two"),
+        "rotation-specializes-to-identity": ("a96J06:B4", "four"),
+        "coefficient-extensionality": ("a96J06:B5", "five"),
+    }
+    questions = [{
+        "question": qid, "status": "answered", "node": node,
+        "quote": quote, "ink_words": 1,
+    } for qid, (node, quote) in question_nodes.items()]
+    sidecar_doc = {
+        "schema": module.SCHEMA,
+        "content_plan": "holes/inkup/pilots/a96J06/content-plan.json",
+        "realizations": "unused-by-test",
+        "profiles": {"publication": {
+            "nodes": nodes, "questions": questions, "unplanned_answers": [],
+        }},
+    }
+    plan_path = tmp_path / "publication-plan.json"
+    plan_path.write_text(json.dumps(plan))
+    sidecar_path = tmp_path / "publication.sidecar.json"
+    sidecar_path.write_text(json.dumps(sidecar_doc))
+    return plan, plan_path, telling, sidecar_doc, sidecar_path
+
+
+def validate_publication(plan_path, telling, sidecar_path):
+    return module.validate(sidecar_path, realizations=telling,
+                           publication_plan=plan_path)
+
+
 def codes(errors):
     return set(re.findall(r"SC\d{3}", "\n".join(errors)))
 
@@ -43,6 +99,50 @@ def test_teaching_only_sidecar_and_alternate_telling_pass():
     assert errors == []
     assert set(report) == {"teaching"}
     assert report["teaching"]["questions"]["answered"] == 7
+
+
+def test_publication_plan_drives_profile(tmp_path):
+    _plan, plan_path, telling, _doc, sidecar_path = publication_fixture(tmp_path)
+    report, errors = validate_publication(plan_path, telling, sidecar_path)
+    assert errors == []
+    assert report["publication"]["questions"]["answered"] == 3
+    assert report["publication"]["words"] == {"actual": 7, "target": 120, "max": 168}
+
+
+def test_publication_plan_cannot_anticipate_contested_question(tmp_path):
+    plan, plan_path, telling, _doc, sidecar_path = publication_fixture(tmp_path)
+    plan["questions"]["closed-disk-codomain"]["action"] = "anticipate"
+    plan_path.write_text(json.dumps(plan))
+    assert codes(validate_publication(plan_path, telling, sidecar_path)[1]) == {"SC016"}
+
+
+def test_publication_plan_must_name_every_mandatory_node(tmp_path):
+    plan, plan_path, telling, _doc, sidecar_path = publication_fixture(tmp_path)
+    plan["nodes"] = plan["nodes"][:-1]
+    plan_path.write_text(json.dumps(plan))
+    assert codes(validate_publication(plan_path, telling, sidecar_path)[1]) == {"SC017"}
+
+
+def test_publication_plan_budgets_sum_to_100(tmp_path):
+    plan, plan_path, telling, _doc, sidecar_path = publication_fixture(tmp_path)
+    plan["nodes"][1]["budget_percent"] -= 10
+    plan_path.write_text(json.dumps(plan))
+    assert codes(validate_publication(plan_path, telling, sidecar_path)[1]) == {"SC018"}
+
+
+def test_publication_telling_obeys_max_words(tmp_path):
+    plan, plan_path, telling, _doc, sidecar_path = publication_fixture(tmp_path)
+    plan["max_words"] = 6
+    plan_path.write_text(json.dumps(plan))
+    assert codes(validate_publication(plan_path, telling, sidecar_path)[1]) == {"SC019"}
+
+
+def test_publication_answer_for_omitted_question_is_unplanned(tmp_path):
+    plan, plan_path, telling, doc, sidecar_path = publication_fixture(tmp_path)
+    plan["questions"]["scaling-strategy"]["action"] = "omit"
+    plan_path.write_text(json.dumps(plan))
+    sidecar_path.write_text(json.dumps(doc))
+    assert codes(validate_publication(plan_path, telling, sidecar_path)[1]) == {"SC011"}
 
 
 def test_every_mandatory_node_scored_in_every_profile():
