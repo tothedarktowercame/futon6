@@ -1,0 +1,24 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a99J07:B1-B3 — why the unit-disk supremum bounds each value on the disk",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/a99J07/alignment.json", "sha256": "e85668aec81bad2c33793515dda95926acc4ef9363878549384e992e062d6a98"},
+    "lean": {"path": "apm-lean:problems/a99J07/lean/Main.lean", "sha256": "2632c9cdd4cb69ba4ce8632661a1e5d676a0aa9fbae192b4fb0de6037d688e39"}
+  },
+  "nodes": [
+    {"id":"q","kind":"question","claim":"Why does the unit-disk supremum bound |p(w)| when |w| ≤ 1?","authority":"reader-question","evidence":["blueprint-alignment:a99J07:B1","candidate:se-math-4342715"]},
+    {"id":"answer","kind":"answer","claim":"The value |p(w)| belongs to the set whose supremum defines the norm, and compactness makes that set bounded above, so le_csSup applies.","authority":"secondary","evidence":["blueprint-alignment:a99J07:B1","blueprint-alignment:a99J07:B3","lean:Main.lean#apm_a99J07_eval_le_supNorm"]},
+    {"id":"in-disk","kind":"premise","claim":"The point w satisfies ‖w‖ ≤ 1.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B3","Main.lean:apm_a99j07:case-hw"]},
+    {"id":"bounded-values","kind":"premise","claim":"The set of attained norms on the closed unit disk is bounded above, by compactness and continuity.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B1","lean:Main.lean#apm_a99J07_supNorm_bddAbove"]},
+    {"id":"supremum-warrant","kind":"warrant","claim":"le_csSup applied to the bounded set and the member witnessed by w yields the pointwise upper bound.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B1","lean:Main.lean#apm_a99J07_eval_le_supNorm","Mathlib:le_csSup"]},
+    {"id":"pointwise-bound","kind":"claim","claim":"‖p.eval w‖ ≤ a99J07SupNormUnitDisk p.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B3","lean:Main.lean#apm_a99J07_eval_le_supNorm"]}
+  ],
+  "edges": [
+    {"from":"q","relation":"answered-by","to":"answer"},
+    {"from":"answer","relation":"cites-reason","to":"supremum-warrant"},
+    {"from":"supremum-warrant","relation":"requires","to":"in-disk"},
+    {"from":"supremum-warrant","relation":"requires","to":"bounded-values"},
+    {"from":"supremum-warrant","relation":"warrants","to":"pointwise-bound"}
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "subject": "a99J07:B2-B7 — why reflect the polynomial",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/a99J07/alignment.json", "sha256": "e85668aec81bad2c33793515dda95926acc4ef9363878549384e992e062d6a98"},
+    "lean": {"path": "apm-lean:problems/a99J07/lean/Main.lean", "sha256": "2632c9cdd4cb69ba4ce8632661a1e5d676a0aa9fbae192b4fb0de6037d688e39"}
+  },
+  "nodes": [
+    {"id":"q","kind":"question","claim":"Why introduce q(z) = z^N p(1/z) when |w| > 1?","authority":"reader-question","evidence":["blueprint-alignment:a99J07:B4","seed:why-reflect"]},
+    {"id":"answer","kind":"answer","claim":"Reflection converts the exterior evaluation p(w) into an evaluation of a polynomial at 1/w inside the disk, where a circle bound and the polynomial maximum-modulus lemma apply; the reflection identity then restores p(w) with the required |w|^N factor.","authority":"secondary","evidence":["blueprint-alignment:a99J07:B4","blueprint-alignment:a99J07:B7"]},
+    {"id":"exterior-gap","kind":"obstacle","claim":"When |w| > 1, the definition of the supremum on the unit disk gives no direct bound for p(w).","authority":"proof-plan","evidence":["blueprint-alignment:a99J07:B2"]},
+    {"id":"boundary-method","kind":"method","claim":"Use the polynomial maximum-modulus lemma to transport a circle bound to an evaluation point in the closed unit disk.","authority":"formal-derived","evidence":["blueprint-alignment:a99J07:B6","lean:Main.lean#apm_a99J07_poly_le_boundary"]},
+    {"id":"reflect","kind":"move","claim":"Replace p by p.reflect N, corresponding away from zero to q(z) = z^N p(1/z).","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B4","lean:Main.lean#heval"]},
+    {"id":"degree-control","kind":"invariant","claim":"The hypothesis p.natDegree ≤ N makes the reflection evaluation identity available and keeps the auxiliary object polynomial at zero.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B4","lean:Main.lean#hdegree","Mathlib:Polynomial.eval₂_reflect_mul_pow"]},
+    {"id":"inside-conversion","kind":"conversion","claim":"For |w| > 1, u = 1/w lies in the closed unit disk, and the reflected polynomial is bounded there by the circle estimate.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B6","blueprint-alignment:a99J07:B7","lean:Main.lean#hu","lean:Main.lean#hqu"]},
+    {"id":"reflected-bound","kind":"result","claim":"‖(p.reflect N).eval (1/w)‖ is at most the unit-disk supremum norm of p.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B7","lean:Main.lean#hqu"]},
+    {"id":"exterior-return","kind":"return","claim":"The identity (p.reflect N).eval (1/w) · w^N = p.eval w returns the bound |p(w)| ≤ ‖p‖∞ |w|^N.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B7","lean:Main.lean#heq"]}
+  ],
+  "edges": [
+    {"from":"q","relation":"answered-by","to":"answer"},
+    {"from":"answer","relation":"cites-reason","to":"exterior-gap"},
+    {"from":"answer","relation":"cites-reason","to":"reflect"},
+    {"from":"answer","relation":"summarizes","to":"exterior-return"},
+    {"from":"exterior-gap","relation":"blocks","to":"boundary-method"},
+    {"from":"exterior-gap","relation":"resolved-by","to":"reflect"},
+    {"from":"reflect","relation":"preserves","to":"degree-control"},
+    {"from":"reflect","relation":"produces","to":"inside-conversion"},
+    {"from":"inside-conversion","relation":"enables","to":"boundary-method"},
+    {"from":"boundary-method","relation":"produces","to":"reflected-bound"},
+    {"from":"reflected-bound","relation":"transported-by","to":"exterior-return"}
+  ]
+}

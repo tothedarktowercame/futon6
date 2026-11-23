@@ -1,0 +1,24 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a99J07:B5-B7 — why the circle bound controls the reflected polynomial inside the disk",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/a99J07/alignment.json", "sha256": "e85668aec81bad2c33793515dda95926acc4ef9363878549384e992e062d6a98"},
+    "lean": {"path": "apm-lean:problems/a99J07/lean/Main.lean", "sha256": "2632c9cdd4cb69ba4ce8632661a1e5d676a0aa9fbae192b4fb0de6037d688e39"}
+  },
+  "nodes": [
+    {"id":"q","kind":"question","claim":"How does the maximum-modulus step turn the bound on the unit circle into a bound throughout the disk?","authority":"reader-question","evidence":["blueprint-alignment:a99J07:B6","candidate:se-math-2665625"]},
+    {"id":"answer","kind":"answer","claim":"For the chosen interior point the polynomial boundary lemma supplies a circle point with no smaller modulus, and the reflection identity bounds the value at every such circle point by the original disk norm; transitivity gives the interior bound.","authority":"secondary","evidence":["blueprint-alignment:a99J07:B5","blueprint-alignment:a99J07:B6","blueprint-alignment:a99J07:B7","lean:Main.lean#hqu"]},
+    {"id":"dominating-boundary-point","kind":"premise","claim":"There is a point v with ‖v‖ = 1 and ‖(p.reflect N).eval (1/w)‖ ≤ ‖(p.reflect N).eval v‖.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B6","lean:Main.lean#apm_a99J07_poly_le_boundary"]},
+    {"id":"circle-bound","kind":"premise","claim":"At that boundary point, ‖(p.reflect N).eval v‖ is at most the unit-disk supremum norm of p.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B5","lean:Main.lean#hvb"]},
+    {"id":"transitivity-warrant","kind":"warrant","claim":"Transitivity of the two inequalities carries the boundary estimate back to the selected interior point.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B7","lean:Main.lean#hqu"]},
+    {"id":"interior-bound","kind":"claim","claim":"‖(p.reflect N).eval (1/w)‖ ≤ a99J07SupNormUnitDisk p.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B7","lean:Main.lean#hqu"]}
+  ],
+  "edges": [
+    {"from":"q","relation":"answered-by","to":"answer"},
+    {"from":"answer","relation":"cites-reason","to":"transitivity-warrant"},
+    {"from":"transitivity-warrant","relation":"requires","to":"dominating-boundary-point"},
+    {"from":"transitivity-warrant","relation":"requires","to":"circle-bound"},
+    {"from":"transitivity-warrant","relation":"warrants","to":"interior-bound"}
+  ]
+}

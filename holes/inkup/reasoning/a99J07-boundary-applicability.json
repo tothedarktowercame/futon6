@@ -1,0 +1,24 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a99J07:B6 — hypotheses and witness returned by the polynomial maximum-modulus step",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/a99J07/alignment.json", "sha256": "e85668aec81bad2c33793515dda95926acc4ef9363878549384e992e062d6a98"},
+    "lean": {"path": "apm-lean:problems/a99J07/lean/Main.lean", "sha256": "2632c9cdd4cb69ba4ce8632661a1e5d676a0aa9fbae192b4fb0de6037d688e39"}
+  },
+  "nodes": [
+    {"id":"q","kind":"question","claim":"Why does the maximum-modulus step apply to the reflected polynomial at 1/w?","authority":"reader-question","evidence":["blueprint-alignment:a99J07:B6","candidate:se-math-4074935"]},
+    {"id":"answer","kind":"answer","claim":"The formal lemma is specialized to polynomials and only consumes that its evaluation point is in the closed unit disk; reflection already produces a polynomial, and |w| > 1 puts 1/w in that disk.","authority":"secondary","evidence":["blueprint-alignment:a99J07:B4","blueprint-alignment:a99J07:B6","blueprint-alignment:a99J07:B7","lean:Main.lean#apm_a99J07_poly_le_boundary"]},
+    {"id":"polynomial","kind":"premise","claim":"p.reflect N is a complex polynomial, hence its evaluation is continuous on the closed disk and differentiable on the open disk.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B4","lean:Main.lean#apm_a99J07_poly_le_boundary"]},
+    {"id":"inside-disk","kind":"premise","claim":"The point u = 1/w satisfies ‖u‖ ≤ 1.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B7","lean:Main.lean#hu"]},
+    {"id":"boundary-witness-warrant","kind":"warrant","claim":"apm_a99J07_poly_le_boundary uses compactness to choose a maximizer; if it is interior, Complex.norm_eqOn_closure_of_isPreconnected_of_isMaxOn makes the norm constant up to the boundary. It returns a boundary point v dominating the value at u.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B6","lean:Main.lean#apm_a99J07_poly_le_boundary","Mathlib:Complex.norm_eqOn_closure_of_isPreconnected_of_isMaxOn"]},
+    {"id":"boundary-witness","kind":"claim","claim":"There exists v with ‖v‖ = 1 and ‖(p.reflect N).eval u‖ ≤ ‖(p.reflect N).eval v‖.","authority":"formal-proof","evidence":["blueprint-alignment:a99J07:B6","lean:Main.lean#apm_a99J07_poly_le_boundary"]}
+  ],
+  "edges": [
+    {"from":"q","relation":"answered-by","to":"answer"},
+    {"from":"answer","relation":"cites-reason","to":"boundary-witness-warrant"},
+    {"from":"boundary-witness-warrant","relation":"requires","to":"polynomial"},
+    {"from":"boundary-witness-warrant","relation":"requires","to":"inside-disk"},
+    {"from":"boundary-witness-warrant","relation":"warrants","to":"boundary-witness"}
+  ]
+}
