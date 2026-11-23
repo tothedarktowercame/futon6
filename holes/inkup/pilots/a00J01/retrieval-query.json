@@ -1,0 +1,227 @@
+{
+ "schema": "inkup.retrieval-query/v0",
+ "problem": "a00J01",
+ "terms": [
+  {
+   "term": "essential supremum norm $\\|f\\|_{\\infty}$",
+   "kind": "object",
+   "source": "statement",
+   "quote": "State the definition of $\\|f\\|_{\\infty}$"
+  },
+  {
+   "term": "$L^{\\infty}([0,1])$ with Lebesgue measure",
+   "kind": "object",
+   "source": "statement",
+   "quote": "f\\in L^{\\infty}([0,1],\\mathcal{L},m)"
+  },
+  {
+   "term": "$\\lim_{p\\rightarrow \\infty}\\|f\\|_p=\\|f\\|_{\\infty}$",
+   "kind": "object",
+   "source": "statement",
+   "quote": "\\lim_{p\\rightarrow \\infty}\\|f\\|_p=\\|f\\|_{\\infty}"
+  },
+  {
+   "term": "$\\sigma$-algebra of Lebesgue measurable sets",
+   "kind": "object",
+   "source": "statement",
+   "quote": "the $\\sigma$-algebra of Lebesgue measurable sets"
+  },
+  {
+   "term": "Lebesgue measure $m$",
+   "kind": "object",
+   "source": "statement",
+   "quote": "is\nLebesgue measure"
+  },
+  {
+   "term": "on the interval $[0,1]$",
+   "kind": "surface",
+   "source": "statement",
+   "quote": "[0,1]"
+  },
+  {
+   "term": "essential supremum as an infimum over almost-everywhere bounds",
+   "kind": "object",
+   "source": "informal",
+   "quote": "\\inf\\{M \\geq 0 : m(\\{x : |f(x)| > M\\}) = 0\\}"
+  },
+  {
+   "term": "least bound holding almost everywhere",
+   "kind": "object",
+   "source": "informal",
+   "quote": "$|f| \\leq M$ almost everywhere"
+  },
+  {
+   "term": "L^p norm as p tends to infinity",
+   "kind": "transformation",
+   "source": "informal",
+   "quote": "$\\lim_{p\\to\\infty} \\|f\\|_p = \\|f\\|_\\infty$",
+   "anchor": true
+  },
+  {
+   "term": "upper bound by the essential supremum",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "**Upper bound: $\\limsup \\|f\\|_p \\leq \\|f\\|_\\infty$.**"
+  },
+  {
+   "term": "integral of $|f|^p$ over $[0,1]$",
+   "kind": "object",
+   "source": "informal",
+   "quote": "\\int|f|^p \\leq \\|f\\|_\\infty^p"
+  },
+  {
+   "term": "taking $p$-th roots",
+   "kind": "transformation",
+   "source": "informal",
+   "quote": "Taking $p$-th roots: $\\|f\\|_p \\leq \\|f\\|_\\infty$ for all $p \\geq 1$"
+  },
+  {
+   "term": "set of positive measure where $|f|$ exceeds $\\alpha$",
+   "kind": "object",
+   "source": "informal",
+   "quote": "The set $E_\\alpha = \\{x : |f(x)| > \\alpha\\}$ has $m(E_\\alpha) > 0$",
+   "anchor": true
+  },
+  {
+   "term": "restricting the integral to a level set",
+   "kind": "transformation",
+   "source": "informal",
+   "quote": "\\int_{E_\\alpha} |f|^p \\geq \\alpha^p \\cdot m(E_\\alpha)$"
+  },
+  {
+   "term": "measure of a set to the power $1/p$ tends to 1",
+   "kind": "transformation",
+   "source": "informal",
+   "quote": "$m(E_\\alpha)^{1/p} \\to 1$",
+   "anchor": true
+  },
+  {
+   "term": "lower bound by liminf",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "**Lower bound: $\\liminf \\|f\\|_p \\geq \\|f\\|_\\infty$.**"
+  },
+  {
+   "term": "finite measure space of total measure one",
+   "kind": "object",
+   "source": "informal",
+   "quote": "finite measure $m([0,1]) = 1$"
+  },
+  {
+   "term": "squeezing liminf and limsup",
+   "kind": "named-method",
+   "source": "informal",
+   "quote": "$\\|f\\|_\\infty \\leq \\liminf \\|f\\|_p \\leq \\limsup \\|f\\|_p \\leq \\|f\\|_\\infty$"
+  },
+  {
+   "term": "Hölder on a finite measure space",
+   "kind": "named-method",
+   "source": "proof-plan",
+   "quote": "Hölder on finite measure space"
+  },
+  {
+   "term": "norm comparison $\\|f\\|_p \\leq \\|f\\|_\\infty$ on a finite measure space",
+   "kind": "object",
+   "source": "proof-plan",
+   "quote": "implies ‖f‖_p ≤ ‖f‖_∞ on a finite measure space"
+  },
+  {
+   "term": "lower bound via level sets",
+   "kind": "strategic-move",
+   "source": "proof-plan",
+   "quote": "lower bound via level sets"
+  },
+  {
+   "term": "positive measure of the super-level set",
+   "kind": "object",
+   "source": "proof-plan",
+   "quote": "the set {|f| > α} has positive measure"
+  },
+  {
+   "term": "$t^{1/p} \\to 1$ for $t > 0$",
+   "kind": "transformation",
+   "source": "proof-plan",
+   "quote": "for t > 0, t^{1/p} → 1 as p → ∞"
+  },
+  {
+   "term": "one direction of the sandwich",
+   "kind": "strategic-move",
+   "source": "proof-plan",
+   "quote": "one direction of the sandwich"
+  },
+  {
+   "term": "monotonicity of the L^p norm in the exponent",
+   "kind": "transformation",
+   "source": "alignment:a00J01:B2",
+   "quote": "it uses monotonicity of the L^p norm in the exponent directly"
+  },
+  {
+   "term": "a bound at one exponent gives the same bound at all larger exponents",
+   "kind": "strategic-move",
+   "source": "alignment:a00J01:B6",
+   "quote": "a bound at one exponent gives the same bound at all larger exponents"
+  },
+  {
+   "term": "monotonicity of the L^p norm on a probability space",
+   "kind": "named-method",
+   "source": "alignment:a00J01:B6",
+   "quote": "monotonicity of the L^p norm on a probability space"
+  },
+  {
+   "term": "choose a level strictly between $\\alpha$ and the norm",
+   "kind": "strategic-move",
+   "source": "alignment:a00J01:B4",
+   "quote": "choose beta strictly between alpha and the norm"
+  },
+  {
+   "term": "keep the chosen level fixed while the exponent varies",
+   "kind": "strategic-move",
+   "source": "alignment:a00J01:B4",
+   "quote": "keep the chosen level fixed while the exponent varies"
+  },
+  {
+   "term": "a fixed positive measure disappears from the lower bound",
+   "kind": "transformation",
+   "source": "alignment:a00J01:B3",
+   "quote": "a fixed positive measure disappear from the lower bound"
+  },
+  {
+   "term": "two one-sided bounds produce a limit",
+   "kind": "strategic-move",
+   "source": "alignment:a00J01:B7",
+   "quote": "the two one-sided bounds produce a limit"
+  },
+  {
+   "term": "comparison of L^p norms on a space of unit measure",
+   "kind": "object",
+   "source": "alignment:a00J01:B2",
+   "quote": "it removes the measure factor in the comparison of L^p norms"
+  }
+ ],
+ "embedding_queries": [
+  {
+   "text": "For an essentially bounded measurable function on the unit interval, the L^p norm converges to the essential supremum norm as the exponent p tends to infinity.",
+   "source": "statement"
+  },
+  {
+   "text": "On a finite measure space the L^p norm of a function is at most its essential supremum norm, because the integral of |f|^p is at most the essential supremum to the p times the measure of the space.",
+   "source": "informal"
+  },
+  {
+   "text": "For a level below the essential supremum, the set where |f| exceeds the level has positive measure, so restricting the integral to that set gives a lower bound on the L^p norm by the level times the measure of the set to the power 1/p.",
+   "source": "informal"
+  },
+  {
+   "text": "For a positive real number t, t to the power 1/p tends to 1 as p tends to infinity.",
+   "source": "proof-plan"
+  },
+  {
+   "text": "It suffices to prove the lower bound at one exponent, since on a probability space the L^p norm is monotone in the exponent, so the bound holds for all larger exponents.",
+   "source": "alignment:a00J01:B6"
+  },
+  {
+   "text": "The upper bound on the limsup and the lower bound on the liminf squeeze the L^p norms to the essential supremum norm.",
+   "source": "alignment:a00J01:B7"
+  }
+ ]
+}
