@@ -1,0 +1,66 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a00J01:B2 — whether the upper bound by the essential-supremum norm needs p ≥ 1",
+  "sources": {
+    "blueprint-alignment": {
+      "path": "../pilots/a00J01/alignment.json",
+      "sha256": "2701f276207b79c511a2f42736c42e81f79b5a4639ca433f11cd7a051a21c13b"
+    },
+    "lean": {
+      "path": "apm-lean:problems/a00J01/lean/Main.lean",
+      "sha256": "89909aff4ced96b0820cf4c8d0b3a68aa21823cf33d04401d2515c7b1338e9bd"
+    }
+  },
+  "nodes": [
+    {
+      "id": "q",
+      "kind": "question",
+      "claim": "Does the upper comparison of the L^p norm with the essential-supremum norm require p ≥ 1, or does it hold for every exponent?",
+      "authority": "reader-question",
+      "evidence": ["blueprint-alignment:a00J01:B2", "candidate:se-math-9668"]
+    },
+    {
+      "id": "answer",
+      "kind": "answer",
+      "claim": "On the probability space [0,1] the comparison holds for every exponent p: the formal proof of the limit applies exponent monotonicity with p ≤ ⊤ and no lower restriction on p, and the hypothesis 1 ≤ p in the lemma upper_bound is not used by its proof. What the comparison does consume is unit total measure.",
+      "authority": "secondary",
+      "evidence": ["blueprint-alignment:a00J01:B2", "lean:Main.lean#upper_bound", "lean:Main.lean#eLpNorm_tendsto_top"]
+    },
+    {
+      "id": "exponent-below-top",
+      "kind": "premise",
+      "claim": "Every exponent p satisfies p ≤ ⊤.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B2", "Main.lean:eLpNorm_tendsto_top:le_top"]
+    },
+    {
+      "id": "probability-space",
+      "kind": "premise",
+      "claim": "The restricted volume measure on [0,1] is a probability measure.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B2", "Mathlib:IsProbabilityMeasure"]
+    },
+    {
+      "id": "comparison-warrant",
+      "kind": "warrant",
+      "claim": "eLpNorm_le_eLpNorm_of_exponent_le applied to p ≤ ⊤ gives eLpNorm f p μ ≤ eLpNorm f ⊤ μ on this probability space; in eLpNorm_tendsto_top it is applied to an arbitrary exponent p with no hypothesis 1 ≤ p.",
+      "authority": "mathlib",
+      "evidence": ["blueprint-alignment:a00J01:B2", "Mathlib:eLpNorm_le_eLpNorm_of_exponent_le", "lean:Main.lean#eLpNorm_tendsto_top"]
+    },
+    {
+      "id": "upper-bound-all-exponents",
+      "kind": "claim",
+      "claim": "For every exponent p, eLpNorm f p μ ≤ eLpNorm f ⊤ μ.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B2", "lean:Main.lean#eLpNorm_tendsto_top"]
+    }
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "comparison-warrant"},
+    {"from": "comparison-warrant", "relation": "requires", "to": "exponent-below-top"},
+    {"from": "comparison-warrant", "relation": "requires", "to": "probability-space"},
+    {"from": "comparison-warrant", "relation": "warrants", "to": "upper-bound-all-exponents"}
+  ]
+}
