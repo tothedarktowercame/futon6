@@ -1,0 +1,95 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a96J06",
+  "realizations": "holes/inkup/pilots/a96J06/reader-telling.expert-reference.md",
+  "content_plan": "holes/inkup/pilots/a96J06/content-plan.json",
+  "note": "Expert-only R5 sidecar. B0 and B3 are merged as planned; overlapping omitted obligations are recorded as unplanned partial answers.",
+  "profiles": {
+    "expert-reference": {
+      "nodes": [
+        {"node": "a96J06:B0", "status": "merged", "ink_words": 0, "ink_percent": 0.0, "planned_percent": 5, "planned_action": "compress", "merged_into": "a96J06:B6", "quote": "Therefore every positive-radius disk"},
+        {"node": "a96J06:B1", "status": "realized", "ink_words": 14, "ink_percent": 10.1, "planned_percent": 10, "planned_action": "show"},
+        {"node": "a96J06:B2", "status": "realized", "ink_words": 36, "ink_percent": 25.9, "planned_percent": 20, "planned_action": "expand"},
+        {"node": "a96J06:B3", "status": "merged", "ink_words": 0, "ink_percent": 0.0, "planned_percent": 5, "planned_action": "compress", "merged_into": "a96J06:B2", "quote": "Then (g) is holomorphic on the unit disk, maps it to the closed unit disk,\nfixes (0), and has (g'(0)=1)."},
+        {"node": "a96J06:B4", "status": "realized", "ink_words": 33, "ink_percent": 23.7, "planned_percent": 20, "planned_action": "show"},
+        {"node": "a96J06:B5", "status": "realized", "ink_words": 41, "ink_percent": 29.5, "planned_percent": 30, "planned_action": "expand"},
+        {"node": "a96J06:B6", "status": "realized", "ink_words": 15, "ink_percent": 10.8, "planned_percent": 10, "planned_action": "show"}
+      ],
+      "questions": [
+        {
+          "question": "scaling-strategy",
+          "blueprint_node": "a96J06:B2",
+          "status": "answered",
+          "node": "a96J06:B2",
+          "quote": "Schwarz rigidity uses the unit disk, but the assumption has radius\n(r).  Rescale:\n\n\\[\ng(w)=r^{-1}p(rw).\n\\]",
+          "ink_words": 16,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "gap", "relation": "resolved-by", "to": "scale"}}
+          ]
+        },
+        {
+          "question": "rotation-specializes-to-identity",
+          "blueprint_node": "a96J06:B4",
+          "status": "answered",
+          "node": "a96J06:B4",
+          "quote": "Here (\\operatorname{dslope}(g,0,0)=g'(0)=1) and (g(0)=0), so the affine\nslope is exactly (1) and the formula reduces to (g(w)=w); no arbitrary\nrotation factor remains.",
+          "ink_words": 22,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "requires", "to": "derivative-one"}},
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "warrants", "to": "identity-on-unit-ball"}}
+          ]
+        },
+        {
+          "question": "coefficient-extensionality",
+          "blueprint_node": "a96J06:B5",
+          "status": "answered",
+          "node": "a96J06:B5",
+          "quote": "Applying the degree-(N) coefficient\nfunction to that equality makes their degree-(N) coefficients equal; these are\n(c_N) and (0), since (N\\ge2).  Thus (c_N=0), contrary to hypothesis.",
+          "ink_words": 25,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "coefficient-congruence-warrant", "relation": "warrants", "to": "coefficient-equality"}},
+            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "top-zero-warrant", "relation": "warrants", "to": "coefficient-zero"}}
+          ]
+        }
+      ],
+      "unplanned_answers": [
+        {
+          "question": "schwarz-applicability-by-normalization",
+          "decision": "omit",
+          "status": "partly-answered",
+          "node": "a96J06:B2",
+          "quote": "Then (g) is holomorphic on the unit disk, maps it to the closed unit disk,\nfixes (0), and has (g'(0)=1).",
+          "ink_words": 20,
+          "missing": "States the converted hypotheses but omits the radius-r to unit-disk bound calculation.",
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "unit-bound", "relation": "enables", "to": "schwarz"}}
+          ]
+        },
+        {
+          "question": "schwarz-rigidity-connection",
+          "decision": "omit",
+          "status": "partly-answered",
+          "node": "a96J06:B4",
+          "quote": "The equality case gives, on the unit disk,\n\n\\[\ng(w)=g(0)+(w-0)\\operatorname{dslope}(g,0,0).\n\\]",
+          "ink_words": 11,
+          "missing": "States the affine conclusion but omits the equality-case lemma's full hypothesis inventory.",
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "affine-equality-warrant", "relation": "warrants", "to": "affine-on-unit-ball"}}
+          ]
+        },
+        {
+          "question": "fixed-point-applicability",
+          "decision": "omit",
+          "status": "partly-answered",
+          "node": "a96J06:B4",
+          "quote": "Here (\\operatorname{dslope}(g,0,0)=g'(0)=1) and (g(0)=0), so the affine\nslope is exactly (1) and the formula reduces to (g(w)=w)",
+          "ink_words": 17,
+          "missing": "Shows the fixed point simplifying the affine conclusion but does not explain its earlier use in centering the target ball or that it is not a hypothesis of the equality-case lemma.",
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "requires", "to": "fixed-zero"}}
+          ]
+        }
+      ]
+    }
+  }
+}
