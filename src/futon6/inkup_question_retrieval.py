@@ -49,6 +49,10 @@ EMBEDDING_MATCH_SCOPE = "title + first 500 chars of question + first 500 chars o
 # command names (alpha, infty) behind, and single letters would match almost every post.
 ANCHOR_TOKEN_SHARE = 0.6
 ANCHOR_MIN_TOKENS = 2
+# Function words are not content tokens of an anchor: with them, "as", "to" and "norm" alone
+# satisfied the anchor "L^p norm as p tends to infinity". ("to" is also what \to leaves.)
+ANCHOR_STOPWORDS = frozenset(
+    "a an and are as at be by for from in is it of on or that the this to where which with".split())
 
 Encode = Callable[[list[str]], np.ndarray]
 
@@ -317,9 +321,9 @@ def _counts(title: list[str], body: list[str], phrases: dict[str, list[str]]) ->
 
 def anchor_required_tokens(anchor: str) -> tuple[set[str], int]:
     """(distinct content tokens, how many a document must contain) for one anchor term."""
-    tokens = {token for token in tokenize(anchor) if len(token) >= 2}
+    tokens = {token for token in tokenize(anchor) if len(token) >= 2 and token not in ANCHOR_STOPWORDS}
     if not tokens:
-        raise ValueError(f"anchor term has no content token of length >= 2: {anchor!r}")
+        raise ValueError(f"anchor term has no content token (length >= 2, not a function word): {anchor!r}")
     return tokens, min(len(tokens), max(ANCHOR_MIN_TOKENS, int(np.ceil(ANCHOR_TOKEN_SHARE * len(tokens)))))
 
 
@@ -330,7 +334,7 @@ def anchors_admitting(document_tokens: set[str], anchors: dict[str, tuple[set[st
 
 
 ANCHOR_RULE = (f"a document is a lexical candidate only if, for at least one anchor term, it contains "
-               f"at least {ANCHOR_TOKEN_SHARE:.0%} of that term's distinct tokens of length >= 2 "
+               f"at least {ANCHOR_TOKEN_SHARE:.0%} of that term's distinct tokens of length >= 2 (function words excluded) "
                f"(never fewer than {ANCHOR_MIN_TOKENS}), in title or question body")
 
 

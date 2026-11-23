@@ -640,3 +640,25 @@ def test_the_anchor_rule_does_not_touch_the_embedding_method(tmp_path, embedder)
              (outdir / "question-candidates.jsonl").read_text(encoding="utf-8").splitlines()]
     key = lambda cs: [(c["site"], c["thread_id"], round(c["score"], 6)) for c in cs if c["method"] == "embedding"]
     assert key(anchored) == key(plain) and key(anchored)
+
+
+def test_function_words_are_not_anchor_content_tokens():
+    """Before this, "as", "to" and "norm" alone satisfied the first a00J01 anchor."""
+    tokens, required = retrieval.anchor_required_tokens("L^p norm as p tends to infinity")
+    assert (tokens, required) == ({"norm", "tend", "infinity"}, 2)
+    spec = {"anchor": (tokens, required)}
+    assert retrieval.anchors_admitting({"as", "to", "norm"}, spec) == []
+    assert retrieval.anchors_admitting({"norm", "infinity"}, spec) == ["anchor"]
+
+
+def test_anchor_tokens_only_in_the_answer_body_do_not_admit(tmp_path):
+    store = tmp_path / "entities.json"
+    store.write_text(json.dumps([
+        {"entity/id": "se-math-1", "title": "A polynomial question", "question-body": "Why is this polynomial bounded?",
+         "answer-body": "Use the Schwarz lemma."},
+        {"entity/id": "se-math-2", "title": "Schwarz lemma", "question-body": "A polynomial and the Schwarz lemma.",
+         "answer-body": ""},
+    ]), encoding="utf-8")
+    result = retrieval.lexical_retrieve(store, ["schwarz lemma", "polynomial"], 10, anchors=["schwarz lemma"])
+    assert [hit[2]["entity/id"] for hit in result["hits"]] == ["se-math-2"]
+    assert result["anchor_filter"]["documents_passing"] == 1

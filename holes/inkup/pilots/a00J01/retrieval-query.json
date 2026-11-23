@@ -6,7 +6,8 @@
    "term": "essential supremum norm $\\|f\\|_{\\infty}$",
    "kind": "object",
    "source": "statement",
-   "quote": "State the definition of $\\|f\\|_{\\infty}$"
+   "quote": "State the definition of $\\|f\\|_{\\infty}$",
+   "anchor": true
   },
   {
    "term": "$L^{\\infty}([0,1])$ with Lebesgue measure",
@@ -79,8 +80,7 @@
    "term": "set of positive measure where $|f|$ exceeds $\\alpha$",
    "kind": "object",
    "source": "informal",
-   "quote": "The set $E_\\alpha = \\{x : |f(x)| > \\alpha\\}$ has $m(E_\\alpha) > 0$",
-   "anchor": true
+   "quote": "The set $E_\\alpha = \\{x : |f(x)| > \\alpha\\}$ has $m(E_\\alpha) > 0$"
   },
   {
    "term": "restricting the integral to a level set",
@@ -92,8 +92,7 @@
    "term": "measure of a set to the power $1/p$ tends to 1",
    "kind": "transformation",
    "source": "informal",
-   "quote": "$m(E_\\alpha)^{1/p} \\to 1$",
-   "anchor": true
+   "quote": "$m(E_\\alpha)^{1/p} \\to 1$"
   },
   {
    "term": "lower bound by liminf",
