@@ -1,0 +1,149 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a00J01",
+  "realizations": "holes/inkup/pilots/a00J01/publication-telling.md",
+  "content_plan": "holes/inkup/pilots/a00J01/content-plan.json",
+  "note": "Publication-profile P4 sidecar. Quotes are verbatim and graph_support identifies each anticipated answer.",
+  "profiles": {
+    "publication": {
+      "nodes": [
+        {
+          "node": "a00J01:B0",
+          "status": "merged",
+          "merged_into": "a00J01:B7",
+          "quote": "Combining this eventual lower bound for every \\(\\alpha<L\\) with B2\nyields \\(\\lVert f\\rVert_p\\to L=\\lVert f\\rVert_\\infty\\).",
+          "ink_words": 0,
+          "ink_percent": 0,
+          "planned_percent": 0,
+          "planned_action": "omit"
+        },
+        {
+          "node": "a00J01:B1",
+          "status": "realized",
+          "ink_words": 19,
+          "ink_percent": 14.0,
+          "planned_percent": 5,
+          "planned_action": "compress"
+        },
+        {
+          "node": "a00J01:B2",
+          "status": "realized",
+          "ink_words": 8,
+          "ink_percent": 5.9,
+          "planned_percent": 15,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B3",
+          "status": "realized",
+          "ink_words": 7,
+          "ink_percent": 5.1,
+          "planned_percent": 5,
+          "planned_action": "compress"
+        },
+        {
+          "node": "a00J01:B4",
+          "status": "realized",
+          "ink_words": 37,
+          "ink_percent": 27.2,
+          "planned_percent": 30,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B5",
+          "status": "realized",
+          "ink_words": 27,
+          "ink_percent": 19.9,
+          "planned_percent": 20,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B6",
+          "status": "realized",
+          "ink_words": 23,
+          "ink_percent": 16.9,
+          "planned_percent": 15,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B7",
+          "status": "realized",
+          "ink_words": 15,
+          "ink_percent": 11.0,
+          "planned_percent": 10,
+          "planned_action": "show"
+        }
+      ],
+      "questions": [
+        {
+          "question": "why-level-set-strategy",
+          "status": "answered",
+          "node": "a00J01:B4",
+          "quote": "Fix \\(\\alpha<L\\), choose \\(\\alpha<\\beta<L\\), take a measurable\nrepresentative \\(g=f\\) almost everywhere, and, to obtain one lower region\nwhile the exponent varies, set \\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\).\nIf \\(\\mu(s)=0\\), then \\(\\lVert g\\rVert_\\infty\\le\\beta\\), whence\n\\(L\\le\\beta\\), a contradiction; moreover, \\(\\mu(s)<\\infty\\) since\n\\(\\mu(\\text{univ})=1\\).",
+          "ink_words": 37,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+              "edge": {
+                "from": "gap",
+                "relation": "resolved-by",
+                "to": "choose-level-set"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+              "edge": {
+                "from": "positive-measure-conversion",
+                "relation": "enables",
+                "to": "lower-bound-method"
+              }
+            }
+          ]
+        },
+        {
+          "question": "level-set-positive-measure",
+          "status": "answered",
+          "node": "a00J01:B4",
+          "quote": "Fix \\(\\alpha<L\\), choose \\(\\alpha<\\beta<L\\), take a measurable\nrepresentative \\(g=f\\) almost everywhere, and, to obtain one lower region\nwhile the exponent varies, set \\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\).\nIf \\(\\mu(s)=0\\), then \\(\\lVert g\\rVert_\\infty\\le\\beta\\), whence\n\\(L\\le\\beta\\), a contradiction; moreover, \\(\\mu(s)<\\infty\\) since\n\\(\\mu(\\text{univ})=1\\).",
+          "ink_words": 37,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-level-set-positive-measure.json",
+              "edge": {
+                "from": "positive-measure-warrant",
+                "relation": "warrants",
+                "to": "positive-measure"
+              }
+            }
+          ]
+        },
+        {
+          "question": "monotonicity-extension",
+          "status": "answered",
+          "node": "a00J01:B6",
+          "quote": "For \\(p\\ge n\\), exponent monotonicity on the probability space gives\n\\(\\lVert g\\rVert_n\\le\\lVert g\\rVert_p\\); combining this with B5 and\nalmost-everywhere equality gives\n\\(\\alpha\\le\\lVert f\\rVert_p\\).",
+          "ink_words": 23,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+              "edge": {
+                "from": "monotonicity-warrant",
+                "relation": "warrants",
+                "to": "monotone-comparison"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+              "edge": {
+                "from": "extension-warrant",
+                "relation": "warrants",
+                "to": "eventual-lower-bound"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}
