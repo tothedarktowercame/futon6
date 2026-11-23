@@ -63,12 +63,12 @@
         "depends_on": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
         "argument_roles": {
           "type": "array",
-          "items": {"enum": ["goal", "assumption", "normalization", "side-condition", "lemma-application", "identity", "contradiction", "closure"]},
+          "items": {"enum": ["goal", "assumption", "normalization", "side-condition", "lemma-application", "identity", "contradiction", "closure", "estimate", "limit", "case-split", "auxiliary-construction", "substitution"]},
           "uniqueItems": true
         },
         "expository_roles": {
           "type": "array",
-          "items": {"enum": ["overview", "motivation", "assumption", "definition", "bridge", "calculation", "citation", "closure", "audit-detail"]},
+          "items": {"enum": ["overview", "motivation", "assumption", "definition", "bridge", "calculation", "citation", "closure", "audit-detail", "estimate", "case-split", "formal-conversion"]},
           "uniqueItems": true
         },
         "reader_obligations": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1},

@@ -59,8 +59,8 @@
       "parent": "a00J01:B0",
       "obligation": "On the probability space [0,1], the L^p norm is at most the essential-supremum norm for every exponent p at least 1.",
       "depends_on": ["a00J01:B1"],
-      "argument_roles": ["lemma-application"],
-      "expository_roles": ["calculation", "citation"],
+      "argument_roles": ["estimate"],
+      "expository_roles": ["estimate", "citation"],
       "reader_obligations": ["Say where unit measure of the space is used: it removes the measure factor in the comparison of L^p norms."],
       "anchors": [
         {"source": "proof-plan", "ref": ":strategy :upper-bound", "relation": "states", "review": "model-proposed"},
@@ -74,7 +74,7 @@
       "parent": "a00J01:B0",
       "obligation": "For every positive real t, the powers t^{1/n} tend to 1 as the natural number n tends to infinity.",
       "depends_on": [],
-      "argument_roles": ["lemma-application"],
+      "argument_roles": ["limit"],
       "expository_roles": ["calculation", "bridge"],
       "reader_obligations": ["Recognize this as the analytic fact that lets a fixed positive measure disappear from the lower bound."],
       "anchors": [
@@ -88,7 +88,7 @@
       "parent": "a00J01:B0",
       "obligation": "For a level alpha strictly below the norm, choose beta strictly between alpha and the norm, and show the super-level set where the function exceeds beta is measurable with positive, finite measure.",
       "depends_on": ["a00J01:B1"],
-      "argument_roles": ["assumption", "side-condition"],
+      "argument_roles": ["auxiliary-construction", "side-condition"],
       "expository_roles": ["definition", "calculation", "audit-detail"],
       "reader_obligations": ["Justify positive measure from the definition of the essential supremum, and keep the chosen level fixed while the exponent varies."],
       "anchors": [
@@ -103,8 +103,8 @@
       "parent": "a00J01:B0",
       "obligation": "Using the limit of B3 and the level set of B4, find one natural number n for which alpha is at most beta times the measure of the level set to the power 1/n, and hence at most the L^n norm on that set.",
       "depends_on": ["a00J01:B3", "a00J01:B4"],
-      "argument_roles": ["lemma-application"],
-      "expository_roles": ["calculation", "bridge"],
+      "argument_roles": ["estimate"],
+      "expository_roles": ["estimate", "bridge", "formal-conversion"],
       "reader_obligations": ["See the lower bound as a bound on one fixed set: the L^p norm is at least the level times the measure of the set to the power 1/p."],
       "anchors": [
         {"source": "informal", "ref": "\\|f\\|_p^p \\geq \\int_{E_\\alpha} |f|^p \\geq \\alpha^p \\cdot m(E_\\alpha)", "relation": "explains", "review": "model-proposed"},
@@ -117,7 +117,7 @@
       "parent": "a00J01:B0",
       "obligation": "Extend the bound from that one exponent n to every exponent p at least n by monotonicity of the L^p norm on a probability space: eventually the L^p norm is at least alpha, for every alpha below the norm.",
       "depends_on": ["a00J01:B5"],
-      "argument_roles": ["lemma-application", "identity"],
+      "argument_roles": ["estimate", "lemma-application"],
       "expository_roles": ["bridge", "audit-detail"],
       "reader_obligations": ["Explain why a bound at one exponent gives the same bound at all larger exponents, and why it suffices to prove the lower bound for every level strictly below the norm."],
       "anchors": [
@@ -131,7 +131,7 @@
       "parent": "a00J01:B0",
       "obligation": "Combine the upper bound and the eventual lower bound into the limit: the L^p norms tend to the essential-supremum norm as p tends to infinity.",
       "depends_on": ["a00J01:B2", "a00J01:B6"],
-      "argument_roles": ["closure"],
+      "argument_roles": ["limit", "closure"],
       "expository_roles": ["closure"],
       "reader_obligations": ["Say how the two one-sided bounds produce a limit, and restore the full exponent range."],
       "anchors": [

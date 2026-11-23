@@ -116,14 +116,8 @@
    "parent": "a99J07:B0",
    "obligation": "Split the claim on the size of |w|: the case |w| at most 1, where the factor max{1,|w|}^N equals 1, and the case |w| greater than 1, where it equals |w|^N and the norm on the disk gives nothing directly.",
    "depends_on": [],
-   "argument_roles": [
-    "assumption",
-    "side-condition"
-   ],
-   "expository_roles": [
-    "overview",
-    "bridge"
-   ],
+   "argument_roles": ["case-split"],
+   "expository_roles": ["case-split", "overview"],
    "reader_obligations": [
     "Say why the two cases need different arguments: inside the disk the claim is the definition of the norm, outside it the disk says nothing about p(w)."
    ],
@@ -204,14 +198,8 @@
    "parent": "a99J07:B0",
    "obligation": "Introduce the auxiliary polynomial q(z) = z^N p(1/z) (the reflection of p), so that q(1/w) * w^N = p(w); q is a polynomial of degree at most N, hence no issue arises at z = 0.",
    "depends_on": [],
-   "argument_roles": [
-    "normalization",
-    "identity"
-   ],
-   "expository_roles": [
-    "definition",
-    "bridge"
-   ],
+   "argument_roles": ["auxiliary-construction"],
+   "expository_roles": ["definition", "bridge"],
    "reader_obligations": [
     "See why this is the object to invent: it turns a statement about p outside the disk into a statement about a polynomial inside the disk. Verify the identity q(z) z^N = p(1/z) for z not zero."
    ],
@@ -251,13 +239,8 @@
     "a99J07:B1",
     "a99J07:B4"
    ],
-   "argument_roles": [
-    "lemma-application",
-    "side-condition"
-   ],
-   "expository_roles": [
-    "calculation"
-   ],
+   "argument_roles": ["estimate", "side-condition"],
+   "expository_roles": ["estimate"],
    "reader_obligations": [
     "Use that v on the unit circle is not zero and has inverse of modulus one, then apply the bound from the disk to the point 1/v."
    ],
@@ -344,14 +327,8 @@
     "a99J07:B5",
     "a99J07:B6"
    ],
-   "argument_roles": [
-    "lemma-application",
-    "identity"
-   ],
-   "expository_roles": [
-    "calculation",
-    "bridge"
-   ],
+   "argument_roles": ["substitution", "estimate"],
+   "expository_roles": ["calculation", "bridge"],
    "reader_obligations": [
     "Carry the substitution z = 1/w through the identity, and note where |w| > 1 is used: it makes 1/w a point of the disk and makes max{1,|w|} equal |w|."
    ],
@@ -398,12 +375,8 @@
     "a99J07:B3",
     "a99J07:B7"
    ],
-   "argument_roles": [
-    "closure"
-   ],
-   "expository_roles": [
-    "closure"
-   ],
+   "argument_roles": ["closure"],
+   "expository_roles": ["closure", "case-split"],
    "reader_obligations": [
     "Say explicitly that the two cases cover the plane, so the two partial bounds add up to the full claim."
    ],
