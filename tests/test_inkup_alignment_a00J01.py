@@ -6,13 +6,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PILOT = ROOT / "holes/inkup/pilots/a00J01"
-spec = importlib.util.spec_from_file_location("validate_alignment", PILOT / "validate_alignment.py")
+spec = importlib.util.spec_from_file_location("validate_alignment", PILOT.parent / "validate_alignment.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 
 def validate_doc(tmp_path, doc):
-    path = tmp_path / "alignment.json"
+    path = tmp_path / doc.get("problem", "unknown") / "alignment.json"  # pilot directory must match the problem id
+    path.parent.mkdir(exist_ok=True)
     path.write_text(json.dumps(doc, ensure_ascii=False))
     return module.validate(path)[1]
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Validate the a00J01 Blueprint alignment without external packages.
+"""Validate an InkUp Blueprint alignment (any pilot problem) without external packages.
 
 Checks the alignment against the schema beside the a96J06 pilot (with the
-problem id and node-id pattern read for this problem), then against its
+problem id and node-id pattern read for the alignment being checked), then against its
 sources: files exist, hashes match, dependencies exist and are acyclic, and
 every Lean anchor names identifiers that occur in Main.lean.  No realization,
 ink or grammar file is required yet.
@@ -16,8 +16,7 @@ import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PROBLEM = "a00J01"
-SCHEMA = HERE.parent / "a96J06" / "alignment.schema.json"
+SCHEMA = HERE / "a96J06" / "alignment.schema.json"
 PROFILE_IDS = ["expert-reference", "teaching", "formal-audit"]
 
 # Source paths are written "<root>:<relative path>" so that the record holds no
@@ -25,7 +24,7 @@ PROFILE_IDS = ["expert-reference", "teaching", "formal-audit"]
 # INKUP_APM_LEAN_ROOT says otherwise; storage is the storage home (run output,
 # never in a repo), ~/storage unless INKUP_STORAGE_ROOT says otherwise.
 SOURCE_ROOTS = {
-    "apm-lean": Path(os.environ.get("INKUP_APM_LEAN_ROOT", HERE.parents[4] / "apm-lean")),
+    "apm-lean": Path(os.environ.get("INKUP_APM_LEAN_ROOT", HERE.parents[3] / "apm-lean")),
     "storage": Path(os.environ.get("INKUP_STORAGE_ROOT", Path.home() / "storage")),
 }
 # The schema is written for a96J06 only (``problem`` const and node-id pattern);
@@ -124,14 +123,19 @@ def validate(alignment: Path, schema_path: Path = SCHEMA,
     roots = roots or SOURCE_ROOTS
     try:
         doc = json.loads(alignment.read_text())
-        SCHEMA_DOC = json.loads(schema_path.read_text())
+        schema_text = schema_path.read_text()
     except (OSError, ValueError) as exc:
         return {}, [f"AL000 cannot read alignment or schema: {exc}"]
-    SCHEMA_DOC = json.loads(json.dumps(SCHEMA_DOC).replace(SCHEMA_PROBLEM, PROBLEM))
+    PROBLEM = doc.get("problem") if isinstance(doc.get("problem"), str) else ""
+    SCHEMA_DOC = json.loads(schema_text.replace(SCHEMA_PROBLEM, PROBLEM))
 
     check_schema(doc, SCHEMA_DOC, "alignment", errors)
-    if doc.get("schema") != "inkup.blueprint-lineage/v0" or doc.get("problem") != PROBLEM:
-        errors.append(f"AL000 wrong pilot identity: expected {PROBLEM}")
+    if doc.get("schema") != "inkup.blueprint-lineage/v0":
+        errors.append("AL000 wrong pilot identity: schema must be inkup.blueprint-lineage/v0")
+    # The problem id is read from the record, so tie it to the pilot directory it lives in.
+    if not PROBLEM or alignment.resolve().parent.name != PROBLEM:
+        errors.append(f"AL000 wrong pilot identity: problem {PROBLEM!r} in pilot directory "
+                      f"{alignment.resolve().parent.name!r}")
     if [profile.get("id") for profile in doc.get("profiles", [])] != PROFILE_IDS:
         errors.append(f"AL001 profiles must be exactly {PROFILE_IDS} in that order")
 
@@ -233,7 +237,7 @@ def validate(alignment: Path, schema_path: Path = SCHEMA,
 def main() -> None:
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("alignment", type=Path, nargs="?", default=HERE / "alignment.json")
+    parser.add_argument("alignment", type=Path, help="path to the pilot's alignment.json")
     doc, errors = validate(parser.parse_args().alignment)
     for error in errors:
         print(error)
@@ -243,7 +247,7 @@ def main() -> None:
     for node in doc["nodes"]:
         for anchor in node["anchors"]:
             counts[anchor["review"]] = counts.get(anchor["review"], 0) + 1
-    print(f"valid {PROBLEM} lineage: {len(doc['nodes'])} nodes, {len(doc['profiles'])} profiles")
+    print(f"valid {doc['problem']} lineage: {len(doc['nodes'])} nodes, {len(doc['profiles'])} profiles")
     print("spine: " + "; ".join(f"{node['id'].split(':')[1]} <- {','.join(d.split(':')[1] for d in node['depends_on']) or '-'}"
                                for node in doc["nodes"]))
     print("anchor review states: " + ", ".join(f"{key}={counts[key]}" for key in sorted(counts)))

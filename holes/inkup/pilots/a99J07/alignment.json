@@ -1,0 +1,488 @@
+{
+ "schema": "inkup.blueprint-lineage/v0",
+ "problem": "a99J07",
+ "sources": {
+  "proof-plan": {
+   "path": "apm-lean:problems/a99J07/proof-plan.edn",
+   "sha256": "9996baf7e55fb67056d879c3c9b7ef9cc4c587e611bff9ae5ca3fc83db3cf8c2"
+  },
+  "informal": {
+   "path": "apm-lean:problems/a99J07/informal-solution.md",
+   "sha256": "c0b2d02951ea21f2bc1921cca8ce0e468e77c1fb0ef70ddec24639809b1d7a1f"
+  },
+  "lean": {
+   "path": "apm-lean:problems/a99J07/lean/Main.lean",
+   "sha256": "2632c9cdd4cb69ba4ce8632661a1e5d676a0aa9fbae192b4fb0de6037d688e39"
+  },
+  "mark8-candidate": {
+   "path": "storage:apm/mining/runs/apm-501-xi-r1/artifacts/candidates/a99J07__p0.candidate.json",
+   "sha256": "738d93b0dd3dad89a6cc7f48b486dd25a64f86d6602af0d4c51f87c0d3283216"
+  },
+  "mark8-s3": {
+   "path": "storage:apm/mining/runs/apm-501-xi-r1/artifacts/graphs/a99J07__p0.edn",
+   "sha256": "3e3cfe89d1d8818173d50d0a75de019c9014bbe85389e6f6f7b82dd4ff61624d"
+  }
+ },
+ "nodes": [
+  {
+   "id": "a99J07:B0",
+   "parent": null,
+   "obligation": "For a complex polynomial of degree N at least 1, prove that its modulus at any point is at most its supremum on the closed unit disk times max{1, |w|}^N.",
+   "depends_on": [
+    "a99J07:B8"
+   ],
+   "argument_roles": [
+    "goal"
+   ],
+   "expository_roles": [
+    "overview"
+   ],
+   "reader_obligations": [
+    "Keep in view that one norm, taken on the unit disk, has to control the polynomial on the whole plane."
+   ],
+   "anchors": [
+    {
+     "source": "proof-plan",
+     "ref": ":goal",
+     "relation": "states",
+     "review": "model-proposed"
+    },
+    {
+     "source": "informal",
+     "ref": "*Key insight.*",
+     "relation": "motivates",
+     "review": "model-proposed"
+    },
+    {
+     "source": "lean",
+     "ref": "theorem apm_a99j07",
+     "relation": "implements",
+     "review": "model-proposed",
+     "note": "The Lean theorem states the bound for every w; the supremum is the definition `a99J07SupNormUnitDisk` rather than a hypothesis. The hypothesis `hN : 1 ≤ N` is never used in the proof body."
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n11",
+     "relation": "states",
+     "review": "model-proposed"
+    }
+   ]
+  },
+  {
+   "id": "a99J07:B1",
+   "parent": "a99J07:B0",
+   "obligation": "Define the norm as the supremum of |p| over the closed unit disk, and show it bounds |p| at every point of that disk: the supremum is of a set that compactness of the disk makes bounded above.",
+   "depends_on": [],
+   "argument_roles": [
+    "assumption"
+   ],
+   "expository_roles": [
+    "definition",
+    "calculation"
+   ],
+   "reader_obligations": [
+    "Note that the disk is closed, so the supremum is over a compact set; this is what makes the supremum bound every value on the disk."
+   ],
+   "anchors": [
+    {
+     "source": "proof-plan",
+     "ref": ":terms",
+     "relation": "states",
+     "review": "model-proposed"
+    },
+    {
+     "source": "informal",
+     "ref": "by definition, and",
+     "relation": "explains",
+     "review": "model-proposed",
+     "note": "The informal proof uses the definition of the norm directly. Lean defines the norm as a supremum of attained values and needs a separate compactness lemma (`apm_a99J07_supNorm_bddAbove`) before `le_csSup` gives the bound in `apm_a99J07_eval_le_supNorm`."
+    },
+    {
+     "source": "lean",
+     "ref": "a99J07SupNormUnitDisk: apm_a99J07_supNorm_bddAbove, apm_a99J07_eval_le_supNorm",
+     "relation": "implements",
+     "review": "model-proposed"
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n8,:n9",
+     "relation": "states",
+     "review": "model-proposed"
+    }
+   ]
+  },
+  {
+   "id": "a99J07:B2",
+   "parent": "a99J07:B0",
+   "obligation": "Split the claim on the size of |w|: the case |w| at most 1, where the factor max{1,|w|}^N equals 1, and the case |w| greater than 1, where it equals |w|^N and the norm on the disk gives nothing directly.",
+   "depends_on": [],
+   "argument_roles": [
+    "assumption",
+    "side-condition"
+   ],
+   "expository_roles": [
+    "overview",
+    "bridge"
+   ],
+   "reader_obligations": [
+    "Say why the two cases need different arguments: inside the disk the claim is the definition of the norm, outside it the disk says nothing about p(w)."
+   ],
+   "anchors": [
+    {
+     "source": "proof-plan",
+     "ref": ":strategy :s1",
+     "relation": "states",
+     "review": "model-proposed"
+    },
+    {
+     "source": "informal",
+     "ref": "split into $|w|\\leq 1$ vs $|w|\\geq 1$",
+     "relation": "explains",
+     "review": "model-proposed",
+     "note": "The informal remarks split at |w| <= 1 versus |w| >= 1, which overlap at |w| = 1; Lean splits on ‖w‖ <= 1 and its negation 1 < ‖w‖. The proof-plan lists the two cases as separate strategies without a split node."
+    },
+    {
+     "source": "lean",
+     "ref": "theorem apm_a99j07: hw, hwlt",
+     "relation": "implements",
+     "review": "model-proposed"
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n1",
+     "relation": "states",
+     "review": "model-proposed"
+    }
+   ]
+  },
+  {
+   "id": "a99J07:B3",
+   "parent": "a99J07:B0",
+   "obligation": "Case |w| at most 1: |p(w)| is at most the norm by its definition, and max{1,|w|}^N = 1, so the bound holds.",
+   "depends_on": [
+    "a99J07:B1",
+    "a99J07:B2"
+   ],
+   "argument_roles": [
+    "lemma-application"
+   ],
+   "expository_roles": [
+    "calculation"
+   ],
+   "reader_obligations": [
+    "Check that the right-hand side collapses to the norm in this case, so there is nothing to prove beyond the definition."
+   ],
+   "anchors": [
+    {
+     "source": "proof-plan",
+     "ref": ":strategy :s1",
+     "relation": "states",
+     "review": "model-proposed"
+    },
+    {
+     "source": "informal",
+     "ref": "If $|w|\\leq 1$, then",
+     "relation": "explains",
+     "review": "model-proposed"
+    },
+    {
+     "source": "lean",
+     "ref": "apm_a99J07_eval_le_supNorm: hw",
+     "relation": "implements",
+     "review": "model-proposed"
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n9",
+     "relation": "states",
+     "review": "model-proposed"
+    }
+   ]
+  },
+  {
+   "id": "a99J07:B4",
+   "parent": "a99J07:B0",
+   "obligation": "Introduce the auxiliary polynomial q(z) = z^N p(1/z) (the reflection of p), so that q(1/w) * w^N = p(w); q is a polynomial of degree at most N, hence no issue arises at z = 0.",
+   "depends_on": [],
+   "argument_roles": [
+    "normalization",
+    "identity"
+   ],
+   "expository_roles": [
+    "definition",
+    "bridge"
+   ],
+   "reader_obligations": [
+    "See why this is the object to invent: it turns a statement about p outside the disk into a statement about a polynomial inside the disk. Verify the identity q(z) z^N = p(1/z) for z not zero."
+   ],
+   "anchors": [
+    {
+     "source": "proof-plan",
+     "ref": ":terms",
+     "relation": "motivates",
+     "review": "model-proposed"
+    },
+    {
+     "source": "informal",
+     "ref": "define $q(z)=z^N p(1/z)$",
+     "relation": "explains",
+     "review": "model-proposed",
+     "note": "The auxiliary object differs in form. The informal proof defines q(z)=z^N p(1/z) and remarks it is analytic on the closed disk; Lean takes Mathlib's `p.reflect N`, a polynomial by construction, with the explicit side condition p.natDegree <= N and no analyticity argument. The proof-plan Stage 3 predicted `Polynomial.reverse`; Lean does not use it."
+    },
+    {
+     "source": "lean",
+     "ref": "apm_a99J07_reflect_boundary: heval",
+     "relation": "implements",
+     "review": "model-proposed"
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n2,:n4",
+     "relation": "states",
+     "review": "model-proposed"
+    }
+   ]
+  },
+  {
+   "id": "a99J07:B5",
+   "parent": "a99J07:B0",
+   "obligation": "On the unit circle the auxiliary polynomial is bounded by the norm: for |v| = 1, |q(v)| = |p(1/v)| is at most the norm, because 1/v lies on the circle and inside the disk.",
+   "depends_on": [
+    "a99J07:B1",
+    "a99J07:B4"
+   ],
+   "argument_roles": [
+    "lemma-application",
+    "side-condition"
+   ],
+   "expository_roles": [
+    "calculation"
+   ],
+   "reader_obligations": [
+    "Use that v on the unit circle is not zero and has inverse of modulus one, then apply the bound from the disk to the point 1/v."
+   ],
+   "anchors": [
+    {
+     "source": "proof-plan",
+     "ref": ":strategy :s2",
+     "relation": "states",
+     "review": "model-proposed"
+    },
+    {
+     "source": "informal",
+     "ref": "On the unit circle $|z|=1$ we have $|q(z)|=|p(1/z)|\\leq\\|p\\|_\\infty$",
+     "relation": "explains",
+     "review": "model-proposed",
+     "note": "The informal proof writes |q(z)| = |p(1/z)| on the circle as a remark. Lean proves `(p.reflect N).eval v * v⁻¹^N = p.eval v⁻¹` from `eval₂_reflect_mul_pow` and takes norms, with the side conditions v != 0 and p.natDegree <= N."
+    },
+    {
+     "source": "lean",
+     "ref": "apm_a99J07_reflect_boundary: hv0, hinv_norm, hpbound, heval",
+     "relation": "implements",
+     "review": "model-proposed"
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n5",
+     "relation": "states",
+     "review": "model-proposed"
+    }
+   ]
+  },
+  {
+   "id": "a99J07:B6",
+   "parent": "a99J07:B0",
+   "obligation": "Boundary to interior for the auxiliary polynomial: for every u in the closed unit disk there is a point v on the unit circle with |q(u)| at most |q(v)| (maximum modulus principle for polynomials).",
+   "depends_on": [
+    "a99J07:B4"
+   ],
+   "argument_roles": [
+    "lemma-application"
+   ],
+   "expository_roles": [
+    "citation",
+    "bridge"
+   ],
+   "reader_obligations": [
+    "Recognize the maximum modulus principle as the tool that lets a bound on the circle bound the polynomial on the whole disk."
+   ],
+   "anchors": [
+    {
+     "source": "proof-plan",
+     "ref": ":terms",
+     "relation": "states",
+     "review": "model-proposed"
+    },
+    {
+     "source": "informal",
+     "ref": "By the maximum modulus principle, $|q(z)|\\leq\\|p\\|_\\infty$ for every $|z|\\leq 1$",
+     "relation": "explains",
+     "review": "model-proposed",
+     "note": "Lean does not cite the maximum modulus principle as a black box. `apm_a99J07_poly_le_boundary` proves a polynomial version: compactness gives a maximiser x on the closed disk; if x is on the circle it is the witness, otherwise the maximum sits in the open disk and `Complex.norm_eqOn_closure_of_isPreconnected_of_isMaxOn` forces the modulus to be constant, so the point 1 is a boundary witness. The lemma returns a boundary point v with |q(u)| <= |q(v)|."
+    },
+    {
+     "source": "lean",
+     "ref": "apm_a99J07_poly_le_boundary: hxmax, hxmax, heq",
+     "relation": "implements",
+     "review": "model-proposed"
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n6",
+     "relation": "states",
+     "review": "model-proposed"
+    }
+   ]
+  },
+  {
+   "id": "a99J07:B7",
+   "parent": "a99J07:B0",
+   "obligation": "Case |w| greater than 1: w is not zero, u = 1/w lies in the closed disk, so |q(u)| is at most the norm by B5 and B6, and the identity p(w) = q(u) w^N gives |p(w)| at most the norm times |w|^N.",
+   "depends_on": [
+    "a99J07:B2",
+    "a99J07:B4",
+    "a99J07:B5",
+    "a99J07:B6"
+   ],
+   "argument_roles": [
+    "lemma-application",
+    "identity"
+   ],
+   "expository_roles": [
+    "calculation",
+    "bridge"
+   ],
+   "reader_obligations": [
+    "Carry the substitution z = 1/w through the identity, and note where |w| > 1 is used: it makes 1/w a point of the disk and makes max{1,|w|} equal |w|."
+   ],
+   "anchors": [
+    {
+     "source": "proof-plan",
+     "ref": ":strategy :s2",
+     "relation": "states",
+     "review": "model-proposed"
+    },
+    {
+     "source": "informal",
+     "ref": "Put $z=1/w$",
+     "relation": "explains",
+     "review": "model-proposed",
+     "note": "The informal proof substitutes z = 1/w in the bound for q. Lean works with an `Invertible w` instance obtained from w != 0 (derived from 1 < ‖w‖), proves ‖w⁻¹‖ <= 1, chains the boundary bound and the disk bound, and rewrites with the identity."
+    },
+    {
+     "source": "lean",
+     "ref": "theorem apm_a99j07: hwlt, hw0, hu, huv, hvb, hqu, hid, heq",
+     "relation": "implements",
+     "review": "model-proposed"
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n7",
+     "relation": "supports",
+     "review": "model-proposed"
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n10",
+     "relation": "supports",
+     "review": "rejected",
+     "note": "The mined gloss reads \"If |w| > 1, then |p(w)| ≤ ‖p‖_∞\", which drops the factor |w|^N and is false; the quoted source line states the correct bound. Retained as a negative anchoring example."
+    }
+   ]
+  },
+  {
+   "id": "a99J07:B8",
+   "parent": "a99J07:B0",
+   "obligation": "Combine the two cases: every w satisfies one of them, so the bound holds for all complex w.",
+   "depends_on": [
+    "a99J07:B3",
+    "a99J07:B7"
+   ],
+   "argument_roles": [
+    "closure"
+   ],
+   "expository_roles": [
+    "closure"
+   ],
+   "reader_obligations": [
+    "Say explicitly that the two cases cover the plane, so the two partial bounds add up to the full claim."
+   ],
+   "anchors": [
+    {
+     "source": "proof-plan",
+     "ref": ":strategy",
+     "relation": "states",
+     "review": "model-proposed"
+    },
+    {
+     "source": "informal",
+     "ref": "Combining the two cases proves the inequality",
+     "relation": "explains",
+     "review": "model-proposed",
+     "note": "The informal proof has an explicit combining step. Lean has none: the two cases are the branches of one `by_cases` and the theorem is closed in each branch."
+    },
+    {
+     "source": "lean",
+     "ref": "theorem apm_a99j07",
+     "relation": "implements",
+     "review": "model-proposed"
+    },
+    {
+     "source": "mark8-s3",
+     "ref": ":n11",
+     "relation": "states",
+     "review": "model-proposed"
+    }
+   ]
+  }
+ ],
+ "profiles": [
+  {
+   "id": "expert-reference",
+   "audience": "A mathematician who knows the maximum modulus principle and wants the estimate.",
+   "purpose": "reference",
+   "mandatory_nodes": [
+    "a99J07:B1",
+    "a99J07:B4",
+    "a99J07:B5",
+    "a99J07:B6",
+    "a99J07:B7"
+   ],
+   "compression": "Inside the disk cite the definition; introduce the reflected polynomial in one line and cite the maximum modulus principle for it; substitute z = 1/w. No words on the split or on combining."
+  },
+  {
+   "id": "teaching",
+   "audience": "A student who has not seen why a polynomial is reflected to control it outside the disk.",
+   "purpose": "teaching",
+   "mandatory_nodes": [
+    "a99J07:B0",
+    "a99J07:B1",
+    "a99J07:B2",
+    "a99J07:B3",
+    "a99J07:B4",
+    "a99J07:B5",
+    "a99J07:B6",
+    "a99J07:B7",
+    "a99J07:B8"
+   ],
+   "compression": "Show every node; spend the most exposition on why the split is needed, on where the auxiliary polynomial comes from, and on how the boundary bound reaches the interior."
+  },
+  {
+   "id": "formal-audit",
+   "audience": "A reviewer comparing the prose with the compiled Lean proof.",
+   "purpose": "audit",
+   "mandatory_nodes": [
+    "a99J07:B0",
+    "a99J07:B1",
+    "a99J07:B2",
+    "a99J07:B3",
+    "a99J07:B4",
+    "a99J07:B5",
+    "a99J07:B6",
+    "a99J07:B7",
+    "a99J07:B8"
+   ],
+   "compression": "Do not compress side conditions; expose the compactness lemma behind the supremum, the degree bound on the reflection, the witness form of the maximum modulus lemma, and the invertibility argument."
+  }
+ ]
+}
