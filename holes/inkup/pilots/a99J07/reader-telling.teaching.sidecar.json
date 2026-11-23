@@ -1,0 +1,52 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a99J07",
+  "realizations": "holes/inkup/pilots/a99J07/reader-telling.teaching.md",
+  "content_plan": "holes/inkup/pilots/a99J07/content-plan.json",
+  "ink": "holes/inkup/pilots/a99J07/generative-ink.tsv",
+  "note": "Teaching R5 sidecar; budgets are derived from mandatory nodes and anticipated questions.",
+  "profiles": {
+    "teaching": {
+      "nodes": [
+        {"node":"a99J07:B0","status":"realized","ink_words":26,"ink_percent":9.1,"planned_percent":7.7,"planned_action":"show"},
+        {"node":"a99J07:B1","status":"realized","ink_words":34,"ink_percent":11.9,"planned_percent":15.4,"planned_action":"expand"},
+        {"node":"a99J07:B2","status":"realized","ink_words":28,"ink_percent":9.8,"planned_percent":7.7,"planned_action":"show"},
+        {"node":"a99J07:B3","status":"realized","ink_words":14,"ink_percent":4.9,"planned_percent":7.7,"planned_action":"show"},
+        {"node":"a99J07:B4","status":"realized","ink_words":55,"ink_percent":19.2,"planned_percent":15.4,"planned_action":"expand"},
+        {"node":"a99J07:B5","status":"realized","ink_words":15,"ink_percent":5.2,"planned_percent":7.7,"planned_action":"show"},
+        {"node":"a99J07:B6","status":"realized","ink_words":67,"ink_percent":23.4,"planned_percent":23.1,"planned_action":"expand"},
+        {"node":"a99J07:B7","status":"realized","ink_words":34,"ink_percent":11.9,"planned_percent":7.7,"planned_action":"show"},
+        {"node":"a99J07:B8","status":"realized","ink_words":13,"ink_percent":4.5,"planned_percent":7.7,"planned_action":"show"}
+      ],
+      "questions": [
+        {
+          "question":"unit-disk-supremum-bound","blueprint_node":"a99J07:B1","status":"answered","node":"a99J07:B1",
+          "quote":"The closed unit disk is compact and \\(p\\) is continuous, so the set\nof values \\(\\lvert p(z)\\rvert\\) on it is bounded above.  Consequently its\nsupremum \\(M\\) exists and \\(\\lvert p(z)\\rvert\\le M\\) whenever\n\\(\\lvert z\\rvert\\le1\\).","ink_words":34,
+          "graph_support":[{"graph":"holes/inkup/reasoning/a99J07-supremum-bound.json","edge":{"from":"supremum-warrant","relation":"warrants","to":"pointwise-bound"}}]
+        },
+        {
+          "question":"maximum-modulus-applicability","blueprint_node":"a99J07:B6","status":"answered","node":"a99J07:B6",
+          "quote":"The polynomial boundary lemma applies because \\(q\\) is a polynomial\nand \\(u=1/w\\) lies in the closed unit disk.  It supplies a point \\(v\\) on\nthe unit circle such that\n\\[\n\\lvert q(u)\\rvert\\le\\lvert q(v)\\rvert.\n\\]\nThe circle estimate just proved then yields \\(\\lvert q(1/w)\\rvert\\le M\\).\nThus the method needs an interior evaluation point and a polynomial; its\nboundary witness is what carries the circle bound into the disk.","ink_words":67,
+          "graph_support":[
+            {"graph":"holes/inkup/reasoning/a99J07-boundary-applicability.json","edge":{"from":"boundary-witness-warrant","relation":"requires","to":"polynomial"}},
+            {"graph":"holes/inkup/reasoning/a99J07-boundary-applicability.json","edge":{"from":"boundary-witness-warrant","relation":"requires","to":"inside-disk"}}
+          ]
+        },
+        {
+          "question":"circle-to-disk-transfer","blueprint_node":"a99J07:B6","status":"answered","node":"a99J07:B6",
+          "quote":"It supplies a point \\(v\\) on\nthe unit circle such that\n\\[\n\\lvert q(u)\\rvert\\le\\lvert q(v)\\rvert.\n\\]\nThe circle estimate just proved then yields \\(\\lvert q(1/w)\\rvert\\le M\\).\nThus the method needs an interior evaluation point and a polynomial; its\nboundary witness is what carries the circle bound into the disk.","ink_words":49,
+          "graph_support":[{"graph":"holes/inkup/reasoning/a99J07-boundary-to-interior.json","edge":{"from":"transitivity-warrant","relation":"warrants","to":"interior-bound"}}]
+        },
+        {
+          "question":"reflection-strategy","blueprint_node":"a99J07:B4","status":"answered","node":"a99J07:B4",
+          "quote":"For the exterior case, let \\(q\\) be the polynomial obtained by\nreversing the coefficients of \\(p\\) up to degree \\(N\\).  For \\(z\\ne0\\) it\nsatisfies\n\\[\nq(z)=z^{N}p(1/z).\n\\]\nThis is the useful object because it moves the exterior point \\(w\\) to\n\\(1/w\\) inside the disk while retaining exactly the factor\n\\(\\lvert w\\rvert^{N}\\) needed in the conclusion.","ink_words":55,
+          "graph_support":[
+            {"graph":"holes/inkup/reasoning/a99J07-why-reflect.json","edge":{"from":"exterior-gap","relation":"resolved-by","to":"reflect"}},
+            {"graph":"holes/inkup/reasoning/a99J07-why-reflect.json","edge":{"from":"inside-conversion","relation":"enables","to":"boundary-method"}}
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}

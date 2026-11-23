@@ -9,6 +9,11 @@ PILOT = ROOT / "holes/inkup/pilots/a96J06"
 SIDECAR = PILOT / "realizations.sidecar.json"
 TEACHING_SIDECAR = PILOT / "reader-telling.teaching.sidecar.json"
 A00_TEACHING_SIDECAR = ROOT / "holes/inkup/pilots/a00J01/reader-telling.teaching.sidecar.json"
+A99_SIDECARS = {
+    "teaching": ROOT / "holes/inkup/pilots/a99J07/reader-telling.teaching.sidecar.json",
+    "expert-reference": ROOT / "holes/inkup/pilots/a99J07/reader-telling.expert-reference.sidecar.json",
+    "formal-audit": ROOT / "holes/inkup/pilots/a99J07/reader-telling.formal-audit.sidecar.json",
+}
 VALIDATOR = PILOT / "validate_sidecar.py"
 spec = importlib.util.spec_from_file_location("validate_sidecar", VALIDATOR)
 module = importlib.util.module_from_spec(spec)
@@ -106,6 +111,14 @@ def test_a00j01_teaching_sidecar_passes():
     report, errors = module.validate(A00_TEACHING_SIDECAR)
     assert errors == []
     assert report["teaching"]["questions"]["answered"] == 4
+
+
+def test_a99j07_reader_sidecars_pass():
+    expected = {"teaching": 4, "expert-reference": 1, "formal-audit": 4}
+    for profile, sidecar in A99_SIDECARS.items():
+        report, errors = module.validate(sidecar)
+        assert errors == [], (profile, errors)
+        assert report[profile]["questions"]["answered"] == expected[profile]
 
 
 def test_a00j01_question_quote_must_be_in_telling(tmp_path):

@@ -1,0 +1,32 @@
+{
+  "schema":"inkup.telling-sidecar/v0",
+  "problem":"a99J07",
+  "realizations":"holes/inkup/pilots/a99J07/reader-telling.expert-reference.md",
+  "content_plan":"holes/inkup/pilots/a99J07/content-plan.json",
+  "ink":"holes/inkup/pilots/a99J07/generative-ink.tsv",
+  "note":"Expert-reference R5 sidecar; compressed nodes are carried by the cited realized passages.",
+  "profiles":{"expert-reference":{
+    "nodes":[
+      {"node":"a99J07:B0","status":"merged","merged_into":"a99J07:B7","quote":"Taking \\(u=1/w\\) yields\n\\(\\lvert p(w)\\rvert=\\lvert q(1/w)\\rvert\\lvert w\\rvert^{N}\\le\nM\\lvert w\\rvert^{N}\\).  Together with the defining bound for\n\\(\\lvert w\\rvert\\le1\\), this proves\n\\(\\lvert p(w)\\rvert\\le M\\max\\{1,\\lvert w\\rvert\\}^{N}\\) for all \\(w\\).","ink_words":0,"ink_percent":0.0,"planned_percent":0.0,"planned_action":"compress"},
+      {"node":"a99J07:B1","status":"realized","ink_words":14,"ink_percent":13.1,"planned_percent":16.7,"planned_action":"show"},
+      {"node":"a99J07:B2","status":"merged","merged_into":"a99J07:B4","quote":"For \\(\\lvert w\\rvert>1\\), let \\(q\\) be the polynomial obtained by\nreversing the coefficients of \\(p\\) up to degree \\(N\\), so that\n\\(q(z)=z^{N}p(1/z)\\) for \\(z\\ne0\\).  This reflection moves the exterior\nevaluation to \\(1/w\\) in the disk and preserves the factor \\(w^{N}\\) needed\nto recover \\(p(w)\\).","ink_words":0,"ink_percent":0.0,"planned_percent":0.0,"planned_action":"compress"},
+      {"node":"a99J07:B3","status":"merged","merged_into":"a99J07:B7","quote":"Taking \\(u=1/w\\) yields\n\\(\\lvert p(w)\\rvert=\\lvert q(1/w)\\rvert\\lvert w\\rvert^{N}\\le\nM\\lvert w\\rvert^{N}\\).  Together with the defining bound for\n\\(\\lvert w\\rvert\\le1\\), this proves\n\\(\\lvert p(w)\\rvert\\le M\\max\\{1,\\lvert w\\rvert\\}^{N}\\) for all \\(w\\).","ink_words":0,"ink_percent":0.0,"planned_percent":0.0,"planned_action":"compress"},
+      {"node":"a99J07:B4","status":"realized","ink_words":44,"ink_percent":41.1,"planned_percent":33.3,"planned_action":"expand"},
+      {"node":"a99J07:B5","status":"realized","ink_words":11,"ink_percent":10.3,"planned_percent":16.7,"planned_action":"show"},
+      {"node":"a99J07:B6","status":"realized","ink_words":12,"ink_percent":11.2,"planned_percent":16.7,"planned_action":"show"},
+      {"node":"a99J07:B7","status":"realized","ink_words":26,"ink_percent":24.3,"planned_percent":16.7,"planned_action":"show"},
+      {"node":"a99J07:B8","status":"merged","merged_into":"a99J07:B7","quote":"Taking \\(u=1/w\\) yields\n\\(\\lvert p(w)\\rvert=\\lvert q(1/w)\\rvert\\lvert w\\rvert^{N}\\le\nM\\lvert w\\rvert^{N}\\).  Together with the defining bound for\n\\(\\lvert w\\rvert\\le1\\), this proves\n\\(\\lvert p(w)\\rvert\\le M\\max\\{1,\\lvert w\\rvert\\}^{N}\\) for all \\(w\\).","ink_words":0,"ink_percent":0.0,"planned_percent":0.0,"planned_action":"compress"}
+    ],
+    "questions":[
+      {
+        "question":"reflection-strategy","blueprint_node":"a99J07:B4","status":"answered","node":"a99J07:B4",
+        "quote":"For \\(\\lvert w\\rvert>1\\), let \\(q\\) be the polynomial obtained by\nreversing the coefficients of \\(p\\) up to degree \\(N\\), so that\n\\(q(z)=z^{N}p(1/z)\\) for \\(z\\ne0\\).  This reflection moves the exterior\nevaluation to \\(1/w\\) in the disk and preserves the factor \\(w^{N}\\) needed\nto recover \\(p(w)\\).","ink_words":44,
+        "graph_support":[
+          {"graph":"holes/inkup/reasoning/a99J07-why-reflect.json","edge":{"from":"exterior-gap","relation":"resolved-by","to":"reflect"}},
+          {"graph":"holes/inkup/reasoning/a99J07-why-reflect.json","edge":{"from":"inside-conversion","relation":"enables","to":"boundary-method"}}
+        ]
+      }
+    ],
+    "unplanned_answers":[]
+  }}
+}

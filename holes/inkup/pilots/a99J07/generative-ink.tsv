@@ -1,0 +1,28 @@
+profile	node	action	budget_percent	reason
+teaching	a99J07:B0	show	7.7	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 13.
+teaching	a99J07:B1	expand	15.4	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 13.
+teaching	a99J07:B2	show	7.7	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 13.
+teaching	a99J07:B3	show	7.7	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 13.
+teaching	a99J07:B4	expand	15.4	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 13.
+teaching	a99J07:B5	show	7.7	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 13.
+teaching	a99J07:B6	expand	23.1	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 13.
+teaching	a99J07:B7	show	7.7	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 13.
+teaching	a99J07:B8	show	7.7	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 13.
+expert-reference	a99J07:B0	compress	0.0	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 6.
+expert-reference	a99J07:B1	show	16.7	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 6.
+expert-reference	a99J07:B2	compress	0.0	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 6.
+expert-reference	a99J07:B3	compress	0.0	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 6.
+expert-reference	a99J07:B4	expand	33.3	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 6.
+expert-reference	a99J07:B5	show	16.7	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 6.
+expert-reference	a99J07:B6	show	16.7	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 6.
+expert-reference	a99J07:B7	show	16.7	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 6.
+expert-reference	a99J07:B8	compress	0.0	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 6.
+formal-audit	a99J07:B0	show	7.7	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 13.
+formal-audit	a99J07:B1	expand	15.4	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 13.
+formal-audit	a99J07:B2	show	7.7	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 13.
+formal-audit	a99J07:B3	show	7.7	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 13.
+formal-audit	a99J07:B4	expand	15.4	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 13.
+formal-audit	a99J07:B5	show	7.7	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 13.
+formal-audit	a99J07:B6	expand	23.1	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 13.
+formal-audit	a99J07:B7	show	7.7	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 13.
+formal-audit	a99J07:B8	show	7.7	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 13.

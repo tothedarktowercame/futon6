@@ -1,0 +1,50 @@
+{
+  "schema":"inkup.telling-sidecar/v0",
+  "problem":"a99J07",
+  "realizations":"holes/inkup/pilots/a99J07/reader-telling.formal-audit.md",
+  "content_plan":"holes/inkup/pilots/a99J07/content-plan.json",
+  "ink":"holes/inkup/pilots/a99J07/generative-ink.tsv",
+  "note":"Formal-audit R5 sidecar; every anticipated obligation is anchored to the reviewed graph edge stated by its passage.",
+  "profiles":{"formal-audit":{
+    "nodes":[
+      {"node":"a99J07:B0","status":"realized","ink_words":19,"ink_percent":7.4,"planned_percent":7.7,"planned_action":"show"},
+      {"node":"a99J07:B1","status":"realized","ink_words":34,"ink_percent":13.2,"planned_percent":15.4,"planned_action":"expand"},
+      {"node":"a99J07:B2","status":"realized","ink_words":12,"ink_percent":4.7,"planned_percent":7.7,"planned_action":"show"},
+      {"node":"a99J07:B3","status":"realized","ink_words":20,"ink_percent":7.8,"planned_percent":7.7,"planned_action":"show"},
+      {"node":"a99J07:B4","status":"realized","ink_words":51,"ink_percent":19.8,"planned_percent":15.4,"planned_action":"expand"},
+      {"node":"a99J07:B5","status":"realized","ink_words":19,"ink_percent":7.4,"planned_percent":7.7,"planned_action":"show"},
+      {"node":"a99J07:B6","status":"realized","ink_words":67,"ink_percent":26.0,"planned_percent":23.1,"planned_action":"expand"},
+      {"node":"a99J07:B7","status":"realized","ink_words":22,"ink_percent":8.5,"planned_percent":7.7,"planned_action":"show"},
+      {"node":"a99J07:B8","status":"realized","ink_words":14,"ink_percent":5.4,"planned_percent":7.7,"planned_action":"show"}
+    ],
+    "questions":[
+      {
+        "question":"unit-disk-supremum-bound","blueprint_node":"a99J07:B1","status":"answered","node":"a99J07:B1",
+        "quote":"The lemma apm_a99J07_supNorm_bddAbove uses compactness of the\nclosed ball and continuity of \\(z\\mapsto\\lVert p(z)\\rVert\\) to make the\ndefining value set bounded above.  Thus apm_a99J07_eval_le_supNorm applies\nle_csSup and yields \\(\\lVert p(z)\\rVert\\le a99J07SupNormUnitDisk(p)\\) from\n\\(\\lVert z\\rVert\\le1\\).","ink_words":34,
+        "graph_support":[{"graph":"holes/inkup/reasoning/a99J07-supremum-bound.json","edge":{"from":"supremum-warrant","relation":"warrants","to":"pointwise-bound"}}]
+      },
+      {
+        "question":"maximum-modulus-applicability","blueprint_node":"a99J07:B6","status":"answered","node":"a99J07:B6",
+        "quote":"The lemma apm_a99J07_poly_le_boundary applies because\np.reflect N is a polynomial and \\(hu\\) places \\(1/w\\) in the closed disk.\nIt returns \\(v\\) with \\(hv:\\lVert v\\rVert=1\\) and\n\\[\nhuv:\\lVert(p.reflect\\ N)(1/w)\\rVert\n\\le\\lVert(p.reflect\\ N)(v)\\rVert.\n\\]\nComposing huv with the circle estimate hvb gives hqu, the required\nbound at \\(1/w\\).  The lemma obtains its boundary witness by compactness;\nif a maximizer is interior,\nComplex.norm_eqOn_closure_of_isPreconnected_of_isMaxOn makes the norm\nconstant through the closed disk.","ink_words":67,
+        "graph_support":[
+          {"graph":"holes/inkup/reasoning/a99J07-boundary-applicability.json","edge":{"from":"boundary-witness-warrant","relation":"requires","to":"polynomial"}},
+          {"graph":"holes/inkup/reasoning/a99J07-boundary-applicability.json","edge":{"from":"boundary-witness-warrant","relation":"requires","to":"inside-disk"}}
+        ]
+      },
+      {
+        "question":"circle-to-disk-transfer","blueprint_node":"a99J07:B6","status":"answered","node":"a99J07:B6",
+        "quote":"It returns \\(v\\) with \\(hv:\\lVert v\\rVert=1\\) and\n\\[\nhuv:\\lVert(p.reflect\\ N)(1/w)\\rVert\n\\le\\lVert(p.reflect\\ N)(v)\\rVert.\n\\]\nComposing huv with the circle estimate hvb gives hqu, the required\nbound at \\(1/w\\).","ink_words":27,
+        "graph_support":[{"graph":"holes/inkup/reasoning/a99J07-boundary-to-interior.json","edge":{"from":"transitivity-warrant","relation":"warrants","to":"interior-bound"}}]
+      },
+      {
+        "question":"reflection-strategy","blueprint_node":"a99J07:B4","status":"answered","node":"a99J07:B4",
+        "quote":"In the exterior branch, \\(hwlt\\) implies \\(hw0:w\\ne0\\), hence an\nInvertible w instance and\n\\(hu:\\lVert1/w\\rVert\\le1\\).  The auxiliary object is the polynomial\np.reflect N; Polynomial.eval₂_reflect_mul_pow, using hdegree.le, gives\n\\[\n(p.reflect\\ N)(1/w)\\,w^{N}=p(w).\n\\]\nThis reflection is introduced because it moves the exterior evaluation to\nthe disk while retaining the factor \\(w^{N}\\) needed on return.","ink_words":51,
+        "graph_support":[
+          {"graph":"holes/inkup/reasoning/a99J07-why-reflect.json","edge":{"from":"exterior-gap","relation":"resolved-by","to":"reflect"}},
+          {"graph":"holes/inkup/reasoning/a99J07-why-reflect.json","edge":{"from":"inside-conversion","relation":"enables","to":"boundary-method"}}
+        ]
+      }
+    ],
+    "unplanned_answers":[]
+  }}
+}
