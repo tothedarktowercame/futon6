@@ -7,13 +7,62 @@
   "profiles": {
     "teaching": {
       "nodes": [
-        {"node": "a96J06:B0", "status": "realized", "ink_words": 29, "ink_percent": 8.3, "planned_percent": 10, "planned_action": "show"},
-        {"node": "a96J06:B1", "status": "realized", "ink_words": 26, "ink_percent": 7.5, "planned_percent": 10, "planned_action": "show"},
-        {"node": "a96J06:B2", "status": "realized", "ink_words": 74, "ink_percent": 21.3, "planned_percent": 25, "planned_action": "expand"},
-        {"node": "a96J06:B3", "status": "realized", "ink_words": 25, "ink_percent": 7.2, "planned_percent": 10, "planned_action": "show"},
-        {"node": "a96J06:B4", "status": "realized", "ink_words": 90, "ink_percent": 25.9, "planned_percent": 20, "planned_action": "expand"},
-        {"node": "a96J06:B5", "status": "realized", "ink_words": 72, "ink_percent": 20.7, "planned_percent": 15, "planned_action": "expand"},
-        {"node": "a96J06:B6", "status": "realized", "ink_words": 32, "ink_percent": 9.2, "planned_percent": 10, "planned_action": "show"}
+        {
+          "node": "a96J06:B0",
+          "status": "realized",
+          "ink_words": 29,
+          "ink_percent": 7.9,
+          "planned_percent": 10,
+          "planned_action": "show"
+        },
+        {
+          "node": "a96J06:B1",
+          "status": "realized",
+          "ink_words": 26,
+          "ink_percent": 7.0,
+          "planned_percent": 10,
+          "planned_action": "show"
+        },
+        {
+          "node": "a96J06:B2",
+          "status": "realized",
+          "ink_words": 74,
+          "ink_percent": 20.1,
+          "planned_percent": 25,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a96J06:B3",
+          "status": "realized",
+          "ink_words": 35,
+          "ink_percent": 9.5,
+          "planned_percent": 10,
+          "planned_action": "show"
+        },
+        {
+          "node": "a96J06:B4",
+          "status": "realized",
+          "ink_words": 101,
+          "ink_percent": 27.4,
+          "planned_percent": 20,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a96J06:B5",
+          "status": "realized",
+          "ink_words": 72,
+          "ink_percent": 19.5,
+          "planned_percent": 15,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a96J06:B6",
+          "status": "realized",
+          "ink_words": 32,
+          "ink_percent": 8.7,
+          "planned_percent": 10,
+          "planned_action": "show"
+        }
       ],
       "questions": [
         {
@@ -24,7 +73,14 @@
           "quote": "The available rigidity theorem is stated for the unit disk, while our\nassumption concerns a disk of radius (r).  This mismatch explains the change\nof scale\n\n\\[\ng(w)=\\frac{p(rw)}r.\n\\]",
           "ink_words": 29,
           "graph_support": [
-            {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "gap", "relation": "resolved-by", "to": "scale"}}
+            {
+              "graph": "holes/inkup/reasoning/a96J06-why-rescale.json",
+              "edge": {
+                "from": "gap",
+                "relation": "resolved-by",
+                "to": "scale"
+              }
+            }
           ]
         },
         {
@@ -35,7 +91,14 @@
           "quote": "Indeed, (\\lVert w\\rVert<1) implies (\\lVert rw\\rVert<r), so the supposition\ngives (\\lVert p(rw)\\rVert\\le r), and division by (r) gives\n(\\lVert g(w)\\rVert\\le1).  Thus scaling converts precisely the radius-(r)\nbound into the unit-disk bound needed for Schwarz rigidity.",
           "ink_words": 35,
           "graph_support": [
-            {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "unit-bound", "relation": "enables", "to": "schwarz"}}
+            {
+              "graph": "holes/inkup/reasoning/a96J06-why-rescale.json",
+              "edge": {
+                "from": "unit-bound",
+                "relation": "enables",
+                "to": "schwarz"
+              }
+            }
           ]
         },
         {
@@ -43,11 +106,25 @@
           "blueprint_node": "a96J06:B4",
           "status": "answered",
           "node": "a96J06:B4",
-          "quote": "Since\n(\\operatorname{dslope}(g,0,0)=g'(0)=1), this formula has slope (1), not an\nundetermined rotation parameter.  The derivative identity is what makes the\ndivided-slope norm attain the radius ratio required by the lemma.  It does not assume\n(g(0)=0); that fact is used here to remove the constant term.  Consequently\n(g(w)=w) on the unit ball.",
-          "ink_words": 50,
+          "quote": "Since\n(\\operatorname{dslope}(g,0,0)=g'(0)=1), this formula has slope (1), not the\nundetermined rotation factor of the textbook statement.  The derivative identity is what makes the\ndivided-slope norm attain the radius ratio required by the lemma.  It does not assume\n(g(0)=0); that fact centered the target ball in B3 and is used here to remove\nthe constant term.  Consequently\n(g(w)=w) on the unit ball.",
+          "ink_words": 61,
           "graph_support": [
-            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "requires", "to": "derivative-one"}},
-            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "warrants", "to": "identity-on-unit-ball"}}
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "identity-specialization-warrant",
+                "relation": "requires",
+                "to": "derivative-one"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "identity-specialization-warrant",
+                "relation": "warrants",
+                "to": "identity-on-unit-ball"
+              }
+            }
           ]
         },
         {
@@ -58,8 +135,22 @@
           "quote": "Applying the\ncoefficient function at degree (N) to the polynomial equality gives equal\ndegree-(N) coefficients.  The left one is (c_N), while that of (X) is zero\nbecause (N\\ge2); hence (c_N=0).",
           "ink_words": 30,
           "graph_support": [
-            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "coefficient-congruence-warrant", "relation": "warrants", "to": "coefficient-equality"}},
-            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "top-zero-warrant", "relation": "warrants", "to": "coefficient-zero"}}
+            {
+              "graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json",
+              "edge": {
+                "from": "coefficient-congruence-warrant",
+                "relation": "warrants",
+                "to": "coefficient-equality"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json",
+              "edge": {
+                "from": "top-zero-warrant",
+                "relation": "warrants",
+                "to": "coefficient-zero"
+              }
+            }
           ]
         },
         {
@@ -70,8 +161,22 @@
           "quote": "The point (0) lies in that ball; there the divided slope is the\nderivative and has norm (1).  Together with B3, these supply the equality-case\nlemma's hypotheses.  The lemma returns the affine formula\n\n\\[\ng(w)=g(0)+(w-0)\\,\\operatorname{dslope}(g,0,0)\n\\]",
           "ink_words": 36,
           "graph_support": [
-            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "affine-equality-warrant", "relation": "requires", "to": "unit-dslope"}},
-            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "affine-equality-warrant", "relation": "warrants", "to": "affine-on-unit-ball"}}
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "affine-equality-warrant",
+                "relation": "requires",
+                "to": "unit-dslope"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "affine-equality-warrant",
+                "relation": "warrants",
+                "to": "affine-on-unit-ball"
+              }
+            }
           ]
         },
         {
@@ -82,9 +187,30 @@
           "quote": "That ball supplies infinitely many evaluation points, and over (\\mathbb C),\nagreement on an infinite set makes the two polynomials equal.\nThe infinitude matters: over (\\mathbb F_2), the nonzero polynomial\n(X^2-X) vanishes everywhere.",
           "ink_words": 33,
           "graph_support": [
-            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "polynomial-identity-warrant", "relation": "requires", "to": "infinite-agreement"}},
-            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "polynomial-identity-warrant", "relation": "requires", "to": "complex-domain"}},
-            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "infinite-agreement", "relation": "violated-in", "to": "finite-field-boundary"}}
+            {
+              "graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json",
+              "edge": {
+                "from": "polynomial-identity-warrant",
+                "relation": "requires",
+                "to": "infinite-agreement"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json",
+              "edge": {
+                "from": "polynomial-identity-warrant",
+                "relation": "requires",
+                "to": "complex-domain"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json",
+              "edge": {
+                "from": "infinite-agreement",
+                "relation": "violated-in",
+                "to": "finite-field-boundary"
+              }
+            }
           ]
         },
         {
@@ -92,11 +218,25 @@
           "blueprint_node": "a96J06:B3",
           "status": "answered",
           "node": "a96J06:B4",
-          "quote": "It does not assume\n(g(0)=0); that fact is used here to remove the constant term.  Consequently\n(g(w)=w) on the unit ball.",
-          "ink_words": 21,
+          "quote": "It does not assume\n(g(0)=0); that fact centered the target ball in B3 and is used here to remove\nthe constant term.  Consequently\n(g(w)=w) on the unit ball.",
+          "ink_words": 28,
           "graph_support": [
-            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "requires", "to": "fixed-zero"}},
-            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "warrants", "to": "identity-on-unit-ball"}}
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "identity-specialization-warrant",
+                "relation": "requires",
+                "to": "fixed-zero"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "identity-specialization-warrant",
+                "relation": "warrants",
+                "to": "identity-on-unit-ball"
+              }
+            }
           ]
         }
       ],

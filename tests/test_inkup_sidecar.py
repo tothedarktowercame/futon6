@@ -120,3 +120,18 @@ def test_graph_support_edge_must_resolve(tmp_path):
     target = question(doc, "teaching", "scaling-strategy")
     target["graph_support"][0]["edge"]["to"] = "not-a-node"
     assert codes(validate_doc(tmp_path, doc)) == {"SC014"}
+
+
+def test_graph_support_cannot_be_dropped_from_one_entry(tmp_path):
+    doc = json.loads(TEACHING_SIDECAR.read_text())
+    question(doc, "teaching", "scaling-strategy").pop("graph_support")
+    assert codes(validate_doc(tmp_path, doc)) == {"SC014"}
+
+
+def test_graph_support_must_use_a_graph_the_plan_entry_cites(tmp_path):
+    doc = json.loads(TEACHING_SIDECAR.read_text())
+    question(doc, "teaching", "scaling-strategy")["graph_support"] = [{
+        "graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json",
+        "edge": {"from": "top-zero-warrant", "relation": "warrants", "to": "coefficient-zero"},
+    }]
+    assert codes(validate_doc(tmp_path, doc)) == {"SC014"}

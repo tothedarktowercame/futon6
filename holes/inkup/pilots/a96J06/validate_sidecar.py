@@ -207,10 +207,18 @@ def validate(sidecar: Path, plan_path: Path | None = None,
             if entry.get("ink_words") != words(quote):
                 errors.append(f"SC006 {where}: ink_words {entry.get('ink_words')} != {words(quote)}")
 
+        profile_uses_graph_support = any(
+            isinstance(entry, dict) and "graph_support" in entry
+            for key in ("questions", "unplanned_answers")
+            for entry in (doc.get(key) or []))
+
         def check_graph_support(entry: dict, where: str, qid: str) -> None:
-            # v0 sidecars predate graph_support; new sidecars opt into this
-            # stronger check by carrying the field on each question entry.
+            # The baseline sidecar predates graph_support.  A sidecar that
+            # carries the field on any entry of a profile must carry it on
+            # every answered or partly answered entry of that profile.
             if "graph_support" not in entry:
+                if profile_uses_graph_support and entry.get("status") != "not-answered":
+                    errors.append(f"SC014 {where}: graph_support missing")
                 return
             anchors = entry["graph_support"]
             if not isinstance(anchors, list) or not anchors:

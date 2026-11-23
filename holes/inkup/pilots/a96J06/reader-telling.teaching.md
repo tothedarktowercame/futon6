@@ -30,8 +30,9 @@ gives (\lVert p(rw)\rVert\le r), and division by (r) gives
 bound into the unit-disk bound needed for Schwarz rigidity.  It also gives
 (g(0)=0) and preserves the normalized derivative (g'(0)=1).
 
-**[B3]** Direct calculation shows that (g) is holomorphic on the open unit ball
-and maps it into the closed ball of radius (1) centered at (g(0)).
+**[B3]** Being a polynomial in (w), (g) is holomorphic on the open unit ball.
+Since (g(0)=0), the bound of B2 says that (g) maps that ball into the closed
+ball of radius (1) centered at (g(0)).
 
 **[B4]** The point (0) lies in that ball; there the divided slope is the
 derivative and has norm (1).  Together with B3, these supply the equality-case
@@ -42,10 +43,11 @@ g(w)=g(0)+(w-0)\,\operatorname{dslope}(g,0,0)
 \]
 
 throughout the unit ball.  Since
-(\operatorname{dslope}(g,0,0)=g'(0)=1), this formula has slope (1), not an
-undetermined rotation parameter.  The derivative identity is what makes the
+(\operatorname{dslope}(g,0,0)=g'(0)=1), this formula has slope (1), not the
+undetermined rotation factor of the textbook statement.  The derivative identity is what makes the
 divided-slope norm attain the radius ratio required by the lemma.  It does not assume
-(g(0)=0); that fact is used here to remove the constant term.  Consequently
+(g(0)=0); that fact centered the target ball in B3 and is used here to remove
+the constant term.  Consequently
 (g(w)=w) on the unit ball.
 
 **[B5]** Undoing the scale gives (p(z)=z) throughout the radius-(r) ball.
