@@ -1,0 +1,13 @@
+id	question_form	missing_relation	presentation_response	primary_evidence	calibration_role
+QF01	Why make this move?	strategy-enables-goal	show the obstacle, the chosen move, and what it unlocks	proof activity / a96J06 secondary graph	process-facing
+QF02	Why is this enough?	claim-suffices-for-goal	show the reduction from the current goal to the stated claim	proof activity; sufficiency-wall residual	process-facing
+QF03	Where did this assumption enter?	claim-depends-on-scope	show or nest the owning assumption with the dependent claim	proof activity; C23 residual	process-facing
+QF04	Why does this method apply here?	method-requires-hypotheses	show the applicability conditions and their witnesses	proof activity / a96J06 secondary graph	process-facing
+QF05	What remains after this step?	step-reduces-frontier	name the new frontier or remaining lemma	proof activity; First Proof process questions	process-facing
+QF06	Could this be generalized?	result-extends-under-variation	show which hypotheses are essential and which may vary	MO/MSE plus earlier MO keyword survey	content-facing
+QF07	Is there a counterexample?	claim-fails-under-boundary	show a boundary case and the assumption it violates	MO/MSE plus earlier MO keyword survey	content-facing
+QF08	What obstructs the construction?	goal-blocked-by-obstruction	show the obstruction and the failed route	MO/MSE plus earlier MO keyword survey	content-facing
+QF09	How is this connected to the known result?	claim-related-by-analogy-or-reduction	show the common structure and the difference	MO/MSE plus earlier MO keyword survey	content-facing
+QF10	Is the bound or hypothesis sharp?	result-sensitive-to-boundary	show the extremal case or weakening test	MO/MSE plus earlier MO keyword survey	content-facing
+QF11	Why should I believe this step?	claim-supported-by-warrant	show the local warrant, citation, or derivation	MO/MSE dialogue; proof-reading activity	reader-facing
+QF12	What is the proof's main idea?	local-steps-implement-strategy	compress local steps beneath an explicit strategy node	professional exposition plus MO/MSE dialogue	reader-facing
