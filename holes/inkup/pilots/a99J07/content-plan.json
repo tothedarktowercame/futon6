@@ -1,0 +1,108 @@
+{
+  "schema": "inkup.content-plan/v0",
+  "problem": "a99J07",
+  "alignment": "holes/inkup/pilots/a99J07/alignment.json",
+  "evidence_run": "20261123T-r1-f19d4b5",
+  "blocked_on": [],
+  "mandatory_nodes": [
+    {"node": "a99J07:B0", "depends_on": ["a99J07:B8"]},
+    {"node": "a99J07:B1", "depends_on": []},
+    {"node": "a99J07:B2", "depends_on": []},
+    {"node": "a99J07:B3", "depends_on": ["a99J07:B1", "a99J07:B2"]},
+    {"node": "a99J07:B4", "depends_on": []},
+    {"node": "a99J07:B5", "depends_on": ["a99J07:B1", "a99J07:B4"]},
+    {"node": "a99J07:B6", "depends_on": ["a99J07:B4"]},
+    {"node": "a99J07:B7", "depends_on": ["a99J07:B2", "a99J07:B4", "a99J07:B5", "a99J07:B6"]},
+    {"node": "a99J07:B8", "depends_on": ["a99J07:B3", "a99J07:B7"]}
+  ],
+  "questions": [
+    {
+      "id": "unit-disk-supremum-bound",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "Why does compactness and the definition of the supremum imply |p(w)| ≤ ‖p‖∞ for |w| ≤ 1?",
+      "blueprint_node": "a99J07:B1",
+      "evidence": [
+        {"candidate_id": "se-math-2933667", "run_id": "20261123T-r1-f19d4b5"},
+        {"candidate_id": "se-math-4342715", "run_id": "20261123T-r1-f19d4b5"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a99J07-supremum-bound.json", "edge": {"from": "supremum-warrant", "relation": "warrants", "to": "pointwise-bound"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "Both corpus records request the same local supremum warrant and are answered by one B1 passage.",
+      "decisions": {
+        "expert-reference": {"action": "omit", "reason": "For an expert, the defining supremum bounds values on the disk without further explanation."},
+        "teaching": {"action": "anticipate", "reason": "Explain why compactness supplies boundedness before the supremum inequality is invoked."},
+        "formal-audit": {"action": "anticipate", "reason": "Expose the compactness premise and the le_csSup application used by the formal proof."}
+      }
+    },
+    {
+      "id": "maximum-modulus-applicability",
+      "question_function": "QF04",
+      "requested_relation": "method-requires-hypotheses",
+      "analogue": "Why does the polynomial maximum-modulus step apply to the reflected polynomial at 1/w, rather than directly to p at the exterior point w?",
+      "blueprint_node": "a99J07:B6",
+      "evidence": [
+        {"candidate_id": "se-math-4074935", "run_id": "20261123T-r1-f19d4b5"},
+        {"candidate_id": "se-math-179050", "run_id": "20261123T-r1-f19d4b5"},
+        {"candidate_id": "se-math-1661682", "run_id": "20261123T-r1-f19d4b5"},
+        {"candidate_id": "se-math-1972160", "run_id": "20261123T-r1-f19d4b5"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a99J07-boundary-applicability.json", "edge": {"from": "boundary-witness-warrant", "relation": "requires", "to": "polynomial"}},
+        {"graph": "holes/inkup/reasoning/a99J07-boundary-applicability.json", "edge": {"from": "boundary-witness-warrant", "relation": "requires", "to": "inside-disk"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "se-math-179050 is the same QF04 obligation viewed from the failed direct application: p is polynomial, but w is outside the disk whose boundary estimate is useful. Reflection moves the evaluation to 1/w inside the disk; no fifth question is counted.",
+      "decisions": {
+        "expert-reference": {"action": "omit", "reason": "This audience knows the maximum modulus principle and needs only its concise application to the reflected polynomial."},
+        "teaching": {"action": "anticipate", "reason": "State both applicability conditions and why reflection places the evaluation where the method applies."},
+        "formal-audit": {"action": "anticipate", "reason": "Record that the auxiliary object is a polynomial and that 1/w lies in the closed unit disk."}
+      }
+    },
+    {
+      "id": "circle-to-disk-transfer",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "How does the maximum-modulus step carry the circle bound for the reflected polynomial to its value at 1/w inside the disk?",
+      "blueprint_node": "a99J07:B6",
+      "evidence": [
+        {"candidate_id": "se-math-2665625", "run_id": "20261123T-r1-f19d4b5"},
+        {"candidate_id": "se-math-578191", "run_id": "20261123T-r1-f19d4b5"},
+        {"candidate_id": "se-math-127401", "run_id": "20261123T-r1-f19d4b5"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a99J07-boundary-to-interior.json", "edge": {"from": "transitivity-warrant", "relation": "warrants", "to": "interior-bound"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "This remains distinct from maximum-modulus-applicability: QF04 asks what the method consumes, while QF11 asks how its boundary witness and the circle estimate entail the interior bound. One B6 passage may answer both, but the reader lane counts two obligations.",
+      "decisions": {
+        "expert-reference": {"action": "omit", "reason": "The boundary-to-interior implication is standard for an expert who accepts the cited maximum modulus principle."},
+        "teaching": {"action": "anticipate", "reason": "Show the boundary witness and the transitive inequality rather than citing the principle without its consequence."},
+        "formal-audit": {"action": "anticipate", "reason": "Expose how huv and hvb compose to produce the formal interior bound hqu."}
+      }
+    },
+    {
+      "id": "reflection-strategy",
+      "question_function": "QF01",
+      "requested_relation": "strategy-enables-goal",
+      "analogue": "Why introduce q(z)=z^N p(1/z) when the unit-disk norm gives no direct information at |w|>1?",
+      "blueprint_node": "a99J07:B4",
+      "evidence": [
+        {"candidate_id": "seed:why-reflect", "run_id": "20261123T-r1-f19d4b5"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a99J07-why-reflect.json", "edge": {"from": "exterior-gap", "relation": "resolved-by", "to": "reflect"}},
+        {"graph": "holes/inkup/reasoning/a99J07-why-reflect.json", "edge": {"from": "inside-conversion", "relation": "enables", "to": "boundary-method"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "This strategic QF01 obligation is separate from the QF04 applicability check: it explains why the reflected object is invented, not merely whether the later method's hypotheses hold.",
+      "decisions": {
+        "expert-reference": {"action": "anticipate", "reason": "Even the compressed reference proof should identify the reflection as the move that converts exterior control into a disk problem."},
+        "teaching": {"action": "anticipate", "reason": "The audience has not seen why reflection is the object to invent, so explain the obstacle it resolves."},
+        "formal-audit": {"action": "anticipate", "reason": "Tie the reflected polynomial and inverse substitution to the exterior branch they discharge."}
+      }
+    }
+  ]
+}

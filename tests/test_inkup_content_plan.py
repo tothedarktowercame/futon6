@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / "holes/inkup/pilots/a96J06/content-plan.json"
 A00_PLAN = ROOT / "holes/inkup/pilots/a00J01/content-plan.json"
+A99_PLAN = ROOT / "holes/inkup/pilots/a99J07/content-plan.json"
 VALIDATOR = ROOT / "holes/inkup/pilots/a96J06/validate_content_plan.py"
 spec = importlib.util.spec_from_file_location("validate_content_plan", VALIDATOR)
 module = importlib.util.module_from_spec(spec)
@@ -31,6 +32,11 @@ def test_real_content_plan_passes():
 
 def test_a00j01_content_plan_passes():
     _plan, errors = module.validate(A00_PLAN)
+    assert errors == []
+
+
+def test_a99j07_content_plan_passes():
+    _plan, errors = module.validate(A99_PLAN)
     assert errors == []
 
 
