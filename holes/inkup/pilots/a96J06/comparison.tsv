@@ -1,0 +1,34 @@
+axis	key	teaching	expert-reference	formal-audit	publication
+words	total	369	139	304	127
+node_status	a96J06:B0	realized	merged->B6	realized	merged->B6
+node_ink_percent	a96J06:B0	7.9	0.0	4.6	0.0
+node_status	a96J06:B1	realized	realized	realized	realized
+node_ink_percent	a96J06:B1	7.0	10.1	6.6	8.7
+node_status	a96J06:B2	realized	realized	realized	realized
+node_ink_percent	a96J06:B2	20.1	25.9	12.5	11.8
+node_status	a96J06:B3	realized	merged->B2	realized	realized
+node_ink_percent	a96J06:B3	9.5	0.0	17.4	13.4
+node_status	a96J06:B4	realized	realized	realized	realized
+node_ink_percent	a96J06:B4	27.4	23.7	20.7	27.6
+node_status	a96J06:B5	realized	realized	realized	realized
+node_ink_percent	a96J06:B5	19.5	29.5	30.3	23.6
+node_status	a96J06:B6	realized	realized	realized	realized
+node_ink_percent	a96J06:B6	8.7	10.8	7.9	15.0
+question_status	scaling-strategy [QF01]	answered	answered	answered	answered
+question_status	schwarz-applicability-by-normalization [QF04]	answered	partly-answered (unplanned)	answered	answered (unplanned)
+question_status	closed-disk-codomain [QF06]	not-answered	not-answered	not-answered	not-answered
+question_status	rotation-specializes-to-identity [QF11]	answered	answered	answered	answered
+question_status	coefficient-extensionality [QF11]	answered	answered	answered	answered
+question_status	schwarz-rigidity-connection [QF09]	answered	partly-answered (unplanned)	answered	answered (unplanned)
+question_status	finite-domain-coefficient-boundary [QF04]	answered	not-answered	answered	not-answered
+question_status	dropping-fixed-point [QF06]	not-answered	not-answered	not-answered	not-answered
+question_status	strategy-overview [QF12]	not-answered	not-answered	not-answered	not-answered
+question_status	fixed-point-applicability [QF04]	answered	partly-answered (unplanned)	answered	partly-answered (unplanned)
+question_function_ink_words	QF01	29	16	19	15
+question_function_ink_words	QF04	96	37	86	28
+question_function_ink_words	QF06	0	0	0	0
+question_function_ink_words	QF09	36	11	14	35
+question_function_ink_words	QF11	91	47	64	44
+question_function_ink_words	QF12	0	0	0	0
+questions_count	answered	7	3	7	5
+questions_count	partly-answered	0	3	0	1
