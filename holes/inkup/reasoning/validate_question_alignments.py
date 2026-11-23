@@ -155,7 +155,7 @@ def validate(path: Path, candidates_path: Path | None = None) -> tuple[list[dict
         if candidates is not None and not record["candidate_id"].startswith("seed:"):
             source = candidates.get(record["candidate_id"])
             haystack = "" if source is None else ((source.get("title") or "") + "\n" +
-                                                   (source.get("question_passage") or ""))
+                                                   (source.get("passage") or ""))
             if source is None or record["source_wording"] not in haystack:
                 errors.append((line_no, "QA006 candidate missing or source wording is not verbatim"))
     return records, errors

@@ -443,3 +443,49 @@ def test_fake_similarity_reflects_shared_tokens_for_the_pinned_rows(embedder):
 def test_fixture_pinned_row_counts():
     assert len(_entities("math")) == 30
     assert len(_entities("mo")) == 12
+
+
+# stated embedding queries -----------------------------------------------------
+
+def test_stated_embedding_queries_are_used_and_each_hit_names_its_best_query(tmp_path, embedder):
+    texts = ["Schwarz lemma for a holomorphic self-map of the unit disk",
+             "roots of a polynomial"]
+    path = tmp_path / "query.json"
+    path.write_text(json.dumps({
+        "terms": [{"term": "polynomial", "source": "statement", "kind": "object"}],
+        "embedding_queries": [{"text": t, "source": "statement"} for t in texts],
+    }), encoding="utf-8")
+    outdir = retrieval.run_retrieval(path, list(STORES.items()), tmp_path / "out", embedder)
+    manifest = json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["query_texts"] == texts
+    hits = [json.loads(line) for line in
+            (outdir / "question-candidates.jsonl").read_text(encoding="utf-8").splitlines()]
+    dense = [c for c in hits if c["method"] == "embedding"]
+    assert dense and {c["retrieval_reason"]["query_text"] for c in dense} == set(texts)
+    vectors = retrieval.normalize_rows(np.stack(
+        [retrieval.encode_query_text(embedder, t) for t in texts]).astype(np.float32))
+    for site, store in STORES.items():
+        matrix = retrieval.normalize_rows(np.load(store / "embeddings.npy").astype(np.float32))
+        rows = {e["entity/id"]: i for i, e in enumerate(_entities(site))}
+        for c in (c for c in dense if c["site"] == site):
+            cosines = matrix[rows[c["entity_id"]]] @ vectors.T
+            assert c["score"] == pytest.approx(float(cosines.max()), abs=1e-5)
+            assert c["retrieval_reason"]["query_index"] == int(cosines.argmax())
+            assert c["retrieval_reason"]["query_text"] == texts[int(cosines.argmax())]
+
+
+def test_empty_or_malformed_embedding_queries_are_refused(tmp_path, embedder):
+    path = tmp_path / "query.json"
+    path.write_text(json.dumps({
+        "terms": [{"term": "polynomial", "source": "statement"}],
+        "embedding_queries": [{"source": "statement"}],
+    }), encoding="utf-8")
+    with pytest.raises(ValueError):
+        retrieval.run_retrieval(path, list(STORES.items()), tmp_path / "out", embedder)
+
+
+def test_the_a96J06_query_file_loads():
+    path = Path(__file__).resolve().parents[1] / "holes/inkup/pilots/a96J06/retrieval-query.json"
+    query = retrieval.load_query(path)
+    assert len(retrieval.query_terms(query)) == 30
+    assert len(retrieval.query_embedding_texts(query)) == 5

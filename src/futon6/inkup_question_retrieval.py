@@ -234,8 +234,22 @@ def query_embedding_text(query: dict) -> str:
     """Terms grouped by category when categories are given; the text is reported verbatim."""
     categories: dict[str, list[str]] = {}
     for item in query["vocabulary"]:
-        categories.setdefault(str(item.get("category") or "term"), []).append(item["term"])
+        group = str(item.get("category") or item.get("kind") or "term")
+        categories.setdefault(group, []).append(item["term"])
     return ". ".join(f"{group}: " + "; ".join(terms) for group, terms in categories.items())
+
+
+def query_embedding_texts(query: dict) -> list[str]:
+    """The texts to embed. A query file may state them itself under "embedding_queries"
+    ([{"text": ...}, ...]): a sentence about the problem is a better dense query than a
+    list of terms. Without that key the grouped term list is the single query text."""
+    stated = query.get("embedding_queries")
+    if stated is None:
+        return [query_embedding_text(query)]
+    if (not isinstance(stated, list) or not stated or
+            not all(isinstance(q, dict) and str(q.get("text") or "").strip() for q in stated)):
+        raise ValueError("embedding_queries must be a non-empty list of {text: ...}")
+    return [q["text"].strip() for q in stated]
 
 
 # --- lexical: BM25 over title + question body -----------------------------
@@ -382,25 +396,36 @@ def question_passage(body: str, matched: Sequence[str], width: int = 700) -> str
 
 
 def embedding_top_rows(path: Path, query_vector: np.ndarray, limit: int,
-                       chunk_size: int = 8192) -> list[tuple[float, int]]:
+                       chunk_size: int = 8192,
+                       best_query: dict[int, int] | None = None) -> list[tuple[float, int]]:
     """Top `limit` rows by positive cosine, memory-mapped and scored in chunks.
 
-    Rows with no similarity to the query (cosine <= 0) are not candidates.
+    `query_vector` is one vector or a (queries, width) matrix. With several queries a row's
+    score is its best cosine over them, and `best_query`, when given, is filled with
+    row -> index of the query that produced that score.
+    Rows with no similarity to any query (cosine <= 0) are not candidates.
     """
     matrix = np.load(path, mmap_mode="r")
-    query = normalize_rows(np.asarray(query_vector, dtype=np.float32).reshape(1, -1))[0]
-    if matrix.ndim != 2 or matrix.shape[1] != query.shape[0]:
-        raise ValueError(f"stored vectors {matrix.shape} do not match query width {query.shape[0]}")
+    queries = np.asarray(query_vector, dtype=np.float32)
+    queries = normalize_rows(queries.reshape(1, -1) if queries.ndim == 1 else queries)
+    if matrix.ndim != 2 or matrix.shape[1] != queries.shape[1]:
+        raise ValueError(f"stored vectors {matrix.shape} do not match query width {queries.shape[1]}")
     heap = []
+    which: dict[int, int] = {}
     for start in range(0, len(matrix), chunk_size):
         chunk = np.asarray(matrix[start:start + chunk_size], dtype=np.float32)
-        scores = normalize_rows(chunk) @ query
+        every = normalize_rows(chunk) @ queries.T
+        scores, winners = every.max(axis=1), every.argmax(axis=1)
         take = min(limit, len(scores))
         for local in np.argpartition(scores, len(scores) - take)[len(scores) - take:]:
             if scores[local] > 0.0:
                 row = start + int(local)
+                which[row] = int(winners[local])
                 _push(heap, (float(scores[local]), -row, row), limit)
-    return [(x[0], x[2]) for x in sorted(heap, reverse=True) if x[0] > 0.0]
+    top = [(x[0], x[2]) for x in sorted(heap, reverse=True) if x[0] > 0.0]
+    if best_query is not None:
+        best_query.update({row: which[row] for _score, row in top})
+    return top
 
 
 def make_candidate(entity: dict, site: str, method: str, rank: int, score: float,
@@ -485,12 +510,13 @@ def retrieve_site(site: str, store: Path, terms: Sequence[str], query_vector: np
         "row_alignment": alignment,
     }
     dense = []
+    best_query: dict[int, int] = {}
     if not rows_match:
         # Vectors are tied to entities by row position; unequal counts mean positions disagree.
         report["embedding_skipped"] = (
             f"row count mismatch: {stats['docs']} entities but {stored_rows} stored vectors")
     elif alignment["trusted"]:
-        dense = embedding_top_rows(embeddings, query_vector, limit)
+        dense = embedding_top_rows(embeddings, query_vector, limit, best_query=best_query)
     else:
         report["embedding_skipped"] = ("row alignment below threshold: stored vectors "
                                        "could not be tied to their entity rows")
@@ -502,7 +528,8 @@ def retrieve_site(site: str, store: Path, terms: Sequence[str], query_vector: np
                                  {"matched_terms": matched}, passage)
                   for rank, (score, _row, entity, matched, passage) in enumerate(lexical["hits"], 1)]
     candidates += [make_candidate(lexical["grabbed"][row], site, "embedding", rank, score,
-                                  {"query_text": None, "match_scope": EMBEDDING_MATCH_SCOPE},
+                                  {"query_text": None, "query_index": best_query.get(row, 0),
+                                   "match_scope": EMBEDDING_MATCH_SCOPE},
                                   (lexical["grabbed"][row].get("question-body") or "")[:WINDOW])
                    for rank, (score, row) in enumerate(dense, 1)]
     report["counts"] = {"lexical": len(lexical["hits"]), "embedding": len(dense)}
@@ -526,14 +553,16 @@ def run_retrieval(query_path: Path, stores: Sequence[tuple[str, Path]], output_d
     encode_query = encode_query or (lambda text: encode_query_text(encode, text))
     run_id = run_id or datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     terms = query_terms(query)
-    query_text = query_embedding_text(query)
-    query_vector = encode_query(query_text)
+    query_texts = query_embedding_texts(query)
+    query_vector = np.stack([np.asarray(encode_query(text), dtype=np.float32)
+                             for text in query_texts])
     candidates, reports = [], []
     for site, store in stores:
         found, report = retrieve_site(site, store, terms, query_vector, encode, limit, sample_count)
         for candidate in found:
             if candidate["method"] == "embedding":
-                candidate["retrieval_reason"]["query_text"] = query_text
+                reason = candidate["retrieval_reason"]
+                reason["query_text"] = query_texts[reason["query_index"]]
         candidates += found
         reports.append(report)
     with (output_dir / "question-candidates.jsonl").open("w", encoding="utf-8") as fh:
@@ -546,7 +575,7 @@ def run_retrieval(query_path: Path, stores: Sequence[tuple[str, Path]], output_d
         "git_sha": git_sha(repo),
         "model": MODEL_NAME,
         "query_sha256": hashlib.sha256(Path(query_path).read_bytes()).hexdigest(),
-        "query_text": query_text,
+        "query_texts": query_texts,
         "terms": terms,
         "problem": query.get("problem"),
         "top_per_method_per_site": limit,
