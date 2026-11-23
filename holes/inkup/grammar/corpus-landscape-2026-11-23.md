@@ -4,7 +4,7 @@ Status: read-only inventory for sampling; no corpus-quality claim.
 
 ## Local CT scope store
 
-`/home/joe/storage/mark2/ct-fresh-scopes` contains 9,916 JSON files totalling
+`mark2/ct-fresh-scopes` under the storage home contains 9,916 JSON files totalling
 11,754,518,979 bytes.  A deterministic 100-file stratified sample (evenly
 spaced over the sorted filenames) parsed without errors:
 
@@ -22,8 +22,8 @@ than treating every scope as one observation of writing quality.
 
 ## Rob's retained Mark7 runs on metameso
 
-Read-only SSH inspection of `/home/rob` on `metameso` found an empty
-`/home/rob/mark2` directory and these retained result archives beside it:
+Read-only SSH inspection of Rob's home directory on `metameso` found an empty
+`mark2` directory there and these retained result archives beside it:
 
 | Archive | Compressed bytes | Uncompressed tar bytes |
 |---|---:|---:|
@@ -42,7 +42,7 @@ or unaccounted.  Its proof-move grounding curve reaches 7,029 proof graphs,
 Therefore the evidence presently supports **100 retained papers and 7,029
 proof graphs**, not 1,000 retained papers.  The remembered larger figure may
 describe an upstream complex-analysis collection or a run not present under
-`/home/rob`; it must not be substituted for the manifest count.
+Rob's home; it must not be substituted for the manifest count.
 
 ## Sampling consequence
 

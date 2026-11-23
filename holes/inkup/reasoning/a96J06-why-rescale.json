@@ -4,7 +4,7 @@
   "sources": {
     "blueprint-alignment": {
       "path": "../pilots/a96J06/alignment.json",
-      "sha256": "9242e6c801769a3429d6c9537d68b42c92bb3c6d5e0c682ca7173ec2f37bb9b0"
+      "sha256": "65567ce4637ea4b435c9a28514deaa9ead92e1eeaf253a993d58f0cb36692e00"
     }
   },
   "nodes": [

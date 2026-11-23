@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import re
 from pathlib import Path
 
@@ -16,6 +17,23 @@ def fail(message: str) -> None:
     raise SystemExit(message)
 
 
+# Source paths are written "<root>:<relative path>" so that the record holds no
+# host path.  apm-lean is the sibling checkout of this repo unless
+# INKUP_APM_LEAN_ROOT says otherwise; storage is the storage home (run output,
+# never in a repo), ~/storage unless INKUP_STORAGE_ROOT says otherwise.
+SOURCE_ROOTS = {
+    "apm-lean": Path(os.environ.get("INKUP_APM_LEAN_ROOT", HERE.parents[4] / "apm-lean")),
+    "storage": Path(os.environ.get("INKUP_STORAGE_ROOT", Path.home() / "storage")),
+}
+
+
+def resolve_source(spec: str) -> Path:
+    root, sep, rel = spec.partition(":")
+    if not sep or root not in SOURCE_ROOTS or rel.startswith("/"):
+        fail(f"source path must be <root>:<relative path> with root in {sorted(SOURCE_ROOTS)}: {spec}")
+    return SOURCE_ROOTS[root] / rel
+
+
 doc = json.loads((HERE / "alignment.json").read_text())
 json.loads((HERE / "alignment.schema.json").read_text())
 
@@ -23,7 +41,7 @@ if doc.get("schema") != "inkup.blueprint-lineage/v0" or doc.get("problem") != "a
     fail("wrong pilot identity")
 
 for name, source in doc["sources"].items():
-    path = Path(source["path"])
+    path = resolve_source(source["path"])
     if not path.is_file():
         fail(f"{name}: missing source {path}")
     digest = hashlib.sha256(path.read_bytes()).hexdigest()

@@ -3,23 +3,23 @@
   "problem": "a96J06",
   "sources": {
     "proof-plan": {
-      "path": "/home/joe/code/apm-lean/problems/a96J06/proof-plan.edn",
+      "path": "apm-lean:problems/a96J06/proof-plan.edn",
       "sha256": "44f0e8ffd9cdf2f9267a084af2cc230c80b42f0d5018f2cd9adefc4e417ddac0"
     },
     "informal": {
-      "path": "/home/joe/code/apm-lean/problems/a96J06/informal-solution.md",
+      "path": "apm-lean:problems/a96J06/informal-solution.md",
       "sha256": "d0d7f5c0dbf70e139787dd7188bfad98cbf08da5e08a651500f5c23278bfb366"
     },
     "lean": {
-      "path": "/home/joe/code/apm-lean/problems/a96J06/lean/Main.lean",
+      "path": "apm-lean:problems/a96J06/lean/Main.lean",
       "sha256": "b93980bb718864100e5f7e3bb52392d5faf16d2a340b164d9e2e1de0b19898c1"
     },
     "mark8-candidate": {
-      "path": "/home/joe/storage/apm/mining/runs/apm-501-xi-r1/artifacts/candidates/a96J06__p0.candidate.json",
+      "path": "storage:apm/mining/runs/apm-501-xi-r1/artifacts/candidates/a96J06__p0.candidate.json",
       "sha256": "768dc409dc8c8dee61be1d56721d0bf77cccb40e8010197bbbbd85c44ccb7106"
     },
     "mark8-s3": {
-      "path": "/home/joe/storage/apm/mining/runs/apm-501-xi-r1/artifacts/graphs/a96J06__p0.edn",
+      "path": "storage:apm/mining/runs/apm-501-xi-r1/artifacts/graphs/a96J06__p0.edn",
       "sha256": "a3242a7ca944b560f9293e13db65f9bfdfa7dd35f47dad90744a0fd37b2207dd"
     }
   },
