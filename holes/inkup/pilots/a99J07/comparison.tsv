@@ -1,0 +1,30 @@
+axis	key	teaching	expert-reference	formal-audit	publication
+words	total	286	107	258	137
+node_status	a99J07:B0	realized	merged->B7	realized	merged->B8
+node_ink_percent	a99J07:B0	9.1	0.0	7.4	0.0
+node_status	a99J07:B1	realized	realized	realized	realized
+node_ink_percent	a99J07:B1	11.9	13.1	13.2	11.7
+node_status	a99J07:B2	realized	merged->B4	realized	realized
+node_ink_percent	a99J07:B2	9.8	0.0	4.7	5.1
+node_status	a99J07:B3	realized	merged->B7	realized	realized
+node_ink_percent	a99J07:B3	4.9	0.0	7.8	7.3
+node_status	a99J07:B4	realized	realized	realized	realized
+node_ink_percent	a99J07:B4	19.2	41.1	19.8	27.7
+node_status	a99J07:B5	realized	realized	realized	realized
+node_ink_percent	a99J07:B5	5.2	10.3	7.4	8.0
+node_status	a99J07:B6	realized	realized	realized	realized
+node_ink_percent	a99J07:B6	23.4	11.2	26.0	23.4
+node_status	a99J07:B7	realized	realized	realized	realized
+node_ink_percent	a99J07:B7	11.9	24.3	8.5	8.0
+node_status	a99J07:B8	realized	merged->B7	realized	realized
+node_ink_percent	a99J07:B8	4.5	0.0	5.4	8.8
+question_status	unit-disk-supremum-bound [QF11]	answered	not-answered	answered	not-answered
+question_status	maximum-modulus-applicability [QF04]	answered	not-answered	answered	answered
+question_status	circle-to-disk-transfer [QF11]	answered	not-answered	answered	not-answered
+question_status	reflection-strategy [QF01]	answered	answered	answered	answered
+question_function_ink_words	QF01	55	44	51	38
+question_function_ink_words	QF04	67	0	67	32
+question_function_ink_words	QF11	83	0	61	0
+questions	answered	4	1	4	2
+questions	partly-answered	0	0	0	0
+questions	not-answered	0	3	0	2
