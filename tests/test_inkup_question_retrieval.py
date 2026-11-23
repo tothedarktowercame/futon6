@@ -489,3 +489,49 @@ def test_the_a96J06_query_file_loads():
     query = retrieval.load_query(path)
     assert len(retrieval.query_terms(query)) == 30
     assert len(retrieval.query_embedding_texts(query)) == 5
+
+
+# row alignment on a store larger than the sample ------------------------------
+# The fixture stores are smaller than the 200-row sample, so there the sampled rows
+# are rows 0..n-1 and a check that compared against sample POSITIONS would pass.
+# On the real MathOverflow store that comparison reported 1/200 own-row hits with
+# mean own cosine 1.0.
+
+def _hash_embedder(texts):
+    import hashlib
+    rows = []
+    for text in texts:
+        seed = int.from_bytes(hashlib.sha256(text.encode("utf-8")).digest()[:8], "big")
+        rows.append(np.random.default_rng(seed).standard_normal(32))
+    return np.asarray(rows, dtype=np.float32)
+
+
+def _big_store(path, count=700):
+    path.mkdir()
+    entities = [{"entity/id": f"se-big-{i}", "title": f"title {i}",
+                 "question-body": f"question body number {i}",
+                 "answer-body": f"answer body number {i}", "tags": [], "created": None}
+                for i in range(count)]
+    (path / "entities.json").write_text(json.dumps(entities), encoding="utf-8")
+    vectors = retrieval.normalize_rows(
+        _hash_embedder([retrieval.embedding_text(e) for e in entities]))
+    np.save(path / "embeddings.npy", vectors)
+    return vectors
+
+
+def test_row_alignment_is_one_when_the_store_is_larger_than_the_sample(tmp_path):
+    _big_store(tmp_path / "big")
+    report = retrieval.check_row_alignment(tmp_path / "big" / "entities.json",
+                                           tmp_path / "big" / "embeddings.npy", _hash_embedder)
+    assert report["sample_count"] == 200 and report["sample_capped_by_store_size"] is False
+    assert report["own_row_nearest_fraction"] == 1.0
+    assert report["trusted"] is True
+
+
+def test_row_alignment_is_zero_when_a_large_store_is_shifted(tmp_path):
+    vectors = _big_store(tmp_path / "big")
+    np.save(tmp_path / "big" / "embeddings.npy", np.roll(vectors, 1, axis=0))
+    report = retrieval.check_row_alignment(tmp_path / "big" / "entities.json",
+                                           tmp_path / "big" / "embeddings.npy", _hash_embedder)
+    assert report["own_row_nearest_fraction"] == 0.0
+    assert report["trusted"] is False

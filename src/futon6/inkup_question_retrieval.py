@@ -191,7 +191,7 @@ def check_row_alignment(entities_path: Path, embeddings_path: Path, encode: Enco
         value = scores[np.arange(len(indices)), local]
         take = value > best
         nearest[take], best[take] = start + local[take], value[take]
-    hits = int(np.sum(nearest == np.arange(len(indices))))
+    hits = int(np.sum(nearest == np.asarray(indices)))
     return {
         "sample_count": len(indices),
         "sample_count_requested": requested,
