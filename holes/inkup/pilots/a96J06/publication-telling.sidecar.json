@@ -1,0 +1,205 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a96J06",
+  "realizations": "holes/inkup/pilots/a96J06/publication-telling.md",
+  "content_plan": "holes/inkup/pilots/a96J06/content-plan.json",
+  "note": "Publication-profile P4 sidecar. Quotes are verbatim; graph_support identifies the reasoning edges stated by each answer.",
+  "profiles": {
+    "publication": {
+      "nodes": [
+        {
+          "node": "a96J06:B0",
+          "status": "merged",
+          "merged_into": "a96J06:B6",
+          "quote": "for\nevery \\(r>0\\) some \\(\\zeta\\) satisfies \\(\\lVert\\zeta\\rVert<r\\) and\n\\(\\lVert p(\\zeta)\\rVert>r\\)",
+          "ink_words": 0,
+          "ink_percent": 0.0,
+          "planned_percent": 0,
+          "planned_action": "omit"
+        },
+        {
+          "node": "a96J06:B1",
+          "status": "realized",
+          "ink_words": 11,
+          "ink_percent": 8.7,
+          "planned_percent": 10,
+          "planned_action": "show"
+        },
+        {
+          "node": "a96J06:B2",
+          "status": "realized",
+          "ink_words": 15,
+          "ink_percent": 11.8,
+          "planned_percent": 20,
+          "planned_action": "show"
+        },
+        {
+          "node": "a96J06:B3",
+          "status": "realized",
+          "ink_words": 17,
+          "ink_percent": 13.4,
+          "planned_percent": 10,
+          "planned_action": "compress"
+        },
+        {
+          "node": "a96J06:B4",
+          "status": "realized",
+          "ink_words": 35,
+          "ink_percent": 27.6,
+          "planned_percent": 20,
+          "planned_action": "show"
+        },
+        {
+          "node": "a96J06:B5",
+          "status": "realized",
+          "ink_words": 30,
+          "ink_percent": 23.6,
+          "planned_percent": 30,
+          "planned_action": "show"
+        },
+        {
+          "node": "a96J06:B6",
+          "status": "realized",
+          "ink_words": 19,
+          "ink_percent": 15.0,
+          "planned_percent": 10,
+          "planned_action": "show"
+        }
+      ],
+      "questions": [
+        {
+          "question": "scaling-strategy",
+          "blueprint_node": "a96J06:B2",
+          "status": "answered",
+          "node": "a96J06:B2",
+          "quote": "Define \\(g(w)=r^{-1}p(rw)\\), thereby transferring this supposition to\nthe unit disk while preserving \\(g(0)=0\\) and \\(g'(0)=1\\).",
+          "ink_words": 15,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a96J06-why-rescale.json",
+              "edge": {
+                "from": "gap",
+                "relation": "resolved-by",
+                "to": "scale"
+              }
+            }
+          ]
+        },
+        {
+          "question": "rotation-specializes-to-identity",
+          "blueprint_node": "a96J06:B4",
+          "status": "answered",
+          "node": "a96J06:B4",
+          "quote": "The complex Schwarz equality case, applied using this holomorphy, the\nmap into the closed unit disk, \\(0\\) in the domain, and\n\\(\\lVert\\operatorname{dslope}(g,0,0)\\rVert=1\\), yields\n\\(g(w)=g(0)+w\\operatorname{dslope}(g,0,0)\\); since \\(g(0)=0\\) and\n\\(\\operatorname{dslope}(g,0,0)=g'(0)=1\\), we obtain \\(g(w)=w\\) on the unit\ndisk.",
+          "ink_words": 35,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "identity-specialization-warrant",
+                "relation": "requires",
+                "to": "derivative-one"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "identity-specialization-warrant",
+                "relation": "warrants",
+                "to": "identity-on-unit-ball"
+              }
+            }
+          ]
+        },
+        {
+          "question": "coefficient-extensionality",
+          "blueprint_node": "a96J06:B5",
+          "status": "answered",
+          "node": "a96J06:B5",
+          "quote": "Applying the degree-\\(N\\) coefficient map gives\n\\(c_N=\\operatorname{coeff}_N(X)=0\\), since \\(N\\ge2\\).",
+          "ink_words": 9,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json",
+              "edge": {
+                "from": "coefficient-congruence-warrant",
+                "relation": "warrants",
+                "to": "coefficient-equality"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json",
+              "edge": {
+                "from": "top-zero-warrant",
+                "relation": "warrants",
+                "to": "coefficient-zero"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": [
+        {
+          "question": "schwarz-applicability-by-normalization",
+          "status": "answered",
+          "node": "a96J06:B3",
+          "quote": "If \\(\\lVert w\\rVert<1\\), then \\(\\lVert rw\\rVert<r\\), whence\n\\(\\lVert g(w)\\rVert\\le1\\); moreover, \\(g\\) is holomorphic on the unit disk.",
+          "ink_words": 17,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a96J06-why-rescale.json",
+              "edge": {
+                "from": "unit-bound",
+                "relation": "enables",
+                "to": "schwarz"
+              }
+            }
+          ]
+        },
+        {
+          "question": "schwarz-rigidity-connection",
+          "status": "answered",
+          "node": "a96J06:B4",
+          "quote": "The complex Schwarz equality case, applied using this holomorphy, the\nmap into the closed unit disk, \\(0\\) in the domain, and\n\\(\\lVert\\operatorname{dslope}(g,0,0)\\rVert=1\\), yields\n\\(g(w)=g(0)+w\\operatorname{dslope}(g,0,0)\\); since \\(g(0)=0\\) and\n\\(\\operatorname{dslope}(g,0,0)=g'(0)=1\\), we obtain \\(g(w)=w\\) on the unit\ndisk.",
+          "ink_words": 35,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "affine-equality-warrant",
+                "relation": "requires",
+                "to": "unit-dslope"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "affine-equality-warrant",
+                "relation": "warrants",
+                "to": "affine-on-unit-ball"
+              }
+            }
+          ]
+        },
+        {
+          "question": "fixed-point-applicability",
+          "status": "partly-answered",
+          "node": "a96J06:B4",
+          "quote": "since \\(g(0)=0\\) and\n\\(\\operatorname{dslope}(g,0,0)=g'(0)=1\\), we obtain \\(g(w)=w\\) on the unit\ndisk",
+          "ink_words": 11,
+          "missing": "The prose uses g(0)=0 to remove the affine constant but does not separately state that it also centers the target ball.",
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+              "edge": {
+                "from": "identity-specialization-warrant",
+                "relation": "requires",
+                "to": "fixed-zero"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
