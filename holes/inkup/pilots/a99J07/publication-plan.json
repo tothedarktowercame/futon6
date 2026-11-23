@@ -7,7 +7,21 @@
  "source_telling": "holes/inkup/pilots/a99J07/reader-telling.teaching.md",
  "calibration": {
   "inherited_from": "holes/inkup/pilots/a96J06/publication-plan.json",
-  "note": "Same one-paper profile (14 proofs of arXiv 0708.2185); no new measurement was made for this problem. The rules are restated for a two-case proof with one auxiliary construction and one cited principle."
+  "note": "Same one-paper profile (14 proofs of arXiv 0708.2185); no new measurement was made for this problem. The rules are restated for a two-case proof with one auxiliary construction and one cited principle.",
+  "length_basis_rhgrh100": {
+   "run": "mark7rhgrh100-20260928 (100 RH/GRH-adjacent papers; 7,337 usable proofs)",
+   "table": "storage:futon6/inkup/professional/rhgrh100/summary.json, built by scripts/inkup-run-proofs.py",
+   "word_quantiles_10_25_50_75_90": [
+    25,
+    69,
+    156,
+    309,
+    564
+   ],
+   "share_of_proofs_at_or_under_target_120": 0.413,
+   "share_at_or_under_max_168": 0.53,
+   "note": "The 120/168 limits came from one paper whose own median proof is about 48 words; against this corpus they sit between the 41st and 53rd percentile, so they are kept."
+  }
  },
  "rules": [
   {
