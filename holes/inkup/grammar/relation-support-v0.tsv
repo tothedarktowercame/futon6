@@ -4,3 +4,4 @@ strategy-enables-goal	enables	The a96J06 graph records the converted unit-disk b
 method-requires-hypotheses	enables	The a96J06 graph records a verified condition as enabling the Schwarz method; co-occurrence or preservation alone is insufficient.
 claim-supported-by-warrant	warrants	A warrant-chain graph records a named warrant concluding the claim; the warrant must also carry its required premises.
 method-requires-hypotheses	requires	A warrant-chain graph records a hypothesis that the cited warrant consumes.
+claim-related-by-analogy-or-reduction	warrants	A warrant-chain graph records the claim as the conclusion of a named known result (a warrant with library authority); the reviewer checks that the warrant is that result.

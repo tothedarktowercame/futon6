@@ -159,7 +159,7 @@
         }
       ],
       "support_state": "contested",
-      "blocked_on": "A codomain-variation graph establishing when a holomorphic map into the closed unit disk satisfies the open-disk hypothesis needed by Schwarz rigidity.",
+      "blocked_on": "No variation is involved in the Lean proof: the Mathlib equality-case lemma is stated for maps into a closed ball (a96J06-schwarz-rigidity.json, affine-equality-warrant requires maps-to-closed-ball). The question was mapped as QF06 (result-extends-under-variation); an edge of that kind would need a graph relating the closed-codomain statement to the open-disk textbook statement. Alternatively remap the question to QF04 at the next R2 review.",
       "decisions": {
         "expert-reference": {
           "action": "omit",
@@ -189,30 +189,42 @@
       ],
       "support": [
         {
-          "graph": "holes/inkup/pilots/a96J06/alignment.json",
-          "node": "a96J06:B4"
+          "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+          "edge": {
+            "from": "identity-specialization-warrant",
+            "relation": "warrants",
+            "to": "identity-on-unit-ball"
+          }
         },
         {
-          "graph": "holes/inkup/reasoning/a96J06-why-rescale.json",
-          "node": "derivative"
+          "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+          "edge": {
+            "from": "identity-specialization-warrant",
+            "relation": "requires",
+            "to": "derivative-one"
+          }
+        },
+        {
+          "graph": "holes/inkup/pilots/a96J06/alignment.json",
+          "node": "a96J06:B4"
         }
       ],
-      "support_state": "contested",
-      "blocked_on": "A rigidity-warrant graph from derivative g′(0)=1 through the rotation parameter to g(w)=w.",
+      "support_state": "supported",
       "decisions": {
         "expert-reference": {
-          "action": "defer",
-          "reason": "The specialization is important but needs an explicit warrant edge."
+          "action": "anticipate",
+          "reason": "The expert profile names the equality case and its trigger; say what derivative one does."
         },
         "teaching": {
-          "action": "defer",
-          "reason": "A student should see the rotation parameter discharged once the warrant is represented."
+          "action": "anticipate",
+          "reason": "Show the remaining parameter being fixed by the derivative."
         },
         "formal-audit": {
-          "action": "defer",
-          "reason": "The formal identity conclusion must be connected to derivative one."
+          "action": "anticipate",
+          "reason": "Tie the identity conclusion to deriv g 0 = 1."
         }
-      }
+      },
+      "support_note": "The Lean proof has no rotation e^{iθ}: Mathlib's lemma returns the affine formula g 0 + w • dslope g 0 0, and g 0 = 0 with deriv g 0 = 1 reduce it to w. A telling that speaks of a rotation is using a textbook gloss the graph does not contain."
     },
     {
       "id": "coefficient-extensionality",
@@ -283,30 +295,50 @@
       ],
       "support": [
         {
-          "graph": "holes/inkup/pilots/a96J06/alignment.json",
-          "node": "a96J06:B4"
+          "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+          "edge": {
+            "from": "affine-equality-warrant",
+            "relation": "warrants",
+            "to": "affine-on-unit-ball"
+          }
         },
         {
-          "graph": "holes/inkup/reasoning/a96J06-why-rescale.json",
-          "node": "identity"
+          "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+          "edge": {
+            "from": "affine-equality-warrant",
+            "relation": "requires",
+            "to": "unit-dslope"
+          }
+        },
+        {
+          "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
+          "edge": {
+            "from": "identity-specialization-warrant",
+            "relation": "warrants",
+            "to": "identity-on-unit-ball"
+          }
+        },
+        {
+          "graph": "holes/inkup/pilots/a96J06/alignment.json",
+          "node": "a96J06:B4"
         }
       ],
-      "support_state": "contested",
-      "blocked_on": "A Schwarz-rigidity connection graph spelling out the equality-case hypotheses and the classification conclusion specialized by g′(0)=1.",
+      "support_state": "supported",
       "decisions": {
         "expert-reference": {
           "action": "omit",
-          "reason": "Do not duplicate the unresolved B4 warrant in the concise telling."
+          "reason": "The concise telling names the equality case without unpacking it."
         },
         "teaching": {
-          "action": "defer",
-          "reason": "The classification connection is pedagogically central once grounded."
+          "action": "anticipate",
+          "reason": "State what the equality case needs and what it returns."
         },
         "formal-audit": {
-          "action": "defer",
-          "reason": "The consumed equality-case theorem must be represented precisely."
+          "action": "anticipate",
+          "reason": "Record the exact lemma, its hypotheses and its affine conclusion."
         }
-      }
+      },
+      "support_note": "The known result is Complex.affine_of_mapsTo_ball_of_norm_dslope_eq_div."
     },
     {
       "id": "finite-domain-coefficient-boundary",
@@ -458,11 +490,11 @@
       ],
       "support": [
         {
-          "graph": "holes/inkup/reasoning/a96J06-why-rescale.json",
+          "graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json",
           "edge": {
-            "from": "scale",
-            "relation": "preserves",
-            "to": "fixed"
+            "from": "identity-specialization-warrant",
+            "relation": "requires",
+            "to": "fixed-zero"
           }
         },
         {
@@ -470,22 +502,22 @@
           "node": "a96J06:B3"
         }
       ],
-      "support_state": "contested",
-      "blocked_on": "An applicability edge from the preserved fixed-point fact to the Schwarz method, stating that fixing zero is a consumed hypothesis.",
+      "support_state": "supported",
       "decisions": {
         "expert-reference": {
           "action": "omit",
           "reason": "The fixed-point calculation is routine for the expert profile."
         },
         "teaching": {
-          "action": "defer",
-          "reason": "The student should see why the preserved fact is a consumed hypothesis once grounded."
+          "action": "anticipate",
+          "reason": "Say where g(0)=0 is used."
         },
         "formal-audit": {
-          "action": "defer",
-          "reason": "The audit must connect preservation of zero to the invoked theorem's hypothesis."
+          "action": "anticipate",
+          "reason": "Connect g 0 = 0 to the step that consumes it."
         }
-      }
+      },
+      "support_note": "In the Lean proof g 0 = 0 is not a hypothesis of the Mathlib equality-case lemma (which is stated for a ball centred at any c and a closed ball centred at f c). It is used to centre the target ball at 0 when proving hgmap, and to simplify the affine conclusion to the identity."
     }
   ]
 }

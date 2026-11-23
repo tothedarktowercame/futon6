@@ -85,7 +85,17 @@
           "node": "a96J06:B5",
           "quote": "identical.  Comparing their degree-(N) coefficients gives (c_N=0), contrary",
           "ink_words": 8,
-          "missing": "Gives the infinite-agreement warrant for polynomial identity, but not why equal polynomials have equal coefficients."
+          "missing": "Gives the infinite-agreement warrant for polynomial identity, but not why equal polynomials have equal coefficients.",
+          "blueprint_node": "a96J06:B4"
+        },
+        {
+          "question": "rotation-specializes-to-identity",
+          "status": "partly-answered",
+          "node": "a96J06:B4",
+          "quote": "The equality case of Schwarz's lemma therefore gives",
+          "ink_words": 8,
+          "missing": "g'(0)=1 is stated in the preceding passage, but nothing says that it is what triggers the equality case or what it fixes in the conclusion.",
+          "blueprint_node": "a96J06:B4"
         }
       ],
       "unplanned_answers": [
@@ -183,7 +193,8 @@
           "node": "a96J06:B5",
           "quote": "therefore all coefficients of degree at least two vanish.  In particular",
           "ink_words": 11,
-          "missing": "Identity of the polynomials is stated; why identity makes coefficients vanish is not said."
+          "missing": "Identity of the polynomials is stated; why identity makes coefficients vanish is not said.",
+          "blueprint_node": "a96J06:B4"
         },
         {
           "question": "finite-domain-coefficient-boundary",
@@ -192,7 +203,38 @@
           "node": "a96J06:B5",
           "quote": "Two polynomials that agree on infinitely many points are identical;",
           "ink_words": 10,
-          "missing": "States the infinite-point bridge without proof; the finite-domain contrast is not addressed."
+          "missing": "States the infinite-point bridge without proof; the finite-domain contrast is not addressed.",
+          "blueprint_node": "a96J06:B4"
+        },
+        {
+          "question": "rotation-specializes-to-identity",
+          "decision": "defer",
+          "status": "partly-answered",
+          "node": "a96J06:B4",
+          "quote": "Since (g'(0)=1), that rotation is",
+          "ink_words": 5,
+          "missing": "Why a derivative of one forces the identity rather than another rotation rests on a bare 'since'.",
+          "blueprint_node": "a96J06:B4"
+        },
+        {
+          "question": "schwarz-rigidity-connection",
+          "decision": "defer",
+          "status": "partly-answered",
+          "node": "a96J06:B4",
+          "quote": "derivative already has the maximal possible norm at the origin.  The equality",
+          "ink_words": 12,
+          "missing": "Names the trigger of the equality case but not how it classifies g as a rotation.",
+          "blueprint_node": "a96J06:B4"
+        },
+        {
+          "question": "fixed-point-applicability",
+          "decision": "defer",
+          "status": "partly-answered",
+          "node": "a96J06:B2",
+          "quote": "the two decisive normalizations, (g(0)=0) and (g'(0)=1).",
+          "ink_words": 7,
+          "missing": "Says scaling preserves g(0)=0 without computing it or saying that Schwarz's lemma consumes it.",
+          "blueprint_node": "a96J06:B4"
         }
       ],
       "unplanned_answers": [
@@ -203,33 +245,6 @@
           "node": "a96J06:B0",
           "quote": "The obstacle is that the radius (r) varies, whereas Schwarz's lemma",
           "ink_words": 11
-        },
-        {
-          "question": "rotation-specializes-to-identity",
-          "decision": "defer",
-          "status": "partly-answered",
-          "node": "a96J06:B4",
-          "quote": "Since (g'(0)=1), that rotation is",
-          "ink_words": 5,
-          "missing": "Why a derivative of one forces the identity rather than another rotation rests on a bare 'since'."
-        },
-        {
-          "question": "schwarz-rigidity-connection",
-          "decision": "defer",
-          "status": "partly-answered",
-          "node": "a96J06:B4",
-          "quote": "derivative already has the maximal possible norm at the origin.  The equality",
-          "ink_words": 12,
-          "missing": "Names the trigger of the equality case but not how it classifies g as a rotation."
-        },
-        {
-          "question": "fixed-point-applicability",
-          "decision": "defer",
-          "status": "partly-answered",
-          "node": "a96J06:B2",
-          "quote": "the two decisive normalizations, (g(0)=0) and (g'(0)=1).",
-          "ink_words": 7,
-          "missing": "Says scaling preserves g(0)=0 without computing it or saying that Schwarz's lemma consumes it."
         }
       ]
     },
@@ -317,7 +332,8 @@
           "node": "a96J06:B5",
           "quote": "so polynomial extensionality gives",
           "ink_words": 4,
-          "missing": "Names extensionality for polynomial equality; the step to equal coefficients is performed, not warranted."
+          "missing": "Names extensionality for polynomial equality; the step to equal coefficients is performed, not warranted.",
+          "blueprint_node": "a96J06:B4"
         },
         {
           "question": "finite-domain-coefficient-boundary",
@@ -326,10 +342,9 @@
           "node": "a96J06:B5",
           "quote": "The sequence (r/(n+2)) supplies an infinite set of such evaluation points,",
           "ink_words": 11,
-          "missing": "Supplies the infinite evaluation set; failure of comparison on a finite domain is not recorded."
-        }
-      ],
-      "unplanned_answers": [
+          "missing": "Supplies the infinite evaluation set; failure of comparison on a finite domain is not recorded.",
+          "blueprint_node": "a96J06:B4"
+        },
         {
           "question": "fixed-point-applicability",
           "decision": "defer",
@@ -337,9 +352,28 @@
           "node": "a96J06:B2",
           "quote": "gives (g'(0)=1), and direct simplification gives (g(0)=0).",
           "ink_words": 7,
-          "missing": "States g(0)=0 as a simplification; not tied to it being a consumed hypothesis of the rigidity lemma."
+          "missing": "States g(0)=0 as a simplification; not tied to it being a consumed hypothesis of the rigidity lemma.",
+          "blueprint_node": "a96J06:B4"
+        },
+        {
+          "question": "rotation-specializes-to-identity",
+          "status": "answered",
+          "node": "a96J06:B4",
+          "quote": "(g(0)=0) and (g'(0)=1), this specializes to (g(w)=w) throughout the unit",
+          "ink_words": 10,
+          "blueprint_node": "a96J06:B4"
+        },
+        {
+          "question": "schwarz-rigidity-connection",
+          "status": "partly-answered",
+          "node": "a96J06:B4",
+          "quote": "the derivative identity at (0), yields the affine equality case.  With",
+          "ink_words": 11,
+          "missing": "Names the lemma and that its conclusion is affine, but does not state the affine formula or which hypotheses the lemma takes.",
+          "blueprint_node": "a96J06:B4"
         }
-      ]
+      ],
+      "unplanned_answers": []
     }
   }
 }
