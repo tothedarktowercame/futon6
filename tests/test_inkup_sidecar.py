@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PILOT = ROOT / "holes/inkup/pilots/a96J06"
 SIDECAR = PILOT / "realizations.sidecar.json"
+TEACHING_SIDECAR = PILOT / "reader-telling.teaching.sidecar.json"
 VALIDATOR = PILOT / "validate_sidecar.py"
 spec = importlib.util.spec_from_file_location("validate_sidecar", VALIDATOR)
 module = importlib.util.module_from_spec(spec)
@@ -35,6 +36,13 @@ def test_real_sidecar_passes():
     report, errors = module.validate(SIDECAR)
     assert errors == []
     assert set(report) == {"expert-reference", "teaching", "formal-audit"}
+
+
+def test_teaching_only_sidecar_and_alternate_telling_pass():
+    report, errors = module.validate(TEACHING_SIDECAR)
+    assert errors == []
+    assert set(report) == {"teaching"}
+    assert report["teaching"]["questions"]["answered"] == 7
 
 
 def test_every_mandatory_node_scored_in_every_profile():
@@ -101,7 +109,14 @@ def test_partial_answer_needs_missing_statement(tmp_path):
     assert codes(validate_doc(tmp_path, doc)) == {"SC012"}
 
 
-def test_profile_must_match_plan(tmp_path):
+def test_profile_must_be_a_nonempty_plan_subset(tmp_path):
     doc = json.loads(SIDECAR.read_text())
-    del doc["profiles"]["formal-audit"]
+    doc["profiles"]["unknown-profile"] = doc["profiles"].pop("formal-audit")
     assert codes(validate_doc(tmp_path, doc)) == {"SC001"}
+
+
+def test_graph_support_edge_must_resolve(tmp_path):
+    doc = json.loads(TEACHING_SIDECAR.read_text())
+    target = question(doc, "teaching", "scaling-strategy")
+    target["graph_support"][0]["edge"]["to"] = "not-a-node"
+    assert codes(validate_doc(tmp_path, doc)) == {"SC014"}

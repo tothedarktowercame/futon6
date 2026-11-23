@@ -11,6 +11,7 @@ import argparse
 import csv
 import json
 import re
+import sys
 from collections import Counter
 from pathlib import Path
 
@@ -20,6 +21,8 @@ SCHEMA = "inkup.telling-sidecar/v0"
 MARKER = re.compile(r"\*\*\[B(\d+)\]\*\*")
 NODE_STATUSES = {"realized", "merged", "absent"}
 ANSWER_STATUSES = {"answered", "partly-answered", "not-answered"}
+sys.path.insert(0, str(ROOT / "holes/inkup/reasoning"))
+from validate_question_alignments import graph_inventory  # noqa: E402
 
 
 def profile_section_id(profile: str) -> str:
@@ -73,12 +76,23 @@ def load_ink(path: Path) -> dict[tuple[str, str], dict[str, str]]:
     return ink
 
 
-def validate(sidecar: Path, plan_path: Path = HERE / "content-plan.json",
-             realizations: Path = HERE / "realizations.md",
+def repo_path(reference: str) -> Path:
+    path = (ROOT / reference).resolve()
+    try:
+        path.relative_to(ROOT.resolve())
+    except ValueError as exc:
+        raise ValueError(f"path leaves repository: {reference}") from exc
+    return path
+
+
+def validate(sidecar: Path, plan_path: Path | None = None,
+             realizations: Path | None = None,
              ink_path: Path = HERE / "generative-ink.tsv") -> tuple[dict, list[str]]:
     errors: list[str] = []
     try:
         sidecar_doc = json.loads(sidecar.read_text())
+        plan_path = plan_path or repo_path(sidecar_doc["content_plan"])
+        realizations = realizations or repo_path(sidecar_doc["realizations"])
         plan = json.loads(plan_path.read_text())
         ink = load_ink(ink_path)
         sections = parse_sections(realizations.read_text())
@@ -86,6 +100,7 @@ def validate(sidecar: Path, plan_path: Path = HERE / "content-plan.json",
         return {}, [f"SC000 cannot read inputs: {exc}"]
     mandatory = [item["node"] for item in plan.get("mandatory_nodes", [])]
     questions = plan.get("questions", [])
+    question_plans = {q["id"]: q for q in questions}
     decisions = {q["id"]: q["decisions"] for q in questions}
     blueprint = {q["id"]: q["blueprint_node"] for q in questions}
     profiles_planned = {profile for decision in decisions.values() for profile in decision}
@@ -95,8 +110,8 @@ def validate(sidecar: Path, plan_path: Path = HERE / "content-plan.json",
     doc_profiles = sidecar_doc.get("profiles")
     if not isinstance(doc_profiles, dict) or not all(isinstance(p, dict) for p in doc_profiles.values()):
         return {}, errors + ["SC001 profiles must be an object of profile objects"]
-    if set(doc_profiles) != profiles_planned:
-        errors.append(f"SC001 profiles {sorted(doc_profiles)} differ from the plan's {sorted(profiles_planned)}")
+    if not doc_profiles or not set(doc_profiles) <= profiles_planned:
+        errors.append(f"SC001 profiles {sorted(doc_profiles)} are not a non-empty subset of the plan's {sorted(profiles_planned)}")
 
     report: dict = {}
     for profile, doc in doc_profiles.items():
@@ -192,6 +207,35 @@ def validate(sidecar: Path, plan_path: Path = HERE / "content-plan.json",
             if entry.get("ink_words") != words(quote):
                 errors.append(f"SC006 {where}: ink_words {entry.get('ink_words')} != {words(quote)}")
 
+        def check_graph_support(entry: dict, where: str, qid: str) -> None:
+            # v0 sidecars predate graph_support; new sidecars opt into this
+            # stronger check by carrying the field on each question entry.
+            if "graph_support" not in entry:
+                return
+            anchors = entry["graph_support"]
+            if not isinstance(anchors, list) or not anchors:
+                errors.append(f"SC014 {where}: graph_support must be a non-empty list")
+                return
+            allowed_graphs = {anchor.get("graph") for anchor in question_plans[qid].get("support", [])
+                              if isinstance(anchor, dict)}
+            for anchor in anchors:
+                edge = anchor.get("edge") if isinstance(anchor, dict) else None
+                if (not isinstance(anchor, dict) or set(anchor) != {"graph", "edge"} or
+                        not isinstance(edge, dict) or set(edge) != {"from", "relation", "to"}):
+                    errors.append(f"SC014 {where}: malformed graph_support edge")
+                    continue
+                if anchor["graph"] not in allowed_graphs:
+                    errors.append(f"SC014 {where}: graph {anchor['graph']} is not in the plan support")
+                    continue
+                try:
+                    _nodes, graph_edges = graph_inventory(anchor["graph"])
+                except (ValueError, json.JSONDecodeError) as exc:
+                    errors.append(f"SC014 {where}: cannot resolve support graph: {exc}")
+                    continue
+                triple = (edge["from"], edge["relation"], edge["to"])
+                if triple not in graph_edges:
+                    errors.append(f"SC014 {where}: graph_support edge does not resolve: {triple}")
+
         listed = doc.get("questions")
         unplanned = doc.get("unplanned_answers", [])
         if not isinstance(listed, list) or not isinstance(unplanned, list):
@@ -217,6 +261,7 @@ def validate(sidecar: Path, plan_path: Path = HERE / "content-plan.json",
             if status != "answered" and not entry.get("missing"):
                 errors.append(f"SC012 {where}: status {status} needs a 'missing' statement")
             check_quote(entry, where, in_node=True)
+            check_graph_support(entry, where, qid)
         for qid, decision in decisions.items():
             if decision.get(profile, {}).get("action") == "anticipate" and qid not in answered_ids:
                 errors.append(f"SC013 {profile} {qid}: anticipate decision has no question entry")
@@ -234,6 +279,7 @@ def validate(sidecar: Path, plan_path: Path = HERE / "content-plan.json",
             if status != "answered" and not entry.get("missing"):
                 errors.append(f"SC012 {where}: status {status} needs a 'missing' statement")
             check_quote(entry, where, in_node=True)
+            check_graph_support(entry, where, qid)
             report[profile]["unplanned"] += 1
     return report, errors
 
