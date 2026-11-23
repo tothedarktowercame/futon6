@@ -1,0 +1,1 @@
+{"candidate_id":"seed:bad-disposition","source_wording":"Why is this enough?","question_function":"QF02","requested_relation":"claim-suffices-for-goal","mapping_state":"rejected","proposers":["tester"],"reviewer":null,"support":[],"support_state":"unsupported","disposition":"omit","note":"Unsupported records must remain diagnostics."}

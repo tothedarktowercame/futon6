@@ -1,0 +1,4 @@
+requested_relation	admissible_edge_relation	rationale
+strategy-enables-goal	resolved-by	The a96J06 graph records the strategic scaling move as resolving the domain-mismatch obstacle.
+strategy-enables-goal	enables	The a96J06 graph records the converted unit-disk bound as enabling the intended Schwarz method.
+method-requires-hypotheses	enables	The a96J06 graph records a verified condition as enabling the Schwarz method; co-occurrence or preservation alone is insufficient.
