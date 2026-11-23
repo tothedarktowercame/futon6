@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 VALIDATOR = ROOT / "holes/inkup/reasoning/validate_reasoning.py"
 STRATEGY = ROOT / "holes/inkup/reasoning/a96J06-why-rescale.json"
 WARRANT = ROOT / "holes/inkup/reasoning/a96J06-coefficient-bridge.json"
+RIGIDITY = ROOT / "holes/inkup/reasoning/a96J06-schwarz-rigidity.json"
 spec = importlib.util.spec_from_file_location("validate_reasoning", VALIDATOR)
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
@@ -23,6 +24,15 @@ def write_graph(tmp_path, doc):
 def test_both_reasoning_graph_forms_validate():
     assert module.validate(STRATEGY)["subject"] == "a96J06: why rescale?"
     assert module.validate(WARRANT)["form"] == "warrant-chain"
+    assert module.validate(RIGIDITY)["form"] == "warrant-chain"
+
+
+def test_rigidity_graph_cannot_invent_open_codomain_binding(tmp_path):
+    doc = json.loads(RIGIDITY.read_text())
+    node = next(node for node in doc["nodes"] if node["id"] == "maps-to-closed-ball")
+    node["evidence"][0] = "lean:Main.lean#hgopenmap"
+    with pytest.raises(SystemExit, match="names nothing bound in the Lean source"):
+        module.validate(write_graph(tmp_path, doc))
 
 
 def test_warrant_without_requires_fails_for_that_reason(tmp_path):

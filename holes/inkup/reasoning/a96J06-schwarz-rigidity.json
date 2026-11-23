@@ -1,0 +1,129 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a96J06:B4 — Schwarz equality case specialized to the identity",
+  "sources": {
+    "lean": {
+      "path": "apm-lean:problems/a96J06/lean/Main.lean",
+      "sha256": "b93980bb718864100e5f7e3bb52392d5faf16d2a340b164d9e2e1de0b19898c1"
+    }
+  },
+  "nodes": [
+    {
+      "id": "q",
+      "kind": "question",
+      "claim": "Which hypotheses make the Schwarz equality case applicable to g, and why does its affine conclusion simplify to g(w) = w rather than an arbitrary rotation?",
+      "authority": "secondary",
+      "evidence": ["content-plan:rotation-specializes-to-identity", "content-plan:schwarz-rigidity-connection", "content-plan:closed-disk-codomain", "content-plan:fixed-point-applicability"]
+    },
+    {
+      "id": "answer",
+      "kind": "answer",
+      "claim": "Lean proves equality of the dslope norm at the center, applies Mathlib's closed-codomain affine equality case, and then uses g 0 = 0 and deriv g 0 = 1 to simplify the affine formula directly to the identity on the unit ball.",
+      "authority": "secondary",
+      "evidence": ["lean:Main.lean#hgderiv", "lean:Main.lean#haffine", "lean:Main.lean#hgeq"]
+    },
+    {
+      "id": "differentiable-on-ball",
+      "kind": "premise",
+      "claim": "g is complex differentiable on the open unit ball.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hgdiff"]
+    },
+    {
+      "id": "maps-to-closed-ball",
+      "kind": "premise",
+      "claim": "g maps the open unit ball into the closed ball of radius 1 centered at g 0; this is exactly the codomain form required by the Mathlib equality-case lemma, so no open-codomain conversion occurs.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hgmap", "Mathlib.Analysis.Complex.Schwarz:Complex.affine_of_mapsTo_ball_of_norm_dslope_eq_div"]
+    },
+    {
+      "id": "center-in-ball",
+      "kind": "premise",
+      "claim": "The chosen equality point z₀ = 0 belongs to the open unit ball.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hzero_mem"]
+    },
+    {
+      "id": "derivative-one",
+      "kind": "premise",
+      "claim": "deriv g 0 = 1.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hgderiv"]
+    },
+    {
+      "id": "fixed-zero",
+      "kind": "premise",
+      "claim": "g 0 = 0.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hgzero"]
+    },
+    {
+      "id": "strictly-convex-complex-target",
+      "kind": "premise",
+      "claim": "For E = ℂ, the target has instances [NormedAddCommGroup E], [NormedSpace ℂ E], and [StrictConvexSpace ℝ E], as required by the Mathlib equality-case declaration.",
+      "authority": "mathlib",
+      "evidence": ["Mathlib.Analysis.Complex.Schwarz:Complex.affine_of_mapsTo_ball_of_norm_dslope_eq_div:typeclass-instances"]
+    },
+    {
+      "id": "unit-dslope-warrant",
+      "kind": "warrant",
+      "claim": "At z₀ = c = 0, dslope g 0 0 = deriv g 0; substituting hgderiv and R₂/R₁ = 1/1 gives ‖dslope g 0 0‖ = 1 / 1.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hgderiv", "Mathlib.Analysis.Calculus.DSlope:dslope_same"]
+    },
+    {
+      "id": "unit-dslope",
+      "kind": "claim",
+      "claim": "‖dslope g 0 0‖ = 1 / 1.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hgderiv"]
+    },
+    {
+      "id": "affine-equality-warrant",
+      "kind": "warrant",
+      "claim": "Complex.affine_of_mapsTo_ball_of_norm_dslope_eq_div [StrictConvexSpace ℝ E] (hd : DifferentiableOn ℂ f (ball c R₁)) (h_maps : MapsTo f (ball c R₁) (closedBall (f c) R₂)) (h_z₀ : z₀ ∈ ball c R₁) (h_eq : ‖dslope f c z₀‖ = R₂ / R₁) concludes EqOn f (fun z => f c + (z - c) • dslope f c z₀) (ball c R₁); the surrounding declaration has [NormedAddCommGroup E] [NormedSpace ℂ E].",
+      "authority": "mathlib",
+      "evidence": ["Mathlib.Analysis.Complex.Schwarz:Complex.affine_of_mapsTo_ball_of_norm_dslope_eq_div", "lean:Main.lean#haffine"]
+    },
+    {
+      "id": "affine-on-unit-ball",
+      "kind": "claim",
+      "claim": "On the open unit ball, g w = g 0 + (w - 0) • dslope g 0 0.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#haffine"]
+    },
+    {
+      "id": "identity-specialization-warrant",
+      "kind": "warrant",
+      "claim": "Substituting g 0 = 0, dslope g 0 0 = deriv g 0, and deriv g 0 = 1 into the affine formula simplifies it to g w = w on the unit ball.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#haffine", "lean:Main.lean#hgzero", "lean:Main.lean#hgderiv", "lean:Main.lean#hgeq", "Mathlib.Analysis.Calculus.DSlope:dslope_same"]
+    },
+    {
+      "id": "identity-on-unit-ball",
+      "kind": "claim",
+      "claim": "For every w in the open unit ball, g w = w.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hgeq"]
+    }
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "unit-dslope-warrant"},
+    {"from": "answer", "relation": "cites-reason", "to": "affine-equality-warrant"},
+    {"from": "answer", "relation": "cites-reason", "to": "identity-specialization-warrant"},
+    {"from": "unit-dslope-warrant", "relation": "requires", "to": "derivative-one"},
+    {"from": "unit-dslope-warrant", "relation": "warrants", "to": "unit-dslope"},
+    {"from": "affine-equality-warrant", "relation": "requires", "to": "strictly-convex-complex-target"},
+    {"from": "affine-equality-warrant", "relation": "requires", "to": "differentiable-on-ball"},
+    {"from": "affine-equality-warrant", "relation": "requires", "to": "maps-to-closed-ball"},
+    {"from": "affine-equality-warrant", "relation": "requires", "to": "center-in-ball"},
+    {"from": "affine-equality-warrant", "relation": "requires", "to": "unit-dslope"},
+    {"from": "affine-equality-warrant", "relation": "warrants", "to": "affine-on-unit-ball"},
+    {"from": "identity-specialization-warrant", "relation": "requires", "to": "affine-on-unit-ball"},
+    {"from": "identity-specialization-warrant", "relation": "requires", "to": "fixed-zero"},
+    {"from": "identity-specialization-warrant", "relation": "requires", "to": "derivative-one"},
+    {"from": "identity-specialization-warrant", "relation": "warrants", "to": "identity-on-unit-ball"}
+  ]
+}
