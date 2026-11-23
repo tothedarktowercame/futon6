@@ -40,6 +40,16 @@ CORPUS_LIMITS = [
 ]
 EMBEDDING_MATCH_SCOPE = "title + first 500 chars of question + first 500 chars of answer"
 
+# A query term marked "anchor": true (see holes/inkup/pilots/*/retrieval-query.json) must be
+# matched by every lexical candidate. An anchor is a multi-word term with LaTeX, so it is
+# rarely a contiguous phrase in a post: it is matched when the document (title + question
+# body) contains at least this share of its distinct content tokens, and never fewer than
+# ANCHOR_MIN_TOKENS of them (a one- or two-token anchor needs what it has). Content tokens
+# are the tokenizer's tokens of length >= 2: LaTeX leaves single letters (f, p, l) and
+# command names (alpha, infty) behind, and single letters would match almost every post.
+ANCHOR_TOKEN_SHARE = 0.6
+ANCHOR_MIN_TOKENS = 2
+
 Encode = Callable[[list[str]], np.ndarray]
 
 
@@ -226,6 +236,12 @@ def load_query(path: Path) -> dict:
     return query
 
 
+def anchor_terms(query: dict) -> list[str]:
+    """The query terms marked "anchor": true, in query order; empty when none is marked."""
+    return list(dict.fromkeys(item["term"].strip().lower() for item in query["vocabulary"]
+                              if item.get("anchor") is True))
+
+
 def query_terms(query: dict) -> list[str]:
     return list(dict.fromkeys(item["term"].strip().lower() for item in query["vocabulary"]))
 
@@ -299,6 +315,25 @@ def _counts(title: list[str], body: list[str], phrases: dict[str, list[str]]) ->
     return counts
 
 
+def anchor_required_tokens(anchor: str) -> tuple[set[str], int]:
+    """(distinct content tokens, how many a document must contain) for one anchor term."""
+    tokens = {token for token in tokenize(anchor) if len(token) >= 2}
+    if not tokens:
+        raise ValueError(f"anchor term has no content token of length >= 2: {anchor!r}")
+    return tokens, min(len(tokens), max(ANCHOR_MIN_TOKENS, int(np.ceil(ANCHOR_TOKEN_SHARE * len(tokens)))))
+
+
+def anchors_admitting(document_tokens: set[str], anchors: dict[str, tuple[set[str], int]]) -> list[str]:
+    """The anchor terms that `document_tokens` matches, in the order the anchors were given."""
+    return [anchor for anchor, (tokens, required) in anchors.items()
+            if len(tokens.intersection(document_tokens)) >= required]
+
+
+ANCHOR_RULE = (f"a document is a lexical candidate only if, for at least one anchor term, it contains "
+               f"at least {ANCHOR_TOKEN_SHARE:.0%} of that term's distinct tokens of length >= 2 "
+               f"(never fewer than {ANCHOR_MIN_TOKENS}), in title or question body")
+
+
 def _bm25(title_n: int, body_n: int, doc_len: int, avgdl: float, df: int, docs: int) -> float:
     """BM25 term weight; a title occurrence counts TITLE_BOOST times a body occurrence."""
     idf = float(np.log(1.0 + (docs - df + 0.5) / (df + 0.5)))
@@ -318,8 +353,14 @@ def _push(heap: list, item: tuple, limit: int) -> None:
 
 
 def lexical_retrieve(path: Path, terms: Sequence[str], limit: int,
-                     stats: dict | None = None, rows_to_grab: Sequence[int] = ()) -> dict:
+                     stats: dict | None = None, rows_to_grab: Sequence[int] = (),
+                     anchors: Sequence[str] = ()) -> dict:
     """BM25 over title + question body (the answer body is never read).
+
+    `anchors`: terms that must be matched (see ANCHOR_RULE). With none, every document that
+    matches any term is scored; with one or more, only documents matching an anchor are.
+    Scoring is unchanged; the anchor rule only filters, and each hit records the anchors
+    that admitted it under "admitted_by".
 
     `stats` from lexical_stats supplies document frequencies; without it a first pass runs.
     Returns {"hits": [(score, row, entity, matched_terms, passage), ...] best first,
@@ -333,12 +374,20 @@ def lexical_retrieve(path: Path, terms: Sequence[str], limit: int,
     if stats is None:
         stats = lexical_stats(path, phrases)
     docs, total, df = stats["docs"], stats["total"], stats["df"]
-    heap = []
+    unknown = [a for a in anchors if a not in phrases]
+    if unknown:
+        raise ValueError(f"anchor terms must be among the query terms: {unknown}")
+    anchor_specs = {a: anchor_required_tokens(a) for a in anchors}
+    heap, passing = [], 0
     for row, entity in enumerate(iter_json_array(path)):
         if row in wanted:
             grabbed[row] = entity
         title = tokenize(entity.get("title") or "")
         body = tokenize(entity.get("question-body") or "")
+        admitted = anchors_admitting(set(title).union(body), anchor_specs)
+        if anchor_specs and not admitted:
+            continue
+        passing += 1
         score, matched = 0.0, []
         for term in _counts(title, body, phrases):
             phrase = phrases[term]
@@ -348,11 +397,16 @@ def lexical_retrieve(path: Path, terms: Sequence[str], limit: int,
                 score, matched = score + part, matched + [term]
         if score:
             passage = question_passage(entity.get("question-body") or "", matched)
-            _push(heap, (score, -row, row, entity, matched, passage), limit)
+            _push(heap, (score, -row, row, entity, matched, passage, admitted), limit)
     wanted = wanted - grabbed.keys()
     if wanted:
         raise ValueError(f"store rows missing from entities.json: {sorted(wanted)[:5]}")
     return {"hits": [(x[0], x[2], x[3], x[4], x[5]) for x in sorted(heap, reverse=True)],
+            "admitted_by": {x[2]: x[6] for x in heap},
+            "anchor_filter": ({"anchors": list(anchors), "rule": ANCHOR_RULE,
+                               "required_tokens": {a: required for a, (_t, required) in anchor_specs.items()},
+                               "documents_passing": passing, "documents": docs}
+                              if anchors else None),
             "grabbed": grabbed, "docs": docs}
 
 
@@ -490,7 +544,8 @@ def git_sha(repo: Path | None = None) -> str | None:
 
 def retrieve_site(site: str, store: Path, terms: Sequence[str], query_vector: np.ndarray,
                   encode: Encode, limit: int = TOP_PER_METHOD,
-                  sample_count: int = MIN_ALIGNMENT_SAMPLE) -> tuple[list[dict], dict]:
+                  sample_count: int = MIN_ALIGNMENT_SAMPLE,
+                  anchors: Sequence[str] = ()) -> tuple[list[dict], dict]:
     """Both methods over one store. entities.json is streamed exactly twice: pass one collects
     document frequencies and the alignment sample, pass two scores and fetches the embedding rows."""
     entities, embeddings = store / "entities.json", store / "embeddings.npy"
@@ -520,18 +575,22 @@ def retrieve_site(site: str, store: Path, terms: Sequence[str], query_vector: np
     else:
         report["embedding_skipped"] = ("row alignment below threshold: stored vectors "
                                        "could not be tied to their entity rows")
-    lexical = lexical_retrieve(entities, terms, limit, stats, rows_to_grab=[row for _, row in dense])
+    lexical = lexical_retrieve(entities, terms, limit, stats, rows_to_grab=[row for _, row in dense],
+                                anchors=anchors)
     report["row_count"] = {"entities": lexical["docs"], "stored_vectors": stored_rows}
     report["row_count"]["entities_match_vectors"] = (
         report["row_count"]["entities"] == report["row_count"]["stored_vectors"])
     candidates = [make_candidate(entity, site, "lexical", rank, score,
-                                 {"matched_terms": matched}, passage)
-                  for rank, (score, _row, entity, matched, passage) in enumerate(lexical["hits"], 1)]
+                                 ({"matched_terms": matched, "admitted_by": lexical["admitted_by"][row]}
+                                  if anchors else {"matched_terms": matched}), passage)
+                  for rank, (score, row, entity, matched, passage) in enumerate(lexical["hits"], 1)]
     candidates += [make_candidate(lexical["grabbed"][row], site, "embedding", rank, score,
                                   {"query_text": None, "query_index": best_query.get(row, 0),
                                    "match_scope": EMBEDDING_MATCH_SCOPE},
                                   (lexical["grabbed"][row].get("question-body") or "")[:WINDOW])
                    for rank, (score, row) in enumerate(dense, 1)]
+    if anchors:
+        report["anchor_filter"] = lexical["anchor_filter"]
     report["counts"] = {"lexical": len(lexical["hits"]), "embedding": len(dense)}
     return candidates, report
 
@@ -553,12 +612,16 @@ def run_retrieval(query_path: Path, stores: Sequence[tuple[str, Path]], output_d
     encode_query = encode_query or (lambda text: encode_query_text(encode, text))
     run_id = run_id or datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     terms = query_terms(query)
+    anchors = anchor_terms(query)
+    unknown = [a for a in anchors if a not in terms]
+    if unknown:
+        raise ValueError(f"anchor terms must be query terms: {unknown}")
     query_texts = query_embedding_texts(query)
     query_vector = np.stack([np.asarray(encode_query(text), dtype=np.float32)
                              for text in query_texts])
     candidates, reports = [], []
     for site, store in stores:
-        found, report = retrieve_site(site, store, terms, query_vector, encode, limit, sample_count)
+        found, report = retrieve_site(site, store, terms, query_vector, encode, limit, sample_count, anchors)
         for candidate in found:
             if candidate["method"] == "embedding":
                 reason = candidate["retrieval_reason"]
@@ -577,6 +640,8 @@ def run_retrieval(query_path: Path, stores: Sequence[tuple[str, Path]], output_d
         "query_sha256": hashlib.sha256(Path(query_path).read_bytes()).hexdigest(),
         "query_texts": query_texts,
         "terms": terms,
+        "anchors": anchors,
+        "lexical_anchor_rule": ANCHOR_RULE if anchors else None,
         "problem": query.get("problem"),
         "top_per_method_per_site": limit,
         "stores": reports,

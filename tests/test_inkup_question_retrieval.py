@@ -535,3 +535,108 @@ def test_row_alignment_is_zero_when_a_large_store_is_shifted(tmp_path):
                                            tmp_path / "big" / "embeddings.npy", _hash_embedder)
     assert report["own_row_nearest_fraction"] == 0.0
     assert report["trusted"] is False
+
+
+# anchor terms: a lexical candidate must match one when the query marks any -------------
+# Fixture rows used below: 1001 and 1002 say "Schwarz lemma"; 1003 says "polynomial" five
+# times and never "Schwarz" or "lemma"; without the rule 1003 is the top lexical hit.
+
+ANCHORED = [
+    {"term": "Schwarz lemma polynomial", "source": "test", "anchor": True},
+    {"term": "polynomial", "source": "test"},
+    {"term": "disk", "source": "test"},
+]
+
+
+def _anchored_run(tmp_path, embedder, terms):
+    path = tmp_path / "anchored-query.json"
+    path.write_text(json.dumps(terms), encoding="utf-8")
+    outdir = retrieval.run_retrieval(path, list(STORES.items()), tmp_path / "out", embedder)
+    candidates = [json.loads(line) for line in
+                  (outdir / "question-candidates.jsonl").read_text(encoding="utf-8").splitlines()]
+    return candidates, json.loads((outdir / "manifest.json").read_text(encoding="utf-8"))
+
+
+def test_without_anchors_the_manifest_and_reasons_carry_no_anchor_rule(run):
+    _, candidates, manifest = run
+    assert manifest["anchors"] == [] and manifest["lexical_anchor_rule"] is None
+    for entry in manifest["stores"]:
+        assert "anchor_filter" not in entry
+    assert all("admitted_by" not in c["retrieval_reason"]
+               for c in candidates if c["method"] == "lexical")
+
+
+def test_a_query_whose_anchor_flag_is_not_true_is_treated_as_unanchored(tmp_path, query, embedder, run):
+    plain = [dict(item) for item in json.loads(query.read_text())]
+    plain[0]["anchor"] = "true"  # only the boolean true marks an anchor
+    flagged = tmp_path / "flagged.json"
+    flagged.write_text(json.dumps(plain))
+    outdir = retrieval.run_retrieval(flagged, list(STORES.items()), tmp_path / "flagged-out", embedder)
+    candidates = [json.loads(line) for line in
+                  (outdir / "question-candidates.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert [(c["site"], c["method"], c["thread_id"], round(c["score"], 9), c["retrieval_reason"])
+            for c in candidates] == [(c["site"], c["method"], c["thread_id"], round(c["score"], 9), c["retrieval_reason"])
+                                     for c in run[1]]
+
+
+def test_with_an_anchor_the_strongest_non_anchor_match_is_absent(tmp_path, embedder):
+    candidates, manifest = _anchored_run(tmp_path, embedder, ANCHORED)
+    lexical = _ids(candidates, "lexical", "math")
+    assert "1003" not in lexical            # five "polynomial", one anchor token of three
+    assert set(lexical) == {"1001", "1002"}
+    for entry in manifest["stores"]:
+        if entry["site"] == "math":
+            assert entry["anchor_filter"]["documents_passing"] == 2
+            assert entry["anchor_filter"]["documents"] == 30
+    assert manifest["anchors"] == ["schwarz lemma polynomial"]
+    assert "60%" in manifest["lexical_anchor_rule"]
+
+
+def test_an_admitted_candidate_names_the_anchor_that_admitted_it(tmp_path, embedder):
+    candidates, _ = _anchored_run(tmp_path, embedder, ANCHORED)
+    by_id = {c["thread_id"]: c for c in candidates if c["method"] == "lexical" and c["site"] == "math"}
+    assert by_id["1001"]["retrieval_reason"]["admitted_by"] == ["schwarz lemma polynomial"]
+    assert by_id["1002"]["retrieval_reason"]["admitted_by"] == ["schwarz lemma polynomial"]
+    # the anchor is matched by its tokens, not as a phrase: neither post contains the phrase
+    assert "schwarz lemma polynomial" not in by_id["1001"]["retrieval_reason"]["matched_terms"]
+
+
+def test_one_token_of_a_three_token_anchor_admits_nothing():
+    """The bad case: a post with "norm" but not "essential" or "supremum" is not admitted,
+    however well it scores on the other terms."""
+    entities = STORES["math"] / "entities.json"
+    tokens, required = retrieval.anchor_required_tokens("essential supremum norm")
+    assert (tokens, required) == ({"essential", "supremum", "norm"}, 2)
+    assert retrieval.anchors_admitting({"norm", "sup", "polynomial"}, {"essential supremum norm": (tokens, required)}) == []
+    result = retrieval.lexical_retrieve(entities, ["essential supremum norm", "polynomial", "sup norm"], 10,
+                                        anchors=["essential supremum norm"])
+    assert result["hits"] == []
+    assert result["anchor_filter"]["documents_passing"] == 0
+    unanchored = retrieval.lexical_retrieve(entities, ["essential supremum norm", "polynomial", "sup norm"], 10)
+    assert [hit[2]["entity/id"] for hit in unanchored["hits"]] == ["se-math-1003"]
+
+
+def test_short_anchors_need_the_tokens_they_have():
+    assert retrieval.anchor_required_tokens("sup norm")[1] == 2
+    assert retrieval.anchor_required_tokens("quasiconformal")[1] == 1
+    # LaTeX leaves single letters behind; a command name is a content token
+    assert retrieval.anchor_required_tokens("$\\alpha < \\|f\\|_\\infty$") == ({"alpha", "infty"}, 2)
+
+
+def test_an_anchor_without_content_tokens_or_outside_the_terms_is_refused(tmp_path):
+    with pytest.raises(ValueError, match="no content token"):
+        retrieval.anchor_required_tokens("$x$ a")
+    entities = STORES["math"] / "entities.json"
+    with pytest.raises(ValueError, match="among the query terms"):
+        retrieval.lexical_retrieve(entities, ["polynomial"], 5, anchors=["schwarz lemma"])
+
+
+def test_the_anchor_rule_does_not_touch_the_embedding_method(tmp_path, embedder):
+    anchored, _ = _anchored_run(tmp_path, embedder, ANCHORED)
+    path = tmp_path / "plain.json"
+    path.write_text(json.dumps([{k: v for k, v in item.items() if k != "anchor"} for item in ANCHORED]))
+    outdir = retrieval.run_retrieval(path, list(STORES.items()), tmp_path / "plain-out", embedder)
+    plain = [json.loads(line) for line in
+             (outdir / "question-candidates.jsonl").read_text(encoding="utf-8").splitlines()]
+    key = lambda cs: [(c["site"], c["thread_id"], round(c["score"], 6)) for c in cs if c["method"] == "embedding"]
+    assert key(anchored) == key(plain) and key(anchored)
