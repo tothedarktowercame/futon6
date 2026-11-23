@@ -1,0 +1,36 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "subject": "a96J06: why rescale?",
+  "sources": {
+    "blueprint-alignment": {
+      "path": "../pilots/a96J06/alignment.json",
+      "sha256": "9242e6c801769a3429d6c9537d68b42c92bb3c6d5e0c682ca7173ec2f37bb9b0"
+    }
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "Why rescale the polynomial?", "authority": "reader-question", "evidence": ["joe:2026-11-23:why-rescale"]},
+    {"id": "gap", "kind": "obstacle", "claim": "The hypothesis is stated on a disk of radius r, while the available Schwarz rigidity method is stated on the unit disk.", "authority": "plan-inferred", "evidence": ["blueprint-alignment:a96J06:B1", "blueprint-alignment:a96J06:B4"]},
+    {"id": "schwarz", "kind": "method", "claim": "Use the equality case of Schwarz's lemma to identify the normalized map.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a96J06:B4"]},
+    {"id": "scale", "kind": "move", "claim": "Define g(w) = r⁻¹ p(rw).", "authority": "formal-derived", "evidence": ["blueprint-alignment:a96J06:B2"]},
+    {"id": "fixed", "kind": "invariant", "claim": "The rescaled map still fixes zero.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a96J06:B2"]},
+    {"id": "derivative", "kind": "invariant", "claim": "The rescaled map still has derivative one at zero.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a96J06:B2"]},
+    {"id": "unit-bound", "kind": "conversion", "claim": "The radius-r bound becomes a unit-disk bound for g.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a96J06:B2", "blueprint-alignment:a96J06:B3"]},
+    {"id": "identity", "kind": "result", "claim": "Schwarz rigidity yields g(w) = w on the unit disk.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a96J06:B4"]},
+    {"id": "unscale", "kind": "return", "claim": "Undoing the scaling yields p(z) = z on the original disk.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a96J06:B5"]},
+    {"id": "answer", "kind": "answer", "claim": "Rescaling is relevant because it closes the domain mismatch, preserves the decisive normalizations, enables Schwarz rigidity, and transports its conclusion back to the original polynomial.", "authority": "human-proposed", "evidence": ["blueprint-alignment:a96J06:B2", "blueprint-alignment:a96J06:B4", "blueprint-alignment:a96J06:B5"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "gap"},
+    {"from": "answer", "relation": "cites-reason", "to": "scale"},
+    {"from": "answer", "relation": "summarizes", "to": "unscale"},
+    {"from": "gap", "relation": "blocks", "to": "schwarz"},
+    {"from": "gap", "relation": "resolved-by", "to": "scale"},
+    {"from": "scale", "relation": "preserves", "to": "fixed"},
+    {"from": "scale", "relation": "preserves", "to": "derivative"},
+    {"from": "scale", "relation": "produces", "to": "unit-bound"},
+    {"from": "unit-bound", "relation": "enables", "to": "schwarz"},
+    {"from": "schwarz", "relation": "produces", "to": "identity"},
+    {"from": "identity", "relation": "transported-by", "to": "unscale"}
+  ]
+}

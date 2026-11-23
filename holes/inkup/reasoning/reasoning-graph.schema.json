@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://futon.example/schema/inkup-reasoning-graph-v0.json",
+  "title": "InkUp secondary reasoning graph v0",
+  "type": "object",
+  "required": ["schema", "subject", "sources", "nodes", "edges"],
+  "properties": {
+    "schema": {"const": "inkup.reasoning-graph/v0"},
+    "subject": {"type": "string", "minLength": 1},
+    "sources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "claim", "authority", "evidence"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "kind": {"enum": ["question", "obstacle", "method", "move", "invariant", "conversion", "result", "return", "answer"]},
+          "claim": {"type": "string", "minLength": 1},
+          "authority": {"enum": ["formal-derived", "plan-inferred", "reader-question", "human-proposed"]},
+          "evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["from", "relation", "to"],
+        "properties": {
+          "from": {"type": "string", "minLength": 1},
+          "relation": {"enum": ["answered-by", "cites-reason", "blocks", "resolved-by", "preserves", "produces", "enables", "transported-by", "summarizes"]},
+          "to": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
