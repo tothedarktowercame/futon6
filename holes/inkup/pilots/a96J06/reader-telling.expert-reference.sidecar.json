@@ -32,7 +32,7 @@
           "blueprint_node": "a96J06:B4",
           "status": "answered",
           "node": "a96J06:B4",
-          "quote": "Here (\\operatorname{dslope}(g,0,0)=g'(0)=1) and (g(0)=0), so the affine\nslope is exactly (1) and the formula reduces to (g(w)=w); no arbitrary\nrotation factor remains.",
+          "quote": "Here (\\operatorname{dslope}(g,0,0)=g'(0)=1) and (g(0)=0), so the affine\nslope is exactly (1) and the formula reduces to (g(w)=w); no arbitrary\ntextbook rotation remains.",
           "ink_words": 22,
           "graph_support": [
             {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "requires", "to": "derivative-one"}},

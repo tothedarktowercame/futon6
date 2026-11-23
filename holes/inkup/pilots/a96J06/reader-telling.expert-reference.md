@@ -23,7 +23,7 @@ g(w)=g(0)+(w-0)\operatorname{dslope}(g,0,0).
 
 Here (\operatorname{dslope}(g,0,0)=g'(0)=1) and (g(0)=0), so the affine
 slope is exactly (1) and the formula reduces to (g(w)=w); no arbitrary
-rotation factor remains.
+textbook rotation remains.
 
 **[B5]** Hence (p(z)=z) on the radius-(r) disk.  Agreement on this infinite
 set makes the two polynomials identical.  Applying the degree-(N) coefficient

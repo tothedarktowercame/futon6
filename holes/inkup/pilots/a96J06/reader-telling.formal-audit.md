@@ -44,7 +44,7 @@ g(w)=g(0)+(w-0)\operatorname{dslope}(g,0,0).
 `hgzero` first centred the target ball in `hgmap`; the lemma does not consume
 it.  Lean uses it here again with `hgderiv` to simplify the affine formula to
 `hgeq : g(w)=w`.  Thus the slope
-is (1), not an undetermined rotation factor.
+is (1), not a rotation from the textbook.
 
 **[B5]** `heval` applies `hgeq` at (r^{-1}\zeta) and clears (r), giving equal
 evaluations of `apm_a96J06_poly N c` and (X).  In `hset`, the injective

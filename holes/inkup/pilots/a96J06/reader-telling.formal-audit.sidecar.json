@@ -10,9 +10,9 @@
         {"node": "a96J06:B0", "status": "realized", "ink_words": 14, "ink_percent": 4.6, "planned_percent": 5, "planned_action": "show"},
         {"node": "a96J06:B1", "status": "realized", "ink_words": 20, "ink_percent": 6.6, "planned_percent": 10, "planned_action": "show"},
         {"node": "a96J06:B2", "status": "realized", "ink_words": 38, "ink_percent": 12.5, "planned_percent": 15, "planned_action": "show"},
-        {"node": "a96J06:B3", "status": "realized", "ink_words": 53, "ink_percent": 17.5, "planned_percent": 20, "planned_action": "expand"},
-        {"node": "a96J06:B4", "status": "realized", "ink_words": 62, "ink_percent": 20.5, "planned_percent": 15, "planned_action": "show"},
-        {"node": "a96J06:B5", "status": "realized", "ink_words": 92, "ink_percent": 30.4, "planned_percent": 25, "planned_action": "expand"},
+        {"node": "a96J06:B3", "status": "realized", "ink_words": 53, "ink_percent": 17.4, "planned_percent": 20, "planned_action": "expand"},
+        {"node": "a96J06:B4", "status": "realized", "ink_words": 63, "ink_percent": 20.7, "planned_percent": 15, "planned_action": "show"},
+        {"node": "a96J06:B5", "status": "realized", "ink_words": 92, "ink_percent": 30.3, "planned_percent": 25, "planned_action": "expand"},
         {"node": "a96J06:B6", "status": "realized", "ink_words": 24, "ink_percent": 7.9, "planned_percent": 10, "planned_action": "show"}
       ],
       "questions": [
@@ -43,8 +43,8 @@
           "blueprint_node": "a96J06:B4",
           "status": "answered",
           "node": "a96J06:B4",
-          "quote": "Lean uses it here again with `hgderiv` to simplify the affine formula to\n`hgeq : g(w)=w`.  Thus the slope\nis (1), not an undetermined rotation factor.",
-          "ink_words": 26,
+          "quote": "Lean uses it here again with `hgderiv` to simplify the affine formula to\n`hgeq : g(w)=w`.  Thus the slope\nis (1), not a rotation from the textbook.",
+          "ink_words": 27,
           "graph_support": [
             {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "requires", "to": "derivative-one"}},
             {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "warrants", "to": "identity-on-unit-ball"}}
