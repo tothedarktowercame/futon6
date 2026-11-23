@@ -1,0 +1,169 @@
+{
+  "schema": "inkup.blueprint-lineage/v0",
+  "problem": "a00J01",
+  "sources": {
+    "proof-plan": {
+      "path": "apm-lean:problems/a00J01/proof-plan.edn",
+      "sha256": "cb7f975d2bc815e52b141b447681ba4e379f456c054d0fc0e92534d634051bd1"
+    },
+    "informal": {
+      "path": "apm-lean:problems/a00J01/informal-solution.md",
+      "sha256": "96359cb75256e3fd567fd08b30ed185d336fb69b4fcdc627dfbbc088a709e618"
+    },
+    "lean": {
+      "path": "apm-lean:problems/a00J01/lean/Main.lean",
+      "sha256": "89909aff4ced96b0820cf4c8d0b3a68aa21823cf33d04401d2515c7b1338e9bd"
+    },
+    "mark8-candidate": {
+      "path": "storage:apm/mining/runs/apm-501-xi-r1/artifacts/candidates/a00J01__p0.candidate.json",
+      "sha256": "cc105f6b281c0e10769a833cdd9e7f8eb068e7a7cb0bcd6a02d74710a8f1d8c0"
+    },
+    "mark8-s3": {
+      "path": "storage:apm/mining/runs/apm-501-xi-r1/artifacts/graphs/a00J01__p0.edn",
+      "sha256": "20a08984c340b767cc21f3c160e9d992cb92d00933a381f7478b5b91396c2eb3"
+    }
+  },
+  "nodes": [
+    {
+      "id": "a00J01:B0",
+      "parent": null,
+      "obligation": "State the definition of the essential supremum norm and prove that the L^p norms of an essentially bounded measurable function on [0,1] tend to its essential-supremum norm as the exponent tends to infinity.",
+      "depends_on": ["a00J01:B7"],
+      "argument_roles": ["goal"],
+      "expository_roles": ["overview"],
+      "reader_obligations": ["State the goal as a limit, not as two inequalities, and keep both halves of the problem (definition and limit) in view."],
+      "anchors": [
+        {"source": "proof-plan", "ref": ":goal", "relation": "states", "review": "model-proposed"},
+        {"source": "informal", "ref": "$\\lim_{p\\to\\infty} \\|f\\|_p = \\|f\\|_\\infty$", "relation": "states", "review": "model-proposed"},
+        {"source": "lean", "ref": "theorem eLpNorm_tendsto_top", "relation": "implements", "review": "model-proposed", "note": "The Lean theorem proves the limit only; the requested definition is never stated there."},
+        {"source": "mark8-s3", "ref": ":n2", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a00J01:B1",
+      "parent": "a00J01:B0",
+      "obligation": "Define the norm as the essential supremum: the least M with |f| at most M almost everywhere.",
+      "depends_on": [],
+      "argument_roles": ["assumption"],
+      "expository_roles": ["definition"],
+      "reader_obligations": ["State the definition in the form that makes positive measure of each super-level set below the norm immediate."],
+      "anchors": [
+        {"source": "proof-plan", "ref": ":terms", "relation": "states", "review": "model-proposed"},
+        {"source": "informal", "ref": "\\|f\\|_\\infty = \\inf\\{M \\geq 0 : m(\\{x : |f(x)| > M\\}) = 0\\}", "relation": "states", "review": "model-proposed"},
+        {"source": "lean", "ref": "lower_bound: eLpNorm_exponent_top", "relation": "supports", "review": "model-proposed", "note": "The Lean proof does not state the definition. It uses Mathlib's eLpNorm at exponent top and rewrites it to an essential supremum only once, inside the positive-measure step. Difference from the informal proof, which states the infimum definition first."},
+        {"source": "mark8-s3", "ref": ":n1", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a00J01:B2",
+      "parent": "a00J01:B0",
+      "obligation": "On the probability space [0,1], the L^p norm is at most the essential-supremum norm for every exponent p at least 1.",
+      "depends_on": ["a00J01:B1"],
+      "argument_roles": ["lemma-application"],
+      "expository_roles": ["calculation", "citation"],
+      "reader_obligations": ["Say where unit measure of the space is used: it removes the measure factor in the comparison of L^p norms."],
+      "anchors": [
+        {"source": "proof-plan", "ref": ":strategy :upper-bound", "relation": "states", "review": "model-proposed"},
+        {"source": "informal", "ref": "**Upper bound: $\\limsup \\|f\\|_p \\leq \\|f\\|_\\infty$.**", "relation": "explains", "review": "model-proposed"},
+        {"source": "lean", "ref": "lemma upper_bound: h; eLpNorm_tendsto_top: eLpNorm_le_eLpNorm_of_exponent_le", "relation": "implements", "review": "model-proposed", "note": "The informal proof computes the integral of |f|^p. Lean cites one comparison lemma in `upper_bound`, and the main theorem does not call that lemma: it uses monotonicity of the L^p norm in the exponent directly."},
+        {"source": "mark8-s3", "ref": ":n3,:n4,:n5,:n6,:n7", "relation": "supports", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a00J01:B3",
+      "parent": "a00J01:B0",
+      "obligation": "For every positive real t, the powers t^{1/n} tend to 1 as the natural number n tends to infinity.",
+      "depends_on": [],
+      "argument_roles": ["lemma-application"],
+      "expository_roles": ["calculation", "bridge"],
+      "reader_obligations": ["Recognize this as the analytic fact that lets a fixed positive measure disappear from the lower bound."],
+      "anchors": [
+        {"source": "informal", "ref": "$t^{1/p} \\to 1$", "relation": "explains", "review": "model-proposed"},
+        {"source": "lean", "ref": "lemma tendsto_rpow_inv_nat_atTop: hcont, hlim", "relation": "implements", "review": "model-proposed", "note": "Lean proves the limit in the reals along natural-number exponents only, by continuity of a constant base at exponent zero. The informal proof uses it for a real exponent p without proof."},
+        {"source": "mark8-s3", "ref": ":n11", "relation": "supports", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a00J01:B4",
+      "parent": "a00J01:B0",
+      "obligation": "For a level alpha strictly below the norm, choose beta strictly between alpha and the norm, and show the super-level set where the function exceeds beta is measurable with positive, finite measure.",
+      "depends_on": ["a00J01:B1"],
+      "argument_roles": ["assumption", "side-condition"],
+      "expository_roles": ["definition", "calculation", "audit-detail"],
+      "reader_obligations": ["Justify positive measure from the definition of the essential supremum, and keep the chosen level fixed while the exponent varies."],
+      "anchors": [
+        {"source": "proof-plan", "ref": ":strategy :lower-bound", "relation": "states", "review": "model-proposed"},
+        {"source": "informal", "ref": "Fix $\\alpha < \\|f\\|_\\infty$. The set $E_\\alpha = \\{x : |f(x)| > \\alpha\\}$ has $m(E_\\alpha) > 0$ by definition of ess sup", "relation": "explains", "review": "model-proposed", "note": "The informal proof uses the set where |f| exceeds alpha itself. Lean inserts a beta strictly between alpha and the norm and uses the set where the function exceeds beta."},
+        {"source": "lean", "ref": "lower_bound: hαβ, hβ, s, hs, hμs, hμs_top, hμs_real", "relation": "implements", "review": "model-proposed"},
+        {"source": "mark8-s3", "ref": ":n9", "relation": "supports", "review": "model-proposed", "note": "The gloss is right; the mined text of :n9 is garbled around the definition of E_alpha."}
+      ]
+    },
+    {
+      "id": "a00J01:B5",
+      "parent": "a00J01:B0",
+      "obligation": "Using the limit of B3 and the level set of B4, find one natural number n for which alpha is at most beta times the measure of the level set to the power 1/n, and hence at most the L^n norm on that set.",
+      "depends_on": ["a00J01:B3", "a00J01:B4"],
+      "argument_roles": ["lemma-application"],
+      "expository_roles": ["calculation", "bridge"],
+      "reader_obligations": ["See the lower bound as a bound on one fixed set: the L^p norm is at least the level times the measure of the set to the power 1/p."],
+      "anchors": [
+        {"source": "informal", "ref": "\\|f\\|_p^p \\geq \\int_{E_\\alpha} |f|^p \\geq \\alpha^p \\cdot m(E_\\alpha)", "relation": "explains", "review": "model-proposed"},
+        {"source": "lean", "ref": "lower_bound: hlim, hevent, hn, hα_prod, hlevel, hn_lower", "relation": "implements", "review": "model-proposed", "note": "Lean bounds the L^n norm on the level set by a Mathlib lemma (le_eLpNorm_of_bddBelow) and finds a single n from the limit, instead of stating the bound for every p as the informal proof does. Several steps convert between the extended nonnegative reals and the reals; they have no informal counterpart."},
+        {"source": "mark8-s3", "ref": ":n10,:n11", "relation": "supports", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a00J01:B6",
+      "parent": "a00J01:B0",
+      "obligation": "Extend the bound from that one exponent n to every exponent p at least n by monotonicity of the L^p norm on a probability space: eventually the L^p norm is at least alpha, for every alpha below the norm.",
+      "depends_on": ["a00J01:B5"],
+      "argument_roles": ["lemma-application", "identity"],
+      "expository_roles": ["bridge", "audit-detail"],
+      "reader_obligations": ["Explain why a bound at one exponent gives the same bound at all larger exponents, and why it suffices to prove the lower bound for every level strictly below the norm."],
+      "anchors": [
+        {"source": "informal", "ref": "So $\\liminf \\|f\\|_p \\geq \\alpha$ for every $\\alpha < \\|f\\|_\\infty$", "relation": "explains", "review": "model-proposed", "note": "The informal proof has the bound for all p at once and so has no extension step."},
+        {"source": "lean", "ref": "lower_bound: hn_lower, hp, eLpNorm_le_eLpNorm_of_exponent_le, eLpNorm_congr_ae", "relation": "implements", "review": "model-proposed"},
+        {"source": "mark8-s3", "ref": ":n12", "relation": "supports", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a00J01:B7",
+      "parent": "a00J01:B0",
+      "obligation": "Combine the upper bound and the eventual lower bound into the limit: the L^p norms tend to the essential-supremum norm as p tends to infinity.",
+      "depends_on": ["a00J01:B2", "a00J01:B6"],
+      "argument_roles": ["closure"],
+      "expository_roles": ["closure"],
+      "reader_obligations": ["Say how the two one-sided bounds produce a limit, and restore the full exponent range."],
+      "anchors": [
+        {"source": "proof-plan", "ref": ":strategy :squeeze", "relation": "states", "review": "model-proposed"},
+        {"source": "informal", "ref": "**Combine.**", "relation": "explains", "review": "model-proposed", "note": "The informal proof squeezes liminf and limsup. Lean proves the tendsto by its order characterization: eventually above every lower bound and eventually below every upper bound. Same content, different framing."},
+        {"source": "lean", "ref": "eLpNorm_tendsto_top: tendsto_order, lower_bound", "relation": "implements", "review": "model-proposed"},
+        {"source": "mark8-s3", "ref": ":n14", "relation": "supports", "review": "model-proposed"},
+        {"source": "mark8-s3", "ref": ":n8,:n13", "relation": "supports", "review": "rejected", "note": "Both mined nodes read as the claim that the L^p norm is at least the essential-supremum norm for each p, which is false; the source lines state bounds on liminf. Retained as a negative anchoring example."}
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "id": "expert-reference",
+      "audience": "A mathematician who knows measure theory and wants the two-sided estimate.",
+      "purpose": "reference",
+      "mandatory_nodes": ["a00J01:B1", "a00J01:B2", "a00J01:B4", "a00J01:B5", "a00J01:B7"],
+      "compression": "State the definition, give the upper bound in one line, and spend the space on the level-set choice and the lower bound; cite the power limit and the monotonicity extension without proof."
+    },
+    {
+      "id": "teaching",
+      "audience": "A student who has not seen why the norm is approached from below by level sets.",
+      "purpose": "teaching",
+      "mandatory_nodes": ["a00J01:B0", "a00J01:B1", "a00J01:B2", "a00J01:B3", "a00J01:B4", "a00J01:B5", "a00J01:B6", "a00J01:B7"],
+      "compression": "Show every node; spend the most exposition on why a level strictly below the norm has positive measure, and on why the bound at one exponent persists."
+    },
+    {
+      "id": "formal-audit",
+      "audience": "A reviewer comparing the prose with the compiled Lean proof.",
+      "purpose": "audit",
+      "mandatory_nodes": ["a00J01:B0", "a00J01:B1", "a00J01:B2", "a00J01:B3", "a00J01:B4", "a00J01:B5", "a00J01:B6", "a00J01:B7"],
+      "compression": "Do not compress side conditions; expose the measurable representative equal almost everywhere, the intermediate level, the finite-measure check, and the monotonicity step that the informal proof lacks."
+    }
+  ]
+}
