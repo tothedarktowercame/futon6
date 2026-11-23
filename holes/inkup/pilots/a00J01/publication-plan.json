@@ -21,6 +21,52 @@
    "share_of_proofs_at_or_under_target_120": 0.413,
    "share_at_or_under_max_168": 0.53,
    "note": "The 120/168 limits came from one paper whose own median proof is about 48 words; against this corpus they sit between the 41st and 53rd percentile, so they are kept."
+  },
+  "sentence_sample_rhgrh100": {
+   "sample": "60 proofs of 40-400 words, one per paper, from mark7rhgrh100-20260928; two annotators (codex-18, zai-2), same instrument as the one-paper profile",
+   "annotations": "storage:futon6/inkup/professional/rhgrh100/annotation-sample-60/proof-annotations.{codex-18,zai-2}.part{1,2}.jsonl",
+   "agreement_on_383_identically_segmented_sentences": {
+    "formal_role": 0.5,
+    "placement": 0.87,
+    "communicative_function": 0.85,
+    "argument_relation": 0.7,
+    "cites": 0.94
+   },
+   "percent_of_proof_words_pooled": {
+    "inflight_commentary": {
+     "codex-18": 0.0,
+     "zai-2": 1.0
+    },
+    "role_none": {
+     "codex-18": 0.7,
+     "zai-2": 0.6
+    },
+    "section_lead": {
+     "codex-18": 3.4,
+     "zai-2": 14.0
+    },
+    "lemma_application": {
+     "codex-18": 24.0,
+     "zai-2": 26.0
+    },
+    "side_condition": {
+     "codex-18": 0.3,
+     "zai-2": 6.2
+    }
+   },
+   "lemma_application_quartiles_across_proofs": {
+    "codex-18": [
+     4.6,
+     21.0,
+     36.7
+    ],
+    "zai-2": [
+     7.3,
+     25.1,
+     39.4
+    ]
+   },
+   "reading": "PR1 holds on 60 papers: commentary-only sentences are about 1 percent of proof words or less for both annotators, and most of zai-2's in-flight labels are sentence fragments. PR3 holds: separate side-condition sentences are rare. The one-paper lemma-application share (32-42) is high for this corpus (about 25, wide spread). Section lead is not reliably measured: the annotators disagree on whether setup sentences count (per-proof correlation 0.01). About one proof in twelve opens with a one-sentence statement of method (by induction; following a cited argument), which PR2 as worded would forbid; no pilot telling uses one."
   }
  },
  "rules": [
