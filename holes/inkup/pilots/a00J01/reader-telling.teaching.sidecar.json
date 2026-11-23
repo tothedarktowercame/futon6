@@ -12,7 +12,7 @@
           "node": "a00J01:B0",
           "status": "realized",
           "ink_words": 23,
-          "ink_percent": 9.0,
+          "ink_percent": 8.8,
           "planned_percent": 8.3,
           "planned_action": "show"
         },
@@ -20,7 +20,7 @@
           "node": "a00J01:B1",
           "status": "realized",
           "ink_words": 13,
-          "ink_percent": 5.1,
+          "ink_percent": 5.0,
           "planned_percent": 8.3,
           "planned_action": "show"
         },
@@ -28,7 +28,7 @@
           "node": "a00J01:B2",
           "status": "realized",
           "ink_words": 44,
-          "ink_percent": 17.3,
+          "ink_percent": 16.9,
           "planned_percent": 16.7,
           "planned_action": "expand"
         },
@@ -36,7 +36,7 @@
           "node": "a00J01:B3",
           "status": "realized",
           "ink_words": 20,
-          "ink_percent": 7.8,
+          "ink_percent": 7.7,
           "planned_percent": 8.3,
           "planned_action": "show"
         },
@@ -44,15 +44,15 @@
           "node": "a00J01:B4",
           "status": "realized",
           "ink_words": 64,
-          "ink_percent": 25.1,
+          "ink_percent": 24.6,
           "planned_percent": 25.0,
           "planned_action": "expand"
         },
         {
           "node": "a00J01:B5",
           "status": "realized",
-          "ink_words": 27,
-          "ink_percent": 10.6,
+          "ink_words": 32,
+          "ink_percent": 12.3,
           "planned_percent": 8.3,
           "planned_action": "show"
         },
@@ -60,7 +60,7 @@
           "node": "a00J01:B6",
           "status": "realized",
           "ink_words": 34,
-          "ink_percent": 13.3,
+          "ink_percent": 13.1,
           "planned_percent": 16.7,
           "planned_action": "expand"
         },
@@ -68,7 +68,7 @@
           "node": "a00J01:B7",
           "status": "realized",
           "ink_words": 30,
-          "ink_percent": 11.8,
+          "ink_percent": 11.5,
           "planned_percent": 8.3,
           "planned_action": "show"
         }

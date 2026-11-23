@@ -39,8 +39,9 @@ measure: otherwise \(g\) would be bounded by \(\beta\) almost everywhere,
 forcing \(\lVert f\rVert_\infty\le\beta\), a contradiction.  This set is used
 because it supplies one lower estimate while the exponent varies.
 
-**[B5]** Since \(0<\mu(s)<\infty\), B3 gives a positive natural number \(n\)
-for which
+**[B5]** Since \(0<\mu(s)<\infty\), B3 gives
+\(\beta\,\mu(s)^{1/n}\to\beta\); as \(\alpha<\beta\), there is a positive
+natural number \(n\) for which
 \[
 \alpha\le\beta\,\mu(s)^{1/n}.
 \]
