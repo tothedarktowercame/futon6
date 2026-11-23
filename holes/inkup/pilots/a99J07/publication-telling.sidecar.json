@@ -1,0 +1,39 @@
+{
+  "schema":"inkup.telling-sidecar/v0",
+  "problem":"a99J07",
+  "realizations":"holes/inkup/pilots/a99J07/publication-telling.md",
+  "content_plan":"holes/inkup/pilots/a99J07/content-plan.json",
+  "note":"Publication-profile P4 sidecar. The two anticipated questions are answered as clauses inside proof steps.",
+  "profiles":{"publication":{
+    "nodes":[
+      {"node":"a99J07:B0","status":"merged","merged_into":"a99J07:B8","quote":"Combining the cases proves\n\\(\\lvert p(w)\\rvert\\le M\\max\\{1,\\lvert w\\rvert\\}^{N}\\) for every\n\\(w\\in\\mathbb C\\).","ink_words":0,"ink_percent":0.0,"planned_percent":0,"planned_action":"omit"},
+      {"node":"a99J07:B1","status":"realized","ink_words":16,"ink_percent":11.7,"planned_percent":10,"planned_action":"compress"},
+      {"node":"a99J07:B2","status":"realized","ink_words":7,"ink_percent":5.1,"planned_percent":5,"planned_action":"compress"},
+      {"node":"a99J07:B3","status":"realized","ink_words":10,"ink_percent":7.3,"planned_percent":10,"planned_action":"show"},
+      {"node":"a99J07:B4","status":"realized","ink_words":38,"ink_percent":27.7,"planned_percent":25,"planned_action":"show"},
+      {"node":"a99J07:B5","status":"realized","ink_words":11,"ink_percent":8.0,"planned_percent":10,"planned_action":"show"},
+      {"node":"a99J07:B6","status":"realized","ink_words":32,"ink_percent":23.4,"planned_percent":20,"planned_action":"show"},
+      {"node":"a99J07:B7","status":"realized","ink_words":11,"ink_percent":8.0,"planned_percent":15,"planned_action":"show"},
+      {"node":"a99J07:B8","status":"realized","ink_words":12,"ink_percent":8.8,"planned_percent":5,"planned_action":"compress"}
+    ],
+    "questions":[
+      {
+        "question":"reflection-strategy","status":"answered","node":"a99J07:B4",
+        "quote":"In the second case, let \\(q\\) be the polynomial obtained by\nreversing the coefficients of \\(p\\) through degree \\(N\\), so that\n\\(q(z)=z^{N}p(1/z)\\) for \\(z\\ne0\\); this moves the exterior evaluation to\nthe disk while retaining the required degree factor.","ink_words":38,
+        "graph_support":[
+          {"graph":"holes/inkup/reasoning/a99J07-why-reflect.json","edge":{"from":"exterior-gap","relation":"resolved-by","to":"reflect"}},
+          {"graph":"holes/inkup/reasoning/a99J07-why-reflect.json","edge":{"from":"inside-conversion","relation":"enables","to":"boundary-method"}}
+        ]
+      },
+      {
+        "question":"maximum-modulus-applicability","status":"answered","node":"a99J07:B6",
+        "quote":"Since \\(q\\) is a polynomial and \\(u=1/w\\) lies in the closed disk,\nthe boundary form of the maximum modulus principle supplies\n\\(\\lvert v\\rvert=1\\) with \\(\\lvert q(u)\\rvert\\le\\lvert q(v)\\rvert\\), and\nhence \\(\\lvert q(1/w)\\rvert\\le M\\).","ink_words":32,
+        "graph_support":[
+          {"graph":"holes/inkup/reasoning/a99J07-boundary-applicability.json","edge":{"from":"boundary-witness-warrant","relation":"requires","to":"polynomial"}},
+          {"graph":"holes/inkup/reasoning/a99J07-boundary-applicability.json","edge":{"from":"boundary-witness-warrant","relation":"requires","to":"inside-disk"}}
+        ]
+      }
+    ],
+    "unplanned_answers":[]
+  }}
+}
