@@ -1,0 +1,157 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a00J01",
+  "realizations": "holes/inkup/pilots/a00J01/reader-telling.expert-reference.md",
+  "content_plan": "holes/inkup/pilots/a00J01/content-plan.json",
+  "ink": "holes/inkup/pilots/a00J01/generative-ink.tsv",
+  "note": "expert-reference R5 sidecar. Derived budgets are independent of measured prose ink; graph_support records each answered obligation.",
+  "profiles": {
+    "expert-reference": {
+      "nodes": [
+        {
+          "node": "a00J01:B0",
+          "status": "merged",
+          "merged_into": "a00J01:B7",
+          "quote": "Thus the quantities are eventually above every\n\\(\\alpha<\\lVert f\\rVert_\\infty\\) and are bounded above by\n\\(\\lVert f\\rVert_\\infty\\), so\n\\(\\lVert f\\rVert_p\\to\\lVert f\\rVert_\\infty\\).",
+          "ink_words": 0,
+          "ink_percent": 0,
+          "planned_percent": 0,
+          "planned_action": "compress"
+        },
+        {
+          "node": "a00J01:B1",
+          "status": "realized",
+          "ink_words": 10,
+          "ink_percent": 7.4,
+          "planned_percent": 12.5,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B2",
+          "status": "realized",
+          "ink_words": 15,
+          "ink_percent": 11,
+          "planned_percent": 12.5,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B3",
+          "status": "merged",
+          "merged_into": "a00J01:B5",
+          "quote": "The standard limit \\(\\mu(s)^{1/n}\\to1\\) gives a positive natural\nnumber \\(n\\) such that\n\\[\n\\alpha\\le\\beta\\,\\mu(s)^{1/n}\\le\\lVert g\\rVert_n.\n\\]\nMonotonicity of \\(L^p\\) quantities on a probability space and\n\\(g=f\\) almost everywhere then give\n\\(\\alpha\\le\\lVert f\\rVert_p\\) for every \\(p\\ge n\\).",
+          "ink_words": 0,
+          "ink_percent": 0,
+          "planned_percent": 0,
+          "planned_action": "compress"
+        },
+        {
+          "node": "a00J01:B4",
+          "status": "realized",
+          "ink_words": 55,
+          "ink_percent": 40.4,
+          "planned_percent": 37.5,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a00J01:B5",
+          "status": "realized",
+          "ink_words": 36,
+          "ink_percent": 26.5,
+          "planned_percent": 12.5,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B6",
+          "status": "merged",
+          "merged_into": "a00J01:B5",
+          "quote": "The standard limit \\(\\mu(s)^{1/n}\\to1\\) gives a positive natural\nnumber \\(n\\) such that\n\\[\n\\alpha\\le\\beta\\,\\mu(s)^{1/n}\\le\\lVert g\\rVert_n.\n\\]\nMonotonicity of \\(L^p\\) quantities on a probability space and\n\\(g=f\\) almost everywhere then give\n\\(\\alpha\\le\\lVert f\\rVert_p\\) for every \\(p\\ge n\\).",
+          "ink_words": 0,
+          "ink_percent": 0,
+          "planned_percent": 12.5,
+          "planned_action": "compress"
+        },
+        {
+          "node": "a00J01:B7",
+          "status": "realized",
+          "ink_words": 20,
+          "ink_percent": 14.7,
+          "planned_percent": 12.5,
+          "planned_action": "show"
+        }
+      ],
+      "questions": [
+        {
+          "question": "why-level-set-strategy",
+          "blueprint_node": "a00J01:B4",
+          "status": "answered",
+          "node": "a00J01:B4",
+          "quote": "Fix \\(\\alpha<\\lVert f\\rVert_\\infty\\), choose\n\\(\\alpha<\\beta<\\lVert f\\rVert_\\infty\\), take a measurable representative\n\\(g=f\\) almost everywhere, and set \\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\).\nThis fixed set has positive measure, since otherwise\n\\(\\lVert g\\rVert_\\infty\\le\\beta\\) and hence\n\\(\\lVert f\\rVert_\\infty\\le\\beta\\), and it has finite measure because the\nambient measure is a probability measure; thus it supplies a uniform lower\nestimate while the exponent varies.",
+          "ink_words": 55,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+              "edge": {
+                "from": "gap",
+                "relation": "resolved-by",
+                "to": "choose-level-set"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+              "edge": {
+                "from": "positive-measure-conversion",
+                "relation": "enables",
+                "to": "lower-bound-method"
+              }
+            }
+          ]
+        },
+        {
+          "question": "level-set-positive-measure",
+          "blueprint_node": "a00J01:B4",
+          "status": "answered",
+          "node": "a00J01:B4",
+          "quote": "Fix \\(\\alpha<\\lVert f\\rVert_\\infty\\), choose\n\\(\\alpha<\\beta<\\lVert f\\rVert_\\infty\\), take a measurable representative\n\\(g=f\\) almost everywhere, and set \\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\).\nThis fixed set has positive measure, since otherwise\n\\(\\lVert g\\rVert_\\infty\\le\\beta\\) and hence\n\\(\\lVert f\\rVert_\\infty\\le\\beta\\), and it has finite measure because the\nambient measure is a probability measure; thus it supplies a uniform lower\nestimate while the exponent varies.",
+          "ink_words": 55,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-level-set-positive-measure.json",
+              "edge": {
+                "from": "positive-measure-warrant",
+                "relation": "warrants",
+                "to": "positive-measure"
+              }
+            }
+          ]
+        },
+        {
+          "question": "monotonicity-extension",
+          "blueprint_node": "a00J01:B5",
+          "status": "answered",
+          "node": "a00J01:B5",
+          "quote": "The standard limit \\(\\mu(s)^{1/n}\\to1\\) gives a positive natural\nnumber \\(n\\) such that\n\\[\n\\alpha\\le\\beta\\,\\mu(s)^{1/n}\\le\\lVert g\\rVert_n.\n\\]\nMonotonicity of \\(L^p\\) quantities on a probability space and\n\\(g=f\\) almost everywhere then give\n\\(\\alpha\\le\\lVert f\\rVert_p\\) for every \\(p\\ge n\\).",
+          "ink_words": 36,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+              "edge": {
+                "from": "monotonicity-warrant",
+                "relation": "warrants",
+                "to": "monotone-comparison"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+              "edge": {
+                "from": "extension-warrant",
+                "relation": "warrants",
+                "to": "eventual-lower-bound"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a00J01",
+  "realizations": "holes/inkup/pilots/a00J01/reader-telling.formal-audit.md",
+  "content_plan": "holes/inkup/pilots/a00J01/content-plan.json",
+  "ink": "holes/inkup/pilots/a00J01/generative-ink.tsv",
+  "note": "formal-audit R5 sidecar. Derived budgets are independent of measured prose ink; graph_support records each answered obligation.",
+  "profiles": {
+    "formal-audit": {
+      "nodes": [
+        {
+          "node": "a00J01:B0",
+          "status": "realized",
+          "ink_words": 21,
+          "ink_percent": 7.2,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B1",
+          "status": "realized",
+          "ink_words": 18,
+          "ink_percent": 6.1,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B2",
+          "status": "realized",
+          "ink_words": 47,
+          "ink_percent": 16.0,
+          "planned_percent": 16.7,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a00J01:B3",
+          "status": "realized",
+          "ink_words": 17,
+          "ink_percent": 5.8,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B4",
+          "status": "realized",
+          "ink_words": 78,
+          "ink_percent": 26.6,
+          "planned_percent": 25,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a00J01:B5",
+          "status": "realized",
+          "ink_words": 56,
+          "ink_percent": 19.1,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B6",
+          "status": "realized",
+          "ink_words": 22,
+          "ink_percent": 7.5,
+          "planned_percent": 16.7,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a00J01:B7",
+          "status": "realized",
+          "ink_words": 34,
+          "ink_percent": 11.6,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        }
+      ],
+      "questions": [
+        {
+          "question": "why-level-set-strategy",
+          "blueprint_node": "a00J01:B4",
+          "status": "answered",
+          "node": "a00J01:B4",
+          "quote": "In \\(\\texttt{lower_bound}\\), let\n\\(g=\\texttt{hf.mk}\\ f\\); \\(\\texttt{hfg}\\) states \\(f=g\\) almost everywhere\nand \\(\\texttt{hg}\\) states strong measurability of \\(g\\).\nChoose \\(\\alpha<\\beta<\\lVert f\\rVert_\\infty\\), let\n\\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\), and obtain measurability as\n\\(\\texttt{hs}\\).  For \\(\\texttt{hμs}\\), a hypothetical \\(\\mu(s)=0\\) gives\nthe almost-everywhere bound \\(\\texttt{hae}\\), hence\n\\(\\texttt{hgb : ‖g‖∞ ≤ β}\\) and by \\(\\texttt{eLpNorm_congr_ae}\\) the bound\n\\(\\texttt{hfb : ‖f‖∞ ≤ β}\\), contradicting\n\\(\\beta<\\lVert f\\rVert_\\infty\\).  The finite-measure check\n\\(\\texttt{hμs_top}\\) follows from \\(\\mu(s)\\le\\mu(\\text{univ})=1\\).\nThis fixed positive-measure set supplies the exponent-independent lower region\nused by \\(\\texttt{hlevel}\\) and \\(\\texttt{hn_lower}\\).",
+          "ink_words": 78,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+              "edge": {
+                "from": "gap",
+                "relation": "resolved-by",
+                "to": "choose-level-set"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+              "edge": {
+                "from": "positive-measure-conversion",
+                "relation": "enables",
+                "to": "lower-bound-method"
+              }
+            }
+          ]
+        },
+        {
+          "question": "level-set-positive-measure",
+          "blueprint_node": "a00J01:B4",
+          "status": "answered",
+          "node": "a00J01:B4",
+          "quote": "In \\(\\texttt{lower_bound}\\), let\n\\(g=\\texttt{hf.mk}\\ f\\); \\(\\texttt{hfg}\\) states \\(f=g\\) almost everywhere\nand \\(\\texttt{hg}\\) states strong measurability of \\(g\\).\nChoose \\(\\alpha<\\beta<\\lVert f\\rVert_\\infty\\), let\n\\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\), and obtain measurability as\n\\(\\texttt{hs}\\).  For \\(\\texttt{hμs}\\), a hypothetical \\(\\mu(s)=0\\) gives\nthe almost-everywhere bound \\(\\texttt{hae}\\), hence\n\\(\\texttt{hgb : ‖g‖∞ ≤ β}\\) and by \\(\\texttt{eLpNorm_congr_ae}\\) the bound\n\\(\\texttt{hfb : ‖f‖∞ ≤ β}\\), contradicting\n\\(\\beta<\\lVert f\\rVert_\\infty\\).  The finite-measure check\n\\(\\texttt{hμs_top}\\) follows from \\(\\mu(s)\\le\\mu(\\text{univ})=1\\).",
+          "ink_words": 64,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-level-set-positive-measure.json",
+              "edge": {
+                "from": "positive-measure-warrant",
+                "relation": "warrants",
+                "to": "positive-measure"
+              }
+            }
+          ]
+        },
+        {
+          "question": "monotonicity-extension",
+          "blueprint_node": "a00J01:B6",
+          "status": "answered",
+          "node": "a00J01:B6",
+          "quote": "With the probability-measure instance, for every \\(p\\ge n\\),\n\\(\\texttt{eLpNorm_le_eLpNorm_of_exponent_le}\\) gives\n\\(\\lVert g\\rVert_n\\le\\lVert g\\rVert_p\\); transitivity with\n\\(\\texttt{hn_lower}\\) and \\(\\texttt{eLpNorm_congr_ae hfg}\\) gives\n\\(\\alpha\\le\\lVert f\\rVert_p\\).",
+          "ink_words": 22,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+              "edge": {
+                "from": "monotonicity-warrant",
+                "relation": "warrants",
+                "to": "monotone-comparison"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+              "edge": {
+                "from": "extension-warrant",
+                "relation": "warrants",
+                "to": "eventual-lower-bound"
+              }
+            }
+          ]
+        },
+        {
+          "question": "upper-bound-exponent-range",
+          "blueprint_node": "a00J01:B2",
+          "status": "answered",
+          "node": "a00J01:B2",
+          "quote": "The main theorem installs \\(\\texttt{IsProbabilityMeasure μ}\\) from\n\\(\\mu(\\text{univ})=1\\); for arbitrary \\(p\\), the upper branch of\n\\(\\texttt{tendsto_order}\\) applies\n\\(\\texttt{eLpNorm_le_eLpNorm_of_exponent_le}\\) to \\(p\\le\\infty\\), obtaining\n\\(\\lVert f\\rVert_p\\le\\lVert f\\rVert_\\infty\\) without using \\(1\\le p\\).\nThus the comparison consumes unit total measure, and makes no assertion that\nthe quantity is a norm below \\(p=1\\).",
+          "ink_words": 47,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-upper-bound-exponent-range.json",
+              "edge": {
+                "from": "comparison-warrant",
+                "relation": "warrants",
+                "to": "upper-bound-all-exponents"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}

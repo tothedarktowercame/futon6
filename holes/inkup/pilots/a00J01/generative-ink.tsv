@@ -7,3 +7,19 @@ teaching	a00J01:B4	expand	25.0	Derived: weight 1 plus one per anticipated teachi
 teaching	a00J01:B5	show	8.3	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 12.
 teaching	a00J01:B6	expand	16.7	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 12.
 teaching	a00J01:B7	show	8.3	Derived: weight 1 plus one per anticipated teaching question at this node; divide by total weight 12.
+expert-reference	a00J01:B0	compress	0.0	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 8.
+expert-reference	a00J01:B1	show	12.5	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 8.
+expert-reference	a00J01:B2	show	12.5	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 8.
+expert-reference	a00J01:B3	compress	0.0	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 8.
+expert-reference	a00J01:B4	expand	37.5	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 8.
+expert-reference	a00J01:B5	show	12.5	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 8.
+expert-reference	a00J01:B6	compress	12.5	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 8.
+expert-reference	a00J01:B7	show	12.5	Derived: weight 1 per expert-reference mandatory node plus one per anticipated question at its node; divide by total weight 8.
+formal-audit	a00J01:B0	show	8.3	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 12.
+formal-audit	a00J01:B1	show	8.3	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 12.
+formal-audit	a00J01:B2	expand	16.7	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 12.
+formal-audit	a00J01:B3	show	8.3	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 12.
+formal-audit	a00J01:B4	expand	25.0	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 12.
+formal-audit	a00J01:B5	show	8.3	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 12.
+formal-audit	a00J01:B6	expand	16.7	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 12.
+formal-audit	a00J01:B7	show	8.3	Derived: weight 1 plus one per anticipated formal-audit question at this node; divide by total weight 12.
