@@ -1,0 +1,270 @@
+#!/usr/bin/env python3
+"""Validate the a96J06 telling sidecar against the realizations it describes.
+
+Everything countable is recomputed from ``realizations.md``: node passages,
+their word counts and percentages, and the location of every quote.  The
+sidecar's judgements (status, ``missing``) are not checked here.
+"""
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import re
+from collections import Counter
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[3]
+SCHEMA = "inkup.telling-sidecar/v0"
+MARKER = re.compile(r"\*\*\[B(\d+)\]\*\*")
+NODE_STATUSES = {"realized", "merged", "absent"}
+ANSWER_STATUSES = {"answered", "partly-answered", "not-answered"}
+
+
+def profile_section_id(profile: str) -> str:
+    """``formal-audit`` -> ``Formal audit``, the heading text in realizations.md."""
+    headings = {"expert-reference": "Expert reference", "teaching": "Teaching",
+                "formal-audit": "Formal audit"}
+    return headings[profile]
+
+
+def parse_sections(text: str) -> dict[str, str]:
+    """Heading text (without ``##``) -> section body."""
+    sections: dict[str, str] = {}
+    matches = list(re.finditer(r"(?m)^## (.+?)\s*$", text))
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        sections[match.group(1)] = text[match.end():end]
+    return sections
+
+
+def parse_nodes(section: str) -> dict[str, str]:
+    """Node number -> passage (marker removed, up to the next marker)."""
+    nodes: dict[str, str] = {}
+    markers = list(MARKER.finditer(section))
+    for index, match in enumerate(markers):
+        end = markers[index + 1].start() if index + 1 < len(markers) else len(section)
+        nodes[match.group(1)] = section[match.end():end].strip()
+    return nodes
+
+
+def words(text: str) -> int:
+    return len(text.split())
+
+
+def percent(part: int, whole: int) -> float:
+    return round(100.0 * part / whole, 1) if whole else 0.0
+
+
+def load_plan(path: Path) -> tuple[list[str], dict[str, dict], dict[str, str]]:
+    plan = json.loads(path.read_text())
+    nodes = [item["node"] for item in plan["mandatory_nodes"]]
+    decisions = {question["id"]: question["decisions"] for question in plan["questions"]}
+    blueprint = {question["id"]: question["blueprint_node"] for question in plan["questions"]}
+    return nodes, decisions, blueprint
+
+
+def load_ink(path: Path) -> dict[tuple[str, str], dict[str, str]]:
+    ink: dict[tuple[str, str], dict[str, str]] = {}
+    with path.open(newline="") as stream:
+        for row in csv.DictReader(stream, delimiter="\t"):
+            ink[(row["profile"], row["node"])] = row
+    return ink
+
+
+def validate(sidecar: Path, plan_path: Path = HERE / "content-plan.json",
+             realizations: Path = HERE / "realizations.md",
+             ink_path: Path = HERE / "generative-ink.tsv") -> tuple[dict, list[str]]:
+    errors: list[str] = []
+    try:
+        sidecar_doc = json.loads(sidecar.read_text())
+        plan = json.loads(plan_path.read_text())
+        ink = load_ink(ink_path)
+        sections = parse_sections(realizations.read_text())
+    except (OSError, ValueError, KeyError, csv.Error) as exc:
+        return {}, [f"SC000 cannot read inputs: {exc}"]
+    mandatory = [item["node"] for item in plan.get("mandatory_nodes", [])]
+    questions = plan.get("questions", [])
+    decisions = {q["id"]: q["decisions"] for q in questions}
+    blueprint = {q["id"]: q["blueprint_node"] for q in questions}
+    profiles_planned = {profile for decision in decisions.values() for profile in decision}
+
+    if sidecar_doc.get("schema") != SCHEMA:
+        errors.append("SC000 wrong sidecar schema")
+    doc_profiles = sidecar_doc.get("profiles")
+    if not isinstance(doc_profiles, dict) or not all(isinstance(p, dict) for p in doc_profiles.values()):
+        return {}, errors + ["SC001 profiles must be an object of profile objects"]
+    if set(doc_profiles) != profiles_planned:
+        errors.append(f"SC001 profiles {sorted(doc_profiles)} differ from the plan's {sorted(profiles_planned)}")
+
+    report: dict = {}
+    for profile, doc in doc_profiles.items():
+        report[profile] = {"nodes": Counter(), "questions": Counter(), "node_rows": [], "unplanned": 0}
+        if profile not in profiles_planned:
+            continue
+        section_id = profile_section_id(profile)
+        section = sections.get(section_id)
+        if section is None:
+            errors.append(f"SC002 {profile}: no section '{section_id}' in realizations.md")
+            continue
+        passages = parse_nodes(section)
+        total = sum(words(passage) for passage in passages.values())
+
+        # ---- nodes -------------------------------------------------------
+        entries = doc.get("nodes")
+        if not isinstance(entries, list):
+            errors.append(f"SC003 {profile}: nodes must be a list")
+            entries = []
+        seen: dict[str, dict] = {}
+        for entry in entries:
+            if not isinstance(entry, dict) or entry.get("node") not in mandatory:
+                errors.append(f"SC003 {profile}: node entry must name a mandatory node: {entry!r}"[:200])
+                continue
+            if entry["node"] in seen:
+                errors.append(f"SC003 {profile}: duplicate node entry {entry['node']}")
+            seen[entry["node"]] = entry
+        for node in mandatory:
+            if node not in seen:
+                errors.append(f"SC003 {profile}: no entry for mandatory node {node}")
+        for node, entry in seen.items():
+            where = f"{profile} {node}"
+            status = entry.get("status")
+            number = node.rsplit("B", 1)[1]
+            has_marker = number in passages
+            if status not in NODE_STATUSES:
+                errors.append(f"SC004 {where}: unknown status {status!r}")
+                report[profile]["nodes"]["?"] += 1
+                continue
+            report[profile]["nodes"][status] += 1
+            expected_words = expected_percent = 0
+            if status == "realized" and not has_marker:
+                errors.append(f"SC005 {where}: realized but the section has no {node.split(':')[1]} marker")
+            if status != "realized" and has_marker:
+                errors.append(f"SC005 {where}: {status} but the section has a {node.split(':')[1]} marker")
+            if status == "realized":
+                expected_words = words(passages.get(number, ""))
+                expected_percent = percent(expected_words, total)
+            if entry.get("ink_words") != expected_words:
+                errors.append(f"SC006 {where}: ink_words {entry.get('ink_words')} != {expected_words}")
+            if not isinstance(entry.get("ink_percent"), (int, float)) or \
+                    abs(entry["ink_percent"] - expected_percent) > 1e-9:
+                errors.append(f"SC006 {where}: ink_percent {entry.get('ink_percent')} != {expected_percent}")
+            planned = ink.get((profile, node), {})
+            if entry.get("planned_percent") != int(planned.get("budget_percent", -1)):
+                errors.append(f"SC007 {where}: planned_percent {entry.get('planned_percent')} "
+                              f"!= {planned.get('budget_percent')}")
+            if entry.get("planned_action") != planned.get("action"):
+                errors.append(f"SC007 {where}: planned_action {entry.get('planned_action')!r} "
+                              f"!= {planned.get('action')!r}")
+            if status == "merged":
+                target = entry.get("merged_into")
+                quote = entry.get("quote")
+                if not isinstance(target, str) or target == node or target not in mandatory or \
+                        target.rsplit("B", 1)[1] not in passages or \
+                        seen.get(target, {}).get("status") != "realized":
+                    errors.append(f"SC008 {where}: merged_into must be a realized mandatory node: {target!r}")
+                elif not isinstance(quote, str) or not quote.strip() or \
+                        quote not in passages[target.rsplit("B", 1)[1]]:
+                    errors.append(f"SC008 {where}: merged quote not found verbatim in {target}")
+            elif "merged_into" in entry:
+                errors.append(f"SC008 {where}: merged_into is only allowed when merged")
+            if status in {"realized", "merged"}:
+                report[profile]["node_rows"].append(
+                    (node, entry.get("planned_percent"), expected_percent))
+
+        # ---- question entries --------------------------------------------
+        def check_quote(entry: dict, where: str, in_node: bool) -> None:
+            quote = entry.get("quote")
+            if not isinstance(quote, str) or not quote.strip():
+                errors.append(f"SC009 {where}: quote must be a non-empty string")
+                return
+            if quote not in section:
+                errors.append(f"SC009 {where}: quote not found verbatim in section '{section_id}'")
+                return
+            if in_node:
+                node = entry.get("node")
+                number = node.rsplit("B", 1)[1] if isinstance(node, str) else None
+                if number not in passages:
+                    errors.append(f"SC010 {where}: node {node!r} is not realized in {profile}")
+                elif quote not in passages[number]:
+                    errors.append(f"SC010 {where}: quote not found inside the passage of {node}")
+            if entry.get("ink_words") != words(quote):
+                errors.append(f"SC006 {where}: ink_words {entry.get('ink_words')} != {words(quote)}")
+
+        listed = doc.get("questions")
+        unplanned = doc.get("unplanned_answers", [])
+        if not isinstance(listed, list) or not isinstance(unplanned, list):
+            errors.append(f"SC011 {profile}: questions and unplanned_answers must be lists")
+            listed, unplanned = (listed if isinstance(listed, list) else []), []
+        answered_ids: set[str] = set()
+        for entry in listed:
+            qid = entry.get("question") if isinstance(entry, dict) else None
+            if qid not in decisions:
+                errors.append(f"SC011 {profile}: unknown question {qid!r}")
+                continue
+            where = f"{profile} {qid}"
+            answered_ids.add(qid)
+            status = entry.get("status")
+            if status not in ANSWER_STATUSES:
+                errors.append(f"SC004 {where}: unknown status {status!r}")
+            else:
+                report[profile]["questions"][status] += 1
+            if decisions[qid].get(profile, {}).get("action") != "anticipate":
+                errors.append(f"SC011 {where}: decision is not anticipate; use unplanned_answers")
+            if status == "answered" and entry.get("missing"):
+                errors.append(f"SC012 {where}: answered entries must not carry 'missing'")
+            if status != "answered" and not entry.get("missing"):
+                errors.append(f"SC012 {where}: status {status} needs a 'missing' statement")
+            check_quote(entry, where, in_node=True)
+        for qid, decision in decisions.items():
+            if decision.get(profile, {}).get("action") == "anticipate" and qid not in answered_ids:
+                errors.append(f"SC013 {profile} {qid}: anticipate decision has no question entry")
+        for entry in unplanned:
+            qid = entry.get("question") if isinstance(entry, dict) else None
+            if qid not in decisions:
+                errors.append(f"SC011 {profile}: unknown unplanned question {qid!r}")
+                continue
+            where = f"{profile} {qid} (unplanned)"
+            if decisions[qid].get(profile, {}).get("action") == "anticipate":
+                errors.append(f"SC011 {where}: decision is anticipate; list it under questions")
+            status = entry.get("status")
+            if status not in {"answered", "partly-answered"}:
+                errors.append(f"SC004 {where}: unplanned status must be answered or partly-answered")
+            if status != "answered" and not entry.get("missing"):
+                errors.append(f"SC012 {where}: status {status} needs a 'missing' statement")
+            check_quote(entry, where, in_node=True)
+            report[profile]["unplanned"] += 1
+    return report, errors
+
+
+def print_summary(report: dict, errors: list[str]) -> None:
+    for error in errors:
+        print(error)
+    if not report:
+        return
+    for profile, row in report.items():
+        nodes = row["nodes"]
+        q = row["questions"]
+        print(f"{profile}: nodes realized={nodes['realized']} merged={nodes['merged']} "
+              f"absent={nodes['absent']}; questions answered={q['answered']} "
+              f"partly={q['partly-answered']} not={q['not-answered']}; "
+              f"unplanned answers={row['unplanned']}")
+        print("  planned vs actual percent: " + ", ".join(
+            f"{node.split(':')[1]} {planned}->{actual}" for node, planned, actual in row["node_rows"]))
+    if not errors:
+        print("valid telling sidecar")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("sidecar", type=Path, nargs="?", default=HERE / "realizations.sidecar.json")
+    args = parser.parse_args()
+    report, errors = validate(args.sidecar)
+    print_summary(report, errors)
+    if errors:
+        raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()

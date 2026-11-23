@@ -1,0 +1,345 @@
+{
+ "schema": "inkup.telling-sidecar/v0",
+ "problem": "a96J06",
+ "realizations": "holes/inkup/pilots/a96J06/realizations.md",
+ "content_plan": "holes/inkup/pilots/a96J06/content-plan.json",
+ "note": "ink_words and ink_percent are recomputed by validate_sidecar.py from realizations.md; merged and absent nodes carry 0. Quotes are verbatim single lines of the file. A planned action is recorded, not judged: this sidecar says what the text contains.",
+ "profiles": {
+  "expert-reference": {
+   "nodes": [
+    {
+     "node": "a96J06:B0",
+     "status": "merged",
+     "ink_words": 0,
+     "ink_percent": 0.0,
+     "planned_percent": 5,
+     "planned_action": "compress",
+     "merged_into": "a96J06:B6",
+     "quote": "Thus every radius-(r) disk contains a point"
+    },
+    {
+     "node": "a96J06:B1",
+     "status": "realized",
+     "ink_words": 16,
+     "ink_percent": 18.2,
+     "planned_percent": 10,
+     "planned_action": "show"
+    },
+    {
+     "node": "a96J06:B2",
+     "status": "realized",
+     "ink_words": 21,
+     "ink_percent": 23.9,
+     "planned_percent": 20,
+     "planned_action": "expand"
+    },
+    {
+     "node": "a96J06:B3",
+     "status": "merged",
+     "ink_words": 0,
+     "ink_percent": 0.0,
+     "planned_percent": 5,
+     "planned_action": "compress",
+     "merged_into": "a96J06:B2",
+     "quote": "Then (g) maps the unit disk to the closed unit disk, fixes (0), and has"
+    },
+    {
+     "node": "a96J06:B4",
+     "status": "realized",
+     "ink_words": 13,
+     "ink_percent": 14.8,
+     "planned_percent": 20,
+     "planned_action": "show"
+    },
+    {
+     "node": "a96J06:B5",
+     "status": "realized",
+     "ink_words": 27,
+     "ink_percent": 30.7,
+     "planned_percent": 30,
+     "planned_action": "expand"
+    },
+    {
+     "node": "a96J06:B6",
+     "status": "realized",
+     "ink_words": 11,
+     "ink_percent": 12.5,
+     "planned_percent": 10,
+     "planned_action": "show"
+    }
+   ],
+   "questions": [
+    {
+     "question": "scaling-strategy",
+     "blueprint_node": "a96J06:B2",
+     "status": "partly-answered",
+     "node": "a96J06:B2",
+     "quote": "Then (g) maps the unit disk to the closed unit disk, fixes (0), and has",
+     "ink_words": 15,
+     "missing": "The rescaling is named and its output stated, but no obstacle is stated (the radius r varies while Schwarz's lemma is on the unit disk) and nothing says why this move is the one that removes it."
+    }
+   ],
+   "unplanned_answers": [
+    {
+     "question": "schwarz-applicability-by-normalization",
+     "decision": "omit",
+     "status": "partly-answered",
+     "node": "a96J06:B2",
+     "quote": "Then (g) maps the unit disk to the closed unit disk, fixes (0), and has",
+     "ink_words": 15,
+     "missing": "Asserts the converted hypotheses; the step from the radius-r bound to the unit-disk bound is not shown."
+    },
+    {
+     "question": "coefficient-extensionality",
+     "decision": "defer",
+     "status": "partly-answered",
+     "node": "a96J06:B5",
+     "quote": "identical.  Comparing their degree-(N) coefficients gives (c_N=0), contrary",
+     "ink_words": 8,
+     "missing": "Gives the infinite-agreement warrant for polynomial identity, but not why equal polynomials have equal coefficients."
+    }
+   ]
+  },
+  "teaching": {
+   "nodes": [
+    {
+     "node": "a96J06:B0",
+     "status": "realized",
+     "ink_words": 31,
+     "ink_percent": 13.9,
+     "planned_percent": 10,
+     "planned_action": "show"
+    },
+    {
+     "node": "a96J06:B1",
+     "status": "realized",
+     "ink_words": 16,
+     "ink_percent": 7.2,
+     "planned_percent": 10,
+     "planned_action": "show"
+    },
+    {
+     "node": "a96J06:B2",
+     "status": "realized",
+     "ink_words": 52,
+     "ink_percent": 23.3,
+     "planned_percent": 25,
+     "planned_action": "expand"
+    },
+    {
+     "node": "a96J06:B3",
+     "status": "realized",
+     "ink_words": 30,
+     "ink_percent": 13.5,
+     "planned_percent": 10,
+     "planned_action": "show"
+    },
+    {
+     "node": "a96J06:B4",
+     "status": "realized",
+     "ink_words": 34,
+     "ink_percent": 15.2,
+     "planned_percent": 20,
+     "planned_action": "expand"
+    },
+    {
+     "node": "a96J06:B5",
+     "status": "realized",
+     "ink_words": 41,
+     "ink_percent": 18.4,
+     "planned_percent": 15,
+     "planned_action": "expand"
+    },
+    {
+     "node": "a96J06:B6",
+     "status": "realized",
+     "ink_words": 19,
+     "ink_percent": 8.5,
+     "planned_percent": 10,
+     "planned_action": "show"
+    }
+   ],
+   "questions": [
+    {
+     "question": "scaling-strategy",
+     "blueprint_node": "a96J06:B2",
+     "status": "answered",
+     "node": "a96J06:B2",
+     "quote": "This normalization divides the output bound by the same (r): it turns our",
+     "ink_words": 13
+    },
+    {
+     "question": "schwarz-applicability-by-normalization",
+     "blueprint_node": "a96J06:B2",
+     "status": "answered",
+     "node": "a96J06:B2",
+     "quote": "assumption into (\\lVert g(w)\\rVert \\le 1) on the unit disk.  It also preserves",
+     "ink_words": 13
+    }
+   ],
+   "unplanned_answers": [
+    {
+     "question": "strategy-overview",
+     "decision": "defer",
+     "status": "answered",
+     "node": "a96J06:B0",
+     "quote": "The obstacle is that the radius (r) varies, whereas Schwarz's lemma",
+     "ink_words": 11
+    },
+    {
+     "question": "rotation-specializes-to-identity",
+     "decision": "defer",
+     "status": "partly-answered",
+     "node": "a96J06:B4",
+     "quote": "Since (g'(0)=1), that rotation is",
+     "ink_words": 5,
+     "missing": "Why a derivative of one forces the identity rather than another rotation rests on a bare 'since'."
+    },
+    {
+     "question": "schwarz-rigidity-connection",
+     "decision": "defer",
+     "status": "partly-answered",
+     "node": "a96J06:B4",
+     "quote": "derivative already has the maximal possible norm at the origin.  The equality",
+     "ink_words": 12,
+     "missing": "Names the trigger of the equality case but not how it classifies g as a rotation."
+    },
+    {
+     "question": "coefficient-extensionality",
+     "decision": "defer",
+     "status": "partly-answered",
+     "node": "a96J06:B5",
+     "quote": "therefore all coefficients of degree at least two vanish.  In particular",
+     "ink_words": 11,
+     "missing": "Identity of the polynomials is stated; why identity makes coefficients vanish is not said."
+    },
+    {
+     "question": "finite-domain-coefficient-boundary",
+     "decision": "defer",
+     "status": "partly-answered",
+     "node": "a96J06:B5",
+     "quote": "Two polynomials that agree on infinitely many points are identical;",
+     "ink_words": 10,
+     "missing": "States the infinite-point bridge without proof; the finite-domain contrast is not addressed."
+    },
+    {
+     "question": "fixed-point-applicability",
+     "decision": "defer",
+     "status": "partly-answered",
+     "node": "a96J06:B2",
+     "quote": "the two decisive normalizations, (g(0)=0) and (g'(0)=1).",
+     "ink_words": 7,
+     "missing": "Says scaling preserves g(0)=0 without computing it or saying that Schwarz's lemma consumes it."
+    }
+   ]
+  },
+  "formal-audit": {
+   "nodes": [
+    {
+     "node": "a96J06:B0",
+     "status": "realized",
+     "ink_words": 14,
+     "ink_percent": 7.1,
+     "planned_percent": 5,
+     "planned_action": "show"
+    },
+    {
+     "node": "a96J06:B1",
+     "status": "realized",
+     "ink_words": 18,
+     "ink_percent": 9.1,
+     "planned_percent": 10,
+     "planned_action": "show"
+    },
+    {
+     "node": "a96J06:B2",
+     "status": "realized",
+     "ink_words": 14,
+     "ink_percent": 7.1,
+     "planned_percent": 15,
+     "planned_action": "show"
+    },
+    {
+     "node": "a96J06:B3",
+     "status": "realized",
+     "ink_words": 40,
+     "ink_percent": 20.2,
+     "planned_percent": 20,
+     "planned_action": "expand"
+    },
+    {
+     "node": "a96J06:B4",
+     "status": "realized",
+     "ink_words": 25,
+     "ink_percent": 12.6,
+     "planned_percent": 15,
+     "planned_action": "show"
+    },
+    {
+     "node": "a96J06:B5",
+     "status": "realized",
+     "ink_words": 64,
+     "ink_percent": 32.3,
+     "planned_percent": 25,
+     "planned_action": "expand"
+    },
+    {
+     "node": "a96J06:B6",
+     "status": "realized",
+     "ink_words": 23,
+     "ink_percent": 11.6,
+     "planned_percent": 10,
+     "planned_action": "show"
+    }
+   ],
+   "questions": [
+    {
+     "question": "scaling-strategy",
+     "blueprint_node": "a96J06:B2",
+     "status": "partly-answered",
+     "node": "a96J06:B2",
+     "quote": "The separately proved rescaling lemma",
+     "ink_words": 5,
+     "missing": "Records the scaled map and the identities it keeps, but never says what obstacle it removes or which proof obligation (a unit-ball self-map with derivative one) it discharges."
+    },
+    {
+     "question": "schwarz-applicability-by-normalization",
+     "blueprint_node": "a96J06:B2",
+     "status": "answered",
+     "node": "a96J06:B3",
+     "quote": "(\\lVert rw\\rVert<r); the negated conclusion therefore yields",
+     "ink_words": 7
+    }
+   ],
+   "unplanned_answers": [
+    {
+     "question": "coefficient-extensionality",
+     "decision": "defer",
+     "status": "partly-answered",
+     "node": "a96J06:B5",
+     "quote": "so polynomial extensionality gives",
+     "ink_words": 4,
+     "missing": "Names extensionality for polynomial equality; the step to equal coefficients is performed, not warranted."
+    },
+    {
+     "question": "finite-domain-coefficient-boundary",
+     "decision": "defer",
+     "status": "partly-answered",
+     "node": "a96J06:B5",
+     "quote": "The sequence (r/(n+2)) supplies an infinite set of such evaluation points,",
+     "ink_words": 11,
+     "missing": "Supplies the infinite evaluation set; failure of comparison on a finite domain is not recorded."
+    },
+    {
+     "question": "fixed-point-applicability",
+     "decision": "defer",
+     "status": "partly-answered",
+     "node": "a96J06:B2",
+     "quote": "gives (g'(0)=1), and direct simplification gives (g(0)=0).",
+     "ink_words": 7,
+     "missing": "States g(0)=0 as a simplification; not tied to it being a consumed hypothesis of the rigidity lemma."
+    }
+   ]
+  }
+ }
+}
