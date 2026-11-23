@@ -1,0 +1,92 @@
+{
+  "edge_count": 85,
+  "edge_relations": {
+    "by-cases": 10,
+    "iff": 45,
+    "implies": 30
+  },
+  "fixture_record": "mark7master-20260921",
+  "fixture_sha256": "d6b429c5964a8ef1010f665a117160dde016cc8c288c334eaed0b1e13acdcdf0",
+  "kinds_by_layer": {
+    "s1-clause": {
+      "assume/consider": 1,
+      "assume/explicit": 1,
+      "bind/define": 7,
+      "bind/let": 26,
+      "bind/typed": 105,
+      "claim": 73,
+      "constrain/relation": 77,
+      "constrain/such-that": 15,
+      "constrain/where": 2,
+      "definiens": 71,
+      "implies": 13,
+      "let-binder": 71,
+      "proof-move": 5,
+      "quant/existential": 1,
+      "quant/universal": 32
+    },
+    "s1-region": {
+      "env/corollary": 4,
+      "env/definition": 2,
+      "env/enumerate": 5,
+      "env/example": 2,
+      "env/lemma": 2,
+      "env/proof": 14,
+      "env/proposition": 6,
+      "env/remark": 3,
+      "env/thebibliography": 1,
+      "env/theorem": 2,
+      "exposition": 30,
+      "math": 550
+    },
+    "s1-structure": {
+      "label": 34,
+      "layout": 6,
+      "text-mode": 20
+    },
+    "s1-term": {
+      "anaphor": 5,
+      "cite": 56,
+      "classified": 722,
+      "concept": 564,
+      "definiendum": 71,
+      "inference": 37,
+      "kw-con": 13,
+      "kw-hyp": 13,
+      "ref": 19,
+      "symbol": 140,
+      "symbol-grounded": 403,
+      "unknown": 29
+    },
+    "s3": {
+      "claim": 71,
+      "definition": 1,
+      "object": 32,
+      "proof-body": 14,
+      "ref": 18
+    },
+    "s4": {
+      "auxiliary-construction": 4,
+      "carved/in-proof": 1,
+      "carved/inflight": 21,
+      "carved/leaf-section": 1,
+      "carved/section-lead": 4,
+      "connection": 112,
+      "difficulty-assessment": 3,
+      "generalisation": 2,
+      "open-problem/status": 3,
+      "universal-property/characterizes": 12
+    }
+  },
+  "layer_counts": {
+    "s1-clause": 500,
+    "s1-region": 621,
+    "s1-structure": 60,
+    "s1-term": 2072,
+    "s3": 136,
+    "s4": 163
+  },
+  "paper": "0708.2185",
+  "schema": "inkup.mark7-scope-inventory/v0",
+  "span_count": 3552
+}
