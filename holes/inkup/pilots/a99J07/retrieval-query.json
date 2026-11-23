@@ -1,0 +1,205 @@
+{
+ "schema": "inkup.retrieval-query/v0",
+ "problem": "a99J07",
+ "terms": [
+  {
+   "term": "complex polynomial $p$ of degree $N$ with complex coefficients",
+   "kind": "object",
+   "source": "alignment:a99J07:B0",
+   "quote": "For a complex polynomial of degree N at least 1"
+  },
+  {
+   "term": "polynomial modulus $|p(w)|$ at any point $w$",
+   "kind": "object",
+   "source": "alignment:a99J07:B0",
+   "quote": "prove that its modulus at any point is at most its supremum on the closed unit disk"
+  },
+  {
+   "term": "unit-disk sup norm $\\|p\\|_\\infty=\\sup\\{|p(z)| : |z| \\le 1\\}$",
+   "kind": "object",
+   "source": "proof-plan",
+   "quote": "‖p‖_∞ = sup{|p(z)| : |z| ≤ 1}."
+  },
+  {
+   "term": "maximum modulus principle",
+   "kind": "named-method",
+   "source": "informal",
+   "quote": "The maximum modulus principle then controls $q$ everywhere inside"
+  },
+  {
+   "term": "maximum modulus principle for a polynomial on the unit disk",
+   "kind": "named-method",
+   "source": "proof-plan",
+   "quote": "maximum modulus principle",
+   "anchor": true
+  },
+  {
+   "term": "reciprocal polynomial $z^N p(1/z)$",
+   "kind": "transformation",
+   "source": "proof-plan",
+   "quote": "Define q(z)=z^N p(1/z), which is analytic on {|z|≤1}.",
+   "anchor": true
+  },
+  {
+   "term": "reversed polynomial `Polynomial.reverse`",
+   "kind": "transformation",
+   "source": "informal",
+   "quote": "the reversal already lives in Mathlib"
+  },
+  {
+   "term": "reflected polynomial `p.reflect N`",
+   "kind": "transformation",
+   "source": "alignment:a99J07:B4",
+   "quote": "Lean takes Mathlib's `p.reflect N`, a polynomial by construction"
+  },
+  {
+   "term": "auxiliary polynomial $q(z)=z^N p(1/z)$ analytic on the closed unit disk",
+   "kind": "object",
+   "source": "informal",
+   "quote": "This polynomial is analytic on $|z|\\leq 1$ (including $z=0$)."
+  },
+  {
+   "term": "identity $q(1/w)\\,w^N = p(w)$",
+   "kind": "object",
+   "source": "alignment:a99J07:B4",
+   "quote": "so that q(1/w) * w^N = p(w)"
+  },
+  {
+   "term": "bound on the unit circle $|q(z)|=|p(1/z)|\\leq\\|p\\|_\\infty$",
+   "kind": "object",
+   "source": "informal",
+   "quote": "On the unit circle $|z|=1$ we have $|q(z)|=|p(1/z)|\\leq\\|p\\|_\\infty$."
+  },
+  {
+   "term": "point $1/v$ of modulus one for $v$ on the unit circle",
+   "kind": "object",
+   "source": "alignment:a99J07:B5",
+   "quote": "Use that v on the unit circle is not zero and has inverse of modulus one"
+  },
+  {
+   "term": "maximum of $|q|$ on the closed unit disk occurs on the boundary",
+   "kind": "object",
+   "source": "proof-plan",
+   "quote": "The maximum of |q| on {|z|≤1} occurs on the boundary."
+  },
+  {
+   "term": "compactness of the closed unit disk makes the supremum bounded above",
+   "kind": "object",
+   "source": "lean",
+   "quote": "Compactness of the disk supplies the boundedness needed for `le_csSup`."
+  },
+  {
+   "term": "supremum over a compact set is attained at a maximiser",
+   "kind": "object",
+   "source": "alignment:a99J07:B6",
+   "quote": "compactness gives a maximiser x on the closed disk"
+  },
+  {
+   "term": "polynomial growth bound outside the unit disk",
+   "kind": "object",
+   "source": "lean",
+   "quote": "the conclusion is precisely the source's global growth",
+   "anchor": true
+  },
+  {
+   "term": "$|p(w)|\\leq|w|^N \\|p\\|_\\infty$ for $|w|>1$",
+   "kind": "object",
+   "source": "informal",
+   "quote": "$|p(w)|=|w|^N|q(1/w)|\\leq|w|^N \\|p\\|_\\infty = "
+  },
+  {
+   "term": "split into $|w|\\leq 1$ vs $|w|\\geq 1$",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "split into $|w|\\leq 1$ vs $|w|\\geq 1$"
+  },
+  {
+   "term": "case $|w|\\leq 1$: $\\max\\{1,|w|\\}^N=1$",
+   "kind": "surface",
+   "source": "informal",
+   "quote": "If $|w|\\leq 1$, then $|p(w)|\\leq\\|p\\|_\\infty$ by definition, and $\\max\\{1,|w|\\}^N=1$"
+  },
+  {
+   "term": "case $|w|>1$",
+   "kind": "surface",
+   "source": "informal",
+   "quote": "If $|w|>1$, define $q(z)=z^N p(1/z)$."
+  },
+  {
+   "term": "exterior region $|w|>1$",
+   "kind": "surface",
+   "source": "proof-plan",
+   "quote": "Transfers information from the unit circle to the exterior region |w|>1."
+  },
+  {
+   "term": "inside the unit disk the inequality is the definition of the norm",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "Inside the unit disk the inequality is exactly the definition of $\\|p\\|_\\infty$."
+  },
+  {
+   "term": "substitute $z=1/w$",
+   "kind": "transformation",
+   "source": "informal",
+   "quote": "Put $z=1/w$ (since $|w|>1 \\Rightarrow |1/w|<1$)"
+  },
+  {
+   "term": "inversion $w\\mapsto 1/w$ takes a point outside the disk to a point of the disk",
+   "kind": "transformation",
+   "source": "alignment:a99J07:B7",
+   "quote": "it makes 1/w a point of the disk and makes max{1,|w|} equal |w|"
+  },
+  {
+   "term": "direct coefficient bounds by the triangle inequality overshoot",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "Direct coefficient bounds (triangle inequality) often overshoot."
+  },
+  {
+   "term": "supremum on the unit disk controls the polynomial everywhere",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "it uses only the supremum on the unit disk yet must control the polynomial everywhere"
+  },
+  {
+   "term": "complex-analysis tool for a polynomial bound",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "The trick needs a complex-analysis tool"
+  },
+  {
+   "term": "unit circle $|z|=1$",
+   "kind": "surface",
+   "source": "informal",
+   "quote": "on $|z|=1$ it equals $p$ evaluated on the unit circle"
+  },
+  {
+   "term": "combining the two cases",
+   "kind": "strategic-move",
+   "source": "informal",
+   "quote": "Combining the two cases proves the inequality for all"
+  }
+ ],
+ "embedding_queries": [
+  {
+   "text": "If p is a complex polynomial of degree N, then for every complex w the modulus of p at w is at most the supremum of the modulus of p on the closed unit disk times the N-th power of max of 1 and the modulus of w.",
+   "source": "alignment:a99J07:B0"
+  },
+  {
+   "text": "The bound is split into two cases according to the size of the modulus of w: when the modulus of w is at most 1 the right-hand side equals the norm and the claim is the definition of the supremum norm, and when the modulus of w is greater than 1 the factor is the N-th power of the modulus of w.",
+   "source": "alignment:a99J07:B2"
+  },
+  {
+   "text": "Define the auxiliary polynomial q of z as z to the N times p evaluated at 1 over z, the reciprocal or reflected polynomial, which satisfies q of 1 over w times w to the N equals p of w.",
+   "source": "alignment:a99J07:B4"
+  },
+  {
+   "text": "On the unit circle the modulus of the auxiliary polynomial q equals the modulus of p at the inverse point and is therefore at most the supremum norm of p on the closed unit disk.",
+   "source": "alignment:a99J07:B5"
+  },
+  {
+   "text": "By the maximum modulus principle a polynomial whose modulus is bounded on the unit circle has modulus bounded by the same constant on the whole closed unit disk.",
+   "source": "alignment:a99J07:B6"
+  }
+ ]
+}
