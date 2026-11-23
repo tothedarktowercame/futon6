@@ -231,7 +231,10 @@ def validate(alignment: Path, schema_path: Path = SCHEMA,
 
 
 def main() -> None:
-    doc, errors = validate(HERE / "alignment.json")
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("alignment", type=Path, nargs="?", default=HERE / "alignment.json")
+    doc, errors = validate(parser.parse_args().alignment)
     for error in errors:
         print(error)
     if errors:
