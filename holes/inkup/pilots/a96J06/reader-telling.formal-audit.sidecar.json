@@ -1,0 +1,106 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a96J06",
+  "realizations": "holes/inkup/pilots/a96J06/reader-telling.formal-audit.md",
+  "content_plan": "holes/inkup/pilots/a96J06/content-plan.json",
+  "note": "Formal-audit-only R5 sidecar. Lean and Mathlib names are quoted from the pinned proof or reasoning graphs.",
+  "profiles": {
+    "formal-audit": {
+      "nodes": [
+        {"node": "a96J06:B0", "status": "realized", "ink_words": 14, "ink_percent": 4.6, "planned_percent": 5, "planned_action": "show"},
+        {"node": "a96J06:B1", "status": "realized", "ink_words": 20, "ink_percent": 6.6, "planned_percent": 10, "planned_action": "show"},
+        {"node": "a96J06:B2", "status": "realized", "ink_words": 38, "ink_percent": 12.5, "planned_percent": 15, "planned_action": "show"},
+        {"node": "a96J06:B3", "status": "realized", "ink_words": 53, "ink_percent": 17.5, "planned_percent": 20, "planned_action": "expand"},
+        {"node": "a96J06:B4", "status": "realized", "ink_words": 62, "ink_percent": 20.5, "planned_percent": 15, "planned_action": "show"},
+        {"node": "a96J06:B5", "status": "realized", "ink_words": 92, "ink_percent": 30.4, "planned_percent": 25, "planned_action": "expand"},
+        {"node": "a96J06:B6", "status": "realized", "ink_words": 24, "ink_percent": 7.9, "planned_percent": 10, "planned_action": "show"}
+      ],
+      "questions": [
+        {
+          "question": "scaling-strategy",
+          "blueprint_node": "a96J06:B2",
+          "status": "answered",
+          "node": "a96J06:B2",
+          "quote": "Schwarz rigidity uses the unit ball, while `hcontra` is a radius-(r)\nbound.  Remove this mismatch with\n\n\\[\ng(z)=r^{-1}p(rz).\n\\]",
+          "ink_words": 19,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "gap", "relation": "resolved-by", "to": "scale"}}
+          ]
+        },
+        {
+          "question": "schwarz-applicability-by-normalization",
+          "blueprint_node": "a96J06:B2",
+          "status": "answered",
+          "node": "a96J06:B3",
+          "quote": "For (w)\nthere, (rw) lies in the radius-(r) ball; `hcontra`, divided by positive (r),\ntherefore gives (\\lVert g(w)\\rVert\\le1).",
+          "ink_words": 18,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "unit-bound", "relation": "enables", "to": "schwarz"}}
+          ]
+        },
+        {
+          "question": "rotation-specializes-to-identity",
+          "blueprint_node": "a96J06:B4",
+          "status": "answered",
+          "node": "a96J06:B4",
+          "quote": "Lean uses it here again with `hgderiv` to simplify the affine formula to\n`hgeq : g(w)=w`.  Thus the slope\nis (1), not an undetermined rotation factor.",
+          "ink_words": 26,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "requires", "to": "derivative-one"}},
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "warrants", "to": "identity-on-unit-ball"}}
+          ]
+        },
+        {
+          "question": "coefficient-extensionality",
+          "blueprint_node": "a96J06:B5",
+          "status": "answered",
+          "node": "a96J06:B5",
+          "quote": "`congrArg (fun p => p.coeff N)` sends `hpoly` to coefficient equality\n`hcoeff`.  Then `apm_a96J06_coeff_top N hN c` gives the left coefficient\n(c_N), and `hXN` gives the coefficient of (X) as zero since (hN : 2≤N).\nHence (c_N=0).",
+          "ink_words": 37,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "coefficient-congruence-warrant", "relation": "warrants", "to": "coefficient-equality"}},
+            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "top-zero-warrant", "relation": "warrants", "to": "coefficient-zero"}}
+          ]
+        },
+        {
+          "question": "schwarz-rigidity-connection",
+          "blueprint_node": "a96J06:B4",
+          "status": "answered",
+          "node": "a96J06:B4",
+          "quote": "`Complex.affine_of_mapsTo_ball_of_norm_dslope_eq_div` consumes these facts,\n`hgdiff`, `hgmap`, and strict convexity, returning `haffine`:\n\n\\[\ng(w)=g(0)+(w-0)\\operatorname{dslope}(g,0,0).\n\\]",
+          "ink_words": 14,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "affine-equality-warrant", "relation": "requires", "to": "unit-dslope"}},
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "affine-equality-warrant", "relation": "warrants", "to": "affine-on-unit-ball"}}
+          ]
+        },
+        {
+          "question": "finite-domain-coefficient-boundary",
+          "blueprint_node": "a96J06:B5",
+          "status": "answered",
+          "node": "a96J06:B5",
+          "quote": "In `hset`, the injective\nsequence (r/(n+2)) supplies infinitely many agreement points.  Over the domain\n(\\mathbb C), `Polynomial.eq_of_infinite_eval_eq` consumes that infinite set\nand yields `hpoly`.  Infinitude is essential: over (\\mathbb F_2), the distinct\npolynomials (X^2-X) and (0) agree everywhere.",
+          "ink_words": 38,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "polynomial-identity-warrant", "relation": "requires", "to": "infinite-agreement"}},
+            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "polynomial-identity-warrant", "relation": "requires", "to": "complex-domain"}},
+            {"graph": "holes/inkup/reasoning/a96J06-coefficient-bridge.json", "edge": {"from": "infinite-agreement", "relation": "violated-in", "to": "finite-field-boundary"}}
+          ]
+        },
+        {
+          "question": "fixed-point-applicability",
+          "blueprint_node": "a96J06:B3",
+          "status": "answered",
+          "node": "a96J06:B4",
+          "quote": "`hgzero` first centred the target ball in `hgmap`; the lemma does not consume\nit.  Lean uses it here again with `hgderiv` to simplify the affine formula to\n`hgeq : g(w)=w`.",
+          "ink_words": 30,
+          "graph_support": [
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "requires", "to": "fixed-zero"}},
+            {"graph": "holes/inkup/reasoning/a96J06-schwarz-rigidity.json", "edge": {"from": "identity-specialization-warrant", "relation": "warrants", "to": "identity-on-unit-ball"}}
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}
