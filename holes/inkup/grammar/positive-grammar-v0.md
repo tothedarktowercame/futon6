@@ -3,6 +3,10 @@
 Status: candidate factorization grounded in one Mark7 professional-paper
 fixture and one APM alternate-telling pilot; not yet a quality standard.
 
+The wider sampling frame is recorded in
+`corpus-landscape-2026-11-23.md`.  In particular, the retained complex-analysis
+archive is an unvetted transfer corpus, not additional ground truth.
+
 ## Finding
 
 `show`, `compress`, `expand`, and `omit` are **realization actions**.  Mark7's
