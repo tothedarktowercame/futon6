@@ -14,121 +14,190 @@
       "kind": "question",
       "claim": "Why does agreement of the displayed polynomial with the identity on the radius-r disk permit polynomial and coefficient equality?",
       "authority": "secondary",
-      "evidence": ["content-plan:coefficient-extensionality", "content-plan:finite-domain-coefficient-boundary"]
+      "evidence": [
+        "content-plan:coefficient-extensionality",
+        "content-plan:finite-domain-coefficient-boundary"
+      ]
     },
     {
       "id": "answer",
       "kind": "answer",
-      "claim": "The Lean proof first promotes equality on an infinite set to polynomial equality over the domain ℂ, then applies coefficient congruence and the top-coefficient lemmas to contradict c N ≠ 0.",
+      "claim": "The Lean proof exhibits infinitely many points of the disk, so the set of agreement is infinite; over the domain ℂ that promotes pointwise agreement to polynomial equality; coefficient congruence and the two top-coefficient calculations then contradict c N ≠ 0.",
       "authority": "secondary",
-      "evidence": ["lean:Main.lean#hpoly", "lean:Main.lean#hcoeff", "lean:Main.lean#hXN"]
+      "evidence": [
+        "lean:Main.lean#hset",
+        "lean:Main.lean#hpoly",
+        "lean:Main.lean#hcoeff",
+        "lean:Main.lean#hXN"
+      ]
     },
     {
       "id": "disk-agreement",
       "kind": "premise",
       "claim": "For every ζ in the radius-r ball, eval ζ (apm_a96J06_poly N c) = eval ζ X.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#heval"]
+      "evidence": [
+        "lean:Main.lean#heval"
+      ]
+    },
+    {
+      "id": "infinite-sample-warrant",
+      "kind": "warrant",
+      "claim": "The points r/(n+2), n a natural number, are pairwise distinct and lie in the radius-r ball, so they form an infinite set; a set containing an infinite set is infinite.",
+      "authority": "formal-proof",
+      "evidence": [
+        "lean:Main.lean#hset",
+        "lean:Main.lean#huinj",
+        "Mathlib:Set.infinite_range_of_injective",
+        "Mathlib:Set.Infinite.mono"
+      ]
     },
     {
       "id": "infinite-agreement",
-      "kind": "premise",
+      "kind": "claim",
       "claim": "The set of complex ζ at which apm_a96J06_poly N c and X have equal evaluations is infinite.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hset"]
+      "evidence": [
+        "lean:Main.lean#hset"
+      ]
+    },
+    {
+      "id": "complex-domain",
+      "kind": "premise",
+      "claim": "ℂ is a commutative ring with no zero divisors, the instance hypotheses [CommRing R] [IsDomain R] of the Mathlib lemma.",
+      "authority": "mathlib",
+      "evidence": [
+        "Mathlib.Algebra.Polynomial.Roots:variable [CommRing R] [IsDomain R]"
+      ]
     },
     {
       "id": "polynomial-identity-warrant",
       "kind": "warrant",
       "claim": "Polynomial.eq_of_infinite_eval_eq: for R with [CommRing R] [IsDomain R], polynomials p q : R[X] are equal if {x | eval x p = eval x q} is infinite.",
       "authority": "mathlib",
-      "evidence": ["Mathlib.Algebra.Polynomial.Roots:Polynomial.eq_of_infinite_eval_eq"]
+      "evidence": [
+        "Mathlib.Algebra.Polynomial.Roots:Polynomial.eq_of_infinite_eval_eq"
+      ]
     },
     {
       "id": "polynomial-identity",
       "kind": "claim",
       "claim": "apm_a96J06_poly N c = Polynomial.X as polynomials over ℂ.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hpoly"]
+      "evidence": [
+        "lean:Main.lean#hpoly"
+      ]
     },
     {
       "id": "coefficient-congruence-warrant",
       "kind": "warrant",
       "claim": "Applying the function p ↦ p.coeff N to an equality of polynomials preserves equality.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hcoeff", "Lean:congrArg"]
+      "evidence": [
+        "lean:Main.lean#hcoeff",
+        "Lean:congrArg"
+      ]
     },
     {
       "id": "coefficient-equality",
       "kind": "claim",
       "claim": "(apm_a96J06_poly N c).coeff N = Polynomial.X.coeff N.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hcoeff"]
+      "evidence": [
+        "lean:Main.lean#hcoeff"
+      ]
     },
     {
       "id": "top-coefficient",
       "kind": "premise",
       "claim": "Since hN states 2 ≤ N, apm_a96J06_coeff_top identifies (apm_a96J06_poly N c).coeff N with c N.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hN", "lean:Main.lean#apm_a96J06_coeff_top"]
+      "evidence": [
+        "lean:Main.lean#hN",
+        "lean:Main.lean#apm_a96J06_coeff_top"
+      ]
     },
     {
       "id": "identity-top-zero",
       "kind": "premise",
       "claim": "Since 2 ≤ N implies 1 ≠ N, the coefficient of X at N is zero.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hXN", "Mathlib:Polynomial.coeff_X"]
+      "evidence": [
+        "lean:Main.lean#hXN",
+        "Mathlib:Polynomial.coeff_X"
+      ]
     },
     {
       "id": "top-zero-warrant",
       "kind": "warrant",
       "claim": "Substituting the two top-coefficient calculations into coefficient equality yields c N = 0.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hcoeff", "lean:Main.lean#hXN"]
+      "evidence": [
+        "lean:Main.lean#hcoeff",
+        "lean:Main.lean#hXN"
+      ]
     },
     {
       "id": "coefficient-zero",
       "kind": "claim",
       "claim": "c N = 0.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hcoeff", "lean:Main.lean#hXN"]
+      "evidence": [
+        "lean:Main.lean#hcoeff",
+        "lean:Main.lean#hXN"
+      ]
     },
     {
       "id": "terminal-nonzero",
       "kind": "premise",
       "claim": "The theorem hypothesis states c N ≠ 0.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hcN"]
+      "evidence": [
+        "lean:Main.lean#hcN"
+      ]
     },
     {
       "id": "contradiction-warrant",
       "kind": "warrant",
       "claim": "The derived equality c N = 0 contradicts the theorem hypothesis c N ≠ 0.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#hcN", "lean:Main.lean#closing-exact"]
+      "evidence": [
+        "lean:Main.lean#hcN",
+        "lean:Main.lean#hcoeff",
+        "lean:Main.lean#hXN"
+      ]
     },
     {
       "id": "contradiction",
       "kind": "claim",
       "claim": "False, discharging the assumption that the radius-r ball is mapped within radius r.",
       "authority": "formal-proof",
-      "evidence": ["lean:Main.lean#exact-hcN-hcoeff-trans-hXN"]
+      "evidence": [
+        "lean:Main.lean#hcN",
+        "lean:Main.lean#hcontra"
+      ]
     },
     {
       "id": "finite-field-boundary",
       "kind": "boundary-case",
       "claim": "Over F₂, the nonzero polynomial X² - X has coefficients [0,1,1] but evaluates to zero at both field elements 0 and 1; agreement at every point is therefore not an infinite agreement set.",
       "authority": "secondary",
-      "evidence": ["secondary:finite-field-example:F2:X^2-X", "secondary:checked-evaluations:0↦0,1↦0"]
+      "evidence": [
+        "secondary:finite-field-example:F2:X^2-X",
+        "secondary:checked-evaluations:0↦0,1↦0"
+      ]
     }
   ],
   "edges": [
     {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "infinite-sample-warrant"},
     {"from": "answer", "relation": "cites-reason", "to": "polynomial-identity-warrant"},
     {"from": "answer", "relation": "cites-reason", "to": "coefficient-congruence-warrant"},
     {"from": "answer", "relation": "cites-reason", "to": "top-zero-warrant"},
     {"from": "answer", "relation": "cites-reason", "to": "contradiction-warrant"},
-    {"from": "polynomial-identity-warrant", "relation": "requires", "to": "disk-agreement"},
+    {"from": "infinite-sample-warrant", "relation": "requires", "to": "disk-agreement"},
+    {"from": "infinite-sample-warrant", "relation": "warrants", "to": "infinite-agreement"},
+    {"from": "polynomial-identity-warrant", "relation": "requires", "to": "complex-domain"},
     {"from": "polynomial-identity-warrant", "relation": "requires", "to": "infinite-agreement"},
     {"from": "polynomial-identity-warrant", "relation": "warrants", "to": "polynomial-identity"},
     {"from": "coefficient-congruence-warrant", "relation": "requires", "to": "polynomial-identity"},

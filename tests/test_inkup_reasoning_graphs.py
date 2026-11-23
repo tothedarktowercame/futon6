@@ -60,3 +60,25 @@ def test_lean_hash_drift_is_rejected(tmp_path):
     doc["sources"]["lean"]["sha256"] = "0" * 64
     with pytest.raises(SystemExit, match="lean: source hash drifted"):
         module.validate(write_graph(tmp_path, doc))
+
+
+def test_lean_evidence_must_name_a_bound_identifier(tmp_path):
+    doc = json.loads(WARRANT.read_text())
+    node = next(node for node in doc["nodes"] if node["id"] == "polynomial-identity")
+    node["evidence"] = ["lean:Main.lean#hpolynomial"]
+    with pytest.raises(SystemExit, match="names nothing bound in the Lean source"):
+        module.validate(write_graph(tmp_path, doc))
+
+
+def test_warrant_with_two_conclusions_fails(tmp_path):
+    doc = json.loads(WARRANT.read_text())
+    doc["edges"].append({"from": "top-zero-warrant", "relation": "warrants", "to": "contradiction"})
+    with pytest.raises(SystemExit, match="must have exactly one warrants edge"):
+        module.validate(write_graph(tmp_path, doc))
+
+
+def test_unreachable_premise_fails(tmp_path):
+    doc = json.loads(WARRANT.read_text())
+    doc["edges"] = [edge for edge in doc["edges"] if edge["to"] != "complex-domain"]
+    with pytest.raises(SystemExit, match="unreachable from question"):
+        module.validate(write_graph(tmp_path, doc))

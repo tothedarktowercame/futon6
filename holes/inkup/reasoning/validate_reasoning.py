@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from collections import defaultdict, deque
 from pathlib import Path
 
@@ -31,7 +32,7 @@ WARRANT_SIGNATURES = {
     "cites-reason": {("answer", "warrant")},
     "requires": {("warrant", "premise"), ("warrant", "claim")},
     "warrants": {("warrant", "claim")},
-    "violated-in": {("premise", "boundary-case")},
+    "violated-in": {("premise", "boundary-case"), ("claim", "boundary-case")},
 }
 
 
@@ -63,6 +64,10 @@ def validate(path: Path) -> dict:
         digest = hashlib.sha256(source_path.read_bytes()).hexdigest()
         if digest != source["sha256"]:
             fail(f"{name}: source hash drifted")
+
+    lean_text = None
+    if "lean" in doc.get("sources", {}):
+        lean_text = resolve_source(path, doc["sources"]["lean"]["path"]).read_text()
 
     nodes = {node["id"]: node for node in doc.get("nodes", [])}
     if len(nodes) != len(doc.get("nodes", [])):
@@ -118,6 +123,18 @@ def validate(path: Path) -> dict:
     for node in nodes.values():
         if not node.get("claim") or not node.get("evidence"):
             fail(f"{node['id']}: claim or evidence missing")
+    # A "lean:<file>#<name>" evidence reference must name something the pinned
+    # Lean source binds: a have/let, a hypothesis binder, or a declaration.
+    for node in nodes.values():
+        for ref in node["evidence"]:
+            if not ref.startswith("lean:"):
+                continue
+            name = ref.partition("#")[2]
+            if lean_text is None:
+                fail(f"{node['id']}: {ref} cited but the graph pins no lean source")
+            pattern = rf"(\b(have|let|obtain|by_contra|lemma|theorem|def)\s+{re.escape(name)}\b|\(\s*{re.escape(name)}\s*:)"
+            if not name or not re.search(pattern, lean_text):
+                fail(f"{node['id']}: evidence {ref} names nothing bound in the Lean source")
     return doc
 
 
