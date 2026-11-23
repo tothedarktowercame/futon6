@@ -1,0 +1,205 @@
+{
+  "schema": "inkup.content-plan/v0",
+  "problem": "a96J06",
+  "alignment": "holes/inkup/pilots/a96J06/alignment.json",
+  "evidence_run": "20261123T-r1-b6c7858",
+  "mandatory_nodes": [
+    {"node": "a96J06:B0", "depends_on": ["a96J06:B6"]},
+    {"node": "a96J06:B1", "depends_on": []},
+    {"node": "a96J06:B2", "depends_on": ["a96J06:B1"]},
+    {"node": "a96J06:B3", "depends_on": ["a96J06:B2"]},
+    {"node": "a96J06:B4", "depends_on": ["a96J06:B3"]},
+    {"node": "a96J06:B5", "depends_on": ["a96J06:B4"]},
+    {"node": "a96J06:B6", "depends_on": ["a96J06:B5"]}
+  ],
+  "questions": [
+    {
+      "id": "scaling-strategy",
+      "question_function": "QF01",
+      "requested_relation": "strategy-enables-goal",
+      "analogue": "Why are we led to define g(w) = r⁻¹p(rw), rather than work with p directly?",
+      "blueprint_node": "a96J06:B2",
+      "evidence": [
+        {"id": "seed:why-rescale", "source": "holes/inkup/reasoning/a96J06-why-rescale.json"},
+        {"candidate_id": "se-math-644110", "run_id": "20261123T-r1-b6c7858"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "gap", "relation": "resolved-by", "to": "scale"}},
+        {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "unit-bound", "relation": "enables", "to": "schwarz"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "The seed and se-math-644110 are one QF01 obligation and one anticipated answer.",
+      "decisions": {
+        "expert-reference": {"action": "anticipate", "reason": "Name the decisive normalization and the obstacle it removes."},
+        "teaching": {"action": "anticipate", "reason": "Explain the strategic choice before carrying out its calculations."},
+        "formal-audit": {"action": "anticipate", "reason": "Tie the introduced scaled map to the formal proof obligation it discharges."}
+      }
+    },
+    {
+      "id": "schwarz-applicability-by-normalization",
+      "question_function": "QF04",
+      "requested_relation": "method-requires-hypotheses",
+      "analogue": "What normalization is needed to turn the radius-r hypothesis into a unit-disk self-map to which Schwarz's lemma applies?",
+      "blueprint_node": "a96J06:B2",
+      "evidence": [{"candidate_id": "se-math-279906", "run_id": "20261123T-r1-b6c7858"}],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "unit-bound", "relation": "enables", "to": "schwarz"}},
+        {"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B2"}
+      ],
+      "support_state": "supported",
+      "merge_note": "This is a distinct QF04 obligation from scaling-strategy, but the same B2 passage may answer both: one asks why choose the move, the other what makes the method applicable.",
+      "decisions": {
+        "expert-reference": {"action": "omit", "reason": "The expert profile may leave the standard applicability conversion implicit after naming normalization."},
+        "teaching": {"action": "anticipate", "reason": "State explicitly how radius-r data become unit-disk hypotheses."},
+        "formal-audit": {"action": "anticipate", "reason": "Expose the domain and codomain conversion consumed by Schwarz rigidity."}
+      }
+    },
+    {
+      "id": "closed-disk-codomain",
+      "question_function": "QF06",
+      "requested_relation": "result-extends-under-variation",
+      "analogue": "May Schwarz rigidity be applied when the normalized map is known to land in the closed unit disk rather than explicitly in the open disk?",
+      "blueprint_node": "a96J06:B3",
+      "evidence": [{"candidate_id": "se-math-88293", "run_id": "20261123T-r1-b6c7858"}],
+      "support": [{"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B3"}],
+      "support_state": "contested",
+      "blocked_on": "A codomain-variation graph establishing when a holomorphic map into the closed unit disk satisfies the open-disk hypothesis needed by Schwarz rigidity.",
+      "decisions": {
+        "expert-reference": {"action": "omit", "reason": "Do not add an ungrounded boundary-case explanation to the concise profile."},
+        "teaching": {"action": "defer", "reason": "This is a plausible student question but needs the missing codomain argument."},
+        "formal-audit": {"action": "defer", "reason": "The codomain distinction matters to audit and must be settled before presentation."}
+      }
+    },
+    {
+      "id": "rotation-specializes-to-identity",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "Why does the rotation supplied by the equality case reduce to the identity rather than an arbitrary rotation?",
+      "blueprint_node": "a96J06:B4",
+      "evidence": [{"candidate_id": "se-math-1840703", "run_id": "20261123T-r1-b6c7858"}],
+      "support": [
+        {"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B4"},
+        {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "node": "derivative"}
+      ],
+      "support_state": "contested",
+      "blocked_on": "A rigidity-warrant graph from derivative g′(0)=1 through the rotation parameter to g(w)=w.",
+      "decisions": {
+        "expert-reference": {"action": "defer", "reason": "The specialization is important but needs an explicit warrant edge."},
+        "teaching": {"action": "defer", "reason": "A student should see the rotation parameter discharged once the warrant is represented."},
+        "formal-audit": {"action": "defer", "reason": "The formal identity conclusion must be connected to derivative one."}
+      }
+    },
+    {
+      "id": "coefficient-extensionality",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "Once the normalized polynomial equals the identity polynomial, why may their coefficients be equated and every higher coefficient made to vanish?",
+      "blueprint_node": "a96J06:B5",
+      "evidence": [
+        {"candidate_id": "se-math-1410648", "run_id": "20261123T-r1-b6c7858"},
+        {"candidate_id": "se-math-1969852", "run_id": "20261123T-r1-b6c7858"}
+      ],
+      "support": [{"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B5"}],
+      "support_state": "contested",
+      "blocked_on": "A coefficient-extensionality graph from polynomial equality to equality of corresponding coefficients, including the top coefficient used for contradiction.",
+      "merge_note": "Both corpus questions request the same B5 coefficient-uniqueness warrant and would be answered by one passage.",
+      "decisions": {
+        "expert-reference": {"action": "defer", "reason": "Retain the coefficient bridge once its warrant is represented."},
+        "teaching": {"action": "defer", "reason": "Explain coefficient uniqueness rather than treating comparison as syntactic magic."},
+        "formal-audit": {"action": "defer", "reason": "Connect polynomial extensionality to the exact top-coefficient contradiction."}
+      }
+    },
+    {
+      "id": "schwarz-rigidity-connection",
+      "question_function": "QF09",
+      "requested_relation": "claim-related-by-analogy-or-reduction",
+      "analogue": "How does the equality case of Schwarz's lemma imply that the normalized self-map is the identity?",
+      "blueprint_node": "a96J06:B4",
+      "evidence": [{"candidate_id": "se-math-454963", "run_id": "20261123T-r1-b6c7858"}],
+      "support": [
+        {"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B4"},
+        {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "node": "identity"}
+      ],
+      "support_state": "contested",
+      "blocked_on": "A Schwarz-rigidity connection graph spelling out the equality-case hypotheses and the classification conclusion specialized by g′(0)=1.",
+      "decisions": {
+        "expert-reference": {"action": "omit", "reason": "Do not duplicate the unresolved B4 warrant in the concise telling."},
+        "teaching": {"action": "defer", "reason": "The classification connection is pedagogically central once grounded."},
+        "formal-audit": {"action": "defer", "reason": "The consumed equality-case theorem must be represented precisely."}
+      }
+    },
+    {
+      "id": "finite-domain-coefficient-boundary",
+      "question_function": "QF04",
+      "requested_relation": "method-requires-hypotheses",
+      "analogue": "What permits coefficient comparison here, and would it still be valid if equality were only pointwise on a finite domain?",
+      "blueprint_node": "a96J06:B5",
+      "evidence": [{"candidate_id": "se-math-756696", "run_id": "20261123T-r1-b6c7858"}],
+      "support": [{"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B5"}],
+      "support_state": "contested",
+      "blocked_on": "A polynomial-identity bridge graph showing that equality on an infinite subset yields polynomial equality before coefficient comparison, and recording failure over finite evaluation domains.",
+      "decisions": {
+        "expert-reference": {"action": "omit", "reason": "The finite-domain contrast is outside the concise proof unless needed."},
+        "teaching": {"action": "defer", "reason": "The boundary case can explain why infinitely many evaluation points matter."},
+        "formal-audit": {"action": "defer", "reason": "The infinite-root bridge is a formal dependency and needs its own graph."}
+      }
+    },
+    {
+      "id": "dropping-fixed-point",
+      "question_function": "QF06",
+      "requested_relation": "result-extends-under-variation",
+      "analogue": "Could the Schwarz step still work if the normalized map did not fix zero?",
+      "blueprint_node": "a96J06:B3",
+      "evidence": [{"candidate_id": "se-math-2031185", "run_id": "20261123T-r1-b6c7858"}],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "node": "fixed"},
+        {"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B3"}
+      ],
+      "support_state": "contested",
+      "blocked_on": "A hypothesis-variation graph recording why the fixed-point hypothesis is needed, or which replacement theorem applies without it.",
+      "decisions": {
+        "expert-reference": {"action": "omit", "reason": "The counterfactual is not needed in the expert proof."},
+        "teaching": {"action": "defer", "reason": "The variation could clarify the role of fixing zero once supported."},
+        "formal-audit": {"action": "defer", "reason": "Record necessity or an alternate theorem before discussing omission of the hypothesis."}
+      }
+    },
+    {
+      "id": "strategy-overview",
+      "question_function": "QF12",
+      "requested_relation": "local-steps-implement-strategy",
+      "analogue": "What is the main idea that makes the normalization-and-rigidity proof work, rather than a direct coefficient estimate?",
+      "blueprint_node": "a96J06:B0",
+      "evidence": [{"candidate_id": "se-math-3220545", "run_id": "20261123T-r1-b6c7858"}],
+      "support": [
+        {"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B0"},
+        {"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B2"}
+      ],
+      "support_state": "contested",
+      "blocked_on": "A strategy-summary graph relating normalization, applicability checks, rigidity, and coefficient contradiction to the overall goal.",
+      "decisions": {
+        "expert-reference": {"action": "defer", "reason": "A concise overview is valuable once its implementation relation is explicit."},
+        "teaching": {"action": "defer", "reason": "This profile most needs the overview, but it cannot yet anticipate an unsupported relation."},
+        "formal-audit": {"action": "omit", "reason": "The audit profile can follow node accounting without an ungrounded overview."}
+      }
+    },
+    {
+      "id": "fixed-point-applicability",
+      "question_function": "QF04",
+      "requested_relation": "method-requires-hypotheses",
+      "analogue": "How do we know the normalized map fixes the origin, as required before applying Schwarz's lemma?",
+      "blueprint_node": "a96J06:B3",
+      "evidence": [{"candidate_id": "se-math-3202374", "run_id": "20261123T-r1-b6c7858"}],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a96J06-why-rescale.json", "edge": {"from": "scale", "relation": "preserves", "to": "fixed"}},
+        {"graph": "holes/inkup/pilots/a96J06/alignment.json", "node": "a96J06:B3"}
+      ],
+      "support_state": "contested",
+      "blocked_on": "An applicability edge from the preserved fixed-point fact to the Schwarz method, stating that fixing zero is a consumed hypothesis.",
+      "decisions": {
+        "expert-reference": {"action": "omit", "reason": "The fixed-point calculation is routine for the expert profile."},
+        "teaching": {"action": "defer", "reason": "The student should see why the preserved fact is a consumed hypothesis once grounded."},
+        "formal-audit": {"action": "defer", "reason": "The audit must connect preservation of zero to the invoked theorem's hypothesis."}
+      }
+    }
+  ]
+}
