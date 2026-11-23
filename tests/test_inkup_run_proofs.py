@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from futon6.inkup_run_proofs import measure_text, opens_with, proof_records, slice_candidate, words
+from futon6.inkup_run_proofs import strip_wrapper, measure_text, opens_with, proof_records, slice_candidate, words
 
 
 def candidate(**changes):
@@ -68,3 +68,13 @@ def test_missing_clean_or_graph_is_flagged(tmp_path):
     write_run(tmp_path, [candidate()], clean=False)
     result = proof_records(tmp_path)[0]
     assert result["flags"]["no_clean_proof"] is True
+
+
+def test_wrapper_is_not_counted_and_wider_openings():
+    text = "\\begin{proof} This follows from the lemma. \\end{proof}"
+    assert strip_wrapper(text) == "This follows from the lemma."
+    assert measure_text(text)["words"] == 5
+    assert opens_with(text) == "clearly/obvious/immediate/follows-from"
+    assert opens_with("\\proof (i): Let x be fixed.") == "let/suppose/assume"
+    assert opens_with("By base change we reduce.") == "by-other"
+    assert opens_with("We first show (i).") == "we-show/prove/claim/it-suffices"

@@ -33,9 +33,21 @@ DIAGRAM_RE = re.compile(r"\\(?:xymatrix|begin\{(?:tikzcd|diagram)\})")
 LIST_RE = re.compile(r"\\begin\{(?:enumerate|itemize)\}")
 SENTENCE_BOUNDARY_RE = re.compile(r"(?<=[.!?])\s+(?=[A-Z])|\n\s*\n+")
 PROOF_WRAPPER_RE = re.compile(
-    r"^\s*(?:\\begin\{proof\}(?:\[[^]]*\])?|\\noindent\s*\{?\\bf\s+Proof\.?\}?|Proof\.)\s*",
+    r"^\s*(?:\\begin\{(?:proof|pf)\}(?:\[[^]]*\])?|\\(?:proof|bpf)\b|\\noindent\s*\{?\\bf\s+Proof\.?\}?|Proof\.)\s*",
     re.I,
 )
+
+
+PROOF_END_RE = re.compile(r"\s*\\(?:end\{(?:proof|pf)\}|epf\b|qed\b)\s*$")
+
+
+def strip_wrapper(text: str) -> str:
+    """Remove the proof environment's opening and closing markers.
+
+    The tellings carry no such markers, so counting them would add two words
+    to every paper proof.
+    """
+    return PROOF_END_RE.sub("", PROOF_WRAPPER_RE.sub("", text, count=1))
 
 
 def words(text: str) -> int:
@@ -52,7 +64,9 @@ def sentences(text: str) -> list[str]:
 def opens_with(text: str) -> str:
     first = PROOF_WRAPPER_RE.sub("", text, count=1).lstrip()
     first = re.sub(r"^(?:\\(?:noindent|smallskip|medskip|par)\s*)+", "", first)
-    if re.match(r"^(?:Let|Suppose|Assume)\b", first, re.I):
+    # A leading part label such as "(i):" or "\\begin{enumerate} \\item" is skipped.
+    first = re.sub(r"^(?:\\begin\{(?:enumerate|itemize)\}(?:\[[^]]*\])?\s*\\item(?:\[[^]]*\])?\s*|\(?[ivx0-9a-z]{1,4}\)\s*:?\s*)", "", first, flags=re.I)
+    if re.match(r"^(?:Let|Suppose|Assume|Consider|Fix|Choose|Take|Given|Soit|Soient|Supposons)\b", first, re.I):
         return "let/suppose/assume"
     if re.match(
         r"^By\s+(?:\\(?:[A-Za-z]*cite[A-Za-z]*|(?:eq|[A-Za-z]*)ref[A-Za-z]*)\b|"
@@ -61,9 +75,23 @@ def opens_with(text: str) -> str:
         re.I,
     ):
         return "by-cite/ref/named-result"
-    if re.match(r"^(?:We\s+(?:show|prove|claim)|It\s+suffices)\b", first, re.I):
+    if re.match(r"^By\b", first, re.I):
+        return "by-other"
+    if re.match(
+        r"^(?:We\s+(?:first|will|shall|begin|start|need|only|have\s+to|must|proceed|argue|show|prove|claim)|"
+        r"First,?\s+we|To\s+(?:prove|show|begin|see)|It\s+(?:suffices|is\s+enough|remains)|"
+        r"Without\s+loss)\b",
+        first,
+        re.I,
+    ):
         return "we-show/prove/claim/it-suffices"
-    if re.match(r"^(?:Clearly|Obviously|Immediately|It\s+follows\s+from)\b", first, re.I):
+    if re.match(
+        r"^(?:Clearly|Obviously|Immediate(?:ly)?|(?:It|This)\s+follows|Follows\s+from|"
+        r"This\s+is\s+(?:a|an|the|just|clear|immediate|obvious|standard|well)|"
+        r"(?:The\s+)?(?:proof|argument)\s+is|As\s+in|Same\s+as|See)\b",
+        first,
+        re.I,
+    ):
         return "clearly/obvious/immediate/follows-from"
     return "other"
 
@@ -100,6 +128,7 @@ def parse_faithfulness(path: Path) -> dict[str, dict[str, bool]]:
 
 
 def measure_text(text: str) -> dict:
+    text = strip_wrapper(text)
     parts = sentences(text)
     first = parts[0] if parts else ""
     cite_count = len(CITE_RE.findall(text))
