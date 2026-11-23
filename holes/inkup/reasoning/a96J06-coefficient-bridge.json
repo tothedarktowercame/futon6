@@ -1,0 +1,145 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a96J06:B5 — from agreement on the disk to the top-coefficient contradiction",
+  "sources": {
+    "lean": {
+      "path": "apm-lean:problems/a96J06/lean/Main.lean",
+      "sha256": "b93980bb718864100e5f7e3bb52392d5faf16d2a340b164d9e2e1de0b19898c1"
+    }
+  },
+  "nodes": [
+    {
+      "id": "q",
+      "kind": "question",
+      "claim": "Why does agreement of the displayed polynomial with the identity on the radius-r disk permit polynomial and coefficient equality?",
+      "authority": "secondary",
+      "evidence": ["content-plan:coefficient-extensionality", "content-plan:finite-domain-coefficient-boundary"]
+    },
+    {
+      "id": "answer",
+      "kind": "answer",
+      "claim": "The Lean proof first promotes equality on an infinite set to polynomial equality over the domain ℂ, then applies coefficient congruence and the top-coefficient lemmas to contradict c N ≠ 0.",
+      "authority": "secondary",
+      "evidence": ["lean:Main.lean#hpoly", "lean:Main.lean#hcoeff", "lean:Main.lean#hXN"]
+    },
+    {
+      "id": "disk-agreement",
+      "kind": "premise",
+      "claim": "For every ζ in the radius-r ball, eval ζ (apm_a96J06_poly N c) = eval ζ X.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#heval"]
+    },
+    {
+      "id": "infinite-agreement",
+      "kind": "premise",
+      "claim": "The set of complex ζ at which apm_a96J06_poly N c and X have equal evaluations is infinite.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hset"]
+    },
+    {
+      "id": "polynomial-identity-warrant",
+      "kind": "warrant",
+      "claim": "Polynomial.eq_of_infinite_eval_eq: for R with [CommRing R] [IsDomain R], polynomials p q : R[X] are equal if {x | eval x p = eval x q} is infinite.",
+      "authority": "mathlib",
+      "evidence": ["Mathlib.Algebra.Polynomial.Roots:Polynomial.eq_of_infinite_eval_eq"]
+    },
+    {
+      "id": "polynomial-identity",
+      "kind": "claim",
+      "claim": "apm_a96J06_poly N c = Polynomial.X as polynomials over ℂ.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hpoly"]
+    },
+    {
+      "id": "coefficient-congruence-warrant",
+      "kind": "warrant",
+      "claim": "Applying the function p ↦ p.coeff N to an equality of polynomials preserves equality.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hcoeff", "Lean:congrArg"]
+    },
+    {
+      "id": "coefficient-equality",
+      "kind": "claim",
+      "claim": "(apm_a96J06_poly N c).coeff N = Polynomial.X.coeff N.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hcoeff"]
+    },
+    {
+      "id": "top-coefficient",
+      "kind": "premise",
+      "claim": "Since hN states 2 ≤ N, apm_a96J06_coeff_top identifies (apm_a96J06_poly N c).coeff N with c N.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hN", "lean:Main.lean#apm_a96J06_coeff_top"]
+    },
+    {
+      "id": "identity-top-zero",
+      "kind": "premise",
+      "claim": "Since 2 ≤ N implies 1 ≠ N, the coefficient of X at N is zero.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hXN", "Mathlib:Polynomial.coeff_X"]
+    },
+    {
+      "id": "top-zero-warrant",
+      "kind": "warrant",
+      "claim": "Substituting the two top-coefficient calculations into coefficient equality yields c N = 0.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hcoeff", "lean:Main.lean#hXN"]
+    },
+    {
+      "id": "coefficient-zero",
+      "kind": "claim",
+      "claim": "c N = 0.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hcoeff", "lean:Main.lean#hXN"]
+    },
+    {
+      "id": "terminal-nonzero",
+      "kind": "premise",
+      "claim": "The theorem hypothesis states c N ≠ 0.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hcN"]
+    },
+    {
+      "id": "contradiction-warrant",
+      "kind": "warrant",
+      "claim": "The derived equality c N = 0 contradicts the theorem hypothesis c N ≠ 0.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#hcN", "lean:Main.lean#closing-exact"]
+    },
+    {
+      "id": "contradiction",
+      "kind": "claim",
+      "claim": "False, discharging the assumption that the radius-r ball is mapped within radius r.",
+      "authority": "formal-proof",
+      "evidence": ["lean:Main.lean#exact-hcN-hcoeff-trans-hXN"]
+    },
+    {
+      "id": "finite-field-boundary",
+      "kind": "boundary-case",
+      "claim": "Over F₂, the nonzero polynomial X² - X has coefficients [0,1,1] but evaluates to zero at both field elements 0 and 1; agreement at every point is therefore not an infinite agreement set.",
+      "authority": "secondary",
+      "evidence": ["secondary:finite-field-example:F2:X^2-X", "secondary:checked-evaluations:0↦0,1↦0"]
+    }
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "polynomial-identity-warrant"},
+    {"from": "answer", "relation": "cites-reason", "to": "coefficient-congruence-warrant"},
+    {"from": "answer", "relation": "cites-reason", "to": "top-zero-warrant"},
+    {"from": "answer", "relation": "cites-reason", "to": "contradiction-warrant"},
+    {"from": "polynomial-identity-warrant", "relation": "requires", "to": "disk-agreement"},
+    {"from": "polynomial-identity-warrant", "relation": "requires", "to": "infinite-agreement"},
+    {"from": "polynomial-identity-warrant", "relation": "warrants", "to": "polynomial-identity"},
+    {"from": "coefficient-congruence-warrant", "relation": "requires", "to": "polynomial-identity"},
+    {"from": "coefficient-congruence-warrant", "relation": "warrants", "to": "coefficient-equality"},
+    {"from": "top-zero-warrant", "relation": "requires", "to": "coefficient-equality"},
+    {"from": "top-zero-warrant", "relation": "requires", "to": "top-coefficient"},
+    {"from": "top-zero-warrant", "relation": "requires", "to": "identity-top-zero"},
+    {"from": "top-zero-warrant", "relation": "warrants", "to": "coefficient-zero"},
+    {"from": "contradiction-warrant", "relation": "requires", "to": "coefficient-zero"},
+    {"from": "contradiction-warrant", "relation": "requires", "to": "terminal-nonzero"},
+    {"from": "contradiction-warrant", "relation": "warrants", "to": "contradiction"},
+    {"from": "infinite-agreement", "relation": "violated-in", "to": "finite-field-boundary"}
+  ]
+}
