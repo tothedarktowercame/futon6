@@ -1,0 +1,228 @@
+{
+  "schema": "inkup.content-plan/v0",
+  "problem": "a00J01",
+  "alignment": "holes/inkup/pilots/a00J01/alignment.json",
+  "evidence_run": "20261123T-r1-ff65a70",
+  "blocked_on": [],
+  "mandatory_nodes": [
+    {
+      "node": "a00J01:B0",
+      "depends_on": [
+        "a00J01:B7"
+      ]
+    },
+    {
+      "node": "a00J01:B1",
+      "depends_on": []
+    },
+    {
+      "node": "a00J01:B2",
+      "depends_on": [
+        "a00J01:B1"
+      ]
+    },
+    {
+      "node": "a00J01:B3",
+      "depends_on": []
+    },
+    {
+      "node": "a00J01:B4",
+      "depends_on": [
+        "a00J01:B1"
+      ]
+    },
+    {
+      "node": "a00J01:B5",
+      "depends_on": [
+        "a00J01:B3",
+        "a00J01:B4"
+      ]
+    },
+    {
+      "node": "a00J01:B6",
+      "depends_on": [
+        "a00J01:B5"
+      ]
+    },
+    {
+      "node": "a00J01:B7",
+      "depends_on": [
+        "a00J01:B2",
+        "a00J01:B6"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "why-level-set-strategy",
+      "question_function": "QF01",
+      "requested_relation": "strategy-enables-goal",
+      "analogue": "Why does the lower-bound argument pass through a fixed super-level set of positive measure?",
+      "blueprint_node": "a00J01:B4",
+      "evidence": [
+        {
+          "candidate_id": "seed:why-level-set",
+          "run_id": "20261123T-r1-ff65a70"
+        }
+      ],
+      "support": [
+        {
+          "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+          "edge": {
+            "from": "gap",
+            "relation": "resolved-by",
+            "to": "choose-level-set"
+          }
+        },
+        {
+          "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+          "edge": {
+            "from": "positive-measure-conversion",
+            "relation": "enables",
+            "to": "lower-bound-method"
+          }
+        }
+      ],
+      "support_state": "supported",
+      "merge_note": "This is distinct from level-set-positive-measure: QF01 asks why the proof chooses the fixed-set strategy, while QF11 asks why the chosen set has positive measure. One B4 passage may answer both, but the reader lane counts two obligations.",
+      "decisions": {
+        "expert-reference": {
+          "action": "anticipate",
+          "reason": "The reference profile spends its lower-bound exposition on the decisive level-set choice."
+        },
+        "teaching": {
+          "action": "anticipate",
+          "reason": "Explain why the fixed positive-measure set converts the norm gap into a usable lower bound."
+        },
+        "formal-audit": {
+          "action": "anticipate",
+          "reason": "Tie the auxiliary set to the formal lower-bound and monotonicity steps it enables."
+        }
+      }
+    },
+    {
+      "id": "level-set-positive-measure",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "Why does β < ‖f‖∞ imply that the set where ‖g(x)‖ exceeds β has positive measure?",
+      "blueprint_node": "a00J01:B4",
+      "evidence": [
+        {
+          "candidate_id": "se-math-3696704",
+          "run_id": "20261123T-r1-ff65a70"
+        }
+      ],
+      "support": [
+        {
+          "graph": "holes/inkup/reasoning/a00J01-level-set-positive-measure.json",
+          "edge": {
+            "from": "positive-measure-warrant",
+            "relation": "warrants",
+            "to": "positive-measure"
+          }
+        }
+      ],
+      "support_state": "supported",
+      "merge_note": "This local essential-supremum warrant is a separate obligation from the strategic why-level-set question, although the same B4 passage may discharge both.",
+      "decisions": {
+        "expert-reference": {
+          "action": "anticipate",
+          "reason": "The concise lower-bound argument still needs the contrapositive essential-supremum warrant."
+        },
+        "teaching": {
+          "action": "anticipate",
+          "reason": "This is the central definitional step a student may not infer unaided."
+        },
+        "formal-audit": {
+          "action": "anticipate",
+          "reason": "Expose the null-set contradiction that establishes the formal positive-measure hypothesis."
+        }
+      }
+    },
+    {
+      "id": "monotonicity-extension",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "Why does a lower bound proved at one exponent n continue to hold at every exponent p ≥ n?",
+      "blueprint_node": "a00J01:B6",
+      "evidence": [
+        {
+          "candidate_id": "se-math-2247565",
+          "run_id": "20261123T-r1-ff65a70"
+        }
+      ],
+      "support": [
+        {
+          "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+          "edge": {
+            "from": "monotonicity-warrant",
+            "relation": "warrants",
+            "to": "monotone-comparison"
+          }
+        },
+        {
+          "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+          "edge": {
+            "from": "extension-warrant",
+            "relation": "warrants",
+            "to": "eventual-lower-bound"
+          }
+        }
+      ],
+      "support_state": "supported",
+      "decisions": {
+        "expert-reference": {
+          "action": "anticipate",
+          "reason": "Cite exponent monotonicity when extending the one-exponent bound, without expanding its proof."
+        },
+        "teaching": {
+          "action": "anticipate",
+          "reason": "Explain how the lower bound at n persists for every larger exponent."
+        },
+        "formal-audit": {
+          "action": "anticipate",
+          "reason": "Record the probability-space monotonicity lemma and the almost-everywhere representative conversion."
+        }
+      }
+    },
+    {
+      "id": "upper-bound-exponent-range",
+      "question_function": "QF06",
+      "requested_relation": "result-extends-under-variation",
+      "analogue": "Does the upper comparison with the essential-supremum norm really require p ≥ 1, or does it hold for 0 < p < 1?",
+      "blueprint_node": "a00J01:B2",
+      "evidence": [
+        {
+          "candidate_id": "se-math-9668",
+          "run_id": "20261123T-r1-ff65a70"
+        }
+      ],
+      "support": [
+        {
+          "graph": "holes/inkup/reasoning/a00J01-upper-bound-exponent-range.json",
+          "edge": {
+            "from": "comparison-warrant",
+            "relation": "warrants",
+            "to": "upper-bound-all-exponents"
+          }
+        }
+      ],
+      "support_state": "supported",
+      "support_note": "The warrant consumes p ≤ ⊤ and unit total measure, not the varied hypothesis 1 ≤ p; the separate upper_bound lemma's _hp argument is unused.",
+      "decisions": {
+        "expert-reference": {
+          "action": "omit",
+          "reason": "The reference profile needs the upper comparison, not a digression on the redundant exponent restriction."
+        },
+        "teaching": {
+          "action": "anticipate",
+          "reason": "Clarify that unit measure, rather than p ≥ 1, is what the formal comparison consumes."
+        },
+        "formal-audit": {
+          "action": "anticipate",
+          "reason": "Surface the mismatch between the informal exponent range and the unrestricted formal comparison."
+        }
+      }
+    }
+  ]
+}

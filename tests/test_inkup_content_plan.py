@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / "holes/inkup/pilots/a96J06/content-plan.json"
+A00_PLAN = ROOT / "holes/inkup/pilots/a00J01/content-plan.json"
 VALIDATOR = ROOT / "holes/inkup/pilots/a96J06/validate_content_plan.py"
 spec = importlib.util.spec_from_file_location("validate_content_plan", VALIDATOR)
 module = importlib.util.module_from_spec(spec)
@@ -26,6 +27,21 @@ def codes(errors):
 def test_real_content_plan_passes():
     _plan, errors = module.validate(PLAN)
     assert errors == []
+
+
+def test_a00j01_content_plan_passes():
+    _plan, errors = module.validate(A00_PLAN)
+    assert errors == []
+
+
+def test_a00j01_anticipated_support_anchor_must_resolve(tmp_path):
+    doc = json.loads(A00_PLAN.read_text())
+    target = next(q for q in doc["questions"]
+                  if q["id"] == "level-set-positive-measure")
+    target["support"][0]["edge"]["to"] = "not-a-node"
+    errors = validate_doc(tmp_path, doc)
+    assert codes(errors) == {"CP004"}, errors
+    assert any("QA002 unresolved support anchor" in error for error in errors), errors
 
 
 def test_contested_question_cannot_be_anticipated(tmp_path):

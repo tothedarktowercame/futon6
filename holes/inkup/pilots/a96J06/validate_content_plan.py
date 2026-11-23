@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the shared a96J06 content presentation plan."""
+"""Validate an InkUp content presentation plan against its alignment."""
 from __future__ import annotations
 
 import argparse
@@ -40,13 +40,15 @@ def validate(path: Path, run_alignments: Path | None = None) -> tuple[dict, list
         plan = json.loads(path.read_text())
     except (OSError, json.JSONDecodeError) as exc:
         return {}, [f"CP000 cannot read content plan: {exc}"]
-    if plan.get("schema") != "inkup.content-plan/v0" or plan.get("problem") != "a96J06":
+    if plan.get("schema") != "inkup.content-plan/v0":
         errors.append("CP000 wrong content-plan identity")
     alignment_path = ROOT / plan.get("alignment", "")
     try:
         alignment = json.loads(alignment_path.read_text())
     except (OSError, json.JSONDecodeError) as exc:
         return plan, errors + [f"CP000 cannot read alignment: {exc}"]
+    if plan.get("problem") != alignment.get("problem"):
+        errors.append("CP000 content-plan problem does not match alignment")
     nodes = {node["id"]: node for node in alignment["nodes"]}
     profiles = {profile["id"] for profile in alignment["profiles"]}
 
