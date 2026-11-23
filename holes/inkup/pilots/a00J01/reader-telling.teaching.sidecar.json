@@ -79,7 +79,7 @@
           "blueprint_node": "a00J01:B4",
           "status": "answered",
           "node": "a00J01:B4",
-          "quote": "Fix \\(\\alpha<\\lVert f\\rVert_\\infty\\), choose\n\\(\\alpha<\\beta<\\lVert f\\rVert_\\infty\\), and let \\(g\\) be the measurable\nrepresentative equal to \\(f\\) almost everywhere.  The fixed set\n\\[\ns=\\{x:\\beta<\\lVert g(x)\\rVert\\}\n\\]\nis measurable, has finite \\(\\mu\\)-measure since \\(\\mu(\\text{univ})=1\\), and has positive\nmeasure: otherwise \\(g\\) would be bounded by \\(\\beta\\) almost everywhere,\nforcing \\(\\lVert f\\rVert_\\infty\\le\\beta\\), a contradiction.  This set is used\nbecause it supplies one lower estimate while the exponent varies.",
+          "quote": "Fix \\(\\alpha<\\lVert f\\rVert_\\infty\\), choose\n\\(\\alpha<\\beta<\\lVert f\\rVert_\\infty\\), and let \\(g\\) be the measurable\nrepresentative equal to \\(f\\) almost everywhere.  The fixed set\n\\[\ns=\\{x:\\beta<\\lVert g(x)\\rVert\\}\n\\]\nis measurable, has finite \\(\\mu\\)-measure since \\(\\mu([0,1])=1\\), and has positive\nmeasure: otherwise \\(g\\) would be bounded by \\(\\beta\\) almost everywhere,\nforcing \\(\\lVert f\\rVert_\\infty\\le\\beta\\), a contradiction.  This set is used\nbecause it supplies one lower estimate while the exponent varies.",
           "ink_words": 64,
           "graph_support": [
             {
@@ -105,7 +105,7 @@
           "blueprint_node": "a00J01:B4",
           "status": "answered",
           "node": "a00J01:B4",
-          "quote": "The fixed set\n\\[\ns=\\{x:\\beta<\\lVert g(x)\\rVert\\}\n\\]\nis measurable, has finite \\(\\mu\\)-measure since \\(\\mu(\\text{univ})=1\\), and has positive\nmeasure: otherwise \\(g\\) would be bounded by \\(\\beta\\) almost everywhere,\nforcing \\(\\lVert f\\rVert_\\infty\\le\\beta\\), a contradiction.",
+          "quote": "The fixed set\n\\[\ns=\\{x:\\beta<\\lVert g(x)\\rVert\\}\n\\]\nis measurable, has finite \\(\\mu\\)-measure since \\(\\mu([0,1])=1\\), and has positive\nmeasure: otherwise \\(g\\) would be bounded by \\(\\beta\\) almost everywhere,\nforcing \\(\\lVert f\\rVert_\\infty\\le\\beta\\), a contradiction.",
           "ink_words": 32,
           "graph_support": [
             {

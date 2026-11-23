@@ -11,7 +11,7 @@
           "node": "a00J01:B0",
           "status": "merged",
           "merged_into": "a00J01:B7",
-          "quote": "Combining this eventual lower bound for every \\(\\alpha<L\\) with B2\nyields \\(\\lVert f\\rVert_p\\to L=\\lVert f\\rVert_\\infty\\).",
+          "quote": "Combining this eventual lower bound for every \\(\\alpha<L\\) with the upper bound\nyields \\(\\lVert f\\rVert_p\\to L=\\lVert f\\rVert_\\infty\\).",
           "ink_words": 0,
           "ink_percent": 0,
           "planned_percent": 0,
@@ -21,7 +21,7 @@
           "node": "a00J01:B1",
           "status": "realized",
           "ink_words": 19,
-          "ink_percent": 14.0,
+          "ink_percent": 13.4,
           "planned_percent": 5,
           "planned_action": "compress"
         },
@@ -29,7 +29,7 @@
           "node": "a00J01:B2",
           "status": "realized",
           "ink_words": 8,
-          "ink_percent": 5.9,
+          "ink_percent": 5.6,
           "planned_percent": 15,
           "planned_action": "show"
         },
@@ -37,7 +37,7 @@
           "node": "a00J01:B3",
           "status": "realized",
           "ink_words": 7,
-          "ink_percent": 5.1,
+          "ink_percent": 4.9,
           "planned_percent": 5,
           "planned_action": "compress"
         },
@@ -45,31 +45,31 @@
           "node": "a00J01:B4",
           "status": "realized",
           "ink_words": 37,
-          "ink_percent": 27.2,
+          "ink_percent": 26.1,
           "planned_percent": 30,
           "planned_action": "show"
         },
         {
           "node": "a00J01:B5",
           "status": "realized",
-          "ink_words": 27,
-          "ink_percent": 19.9,
+          "ink_words": 29,
+          "ink_percent": 20.4,
           "planned_percent": 20,
           "planned_action": "show"
         },
         {
           "node": "a00J01:B6",
           "status": "realized",
-          "ink_words": 23,
-          "ink_percent": 16.9,
+          "ink_words": 25,
+          "ink_percent": 17.6,
           "planned_percent": 15,
           "planned_action": "show"
         },
         {
           "node": "a00J01:B7",
           "status": "realized",
-          "ink_words": 15,
-          "ink_percent": 11.0,
+          "ink_words": 17,
+          "ink_percent": 12.0,
           "planned_percent": 10,
           "planned_action": "show"
         }
@@ -79,7 +79,7 @@
           "question": "why-level-set-strategy",
           "status": "answered",
           "node": "a00J01:B4",
-          "quote": "Fix \\(\\alpha<L\\), choose \\(\\alpha<\\beta<L\\), take a measurable\nrepresentative \\(g=f\\) almost everywhere, and, to obtain one lower region\nwhile the exponent varies, set \\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\).\nIf \\(\\mu(s)=0\\), then \\(\\lVert g\\rVert_\\infty\\le\\beta\\), whence\n\\(L\\le\\beta\\), a contradiction; moreover, \\(\\mu(s)<\\infty\\) since\n\\(\\mu(\\text{univ})=1\\).",
+          "quote": "Fix \\(\\alpha<L\\), choose \\(\\alpha<\\beta<L\\), take a measurable\nrepresentative \\(g=f\\) almost everywhere, and, to obtain one lower region\nwhile the exponent varies, set \\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\).\nIf \\(\\mu(s)=0\\), then \\(\\lVert g\\rVert_\\infty\\le\\beta\\), whence\n\\(L\\le\\beta\\), a contradiction; moreover, \\(\\mu(s)<\\infty\\) since\n\\(\\mu([0,1])=1\\).",
           "ink_words": 37,
           "graph_support": [
             {
@@ -104,7 +104,7 @@
           "question": "level-set-positive-measure",
           "status": "answered",
           "node": "a00J01:B4",
-          "quote": "Fix \\(\\alpha<L\\), choose \\(\\alpha<\\beta<L\\), take a measurable\nrepresentative \\(g=f\\) almost everywhere, and, to obtain one lower region\nwhile the exponent varies, set \\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\).\nIf \\(\\mu(s)=0\\), then \\(\\lVert g\\rVert_\\infty\\le\\beta\\), whence\n\\(L\\le\\beta\\), a contradiction; moreover, \\(\\mu(s)<\\infty\\) since\n\\(\\mu(\\text{univ})=1\\).",
+          "quote": "Fix \\(\\alpha<L\\), choose \\(\\alpha<\\beta<L\\), take a measurable\nrepresentative \\(g=f\\) almost everywhere, and, to obtain one lower region\nwhile the exponent varies, set \\(s=\\{x:\\beta<\\lVert g(x)\\rVert\\}\\).\nIf \\(\\mu(s)=0\\), then \\(\\lVert g\\rVert_\\infty\\le\\beta\\), whence\n\\(L\\le\\beta\\), a contradiction; moreover, \\(\\mu(s)<\\infty\\) since\n\\(\\mu([0,1])=1\\).",
           "ink_words": 37,
           "graph_support": [
             {
@@ -121,8 +121,8 @@
           "question": "monotonicity-extension",
           "status": "answered",
           "node": "a00J01:B6",
-          "quote": "For \\(p\\ge n\\), exponent monotonicity on the probability space gives\n\\(\\lVert g\\rVert_n\\le\\lVert g\\rVert_p\\); combining this with B5 and\nalmost-everywhere equality gives\n\\(\\alpha\\le\\lVert f\\rVert_p\\).",
-          "ink_words": 23,
+          "quote": "For \\(p\\ge n\\), exponent monotonicity on the probability space gives\n\\(\\lVert g\\rVert_n\\le\\lVert g\\rVert_p\\); combining this with the preceding bound and\nalmost-everywhere equality gives\n\\(\\alpha\\le\\lVert f\\rVert_p\\).",
+          "ink_words": 25,
           "graph_support": [
             {
               "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",

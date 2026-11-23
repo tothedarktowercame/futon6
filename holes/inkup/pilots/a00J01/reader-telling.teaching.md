@@ -34,7 +34,7 @@ representative equal to \(f\) almost everywhere.  The fixed set
 \[
 s=\{x:\beta<\lVert g(x)\rVert\}
 \]
-is measurable, has finite \(\mu\)-measure since \(\mu(\text{univ})=1\), and has positive
+is measurable, has finite \(\mu\)-measure since \(\mu([0,1])=1\), and has positive
 measure: otherwise \(g\) would be bounded by \(\beta\) almost everywhere,
 forcing \(\lVert f\rVert_\infty\le\beta\), a contradiction.  This set is used
 because it supplies one lower estimate while the exponent varies.

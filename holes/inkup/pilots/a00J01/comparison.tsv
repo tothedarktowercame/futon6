@@ -1,0 +1,28 @@
+axis	key	teaching	expert-reference	formal-audit	publication
+words	total	260	136	293	142
+node_status	a00J01:B0	realized	merged->B7	realized	merged->B7
+node_ink_percent	a00J01:B0	8.8	0	7.2	0
+node_status	a00J01:B1	realized	realized	realized	realized
+node_ink_percent	a00J01:B1	5.0	7.4	6.1	13.4
+node_status	a00J01:B2	realized	realized	realized	realized
+node_ink_percent	a00J01:B2	16.9	11	16.0	5.6
+node_status	a00J01:B3	realized	merged->B5	realized	realized
+node_ink_percent	a00J01:B3	7.7	0	5.8	4.9
+node_status	a00J01:B4	realized	realized	realized	realized
+node_ink_percent	a00J01:B4	24.6	40.4	26.6	26.1
+node_status	a00J01:B5	realized	realized	realized	realized
+node_ink_percent	a00J01:B5	12.3	26.5	19.1	20.4
+node_status	a00J01:B6	realized	merged->B5	realized	realized
+node_ink_percent	a00J01:B6	13.1	0	7.5	17.6
+node_status	a00J01:B7	realized	realized	realized	realized
+node_ink_percent	a00J01:B7	11.5	14.7	11.6	12.0
+question_status	why-level-set-strategy [QF01]	answered	answered	answered	answered
+question_status	level-set-positive-measure [QF11]	answered	answered	answered	answered
+question_status	monotonicity-extension [QF11]	answered	answered	answered	answered
+question_status	upper-bound-exponent-range [QF06]	answered	not-answered	answered	not-answered
+question_function_ink_words	QF01	64	55	78	37
+question_function_ink_words	QF06	44	0	47	0
+question_function_ink_words	QF11	66	91	86	62
+questions	answered	4	3	4	3
+questions	partly-answered	0	0	0	0
+questions	not-answered	0	1	0	1
