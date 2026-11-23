@@ -60,4 +60,4 @@ Hence (c_N=0).
 
 **[B6]** `hcN (hcoeff.trans hXN)` contradicts `hcN : c N ≠ 0`, discharging
 `hcontra` for arbitrary positive (r), restoring the outer quantifier and the
-existential witness.
+existential statement.
