@@ -97,6 +97,8 @@ for profile in doc["profiles"]:
 
 with (HERE / "generative-ink.tsv").open(newline="") as stream:
     ink_rows = list(csv.DictReader(stream, delimiter="\t"))
+with (HERE / "grammar-annotations.tsv").open(newline="") as stream:
+    grammar_rows = list(csv.DictReader(stream, delimiter="\t"))
 profile_ids = {profile["id"] for profile in doc["profiles"]}
 allowed_actions = {"show", "compress", "expand", "omit"}
 for row in ink_rows:
@@ -127,6 +129,17 @@ for profile_id in profile_ids:
     if omitted_mandatory:
         fail(f"generative ink: {profile_id} omits mandatory nodes {omitted_mandatory}")
 
+if len(grammar_rows) != len(nodes):
+    fail("grammar annotations: expected exactly one row per Blueprint node")
+if {row["node"] for row in grammar_rows} != set(nodes):
+    fail("grammar annotations: node coverage differs from Blueprint")
+for row in grammar_rows:
+    for field in ("communicative_function", "argument_relation", "placement", "review"):
+        if not row[field]:
+            fail(f"grammar annotations: {row['node']} has empty {field}")
+    if row["review"] not in {"candidate", "human-reviewed", "rejected"}:
+        fail(f"grammar annotations: {row['node']} has unknown review state")
+
 counts = {state: 0 for state in allowed_review}
 for node in nodes.values():
     for anchor in node["anchors"]:
@@ -134,4 +147,5 @@ for node in nodes.values():
 
 print(f"valid a96J06 lineage: {len(nodes)} nodes, {len(doc['profiles'])} profiles")
 print(f"generative ink: {len(ink_rows)} profile-node decisions, 100% budget per profile")
+print(f"grammar plates: {len(grammar_rows)} nodes with communicative, argument, placement")
 print("anchor review states: " + ", ".join(f"{key}={counts[key]}" for key in sorted(counts)))

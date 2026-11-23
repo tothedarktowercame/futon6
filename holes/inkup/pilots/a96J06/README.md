@@ -48,6 +48,13 @@ each profile it assigns every Blueprint node an action (`show`, `compress`, or
 percentages describe where explanation is spent, not how much of the proof is
 correct.  They therefore remain separate from PaperPrinter residual ink.
 
+`grammar-annotations.tsv` adds three orthogonal, provisional plates to each
+Blueprint node: communicative function, argument relation, and placement.
+Realization remains profile-specific in `generative-ink.tsv`.  The WIP demo
+mixes the former as cyan, magenta, and yellow and uses black density for the
+ordered realization action (compress < show < expand).  `candidate` means the
+label is a hypothesis for calibration, not a Mark7-derived fact.
+
 ## Validation
 
 Run:
