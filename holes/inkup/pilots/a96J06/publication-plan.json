@@ -1,0 +1,176 @@
+{
+ "schema": "inkup.publication-plan/v0",
+ "problem": "a96J06",
+ "profile": "publication",
+ "heading": "Publication",
+ "content_plan": "holes/inkup/pilots/a96J06/content-plan.json",
+ "source_telling": "holes/inkup/pilots/a96J06/reader-telling.teaching.md",
+ "calibration": {
+  "sample": "the 14 proofs of arXiv 0708.2185 (one category theory paper; a profile of that paper, not a general norm)",
+  "runs": {
+   "professional": "storage:futon6/inkup/professional/mark7-0708.2185/proof-annotations.{codex-18,zai-2}.jsonl",
+   "telling": "storage:futon6/inkup/a96J06/20261123T-p1-c9d4788/publication-annotations.jsonl"
+  },
+  "annotator_agreement_professional": {
+   "sentences": 50,
+   "formal_role": 41,
+   "placement": 49,
+   "communicative_function": 34,
+   "argument_relation": 45,
+   "cites": 50
+  },
+  "measured_percent_of_words": {
+   "inflight_commentary": {
+    "professional": 0.0,
+    "teaching_telling": 28.5
+   },
+   "section_lead": {
+    "professional": [
+     0.9,
+     4.8
+    ],
+    "teaching_telling": 8.0
+   },
+   "lemma_application": {
+    "professional": [
+     32.4,
+     41.5
+    ],
+    "teaching_telling": 9.0
+   },
+   "side_condition": {
+    "professional": [
+     0.0,
+     14.7
+    ],
+    "teaching_telling": 26.9
+   },
+   "sentences_leaning_on_a_citation": {
+    "professional": 40.3,
+    "teaching_telling": null
+   }
+  },
+  "proof_length_words": {
+   "professional_median": 48.5,
+   "professional_max": 168,
+   "teaching_telling": 369,
+   "expert_telling": 139
+  },
+  "not_used": "communicative function: annotators agreed on 34 of 50 sentences (connection against none), so no rule is derived from it"
+ },
+ "rules": [
+  {
+   "id": "PR1",
+   "rule": "No sentence may be commentary only (placement inflight or leaf-section). A reason for a step may appear only as a clause of the sentence that takes the step.",
+   "from": "inflight_commentary"
+  },
+  {
+   "id": "PR2",
+   "rule": "No restatement of the claim before the derivation; the proof opens with the supposition.",
+   "from": "section_lead"
+  },
+  {
+   "id": "PR3",
+   "rule": "The Schwarz equality case is cited by name in one sentence that lists the hypotheses it consumes; hypotheses are not checked in separate sentences unless the check is a computation the reader cannot be expected to supply.",
+   "from": "lemma_application, side_condition"
+  },
+  {
+   "id": "PR4",
+   "rule": "At most 168 words; aim for 120 or fewer.",
+   "from": "proof_length_words"
+  },
+  {
+   "id": "PR5",
+   "rule": "Every mandatory node of the content plan is realized or merged with an honest quote; every dependency between nodes in the alignment is still visible in the prose.",
+   "from": "programme gate for P3 and P4"
+  }
+ ],
+ "nodes": [
+  {
+   "node": "a96J06:B0",
+   "action": "omit",
+   "budget_percent": 0,
+   "merged_into": "a96J06:B6",
+   "reason": "PR2; the closing sentence restates the claim."
+  },
+  {
+   "node": "a96J06:B1",
+   "action": "show",
+   "budget_percent": 10,
+   "reason": "The supposition is a step everything depends on."
+  },
+  {
+   "node": "a96J06:B2",
+   "action": "show",
+   "budget_percent": 20,
+   "reason": "Define g with its purpose as a clause (PR1)."
+  },
+  {
+   "node": "a96J06:B3",
+   "action": "compress",
+   "budget_percent": 10,
+   "reason": "The unit-disk bound is the one hypothesis check that is a computation; one clause or sentence."
+  },
+  {
+   "node": "a96J06:B4",
+   "action": "show",
+   "budget_percent": 20,
+   "reason": "PR3: cite the equality case, then specialize to g(w)=w."
+  },
+  {
+   "node": "a96J06:B5",
+   "action": "show",
+   "budget_percent": 30,
+   "reason": "Three steps: agreement on the disk, polynomial identity, top coefficient."
+  },
+  {
+   "node": "a96J06:B6",
+   "action": "show",
+   "budget_percent": 10,
+   "reason": "Contradiction and the restored quantifier."
+  }
+ ],
+ "questions": {
+  "scaling-strategy": {
+   "action": "anticipate",
+   "reason": "Answered inside the step that defines g, as a purpose clause; no separate sentence."
+  },
+  "rotation-specializes-to-identity": {
+   "action": "anticipate",
+   "reason": "The passage from the affine formula to g(w)=w is a derivation step, so it stays."
+  },
+  "coefficient-extensionality": {
+   "action": "anticipate",
+   "reason": "Reading off the degree-N coefficient is a derivation step, so it stays."
+  },
+  "schwarz-applicability-by-normalization": {
+   "action": "omit",
+   "reason": "Hypothesis checks are bundled into the sentence that applies the equality case."
+  },
+  "schwarz-rigidity-connection": {
+   "action": "omit",
+   "reason": "The equality case is cited by name; its hypothesis inventory is not unpacked."
+  },
+  "finite-domain-coefficient-boundary": {
+   "action": "omit",
+   "reason": "A boundary case is commentary; the sample proofs contain none."
+  },
+  "fixed-point-applicability": {
+   "action": "omit",
+   "reason": "Bookkeeping over where g(0)=0 is used is commentary."
+  },
+  "closed-disk-codomain": {
+   "action": "omit",
+   "reason": "Contested in the content plan; no support anchor."
+  },
+  "dropping-fixed-point": {
+   "action": "omit",
+   "reason": "Contested in the content plan; no support anchor."
+  },
+  "strategy-overview": {
+   "action": "omit",
+   "reason": "Contested in the content plan; the sample proofs have almost no lead-in."
+  }
+ },
+ "note": "Question decisions coincide with the expert-reference profile of the content plan. What differs is how the answers may be realized (PR1, PR3) and the length (PR4)."
+}
