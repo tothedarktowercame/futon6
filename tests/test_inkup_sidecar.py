@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PILOT = ROOT / "holes/inkup/pilots/a96J06"
 SIDECAR = PILOT / "realizations.sidecar.json"
 TEACHING_SIDECAR = PILOT / "reader-telling.teaching.sidecar.json"
+A00_TEACHING_SIDECAR = ROOT / "holes/inkup/pilots/a00J01/reader-telling.teaching.sidecar.json"
 VALIDATOR = PILOT / "validate_sidecar.py"
 spec = importlib.util.spec_from_file_location("validate_sidecar", VALIDATOR)
 module = importlib.util.module_from_spec(spec)
@@ -99,6 +100,20 @@ def test_teaching_only_sidecar_and_alternate_telling_pass():
     assert errors == []
     assert set(report) == {"teaching"}
     assert report["teaching"]["questions"]["answered"] == 7
+
+
+def test_a00j01_teaching_sidecar_passes():
+    report, errors = module.validate(A00_TEACHING_SIDECAR)
+    assert errors == []
+    assert report["teaching"]["questions"]["answered"] == 4
+
+
+def test_a00j01_question_quote_must_be_in_telling(tmp_path):
+    doc = json.loads(A00_TEACHING_SIDECAR.read_text())
+    target = question(doc, "teaching", "why-level-set-strategy")
+    target["quote"] = "This sentence is not in the telling."
+    target["ink_words"] = module.words(target["quote"])
+    assert codes(validate_doc(tmp_path, doc)) == {"SC009"}
 
 
 def test_publication_plan_drives_profile(tmp_path):

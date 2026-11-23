@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the a96J06 telling sidecar against the realizations it describes.
+"""Validate an InkUp telling sidecar against the realizations it describes.
 
 Everything countable is recomputed from ``realizations.md``: node passages,
 their word counts and percentages, and the location of every quote.  The
@@ -139,7 +139,7 @@ def repo_path(reference: str) -> Path:
 
 def validate(sidecar: Path, plan_path: Path | None = None,
              realizations: Path | None = None,
-             ink_path: Path = HERE / "generative-ink.tsv",
+             ink_path: Path | None = None,
              publication_plan: Path | None = None) -> tuple[dict, list[str]]:
     errors: list[str] = []
     try:
@@ -150,6 +150,9 @@ def validate(sidecar: Path, plan_path: Path | None = None,
         else:
             plan_path = plan_path or repo_path(sidecar_doc["content_plan"])
         realizations = realizations or repo_path(sidecar_doc["realizations"])
+        if ink_path is None:
+            ink_path = repo_path(sidecar_doc["ink"]) if sidecar_doc.get("ink") \
+                else HERE / "generative-ink.tsv"
         plan = json.loads(plan_path.read_text())
         ink = load_ink(ink_path)
         sections = parse_sections(realizations.read_text())
@@ -246,7 +249,9 @@ def validate(sidecar: Path, plan_path: Path | None = None,
                 errors.append(f"SC006 {where}: ink_percent {entry.get('ink_percent')} != {expected_percent}")
             planned = publication_nodes.get(node, {}) if profile == publication_profile \
                 else ink.get((profile, node), {})
-            if entry.get("planned_percent") != int(planned.get("budget_percent", -1)):
+            planned_percent = float(planned.get("budget_percent", -1))
+            if not isinstance(entry.get("planned_percent"), (int, float)) or \
+                    abs(entry["planned_percent"] - planned_percent) > 1e-9:
                 errors.append(f"SC007 {where}: planned_percent {entry.get('planned_percent')} "
                               f"!= {planned.get('budget_percent')}")
             if entry.get("planned_action") != planned.get("action"):

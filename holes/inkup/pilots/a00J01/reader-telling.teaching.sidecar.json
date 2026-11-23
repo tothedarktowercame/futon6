@@ -1,0 +1,169 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a00J01",
+  "realizations": "holes/inkup/pilots/a00J01/reader-telling.teaching.md",
+  "content_plan": "holes/inkup/pilots/a00J01/content-plan.json",
+  "ink": "holes/inkup/pilots/a00J01/generative-ink.tsv",
+  "note": "Teaching-only R5 sidecar. Budgets are derived from one base weight per node plus one per anticipated question at that node; actual ink is measured independently.",
+  "profiles": {
+    "teaching": {
+      "nodes": [
+        {
+          "node": "a00J01:B0",
+          "status": "realized",
+          "ink_words": 23,
+          "ink_percent": 9.0,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B1",
+          "status": "realized",
+          "ink_words": 13,
+          "ink_percent": 5.1,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B2",
+          "status": "realized",
+          "ink_words": 44,
+          "ink_percent": 17.3,
+          "planned_percent": 16.7,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a00J01:B3",
+          "status": "realized",
+          "ink_words": 20,
+          "ink_percent": 7.8,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B4",
+          "status": "realized",
+          "ink_words": 64,
+          "ink_percent": 25.1,
+          "planned_percent": 25.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a00J01:B5",
+          "status": "realized",
+          "ink_words": 27,
+          "ink_percent": 10.6,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        },
+        {
+          "node": "a00J01:B6",
+          "status": "realized",
+          "ink_words": 34,
+          "ink_percent": 13.3,
+          "planned_percent": 16.7,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a00J01:B7",
+          "status": "realized",
+          "ink_words": 30,
+          "ink_percent": 11.8,
+          "planned_percent": 8.3,
+          "planned_action": "show"
+        }
+      ],
+      "questions": [
+        {
+          "question": "why-level-set-strategy",
+          "blueprint_node": "a00J01:B4",
+          "status": "answered",
+          "node": "a00J01:B4",
+          "quote": "Fix \\(\\alpha<\\lVert f\\rVert_\\infty\\), choose\n\\(\\alpha<\\beta<\\lVert f\\rVert_\\infty\\), and let \\(g\\) be the measurable\nrepresentative equal to \\(f\\) almost everywhere.  The fixed set\n\\[\ns=\\{x:\\beta<\\lVert g(x)\\rVert\\}\n\\]\nis measurable, has finite \\(\\mu\\)-measure since \\(\\mu(\\text{univ})=1\\), and has positive\nmeasure: otherwise \\(g\\) would be bounded by \\(\\beta\\) almost everywhere,\nforcing \\(\\lVert f\\rVert_\\infty\\le\\beta\\), a contradiction.  This set is used\nbecause it supplies one lower estimate while the exponent varies.",
+          "ink_words": 64,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+              "edge": {
+                "from": "gap",
+                "relation": "resolved-by",
+                "to": "choose-level-set"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a00J01-why-level-set.json",
+              "edge": {
+                "from": "positive-measure-conversion",
+                "relation": "enables",
+                "to": "lower-bound-method"
+              }
+            }
+          ]
+        },
+        {
+          "question": "level-set-positive-measure",
+          "blueprint_node": "a00J01:B4",
+          "status": "answered",
+          "node": "a00J01:B4",
+          "quote": "The fixed set\n\\[\ns=\\{x:\\beta<\\lVert g(x)\\rVert\\}\n\\]\nis measurable, has finite \\(\\mu\\)-measure since \\(\\mu(\\text{univ})=1\\), and has positive\nmeasure: otherwise \\(g\\) would be bounded by \\(\\beta\\) almost everywhere,\nforcing \\(\\lVert f\\rVert_\\infty\\le\\beta\\), a contradiction.",
+          "ink_words": 32,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-level-set-positive-measure.json",
+              "edge": {
+                "from": "positive-measure-warrant",
+                "relation": "warrants",
+                "to": "positive-measure"
+              }
+            }
+          ]
+        },
+        {
+          "question": "monotonicity-extension",
+          "blueprint_node": "a00J01:B6",
+          "status": "answered",
+          "node": "a00J01:B6",
+          "quote": "The measure on \\([0,1]\\) is a probability measure, hence\n\\(\\lVert g\\rVert_n\\le\\lVert g\\rVert_p\\) whenever \\(p\\ge n\\); combining this\nwith B5 and the almost-everywhere equality of \\(f\\) and \\(g\\) gives\n\\(\\alpha\\le\\lVert f\\rVert_p\\) for every \\(p\\ge n\\).",
+          "ink_words": 34,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+              "edge": {
+                "from": "monotonicity-warrant",
+                "relation": "warrants",
+                "to": "monotone-comparison"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a00J01-monotonicity-extension.json",
+              "edge": {
+                "from": "extension-warrant",
+                "relation": "warrants",
+                "to": "eventual-lower-bound"
+              }
+            }
+          ]
+        },
+        {
+          "question": "upper-bound-exponent-range",
+          "blueprint_node": "a00J01:B2",
+          "status": "answered",
+          "node": "a00J01:B2",
+          "quote": "Restricted Lebesgue measure on \\([0,1]\\) has total mass \\(1\\), so\nexponent monotonicity with \\(p\\le\\infty\\) gives\n\\(\\lVert f\\rVert_p\\le\\lVert f\\rVert_\\infty\\) for every exponent \\(p\\).\nThus the comparison consumes unit total measure, not a hypothesis\n\\(p\\ge1\\); this says nothing about whether the resulting quantity is a norm.",
+          "ink_words": 44,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a00J01-upper-bound-exponent-range.json",
+              "edge": {
+                "from": "comparison-warrant",
+                "relation": "warrants",
+                "to": "upper-bound-all-exponents"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}
