@@ -18,8 +18,24 @@ import validate_question_alignments as question_gate  # noqa: E402
 ACTIONS = {"anticipate", "defer", "omit"}
 
 
-def validate(path: Path) -> tuple[dict, list[str]]:
+def load_run_records(path: Path | None) -> dict | None:
+    """Read a run's question-alignments.jsonl, keyed by candidate id."""
+    if path is None:
+        return None
+    records = {}
+    for line in path.read_text().splitlines():
+        if line.strip():
+            record = json.loads(line)
+            records[record["candidate_id"]] = record
+    return records
+
+
+def validate(path: Path, run_alignments: Path | None = None) -> tuple[dict, list[str]]:
     errors = []
+    try:
+        run_records = load_run_records(run_alignments)
+    except (OSError, json.JSONDecodeError, KeyError) as exc:
+        return {}, [f"CP000 cannot read run alignments: {exc}"]
     try:
         plan = json.loads(path.read_text())
     except (OSError, json.JSONDecodeError) as exc:
@@ -61,6 +77,23 @@ def validate(path: Path) -> tuple[dict, list[str]]:
         question_id = question.get("id", "<missing>")
         if question.get("blueprint_node") not in nodes:
             errors.append(f"CP002 {question_id}: unknown blueprint node {question.get('blueprint_node')}")
+
+        evidence = question.get("evidence")
+        if not isinstance(evidence, list) or not evidence:
+            errors.append(f"CP006 {question_id}: no evidence entries")
+            evidence = []
+        for item in evidence:
+            candidate_id = item.get("candidate_id") if isinstance(item, dict) else None
+            if candidate_id is None or run_records is None:
+                continue
+            record = run_records.get(candidate_id)
+            if record is None:
+                errors.append(f"CP006 {question_id}: evidence {candidate_id} is not in the run")
+            elif (record.get("mapping_state") != "accepted" or
+                  record.get("question_function") != question.get("question_function")):
+                errors.append(
+                    f"CP006 {question_id}: evidence {candidate_id} is not an accepted "
+                    f"{question.get('question_function')} mapping in the run")
 
         decisions = question.get("decisions")
         if not isinstance(decisions, dict) or set(decisions) != profiles:
@@ -110,8 +143,10 @@ def validate(path: Path) -> tuple[dict, list[str]]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("plan", type=Path, nargs="?", default=HERE / "content-plan.json")
+    parser.add_argument("--run-alignments", type=Path,
+                        help="the evidence run's question-alignments.jsonl; checks each cited candidate")
     args = parser.parse_args()
-    plan, errors = validate(args.plan)
+    plan, errors = validate(args.plan, args.run_alignments)
     if errors:
         for error in errors:
             print(error)
