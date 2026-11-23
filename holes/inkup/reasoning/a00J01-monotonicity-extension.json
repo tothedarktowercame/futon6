@@ -1,0 +1,91 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a00J01:B6 — extending a lower bound from one exponent to every larger exponent",
+  "sources": {
+    "blueprint-alignment": {
+      "path": "../pilots/a00J01/alignment.json",
+      "sha256": "2701f276207b79c511a2f42736c42e81f79b5a4639ca433f11cd7a051a21c13b"
+    },
+    "lean": {
+      "path": "apm-lean:problems/a00J01/lean/Main.lean",
+      "sha256": "89909aff4ced96b0820cf4c8d0b3a68aa21823cf33d04401d2515c7b1338e9bd"
+    }
+  },
+  "nodes": [
+    {
+      "id": "q",
+      "kind": "question",
+      "claim": "Why does the lower bound proved at one exponent n persist at every exponent p ≥ n?",
+      "authority": "reader-question",
+      "evidence": ["blueprint-alignment:a00J01:B6", "candidate:se-math-2247565"]
+    },
+    {
+      "id": "answer",
+      "kind": "answer",
+      "claim": "On the probability space [0,1], eLpNorm is monotone in the exponent, so α ≤ ‖g‖ₙ and n ≤ p imply α ≤ ‖g‖ₚ; almost-everywhere equality then returns the bound to f.",
+      "authority": "secondary",
+      "evidence": ["blueprint-alignment:a00J01:B5", "blueprint-alignment:a00J01:B6", "lean:Main.lean#hn_lower"]
+    },
+    {
+      "id": "one-exponent-bound",
+      "kind": "premise",
+      "claim": "For the selected positive natural number n, α ≤ eLpNorm g n μ.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B5", "lean:Main.lean#hn_lower"]
+    },
+    {
+      "id": "larger-exponent",
+      "kind": "premise",
+      "claim": "The eventual exponent p satisfies n ≤ p.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B6", "Main.lean:lower_bound:filter-upwards-hp"]
+    },
+    {
+      "id": "probability-space",
+      "kind": "premise",
+      "claim": "The restricted volume measure on [0,1] is a probability measure.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B2", "blueprint-alignment:a00J01:B6", "Mathlib:IsProbabilityMeasure"]
+    },
+    {
+      "id": "monotonicity-warrant",
+      "kind": "warrant",
+      "claim": "eLpNorm_le_eLpNorm_of_exponent_le applied to n ≤ p and the measurable representative g gives eLpNorm g n μ ≤ eLpNorm g p μ on this probability space.",
+      "authority": "mathlib",
+      "evidence": ["blueprint-alignment:a00J01:B6", "Mathlib:eLpNorm_le_eLpNorm_of_exponent_le", "Main.lean:lower_bound:filter-upwards-hp"]
+    },
+    {
+      "id": "monotone-comparison",
+      "kind": "claim",
+      "claim": "eLpNorm g n μ ≤ eLpNorm g p μ.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B6", "Main.lean:lower_bound:filter-upwards-hp"]
+    },
+    {
+      "id": "extension-warrant",
+      "kind": "warrant",
+      "claim": "Transitivity combines α ≤ eLpNorm g n μ with monotonicity; eLpNorm_congr_ae then replaces g by the almost-everywhere equal f.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B6", "lean:Main.lean#hn_lower", "lean:Main.lean#hfg"]
+    },
+    {
+      "id": "eventual-lower-bound",
+      "kind": "claim",
+      "claim": "For every sufficiently large p, α ≤ eLpNorm f p μ.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B6", "lean:Main.lean#lower_bound"]
+    }
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "monotonicity-warrant"},
+    {"from": "answer", "relation": "cites-reason", "to": "extension-warrant"},
+    {"from": "monotonicity-warrant", "relation": "requires", "to": "larger-exponent"},
+    {"from": "monotonicity-warrant", "relation": "requires", "to": "probability-space"},
+    {"from": "monotonicity-warrant", "relation": "warrants", "to": "monotone-comparison"},
+    {"from": "extension-warrant", "relation": "requires", "to": "one-exponent-bound"},
+    {"from": "extension-warrant", "relation": "requires", "to": "monotone-comparison"},
+    {"from": "extension-warrant", "relation": "warrants", "to": "eventual-lower-bound"}
+  ]
+}

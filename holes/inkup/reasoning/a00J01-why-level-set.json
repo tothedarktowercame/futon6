@@ -1,0 +1,92 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "subject": "a00J01:B4-B6 — why the lower bound uses a fixed positive-measure super-level set",
+  "sources": {
+    "blueprint-alignment": {
+      "path": "../pilots/a00J01/alignment.json",
+      "sha256": "2701f276207b79c511a2f42736c42e81f79b5a4639ca433f11cd7a051a21c13b"
+    },
+    "lean": {
+      "path": "apm-lean:problems/a00J01/lean/Main.lean",
+      "sha256": "89909aff4ced96b0820cf4c8d0b3a68aa21823cf33d04401d2515c7b1338e9bd"
+    }
+  },
+  "nodes": [
+    {
+      "id": "q",
+      "kind": "question",
+      "claim": "Why does the lower bound go through a super-level set of positive measure?",
+      "authority": "reader-question",
+      "evidence": ["blueprint-alignment:a00J01:B4", "seed:why-level-set"]
+    },
+    {
+      "id": "answer",
+      "kind": "answer",
+      "claim": "The fixed super-level set turns the essential-supremum gap into a uniform pointwise lower bound on a set of positive measure; its measure contributes a factor tending to one, yielding one lower-bound exponent that monotonicity extends to all larger exponents.",
+      "authority": "secondary",
+      "evidence": ["blueprint-alignment:a00J01:B4", "blueprint-alignment:a00J01:B5", "blueprint-alignment:a00J01:B6"]
+    },
+    {
+      "id": "gap",
+      "kind": "obstacle",
+      "claim": "To prove the eventual lower bound for α below ‖f‖∞, the proof needs a region on which one fixed lower estimate holds while the exponent varies.",
+      "authority": "plan-inferred",
+      "evidence": ["blueprint-alignment:a00J01:B4", "blueprint-alignment:a00J01:B5"]
+    },
+    {
+      "id": "lower-bound-method",
+      "kind": "method",
+      "claim": "Apply le_eLpNorm_of_bddBelow on a measurable set, then use the power limit and exponent monotonicity.",
+      "authority": "formal-derived",
+      "evidence": ["blueprint-alignment:a00J01:B5", "blueprint-alignment:a00J01:B6", "lean:Main.lean#hn_lower"]
+    },
+    {
+      "id": "choose-level-set",
+      "kind": "move",
+      "claim": "Choose α < β < ‖f‖∞ and set s = {x | β < ‖g x‖ₑ}.",
+      "authority": "formal-derived",
+      "evidence": ["blueprint-alignment:a00J01:B4", "Main.lean:lower_bound:obtain-beta-halpha-beta-hbeta", "lean:Main.lean#s"]
+    },
+    {
+      "id": "fixed-set",
+      "kind": "invariant",
+      "claim": "The level β and set s remain fixed while the exponent varies.",
+      "authority": "formal-derived",
+      "evidence": ["blueprint-alignment:a00J01:B4", "blueprint-alignment:a00J01:B5", "lean:Main.lean#s"]
+    },
+    {
+      "id": "positive-measure-conversion",
+      "kind": "conversion",
+      "claim": "Because μ s is positive and finite and β bounds ‖g‖ below on s, the level-set lemma gives β μ(s)^(1/n) ≤ ‖g‖ₙ, while μ(s)^(1/n) tends to one.",
+      "authority": "formal-derived",
+      "evidence": ["blueprint-alignment:a00J01:B4", "blueprint-alignment:a00J01:B5", "lean:Main.lean#hμs", "lean:Main.lean#hμs_top", "lean:Main.lean#hlevel", "lean:Main.lean#hlim"]
+    },
+    {
+      "id": "one-exponent-result",
+      "kind": "result",
+      "claim": "For some positive natural number n, α ≤ eLpNorm g n μ.",
+      "authority": "formal-derived",
+      "evidence": ["blueprint-alignment:a00J01:B5", "lean:Main.lean#hn_lower"]
+    },
+    {
+      "id": "eventual-return",
+      "kind": "return",
+      "claim": "Monotonicity in the exponent and almost-everywhere equality transport the bound to α ≤ eLpNorm f p μ for every p ≥ n.",
+      "authority": "formal-derived",
+      "evidence": ["blueprint-alignment:a00J01:B6", "Main.lean:lower_bound:filter-upwards-hp", "lean:Main.lean#hfg"]
+    }
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "gap"},
+    {"from": "answer", "relation": "cites-reason", "to": "choose-level-set"},
+    {"from": "answer", "relation": "summarizes", "to": "eventual-return"},
+    {"from": "gap", "relation": "blocks", "to": "lower-bound-method"},
+    {"from": "gap", "relation": "resolved-by", "to": "choose-level-set"},
+    {"from": "choose-level-set", "relation": "preserves", "to": "fixed-set"},
+    {"from": "choose-level-set", "relation": "produces", "to": "positive-measure-conversion"},
+    {"from": "positive-measure-conversion", "relation": "enables", "to": "lower-bound-method"},
+    {"from": "lower-bound-method", "relation": "produces", "to": "one-exponent-result"},
+    {"from": "one-exponent-result", "relation": "transported-by", "to": "eventual-return"}
+  ]
+}

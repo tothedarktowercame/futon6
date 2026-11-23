@@ -1,0 +1,66 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a00J01:B4 — why a level below the essential supremum has a positive-measure super-level set",
+  "sources": {
+    "blueprint-alignment": {
+      "path": "../pilots/a00J01/alignment.json",
+      "sha256": "2701f276207b79c511a2f42736c42e81f79b5a4639ca433f11cd7a051a21c13b"
+    },
+    "lean": {
+      "path": "apm-lean:problems/a00J01/lean/Main.lean",
+      "sha256": "89909aff4ced96b0820cf4c8d0b3a68aa21823cf33d04401d2515c7b1338e9bd"
+    }
+  },
+  "nodes": [
+    {
+      "id": "q",
+      "kind": "question",
+      "claim": "Why does a level β strictly below the essential-supremum norm have a super-level set of positive measure?",
+      "authority": "reader-question",
+      "evidence": ["blueprint-alignment:a00J01:B4", "candidate:se-math-3696704"]
+    },
+    {
+      "id": "answer",
+      "kind": "answer",
+      "claim": "If that super-level set had measure zero, the function would be bounded by β almost everywhere, forcing its essential-supremum norm to be at most β and contradicting β < ‖f‖∞.",
+      "authority": "secondary",
+      "evidence": ["blueprint-alignment:a00J01:B1", "blueprint-alignment:a00J01:B4", "lean:Main.lean#hμs"]
+    },
+    {
+      "id": "below-norm",
+      "kind": "premise",
+      "claim": "The chosen intermediate level β satisfies β < eLpNorm f ⊤ μ.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B4", "Main.lean:lower_bound:obtain-beta-halpha-beta-hbeta"]
+    },
+    {
+      "id": "super-level-set",
+      "kind": "premise",
+      "claim": "The set s is {x | β < ‖g x‖ₑ}, where g is a measurable representative equal to f almost everywhere.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B4", "lean:Main.lean#s", "lean:Main.lean#hfg"]
+    },
+    {
+      "id": "positive-measure-warrant",
+      "kind": "warrant",
+      "claim": "Assuming μ s = 0 makes ‖g x‖ₑ ≤ β almost everywhere; eLpNormEssSup_le_of_ae_enorm_bound then gives eLpNorm g ⊤ μ ≤ β, and eLpNorm_congr_ae transfers this to f, contradicting β < eLpNorm f ⊤ μ.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B4", "lean:Main.lean#hμs", "lean:Main.lean#hae", "lean:Main.lean#hgb", "lean:Main.lean#hfb", "Main.lean:lower_bound:obtain-beta-halpha-beta-hbeta"]
+    },
+    {
+      "id": "positive-measure",
+      "kind": "claim",
+      "claim": "The super-level set s has nonzero measure.",
+      "authority": "formal-proof",
+      "evidence": ["blueprint-alignment:a00J01:B4", "lean:Main.lean#hμs"]
+    }
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "positive-measure-warrant"},
+    {"from": "positive-measure-warrant", "relation": "requires", "to": "below-norm"},
+    {"from": "positive-measure-warrant", "relation": "requires", "to": "super-level-set"},
+    {"from": "positive-measure-warrant", "relation": "warrants", "to": "positive-measure"}
+  ]
+}
