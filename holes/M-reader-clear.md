@@ -363,6 +363,35 @@ of 332 has not been rechecked for `sorry`; statement and owner notes are written
 yet filed with the APM statement-repair pool or the proof owners; the reader packet gives
 a checker path that Zai seats could not resolve from their start directory.
 
+## After delivery (2026-11-24, claude-12)
+
+**claude-7's reply to the tranche 2 delivery.** Nothing in it was unusable. Three points:
+
+- "Lemma n" has two numbering regimes in the printer (`paper_lemmas.py` on the batch
+  branch): `module_lemma_numbers` numbers the module's theorems in source order (the
+  a97A02 reading), and `page_numbering_scope` numbers only the theorems rendered on one
+  declaration's page (the a99J05 and a01A01 readings). Which regime each record ran under
+  is not yet settled. The lab takes it in as a defect either way: a reader of one record
+  cannot resolve the number without the name.
+- Dropped instance hypotheses go in as one class of 7 problems, ranked with false-formula
+  defects, with t95A03 and m01J01 flagged as false as printed.
+- Some marked steps may already be changing on the batch branch (swapped power, proofs
+  ending on "It suffices to show", removed closers, `X = X` calculation rows). None is
+  accepted yet. The lab will bell at the next accepted head with the changed records in
+  the 27 modules, and will take in both tranches together. t99A04 stays out of counts.
+
+**Statement and proof notes filed.** apm-lean
+`holes/labs/statement-registry/reader-clear-1124.md` (commit `d294575aef`). Compile
+experiments for five statement points from the control sets (m03J05, m98A06, t96A08,
+m02J04, b93A04) were sent to a Codex seat; results go in
+`statement-experiments.head-b38755b7.md` in the storage area and are folded into that note.
+
+**`sorry` in the population.** The draw filtered on residual ink only and did not store
+the eligible list of 332, so the eligible set cannot be rechecked exactly. 3 of the 30
+sampled modules were unproved. Across apm-lean, 26 of 480 `Main.lean` files contain the
+word `sorry` (a text count, not a compile). A later draw should store the eligible list
+and exclude modules with `sorry`.
+
 ## Not in scope
 
 Generating tellings or content plans (the other half of the InkUp pilot); reading records
