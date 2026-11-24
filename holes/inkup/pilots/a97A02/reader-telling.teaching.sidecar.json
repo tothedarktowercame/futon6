@@ -12,7 +12,7 @@
           "node": "a97A02:B0",
           "status": "realized",
           "ink_words": 82,
-          "ink_percent": 11.9,
+          "ink_percent": 11.4,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -20,7 +20,7 @@
           "node": "a97A02:B1",
           "status": "realized",
           "ink_words": 103,
-          "ink_percent": 15.0,
+          "ink_percent": 14.3,
           "planned_percent": 14.0,
           "planned_action": "expand"
         },
@@ -28,7 +28,7 @@
           "node": "a97A02:B2",
           "status": "realized",
           "ink_words": 48,
-          "ink_percent": 7.0,
+          "ink_percent": 6.7,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -36,23 +36,23 @@
           "node": "a97A02:B3",
           "status": "realized",
           "ink_words": 39,
-          "ink_percent": 5.7,
+          "ink_percent": 5.4,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
         {
           "node": "a97A02:B4",
           "status": "realized",
-          "ink_words": 168,
-          "ink_percent": 24.5,
+          "ink_words": 190,
+          "ink_percent": 26.5,
           "planned_percent": 22.0,
           "planned_action": "expand"
         },
         {
           "node": "a97A02:B5",
           "status": "realized",
-          "ink_words": 46,
-          "ink_percent": 6.7,
+          "ink_words": 55,
+          "ink_percent": 7.7,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -60,7 +60,7 @@
           "node": "a97A02:B6",
           "status": "realized",
           "ink_words": 92,
-          "ink_percent": 13.4,
+          "ink_percent": 12.8,
           "planned_percent": 14.0,
           "planned_action": "expand"
         },
@@ -68,7 +68,7 @@
           "node": "a97A02:B7",
           "status": "realized",
           "ink_words": 66,
-          "ink_percent": 9.6,
+          "ink_percent": 9.2,
           "planned_percent": 15.0,
           "planned_action": "expand"
         },
@@ -76,7 +76,7 @@
           "node": "a97A02:B8",
           "status": "realized",
           "ink_words": 43,
-          "ink_percent": 6.3,
+          "ink_percent": 6.0,
           "planned_percent": 7.0,
           "planned_action": "show"
         }
@@ -103,7 +103,7 @@
           "question": "continuity-from-integrability",
           "status": "answered",
           "node": "a97A02:B4",
-          "quote": "Continuity of \\( f_h \\)\nfrom \\( f \\in L^{p} \\) then comes in two stages: first \\( f \\) is integrable,\nas in B2, and second the primitive lemma applies because the restricted\nLebesgue measure has no atoms, so \\( b \\mapsto \\int_{(-\\infty,b]} f \\) is\ncontinuous, and \\( t \\mapsto F(t\\pm h) \\) is continuous on \\( [0,1] \\).",
+          "quote": "Since \\( f \\) is\nintegrable, as in B2, \\( F \\) is continuous: for \\( b < c \\),\n\\[ F(c) - F(b) = \\int_{(b,c]} f , \\]\nand by absolute continuity of the integral this is small whenever the\ninterval \\( (b,c] \\) has small measure. Hence \\( t \\mapsto F(t\\pm h) \\) is\ncontinuous on \\( [0,1] \\).",
           "ink_words": 61,
           "graph_support": [
             {
@@ -128,8 +128,8 @@
           "question": "why-not-symmetric-difference",
           "status": "answered",
           "node": "a97A02:B4",
-          "quote": "that estimate needs care: the difference has measure\n\\( 2\\min(\\lvert s-t\\rvert, 2h) \\), not the \\( 2\\lvert s-t\\rvert \\) one first\nwrites down, since once \\( \\lvert s-t\\rvert \\) exceeds \\( 2h \\) the windows\nare disjoint; the \\( L^{q} \\) bookkeeping degenerates at \\( q=\\infty \\); and\n\\( p=1 \\) needs a separate fallback through absolute continuity.",
-          "ink_words": 58,
+          "quote": "For \\( p > 1 \\) that works, with care: the difference has\nmeasure \\( 2\\min(\\lvert s-t\\rvert, 2h) \\), not the \\( 2\\lvert s-t\\rvert \\) one\nfirst writes down, since once \\( \\lvert s-t\\rvert \\) exceeds \\( 2h \\) the\nwindows are disjoint. At \\( p = 1 \\) the Hölder estimate gives no decay, and\none falls back on absolute continuity of the integral. That fallback alone\nproves continuity for every \\( p \\ge 1 \\), so we use it from the start",
+          "ink_words": 84,
           "graph_support": [
             {
               "graph": "holes/inkup/reasoning/a97A02-why-primitives.json",

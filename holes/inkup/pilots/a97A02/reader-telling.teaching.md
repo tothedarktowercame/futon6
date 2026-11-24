@@ -30,24 +30,27 @@ interval, and this holds for every \( t \), near the endpoints or not.
 
 **[B4]** Now the continuity, and a choice of object. The tempting route is to
 estimate \( \lvert f_h(t)-f_h(s)\rvert \) through the symmetric difference of
-the two windows, but that estimate needs care: the difference has measure
-\( 2\min(\lvert s-t\rvert, 2h) \), not the \( 2\lvert s-t\rvert \) one first
-writes down, since once \( \lvert s-t\rvert \) exceeds \( 2h \) the windows
-are disjoint; the \( L^{q} \) bookkeeping degenerates at \( q=\infty \); and
-\( p=1 \) needs a separate fallback through absolute continuity. The better
-object is the primitive
+the two windows. For \( p > 1 \) that works, with care: the difference has
+measure \( 2\min(\lvert s-t\rvert, 2h) \), not the \( 2\lvert s-t\rvert \) one
+first writes down, since once \( \lvert s-t\rvert \) exceeds \( 2h \) the
+windows are disjoint. At \( p = 1 \) the Hölder estimate gives no decay, and
+one falls back on absolute continuity of the integral. That fallback alone
+proves continuity for every \( p \ge 1 \), so we use it from the start, through
+the primitive
 \[ F(b) = \int_{(-\infty,b]} f , \]
-one function of one endpoint, with no moving window. Continuity of \( f_h \)
-from \( f \in L^{p} \) then comes in two stages: first \( f \) is integrable,
-as in B2, and second the primitive lemma applies because the restricted
-Lebesgue measure has no atoms, so \( b \mapsto \int_{(-\infty,b]} f \) is
-continuous, and \( t \mapsto F(t\pm h) \) is continuous on \( [0,1] \).
+one function of one endpoint, with no moving window. Since \( f \) is
+integrable, as in B2, \( F \) is continuous: for \( b < c \),
+\[ F(c) - F(b) = \int_{(b,c]} f , \]
+and by absolute continuity of the integral this is small whenever the
+interval \( (b,c] \) has small measure. Hence \( t \mapsto F(t\pm h) \) is
+continuous on \( [0,1] \).
 
 **[B5]** The interval identity
 \[ \int_{[t-h,t+h]} f = F(t+h) - F(t-h) \]
 turns the moving numerator into a difference of two continuous functions of
-\( t \), and dividing by the constant \( 2h \) preserves continuity. With
-\( F \) continuous, nothing more is needed here.
+\( t \); the single point \( t-h \) has measure zero, so it does not matter
+that the right side omits it. Dividing by the constant \( 2h \) preserves
+continuity.
 
 **[B6]** For the bound, apply Hölder on the window \( E = [t-h,t+h] \):
 \[ \int_{E} \lvert f\rvert \le \lVert f\rVert_{p}\, \mu(E)^{1-1/p}
