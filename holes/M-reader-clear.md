@@ -6,8 +6,10 @@ relatively fresh, probably good to use a mix of those two agent classes"). Sampl
 sampled and 5 for planted controls (`holes/reader-clear/sample.head-b38755b7.json`,
 release order in `release.head-b38755b7.json`). Tranche 1 (10 problems) was read, answered
 and restated on 2026-11-24: none is reader-clear (review below). Both control sets were
-read on 2026-11-24 (controls review below). Next: the remaining 20, with the reader packet
-changed as that review records.
+read on 2026-11-24 (controls review below). Tranche 2 (the 17 proved problems of the
+remaining 20; 3 are unproved) was read, answered and restated on 2026-11-24: none of the 27
+proved problems is reader-clear (tranche 2 review below). Left: file the statement and
+owner notes; recheck the eligible population for `sorry`.
 
 **Type:** mission (quality assurance). **Raised:** 2026-11-24 by Joe, after the InkUp
 pilot: "If we had a sample of prelim papers that had been marked 'clear' by claude-7,
@@ -294,6 +296,72 @@ storage, `inkup/reader-clear/notes-beyond-printer.head-b38755b7.md`.
   can supply, not only to wrong labels (aunk05, b93A04: 15 of 18 asserting steps, no
   not-justified, no questions). Rates for tranche 2 are therefore given both for
   not-justified alone and for either mark.
+
+## Tranche 2 review (2026-11-24, claude-12)
+
+All 17 proved problems of tranche 2 were read by one Codex and one Zai seat, answered by a
+Codex seat that read nothing in that problem (aunk05 excepted, see notes above), and
+restated. With tranche 1 that is 27 proved problems, 2,650 steps, 54 readings.
+
+**Result: no problem is reader-clear.** Every one of the 27 has at least one step marked
+by at least one reader. Two tranche-2 problems (a99J05, m99J02) have no not-justified step
+but 33 and 19 wrong-as-printed ones.
+
+| | Tranche 1 (10) | Tranche 2 (17) | All 27 |
+|---|---|---|---|
+| Steps | 1,214 | 1,436 | 2,650 |
+| Not-justified by either reader | 191 (15.7%) | 31 (2.2%) | 222 (8.4%) |
+| Either mark by either reader | 191 (15.7%) | 278 (19.4%) | 469 (17.7%) |
+| Marked by both readers | 45 (3.7%) | 88 (6.1%) | 133 (5.0%) |
+| Steps both readers call setup | 251 | 419 | 670 |
+
+The drop in not-justified between tranches is the new verdict, not a better print: readers
+who could supply the argument moved those steps to wrong-as-printed. The comparable figure
+across tranches is "either mark": 16% then 19% of all steps (20% and 27% of steps not
+called setup by both readers).
+
+**The two seat classes read differently.** In tranche 2 the Codex readers marked 235 steps
+wrong-as-printed, 2 not-justified, and asked 9 questions; the Zai readers marked 100
+wrong-as-printed, 29 not-justified, and asked 60. Agreement on which steps are marked is
+low (88 of 278). The readers also disagree on what is setup (a01A01: 62 against 122).
+
+**Where the 69 tranche-2 questions were diagnosed:** printer 51, informal text 10, Lean
+proof 4, statement 3, reader gap 1 (a03J01: the reader thought A < ∞ unnecessary; a
+counterexample and a failed recompile show it is needed). Restates: 37 settled, 30 settled
+with residue, 1 not settled (a98J01 Q4, answered afterwards by the owner), 1 not taken.
+
+**Answer quality.** Three answers by the answering seats were wrong or misfiled and were
+corrected by the owner on the ArSE thread: m99J02 (an answer filed under the wrong
+question, with an answer from another problem posted in its place), a98J01 ("coarser"
+topology where the source refines), a01A01 (d = 0 called the one-dimensional case). The
+owner's earlier statement that lemma numbers restart per declaration was wrong for a97A02
+and is withdrawn. The answer pass needs the owner's reading; row counts are not enough.
+
+**Findings outside the print** (details in the notes file in storage):
+
+- Statement narrower than the problem: a98J01 (Borel measurable on ℝ where the problem says
+  Lebesgue measurable on [a,b]; header says no statement repairs).
+- Formal proof does not carry the argument the problem asks for: t97J07 part (c) (no
+  Lefschetz step linking the two computations), m01J01 part (c) (closed graph cited from
+  the library, the open-mapping assumption unused), aunk05 and t95A03 (single library
+  calls), t03J06 (parametrisation integrals; that they make up the surface is not stated).
+- Unused hypothesis: a97A02 (t ∈ [0,1], recompiled without it), aunk05 (connectedness).
+- Informal errata: a97A02, a98J01, a03J01, a01A01, t96A03, t95A03, a99J05.
+
+**What "clear" means after this.** Zero residual ink says the printer rendered every
+construct. It does not say a reader can follow the result: in this sample roughly one
+step in five is marked, most often because hypotheses carried by instances are not
+printed, the printed reason is a tactic name, or a cited lemma cannot be identified. And
+by the controls, an unmarked step is weak evidence, since readers repaired planted wrong
+reasons silently in 10 of 10 readings.
+
+**Delivered** to the cleanup lab in storage: findings table (240 rows), a new marks table
+(604 marked steps with notes), and a delivery note listing the recurring defects.
+
+**Not done:** the three unproved problems were not read further; the eligible population
+of 332 has not been rechecked for `sorry`; statement and owner notes are written but not
+yet filed with the APM statement-repair pool or the proof owners; the reader packet gives
+a checker path that Zai seats could not resolve from their start directory.
 
 ## Not in scope
 
