@@ -1,5 +1,5 @@
 telling	nodes_shown	questions_answered	predicted_words	predicted_words_alt	actual_words	actual_formula_as_one	difference_from_predicted_words
-teaching	10	5	355	540	572	550	+217
+teaching	10	5	355	540	591	569	+236
 expert-reference	8	1	149	149	150	142	+1
 formal-audit	10	5	325	405	412	394	+87
 publication	10	3	140	140	161	148	+21

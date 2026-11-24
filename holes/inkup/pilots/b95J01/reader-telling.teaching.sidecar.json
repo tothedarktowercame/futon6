@@ -12,7 +12,7 @@
           "node": "b95J01:B0",
           "status": "realized",
           "ink_words": 59,
-          "ink_percent": 10.3,
+          "ink_percent": 10.0,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -20,23 +20,23 @@
           "node": "b95J01:B1",
           "status": "realized",
           "ink_words": 96,
-          "ink_percent": 16.8,
+          "ink_percent": 16.2,
           "planned_percent": 13.0,
           "planned_action": "expand"
         },
         {
           "node": "b95J01:B2",
           "status": "realized",
-          "ink_words": 92,
-          "ink_percent": 16.1,
+          "ink_words": 98,
+          "ink_percent": 16.6,
           "planned_percent": 20.0,
           "planned_action": "expand"
         },
         {
           "node": "b95J01:B3",
           "status": "realized",
-          "ink_words": 27,
-          "ink_percent": 4.7,
+          "ink_words": 40,
+          "ink_percent": 6.8,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -44,7 +44,7 @@
           "node": "b95J01:B4",
           "status": "realized",
           "ink_words": 27,
-          "ink_percent": 4.7,
+          "ink_percent": 4.6,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -52,7 +52,7 @@
           "node": "b95J01:B5",
           "status": "realized",
           "ink_words": 38,
-          "ink_percent": 6.6,
+          "ink_percent": 6.4,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -60,7 +60,7 @@
           "node": "b95J01:B6",
           "status": "realized",
           "ink_words": 95,
-          "ink_percent": 16.6,
+          "ink_percent": 16.1,
           "planned_percent": 13.0,
           "planned_action": "expand"
         },
@@ -68,7 +68,7 @@
           "node": "b95J01:B7",
           "status": "realized",
           "ink_words": 18,
-          "ink_percent": 3.1,
+          "ink_percent": 3.0,
           "planned_percent": 6.0,
           "planned_action": "show"
         },
@@ -76,7 +76,7 @@
           "node": "b95J01:B8",
           "status": "realized",
           "ink_words": 36,
-          "ink_percent": 6.3,
+          "ink_percent": 6.1,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -84,7 +84,7 @@
           "node": "b95J01:B9",
           "status": "realized",
           "ink_words": 84,
-          "ink_percent": 14.7,
+          "ink_percent": 14.2,
           "planned_percent": 13.0,
           "planned_action": "expand"
         }
@@ -94,8 +94,8 @@
           "question": "finite-index-is-the-only-source",
           "status": "answered",
           "node": "b95J01:B2",
-          "quote": "Next, \\(T\\) must contain something positive, and this is the only\nplace finite index enters part (a). Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{i}H=g^{j}H\\) with\n\\(0\\le i<j\\le n\\). Then \\(g^{j-i}H=H\\), that is \\(g^{j-i}\\in H\\) with\n\\(j-i>0\\), a pigeonhole pairing worth being able to reproduce. Without finite\nindex nothing of the sort needs to happen: \\(g\\) of infinite order with \\(H\\)\ntrivial has no positive exponent in \\(H\\) at all, so the least \\(k\\) would\nnot exist.",
-          "ink_words": 92,
+          "quote": "Next, \\(T\\) must contain something positive, and this is the only\nplace finite index enters part (a). Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{i}H=g^{j}H\\) with\n\\(0\\le i<j\\le n\\). Multiplying on the left by \\(g^{-i}\\) gives \\(g^{j-i}H=H\\), that is \\(g^{j-i}\\in H\\) with\n\\(j-i>0\\), a pigeonhole pairing worth being able to reproduce. Without finite\nindex nothing of the sort needs to happen: \\(g\\) of infinite order with \\(H\\)\ntrivial has no positive exponent in \\(H\\) at all, so the least \\(k\\) would\nnot exist.",
+          "ink_words": 98,
           "graph_support": [
             {
               "graph": "holes/inkup/reasoning/b95J01-finite-index-role.json",
@@ -119,8 +119,8 @@
           "question": "positive-exponent-origin",
           "status": "answered",
           "node": "b95J01:B2",
-          "quote": "Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{i}H=g^{j}H\\) with\n\\(0\\le i<j\\le n\\). Then \\(g^{j-i}H=H\\), that is \\(g^{j-i}\\in H\\) with\n\\(j-i>0\\), a pigeonhole pairing worth being able to reproduce.",
-          "ink_words": 43,
+          "quote": "Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{i}H=g^{j}H\\) with\n\\(0\\le i<j\\le n\\). Multiplying on the left by \\(g^{-i}\\) gives \\(g^{j-i}H=H\\), that is \\(g^{j-i}\\in H\\) with\n\\(j-i>0\\), a pigeonhole pairing worth being able to reproduce.",
+          "ink_words": 49,
           "graph_support": [
             {
               "graph": "holes/inkup/reasoning/b95J01-pigeonhole.json",
