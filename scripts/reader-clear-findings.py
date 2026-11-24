@@ -61,6 +61,8 @@ def main():
                 diag = ov.get(f"{r}:{q['id']}", an["diagnosis"])
                 cls = an.get("proposed_class", "") if TYPE[diag] == "printer" else ""
                 cls = CLASS_ALIAS.get(cls, cls)
+                if cls.startswith("NEW:omitted-") and cls.endswith("-hypotheses"):
+                    cls = "NEW:lost-instance-hypotheses"
                 rr = r2.get(q["id"], {})
                 out.append({"head": a.head, "module": p, "declaration": ";".join(ds) or "-",
                             "steps": ";".join(q["steps"]) or "-", "printed_line": one(q["locus_P"]),
