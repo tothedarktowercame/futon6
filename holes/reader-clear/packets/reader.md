@@ -20,6 +20,8 @@ WRITE in {DIR}:
 
 4. reading-notes.{READER}.md: five to ten lines: which version you found clearer and where; whether you could now state the proof without the texts.
 
+READ EVERY STEP YOURSELF. Do not generate verdicts, notes or questions with a script or a rule such as "no 'by' clause means not-justified". A line with no printed reason is justified if you can supply the reason from earlier lines, the informal version or standard mathematics; say that reason in the note. A line that only fixes a witness or opens a case is setup. Each not-justified note and each question is about that line's mathematics; identical notes or questions across steps will be returned.
+
 CHECK before replying, and fix what it reports:
   python3 futon6/scripts/reader-clear-check-loci.py --print {DIR}/version-P.paperprinter.md --informal {DIR}/version-I.informal.md {DIR}/questions.{READER}.jsonl
 
