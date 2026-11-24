@@ -408,17 +408,33 @@ pinned head.
 
 | Id | Problem | Defect | Fix | Status |
 |---|---|---|---|---|
-| A1 | t91J05 | "the number of sheets is finite since the base is compact and the cover connected" is false (ℝ → S¹). | Take finiteness from the hypothesis that the cover is finite. | open |
-| A2 | t94A05 | "an open subset of ℝⁿ is path connected" is false. | Use a ball inside the chart image. | open |
-| A3 | b03J04 | A root of unity from an unspecified extension is multiplied by α in K with no common field named. | Fix a splitting field containing both. | open |
-| A4 | a92J05 | Closing remark (a single dominating term exists for any polynomial on any circle) is false: z² + 3z + 3 on \|z\| = 1. | Delete the remark or restrict it. | open |
-| A5 | a96J04 | `informal-solution.md` embeds a stale Lean statement with closed intervals; `Main.lean` has open ones. | Replace the embedded statement. | open |
-| A6 | a98J01 | The separation constant is a minimum over compact sets that may be empty or fewer than two. | Treat those cases separately. | open |
-| A7 | a97A02 | The symmetric difference has measure 2·min(\|s−t\|, 2h), not 2\|s−t\|. | State the min, or an inequality (≤ 2\|s−t\|), which is all the proof uses. | open |
-| A8 | a03J01 | "potentially uncountable collection" said of a sequence of sets. | Say countable. | open |
-| A9 | t95A03 | "B₂ ⊆ B₁" is not given by the cover and not needed. | Remove it. | open |
-| A10 | m93J03 | Uniqueness is obtained only inside the neighbourhood given by the implicit function theorem. | Check against the Lean statement first, then say which uniqueness is proved. | open |
-| A11 | m02J04 | Finds a stationary catenary without proving it minimal (the Lean proof does prove it). | Add the minimality argument, following the Lean proof. | open |
+| A1 | t91J05 | "the number of sheets is finite since the base is compact and the cover connected" is false (ℝ → S¹). | Take finiteness from the hypothesis that the cover is finite. | fixed `063ef70827` 2026-11-24 |
+| A2 | t94A05 | "an open subset of ℝⁿ is path connected" is false. | Use a ball inside the chart image. | fixed `c8b02586e2` 2026-11-24 |
+| A3 | b03J04 | A root of unity from an unspecified extension is multiplied by α in K with no common field named. | Fix a splitting field containing both. | fixed `334df3aa46` 2026-11-24 |
+| A4 | a92J05 | Closing remark (a single dominating term exists for any polynomial on any circle) is false: z² + 3z + 3 on \|z\| = 1. | Delete the remark or restrict it. | fixed `31e03b2b60` 2026-11-24 |
+| A5 | a96J04 | `informal-solution.md` embeds a stale Lean statement with closed intervals; `Main.lean` has open ones. | Replace the embedded statement. | fixed `d55bad50a1` 2026-11-24 |
+| A6 | a98J01 | The separation constant is a minimum over compact sets that may be empty or fewer than two. | Treat those cases separately. | fixed `3654c35d2c` 2026-11-24 |
+| A7 | a97A02 | The symmetric difference has measure 2·min(\|s−t\|, 2h), not 2\|s−t\|. | State the min, or an inequality (≤ 2\|s−t\|), which is all the proof uses. | fixed `56ef022aca` 2026-11-24 |
+| A8 | a03J01 | "potentially uncountable collection" said of a sequence of sets. | Say countable. | fixed `ca7e158be5` 2026-11-24 |
+| A9 | t95A03 | "B₂ ⊆ B₁" is not given by the cover and not needed. | Remove it. | fixed `eb7d632d63` 2026-11-24 |
+| A10 | m93J03 | Uniqueness is obtained only inside the neighbourhood given by the implicit function theorem. | Check against the Lean statement first, then say which uniqueness is proved. | fixed `8fa9d21ec0` 2026-11-24 |
+| A11 | m02J04 | Finds a stationary catenary without proving it minimal (the Lean proof does prove it). | Add the minimality argument, following the Lean proof. | claim corrected `67db5a86c8` 2026-11-24; minimality argument not written out |
+
+Group A was edited on apm-lean master on 2026-11-24 after claude-7 confirmed that its lab
+does not read `informal-solution.md`. Three rows turned out differently from the fix
+first written down:
+
+- A10 (m93J03): the Lean file already records that the printed global uniqueness is
+  false (its second conjunct gives two solutions for every ε). The informal solution now
+  claims only local uniqueness and says so.
+- A11 (m02J04): the informal solution now says it shows stationarity only and cites
+  `apm_m02J04_global_area_minimal`. The Lean minimality proof is a case analysis of about
+  1000 lines; an informal version of it has not been written, so the row stays open in
+  that respect.
+- A5 (a96J04): the sketch still writes [a,b] where the problem and the Lean statement
+  have [0,1]; a sentence now says so.
+
+None of the edits has been read by a second reader.
 
 ### B. Lean statements that differ from the problem
 
@@ -484,5 +500,6 @@ that still carry residual ink; reading at more than one head.
 2. A reader who has the informal proof never asks why the proof takes its main approach.
    A statement-only reading would cover that; it is not part of this mission.
 3. Whether a gate-6 pass by this protocol is wanted later is for Joe and claude-10.
-4. The errata register above: 34 rows open (11 informal, 8 statements, 8 Lean proofs,
-   4 unused declarations, 3 unproved). None fixed yet.
+4. The errata register above: group A (11 informal) edited 2026-11-24, A11 in part;
+   23 rows open (8 statements, 8 Lean proofs, 4 unused declarations, 3 unproved).
+   claude-7 asks to be told before any `Main.lean` is edited.
