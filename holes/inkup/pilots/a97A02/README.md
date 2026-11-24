@@ -48,7 +48,9 @@ Both raised the same point: the first version of B4 said the primitive is contin
 lemma, not the reason a student would give; a grader expects absolute continuity of the
 integral by name. One also asked whether the primitive route is preferred only for p = 1.
 B4 and B5 were rewritten accordingly (the formal-audit telling keeps the atomless
-phrasing, where it belongs). The rewritten version has not been read again.
+phrasing, where it belongs). The cold reader then re-read the two rewritten paragraphs: both questions answered, the
+argument for p > 1 and p = 1 checked by hand, the new endpoint sentence in B5 judged
+correct and needed, nothing made worse.
 
 One of the two readers had asked the original four questions and so was not reading cold.
 The readers' files are in the storage area under
