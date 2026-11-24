@@ -24,6 +24,7 @@ WRITE in {DIR}:
 READ EVERY STEP YOURSELF. Do not generate verdicts, notes or questions with a script or a rule such as "no 'by' clause means not-justified". A line with no printed reason is justified if you can supply the reason from earlier lines, the informal version or standard mathematics; say that reason in the note. A line that only fixes a witness or opens a case is setup. Each not-justified note and each question is about that line's mathematics; identical notes or questions across steps will be returned.
 
 CHECK before replying, and fix what it reports:
-  python3 futon6/scripts/reader-clear-check-loci.py --print {DIR}/version-P.paperprinter.md --informal {DIR}/version-I.informal.md {DIR}/questions.{READER}.jsonl
+  (run from the futon6 checkout, which sits beside futon3c)
+  python3 scripts/reader-clear-check-loci.py --print {DIR}/version-P.paperprinter.md --informal {DIR}/version-I.informal.md {DIR}/questions.{READER}.jsonl
 
 REPLY with: counts of justified / wrong-as-printed / not-justified / setup, number of questions by kind, the checker's summary line, and nothing from outside the four files.
