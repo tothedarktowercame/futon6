@@ -94,7 +94,7 @@
           "question": "positive-exponent-origin",
           "status": "answered",
           "node": "b95J01:B2",
-          "quote": "Since \\(H\\) has finite index \\(n\\), two of the cosets\n\\(H,gH,\\dots,g^{n}H\\) coincide, so \\(g^{b-a}\\in H\\) for some\n\\(0\\le a<b\\le n\\).",
+          "quote": "Since \\(H\\) has finite index \\(n\\), two of the cosets\n\\(H,gH,\\dots,g^{n}H\\) coincide, so \\(g^{j-i}\\in H\\) for some\n\\(0\\le i<j\\le n\\).",
           "ink_words": 20,
           "graph_support": [
             {

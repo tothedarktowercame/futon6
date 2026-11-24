@@ -12,7 +12,7 @@
           "node": "b95J01:B0",
           "status": "realized",
           "ink_words": 54,
-          "ink_percent": 13.0,
+          "ink_percent": 13.1,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -20,7 +20,7 @@
           "node": "b95J01:B1",
           "status": "realized",
           "ink_words": 48,
-          "ink_percent": 11.6,
+          "ink_percent": 11.7,
           "planned_percent": 13.0,
           "planned_action": "expand"
         },
@@ -28,7 +28,7 @@
           "node": "b95J01:B2",
           "status": "realized",
           "ink_words": 58,
-          "ink_percent": 14.0,
+          "ink_percent": 14.1,
           "planned_percent": 20.0,
           "planned_action": "expand"
         },
@@ -52,7 +52,7 @@
           "node": "b95J01:B5",
           "status": "realized",
           "ink_words": 20,
-          "ink_percent": 4.8,
+          "ink_percent": 4.9,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -83,8 +83,8 @@
         {
           "node": "b95J01:B9",
           "status": "realized",
-          "ink_words": 76,
-          "ink_percent": 18.4,
+          "ink_words": 74,
+          "ink_percent": 18.0,
           "planned_percent": 13.0,
           "planned_action": "expand"
         }
@@ -170,8 +170,8 @@
           "question": "why-not-a-three-cycle",
           "status": "answered",
           "node": "b95J01:B9",
-          "quote": "A\n3-cycle would not have refuted anything: its least positive exponent is\n\\(1\\) or \\(3\\), both dividing the index \\(3\\).",
-          "ink_words": 20,
+          "quote": "A\n3-cycle would not have refuted anything: its least positive exponent is\n\\(3\\), which divides the index \\(3\\).",
+          "ink_words": 18,
           "graph_support": [
             {
               "graph": "holes/inkup/reasoning/b95J01-why-involution.json",

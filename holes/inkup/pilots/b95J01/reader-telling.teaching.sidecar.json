@@ -12,7 +12,7 @@
           "node": "b95J01:B0",
           "status": "realized",
           "ink_words": 59,
-          "ink_percent": 10.4,
+          "ink_percent": 10.3,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -52,7 +52,7 @@
           "node": "b95J01:B5",
           "status": "realized",
           "ink_words": 38,
-          "ink_percent": 6.7,
+          "ink_percent": 6.6,
           "planned_percent": 7.0,
           "planned_action": "show"
         },
@@ -60,7 +60,7 @@
           "node": "b95J01:B6",
           "status": "realized",
           "ink_words": 95,
-          "ink_percent": 16.7,
+          "ink_percent": 16.6,
           "planned_percent": 13.0,
           "planned_action": "expand"
         },
@@ -68,7 +68,7 @@
           "node": "b95J01:B7",
           "status": "realized",
           "ink_words": 18,
-          "ink_percent": 3.2,
+          "ink_percent": 3.1,
           "planned_percent": 6.0,
           "planned_action": "show"
         },
@@ -83,8 +83,8 @@
         {
           "node": "b95J01:B9",
           "status": "realized",
-          "ink_words": 82,
-          "ink_percent": 14.4,
+          "ink_words": 84,
+          "ink_percent": 14.7,
           "planned_percent": 13.0,
           "planned_action": "expand"
         }
@@ -94,7 +94,7 @@
           "question": "finite-index-is-the-only-source",
           "status": "answered",
           "node": "b95J01:B2",
-          "quote": "Next, \\(T\\) must contain something positive, and this is the only\nplace finite index enters part (a). Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{a}H=g^{b}H\\) with\n\\(0\\le a<b\\le n\\). Then \\(g^{b-a}H=H\\), that is \\(g^{b-a}\\in H\\) with\n\\(b-a>0\\), a pigeonhole pairing worth being able to reproduce. Without finite\nindex nothing of the sort needs to happen: \\(g\\) of infinite order with \\(H\\)\ntrivial has no positive exponent in \\(H\\) at all, so the least \\(k\\) would\nnot exist.",
+          "quote": "Next, \\(T\\) must contain something positive, and this is the only\nplace finite index enters part (a). Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{i}H=g^{j}H\\) with\n\\(0\\le i<j\\le n\\). Then \\(g^{j-i}H=H\\), that is \\(g^{j-i}\\in H\\) with\n\\(j-i>0\\), a pigeonhole pairing worth being able to reproduce. Without finite\nindex nothing of the sort needs to happen: \\(g\\) of infinite order with \\(H\\)\ntrivial has no positive exponent in \\(H\\) at all, so the least \\(k\\) would\nnot exist.",
           "ink_words": 92,
           "graph_support": [
             {
@@ -119,7 +119,7 @@
           "question": "positive-exponent-origin",
           "status": "answered",
           "node": "b95J01:B2",
-          "quote": "Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{a}H=g^{b}H\\) with\n\\(0\\le a<b\\le n\\). Then \\(g^{b-a}H=H\\), that is \\(g^{b-a}\\in H\\) with\n\\(b-a>0\\), a pigeonhole pairing worth being able to reproduce.",
+          "quote": "Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{i}H=g^{j}H\\) with\n\\(0\\le i<j\\le n\\). Then \\(g^{j-i}H=H\\), that is \\(g^{j-i}\\in H\\) with\n\\(j-i>0\\), a pigeonhole pairing worth being able to reproduce.",
           "ink_words": 43,
           "graph_support": [
             {
@@ -170,8 +170,8 @@
           "question": "why-not-a-three-cycle",
           "status": "answered",
           "node": "b95J01:B9",
-          "quote": "Note why the first reflex, a \\(3\\)-cycle, would not\nhave worked: for a \\(3\\)-cycle the least positive exponent is \\(1\\) or\n\\(3\\), and both divide the index \\(3\\), so it satisfies the conclusion and\nrefutes nothing.",
-          "ink_words": 36,
+          "quote": "Note why the first reflex, a \\(3\\)-cycle, would not\nhave worked: a \\(3\\)-cycle and its square lie outside \\(H\\), so its least positive\nexponent is \\(3\\), which divides the index \\(3\\); it satisfies the conclusion and\nrefutes nothing.",
+          "ink_words": 38,
           "graph_support": [
             {
               "graph": "holes/inkup/reasoning/b95J01-why-involution.json",

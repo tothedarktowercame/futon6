@@ -17,7 +17,7 @@ b95j01CounterexampleSubgroup and b95j01CounterexampleElement.
 of the powers homomorphism, and subgroup closure is inherited, not checked.
 
 **[B2]** The positive exponent comes from
-\(\mathrm{H.exists\_pow\_mem\_index\_ne\_zero}\) applied to
+\(\mathrm{H.exists\_pow\_mem\_of\_index\_ne\_zero}\) applied to
 \(\mathrm{Subgroup.FiniteIndex.index\_ne\_zero}\) and \(g\), giving
 \(n>0\) with \(g^{n}\in H\); the step \(\mathrm{hnT}\) transports it into
 \(T\) by zpow_natCast. This lemma is the single consumption of the
@@ -71,4 +71,4 @@ exponent is \(2\) — and its square is \(1\) by decide, hence in the
 subgroup. Since the index is \(3\), the final \(\neg(2\mid3)\) is by omega,
 so \(k=2\) does not divide the index and part (b)'s conclusion fails. A
 3-cycle would not have refuted anything: its least positive exponent is
-\(1\) or \(3\), both dividing the index \(3\).
+\(3\), which divides the index \(3\).

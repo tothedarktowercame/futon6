@@ -6,8 +6,8 @@
 under \(m\mapsto g^{m}\).
 
 **[B2]** Since \(H\) has finite index \(n\), two of the cosets
-\(H,gH,\dots,g^{n}H\) coincide, so \(g^{b-a}\in H\) for some
-\(0\le a<b\le n\).
+\(H,gH,\dots,g^{n}H\) coincide, so \(g^{j-i}\in H\) for some
+\(0\le i<j\le n\).
 
 **[B3]** Thus \(T\) is a nonzero subgroup of \(\mathbb{Z}\), say
 \(T=a\mathbb{Z}\) with \(a\ne0\).
@@ -30,5 +30,5 @@ transposition \((1\,2)\), a non-normal subgroup of order \(2\) and index
 **[B9]** For \(g=(1\,3)\) we have \(g^{2}=e\in H\) with \(g\notin H\), so
 \(k=2\), which does not divide the index \(3\).
 
-**[B0]** Thus \(k\) exists, is least, and divides as stated, with the
-divisibility of the index characteristically failing without normality.
+**[B0]** Thus \(k\) exists, is least, and divides as stated, and the
+divisibility of the index can fail without normality.
