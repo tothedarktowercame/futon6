@@ -16,7 +16,10 @@ TYPE = {"printer-drops-content": "printer", "printer-wording": "printer",
         "known-statement-repair": "statement-known",
         "informal-skips-or-loose": "informal", "reader-gap": "reader-error"}
 # Answerers sometimes coin different names for one proposed class; merge them here.
-CLASS_ALIAS = {"NEW:omitted-instance-hypotheses": "NEW:lost-instance-hypotheses"}
+CLASS_ALIAS = {"NEW:omitted-instance-hypotheses": "NEW:lost-instance-hypotheses",
+               "NEW:named-cauchy-estimate": "P-unnamed-library-result",
+               "NEW:simple-pole-definition": "NEW:undefined-statement-predicate",
+               "NEW:image-witness": "NEW:wrong-witness-term"}
 COLS = ["head", "module", "declaration", "steps", "printed_line", "reader", "question",
         "reader_verdict", "diagnosis_type", "diagnosis", "answerer_diagnosis", "proposed_class",
         "class_known", "settlement", "print_would_prevent", "evidence"]
