@@ -39,8 +39,11 @@ PREAMBLE = r"""\documentclass{article}
 
 
 def tex_escape(text: str) -> str:
-    return (text.replace("\\", r"\textbackslash{}").replace("&", r"\&").replace("%", r"\%")
-            .replace("#", r"\#").replace("_", r"\_").replace("^", r"\^{}"))
+    out = []
+    for ch in text:
+        out.append({"\\": r"\textbackslash{}", "&": r"\&", "%": r"\%", "#": r"\#", "_": r"\_",
+                    "^": r"\^{}", "{": r"\{", "}": r"\}"}.get(ch, ch))
+    return "".join(out)
 
 
 def md_body(path: Path) -> str:
@@ -93,9 +96,9 @@ def main() -> None:
         tex.write_text("".join(parts))
         args.out.parent.mkdir(parents=True, exist_ok=True)
         result = subprocess.run(
-            ["latexmlc", "--dest", str(args.out), "--format=html5", "--pmml", "--mathtex",
+            ["latexmlc", "--dest", str(args.out.resolve()), "--format=html5", "--pmml", "--mathtex",
              "--nodefaultresources", "--css=LaTeXML.css", "--css=ltx-article.css", str(tex)],
-            capture_output=True, text=True, timeout=300)
+            capture_output=True, text=True, timeout=300, cwd=tmp)
         tail = [line for line in result.stderr.splitlines() if re.search(r"(?i)error|warning|undefined", line)]
         print("\n".join(tail[-15:]))
         if result.returncode != 0:
