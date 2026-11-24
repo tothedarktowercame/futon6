@@ -77,3 +77,12 @@ def test_refuses_drawn_module_without_rows(tmp_path: Path) -> None:
     }), encoding="utf-8")
     with pytest.raises(ValueError, match="no render rows for drawn module"):
         build_kits(head, problems, sample, tmp_path / "out")
+
+
+def test_split_steps_gives_the_counted_sentences():
+    from futon6.reader_clear_kit import split_steps, step_count
+
+    proof = "Let \\(x = 1.5 \\). Hence \\(x > 1\\).\nDone"
+    steps = split_steps(proof)
+    assert steps == ["Let \\(x = 1.5 \\).", "Hence \\(x > 1\\).", "Done"]
+    assert step_count(proof) == len(steps)

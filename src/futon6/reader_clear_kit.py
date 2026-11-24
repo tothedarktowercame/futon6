@@ -55,9 +55,9 @@ def _braced(text: str, position: int) -> tuple[str, int]:
     raise ValueError("unclosed brace")
 
 
-def step_count(proof: str) -> int:
-    """Count the sentence boundaries described in the module docstring."""
-    count = 0
+def split_steps(proof: str) -> list[str]:
+    """Split a proof into the sentences described in the module docstring."""
+    steps: list[str] = []
     math_end: str | None = None
     last_boundary = 0
     index = 0
@@ -73,14 +73,19 @@ def step_count(proof: str) -> int:
             continue
         if math_end is None and proof[index] == "." and index + 1 < len(proof):
             if proof[index + 1] in " \n":
-                count += 1
+                steps.append(proof[last_boundary:index + 1].strip())
                 last_boundary = index + 2
                 index += 2
                 continue
         index += 1
     if proof[last_boundary:].strip():
-        count += 1
-    return count
+        steps.append(proof[last_boundary:].strip())
+    return steps
+
+
+def step_count(proof: str) -> int:
+    """Count the sentences returned by :func:`split_steps`."""
+    return len(split_steps(proof))
 
 
 def prepare_informal(text: str) -> tuple[str, bool]:
@@ -168,6 +173,16 @@ def build_kits(head_dir: Path, apm_problems: Path, sample_path: Path,
              "step_count": step_count(str(row.get("proof") or ""))}
             for row in rows
         ]
+        # One row per printed step, so that two readers give verdicts on the
+        # same units: id D<declaration number>.S<sentence number>.
+        with (kit_dir / "steps.jsonl").open("w", encoding="utf-8") as stream:
+            for number, row in enumerate(rows, 1):
+                proof = replace_leanrefs(str(row.get("proof") or ""))
+                for sentence, text in enumerate(split_steps(proof), 1):
+                    stream.write(json.dumps(
+                        {"step": f"D{number}.S{sentence}",
+                         "declaration": row.get("declaration", ""),
+                         "text": text}, ensure_ascii=False) + "\n")
         metadata = {
             "schema": SCHEMA,
             "head": head_dir.name,
