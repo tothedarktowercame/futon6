@@ -1,7 +1,8 @@
 # M-reader-clear — a reading gate on zero-residual-ink PaperPrinter records
 
 **Status:** DRAFT (2026-11-24, claude-12, at Joe's request). Nothing is dispatched.
-Awaiting claude-7's view on the sample and the routing, then Joe's go.
+claude-7's view (cleanup lab owner) is incorporated below. Awaiting Joe's go, and the
+lab's next accepted head.
 
 **Type:** mission (quality assurance). **Raised:** 2026-11-24 by Joe, after the InkUp
 pilot: "If we had a sample of prelim papers that had been marked 'clear' by claude-7,
@@ -26,20 +27,48 @@ pilot findings says the same.)
 justify step by step from the print alone, and for the steps they cannot, whose defect is
 it: the printer's, the Lean source's, the statement's, or the reader's?
 
+## The argument
+
+**IF:** a problem's PaperPrinter record is to be offered to a reader as an account of
+its proof,
+**HOWEVER:** the lab's ink measure marks only defect classes that have an extractor, so
+zero residual ink is a lower bound on defects and says nothing about steps that print
+well-formed text with the reason missing or wrong,
+**THEN:** have independent readers try to justify every printed step of a frozen sample
+of zero-ink problems, and route each failure by diagnosis,
+**BECAUSE:** in the pilot this reading found such steps in a zero-ink problem (a96J06, 13
+of 23 steps), and also found statement and Lean-source defects that no printer measure
+could.
+
 ## Population and sample
 
 At head `7db1eb81`: 468 problem modules, 8,778 records. 312 modules have no ink span in
-any declaration (counted from `residual-ink-annotations` and `residual-ink-overlay`; the
-count is to be confirmed by claude-7). All 312 have an `informal-solution.md` in apm-lean.
-Their median size is 5 declarations and about 1,100 printed proof words.
+any declaration (289 annotated records in 156 modules; confirmed by claude-7 from
+`residual-ink-annotations`). All 312 have an `informal-solution.md` in apm-lean. Their
+median size is 5 declarations and about 1,100 printed proof words. These figures will be
+recounted at the head the sample is drawn from.
+
+"Zero residual ink" means none of the known, measurable defect classes; it does not mean
+read clean. Sentences that assert without a reason are not inked (the lab measured 149
+such sentences the N1 extractor does not count), so readers should be expected to find
+them.
+
+- **Exclusion:** records with a non-empty `proof_error` have no ink because they have no
+  proof text. A module containing such a record is dropped before the draw.
 
 - **Sample:** 30 of the 312, drawn once with a recorded seed, stratified by subject letter
   and by printed length (thirds). a96J06 is excluded as already read.
-- **Frozen:** the sample list is committed before any reading. It is not used to tune
-  printer repairs, so that it can count toward the lab's readiness gate 6 (a discovery
-  pass not used to tune the repair).
-- **Head:** every record is read at one named accepted head. A later head means a new
-  reading, not an update.
+- **Frozen:** the sample list, seed and head sha are committed before any reading.
+- **Head:** the sample is drawn from the lab's next accepted head (the batch in trial on
+  2026-11-24 changes several hundred records, so `7db1eb81` would be partly stale).
+  Renders are read from the stored head directory, and every finding carries the head
+  sha. Heads will keep moving; a reading stays valid as a reading of its head, and the
+  lab can say afterwards which findings later heads removed.
+- **Gate 6:** this sample does not count toward the lab's readiness gate 6 (claude-7's
+  reading; the gate is claude-10's and Joe's). It is drawn before the last repair, from
+  zero-ink modules only, and its findings feed repairs. It is discovery evidence and a
+  rehearsal of the protocol. A qualifying pass would be the same protocol on a fresh
+  sample drawn after the final head, across all modules, reusing no problem from this one.
 
 ## Procedure per problem
 
@@ -76,7 +105,8 @@ informal proof skips or is loose; reader gap.
 Without these the rates cannot be interpreted.
 
 - **Planted defect.** In 5 further problems, one step of the print is removed or its
-  cited reason replaced by a wrong one, by a seat that is not a reader. Measures what
+  cited reason replaced by a wrong one, by a seat that is not a reader. The planting is
+  done in copies of the stored render text, never in a printer worktree. Measures what
   readers miss.
 - **Known-good.** 5 short records that claude-12 and claude-7 have both read and consider
   fully justified. Measures false alarms.
@@ -90,13 +120,25 @@ Without these the rates cannot be interpreted.
 
 | Diagnosis | Destination |
 |---|---|
-| printer drops content, printer wording | cleanup lab intake, as typed class entries with locus, in the form of `INTAKE-inkup-2026-11-24.md` |
+| printer drops content, printer wording | cleanup lab, as one TSV row per finding (below) |
 | statement unused or missing hypothesis, uncalled lemma | APM statement-repair pool, each with its compile experiment |
 | Lean proof choice that could be simplified | note to the problem's owner; no edit while a render batch is in trial |
 | informal proof skips or is loose | informal corpus errata list |
 | reader gap | recorded, no action |
 
+**Findings table for the lab** (claude-7's form, for an expected 300 to 600 findings):
+one TSV row per finding with head sha, module, declaration, the quoted printed line or
+step ordinal, the reader verdict, the diagnosis type (printer, Lean proof, statement,
+reader error), a proposed class (an existing id from the lab's `classes.tsv` or
+`NEW:<short name>`), and one sentence of evidence; plus a per-class count table. Both are
+delivered in the storage area under `futon6/inkup/`. Nothing is written into the lab's
+directory; the lab writes its own intake note and class rows from the table.
+
 This mission changes no printer code and no Lean source. It reads and routes.
+
+**Wording in reports.** "Justified" is a reading result, not a correctness claim. Until
+the lab's gates hold, reports keep its line: rendering works; informalisation validation
+is in progress.
 
 ## Cost
 
@@ -105,6 +147,11 @@ in the pilot. 40 problems with controls is about 200 jobs. Dispatch at most thre
 seats at once and stagger Codex seats by 30 seconds; at that rate the sample takes several
 days of background running. A first tranche of 10 problems (50 jobs) is reviewed before the
 rest is released.
+
+**Seats and machine.** Reader and answering seats are not drawn from those the lab is
+using (on 2026-11-24: codex-2, 12, 13, 15, 21, 26, kimi-1, zai-6; check again at
+dispatch). Reading stored renders costs nothing; an answering seat that builds Lean runs
+one `nice` process at a time while the lab's census is running.
 
 ## Exit
 
@@ -122,9 +169,8 @@ that still carry residual ink; reading at more than one head.
 
 ## Open points
 
-1. The zero-ink count (312) and the definition of "no ink in any declaration" are mine,
-   from the head's annotation files. claude-7 to confirm or correct.
-2. Whether the lab wants the sample drawn from the accepted head or from the head after
-   its current batch is accepted.
-3. A reader who has the informal proof never asks why the proof takes its main approach.
+1. The lab's next accepted head: claude-7 will bell claude-12 when it is accepted. The
+   draw waits for that.
+2. A reader who has the informal proof never asks why the proof takes its main approach.
    A statement-only reading would cover that; it is not part of this mission.
+3. Whether a gate-6 pass by this protocol is wanted later is for Joe and claude-10.
