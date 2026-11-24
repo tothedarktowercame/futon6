@@ -86,3 +86,13 @@ def test_split_steps_gives_the_counted_sentences():
     steps = split_steps(proof)
     assert steps == ["Let \\(x = 1.5 \\).", "Hence \\(x > 1\\).", "Done"]
     assert step_count(proof) == len(steps)
+
+
+def test_informal_lean_block_is_omitted():
+    from futon6.reader_clear_kit import prepare_informal
+    text = "Intro.\n\n```lean4\ntheorem t : Icc a b = s := by\n  simp\n```\n\nProof prose.\n\n```\nplain block\n```\n"
+    out, cut = prepare_informal(text)
+    assert "theorem t" not in out and "Icc" not in out
+    assert "[Lean code block omitted from the reading kit]" in out
+    assert "Proof prose." in out and "plain block" in out
+    assert cut is False

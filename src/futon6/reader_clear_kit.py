@@ -88,6 +88,27 @@ def step_count(proof: str) -> int:
     return len(split_steps(proof))
 
 
+def _drop_lean_blocks(lines: list[str]) -> list[str]:
+    """Replace fenced ``lean`` code blocks with a one-line marker.
+
+    Readers are not to see Lean; some informal solutions embed a (possibly
+    stale) Lean statement of the theorem.
+    """
+    out: list[str] = []
+    inside = False
+    for line in lines:
+        stripped = line.strip()
+        if not inside and stripped.lower().startswith("```lean"):
+            inside = True
+            out.append("[Lean code block omitted from the reading kit]\n")
+        elif inside:
+            if stripped.startswith("```"):
+                inside = False
+        else:
+            out.append(line)
+    return out
+
+
 def prepare_informal(text: str) -> tuple[str, bool]:
     """Drop leading HTML comments and content beginning at a Stage 3 heading."""
     lines = text.splitlines(keepends=True)
@@ -96,6 +117,7 @@ def prepare_informal(text: str) -> tuple[str, bool]:
             line = lines.pop(0)
             if "-->" in line:
                 break
+    lines = _drop_lean_blocks(lines)
     for index, line in enumerate(lines):
         heading = line.lstrip("#* ").lower()
         if heading.startswith("stage 3"):
