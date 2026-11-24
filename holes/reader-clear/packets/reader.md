@@ -9,8 +9,9 @@ TASK. For every row of steps.jsonl, decide whether you can justify that printed 
 WRITE in {DIR}:
 
 1. steps.{READER}.jsonl, one row per row of steps.jsonl, same order:
-   {"id": "<step id>", "verdict": "justified" | "not-justified" | "setup", "note": "<at most one sentence, optional>"}
+   {"id": "<step id>", "verdict": "justified" | "wrong-as-printed" | "not-justified" | "setup", "note": "<at most one sentence, optional>"}
    Use "setup" only for sentences that introduce variables or hypotheses and assert nothing.
+   Use "wrong-as-printed" when the step's conclusion holds and you can supply the argument, but the print gets it wrong: the printed reason is not the reason, a line the argument needs is absent, or a formula is misprinted. A note saying what is wrong is then required; no question row is needed.
 
 2. questions.{READER}.jsonl, one row for each step marked not-justified (several adjacent steps with one cause may share a row; list them):
    {"id": "Q<n>", "steps": ["<step id>", ...], "locus_P": "<a passage copied exactly from version-P.paperprinter.md, at least 12 characters>", "locus_I": "<the corresponding passage copied exactly from version-I.informal.md, or empty>", "kind": "why-true" | "what-needed" | "what-if" | "mismatch" | "unclear-wording", "contrast": "I-explains-P-silent" | "P-explicit-I-skips" | "both-silent" | "both-clear-but-different" | "not-applicable", "question": "<the question>", "my_guess": "<your best guess at the answer>", "would_settle": "<what kind of answer would settle it>"}
@@ -25,4 +26,4 @@ READ EVERY STEP YOURSELF. Do not generate verdicts, notes or questions with a sc
 CHECK before replying, and fix what it reports:
   python3 futon6/scripts/reader-clear-check-loci.py --print {DIR}/version-P.paperprinter.md --informal {DIR}/version-I.informal.md {DIR}/questions.{READER}.jsonl
 
-REPLY with: counts of justified / not-justified / setup, number of questions by kind, the checker's summary line, and nothing from outside the four files.
+REPLY with: counts of justified / wrong-as-printed / not-justified / setup, number of questions by kind, the checker's summary line, and nothing from outside the four files.

@@ -5,8 +5,9 @@ relatively fresh, probably good to use a mix of those two agent classes"). Sampl
 2026-11-24 at head `b38755b7`, seed 20261124: 332 eligible zero-ink problems of 468, 30
 sampled and 5 for planted controls (`holes/reader-clear/sample.head-b38755b7.json`,
 release order in `release.head-b38755b7.json`). Tranche 1 (10 problems) was read, answered
-and restated on 2026-11-24: none is reader-clear (review below). Next: the two control
-sets, then the remaining 20.
+and restated on 2026-11-24: none is reader-clear (review below). Both control sets were
+read on 2026-11-24 (controls review below). Next: the remaining 20, with the reader packet
+changed as that review records.
 
 **Type:** mission (quality assurance). **Raised:** 2026-11-24 by Joe, after the InkUp
 pilot: "If we had a sample of prelim papers that had been marked 'clear' by claude-7,
@@ -220,6 +221,62 @@ What the tranche showed about the protocol:
 
 **Decision.** The controls are run before the remaining 20 problems, since the tranche
 result (0 of 10, no reader gaps) is the kind the controls exist to interpret.
+
+## Controls review (2026-11-24, claude-12)
+
+Kits in storage under `reader-clear/head-b38755b7/kits-c/` (a neutral name; readers were
+not told these were controls); planting record in `ledger/planted.jsonl` beside it. Each
+record was read by one Codex and one Zai seat. A defect counts as *caught* only when the
+step is marked not-justified and a question on it names the defect.
+
+**Known-good (five records supplied by claude-7, read and accepted by claude-12; not
+checked against Lean).** a92J05, m93J03, m03J05 D99, a96A04, m98A06: every step justified
+in all 10 readings. No false alarms. These were single-declaration excerpts; the first
+three kits did not say so and each reader asked where the main proof was. Those questions
+are not counted.
+
+**Defects (9 records, 18 readings).**
+
+| record | defect | Codex reader | Zai reader |
+|---|---|---|---|
+| m03J05 D121 | natural: wrong reason ("algebra" for a substitution) | passed | passed, wrong label noted |
+| m96A02 D9 | natural: wrong reason ("by adding to both sides") | passed | passed, wrong label noted |
+| b01J01 D8.S5 | planted: wrong reason | passed | passed |
+| a96J07 D2.S9 | planted: wrong reason | passed | passed, wrong label noted |
+| m02J04 D16.S4 | planted: wrong reason | passed | passed, wrong label noted |
+| t96A08 D19 | natural: calculation stops one line early | marked, other question asked | caught |
+| t94J08 D10 | planted: one-line consequence removed | passed | passed, gap noted |
+| t02A02 D10 | planted: equality removed that later lines cite | caught | caught |
+| (same kits) | steps marked outside the altered declaration | 55 | 36 |
+
+- **Wrong reason on a true line:** caught in 0 of 10 readings; mentioned in a step note in
+  4 (all Zai).
+- **Missing line or step:** caught in 3 of 6 readings; marked for another reason in 1;
+  noted and passed in 1; passed in 1.
+- The three wrong-reason plants by codex-3 only changed a lemma number, which the
+  lemma-numbering defect makes undetectable; claude-12 replaced them with named wrong
+  reasons. Both versions are in the planting record.
+
+**Reading of the result.** A reader marks a step when they cannot reconstruct why it
+holds. A step whose printed reason is wrong, or which lacks a line the reader can supply,
+is passed; the reader packet told them to ("justified if you can supply the reason").
+Zai seats often record the flaw in the note; Codex seats usually do not. So tranche 1's
+16% counts steps readers could not follow, and does not count print defects that a
+competent reader repairs silently. "Reader-clear" by this protocol means followable, not
+correctly printed.
+
+**Change for the remaining 20.** The reader packet gains a verdict `wrong-as-printed`
+(conclusion holds and the reader can supply the argument, but the printed reason is not
+the reason, a needed line is absent, or a formula is misprinted), with a required note and
+no question row. A line with no printed reason that the reader can supply stays
+`justified`, as in tranche 1, so the not-justified rates remain comparable; the new
+verdict is reported as a separate rate. It was not tested on the controls.
+
+**Other observations.** codex-19 returned the 663-step m02J04 in under three minutes by
+the job record, with no note on any justified row; its three marks are correct. Its
+justified verdicts on that kit are weak evidence. Findings from control readings (a power
+printed with base and exponent swapped in m02J04; statement and informal items) are in
+storage, `inkup/reader-clear/notes-beyond-printer.head-b38755b7.md`.
 
 ## Not in scope
 
