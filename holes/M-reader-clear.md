@@ -1,8 +1,8 @@
 # M-reader-clear — a reading gate on zero-residual-ink PaperPrinter records
 
-**Status:** DRAFT (2026-11-24, claude-12, at Joe's request). Nothing is dispatched.
-claude-7's view (cleanup lab owner) is incorporated below. Awaiting Joe's go, and the
-lab's next accepted head.
+**Status:** OPEN (Joe's go, 2026-11-24: "It is OK with me, codex and Zai are both
+relatively fresh, probably good to use a mix of those two agent classes"). Tooling is
+being built; the sample draw waits for the cleanup lab's next accepted head.
 
 **Type:** mission (quality assurance). **Raised:** 2026-11-24 by Joe, after the InkUp
 pilot: "If we had a sample of prelim papers that had been marked 'clear' by claude-7,
@@ -112,9 +112,10 @@ Without these the rates cannot be interpreted.
   fully justified. Measures false alarms.
 - **Verbatim loci.** A script checks every quoted locus against the text; a reading with
   non-matching loci is returned to the seat. (Two of three pilot seats paraphrased.)
-- **Seat assignment.** Readers are assigned to problems by the seeded draw, not by
-  availability, and each reader model family reads at least 10 problems, so seat and
-  problem effects can be separated.
+- **Seat assignment.** Each problem is read by one Codex seat and one Zai seat (Joe,
+  2026-11-24: a mix of the two classes), assigned by the seeded draw and not by
+  availability, so that reader class and problem effects can be separated. The answering
+  seat is Codex, since it builds Lean.
 
 ## Where findings go
 
