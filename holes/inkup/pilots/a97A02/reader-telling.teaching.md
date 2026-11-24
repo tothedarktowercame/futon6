@@ -37,7 +37,7 @@ are disjoint; the \( L^{q} \) bookkeeping degenerates at \( q=\infty \); and
 \( p=1 \) needs a separate fallback through absolute continuity. The better
 object is the primitive
 \[ F(b) = \int_{(-\infty,b]} f , \]
-a fixed function of one endpoint that chases nothing. Continuity of \( f_h \)
+one function of one endpoint, with no moving window. Continuity of \( f_h \)
 from \( f \in L^{p} \) then comes in two stages: first \( f \) is integrable,
 as in B2, and second the primitive lemma applies because the restricted
 Lebesgue measure has no atoms, so \( b \mapsto \int_{(-\infty,b]} f \) is
@@ -46,8 +46,8 @@ continuous, and \( t \mapsto F(t\pm h) \) is continuous on \( [0,1] \).
 **[B5]** The interval identity
 \[ \int_{[t-h,t+h]} f = F(t+h) - F(t-h) \]
 turns the moving numerator into a difference of two continuous functions of
-\( t \), and dividing by the constant \( 2h \) preserves continuity. This
-identity is the only continuity input the average needs.
+\( t \), and dividing by the constant \( 2h \) preserves continuity. With
+\( F \) continuous, nothing more is needed here.
 
 **[B6]** For the bound, apply Hölder on the window \( E = [t-h,t+h] \):
 \[ \int_{E} \lvert f\rvert \le \lVert f\rVert_{p}\, \mu(E)^{1-1/p}
