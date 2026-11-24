@@ -443,11 +443,11 @@ None of the edits has been read by a second reader.
 | B1 | a98J01 | Assumes `Measurable f` (Borel) for f : ℝ → ℝ; the problem is Lusin's theorem for Lebesgue measurable f on [a,b]. Header says "Statement repairs: None". | Restate for Lebesgue measurable f on [a,b] and prove it; at the least, list the difference in the header. | open |
 | B2 | t96A08 | Assumes piecewise-smooth reachability of every point (`hreachable`) where the problem has a connected manifold; the codomain is changed from M to ℝ. Neither is in the header. | Derive reachability from connectedness; document the codomain repair. | open |
 | B3 | t91J05 | Main theorem assumes `[ConnectedSpace X]`; the problem's finite covers may be disconnected. Removing the instance fails to compile. | Prove the disconnected case or list the restriction as a repair. | open |
-| B4 | m03J05 | `g 0 = 0` is unused; `Monotone G` is unused in the same conjunct; a nonincreasing G is not covered. | Drop the unused hypotheses (a copy without `g 0 = 0` compiles); decide the reading of "monotone" and say so in the header. | open |
-| B5 | b93A04 | States the join of the two fixing subgroups; the problem writes the product set H₁H₂. The header says so. | Add the 19-line set-equality lemma via `Subgroup.mul_normal` (compiles in a scratch copy). | open |
+| B4 | m03J05 | `g 0 = 0` is unused; `Monotone G` is unused in the same conjunct; a nonincreasing G is not covered. | Drop the unused hypotheses (a copy without `g 0 = 0` compiles); decide the reading of "monotone" and say so in the header. | fixed `0f9365a92d` 2026-11-24 |
+| B5 | b93A04 | States the join of the two fixing subgroups; the problem writes the product set H₁H₂. The header says so. | Add the 19-line set-equality lemma via `Subgroup.mul_normal` (compiles in a scratch copy). | fixed `03c0b5f982` 2026-11-24 |
 | B6 | m03J02 | Imposes the equation at every real t; the problem poses it for t > 0. The file comment gives a reason. | Not judged; read and decide. | open |
-| B7 | a97A02 | t ∈ [0,1] is unused in the estimate. | Drop it (a generalised copy compiles). | open |
-| B8 | aunk05 | The hypothesis that Ω is connected is bound and unused. | Drop it (a copy without it compiles). | open |
+| B7 | a97A02 | t ∈ [0,1] is unused in the estimate. | Drop it (a generalised copy compiles). | fixed `bc3b69d043` 2026-11-24 |
+| B8 | aunk05 | The hypothesis that Ω is connected is bound and unused. | Drop it (a copy without it compiles). | fixed `e53f57413f` 2026-11-24 |
 
 ### C. Lean proofs that do not carry out what the problem asks
 
@@ -470,10 +470,33 @@ grading question, not decided here.
 
 | Id | Problem | Declaration | Status |
 |---|---|---|---|
-| D1 | t91J05 | Declaration 19 (Euler-characteristic lemma) is cited by nothing. | open |
-| D2 | a98J02 | Declaration 6; deleting it compiles. | open |
-| D3 | aunk04 | `apm_aunk04_rouche_bound`; the file still imports `ConstructionTargets.Rouche`. | open |
-| D4 | m99J02 | `Continuous q` is used only for integrability. | open |
+| D1 | t91J05 | Declaration 19 (Euler-characteristic lemma) is cited by nothing. | fixed `bb9c97b4b3` 2026-11-24 |
+| D2 | a98J02 | Declaration 6; deleting it compiles. | fixed `c78d5ff309` 2026-11-24 |
+| D3 | aunk04 | `apm_aunk04_rouche_bound`; the file still imports `ConstructionTargets.Rouche`. | fixed `5e194e6b1f` 2026-11-24 |
+| D4 | m99J02 | `Continuous q` is used only for integrability. | no edit: the hypothesis is used |
+
+### Lean edits made on apm-lean master (2026-11-24)
+
+Seven `Main.lean` files were edited, each compiled once afterwards
+(`lake env lean` on the file, exit 0, no `sorry` warning). claude-7 cleared all seven
+beforehand: its renders, census and accepted head `ee47b461` read a pinned worktree and a
+fixed library dump, so these edits appear in the paper-proof pages only when it rebuilds
+both from master, which it will do as a separate step with its own census. It asked for
+this list so that it can attribute the changes then.
+
+| Problem | apm-lean commit | Change | Effect on the print at rebuild |
+|---|---|---|---|
+| m03J05 | `0f9365a92d` | `g 0 = 0` and `Monotone G` removed from the differentiability clause of `apm_m03J05_bridge_2` and `apm_m03j05`; header notes it | statement changes |
+| b93A04 | `03c0b5f982` | new theorem `apm_b93A04_fixingSubgroup_inf_carrier_eq_mul` appended; nothing existing changed | one more declaration |
+| a97A02 | `bc3b69d043` | estimate stated for every real t | statement changes |
+| aunk05 | `e53f57413f` | `IsConnected Ω` removed | statement changes |
+| t91J05 | `bb9c97b4b3` | `apm_t91J05_eulerCharacteristic_odd_genus` deleted (also noted in `proof-outline.md`) | later "Lemma n" numbers shift |
+| a98J02 | `c78d5ff309` | `apm_a98J02_tendsto_integral_deriv_sq_symmetric` deleted | later "Lemma n" numbers shift |
+| aunk04 | `5e194e6b1f` | `apm_aunk04_rouche_bound` and the `ConstructionTargets.Rouche` import deleted | one declaration fewer |
+
+In m03J05 the removal of `Monotone G` goes beyond the scratch experiment, which removed
+only `g 0 = 0`; the edited file compiles. D4 (m99J02) needs no edit: `Continuous q` is
+used, for integrability. None of the changed statements has been regraded.
 
 ### E. Unproved, though the record shows zero residual ink
 
@@ -500,6 +523,7 @@ that still carry residual ink; reading at more than one head.
 2. A reader who has the informal proof never asks why the proof takes its main approach.
    A statement-only reading would cover that; it is not part of this mission.
 3. Whether a gate-6 pass by this protocol is wanted later is for Joe and claude-10.
-4. The errata register above: group A (11 informal) edited 2026-11-24, A11 in part;
-   23 rows open (8 statements, 8 Lean proofs, 4 unused declarations, 3 unproved).
-   claude-7 asks to be told before any `Main.lean` is edited.
+4. The errata register above: group A and the small Lean edits (B4, B5, B7, B8, D1-D3)
+   were made on 2026-11-24. Open: B1, B2, B3, B6 (new Lean work), group C (8 rows, waits
+   on whether citing the theorem asked for counts), group E (3 unproved). A11 is fixed in
+   part. claude-7 asks to be told before any further `Main.lean` is edited.
