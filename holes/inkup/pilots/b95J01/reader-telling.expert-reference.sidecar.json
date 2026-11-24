@@ -1,0 +1,114 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "b95J01",
+  "realizations": "holes/inkup/pilots/b95J01/reader-telling.expert-reference.md",
+  "content_plan": "holes/inkup/pilots/b95J01/content-plan.json",
+  "ink": "holes/inkup/pilots/b95J01/generative-ink.tsv",
+  "note": "b95J01 expert-reference sidecar; ink budgets derived from the mandatory nodes and the anticipated questions.",
+  "profiles": {
+    "expert-reference": {
+      "nodes": [
+        {
+          "node": "b95J01:B0",
+          "status": "absent",
+          "ink_words": 0,
+          "ink_percent": 0.0,
+          "planned_percent": 0.0,
+          "planned_action": "omit"
+        },
+        {
+          "node": "b95J01:B1",
+          "status": "realized",
+          "ink_words": 35,
+          "ink_percent": 23.3,
+          "planned_percent": 22.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "b95J01:B2",
+          "status": "absent",
+          "ink_words": 0,
+          "ink_percent": 0.0,
+          "planned_percent": 0.0,
+          "planned_action": "omit"
+        },
+        {
+          "node": "b95J01:B3",
+          "status": "realized",
+          "ink_words": 16,
+          "ink_percent": 10.7,
+          "planned_percent": 11.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B4",
+          "status": "realized",
+          "ink_words": 14,
+          "ink_percent": 9.3,
+          "planned_percent": 11.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B5",
+          "status": "realized",
+          "ink_words": 17,
+          "ink_percent": 11.3,
+          "planned_percent": 11.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B6",
+          "status": "realized",
+          "ink_words": 18,
+          "ink_percent": 12.0,
+          "planned_percent": 11.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B7",
+          "status": "realized",
+          "ink_words": 13,
+          "ink_percent": 8.7,
+          "planned_percent": 11.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B8",
+          "status": "realized",
+          "ink_words": 16,
+          "ink_percent": 10.7,
+          "planned_percent": 11.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B9",
+          "status": "realized",
+          "ink_words": 21,
+          "ink_percent": 14.0,
+          "planned_percent": 12.0,
+          "planned_action": "show"
+        }
+      ],
+      "questions": [
+        {
+          "question": "why-the-set-T",
+          "status": "answered",
+          "node": "b95J01:B1",
+          "quote": "this packaging, rather than a least positive\nexponent plus the division algorithm, is what makes the divisibility for all\nintegers fall out at once.",
+          "ink_words": 24,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-why-T.json",
+              "edge": {
+                "from": "minimal-k-bookkeeping",
+                "relation": "resolved-by",
+                "to": "package-as-T"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}

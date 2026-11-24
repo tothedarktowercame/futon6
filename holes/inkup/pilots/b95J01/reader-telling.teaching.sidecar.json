@@ -1,0 +1,190 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "b95J01",
+  "realizations": "holes/inkup/pilots/b95J01/reader-telling.teaching.md",
+  "content_plan": "holes/inkup/pilots/b95J01/content-plan.json",
+  "ink": "holes/inkup/pilots/b95J01/generative-ink.tsv",
+  "note": "b95J01 teaching sidecar; ink budgets derived from the mandatory nodes and the anticipated questions.",
+  "profiles": {
+    "teaching": {
+      "nodes": [
+        {
+          "node": "b95J01:B0",
+          "status": "realized",
+          "ink_words": 59,
+          "ink_percent": 10.4,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B1",
+          "status": "realized",
+          "ink_words": 96,
+          "ink_percent": 16.8,
+          "planned_percent": 13.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "b95J01:B2",
+          "status": "realized",
+          "ink_words": 92,
+          "ink_percent": 16.1,
+          "planned_percent": 20.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "b95J01:B3",
+          "status": "realized",
+          "ink_words": 27,
+          "ink_percent": 4.7,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B4",
+          "status": "realized",
+          "ink_words": 27,
+          "ink_percent": 4.7,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B5",
+          "status": "realized",
+          "ink_words": 38,
+          "ink_percent": 6.7,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B6",
+          "status": "realized",
+          "ink_words": 95,
+          "ink_percent": 16.7,
+          "planned_percent": 13.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "b95J01:B7",
+          "status": "realized",
+          "ink_words": 18,
+          "ink_percent": 3.2,
+          "planned_percent": 6.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B8",
+          "status": "realized",
+          "ink_words": 36,
+          "ink_percent": 6.3,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B9",
+          "status": "realized",
+          "ink_words": 82,
+          "ink_percent": 14.4,
+          "planned_percent": 13.0,
+          "planned_action": "expand"
+        }
+      ],
+      "questions": [
+        {
+          "question": "finite-index-is-the-only-source",
+          "status": "answered",
+          "node": "b95J01:B2",
+          "quote": "Next, \\(T\\) must contain something positive, and this is the only\nplace finite index enters part (a). Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{a}H=g^{b}H\\) with\n\\(0\\le a<b\\le n\\). Then \\(g^{b-a}H=H\\), that is \\(g^{b-a}\\in H\\) with\n\\(b-a>0\\), a pigeonhole pairing worth being able to reproduce. Without finite\nindex nothing of the sort needs to happen: \\(g\\) of infinite order with \\(H\\)\ntrivial has no positive exponent in \\(H\\) at all, so the least \\(k\\) would\nnot exist.",
+          "ink_words": 92,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-finite-index-role.json",
+              "edge": {
+                "from": "exponent-warrant",
+                "relation": "requires",
+                "to": "finite-index"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/b95J01-finite-index-role.json",
+              "edge": {
+                "from": "exponent-warrant",
+                "relation": "requires",
+                "to": "cosets-finite"
+              }
+            }
+          ]
+        },
+        {
+          "question": "positive-exponent-origin",
+          "status": "answered",
+          "node": "b95J01:B2",
+          "quote": "Write \\(n=[G:H]\\) and list the \\(n+1\\)\ncosets \\(H=g^{0}H,g^{1}H,\\dots,g^{n}H\\). There are only \\(n\\) cosets in all,\nso two of the listed ones coincide: \\(g^{a}H=g^{b}H\\) with\n\\(0\\le a<b\\le n\\). Then \\(g^{b-a}H=H\\), that is \\(g^{b-a}\\in H\\) with\n\\(b-a>0\\), a pigeonhole pairing worth being able to reproduce.",
+          "ink_words": 43,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-pigeonhole.json",
+              "edge": {
+                "from": "pigeonhole-warrant",
+                "relation": "warrants",
+                "to": "exponent-found"
+              }
+            }
+          ]
+        },
+        {
+          "question": "normality-to-divisibility",
+          "status": "answered",
+          "node": "b95J01:B6",
+          "quote": "The cosets then form the quotient\ngroup \\(G/H\\), of order \\([G:H]\\), and this upgrade is the hinge of part\n(b). The coset \\(gH\\) has order exactly \\(k\\): its powers are\n\\(g^{j}H\\), and \\(g^{j}H=H\\) precisely when \\(g^{j}\\in H\\), which by part\n(a) happens exactly at multiples of \\(k\\). You can see the conclusion\neither as Lagrange — the order of an element divides the order of the finite\ngroup — or concretely: in a group of order \\([G:H]\\), every element's\n\\([G:H]\\)-th power is the identity, so \\(g^{[G:H]}H=H\\), that is\n\\(g^{[G:H]}\\in H\\).",
+          "ink_words": 90,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-lagrange.json",
+              "edge": {
+                "from": "quotient-warrant",
+                "relation": "warrants",
+                "to": "k-divides-index"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-the-set-T",
+          "status": "answered",
+          "node": "b95J01:B1",
+          "quote": "The structural idea is to package the exponents as one set:\n\\(T=\\{m\\in\\mathbb{Z}: g^{m}\\in H\\}\\). You could instead take a least positive\nexponent by well-ordering and then run the division algorithm to see every\nother exponent is a multiple of it, handling negative exponents separately;\nthat works, but \\(T\\) does all of it at once. The map \\(m\\mapsto g^{m}\\) is a\nhomomorphism \\(\\mathbb{Z}\\to G\\), and \\(T\\) is the preimage of \\(H\\) under\nit, so \\(T\\) is a subgroup of \\(\\mathbb{Z}\\): one statement about \\(T\\)\ndelivers the least positive element and divisibility for all integers,\nnegative ones included.",
+          "ink_words": 96,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-why-T.json",
+              "edge": {
+                "from": "minimal-k-bookkeeping",
+                "relation": "resolved-by",
+                "to": "package-as-T"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-not-a-three-cycle",
+          "status": "answered",
+          "node": "b95J01:B9",
+          "quote": "Note why the first reflex, a \\(3\\)-cycle, would not\nhave worked: for a \\(3\\)-cycle the least positive exponent is \\(1\\) or\n\\(3\\), and both divide the index \\(3\\), so it satisfies the conclusion and\nrefutes nothing.",
+          "ink_words": 36,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-why-involution.json",
+              "edge": {
+                "from": "order-divides-warrant",
+                "relation": "warrants",
+                "to": "three-cycle-divides"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}

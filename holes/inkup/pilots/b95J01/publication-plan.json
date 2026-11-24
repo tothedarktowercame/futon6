@@ -1,0 +1,139 @@
+{
+ "schema": "inkup.publication-plan/v0",
+ "problem": "b95J01",
+ "profile": "publication",
+ "heading": "Publication",
+ "content_plan": "holes/inkup/pilots/b95J01/content-plan.json",
+ "source_telling": "holes/inkup/pilots/b95J01/reader-telling.teaching.md",
+ "calibration": {
+  "inherited_from": "holes/inkup/pilots/a97A02/publication-plan.json",
+  "note": "Same inherited rhgrh100 calibration; no new measurement was made for this problem. The rules are restated for a three-part problem: two divisibility conclusions from one subgroup construction, and one explicit counterexample.",
+  "length_basis_rhgrh100": {
+   "run": "mark7rhgrh100-20260928 (100 RH/GRH-adjacent papers; 7,337 usable proofs)",
+   "table": "storage:futon6/inkup/professional/rhgrh100/summary.json, built by scripts/inkup-run-proofs.py",
+   "word_quantiles_10_25_50_75_90": [
+    25,
+    69,
+    156,
+    309,
+    564
+   ],
+   "share_of_proofs_at_or_under_target_120": 0.413,
+   "share_at_or_under_max_168": 0.53
+  }
+ },
+ "rules": [
+  {
+   "id": "PR1",
+   "rule": "No sentence may be commentary only. A reason for a step may appear only as a clause of the sentence that takes the step.",
+   "from": "inflight_commentary"
+  },
+  {
+   "id": "PR2",
+   "rule": "No restatement of the claim before the derivation; the proof opens with its first step, and the statement is carried by the closing sentence.",
+   "from": "section_lead"
+  },
+  {
+   "id": "PR3",
+   "rule": "The subgroup-of-Z fact and Lagrange are invoked in one sentence each that says what they consume and what they return; the pigeonhole pairing is a clause of the sentence that uses it.",
+   "from": "lemma_application, side_condition"
+  },
+  {
+   "id": "PR4",
+   "rule": "At most 168 words; aim for 120 or fewer.",
+   "from": "proof_length_words"
+  },
+  {
+   "id": "PR5",
+   "rule": "Every mandatory node of the content plan is realized or merged with an honest quote; every dependency between nodes in the alignment is still visible in the prose.",
+   "from": "programme gate for P3 and P4"
+  }
+ ],
+ "target_words": 120,
+ "max_words": 168,
+ "nodes": [
+  {
+   "node": "b95J01:B0",
+   "action": "compress",
+   "budget_percent": 7,
+   "reason": "The closing sentence states the three conclusions (PR2)."
+  },
+  {
+   "node": "b95J01:B1",
+   "action": "compress",
+   "budget_percent": 11,
+   "reason": "The set T with its preimage reading, as the opening step."
+  },
+  {
+   "node": "b95J01:B2",
+   "action": "show",
+   "budget_percent": 12,
+   "reason": "The pigeonhole clause and the positive exponent."
+  },
+  {
+   "node": "b95J01:B3",
+   "action": "compress",
+   "budget_percent": 9,
+   "reason": "T = aZ in one sentence."
+  },
+  {
+   "node": "b95J01:B4",
+   "action": "show",
+   "budget_percent": 11,
+   "reason": "The membership criterion."
+  },
+  {
+   "node": "b95J01:B5",
+   "action": "compress",
+   "budget_percent": 9,
+   "reason": "Part (a) in one sentence."
+  },
+  {
+   "node": "b95J01:B6",
+   "action": "show",
+   "budget_percent": 12,
+   "reason": "One sentence of quotient group and Lagrange (PR3)."
+  },
+  {
+   "node": "b95J01:B7",
+   "action": "compress",
+   "budget_percent": 7,
+   "reason": "The criterion applied at the index."
+  },
+  {
+   "node": "b95J01:B8",
+   "action": "show",
+   "budget_percent": 11,
+   "reason": "The counterexample subgroup and its non-normality."
+  },
+  {
+   "node": "b95J01:B9",
+   "action": "show",
+   "budget_percent": 11,
+   "reason": "The counterexample element and the failing divisibility."
+  }
+ ],
+ "questions": {
+  "finite-index-is-the-only-source": {
+   "action": "omit",
+   "reason": "A paper uses the finite-index hypothesis where it is needed and does not discuss what fails without it."
+  },
+  "positive-exponent-origin": {
+   "action": "anticipate",
+   "reason": "The pigeonhole pairing is written out as the clause that produces the positive exponent (PR3)."
+  },
+  "normality-to-divisibility": {
+   "action": "anticipate",
+   "reason": "The quotient sentence names the order of the coset and Lagrange, which is this question's answer (PR3)."
+  },
+  "why-the-set-T": {
+   "action": "anticipate",
+   "reason": "The opening sentence names T as the preimage under the powers homomorphism, the packaging the question asks about."
+  },
+  "why-not-a-three-cycle": {
+   "action": "omit",
+   "reason": "A paper gives the working counterexample and does not discuss candidates that would not have worked."
+  }
+ },
+ "note": "As on a97A02, the plan's predicted_words note says the publication lane answers none of the dialogue questions; the prose answers three in passing as clauses, and those are recorded here as anticipate. The contrast questions (finiteness as the only source; why not a 3-cycle) are omitted as commentary on roads not taken."
+}

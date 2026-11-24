@@ -1,0 +1,148 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "b95J01",
+  "realizations": "holes/inkup/pilots/b95J01/publication-telling.md",
+  "content_plan": "holes/inkup/pilots/b95J01/content-plan.json",
+  "ink": "holes/inkup/pilots/b95J01/generative-ink.tsv",
+  "note": "b95J01 publication sidecar; ink budgets derived from the mandatory nodes and the anticipated questions.",
+  "profiles": {
+    "publication": {
+      "nodes": [
+        {
+          "node": "b95J01:B0",
+          "status": "realized",
+          "ink_words": 19,
+          "ink_percent": 11.8,
+          "planned_percent": 7.0,
+          "planned_action": "compress"
+        },
+        {
+          "node": "b95J01:B1",
+          "status": "realized",
+          "ink_words": 11,
+          "ink_percent": 6.8,
+          "planned_percent": 11.0,
+          "planned_action": "compress"
+        },
+        {
+          "node": "b95J01:B2",
+          "status": "realized",
+          "ink_words": 20,
+          "ink_percent": 12.4,
+          "planned_percent": 12.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B3",
+          "status": "realized",
+          "ink_words": 12,
+          "ink_percent": 7.5,
+          "planned_percent": 9.0,
+          "planned_action": "compress"
+        },
+        {
+          "node": "b95J01:B4",
+          "status": "realized",
+          "ink_words": 16,
+          "ink_percent": 9.9,
+          "planned_percent": 11.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B5",
+          "status": "realized",
+          "ink_words": 17,
+          "ink_percent": 10.6,
+          "planned_percent": 9.0,
+          "planned_action": "compress"
+        },
+        {
+          "node": "b95J01:B6",
+          "status": "realized",
+          "ink_words": 20,
+          "ink_percent": 12.4,
+          "planned_percent": 12.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B7",
+          "status": "realized",
+          "ink_words": 7,
+          "ink_percent": 4.3,
+          "planned_percent": 7.0,
+          "planned_action": "compress"
+        },
+        {
+          "node": "b95J01:B8",
+          "status": "realized",
+          "ink_words": 21,
+          "ink_percent": 13.0,
+          "planned_percent": 11.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B9",
+          "status": "realized",
+          "ink_words": 18,
+          "ink_percent": 11.2,
+          "planned_percent": 11.0,
+          "planned_action": "show"
+        }
+      ],
+      "questions": [
+        {
+          "question": "positive-exponent-origin",
+          "status": "answered",
+          "node": "b95J01:B2",
+          "quote": "Since \\(H\\) has finite index \\(n\\), two of the cosets\n\\(H,gH,\\dots,g^{n}H\\) coincide, so \\(g^{b-a}\\in H\\) for some\n\\(0\\le a<b\\le n\\).",
+          "ink_words": 20,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-pigeonhole.json",
+              "edge": {
+                "from": "pigeonhole-warrant",
+                "relation": "warrants",
+                "to": "exponent-found"
+              }
+            }
+          ]
+        },
+        {
+          "question": "normality-to-divisibility",
+          "status": "answered",
+          "node": "b95J01:B6",
+          "quote": "If \\(H\\) is normal, the quotient \\(G/H\\) has order \\([G:H]\\) and\nthe coset \\(gH\\) has order \\(k\\), so \\(g^{[G:H]}\\in H\\).",
+          "ink_words": 20,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-lagrange.json",
+              "edge": {
+                "from": "quotient-warrant",
+                "relation": "warrants",
+                "to": "k-divides-index"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-the-set-T",
+          "status": "answered",
+          "node": "b95J01:B1",
+          "quote": "the preimage of \\(H\\)\nunder \\(m\\mapsto g^{m}\\).",
+          "ink_words": 7,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-why-T.json",
+              "edge": {
+                "from": "minimal-k-bookkeeping",
+                "relation": "resolved-by",
+                "to": "package-as-T"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}

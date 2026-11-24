@@ -1,0 +1,190 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "b95J01",
+  "realizations": "holes/inkup/pilots/b95J01/reader-telling.formal-audit.md",
+  "content_plan": "holes/inkup/pilots/b95J01/content-plan.json",
+  "ink": "holes/inkup/pilots/b95J01/generative-ink.tsv",
+  "note": "b95J01 formal-audit sidecar; ink budgets derived from the mandatory nodes and the anticipated questions.",
+  "profiles": {
+    "formal-audit": {
+      "nodes": [
+        {
+          "node": "b95J01:B0",
+          "status": "realized",
+          "ink_words": 54,
+          "ink_percent": 13.0,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B1",
+          "status": "realized",
+          "ink_words": 48,
+          "ink_percent": 11.6,
+          "planned_percent": 13.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "b95J01:B2",
+          "status": "realized",
+          "ink_words": 58,
+          "ink_percent": 14.0,
+          "planned_percent": 20.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "b95J01:B3",
+          "status": "realized",
+          "ink_words": 23,
+          "ink_percent": 5.6,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B4",
+          "status": "realized",
+          "ink_words": 15,
+          "ink_percent": 3.6,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B5",
+          "status": "realized",
+          "ink_words": 20,
+          "ink_percent": 4.8,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B6",
+          "status": "realized",
+          "ink_words": 47,
+          "ink_percent": 11.4,
+          "planned_percent": 13.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "b95J01:B7",
+          "status": "realized",
+          "ink_words": 16,
+          "ink_percent": 3.9,
+          "planned_percent": 6.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B8",
+          "status": "realized",
+          "ink_words": 57,
+          "ink_percent": 13.8,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "b95J01:B9",
+          "status": "realized",
+          "ink_words": 76,
+          "ink_percent": 18.4,
+          "planned_percent": 13.0,
+          "planned_action": "expand"
+        }
+      ],
+      "questions": [
+        {
+          "question": "finite-index-is-the-only-source",
+          "status": "answered",
+          "node": "b95J01:B2",
+          "quote": "This lemma is the single consumption of the\nFiniteIndex instance — without the instance no such lemma applies",
+          "ink_words": 18,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-finite-index-role.json",
+              "edge": {
+                "from": "exponent-warrant",
+                "relation": "requires",
+                "to": "finite-index"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/b95J01-finite-index-role.json",
+              "edge": {
+                "from": "exponent-warrant",
+                "relation": "requires",
+                "to": "cosets-finite"
+              }
+            }
+          ]
+        },
+        {
+          "question": "positive-exponent-origin",
+          "status": "answered",
+          "node": "b95J01:B2",
+          "quote": "and it\nis the Lean form of the pigeonhole argument on the cosets\n\\(H,gH,\\dots,g^{n}H\\).",
+          "ink_words": 14,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-pigeonhole.json",
+              "edge": {
+                "from": "pigeonhole-warrant",
+                "relation": "warrants",
+                "to": "exponent-found"
+              }
+            }
+          ]
+        },
+        {
+          "question": "normality-to-divisibility",
+          "status": "answered",
+          "node": "b95J01:B6",
+          "quote": "This lemma is the Lean form of the\nquotient-group and Lagroute: in \\(G/H\\), of order \\([G:H]\\), the coset\n\\(gH\\) has order the least positive exponent, which is \\(k\\), so \\(k\\)\ndivides \\([G:H]\\).",
+          "ink_words": 32,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-lagrange.json",
+              "edge": {
+                "from": "quotient-warrant",
+                "relation": "warrants",
+                "to": "k-divides-index"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-the-set-T",
+          "status": "answered",
+          "node": "b95J01:B1",
+          "quote": "So the packaging is the comap\nof the powers homomorphism, and subgroup closure is inherited, not checked.",
+          "ink_words": 17,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-why-T.json",
+              "edge": {
+                "from": "minimal-k-bookkeeping",
+                "relation": "resolved-by",
+                "to": "package-as-T"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-not-a-three-cycle",
+          "status": "answered",
+          "node": "b95J01:B9",
+          "quote": "A\n3-cycle would not have refuted anything: its least positive exponent is\n\\(1\\) or \\(3\\), both dividing the index \\(3\\).",
+          "ink_words": 20,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/b95J01-why-involution.json",
+              "edge": {
+                "from": "order-divides-warrant",
+                "relation": "warrants",
+                "to": "three-cycle-divides"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}

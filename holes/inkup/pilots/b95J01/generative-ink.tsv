@@ -1,0 +1,31 @@
+profile	node	action	budget_percent	reason
+teaching	b95J01:B0	show	7	Derived: weight 1 plus one per anticipated teaching question at this node; total weight 15.
+teaching	b95J01:B1	expand	13	Derived: weight 2 (node plus why-the-set-T); total weight 15.
+teaching	b95J01:B2	expand	20	Derived: weight 3 (node plus finite-index-is-the-only-source and positive-exponent-origin); total weight 15.
+teaching	b95J01:B3	show	7	Derived: weight 1; total weight 15.
+teaching	b95J01:B4	show	7	Derived: weight 1; total weight 15.
+teaching	b95J01:B5	show	7	Derived: weight 1; total weight 15.
+teaching	b95J01:B6	expand	13	Derived: weight 2 (node plus normality-to-divisibility); total weight 15.
+teaching	b95J01:B7	show	6	Derived: weight 1; total weight 15.
+teaching	b95J01:B8	show	7	Derived: weight 1; total weight 15.
+teaching	b95J01:B9	expand	13	Derived: weight 2 (node plus why-not-a-three-cycle); total weight 15.
+expert-reference	b95J01:B0	omit	0	Not in the expert-reference mandatory nodes of the alignment.
+expert-reference	b95J01:B1	expand	22	Derived: weight 2 (node plus the anticipated why-the-set-T); total weight 9.
+expert-reference	b95J01:B2	omit	0	Not in the expert-reference mandatory nodes; the pigeonhole lemma is cited at B3 instead.
+expert-reference	b95J01:B3	show	11	Derived: weight 1; total weight 9.
+expert-reference	b95J01:B4	show	11	Derived: weight 1; total weight 9.
+expert-reference	b95J01:B5	show	11	Derived: weight 1; total weight 9.
+expert-reference	b95J01:B6	show	11	Derived: weight 1; total weight 9.
+expert-reference	b95J01:B7	show	11	Derived: weight 1; total weight 9.
+expert-reference	b95J01:B8	show	11	Derived: weight 1; total weight 9.
+expert-reference	b95J01:B9	show	12	Derived: weight 1; total weight 9.
+formal-audit	b95J01:B0	show	7	Derived: weight 1 plus one per anticipated audit question at this node; total weight 15.
+formal-audit	b95J01:B1	expand	13	Derived: weight 2 (node plus why-the-set-T); total weight 15.
+formal-audit	b95J01:B2	expand	20	Derived: weight 3 (node plus finite-index-is-the-only-source and positive-exponent-origin); total weight 15.
+formal-audit	b95J01:B3	show	7	Derived: weight 1; total weight 15.
+formal-audit	b95J01:B4	show	7	Derived: weight 1; total weight 15.
+formal-audit	b95J01:B5	show	7	Derived: weight 1; total weight 15.
+formal-audit	b95J01:B6	expand	13	Derived: weight 2 (node plus normality-to-divisibility); total weight 15.
+formal-audit	b95J01:B7	show	6	Derived: weight 1; total weight 15.
+formal-audit	b95J01:B8	show	7	Derived: weight 1; total weight 15.
+formal-audit	b95J01:B9	expand	13	Derived: weight 2 (node plus why-not-a-three-cycle); total weight 15.
