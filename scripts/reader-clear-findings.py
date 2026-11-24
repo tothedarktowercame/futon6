@@ -117,15 +117,26 @@ def main():
         p = os.path.basename(kit)
         qfiles = sorted(glob.glob(os.path.join(kit, "questions.*.jsonl")))
         readers = [os.path.basename(q)[len("questions."):-len(".jsonl")] for q in qfiles]
-        if len(readers) < 2 or not os.path.exists(os.path.join(kit, "answers.jsonl")) or \
-           not all(os.path.exists(os.path.join(kit, f"round2.{r}.jsonl")) for r in readers):
+        # A reader who asked nothing gets no answer pass and no restate; a problem is
+        # complete when every reader who did ask has a restate file (or there are no
+        # questions at all, in which case it contributes no finding rows).
+        nq = {r: len(rows(q)) for r, q in zip(readers, qfiles)}
+        asked = [r for r in readers if nq[r]]
+        if len(readers) < 2 or (asked and not os.path.exists(os.path.join(kit, "answers.jsonl"))) or \
+           not all(os.path.exists(os.path.join(kit, f"round2.{r}.jsonl")) or
+                   os.path.exists(os.path.join(kit, f"no-restate.{r}")) for r in asked):
             skipped.append(p); continue
+        if not asked:
+            continue
         decls = [d["declaration"] for d in json.load(open(os.path.join(kit, "kit.json")))["declarations"]]
         ans = {(x["reader"], x["id"]): x for x in rows(os.path.join(kit, "answers.jsonl"))}
         ov_path = os.path.join(kit, "diagnosis-overrides.json")
         ov = json.load(open(ov_path)) if os.path.exists(ov_path) else {}
-        for r in readers:
-            r2 = {x["id"]: x for x in rows(os.path.join(kit, f"round2.{r}.jsonl"))}
+        for r in asked:
+            # no-restate.<reader>: the owner records that this reader's restate was not
+            # taken (file holds the reason); its rows get settlement "not-taken".
+            r2_path = os.path.join(kit, f"round2.{r}.jsonl")
+            r2 = {x["id"]: x for x in rows(r2_path)} if os.path.exists(r2_path) else None
             for q in rows(os.path.join(kit, f"questions.{r}.jsonl")):
                 an = ans.get((r, q["id"]))
                 if an is None:
@@ -137,7 +148,7 @@ def main():
                 cls = CLASS_ALIAS.get(cls, cls)
                 if cls.startswith("NEW:omitted-") and cls.endswith("-hypotheses"):
                     cls = "NEW:lost-instance-hypotheses"
-                rr = r2.get(q["id"], {})
+                rr = {"status": "not-taken"} if r2 is None else r2.get(q["id"], {})
                 out.append({"head": a.head, "module": p, "declaration": ";".join(ds) or "-",
                             "steps": ";".join(qsteps) or "-", "printed_line": one(q["locus_P"]),
                             "reader": r, "question": q["id"],
@@ -163,7 +174,7 @@ def main():
         for (t, k), n in sorted(c.items(), key=lambda kv: (-kv[1], kv[0])):
             m = len({x["module"] for x in out if (x["diagnosis_type"], x["proposed_class"] or "-") == (t, k)})
             f.write(f"{t}\t{k}\t{n}\t{m}\n")
-    print(f"{len(out)} findings from {len({x['module'] for x in out})} problems; not complete: {len(skipped)}")
+    print(f"{len(out)} findings from {len({x['module'] for x in out})} problems; not complete: {len(skipped)} {sorted(skipped)}")
     verdict_counts = collections.Counter(row["verdict"] for row in marks)
     counts = ", ".join(f"{verdict}={verdict_counts[verdict]}"
                        for verdict in ("wrong-as-printed", "not-justified"))

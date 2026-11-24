@@ -48,7 +48,7 @@ def test_marks_table_and_existing_findings(tmp_path: Path) -> None:
     write_jsonl(first / "round2.alice.jsonl", [
         {"id": "Q1", "status": "settled", "would_the_print_have_prevented_it": "yes"},
     ])
-    write_jsonl(first / "round2.bob.jsonl", [])
+    # bob asked nothing, so has no round2 file; that must not make p01 incomplete.
 
     second = kits / "p02"
     second.mkdir()
@@ -85,5 +85,27 @@ def test_marks_table_and_existing_findings(tmp_path: Path) -> None:
              "verdict": "wrong-as-printed", "note": "Bad formula.", "question": "-",
              "answerer_diagnosis": "-", "proposed_class": "-", "other_readers": "-"},
         ]
-    assert (out / "findings.head-demo.tsv").exists()
+    with (out / "findings.head-demo.tsv").open(newline="") as handle:
+        findings = list(csv.DictReader(handle, delimiter="\t"))
+    assert [(row["module"], row["reader"], row["question"], row["settlement"])
+            for row in findings] == [("p01", "alice", "Q1", "settled")]
+    assert "not complete: 1 ['p02']" in result.stdout
+
+    # A reader who asked but has no restate blocks the problem, unless the owner
+    # records that the restate was not taken.
+    (first / "round2.alice.jsonl").unlink()
+    blocked = subprocess.run(
+        [sys.executable, str(SCRIPT), "--head", "demo", "--kits", str(kits),
+         "--classes", str(classes), "--out", str(out)],
+        text=True, capture_output=True, timeout=60, check=True,
+    )
+    assert "0 findings" in blocked.stdout and "'p01'" in blocked.stdout
+    (first / "no-restate.alice").write_text("reason\n", encoding="utf-8")
+    subprocess.run(
+        [sys.executable, str(SCRIPT), "--head", "demo", "--kits", str(kits),
+         "--classes", str(classes), "--out", str(out)],
+        text=True, capture_output=True, timeout=60, check=True,
+    )
+    with (out / "findings.head-demo.tsv").open(newline="") as handle:
+        assert [row["settlement"] for row in csv.DictReader(handle, delimiter="\t")] == ["not-taken"]
     assert "3 marks from 2 modules; wrong-as-printed=2, not-justified=1" in result.stdout
