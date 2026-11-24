@@ -1,0 +1,157 @@
+{
+  "schema": "inkup.blueprint-lineage/v0",
+  "problem": "a97A02",
+  "sources": {
+    "informal": {"path": "apm-lean:problems/a97A02/informal-solution.md", "sha256": "87bb9ba9023e7f268d2c7b00491cb51d24d6bf8608f40ac578bbb586d0e8f7bf"},
+    "lean": {"path": "apm-lean:problems/a97A02/lean/Main.lean", "sha256": "c4b577816eb11ebc2fda9e0815516b91f899415061ee230a54de5c28cde95e91"},
+    "reader-dialogue": {"path": "storage:futon6/reader-clear/head-b38755b7/kits/a97A02/questions.zai-4.jsonl", "sha256": "7a9de56e07ab341f6f2fd4ce1ead6d89f47b4e220f1d64b2d9dd300aeb5ca08e"},
+    "reader-round2": {"path": "storage:futon6/reader-clear/head-b38755b7/kits/a97A02/round2.zai-4.jsonl", "sha256": "f149e2c98292860fb6e56994cc90ed923f8d2314821e7a546f7b9646ee61ab25"}
+  },
+  "nodes": [
+    {
+      "id": "a97A02:B0",
+      "parent": null,
+      "obligation": "Prove that for f in L^p of the unit interval (1 ≤ p < ∞) and h > 0, the averages f_h are continuous on [0,1] and satisfy |f_h(t)| ≤ (2h)^(-1/p) ‖f‖_p.",
+      "depends_on": ["a97A02:B8"],
+      "argument_roles": ["goal"],
+      "expository_roles": ["overview"],
+      "reader_obligations": ["Keep both conclusions in view: one hypothesis, f in L^p, has to deliver continuity and the quantitative bound at once."],
+      "anchors": [
+        {"source": "lean", "ref": "theorem apm_a97a02", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "*Key insight.*", "relation": "motivates", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a97A02:B1",
+      "parent": "a97A02:B0",
+      "obligation": "Fix the reading of the integral: work with Lebesgue measure restricted to [0,1], so the window [t-h, t+h] contributes only its part inside [0,1]; this is the zero extension of f in disguise, and the average is the window integral divided by 2h.",
+      "depends_on": [],
+      "argument_roles": ["normalization"],
+      "expository_roles": ["definition", "bridge"],
+      "reader_obligations": ["Understand that the problem's f, defined only on [0,1], is being read as a function on all of R that vanishes outside the interval."],
+      "anchors": [
+        {"source": "lean", "ref": "def apm_a97A02_measure", "relation": "implements", "review": "model-proposed"},
+        {"source": "lean", "ref": "def apm_a97A02_average", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "Extend \\(f\\) by zero outside \\([0,1]\\)", "relation": "explains", "review": "model-proposed"},
+        {"source": "reader-dialogue", "ref": "ask-1795503347-387", "relation": "supports", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a97A02:B2",
+      "parent": "a97A02:B0",
+      "obligation": "From f in L^p with 1 ≤ p on a finite measure space, conclude that f is integrable.",
+      "depends_on": ["a97A02:B1"],
+      "argument_roles": ["lemma-application"],
+      "expository_roles": ["citation"],
+      "reader_obligations": ["Accept that L^p on a finite measure sits inside L^1, so integrals of f are finite and the primitive below exists."],
+      "anchors": [
+        {"source": "lean", "ref": "lemma apm_a97A02_integrable_of_memLp", "relation": "implements", "review": "model-proposed"},
+        {"source": "reader-dialogue", "ref": "ask-1795503346-386", "relation": "supports", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a97A02:B3",
+      "parent": "a97A02:B0",
+      "obligation": "Show that the restricted measure of the window [t-h, t+h] is at most 2h, the volume of the unclipped interval.",
+      "depends_on": ["a97A02:B1"],
+      "argument_roles": ["estimate"],
+      "expository_roles": ["estimate"],
+      "reader_obligations": ["See that clipping the window to [0,1] can only shrink it, so 2h is a valid upper bound for every t."],
+      "anchors": [
+        {"source": "lean", "ref": "lemma apm_a97A02_measure_Icc_le", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "constant \\((2h)^{-1}\\) on an interval of length \\(2h\\)", "relation": "explains", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a97A02:B4",
+      "parent": "a97A02:B0",
+      "obligation": "Construct the primitive F(b) = integral of f over (-∞, b] for the restricted measure; F is continuous on (-∞, 1+h], so composing with t ↦ t ± h gives two continuous functions of t on [0,1].",
+      "depends_on": ["a97A02:B2"],
+      "argument_roles": ["auxiliary-construction"],
+      "expository_roles": ["bridge", "audit-detail"],
+      "reader_obligations": ["See why the half-line primitive, not the moving window, is the object to make continuous: it is a fixed function of one endpoint and needs no symmetric-difference bookkeeping."],
+      "anchors": [
+        {"source": "lean", "ref": "lemma apm_a97A02_continuousOn_average", "relation": "implements", "review": "model-proposed"},
+        {"source": "lean", "ref": "have hF", "relation": "supports", "review": "model-proposed"},
+        {"source": "informal", "ref": "The symmetric difference \\(A_{s,t} = [s-h,s+h]\\triangle[t-h,t+h]\\)", "relation": "explains", "review": "model-proposed", "note": "The informal solution takes the symmetric-difference route; the formal proof takes the primitive route recorded here, and the dialogue question ask-1795503347-388 contrasts them."},
+        {"source": "reader-dialogue", "ref": "ask-1795503347-388", "relation": "supports", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a97A02:B5",
+      "parent": "a97A02:B0",
+      "obligation": "Identify the moving window integral with the difference F(t+h) - F(t-h) of the two primitives, conclude the numerator is continuous on [0,1], and divide by the constant 2h to get continuity of the average.",
+      "depends_on": ["a97A02:B4"],
+      "argument_roles": ["identity", "closure"],
+      "expository_roles": ["calculation", "closure"],
+      "reader_obligations": ["Check that the interval identity turns the moving integral into a difference of continuous functions, which is the only continuity input needed."],
+      "anchors": [
+        {"source": "lean", "ref": "have hnum", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "Either way, \\(f_h\\) is continuous on \\([0,1]\\)", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a97A02:B6",
+      "parent": "a97A02:B0",
+      "obligation": "Apply Hölder on the window: the L^1 norm of f restricted to [t-h, t+h] is at most ‖f‖_p times (2h)^(1-1/p), using the window-measure bound and monotonicity of the eLpNorm under shrinking the measure.",
+      "depends_on": ["a97A02:B3"],
+      "argument_roles": ["lemma-application", "estimate"],
+      "expository_roles": ["citation", "estimate"],
+      "reader_obligations": ["Track where each factor comes from: the exponent 1 - 1/p is Hölder's, and the 2h inside it is the window-measure bound."],
+      "anchors": [
+        {"source": "lean", "ref": "have hL1", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "Hölder gives", "relation": "explains", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a97A02:B7",
+      "parent": "a97A02:B0",
+      "obligation": "Bound the norm of the window integral by its L^1 norm, divide by 2h, and combine exponents: the result is |f_h(t)| ≤ (2h)^(-1/p) ‖f‖_p. The restriction t ∈ [0,1] is never used; the bound holds for every real t.",
+      "depends_on": ["a97A02:B6"],
+      "argument_roles": ["estimate", "side-condition", "closure"],
+      "expository_roles": ["calculation", "audit-detail"],
+      "reader_obligations": ["Watch the exponent arithmetic (1 - 1/p) - 1 = -1/p, and notice that no step consumed t ∈ [0,1]."],
+      "anchors": [
+        {"source": "lean", "ref": "have hnormInt", "relation": "implements", "review": "model-proposed"},
+        {"source": "lean", "ref": "have hL1real", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "Thus \\(|f_h(t)| \\le (2h)^{-1/p}\\|f\\|_p\\)", "relation": "states", "review": "model-proposed"},
+        {"source": "reader-dialogue", "ref": "ask-1795503348-389", "relation": "audits", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "a97A02:B8",
+      "parent": null,
+      "obligation": "Assemble the conjunction: continuity from the primitive route and the bound from the Hölder route, for every h > 0 and every 1 ≤ p < ∞.",
+      "depends_on": ["a97A02:B5", "a97A02:B7"],
+      "argument_roles": ["closure"],
+      "expository_roles": ["closure"],
+      "reader_obligations": ["Confirm that the two conclusions were proved independently and only meet in the final conjunction."],
+      "anchors": [
+        {"source": "lean", "ref": "theorem apm_a97a02", "relation": "implements", "review": "model-proposed"}
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "id": "expert-reference",
+      "audience": "An analyst who wants the estimate and the continuity argument in the shortest correct form.",
+      "purpose": "reference",
+      "mandatory_nodes": ["a97A02:B1", "a97A02:B3", "a97A02:B4", "a97A02:B5", "a97A02:B6", "a97A02:B7"],
+      "compression": "State the restricted-measure reading in one clause; cite L^p ⊂ L^1 without comment; give the primitive in one line and its continuity by the standard atomless-primitive fact; state Hölder on the window and the exponent arithmetic without bookkeeping."
+    },
+    {
+      "id": "teaching",
+      "audience": "A student who has not seen why an L^p function can be integrated against a moving window at all.",
+      "purpose": "teaching",
+      "mandatory_nodes": ["a97A02:B0", "a97A02:B1", "a97A02:B2", "a97A02:B3", "a97A02:B4", "a97A02:B5", "a97A02:B6", "a97A02:B7", "a97A02:B8"],
+      "compression": "Show every node; spend the most exposition on what the restricted measure means near the endpoints, on why the primitive replaces naive window-chasing, and on where each factor of the final constant comes from."
+    },
+    {
+      "id": "formal-audit",
+      "audience": "A reviewer comparing the prose with the compiled Lean proof.",
+      "purpose": "audit",
+      "mandatory_nodes": ["a97A02:B0", "a97A02:B1", "a97A02:B2", "a97A02:B3", "a97A02:B4", "a97A02:B5", "a97A02:B6", "a97A02:B7", "a97A02:B8"],
+      "compression": "Do not compress side conditions: name the finite-measure instance behind integrability, the NoAtoms instance behind the primitive, the interval identity, the eLpNorm lemma and monotonicity, and record that the t ∈ [0,1] binder is unused in the bound."
+    }
+  ]
+}

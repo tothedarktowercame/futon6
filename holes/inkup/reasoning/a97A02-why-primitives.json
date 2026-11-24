@@ -1,0 +1,34 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "strategy-answer",
+  "subject": "a97A02:B4 — why the primitive route instead of the symmetric-difference estimate",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/a97A02/alignment.json", "sha256": "bf40859a27db4f68afa95d44f16c9aeea1a12641a306576f51844b69096e0ccd"},
+    "lean": {"path": "apm-lean:problems/a97A02/lean/Main.lean", "sha256": "c4b577816eb11ebc2fda9e0815516b91f899415061ee230a54de5c28cde95e91"}
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "Why not prove continuity by estimating the symmetric difference of the two windows, as the informal solution does?", "authority": "reader-question", "evidence": ["arse:ask-1795503347-388", "blueprint-alignment:a97A02:B4"]},
+    {"id": "answer", "kind": "answer", "claim": "The symmetric-difference estimate needs the restriction |s-t| ≤ 2h (the difference has measure 2 min(|s-t|, 2h), not 2|s-t|), exponent bookkeeping in 1/q, and a separate p = 1 fallback through absolute continuity of the integral; writing the moving integral as a difference of two continuous primitives handles every p ≥ 1 at once.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a97A02:B4", "lean:Main.lean#apm_a97A02_continuousOn_average"]},
+    {"id": "sd-bookkeeping", "kind": "obstacle", "claim": "The symmetric-difference measure is 2 min(|s-t|, 2h) — the informal solution's 2|s-t| fails once the windows are disjoint — and the L^q estimate degenerates at q = ∞, where p = 1 needs absolute continuity instead.", "authority": "formal-derived", "evidence": ["arse:ask-1795503347-388", "informal:The symmetric difference"]},
+    {"id": "sd-method", "kind": "method", "claim": "Bound |f_h(t) - f_h(s)| by ‖f‖_p times the L^q norm of g_{t,h} - g_{s,h}, supported on the symmetric difference.", "authority": "formal-derived", "evidence": ["informal:By Hölder,"]},
+    {"id": "primitive-move", "kind": "move", "claim": "Write the moving window integral as F(t+h) - F(t-h) for the fixed primitive F of the integrable function f.", "authority": "formal-derived", "evidence": ["lean:Main.lean#F", "lean:Main.lean#hnum"]},
+    {"id": "no-atoms", "kind": "invariant", "claim": "The restricted Lebesgue measure is atomless, which is what makes the half-line primitive continuous.", "authority": "formal-derived", "evidence": ["lean:Main.lean#apm_a97A02_continuousOn_average"]},
+    {"id": "icc-as-difference", "kind": "conversion", "claim": "The Icc window integral equals the difference of the two Iic primitives, by the interval-integral identity.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hnum", "Mathlib:intervalIntegral.integral_Iic_sub_Iic"]},
+    {"id": "primitive-method", "kind": "method", "claim": "Continuity of a difference of compositions of a continuous primitive with continuous translations.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hleft", "lean:Main.lean#hright"]},
+    {"id": "numerator-continuous", "kind": "result", "claim": "t ↦ ∫_{[t-h,t+h]} f is continuous on [0,1] for every p ≥ 1, with no case distinction.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hnum", "blueprint-alignment:a97A02:B5"]},
+    {"id": "average-continuous", "kind": "return", "claim": "Dividing by the constant 2h, f_h is continuous on [0,1] for all 1 ≤ p < ∞ at once.", "authority": "formal-derived", "evidence": ["lean:Main.lean#apm_a97A02_continuousOn_average", "blueprint-alignment:a97A02:B5"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "sd-bookkeeping"},
+    {"from": "answer", "relation": "cites-reason", "to": "primitive-move"},
+    {"from": "answer", "relation": "summarizes", "to": "average-continuous"},
+    {"from": "sd-bookkeeping", "relation": "blocks", "to": "sd-method"},
+    {"from": "sd-bookkeeping", "relation": "resolved-by", "to": "primitive-move"},
+    {"from": "primitive-move", "relation": "preserves", "to": "no-atoms"},
+    {"from": "primitive-move", "relation": "produces", "to": "icc-as-difference"},
+    {"from": "icc-as-difference", "relation": "enables", "to": "primitive-method"},
+    {"from": "primitive-method", "relation": "produces", "to": "numerator-continuous"},
+    {"from": "numerator-continuous", "relation": "transported-by", "to": "average-continuous"}
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a97A02:B6 — why (2h)^(-1/p) is the right constant",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/a97A02/alignment.json", "sha256": "bf40859a27db4f68afa95d44f16c9aeea1a12641a306576f51844b69096e0ccd"},
+    "lean": {"path": "apm-lean:problems/a97A02/lean/Main.lean", "sha256": "c4b577816eb11ebc2fda9e0815516b91f899415061ee230a54de5c28cde95e91"}
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "Where does the constant (2h)^(-1/p) in the bound come from?", "authority": "human-proposed", "evidence": ["seed:why-this-constant", "blueprint-alignment:a97A02:B6"]},
+    {"id": "answer", "kind": "answer", "claim": "It is the L^q norm of the normalised window indicator (2h)^(-1) 1_{[t-h,t+h]} with q the conjugate exponent: constant (2h)^(-1) on a set of measure 2h gives (2h)^(-1) (2h)^(1/q) = (2h)^(-1/p); when p = 1 read 1/q = 0, so the L^∞ norm is 1 and the same formula results.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a97A02:B6", "blueprint-alignment:a97A02:B7"]},
+    {"id": "holder", "kind": "premise", "claim": "Hölder pairs f in L^p against the kernel in L^q.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hL1"]},
+    {"id": "window-length", "kind": "premise", "claim": "The kernel is supported on a window of measure at most 2h.", "authority": "formal-derived", "evidence": ["lean:Main.lean#apm_a97A02_measure_Icc_le", "blueprint-alignment:a97A02:B3"]},
+    {"id": "exponent-arithmetic", "kind": "premise", "claim": "Dividing Hölder's (2h)^(1-1/p) by 2h leaves (2h)^(-1/p), since (1 - 1/p) - 1 = -1/p.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hL1real"]},
+    {"id": "conjugate-norm-warrant", "kind": "warrant", "claim": "The norm of the constant c on a set of measure m in L^q is c m^(1/q), so the normalised indicator has norm exactly (2h)^(-1/p), including the q = ∞ reading.", "authority": "formal-derived", "evidence": ["Mathlib:eLpNorm_one_eq_lintegral_enorm", "lean:Main.lean#hL1"]},
+    {"id": "normalised-indicator-norm", "kind": "claim", "claim": "|f_h(t)| ≤ ‖f‖_p (2h)^(-1/p), and the constant cannot be improved for a constant function on a full window.", "authority": "formal-derived", "evidence": ["lean:Main.lean#apm_a97a02", "blueprint-alignment:a97A02:B7"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "conjugate-norm-warrant"},
+    {"from": "conjugate-norm-warrant", "relation": "requires", "to": "holder"},
+    {"from": "conjugate-norm-warrant", "relation": "requires", "to": "window-length"},
+    {"from": "conjugate-norm-warrant", "relation": "requires", "to": "exponent-arithmetic"},
+    {"from": "conjugate-norm-warrant", "relation": "warrants", "to": "normalised-indicator-norm"}
+  ]
+}

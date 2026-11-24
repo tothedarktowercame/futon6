@@ -1,0 +1,128 @@
+{
+  "schema": "inkup.content-plan/v0",
+  "problem": "a97A02",
+  "alignment": "holes/inkup/pilots/a97A02/alignment.json",
+  "evidence_run": "reader-clear-b38755b7",
+  "blocked_on": [],
+  "predicted_words": {
+    "rule": "words = nodes shown x base + questions answered x increment; base/increment teaching 24/23, expert-reference 16/21, formal-audit 22/21, publication 14/14; computed before any telling exists",
+    "teaching": {"nodes": 9, "questions": 5, "words": 331},
+    "expert-reference": {"nodes": 6, "questions": 0, "words": 96},
+    "formal-audit": {"nodes": 9, "questions": 5, "words": 303},
+    "publication": {"nodes": 9, "questions": 0, "words": 126, "note": "The publication lane compresses the same nine nodes and answers none of the dialogue questions."}
+  },
+  "mandatory_nodes": [
+    {"node": "a97A02:B0", "depends_on": ["a97A02:B8"]},
+    {"node": "a97A02:B1", "depends_on": []},
+    {"node": "a97A02:B2", "depends_on": ["a97A02:B1"]},
+    {"node": "a97A02:B3", "depends_on": ["a97A02:B1"]},
+    {"node": "a97A02:B4", "depends_on": ["a97A02:B2"]},
+    {"node": "a97A02:B5", "depends_on": ["a97A02:B4"]},
+    {"node": "a97A02:B6", "depends_on": ["a97A02:B3"]},
+    {"node": "a97A02:B7", "depends_on": ["a97A02:B6"]},
+    {"node": "a97A02:B8", "depends_on": ["a97A02:B5", "a97A02:B7"]}
+  ],
+  "questions": [
+    {
+      "id": "window-near-endpoint",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "What does the average mean when t lies within h of an endpoint of [0,1]: why is integrating against Lebesgue measure restricted to [0,1] the same as integrating the zero extension of f?",
+      "blueprint_node": "a97A02:B1",
+      "evidence": [
+        {"candidate_id": "arse:ask-1795503347-387", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a97A02-window-meaning.json", "edge": {"from": "restriction-warrant", "relation": "warrants", "to": "window-meaning"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "The ArSE thread ask-1795503347-387 is cited in place of a corpus candidate id; the run is the reader-clear dialogue at head b38755b7, so no question-alignments.jsonl exists for it.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "A student meets a moving window crossing the edge of the domain for the first time and needs the zero-extension reading stated."},
+        "expert-reference": {"action": "omit", "reason": "An analyst reads the restricted measure as the standard convention and needs no sentence on it."},
+        "formal-audit": {"action": "anticipate", "reason": "The Lean file's encoding note says exactly this and the print dropped it; the audit lane should restore it."}
+      }
+    },
+    {
+      "id": "continuity-from-integrability",
+      "question_function": "QF04",
+      "requested_relation": "method-requires-hypotheses",
+      "analogue": "Why does continuity of f_h follow from f in L^p: which hypotheses does the primitive argument consume, and in what order?",
+      "blueprint_node": "a97A02:B4",
+      "evidence": [
+        {"candidate_id": "arse:ask-1795503346-386", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a97A02-primitive-continuity.json", "edge": {"from": "primitive-warrant", "relation": "requires", "to": "integrable-f"}},
+        {"graph": "holes/inkup/reasoning/a97A02-primitive-continuity.json", "edge": {"from": "primitive-warrant", "relation": "requires", "to": "no-atoms"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "The dialogue question asked which lemma a mislabelled citation denoted; the mathematical content is the two-stage route (integrability, then the primitive lemma), which is what is carried forward.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "The two stages, L^p inside L^1 and then the primitive, are the spine of the continuity half for a student."},
+        "expert-reference": {"action": "omit", "reason": "The expert needs only the primitive lemma; the L^p ⊂ L^1 step is automatic at this level."},
+        "formal-audit": {"action": "anticipate", "reason": "The audit lane should expose the finite-measure instance behind integrability and the NoAtoms instance behind the primitive lemma."}
+      }
+    },
+    {
+      "id": "why-not-symmetric-difference",
+      "question_function": "QF01",
+      "requested_relation": "strategy-enables-goal",
+      "analogue": "Why estimate the symmetric difference of two windows at all, rather than writing the moving integral as a difference of two continuous primitives?",
+      "blueprint_node": "a97A02:B4",
+      "evidence": [
+        {"candidate_id": "arse:ask-1795503347-388", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a97A02-why-primitives.json", "edge": {"from": "sd-bookkeeping", "relation": "resolved-by", "to": "primitive-move"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "The informal solution's symmetric-difference measure should read 2 min(|s-t|, 2h), not 2|s-t|: the identity fails once |s-t| exceeds 2h, where the windows are disjoint and the measure is 4h. Clipping at the ends of [0,1] only shrinks the difference. The primitive route recorded as node B4 avoids the case split and the p = 1 fallback to absolute continuity; the dialogue thread ask-1795503347-388 is the evidence.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "The student should see why the primitive is the better object: one argument for all p, no exponent bookkeeping, no p = 1 exception."},
+        "expert-reference": {"action": "omit", "reason": "Either route is one line for an expert; the reference proof simply takes the primitive one."},
+        "formal-audit": {"action": "anticipate", "reason": "The Lean proof's own comment says the primitive route avoids symmetric-difference bookkeeping; the audit lane should record that choice."}
+      }
+    },
+    {
+      "id": "bound-needs-no-t-restriction",
+      "question_function": "QF06",
+      "requested_relation": "result-extends-under-variation",
+      "analogue": "Is the restriction t ∈ [0,1] needed in the bound, or does the same estimate hold for every real t?",
+      "blueprint_node": "a97A02:B7",
+      "evidence": [
+        {"candidate_id": "arse:ask-1795503348-389", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a97A02-bound-all-real-t.json", "edge": {"from": "holder-window-warrant", "relation": "warrants", "to": "all-real-t-bound"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "The warrant consumes only measurability, the window-measure bound (which holds for every t), and the exponent condition; it does not consume t ∈ [0,1], so the result extends to all real t.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "Noticing which hypotheses a proof never uses is a habit worth teaching, and here it widens the statement for free."},
+        "expert-reference": {"action": "omit", "reason": "The reference states the theorem as asked; the strengthening is a remark an expert supplies mentally."},
+        "formal-audit": {"action": "anticipate", "reason": "In the Lean proof the t ∈ [0,1] binder is introduced and never used in the bound branch; the audit lane should record that."}
+      }
+    },
+    {
+      "id": "why-this-constant",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "Why is (2h)^(-1/p) the right constant in the bound?",
+      "blueprint_node": "a97A02:B6",
+      "evidence": [
+        {"candidate_id": "seed:why-this-constant", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/a97A02-constant.json", "edge": {"from": "conjugate-norm-warrant", "relation": "warrants", "to": "normalised-indicator-norm"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "Nobody asked this in the dialogue, but the blueprint needs it: the constant is the L^q norm of the normalised window indicator, (2h)^(-1) times (2h)^(1/q), including q = ∞ when p = 1.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "The constant looks arbitrary until it is recognised as a dual norm; that recognition is the teaching payload."},
+        "expert-reference": {"action": "omit", "reason": "An expert reads the constant as the dual norm of the box kernel without help."},
+        "formal-audit": {"action": "anticipate", "reason": "The Lean proof reaches the constant by exponent arithmetic on Hölder's (2h)^(1-1/p) followed by division by 2h; the audit lane should show both computations agree."}
+      }
+    }
+  ]
+}

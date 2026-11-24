@@ -1,0 +1,26 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a97A02:B4 — what the primitive continuity lemma consumes",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/a97A02/alignment.json", "sha256": "bf40859a27db4f68afa95d44f16c9aeea1a12641a306576f51844b69096e0ccd"},
+    "lean": {"path": "apm-lean:problems/a97A02/lean/Main.lean", "sha256": "c4b577816eb11ebc2fda9e0815516b91f899415061ee230a54de5c28cde95e91"}
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "Why does continuity of f_h follow from f in L^p, and which hypotheses does the argument consume?", "authority": "reader-question", "evidence": ["arse:ask-1795503346-386", "blueprint-alignment:a97A02:B4"]},
+    {"id": "answer", "kind": "answer", "claim": "Two stages: on the finite restricted measure, L^p with p ≥ 1 gives integrability; then the atomless primitive lemma makes b ↦ ∫_{(-∞,b]} f continuous, and the moving integral is a difference of two such primitives at t+h and t-h.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a97A02:B2", "blueprint-alignment:a97A02:B4", "lean:Main.lean#apm_a97A02_continuousOn_average"]},
+    {"id": "integrable-f", "kind": "premise", "claim": "f is integrable for the restricted measure, from MemLp and 1 ≤ p on a finite measure.", "authority": "formal-derived", "evidence": ["lean:Main.lean#apm_a97A02_integrable_of_memLp", "blueprint-alignment:a97A02:B2"]},
+    {"id": "no-atoms", "kind": "premise", "claim": "The restricted Lebesgue measure has no atoms, so points carry no mass.", "authority": "formal-derived", "evidence": ["lean:Main.lean#apm_a97A02_continuousOn_average", "Mathlib:Measure.restrict_noAtoms"]},
+    {"id": "window-in-halfline", "kind": "premise", "claim": "For t in [0,1] both endpoints t-h and t+h lie at most 1+h, so the primitives are evaluated inside the continuity region.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hF", "lean:Main.lean#hh"]},
+    {"id": "primitive-warrant", "kind": "warrant", "claim": "An integrable function on an atomless measure has a continuous primitive b ↦ ∫_{(-∞,b]} f.", "authority": "formal-derived", "evidence": ["Mathlib:IntegrableOn.continuousOn_Iic_primitive_Iic", "lean:Main.lean#hF"]},
+    {"id": "primitive-continuous", "kind": "claim", "claim": "The moving window integral is continuous in t on [0,1], hence so is the average after division by the constant 2h.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hnum", "blueprint-alignment:a97A02:B5"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "primitive-warrant"},
+    {"from": "primitive-warrant", "relation": "requires", "to": "integrable-f"},
+    {"from": "primitive-warrant", "relation": "requires", "to": "no-atoms"},
+    {"from": "primitive-warrant", "relation": "requires", "to": "window-in-halfline"},
+    {"from": "primitive-warrant", "relation": "warrants", "to": "primitive-continuous"}
+  ]
+}

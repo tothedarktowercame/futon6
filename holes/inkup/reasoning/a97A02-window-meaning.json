@@ -1,0 +1,22 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a97A02:B1 — what the window integral means near the endpoints of [0,1]",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/a97A02/alignment.json", "sha256": "bf40859a27db4f68afa95d44f16c9aeea1a12641a306576f51844b69096e0ccd"},
+    "lean": {"path": "apm-lean:problems/a97A02/lean/Main.lean", "sha256": "c4b577816eb11ebc2fda9e0815516b91f899415061ee230a54de5c28cde95e91"}
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "The problem defines f on [0,1] only; what does the integral over [t-h, t+h] mean when t is within h of an endpoint?", "authority": "reader-question", "evidence": ["arse:ask-1795503347-387", "blueprint-alignment:a97A02:B1"]},
+    {"id": "answer", "kind": "answer", "claim": "Integrating f against Lebesgue measure restricted to [0,1] is the same as integrating the zero extension of f against Lebesgue measure: the part of the window outside [0,1] contributes nothing either way, so the average is over the part of the window inside the interval.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a97A02:B1", "lean:Main.lean#apm_a97A02_measure"]},
+    {"id": "zero-extension", "kind": "premise", "claim": "The problem's f is read as a function on R that vanishes outside [0,1].", "authority": "formal-derived", "evidence": ["informal:Extend f by zero outside [0,1]", "blueprint-alignment:a97A02:B1"]},
+    {"id": "restriction-warrant", "kind": "warrant", "claim": "For any measurable set A, the integral of f over A against volume restricted to [0,1] equals the integral over A of the zero extension against volume, because the restriction multiplies the integrand by the indicator of [0,1].", "authority": "formal-derived", "evidence": ["Mathlib:Measure.restrict_apply", "lean:Main.lean#apm_a97A02_measure"]},
+    {"id": "window-meaning", "kind": "claim", "claim": "The average f_h(t) is the integral of f over [t-h, t+h] ∩ [0,1], divided by 2h.", "authority": "formal-derived", "evidence": ["lean:Main.lean#apm_a97A02_average", "blueprint-alignment:a97A02:B1"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "restriction-warrant"},
+    {"from": "restriction-warrant", "relation": "requires", "to": "zero-extension"},
+    {"from": "restriction-warrant", "relation": "warrants", "to": "window-meaning"}
+  ]
+}

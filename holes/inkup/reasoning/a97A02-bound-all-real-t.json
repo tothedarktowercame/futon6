@@ -1,0 +1,26 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "a97A02:B7 — the bound holds for every real t, not only t in [0,1]",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/a97A02/alignment.json", "sha256": "bf40859a27db4f68afa95d44f16c9aeea1a12641a306576f51844b69096e0ccd"},
+    "lean": {"path": "apm-lean:problems/a97A02/lean/Main.lean", "sha256": "c4b577816eb11ebc2fda9e0815516b91f899415061ee230a54de5c28cde95e91"}
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "Both the problem and the theorem restrict the estimate to t in [0,1]; is that restriction needed?", "authority": "reader-question", "evidence": ["arse:ask-1795503348-389", "blueprint-alignment:a97A02:B7"]},
+    {"id": "answer", "kind": "answer", "claim": "No: the proof of the bound uses measurability of f, the window-measure bound (valid for every real t), and the exponent condition; the hypothesis t ∈ [0,1] is introduced and never consumed, so the estimate extends to all real t.", "authority": "formal-derived", "evidence": ["blueprint-alignment:a97A02:B7", "lean:Main.lean#apm_a97a02"]},
+    {"id": "measurable-f", "kind": "premise", "claim": "f is measurable for the restricted measure and stays measurable when the measure shrinks to the window.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hmeasE"]},
+    {"id": "window-measure-any-t", "kind": "premise", "claim": "The restricted measure of [t-h, t+h] is at most 2h for every real t.", "authority": "formal-derived", "evidence": ["lean:Main.lean#apm_a97A02_measure_Icc_le", "blueprint-alignment:a97A02:B3"]},
+    {"id": "exponent-nonneg", "kind": "premise", "claim": "The exponent 1 - 1/p is nonnegative because 1 ≤ p.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hexp"]},
+    {"id": "holder-window-warrant", "kind": "warrant", "claim": "Hölder on a set of measure at most 2h bounds the L^1 norm of f on the window by ‖f‖_p (2h)^(1-1/p), for whatever t the window is centred at.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hL1", "Mathlib:eLpNorm_le_eLpNorm_mul_rpow_measure_univ"]},
+    {"id": "all-real-t-bound", "kind": "claim", "claim": "|f_h(t)| ≤ (2h)^(-1/p) ‖f‖_p for every real t.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hL1real", "blueprint-alignment:a97A02:B7"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "holder-window-warrant"},
+    {"from": "holder-window-warrant", "relation": "requires", "to": "measurable-f"},
+    {"from": "holder-window-warrant", "relation": "requires", "to": "window-measure-any-t"},
+    {"from": "holder-window-warrant", "relation": "requires", "to": "exponent-nonneg"},
+    {"from": "holder-window-warrant", "relation": "warrants", "to": "all-real-t-bound"}
+  ]
+}
