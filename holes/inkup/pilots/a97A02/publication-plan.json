@@ -1,0 +1,82 @@
+{
+ "schema": "inkup.publication-plan/v0",
+ "problem": "a97A02",
+ "profile": "publication",
+ "heading": "Publication",
+ "content_plan": "holes/inkup/pilots/a97A02/content-plan.json",
+ "source_telling": "holes/inkup/pilots/a97A02/reader-telling.teaching.md",
+ "calibration": {
+  "inherited_from": "holes/inkup/pilots/a99J07/publication-plan.json",
+  "note": "Same inherited one-paper calibration (rhgrh100 length table and sentence sample); no new measurement was made for this problem. The rules are restated for a two-conclusion estimate proof with one auxiliary construction (the primitive) and one cited principle (Hölder on the window).",
+  "length_basis_rhgrh100": {
+   "run": "mark7rhgrh100-20260928 (100 RH/GRH-adjacent papers; 7,337 usable proofs)",
+   "table": "storage:futon6/inkup/professional/rhgrh100/summary.json, built by scripts/inkup-run-proofs.py",
+   "word_quantiles_10_25_50_75_90": [25, 69, 156, 309, 564],
+   "share_of_proofs_at_or_under_target_120": 0.413,
+   "share_at_or_under_max_168": 0.53
+  }
+ },
+ "rules": [
+  {
+   "id": "PR1",
+   "rule": "No sentence may be commentary only. A reason for a step may appear only as a clause of the sentence that takes the step.",
+   "from": "inflight_commentary"
+  },
+  {
+   "id": "PR2",
+   "rule": "No restatement of the claim before the derivation; the proof opens with its first step and the statement is carried by the closing sentence.",
+   "from": "section_lead"
+  },
+  {
+   "id": "PR3",
+   "rule": "The Hölder step on the window is invoked in one sentence that says what it consumes (the window-measure bound) and what it returns; finiteness and atomlessness of the restricted measure, which make the primitive continuous, are clauses and not separate checks.",
+   "from": "lemma_application, side_condition"
+  },
+  {
+   "id": "PR4",
+   "rule": "At most 168 words; aim for 120 or fewer.",
+   "from": "proof_length_words"
+  },
+  {
+   "id": "PR5",
+   "rule": "Every mandatory node of the content plan is realized or merged with an honest quote; every dependency between nodes in the alignment is still visible in the prose.",
+   "from": "programme gate for P3 and P4"
+  }
+ ],
+ "target_words": 120,
+ "max_words": 168,
+ "nodes": [
+  {"node": "a97A02:B0", "action": "omit", "budget_percent": 0, "merged_into": "a97A02:B8", "reason": "PR2; the closing sentence states both conclusions."},
+  {"node": "a97A02:B1", "action": "compress", "budget_percent": 8, "reason": "The restricted-measure reading in one sentence, as the opening step."},
+  {"node": "a97A02:B2", "action": "omit", "budget_percent": 0, "merged_into": "a97A02:B4", "reason": "L^p inside L^1 on a finite measure is a clause of the sentence that introduces the primitive (PR3)."},
+  {"node": "a97A02:B3", "action": "compress", "budget_percent": 8, "reason": "The window-measure bound in one sentence, as the clause Hölder consumes."},
+  {"node": "a97A02:B4", "action": "show", "budget_percent": 22, "reason": "The primitive, with finiteness and atomlessness as clauses (PR3)."},
+  {"node": "a97A02:B5", "action": "show", "budget_percent": 14, "reason": "The interval identity and continuity of the numerator."},
+  {"node": "a97A02:B6", "action": "show", "budget_percent": 18, "reason": "One sentence applying Hölder on the window and saying what it consumes (PR3)."},
+  {"node": "a97A02:B7", "action": "show", "budget_percent": 18, "reason": "The conclusion sentence with the constant and its validity for every real t."},
+  {"node": "a97A02:B8", "action": "compress", "budget_percent": 12, "reason": "Combine the two conclusions; carries the statement of the result (PR2)."}
+ ],
+ "questions": {
+  "window-near-endpoint": {
+   "action": "anticipate",
+   "reason": "The opening sentence says the window contributes its part inside the interval, which is the zero-extension reading as a clause."
+  },
+  "continuity-from-integrability": {
+   "action": "anticipate",
+   "reason": "PR3 makes the primitive sentence name finiteness (hence L^1) and atomlessness as the clauses behind its continuity."
+  },
+  "why-not-symmetric-difference": {
+   "action": "omit",
+   "reason": "A paper does not contrast its route with the one it did not take."
+  },
+  "bound-needs-no-t-restriction": {
+   "action": "anticipate",
+   "reason": "The conclusion sentence records that the estimate holds for every real t, as a clause."
+  },
+  "why-this-constant": {
+   "action": "anticipate",
+   "reason": "The constant is named as the dual norm of the normalised window indicator in the clause of the concluding estimate."
+  }
+ },
+ "note": "Question decisions differ from the expert-reference profile in three places: the window reading, the primitive's hypotheses and the constant are anticipated here because PR1 and PR3 fold reasons into the step sentences; the symmetric-difference contrast is omitted as commentary on a road not taken."
+}

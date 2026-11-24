@@ -1,0 +1,182 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a97A02",
+  "realizations": "holes/inkup/pilots/a97A02/reader-telling.formal-audit.md",
+  "content_plan": "holes/inkup/pilots/a97A02/content-plan.json",
+  "ink": "holes/inkup/pilots/a97A02/generative-ink.tsv",
+  "note": "a97A02 formal-audit sidecar; ink budgets derived from the mandatory nodes and the anticipated questions.",
+  "profiles": {
+    "formal-audit": {
+      "nodes": [
+        {
+          "node": "a97A02:B0",
+          "status": "realized",
+          "ink_words": 66,
+          "ink_percent": 13.0,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B1",
+          "status": "realized",
+          "ink_words": 71,
+          "ink_percent": 14.0,
+          "planned_percent": 14.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a97A02:B2",
+          "status": "realized",
+          "ink_words": 33,
+          "ink_percent": 6.5,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B3",
+          "status": "realized",
+          "ink_words": 25,
+          "ink_percent": 4.9,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B4",
+          "status": "realized",
+          "ink_words": 97,
+          "ink_percent": 19.2,
+          "planned_percent": 22.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a97A02:B5",
+          "status": "realized",
+          "ink_words": 30,
+          "ink_percent": 5.9,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B6",
+          "status": "realized",
+          "ink_words": 55,
+          "ink_percent": 10.9,
+          "planned_percent": 14.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a97A02:B7",
+          "status": "realized",
+          "ink_words": 88,
+          "ink_percent": 17.4,
+          "planned_percent": 15.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a97A02:B8",
+          "status": "realized",
+          "ink_words": 41,
+          "ink_percent": 8.1,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        }
+      ],
+      "questions": [
+        {
+          "question": "window-near-endpoint",
+          "status": "answered",
+          "node": "a97A02:B1",
+          "quote": "The file's encoding note says that\nthis restriction automatically uses the zero extension outside \\( [0,1] \\):\nintegrating over the window against the restricted measure is integrating the\nzero extension, so a window sticking past an endpoint contributes only its\npart inside \\( [0,1] \\).",
+          "ink_words": 45,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-window-meaning.json",
+              "edge": {
+                "from": "restriction-warrant",
+                "relation": "warrants",
+                "to": "window-meaning"
+              }
+            }
+          ]
+        },
+        {
+          "question": "continuity-from-integrability",
+          "status": "answered",
+          "node": "a97A02:B4",
+          "quote": "The hypothesis \\( \\mathrm{hF} \\) is\ncontinuity of \\( F \\) on \\( \\mathrm{Iic}\\ (1+h) \\), from\nIntegrableOn.continuousOn_Iic_primitive_Iic; this consumes integrability of\n\\( f \\) (B2) and the NoAtoms instance",
+          "ink_words": 30,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-primitive-continuity.json",
+              "edge": {
+                "from": "primitive-warrant",
+                "relation": "requires",
+                "to": "integrable-f"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a97A02-primitive-continuity.json",
+              "edge": {
+                "from": "primitive-warrant",
+                "relation": "requires",
+                "to": "no-atoms"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-not-symmetric-difference",
+          "status": "answered",
+          "node": "a97A02:B4",
+          "quote": "The file's own comment records why this route: writing an\n\\( \\mathrm{Icc} \\) integral as a difference of two \\( \\mathrm{Iic} \\)\nprimitives avoids symmetric-difference bookkeeping.",
+          "ink_words": 26,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-why-primitives.json",
+              "edge": {
+                "from": "sd-bookkeeping",
+                "relation": "resolved-by",
+                "to": "primitive-move"
+              }
+            }
+          ]
+        },
+        {
+          "question": "bound-needs-no-t-restriction",
+          "status": "answered",
+          "node": "a97A02:B7",
+          "quote": "The binder \\( t \\in [0,1] \\) is\nintroduced by intro and never used in this branch: the estimate needs\nmeasurability, the window bound and \\( p \\ge 1 \\) only, so hL1real and the\nfinal bound hold for every real \\( t \\).",
+          "ink_words": 44,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-bound-all-real-t.json",
+              "edge": {
+                "from": "holder-window-warrant",
+                "relation": "warrants",
+                "to": "all-real-t-bound"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-this-constant",
+          "status": "answered",
+          "node": "a97A02:B6",
+          "quote": "The constant agrees\nwith the dual-norm reading: Hölder's factor \\( (2h)^{1-1/p} \\) divided by\n\\( 2h \\) is \\( (2h)^{-1/p} \\).",
+          "ink_words": 21,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-constant.json",
+              "edge": {
+                "from": "conjugate-norm-warrant",
+                "relation": "warrants",
+                "to": "normalised-indicator-norm"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a97A02",
+  "realizations": "holes/inkup/pilots/a97A02/publication-telling.md",
+  "content_plan": "holes/inkup/pilots/a97A02/content-plan.json",
+  "ink": "holes/inkup/pilots/a97A02/generative-ink.tsv",
+  "note": "a97A02 publication sidecar; ink budgets derived from the mandatory nodes and the anticipated questions.",
+  "profiles": {
+    "publication": {
+      "nodes": [
+        {
+          "node": "a97A02:B0",
+          "status": "merged",
+          "ink_words": 0,
+          "ink_percent": 0.0,
+          "planned_percent": 0.0,
+          "planned_action": "omit",
+          "merged_into": "a97A02:B8",
+          "quote": "continuous on \\( [0,1] \\) and satisfies the displayed bound"
+        },
+        {
+          "node": "a97A02:B1",
+          "status": "realized",
+          "ink_words": 27,
+          "ink_percent": 16.4,
+          "planned_percent": 8.0,
+          "planned_action": "compress"
+        },
+        {
+          "node": "a97A02:B2",
+          "status": "merged",
+          "ink_words": 0,
+          "ink_percent": 0.0,
+          "planned_percent": 0.0,
+          "planned_action": "omit",
+          "merged_into": "a97A02:B4",
+          "quote": "since the measure is finite,\nso that \\( f \\in L^{1} \\), and atomless"
+        },
+        {
+          "node": "a97A02:B3",
+          "status": "realized",
+          "ink_words": 12,
+          "ink_percent": 7.3,
+          "planned_percent": 8.0,
+          "planned_action": "compress"
+        },
+        {
+          "node": "a97A02:B4",
+          "status": "realized",
+          "ink_words": 37,
+          "ink_percent": 22.4,
+          "planned_percent": 22.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B5",
+          "status": "realized",
+          "ink_words": 18,
+          "ink_percent": 10.9,
+          "planned_percent": 14.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B6",
+          "status": "realized",
+          "ink_words": 12,
+          "ink_percent": 7.3,
+          "planned_percent": 18.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B7",
+          "status": "realized",
+          "ink_words": 29,
+          "ink_percent": 17.6,
+          "planned_percent": 18.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B8",
+          "status": "realized",
+          "ink_words": 30,
+          "ink_percent": 18.2,
+          "planned_percent": 12.0,
+          "planned_action": "compress"
+        }
+      ],
+      "questions": [
+        {
+          "question": "window-near-endpoint",
+          "status": "answered",
+          "node": "a97A02:B1",
+          "quote": "Work with Lebesgue measure restricted to \\( [0,1] \\): the window\n\\( [t-h,t+h] \\) contributes its part inside the interval, and\n\\( f_h(t) = (2h)^{-1}\\int_{[t-h,t+h]} f \\).",
+          "ink_words": 27,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-window-meaning.json",
+              "edge": {
+                "from": "restriction-warrant",
+                "relation": "warrants",
+                "to": "window-meaning"
+              }
+            }
+          ]
+        },
+        {
+          "question": "continuity-from-integrability",
+          "status": "answered",
+          "node": "a97A02:B4",
+          "quote": "since the measure is finite,\nso that \\( f \\in L^{1} \\), and atomless, \\( F \\) and \\( t \\mapsto F(t\\pm h) \\)\nare continuous",
+          "ink_words": 26,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-primitive-continuity.json",
+              "edge": {
+                "from": "primitive-warrant",
+                "relation": "requires",
+                "to": "integrable-f"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a97A02-primitive-continuity.json",
+              "edge": {
+                "from": "primitive-warrant",
+                "relation": "requires",
+                "to": "no-atoms"
+              }
+            }
+          ]
+        },
+        {
+          "question": "bound-needs-no-t-restriction",
+          "status": "answered",
+          "node": "a97A02:B7",
+          "quote": "Therefore\n\\( \\lvert f_h(t)\\rvert \\le (2h)^{-1/p}\\lVert f\\rVert_{p} \\), the constant being the\ndual norm of the normalised window indicator, and the estimate holds for\nevery real \\( t \\).",
+          "ink_words": 29,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-bound-all-real-t.json",
+              "edge": {
+                "from": "holder-window-warrant",
+                "relation": "warrants",
+                "to": "all-real-t-bound"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-this-constant",
+          "status": "answered",
+          "node": "a97A02:B7",
+          "quote": "the constant being the\ndual norm of the normalised window indicator",
+          "ink_words": 11,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-constant.json",
+              "edge": {
+                "from": "conjugate-norm-warrant",
+                "relation": "warrants",
+                "to": "normalised-indicator-norm"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}

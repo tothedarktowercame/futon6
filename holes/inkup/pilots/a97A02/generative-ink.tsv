@@ -1,0 +1,28 @@
+profile	node	action	budget_percent	reason
+teaching	a97A02:B0	show	7	Derived: weight 1 plus one per anticipated teaching question at this node; total weight 14.
+teaching	a97A02:B1	expand	14	Derived: weight 2 (node plus window-near-endpoint); total weight 14.
+teaching	a97A02:B2	show	7	Derived: weight 1; total weight 14.
+teaching	a97A02:B3	show	7	Derived: weight 1; total weight 14.
+teaching	a97A02:B4	expand	22	Derived: weight 3 (node plus continuity-from-integrability and why-not-symmetric-difference); total weight 14.
+teaching	a97A02:B5	show	7	Derived: weight 1; total weight 14.
+teaching	a97A02:B6	expand	14	Derived: weight 2 (node plus why-this-constant); total weight 14.
+teaching	a97A02:B7	expand	15	Derived: weight 2 (node plus bound-needs-no-t-restriction); total weight 14.
+teaching	a97A02:B8	show	7	Derived: weight 1; total weight 14.
+expert-reference	a97A02:B0	omit	0	Not in the expert-reference mandatory nodes of the alignment.
+expert-reference	a97A02:B1	show	17	Derived: equal weight 1 over the six shown nodes.
+expert-reference	a97A02:B2	omit	0	Not in the expert-reference mandatory nodes; L^p inside L^1 is automatic at this level.
+expert-reference	a97A02:B3	show	16	Derived: equal weight 1 over the six shown nodes.
+expert-reference	a97A02:B4	show	18	Derived: equal weight 1 over the six shown nodes.
+expert-reference	a97A02:B5	show	16	Derived: equal weight 1 over the six shown nodes.
+expert-reference	a97A02:B6	show	17	Derived: equal weight 1 over the six shown nodes.
+expert-reference	a97A02:B7	show	16	Derived: equal weight 1 over the six shown nodes.
+expert-reference	a97A02:B8	omit	0	Not in the expert-reference mandatory nodes of the alignment.
+formal-audit	a97A02:B0	show	7	Derived: weight 1 plus one per anticipated audit question at this node; total weight 14.
+formal-audit	a97A02:B1	expand	14	Derived: weight 2 (node plus window-near-endpoint); total weight 14.
+formal-audit	a97A02:B2	show	7	Derived: weight 1; total weight 14.
+formal-audit	a97A02:B3	show	7	Derived: weight 1; total weight 14.
+formal-audit	a97A02:B4	expand	22	Derived: weight 3 (node plus continuity-from-integrability and why-not-symmetric-difference); total weight 14.
+formal-audit	a97A02:B5	show	7	Derived: weight 1; total weight 14.
+formal-audit	a97A02:B6	expand	14	Derived: weight 2 (node plus why-this-constant); total weight 14.
+formal-audit	a97A02:B7	expand	15	Derived: weight 2 (node plus bound-needs-no-t-restriction); total weight 14.
+formal-audit	a97A02:B8	show	7	Derived: weight 1; total weight 14.

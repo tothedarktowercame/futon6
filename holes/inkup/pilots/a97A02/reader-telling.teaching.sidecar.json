@@ -1,0 +1,182 @@
+{
+  "schema": "inkup.telling-sidecar/v0",
+  "problem": "a97A02",
+  "realizations": "holes/inkup/pilots/a97A02/reader-telling.teaching.md",
+  "content_plan": "holes/inkup/pilots/a97A02/content-plan.json",
+  "ink": "holes/inkup/pilots/a97A02/generative-ink.tsv",
+  "note": "a97A02 teaching sidecar; ink budgets derived from the mandatory nodes and the anticipated questions.",
+  "profiles": {
+    "teaching": {
+      "nodes": [
+        {
+          "node": "a97A02:B0",
+          "status": "realized",
+          "ink_words": 82,
+          "ink_percent": 11.9,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B1",
+          "status": "realized",
+          "ink_words": 103,
+          "ink_percent": 15.0,
+          "planned_percent": 14.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a97A02:B2",
+          "status": "realized",
+          "ink_words": 48,
+          "ink_percent": 7.0,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B3",
+          "status": "realized",
+          "ink_words": 39,
+          "ink_percent": 5.7,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B4",
+          "status": "realized",
+          "ink_words": 168,
+          "ink_percent": 24.5,
+          "planned_percent": 22.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a97A02:B5",
+          "status": "realized",
+          "ink_words": 46,
+          "ink_percent": 6.7,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        },
+        {
+          "node": "a97A02:B6",
+          "status": "realized",
+          "ink_words": 92,
+          "ink_percent": 13.4,
+          "planned_percent": 14.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a97A02:B7",
+          "status": "realized",
+          "ink_words": 66,
+          "ink_percent": 9.6,
+          "planned_percent": 15.0,
+          "planned_action": "expand"
+        },
+        {
+          "node": "a97A02:B8",
+          "status": "realized",
+          "ink_words": 43,
+          "ink_percent": 6.3,
+          "planned_percent": 7.0,
+          "planned_action": "show"
+        }
+      ],
+      "questions": [
+        {
+          "question": "window-near-endpoint",
+          "status": "answered",
+          "node": "a97A02:B1",
+          "quote": "The reading is the zero\nextension: integrate against Lebesgue measure restricted to \\( [0,1] \\), so\nthe part of the window outside contributes nothing, which is exactly the\nintegral of the extended function, and the average is the window integral\ndivided by \\( 2h \\). Near an endpoint you are averaging over a shorter\neffective window, still dividing by \\( 2h \\).",
+          "ink_words": 62,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-window-meaning.json",
+              "edge": {
+                "from": "restriction-warrant",
+                "relation": "warrants",
+                "to": "window-meaning"
+              }
+            }
+          ]
+        },
+        {
+          "question": "continuity-from-integrability",
+          "status": "answered",
+          "node": "a97A02:B4",
+          "quote": "Continuity of \\( f_h \\)\nfrom \\( f \\in L^{p} \\) then comes in two stages: first \\( f \\) is integrable,\nas in B2, and second the primitive lemma applies because the restricted\nLebesgue measure has no atoms, so \\( b \\mapsto \\int_{(-\\infty,b]} f \\) is\ncontinuous, and \\( t \\mapsto F(t\\pm h) \\) is continuous on \\( [0,1] \\).",
+          "ink_words": 61,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-primitive-continuity.json",
+              "edge": {
+                "from": "primitive-warrant",
+                "relation": "requires",
+                "to": "integrable-f"
+              }
+            },
+            {
+              "graph": "holes/inkup/reasoning/a97A02-primitive-continuity.json",
+              "edge": {
+                "from": "primitive-warrant",
+                "relation": "requires",
+                "to": "no-atoms"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-not-symmetric-difference",
+          "status": "answered",
+          "node": "a97A02:B4",
+          "quote": "that estimate needs care: the difference has measure\n\\( 2\\min(\\lvert s-t\\rvert, 2h) \\), not the \\( 2\\lvert s-t\\rvert \\) one first\nwrites down, since once \\( \\lvert s-t\\rvert \\) exceeds \\( 2h \\) the windows\nare disjoint; the \\( L^{q} \\) bookkeeping degenerates at \\( q=\\infty \\); and\n\\( p=1 \\) needs a separate fallback through absolute continuity.",
+          "ink_words": 58,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-why-primitives.json",
+              "edge": {
+                "from": "sd-bookkeeping",
+                "relation": "resolved-by",
+                "to": "primitive-move"
+              }
+            }
+          ]
+        },
+        {
+          "question": "bound-needs-no-t-restriction",
+          "status": "answered",
+          "node": "a97A02:B7",
+          "quote": "Notice which\nhypotheses the chain consumed: measurability, the window bound, and\n\\( p \\ge 1 \\). The restriction \\( t \\in [0,1] \\) never entered, so the same\nestimate holds for every real \\( t \\).",
+          "ink_words": 36,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-bound-all-real-t.json",
+              "edge": {
+                "from": "holder-window-warrant",
+                "relation": "warrants",
+                "to": "all-real-t-bound"
+              }
+            }
+          ]
+        },
+        {
+          "question": "why-this-constant",
+          "status": "answered",
+          "node": "a97A02:B6",
+          "quote": "The constant that will\nsurvive is not arbitrary: \\( (2h)^{-1/p} \\) is the \\( L^{q} \\) norm of the\nnormalised window indicator \\( (2h)^{-1}\\mathbf{1}_{[t-h,t+h]} \\), a constant\n\\( (2h)^{-1} \\) on a set of measure \\( 2h \\), giving\n\\( (2h)^{-1}(2h)^{1/q} = (2h)^{-1/p} \\), with \\( 1/q = 0 \\) when \\( p = 1 \\).",
+          "ink_words": 56,
+          "graph_support": [
+            {
+              "graph": "holes/inkup/reasoning/a97A02-constant.json",
+              "edge": {
+                "from": "conjugate-norm-warrant",
+                "relation": "warrants",
+                "to": "normalised-indicator-norm"
+              }
+            }
+          ]
+        }
+      ],
+      "unplanned_answers": []
+    }
+  }
+}
