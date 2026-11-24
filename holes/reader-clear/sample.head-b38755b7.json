@@ -1,0 +1,362 @@
+{
+  "counts": {
+    "dropped_excluded": 2,
+    "dropped_missing_informal_solution": 0,
+    "dropped_proof_error": 0,
+    "eligible": 332,
+    "inked": 134,
+    "modules": 468,
+    "overlay_modules_agree": true
+  },
+  "drawn": [
+    {
+      "module": "problems.a01A01.lean.Main",
+      "problem_id": "a01A01",
+      "records": 33,
+      "role": "sample",
+      "stratum": "a:long",
+      "words": 5062
+    },
+    {
+      "module": "problems.a96J04.lean.Main",
+      "problem_id": "a96J04",
+      "records": 16,
+      "role": "sample",
+      "stratum": "a:long",
+      "words": 2752
+    },
+    {
+      "module": "problems.a99J05.lean.Main",
+      "problem_id": "a99J05",
+      "records": 13,
+      "role": "sample",
+      "stratum": "a:long",
+      "words": 3289
+    },
+    {
+      "module": "problems.aunk04.lean.Main",
+      "problem_id": "aunk04",
+      "records": 6,
+      "role": "sample",
+      "stratum": "a:middle",
+      "words": 1450
+    },
+    {
+      "module": "problems.a03J01.lean.Main",
+      "problem_id": "a03J01",
+      "records": 3,
+      "role": "sample",
+      "stratum": "a:middle",
+      "words": 1377
+    },
+    {
+      "module": "problems.a96A06.lean.Main",
+      "problem_id": "a96A06",
+      "records": 7,
+      "role": "sample",
+      "stratum": "a:middle",
+      "words": 980
+    },
+    {
+      "module": "problems.a97A02.lean.Main",
+      "problem_id": "a97A02",
+      "records": 4,
+      "role": "sample",
+      "stratum": "a:middle",
+      "words": 800
+    },
+    {
+      "module": "problems.a98J02.lean.Main",
+      "problem_id": "a98J02",
+      "records": 7,
+      "role": "sample",
+      "stratum": "a:middle",
+      "words": 1299
+    },
+    {
+      "module": "problems.a98J01.lean.Main",
+      "problem_id": "a98J01",
+      "records": 3,
+      "role": "sample",
+      "stratum": "a:short",
+      "words": 668
+    },
+    {
+      "module": "problems.aunk05.lean.Main",
+      "problem_id": "aunk05",
+      "records": 1,
+      "role": "sample",
+      "stratum": "a:short",
+      "words": 128
+    },
+    {
+      "module": "problems.b96A03.lean.Main",
+      "problem_id": "b96A03",
+      "records": 7,
+      "role": "sample",
+      "stratum": "b:long",
+      "words": 2885
+    },
+    {
+      "module": "problems.b99A02.lean.Main",
+      "problem_id": "b99A02",
+      "records": 18,
+      "role": "sample",
+      "stratum": "b:long",
+      "words": 3892
+    },
+    {
+      "module": "problems.b95J01.lean.Main",
+      "problem_id": "b95J01",
+      "records": 1,
+      "role": "sample",
+      "stratum": "b:middle",
+      "words": 927
+    },
+    {
+      "module": "problems.b93A04.lean.Main",
+      "problem_id": "b93A04",
+      "records": 1,
+      "role": "sample",
+      "stratum": "b:middle",
+      "words": 1334
+    },
+    {
+      "module": "problems.b03J04.lean.Main",
+      "problem_id": "b03J04",
+      "records": 1,
+      "role": "sample",
+      "stratum": "b:short",
+      "words": 448
+    },
+    {
+      "module": "problems.m99J02.lean.Main",
+      "problem_id": "m99J02",
+      "records": 12,
+      "role": "sample",
+      "stratum": "m:long",
+      "words": 2681
+    },
+    {
+      "module": "problems.m03J02.lean.Main",
+      "problem_id": "m03J02",
+      "records": 28,
+      "role": "sample",
+      "stratum": "m:long",
+      "words": 5489
+    },
+    {
+      "module": "problems.m96J05.lean.Main",
+      "problem_id": "m96J05",
+      "records": 22,
+      "role": "sample",
+      "stratum": "m:long",
+      "words": 2611
+    },
+    {
+      "module": "problems.m03J04.lean.Main",
+      "problem_id": "m03J04",
+      "records": 6,
+      "role": "sample",
+      "stratum": "m:middle",
+      "words": 1584
+    },
+    {
+      "module": "problems.m01J01.lean.Main",
+      "problem_id": "m01J01",
+      "records": 1,
+      "role": "sample",
+      "stratum": "m:short",
+      "words": 171
+    },
+    {
+      "module": "problems.t03J06.lean.Main",
+      "problem_id": "t03J06",
+      "records": 11,
+      "role": "sample",
+      "stratum": "t:long",
+      "words": 2778
+    },
+    {
+      "module": "problems.t97J07.lean.Main",
+      "problem_id": "t97J07",
+      "records": 16,
+      "role": "sample",
+      "stratum": "t:long",
+      "words": 1971
+    },
+    {
+      "module": "problems.t91J05.lean.Main",
+      "problem_id": "t91J05",
+      "records": 20,
+      "role": "sample",
+      "stratum": "t:long",
+      "words": 5614
+    },
+    {
+      "module": "problems.t96A03.lean.Main",
+      "problem_id": "t96A03",
+      "records": 17,
+      "role": "sample",
+      "stratum": "t:middle",
+      "words": 748
+    },
+    {
+      "module": "problems.t00J06.lean.Main",
+      "problem_id": "t00J06",
+      "records": 7,
+      "role": "sample",
+      "stratum": "t:middle",
+      "words": 1278
+    },
+    {
+      "module": "problems.t02A08.lean.Main",
+      "problem_id": "t02A08",
+      "records": 3,
+      "role": "sample",
+      "stratum": "t:short",
+      "words": 128
+    },
+    {
+      "module": "problems.t94A05.lean.Main",
+      "problem_id": "t94A05",
+      "records": 2,
+      "role": "sample",
+      "stratum": "t:short",
+      "words": 33
+    },
+    {
+      "module": "problems.t95A03.lean.Main",
+      "problem_id": "t95A03",
+      "records": 1,
+      "role": "sample",
+      "stratum": "t:short",
+      "words": 50
+    },
+    {
+      "module": "problems.t99A04.lean.Main",
+      "problem_id": "t99A04",
+      "records": 2,
+      "role": "sample",
+      "stratum": "t:short",
+      "words": 271
+    },
+    {
+      "module": "problems.t97A06.lean.Main",
+      "problem_id": "t97A06",
+      "records": 1,
+      "role": "sample",
+      "stratum": "t:short",
+      "words": 126
+    },
+    {
+      "module": "problems.b01J01.lean.Main",
+      "problem_id": "b01J01",
+      "records": 11,
+      "role": "planted-control",
+      "stratum": "b:long",
+      "words": 1988
+    },
+    {
+      "module": "problems.t94J08.lean.Main",
+      "problem_id": "t94J08",
+      "records": 10,
+      "role": "planted-control",
+      "stratum": "t:long",
+      "words": 3095
+    },
+    {
+      "module": "problems.m02J04.lean.Main",
+      "problem_id": "m02J04",
+      "records": 100,
+      "role": "planted-control",
+      "stratum": "m:long",
+      "words": 13800
+    },
+    {
+      "module": "problems.t02A02.lean.Main",
+      "problem_id": "t02A02",
+      "records": 11,
+      "role": "planted-control",
+      "stratum": "t:long",
+      "words": 2058
+    },
+    {
+      "module": "problems.a96J07.lean.Main",
+      "problem_id": "a96J07",
+      "records": 3,
+      "role": "planted-control",
+      "stratum": "a:middle",
+      "words": 1232
+    }
+  ],
+  "head": "head-b38755b7",
+  "length_tercile_cut_points": {
+    "middle_max": 1810,
+    "short_max": 671
+  },
+  "schema": "reader-clear.sample/v0",
+  "seed": 20261124,
+  "strata": [
+    {
+      "allocated": 3,
+      "population": 28,
+      "stratum": "a:long"
+    },
+    {
+      "allocated": 5,
+      "population": 53,
+      "stratum": "a:middle"
+    },
+    {
+      "allocated": 2,
+      "population": 27,
+      "stratum": "a:short"
+    },
+    {
+      "allocated": 2,
+      "population": 18,
+      "stratum": "b:long"
+    },
+    {
+      "allocated": 2,
+      "population": 18,
+      "stratum": "b:middle"
+    },
+    {
+      "allocated": 1,
+      "population": 10,
+      "stratum": "b:short"
+    },
+    {
+      "allocated": 3,
+      "population": 36,
+      "stratum": "m:long"
+    },
+    {
+      "allocated": 1,
+      "population": 15,
+      "stratum": "m:middle"
+    },
+    {
+      "allocated": 1,
+      "population": 13,
+      "stratum": "m:short"
+    },
+    {
+      "allocated": 3,
+      "population": 28,
+      "stratum": "t:long"
+    },
+    {
+      "allocated": 2,
+      "population": 25,
+      "stratum": "t:middle"
+    },
+    {
+      "allocated": 5,
+      "population": 61,
+      "stratum": "t:short"
+    }
+  ]
+}
