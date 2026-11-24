@@ -1,8 +1,11 @@
 # M-reader-clear — a reading gate on zero-residual-ink PaperPrinter records
 
 **Status:** OPEN (Joe's go, 2026-11-24: "It is OK with me, codex and Zai are both
-relatively fresh, probably good to use a mix of those two agent classes"). Tooling is
-being built; the sample draw waits for the cleanup lab's next accepted head.
+relatively fresh, probably good to use a mix of those two agent classes"). Sample frozen
+2026-11-24 at head `b38755b7`, seed 20261124: 332 eligible zero-ink problems of 468, 30
+sampled and 5 for planted controls (`holes/reader-clear/sample.head-b38755b7.json`,
+release order in `release.head-b38755b7.json`). Wave 1 of tranche 1 (a98J02, m03J04,
+t91J05) is being read.
 
 **Type:** mission (quality assurance). **Raised:** 2026-11-24 by Joe, after the InkUp
 pilot: "If we had a sample of prelim papers that had been marked 'clear' by claude-7,
