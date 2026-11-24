@@ -392,6 +392,86 @@ sampled modules were unproved. Across apm-lean, 26 of 480 `Main.lean` files cont
 word `sorry` (a text count, not a compile). A later draw should store the eligible list
 and exclude modules with `sorry`.
 
+## Errata register (opened 2026-11-24, claude-12)
+
+Joe (2026-11-24): the errata found by the reading "need to be recorded and fixed", and
+this file is where they are recorded for now. Each row is a defect in an apm-lean
+statement, Lean proof or informal solution, not in the print (print defects went to the
+cleanup lab; see "Where findings go"). Status is `open` until a commit fixes it; then the
+row gets the commit and the date. Evidence and line numbers:
+apm-lean `holes/labs/statement-registry/reader-clear-1124.md` and
+`statement-experiments.head-b38755b7.md` in the storage area. Nothing here has been
+regraded. Fixes to `Main.lean` files wait until claude-7's lab is not reading them at a
+pinned head.
+
+### A. Informal solutions that say something false or unsupported
+
+| Id | Problem | Defect | Fix | Status |
+|---|---|---|---|---|
+| A1 | t91J05 | "the number of sheets is finite since the base is compact and the cover connected" is false (ℝ → S¹). | Take finiteness from the hypothesis that the cover is finite. | open |
+| A2 | t94A05 | "an open subset of ℝⁿ is path connected" is false. | Use a ball inside the chart image. | open |
+| A3 | b03J04 | A root of unity from an unspecified extension is multiplied by α in K with no common field named. | Fix a splitting field containing both. | open |
+| A4 | a92J05 | Closing remark (a single dominating term exists for any polynomial on any circle) is false: z² + 3z + 3 on \|z\| = 1. | Delete the remark or restrict it. | open |
+| A5 | a96J04 | `informal-solution.md` embeds a stale Lean statement with closed intervals; `Main.lean` has open ones. | Replace the embedded statement. | open |
+| A6 | a98J01 | The separation constant is a minimum over compact sets that may be empty or fewer than two. | Treat those cases separately. | open |
+| A7 | a97A02 | The symmetric difference has measure 2·min(\|s−t\|, 2h), not 2\|s−t\|. | State the min, or an inequality (≤ 2\|s−t\|), which is all the proof uses. | open |
+| A8 | a03J01 | "potentially uncountable collection" said of a sequence of sets. | Say countable. | open |
+| A9 | t95A03 | "B₂ ⊆ B₁" is not given by the cover and not needed. | Remove it. | open |
+| A10 | m93J03 | Uniqueness is obtained only inside the neighbourhood given by the implicit function theorem. | Check against the Lean statement first, then say which uniqueness is proved. | open |
+| A11 | m02J04 | Finds a stationary catenary without proving it minimal (the Lean proof does prove it). | Add the minimality argument, following the Lean proof. | open |
+
+### B. Lean statements that differ from the problem
+
+| Id | Problem | Defect | Fix | Status |
+|---|---|---|---|---|
+| B1 | a98J01 | Assumes `Measurable f` (Borel) for f : ℝ → ℝ; the problem is Lusin's theorem for Lebesgue measurable f on [a,b]. Header says "Statement repairs: None". | Restate for Lebesgue measurable f on [a,b] and prove it; at the least, list the difference in the header. | open |
+| B2 | t96A08 | Assumes piecewise-smooth reachability of every point (`hreachable`) where the problem has a connected manifold; the codomain is changed from M to ℝ. Neither is in the header. | Derive reachability from connectedness; document the codomain repair. | open |
+| B3 | t91J05 | Main theorem assumes `[ConnectedSpace X]`; the problem's finite covers may be disconnected. Removing the instance fails to compile. | Prove the disconnected case or list the restriction as a repair. | open |
+| B4 | m03J05 | `g 0 = 0` is unused; `Monotone G` is unused in the same conjunct; a nonincreasing G is not covered. | Drop the unused hypotheses (a copy without `g 0 = 0` compiles); decide the reading of "monotone" and say so in the header. | open |
+| B5 | b93A04 | States the join of the two fixing subgroups; the problem writes the product set H₁H₂. The header says so. | Add the 19-line set-equality lemma via `Subgroup.mul_normal` (compiles in a scratch copy). | open |
+| B6 | m03J02 | Imposes the equation at every real t; the problem poses it for t > 0. The file comment gives a reason. | Not judged; read and decide. | open |
+| B7 | a97A02 | t ∈ [0,1] is unused in the estimate. | Drop it (a generalised copy compiles). | open |
+| B8 | aunk05 | The hypothesis that Ω is connected is bound and unused. | Drop it (a copy without it compiles). | open |
+
+### C. Lean proofs that do not carry out what the problem asks
+
+| Id | Problem | Defect | Status |
+|---|---|---|---|
+| C1 | t97J07 | Part (c): χ(ℂP²) = 3 and the fixed-point contributions summing to 3 are proved separately; no Lefschetz–Hopf statement links them. The line contribution's factor 2 is hard-coded. | open |
+| C2 | t94A05 | The problem says "Do not quote any theorems you do not prove"; the proof is two library calls. | open |
+| C3 | m03J02 | Part (a) says to use the contraction mapping theorem; existence and uniqueness are cited from Mathlib's Picard–Lindelöf and ODE uniqueness results. | open |
+| C4 | m01J01 | Both parts are single library calls; in the implication the open-mapping assumption is bound as `_` and unused. | open |
+| C5 | b03J04 | Irreducibility of X^p − β is one call to `X_pow_sub_C_irreducible_iff_of_prime`. | open |
+| C6 | aunk05 | Two library calls. | open |
+| C7 | t03J06 | That the two parametrised pieces make up the surface with the stated orientation is a comment, not a statement. | open |
+| C8 | a98J01 | The proof is `Measurable.exists_continuous` plus regularity, not the Lusin argument. Goes with B1. | open |
+
+C2 and C3 contradict an explicit instruction in the problem. C4, C5, C6 and C8 are proofs
+by citation where the problem is the cited theorem; whether that counts as proved is a
+grading question, not decided here.
+
+### D. Unused declarations
+
+| Id | Problem | Declaration | Status |
+|---|---|---|---|
+| D1 | t91J05 | Declaration 19 (Euler-characteristic lemma) is cited by nothing. | open |
+| D2 | a98J02 | Declaration 6; deleting it compiles. | open |
+| D3 | aunk04 | `apm_aunk04_rouche_bound`; the file still imports `ConstructionTargets.Rouche`. | open |
+| D4 | m99J02 | `Continuous q` is used only for integrability. | open |
+
+### E. Unproved, though the record shows zero residual ink
+
+t99A04, t97A06 and t02A08 contain `sorry`. They are not errata in a proof, but each is
+listed here so that it is not counted as proved from its record.
+
+### Order of repair
+
+1. Group A: text edits to `informal-solution.md`, one commit per problem.
+2. B4, B5, B7, B8 and group D: small Lean edits already shown to compile in copies.
+3. B1, B2, B3, B6: new Lean work, one problem per handoff.
+4. Group C: after a decision on whether a proof by citation of the theorem asked for
+   counts.
+
 ## Not in scope
 
 Generating tellings or content plans (the other half of the InkUp pilot); reading records
@@ -404,3 +484,5 @@ that still carry residual ink; reading at more than one head.
 2. A reader who has the informal proof never asks why the proof takes its main approach.
    A statement-only reading would cover that; it is not part of this mission.
 3. Whether a gate-6 pass by this protocol is wanted later is for Joe and claude-10.
+4. The errata register above: 34 rows open (11 informal, 8 statements, 8 Lean proofs,
+   4 unused declarations, 3 unproved). None fixed yet.
