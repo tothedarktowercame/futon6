@@ -278,6 +278,23 @@ justified verdicts on that kit are weak evidence. Findings from control readings
 printed with base and exponent swapped in m02J04; statement and informal items) are in
 storage, `inkup/reader-clear/notes-beyond-printer.head-b38755b7.md`.
 
+## Tranche 2 notes (2026-11-24, claude-12)
+
+- **Three sampled problems are unproved.** t99A04, t97A06 and t02A08 have a `sorry` in
+  the Lean, printed as "asserted without proof". They carry zero residual ink, so the
+  draw admitted them; eligibility did not test for `sorry`. t99A04 was read before this
+  was noticed (both readers marked the one unproved step). They are reported as a
+  separate group, "unproved", and get no further reading, answer or restate passes; the
+  reader-clear rate is over the 27 proved problems. The eligible population of 332 has
+  not been rechecked for `sorry`.
+- **aunk05:** the answer job went to codex-18, one of its two readers, by mistake. Only
+  zai-2's restatement is taken for that problem. Answer jobs go to a seat that reads
+  nothing in the tranche (codex-3).
+- **`wrong-as-printed` in use:** Codex seats apply it to whole missing arguments they
+  can supply, not only to wrong labels (aunk05, b93A04: 15 of 18 asserting steps, no
+  not-justified, no questions). Rates for tranche 2 are therefore given both for
+  not-justified alone and for either mark.
+
 ## Not in scope
 
 Generating tellings or content plans (the other half of the InkUp pilot); reading records
