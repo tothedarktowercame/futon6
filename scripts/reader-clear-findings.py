@@ -15,6 +15,8 @@ TYPE = {"printer-drops-content": "printer", "printer-wording": "printer",
         "statement-unused-hypothesis": "statement", "statement-missing-hypothesis": "statement",
         "known-statement-repair": "statement-known",
         "informal-skips-or-loose": "informal", "reader-gap": "reader-error"}
+# Answerers sometimes coin different names for one proposed class; merge them here.
+CLASS_ALIAS = {"NEW:omitted-instance-hypotheses": "NEW:lost-instance-hypotheses"}
 COLS = ["head", "module", "declaration", "steps", "printed_line", "reader", "question",
         "reader_verdict", "diagnosis_type", "diagnosis", "answerer_diagnosis", "proposed_class",
         "class_known", "settlement", "print_would_prevent", "evidence"]
@@ -54,6 +56,7 @@ def main():
                 ds = sorted({decls[int(s.split('.')[0][1:]) - 1] for s in q["steps"]})
                 diag = ov.get(f"{r}:{q['id']}", an["diagnosis"])
                 cls = an.get("proposed_class", "") if TYPE[diag] == "printer" else ""
+                cls = CLASS_ALIAS.get(cls, cls)
                 rr = r2.get(q["id"], {})
                 out.append({"head": a.head, "module": p, "declaration": ";".join(ds) or "-",
                             "steps": ";".join(q["steps"]) or "-", "printed_line": one(q["locus_P"]),
