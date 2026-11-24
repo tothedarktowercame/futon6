@@ -1,0 +1,24 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "b95J01:B2 — where the finite-index hypothesis is consumed",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/b95J01/alignment.json", "sha256": "55b27312a6b8e98aeacb9ebbfb962a6897602b0ce97935e66cd928b9957c61e9"},
+    "lean": {"path": "apm-lean:problems/b95J01/lean/Main.lean", "sha256": "b14c6101702c7d9ef3c1b1bc8e852947277cdd225a4ea3b077667d478b5d9a8c"}
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "Where does the proof of part (a) use that H has finite index, and is the statement false without it?", "authority": "reader-question", "evidence": ["arse:ask-1795502266-360", "arse:ask-1795502265-357", "blueprint-alignment:b95J01:B2"]},
+    {"id": "answer", "kind": "answer", "claim": "Finite index is used exactly once, to produce a positive exponent with g^n in H; without it no positive exponent need exist (g of infinite order, H trivial), so the least k need not exist.", "authority": "formal-derived", "evidence": ["blueprint-alignment:b95J01:B2", "lean:Main.lean#hnT"]},
+    {"id": "finite-index", "kind": "premise", "claim": "H has finitely many left cosets in G.", "authority": "formal-derived", "evidence": ["lean:Main.lean#H", "Mathlib:Subgroup.FiniteIndex"]},
+    {"id": "cosets-finite", "kind": "premise", "claim": "Only finitely many of the cosets H, gH, g^2H, ... can be pairwise distinct.", "authority": "formal-derived", "evidence": ["blueprint-alignment:b95J01:B2"]},
+    {"id": "exponent-warrant", "kind": "warrant", "claim": "From a finite coset set, some positive power of g lies in H: two of H, gH, ..., g^nH coincide and their quotient gives g^(b-a) in H.", "authority": "formal-derived", "evidence": ["Mathlib:Subgroup.exists_pow_mem_of_index_ne_zero", "informal:by pigeonhole"]},
+    {"id": "positive-exponent", "kind": "claim", "claim": "There exists n > 0 with g^n in H; this is the only source of positivity in part (a).", "authority": "formal-derived", "evidence": ["lean:Main.lean#T", "lean:Main.lean#hnT"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "exponent-warrant"},
+    {"from": "exponent-warrant", "relation": "requires", "to": "finite-index"},
+    {"from": "exponent-warrant", "relation": "requires", "to": "cosets-finite"},
+    {"from": "exponent-warrant", "relation": "warrants", "to": "positive-exponent"}
+  ]
+}

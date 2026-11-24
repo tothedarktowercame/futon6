@@ -1,0 +1,131 @@
+{
+  "schema": "inkup.content-plan/v0",
+  "problem": "b95J01",
+  "alignment": "holes/inkup/pilots/b95J01/alignment.json",
+  "evidence_run": "reader-clear-b38755b7",
+  "blocked_on": [],
+  "predicted_words": {
+    "rule": "words = nodes shown x base + questions answered x increment; base/increment teaching 24/23, expert-reference 16/21, formal-audit 22/21, publication 14/14; computed before any telling exists",
+    "words_alt_rule": "same node bases, but 60 per answered question for teaching and 37 for formal-audit, the per-question costs observed on a97A02 with each formula counted as one word; both are predictions to be tested, neither is a target",
+    "teaching": {"nodes": 10, "questions": 5, "words": 355, "words_alt": 540},
+    "expert-reference": {"nodes": 8, "questions": 1, "words": 149, "words_alt": 149},
+    "formal-audit": {"nodes": 10, "questions": 5, "words": 325, "words_alt": 405},
+    "publication": {"nodes": 10, "questions": 0, "words": 140, "words_alt": 140, "note": "The publication lane compresses the same ten nodes and answers none of the dialogue questions."}
+  },
+  "mandatory_nodes": [
+    {"node": "b95J01:B0", "depends_on": ["b95J01:B5", "b95J01:B7", "b95J01:B9"]},
+    {"node": "b95J01:B1", "depends_on": []},
+    {"node": "b95J01:B2", "depends_on": []},
+    {"node": "b95J01:B3", "depends_on": ["b95J01:B1", "b95J01:B2"]},
+    {"node": "b95J01:B4", "depends_on": ["b95J01:B3"]},
+    {"node": "b95J01:B5", "depends_on": ["b95J01:B4"]},
+    {"node": "b95J01:B6", "depends_on": []},
+    {"node": "b95J01:B7", "depends_on": ["b95J01:B4", "b95J01:B6"]},
+    {"node": "b95J01:B8", "depends_on": []},
+    {"node": "b95J01:B9", "depends_on": ["b95J01:B8"]}
+  ],
+  "questions": [
+    {
+      "id": "finite-index-is-the-only-source",
+      "question_function": "QF04",
+      "requested_relation": "method-requires-hypotheses",
+      "analogue": "Where does the proof of part (a) use that H has finite index, and why is nothing else available: without it, need any positive exponent with g^n in H exist?",
+      "blueprint_node": "b95J01:B2",
+      "evidence": [
+        {"candidate_id": "arse:ask-1795502266-360", "run_id": "reader-clear-b38755b7"},
+        {"candidate_id": "arse:ask-1795502265-357", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/b95J01-finite-index-role.json", "edge": {"from": "exponent-warrant", "relation": "requires", "to": "finite-index"}},
+        {"graph": "holes/inkup/reasoning/b95J01-finite-index-role.json", "edge": {"from": "exponent-warrant", "relation": "requires", "to": "cosets-finite"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "Two dialogue threads, one from each reader, ask the same thing: where the hypothesis lives (ask-1795502265-357, ask-1795502266-360). They are merged into one obligation; the zai thread also notes the printed statement hides the hypothesis entirely.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "A student should see that the whole finiteness of the problem sits in one step and that the statement is false without it."},
+        "expert-reference": {"action": "omit", "reason": "An algebraist sees at once that the positive exponent comes from finiteness of the coset set."},
+        "formal-audit": {"action": "anticipate", "reason": "The Lean hypothesis is the FiniteIndex instance on H, consumed by exists_pow_mem_of_index_ne_zero; the audit lane should name both."}
+      }
+    },
+    {
+      "id": "positive-exponent-origin",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "By what argument does a positive n with g^n in H exist: pigeonhole on the cosets H, gH, ..., g^nH, or a library lemma?",
+      "blueprint_node": "b95J01:B2",
+      "evidence": [
+        {"candidate_id": "arse:ask-1795502265-358", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/b95J01-pigeonhole.json", "edge": {"from": "pigeonhole-warrant", "relation": "warrants", "to": "exponent-found"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "The Lean proof cites the library lemma and the informal solution proves the pigeonhole argument; the telling should give the mathematics, with the lemma named for the audit reader.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "The pigeonhole pairing of cosets is short and is the kind of argument a student must be able to reproduce."},
+        "expert-reference": {"action": "omit", "reason": "The expert accepts the library lemma or the one-line pigeonhole without display."},
+        "formal-audit": {"action": "anticipate", "reason": "The audit lane should show that the cited lemma exists_pow_mem_of_index_ne_zero proves exactly this, matching the informal pigeonhole."}
+      }
+    },
+    {
+      "id": "normality-to-divisibility",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "How exactly does normality of H make k divide the index: quotient group of order [G:H], Lagrange on the coset gH, then the membership criterion at m = [G:H]?",
+      "blueprint_node": "b95J01:B6",
+      "evidence": [
+        {"candidate_id": "arse:ask-1795502266-359", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/b95J01-lagrange.json", "edge": {"from": "quotient-warrant", "relation": "warrants", "to": "k-divides-index"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "The print omitted the quotient-group and Lagrange steps entirely; the dialogue thread ask-1795502266-359 is the evidence.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "The hinge of the problem is that normality upgrades the coset set to a group; that deserves explicit words."},
+        "expert-reference": {"action": "omit", "reason": "For an expert part (b) is one line of quotient group and Lagrange, and saying so suffices."},
+        "formal-audit": {"action": "anticipate", "reason": "The Lean proof reaches it through pow_index_mem under the Normal instance; the audit lane should tie that lemma to the Lagrange route."}
+      }
+    },
+    {
+      "id": "why-the-set-T",
+      "question_function": "QF01",
+      "requested_relation": "strategy-enables-goal",
+      "analogue": "Why package the exponents as the set T = {m : g^m in H} instead of arguing with a least positive k and the division algorithm directly?",
+      "blueprint_node": "b95J01:B1",
+      "evidence": [
+        {"candidate_id": "seed:why-the-set-T", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/b95J01-why-T.json", "edge": {"from": "minimal-k-bookkeeping", "relation": "resolved-by", "to": "package-as-T"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "Nobody asked this in the dialogue, but the proof needs it: T packages the least-k and division-algorithm steps into one subgroup statement and delivers all integers m, negative ones included, at once.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "The student's default is a minimal k plus division algorithm; seeing them as one subgroup of Z is the lesson."},
+        "expert-reference": {"action": "anticipate", "reason": "Unlike the a97A02 omissions, which were standard facts, this is the proof's single structural idea; a reference proof that hides it gives the reader nothing to retain."},
+        "formal-audit": {"action": "anticipate", "reason": "In Lean the packaging is literal: T is the comap of zpowersHom g, and the audit lane should show that comap."}
+      }
+    },
+    {
+      "id": "why-not-a-three-cycle",
+      "question_function": "QF11",
+      "requested_relation": "claim-supported-by-warrant",
+      "analogue": "Why would a 3-cycle not serve as the counterexample in S_3?",
+      "blueprint_node": "b95J01:B9",
+      "evidence": [
+        {"candidate_id": "seed:why-not-a-three-cycle", "run_id": "reader-clear-b38755b7"}
+      ],
+      "support": [
+        {"graph": "holes/inkup/reasoning/b95J01-why-involution.json", "edge": {"from": "order-divides-warrant", "relation": "warrants", "to": "three-cycle-divides"}}
+      ],
+      "support_state": "supported",
+      "merge_note": "For a 3-cycle g, the least positive exponent is 1 or 3, and both divide the index 3, so the conclusion of part (b) would hold and nothing would be refuted. The informal solution flags this trap in its difficulty discussion.",
+      "decisions": {
+        "teaching": {"action": "anticipate", "reason": "The reflex first try is a 3-cycle; explaining why it fails teaches how to search for counterexamples."},
+        "expert-reference": {"action": "omit", "reason": "An expert sizing up S_3 rejects the 3-cycle instantly; the reference gives the working counterexample only."},
+        "formal-audit": {"action": "anticipate", "reason": "The audit lane should record that the chosen element has order 2 by orderOf_eq_prime and that the index is 3 by card_mul_index, so 2 does not divide 3."}
+      }
+    }
+  ]
+}

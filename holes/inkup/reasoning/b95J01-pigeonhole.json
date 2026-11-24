@@ -1,0 +1,24 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "b95J01:B2 — the pigeonhole argument behind the positive exponent",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/b95J01/alignment.json", "sha256": "55b27312a6b8e98aeacb9ebbfb962a6897602b0ce97935e66cd928b9957c61e9"},
+    "lean": {"path": "apm-lean:problems/b95J01/lean/Main.lean", "sha256": "b14c6101702c7d9ef3c1b1bc8e852947277cdd225a4ea3b077667d478b5d9a8c"}
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "By what argument does a positive n with g^n in H exist?", "authority": "reader-question", "evidence": ["arse:ask-1795502265-358", "blueprint-alignment:b95J01:B2"]},
+    {"id": "answer", "kind": "answer", "claim": "Pigeonhole on the cosets: with [G:H] = n finite, the n+1 cosets H = g^0H, g^1H, ..., g^nH cannot be pairwise distinct, so g^aH = g^bH for some 0 ≤ a < b ≤ n, and then g^(b-a) lies in H with b-a positive. The Lean proof cites this as a library lemma.", "authority": "formal-derived", "evidence": ["blueprint-alignment:b95J01:B2", "Mathlib:Subgroup.exists_pow_mem_of_index_ne_zero"]},
+    {"id": "n-plus-one-cosets", "kind": "premise", "claim": "There are n+1 cosets of the listed form but only n cosets in total.", "authority": "formal-derived", "evidence": ["informal:The $n+1$ cosets"]},
+    {"id": "coincide", "kind": "premise", "claim": "Two of the listed cosets coincide: g^aH = g^bH with 0 ≤ a < b ≤ n.", "authority": "formal-derived", "evidence": ["informal:by pigeonhole"]},
+    {"id": "pigeonhole-warrant", "kind": "warrant", "claim": "From g^aH = g^bH it follows that g^(b-a)H = H, that is, g^(b-a) is in H, and b-a is a positive integer.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hnT", "informal:$g^{b-a}\\in H$ with $b-a$ a positive"]},
+    {"id": "exponent-found", "kind": "claim", "claim": "T contains a positive integer, so T is not the trivial subgroup.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hnT", "blueprint-alignment:b95J01:B3"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "pigeonhole-warrant"},
+    {"from": "pigeonhole-warrant", "relation": "requires", "to": "n-plus-one-cosets"},
+    {"from": "pigeonhole-warrant", "relation": "requires", "to": "coincide"},
+    {"from": "pigeonhole-warrant", "relation": "warrants", "to": "exponent-found"}
+  ]
+}

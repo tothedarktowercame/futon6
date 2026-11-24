@@ -1,0 +1,26 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "b95J01:B6-B7 — how normality turns k into a divisor of the index",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/b95J01/alignment.json", "sha256": "55b27312a6b8e98aeacb9ebbfb962a6897602b0ce97935e66cd928b9957c61e9"},
+    "lean": {"path": "apm-lean:problems/b95J01/lean/Main.lean", "sha256": "b14c6101702c7d9ef3c1b1bc8e852947277cdd225a4ea3b077667d478b5d9a8c"}
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "How does normality of H give that k divides the index [G:H], given that the criterion of part (a) only speaks about integers m with g^m in H?", "authority": "reader-question", "evidence": ["arse:ask-1795502266-359", "blueprint-alignment:b95J01:B6"]},
+    {"id": "answer", "kind": "answer", "claim": "With H normal the cosets form the quotient group G/H of order [G:H]; the coset gH has order k by part (a), and Lagrange makes the order of an element divide the order of the group. Concretely g^[G:H] is in H, and applying the membership criterion to m = [G:H] gives k | [G:H].", "authority": "formal-derived", "evidence": ["blueprint-alignment:b95J01:B6", "blueprint-alignment:b95J01:B7", "lean:Main.lean#hd"]},
+    {"id": "hnormal", "kind": "premise", "claim": "H is normal in G, so the set of left cosets carries a group structure.", "authority": "formal-derived", "evidence": ["informal:if $H\\trianglelefteq G$", "lean:Main.lean#hmem"]},
+    {"id": "coset-order-k", "kind": "premise", "claim": "The order of the coset gH in G/H is the least positive j with g^j in H, which is k by part (a).", "authority": "formal-derived", "evidence": ["informal:$\\operatorname{ord}(gH)=k$", "blueprint-alignment:b95J01:B4"]},
+    {"id": "index-power-in-H", "kind": "premise", "claim": "g raised to the index lies in H, the form the Lean proof uses.", "authority": "formal-derived", "evidence": ["Mathlib:Subgroup.pow_index_mem", "blueprint-alignment:b95J01:B6"]},
+    {"id": "quotient-warrant", "kind": "warrant", "claim": "In a finite group, Lagrange's theorem makes the order of an element divide the order of the group; applied to gH in G/H, k divides [G:H].", "authority": "formal-derived", "evidence": ["informal:By Lagrange's theorem", "Mathlib:Subgroup.pow_index_mem"]},
+    {"id": "k-divides-index", "kind": "claim", "claim": "k divides [G:H], and the membership criterion at m = [G:H] is the explicit route.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hd", "blueprint-alignment:b95J01:B7"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "quotient-warrant"},
+    {"from": "quotient-warrant", "relation": "requires", "to": "hnormal"},
+    {"from": "quotient-warrant", "relation": "requires", "to": "coset-order-k"},
+    {"from": "quotient-warrant", "relation": "requires", "to": "index-power-in-H"},
+    {"from": "quotient-warrant", "relation": "warrants", "to": "k-divides-index"}
+  ]
+}

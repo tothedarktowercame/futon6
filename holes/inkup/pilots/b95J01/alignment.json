@@ -1,0 +1,171 @@
+{
+  "schema": "inkup.blueprint-lineage/v0",
+  "problem": "b95J01",
+  "sources": {
+    "informal": {"path": "apm-lean:problems/b95J01/informal-solution.md", "sha256": "0d76d86856214dbdc065364813c387868a0f8266938181d5cec64ec0b1deda6d"},
+    "lean": {"path": "apm-lean:problems/b95J01/lean/Main.lean", "sha256": "b14c6101702c7d9ef3c1b1bc8e852947277cdd225a4ea3b077667d478b5d9a8c"},
+    "reader-dialogue-zai": {"path": "storage:futon6/reader-clear/head-b38755b7/kits/b95J01/questions.zai-4.jsonl", "sha256": "7cd7be6ff8b44da68bed1dc8f2261a69d80e30feaddbd4b22e9f35addd2aaf95"},
+    "reader-dialogue-codex": {"path": "storage:futon6/reader-clear/head-b38755b7/kits/b95J01/questions.codex-19.jsonl", "sha256": "fd8b55b21a3f6c6a24f2dd37ef2d63d5e4324d327f20e7a3a23e8da6999862a9"}
+  },
+  "nodes": [
+    {
+      "id": "b95J01:B0",
+      "parent": null,
+      "obligation": "Prove the three parts: for every g there is a least positive k with g^k in H and k divides every m with g^m in H; if H is normal then k divides [G:H]; and a counterexample with H non-normal where k does not divide the index.",
+      "depends_on": ["b95J01:B5", "b95J01:B7", "b95J01:B9"],
+      "argument_roles": ["goal"],
+      "expository_roles": ["overview"],
+      "reader_obligations": ["Keep in view that part (a) must be proved without quotient-group machinery, since H is not assumed normal until part (b)."],
+      "anchors": [
+        {"source": "lean", "ref": "theorem apm_b95j01", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "## Why It's Hard", "relation": "motivates", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "b95J01:B1",
+      "parent": "b95J01:B0",
+      "obligation": "Define T = {m in Z : g^m in H} and see it as the preimage of H under the homomorphism m ↦ g^m from Z to G, so that membership m in T is exactly g^m in H.",
+      "depends_on": [],
+      "argument_roles": ["normalization"],
+      "expository_roles": ["definition"],
+      "reader_obligations": ["Recognize T as a preimage of a subgroup under a homomorphism; no minimality argument has happened yet."],
+      "anchors": [
+        {"source": "lean", "ref": "let T", "relation": "implements", "review": "model-proposed"},
+        {"source": "lean", "ref": "have hT", "relation": "supports", "review": "model-proposed"},
+        {"source": "informal", "ref": "$T=\\{m\\in\\mathbb{Z}:g^m\\in H\\}$", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "b95J01:B2",
+      "parent": "b95J01:B0",
+      "obligation": "Use finite index to produce a positive n with g^n in H: among the n+1 cosets H, gH, ..., g^nH two coincide, so g^(b-a) is in H for some 0 ≤ a < b ≤ n. This is the only place the finite-index hypothesis enters part (a).",
+      "depends_on": [],
+      "argument_roles": ["lemma-application", "side-condition"],
+      "expository_roles": ["citation", "bridge"],
+      "reader_obligations": ["See that without finite index no positive exponent need exist (g of infinite order, H trivial), so this step carries all the finiteness."],
+      "anchors": [
+        {"source": "lean", "ref": "H.exists_pow_mem_of_index_ne_zero", "relation": "implements", "review": "model-proposed", "note": "The Lean proof cites the library lemma; the informal solution proves the pigeonhole argument itself."},
+        {"source": "informal", "ref": "The $n+1$ cosets $H=g^0H,\\,g^1H,\\dots,g^nH$ lie among the only", "relation": "states", "review": "model-proposed"},
+        {"source": "reader-dialogue-zai", "ref": "ask-1795502265-358", "relation": "supports", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "b95J01:B3",
+      "parent": "b95J01:B0",
+      "obligation": "Conclude T is a nonzero subgroup of Z, hence cyclic: T = aZ with a ≠ 0, because T contains the positive integer from the pigeonhole step.",
+      "depends_on": ["b95J01:B1", "b95J01:B2"],
+      "argument_roles": ["lemma-application"],
+      "expository_roles": ["citation"],
+      "reader_obligations": ["Recall that a subgroup of Z is the set of multiples of its generator, here the integer a with |a| the least positive element."],
+      "anchors": [
+        {"source": "lean", "ref": "have ha", "relation": "implements", "review": "model-proposed"},
+        {"source": "lean", "ref": "have ha0", "relation": "supports", "review": "model-proposed"},
+        {"source": "informal", "ref": "Every nontrivial subgroup of $\\mathbb{Z}$ is $k\\mathbb{Z}$", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "b95J01:B4",
+      "parent": "b95J01:B0",
+      "obligation": "Read off the membership criterion with k = |a|: for every integer m, positive or negative, g^m in H if and only if k divides m.",
+      "depends_on": ["b95J01:B3"],
+      "argument_roles": ["identity"],
+      "expository_roles": ["calculation"],
+      "reader_obligations": ["Check both directions: k | m puts g^m = (g^k)^(m/k) in H, and g^m in H forces m into aZ = T."],
+      "anchors": [
+        {"source": "lean", "ref": "have hmem", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "$g^m\\in H\\iff m\\in k\\mathbb{Z}\\iff k\\mid m$", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "b95J01:B5",
+      "parent": "b95J01:B0",
+      "obligation": "Conclude part (a): k = |a| is positive, g^k is in H, it is least among positive exponents that land in H, and it divides every integer m with g^m in H.",
+      "depends_on": ["b95J01:B4"],
+      "argument_roles": ["closure"],
+      "expository_roles": ["closure"],
+      "reader_obligations": ["See that minimality is a corollary of divisibility: a smaller positive exponent in H would be a positive multiple of k below k."],
+      "anchors": [
+        {"source": "lean", "ref": "theorem apm_b95j01", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "Therefore $k$ is the smallest positive integer with $g^k\\in H$", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "b95J01:B6",
+      "parent": "b95J01:B0",
+      "obligation": "Under normality, form the quotient group G/H of order [G:H] and get g^[G:H] in H: the coset gH has order k by part (a), and Lagrange says the order of an element divides the order of the group.",
+      "depends_on": [],
+      "argument_roles": ["lemma-application"],
+      "expository_roles": ["citation", "bridge"],
+      "reader_obligations": ["See that normality is used exactly here: it is what makes the coset space a group, so that Lagrange applies to the coset gH."],
+      "anchors": [
+        {"source": "lean", "ref": "H.pow_index_mem", "relation": "implements", "review": "model-proposed", "note": "The Lean proof applies pow_index_mem under the Normal instance; the informal solution spells out the quotient-group and Lagrange route behind it."},
+        {"source": "informal", "ref": "$G/H$. By Lagrange's theorem the order of an element divides the order of the", "relation": "states", "review": "model-proposed"},
+        {"source": "reader-dialogue-zai", "ref": "ask-1795502266-359", "relation": "supports", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "b95J01:B7",
+      "parent": "b95J01:B0",
+      "obligation": "Apply the membership criterion of part (a) to the integer m = [G:H]: since g^[G:H] is in H, k divides [G:H].",
+      "depends_on": ["b95J01:B4", "b95J01:B6"],
+      "argument_roles": ["substitution", "closure"],
+      "expository_roles": ["calculation", "closure"],
+      "reader_obligations": ["Watch the shape of the move: part (b) adds no new group theory, it feeds one specific integer into the criterion from part (a)."],
+      "anchors": [
+        {"source": "lean", "ref": "have hd", "relation": "implements", "review": "model-proposed"},
+        {"source": "informal", "ref": "hence\n$$\nk=\\operatorname{ord}(gH)\\ \\big|\\ |G/H|=[G:H]", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "b95J01:B8",
+      "parent": "b95J01:B0",
+      "obligation": "Set up the counterexample: G = S_3, H the subgroup generated by the transposition (0 1); H has order 2 and index 3, and it is not normal, witnessed by conjugating the generator to another transposition outside H.",
+      "depends_on": [],
+      "argument_roles": ["auxiliary-construction", "contradiction"],
+      "expository_roles": ["motivation", "case-split"],
+      "reader_obligations": ["Verify the non-normality witness concretely: the conjugate of the generating transposition by another transposition is a third transposition, not in H."],
+      "anchors": [
+        {"source": "lean", "ref": "def b95j01CounterexampleSubgroup", "relation": "implements", "review": "model-proposed"},
+        {"source": "lean", "ref": "have hnot", "relation": "supports", "review": "model-proposed"},
+        {"source": "informal", "ref": "$(1\\,3)(1\\,2)(1\\,3)^{-1}=(2\\,3)\\notin H$", "relation": "states", "review": "model-proposed"}
+      ]
+    },
+    {
+      "id": "b95J01:B9",
+      "parent": "b95J01:B0",
+      "obligation": "Take g to be the transposition (0 2): g is not in H, g^2 = e is in H, so its least positive exponent is k = 2, while the index is 3 and 2 does not divide 3 — the conclusion of part (b) fails for non-normal H.",
+      "depends_on": ["b95J01:B8"],
+      "argument_roles": ["estimate", "closure"],
+      "expository_roles": ["calculation", "closure"],
+      "reader_obligations": ["Understand why this element and not a 3-cycle: an involution has k = 2 against an index-3 subgroup, and 2 does not divide 3."],
+      "anchors": [
+        {"source": "lean", "ref": "def b95j01CounterexampleElement", "relation": "implements", "review": "model-proposed"},
+        {"source": "lean", "ref": "have hindex", "relation": "supports", "review": "model-proposed"},
+        {"source": "informal", "ref": "Here $k=2$ and $[G:H]=3$, and $2\\nmid 3$", "relation": "states", "review": "model-proposed"}
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "id": "expert-reference",
+      "audience": "An algebraist who wants the three parts in the shortest correct form.",
+      "purpose": "reference",
+      "mandatory_nodes": ["b95J01:B1", "b95J01:B3", "b95J01:B4", "b95J01:B5", "b95J01:B6", "b95J01:B7", "b95J01:B8", "b95J01:B9"],
+      "compression": "Cite the pigeonhole lemma for the positive exponent; state T = aZ and the membership criterion; for part (b) one line of quotient group and Lagrange; give the counterexample without the orbit commentary."
+    },
+    {
+      "id": "teaching",
+      "audience": "A student who has not seen exponent sets packaged as subgroups of Z.",
+      "purpose": "teaching",
+      "mandatory_nodes": ["b95J01:B0", "b95J01:B1", "b95J01:B2", "b95J01:B3", "b95J01:B4", "b95J01:B5", "b95J01:B6", "b95J01:B7", "b95J01:B8", "b95J01:B9"],
+      "compression": "Show every node; spend the most exposition on why T is the right object, on the pigeonhole step as the only use of finiteness, on where normality enters, and on why the counterexample must use an involution."
+    },
+    {
+      "id": "formal-audit",
+      "audience": "A reviewer comparing the prose with the compiled Lean proof.",
+      "purpose": "audit",
+      "mandatory_nodes": ["b95J01:B0", "b95J01:B1", "b95J01:B2", "b95J01:B3", "b95J01:B4", "b95J01:B5", "b95J01:B6", "b95J01:B7", "b95J01:B8", "b95J01:B9"],
+      "compression": "Do not compress side conditions: name exists_pow_mem_of_index_ne_zero, Int.subgroup_cyclic, the Normal instance behind pow_index_mem, and the order computations orderOf_eq_prime and card_mul_index in the counterexample."
+    }
+  ]
+}

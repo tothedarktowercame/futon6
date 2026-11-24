@@ -1,0 +1,26 @@
+{
+  "schema": "inkup.reasoning-graph/v0",
+  "form": "warrant-chain",
+  "subject": "b95J01:B8-B9 — why the counterexample needs an involution, not a 3-cycle",
+  "sources": {
+    "blueprint-alignment": {"path": "../pilots/b95J01/alignment.json", "sha256": "55b27312a6b8e98aeacb9ebbfb962a6897602b0ce97935e66cd928b9957c61e9"},
+    "lean": {"path": "apm-lean:problems/b95J01/lean/Main.lean", "sha256": "b14c6101702c7d9ef3c1b1bc8e852947277cdd225a4ea3b077667d478b5d9a8c"}
+  },
+  "nodes": [
+    {"id": "q", "kind": "question", "claim": "Why would a 3-cycle not serve as the counterexample in S_3?", "authority": "human-proposed", "evidence": ["seed:why-not-a-three-cycle", "blueprint-alignment:b95J01:B9"]},
+    {"id": "answer", "kind": "answer", "claim": "For a 3-cycle g in S_3 the least positive exponent with g^k in H is 1 or 3 (identity if g is in H, 3 otherwise), and both divide the index 3, so the conclusion of part (b) would still hold and nothing would be refuted; an involution against the index-3 subgroup gives k = 2 against index 3.", "authority": "formal-derived", "evidence": ["blueprint-alignment:b95J01:B9", "informal:trying $S_3$ with a $3$-cycle"]},
+    {"id": "cycle-exponents", "kind": "premise", "claim": "A 3-cycle has order 3, so its powers land in H at exponents that are multiples of 1 or 3.", "authority": "formal-derived", "evidence": ["informal:order of an element divides"]},
+    {"id": "index-three", "kind": "premise", "claim": "The subgroup has index 3 in S_3.", "authority": "formal-derived", "evidence": ["lean:Main.lean#hindex", "lean:Main.lean#hcard"]},
+    {"id": "involution-k-two", "kind": "premise", "claim": "The chosen transposition is not in H and squares to the identity, so its least positive exponent is 2.", "authority": "formal-derived", "evidence": ["lean:Main.lean#b95j01CounterexampleElement", "lean:Main.lean#hord"]},
+    {"id": "order-divides-warrant", "kind": "warrant", "claim": "A candidate element refutes part (b) only if its least exponent does not divide the index; for a 3-cycle the candidates 1 and 3 both divide 3, so it cannot refute.", "authority": "formal-derived", "evidence": ["informal:orbit lengths", "blueprint-alignment:b95J01:B9"]},
+    {"id": "three-cycle-divides", "kind": "claim", "claim": "A 3-cycle satisfies the conclusion of part (b) even with H non-normal, so it is not a counterexample.", "authority": "formal-derived", "evidence": ["informal:which still divides the index and\nproves nothing"]}
+  ],
+  "edges": [
+    {"from": "q", "relation": "answered-by", "to": "answer"},
+    {"from": "answer", "relation": "cites-reason", "to": "order-divides-warrant"},
+    {"from": "order-divides-warrant", "relation": "requires", "to": "cycle-exponents"},
+    {"from": "order-divides-warrant", "relation": "requires", "to": "index-three"},
+    {"from": "order-divides-warrant", "relation": "requires", "to": "involution-k-two"},
+    {"from": "order-divides-warrant", "relation": "warrants", "to": "three-cycle-divides"}
+  ]
+}
