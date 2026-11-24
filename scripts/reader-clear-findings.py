@@ -17,6 +17,7 @@ TYPE = {"printer-drops-content": "printer", "printer-wording": "printer",
         "informal-skips-or-loose": "informal", "reader-gap": "reader-error"}
 # Answerers sometimes coin different names for one proposed class; merge them here.
 CLASS_ALIAS = {"NEW:omitted-instance-hypotheses": "NEW:lost-instance-hypotheses",
+               "NEW:omitted-typeclass-hypotheses": "NEW:lost-instance-hypotheses",
                "NEW:named-cauchy-estimate": "P-unnamed-library-result",
                "NEW:simple-pole-definition": "NEW:undefined-statement-predicate",
                "NEW:image-witness": "NEW:wrong-witness-term"}
