@@ -299,7 +299,9 @@ function render(){
     el.setAttribute('opacity', o);
     el.setAttribute('stroke', focused ? D.focusColor : D.roadColor);
     el.setAttribute('stroke-width', focused ? 2 : 1);
-    el.setAttribute('stroke-dasharray', (!focused && (unknown || !rec)) ? '4,3' : '');
+    // Dashed ONLY for no retrieval record at all (unknown). A known pattern with
+    // no exposure in this window is solid at the minimum: road_style() in Python.
+    el.setAttribute('stroke-dasharray', (!focused && unknown) ? '4,3' : '');
     if (rec && o > D.opMin + 1e-9) lit++;
     const p = D.patterns[r.p];
     title.textContent = p.key + ' · ' + r.a + ' ↔ ' + r.b +

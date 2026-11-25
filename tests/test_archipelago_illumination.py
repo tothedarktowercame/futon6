@@ -67,3 +67,11 @@ def test_strand_offsets_centred():
     rows = [{"a": "M-a", "b": "M-b", "pattern": p} for p in ("P", "Q", "R")]
     offs = ai.strand_offsets(rows)
     assert sorted(offs.values()) == [-2.0, 0.0, 2.0]
+
+
+def test_page_dashes_only_unknown_patterns():
+    # The page applies its own style rule in JS; road_style() above is the
+    # spec. Kimi's first page dashed known-zero roads too (unknown || !rec),
+    # merging the two states this prototype must keep apart.
+    assert "(!focused && unknown) ? '4,3'" in ai.SCRIPT
+    assert "unknown || !rec" not in ai.SCRIPT
