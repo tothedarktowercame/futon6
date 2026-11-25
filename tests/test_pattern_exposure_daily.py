@@ -73,12 +73,19 @@ def test_day_hitting_limit_is_split_not_accepted():
     assert entries == []  # hour pages empty: the day page was a lie, not data
 
 
-def test_run_stops_at_first_empty_day_after_nonempty():
+def test_run_crosses_an_outage_and_stops_after_a_long_empty_run():
+    # log: 11-24 and 11-10 have turns; 11-11..11-23 empty (an outage);
+    # nothing before 11-10. The walk must cross the outage (the bad case:
+    # stopping at 11-23 loses 11-10) and record the outage days as zero.
     def fetch(since, before, limit):
-        if since.startswith("2026-11-24"):
-            return [_entry("e1", "2026-11-24", [])]
+        for d in ("2026-11-24", "2026-11-10"):
+            if since.startswith(d):
+                return [_entry("e-" + d, d, [])]
         return []
     state = ped.run(fetch, KEYS, BYNAME, start_day=date(2026, 11, 24),
                     earliest=date(2026, 1, 1))
-    assert state["days_queried"] == 2  # 24th (nonempty) + 23rd (empty) -> stop
-    assert state["turns"] == {"2026-11-24": 1}
+    assert state["turns"]["2026-11-24"] == 1
+    assert state["turns"]["2026-11-10"] == 1
+    assert state["turns"]["2026-11-15"] == 0        # inside the log: known zero
+    assert "2026-11-09" not in state["turns"]       # before the log: not recorded
+    assert state["days_queried"] == 15 + ped.EMPTY_RUN_STOP

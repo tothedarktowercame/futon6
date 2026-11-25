@@ -48,6 +48,11 @@ EVIDENCE_BASE = (
 TIMEOUT_S = int(os.environ.get("EXPOSURE_TIMEOUT_S", "240"))
 LIMIT = int(os.environ.get("EXPOSURE_LIMIT", "2000"))
 EARLIEST = date(2026, 1, 1)
+# The log has holes: 2026-10-06..08 (zone 1.1 rebuild) answer with zero
+# entries while September is full. Stopping at the first empty day ended the
+# 2026-11-25 backfill at 10-09 and lost two months. The walk now ends only
+# after this many consecutive empty days (or at EARLIEST).
+EMPTY_RUN_STOP = 21
 TZ_LABEL = "Europe/London"  # pattern-density's bucketing convention
 
 
@@ -204,12 +209,15 @@ def fetch_day(day, fetch=fetch_window, limit=LIMIT):
 def run(fetch, keys, byname, today=None, earliest=EARLIEST, state=None,
         start_day=None, sleep_s=0.0, max_days=None, deadline=None):
     """Walk back day by day from start_day (default: today), sequentially.
-    Stops at the first zero-entry day after a non-empty run, or at
-    `earliest`. A failed day is retried once, then recorded in gaps."""
+    Stops after EMPTY_RUN_STOP consecutive zero-entry days following a
+    non-empty run (that run is the log's start and is not recorded), or at
+    `earliest`. A zero-entry day inside the log is a known zero (turns 0).
+    A failed day is retried once, then recorded in gaps (unknown, not 0)."""
     state = state or empty_state()
     today = today or date.today()
     day = start_day or today
     seen_nonempty = False
+    empty_run = []
     days_queried = 0
     while day >= earliest:
         if max_days is not None and days_queried >= max_days:
@@ -233,11 +241,18 @@ def run(fetch, keys, byname, today=None, earliest=EARLIEST, state=None,
             days_queried += 1
             if entries:
                 seen_nonempty = True
+                empty_run = []
             elif seen_nonempty:
-                break  # first empty day after a non-empty run: log start
+                state["turns"][day.isoformat()] += 0  # known zero
+                empty_run.append(day.isoformat())
+                if len(empty_run) >= EMPTY_RUN_STOP:
+                    break  # a long empty run: the log starts after it
         day -= timedelta(days=1)
         if sleep_s:
             time.sleep(sleep_s)
+    if len(empty_run) >= EMPTY_RUN_STOP or day < earliest:
+        for d in empty_run:  # days before the log began: not observations
+            state["turns"].pop(d, None)
     state["days_queried"] = days_queried
     return state
 
