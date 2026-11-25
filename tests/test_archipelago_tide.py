@@ -88,3 +88,38 @@ def test_components_four_connected():
     comps = sorted((sorted(c) for c in at.components(cells)))
     assert len(comps) == 3
     assert {(0, 0), (1, 0), (1, 1)} in [set(c) for c in comps]
+
+
+def _dated(points, day):
+    return [{"x": x, "y": y, "dated": day, "mission": "M"} for x, y, _ in points]
+
+
+def test_tide_comes_from_dates_through_the_real_field():
+    # The date filtering itself, not hand-built fields: P worked in March,
+    # Q in September. Bad case: a field that ignores dates (or uses scope
+    # count) keeps 2 islands at every cutoff.
+    p, q = _clusters_fields()
+    pts = _dated(p, "2026-03-10T12:00:00+00:00") + _dated(q, "2026-09-10T12:00:00+00:00")
+    low = _field(p + q)
+    low_land = at.land_cells(low, 0.2)
+    got = {c: (len(at.components(at.tide_land(f, low_land, 0.2))), n)
+           for c, f, n in at.fields_by_cutoff(
+               pts, ["2026-02-02", "2026-06-01", "2026-10-05"], gw=20, gh=20)}
+    assert got == {"2026-02-02": (2, 0), "2026-06-01": (1, 6),
+                   "2026-10-05": (0, 12)}
+
+
+def test_undated_scope_never_expires_in_the_real_field():
+    pts = [{"x": 400, "y": 400, "dated": None, "mission": "M"}]
+    low_land = at.land_cells(_field([(400, 400, 1.0)]), 0.5)
+    for c, f, n in at.fields_by_cutoff(pts, ["2026-01-05", "2027-01-04"], gw=20, gh=20):
+        assert n == 0 and at.tide_land(f, low_land, 0.5) == low_land
+
+
+def test_hub_submersion_is_by_its_own_dates_not_its_size():
+    # a mission with one recent scope is above water, however small;
+    # an undated scope or no scopes at all never submerges it
+    assert not at.mission_submerged(["2026-09-20T00:00:00+00:00"], "2026-09-14")
+    assert at.mission_submerged(["2026-09-20T00:00:00+00:00"], "2026-09-21")
+    assert not at.mission_submerged(["2026-01-01T00:00:00+00:00", None], "2026-11-23")
+    assert not at.mission_submerged([], "2026-11-23")

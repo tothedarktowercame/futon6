@@ -56,10 +56,19 @@ ORDER = {"eightfold-phase": 0, "loose-section": 1, "plain-argument": 1,
          "pattern": 7, "psr": 8, "pur": 8, "verify-gate": 9, "certificate": 10}
 FRONTIER = {"capability-scope", "pattern", "psr", "pur", "verify-gate"}
 
-WATER_FILL = "#0b1a2a"
+WATER_FILL = "#020409"  # darker than the lowest terrain band, so islands read as land
 WATER_OPACITY = 0.82
 SHORE_STROKE = "#7fa7c9"
 SHORE_WIDTH = 1.2
+
+# Tide level: a cell of the low-tide land stays land at cutoff c while the
+# dated-or-undated scope density there is at least TAU, about one scope
+# within 80 units (a single scope peaks near 0.9 at its nearest vertex).
+# Absolute, one constant for all cutoffs. It is NOT theta: theta decides
+# where the map has land at all (matching the baseline terrain); TAU decides
+# whether that land has recent work. Using theta for both made small
+# missions water at the lowest tide, i.e. size read as age.
+TAU = 0.5
 
 LEGEND = ("Water = no dated work on or after the cutoff nearby. "
           "Not failure, not irrelevance. Terrain height is scope density, "
@@ -213,6 +222,38 @@ def choose_theta(low_field, baseline_cells, n_candidates=300):
     return best, best_j
 
 
+def fields_by_cutoff(pts, cutoffs, gw=GW, gh=GH, step=STEP, sigma=SIGMA):
+    """Yield (cutoff, field, n_expired) per cutoff. The field holds every
+    placed scope with dated >= cutoff, plus undated scopes (dated None),
+    which never expire. Built incrementally: each dated scope is added once
+    and subtracted once. The field is mutated in place between yields."""
+    field = [[0.0] * gw for _ in range(gh)]
+    for p in pts:
+        gaussian_scatter(field, p["x"], p["y"], 1.0, step, sigma)
+    dated = sorted((p for p in pts if p["dated"]), key=lambda p: p["dated"])
+    k = 0
+    for c in cutoffs:
+        while k < len(dated) and dated[k]["dated"][:10] < c:
+            p = dated[k]
+            gaussian_scatter(field, p["x"], p["y"], -1.0, step, sigma)
+            k += 1
+        yield c, field, k
+
+
+def tide_land(field, low_land, tau=TAU):
+    """Land at a cutoff: low-tide land cells whose density is still >= tau."""
+    return {(gx, gy) for gx, gy in low_land if field[gy][gx] >= tau}
+
+
+def mission_submerged(scope_dates, cutoff):
+    """A hub is submerged at cutoff when the mission has no scope dated on or
+    after it. An undated scope (None) keeps it above water at every cutoff;
+    so does having no scopes at all (nothing known, not old)."""
+    if not scope_dates or any(d is None for d in scope_dates):
+        return False
+    return max(d[:10] for d in scope_dates) < cutoff
+
+
 def weekly_cutoffs(first_day, last_day):
     """Mondays from the week of first_day to the week of last_day."""
     d0 = date.fromisoformat(first_day[:10])
@@ -244,14 +285,17 @@ def water_runs(water):
     return out
 
 
-def shoreline_segments(field, theta, step=STEP):
-    """Marching squares at level theta; flat [x1, y1, x2, y2, ...]."""
+def shoreline_segments(field, theta, step=STEP, cells=None):
+    """Marching squares at level theta; flat [x1, y1, x2, y2, ...]. With
+    cells, only those grid cells are traced."""
     def interp(p1, p2, v1, v2):
         t = (theta - v1) / (v2 - v1) if v2 != v1 else 0.5
         return (p1[0] + t * (p2[0] - p1[0]), p1[1] + t * (p2[1] - p1[1]))
     segs = []
     for gy in range(len(field) - 1):
         for gx in range(len(field[0]) - 1):
+            if cells is not None and (gx, gy) not in cells:
+                continue
             f00, f10 = field[gy][gx], field[gy][gx + 1]
             f01, f11 = field[gy + 1][gx], field[gy + 1][gx + 1]
             x0, y0 = gx * step, gy * step
@@ -290,61 +334,53 @@ def build(theta_report=None):
                       for gy in range(GH - 1) for gx in range(GW - 1)
                       if tgrid[gy][gx] / fmax >= 0.03}
 
-    # Low-tide field: every placed scope, unit weight. Then expire dated
-    # scopes from it as the cutoff rises (each subtracted exactly once).
-    field = empty_grid()
+    # Low-tide field: every placed scope, unit weight. theta fixes where the
+    # map has land at all (matched to the baseline terrain cells).
+    low = empty_grid()
     for p in pts:
-        gaussian_scatter(field, p["x"], p["y"], 1.0)
-    theta, theta_j = choose_theta(field, baseline_cells)
+        gaussian_scatter(low, p["x"], p["y"], 1.0)
+    theta, theta_j = choose_theta(low, baseline_cells)
+    low_land = land_cells(low, theta)
 
-    dated_pts = sorted((p for p in pts if p["dated"]), key=lambda p: p["dated"])
-    first_day = dated_pts[0]["dated"][:10] if dated_pts else date.today().isoformat()
+    dated_days = sorted(p["dated"][:10] for p in pts if p["dated"])
+    first_day = dated_days[0] if dated_days else date.today().isoformat()
     cutoffs = weekly_cutoffs(first_day, date.today().isoformat())
 
-    hub_cell = {m: (min(GW - 2, max(0, int(round(x / STEP)))),
-                    min(GH - 2, max(0, int(round(y / STEP)))))
-                for m, (x, y) in pos.items()}
+    m_dates = defaultdict(list)
+    for p in pts:
+        m_dates[p["mission"]].append(p["dated"])
 
     weeks = []
-    expiry = 0  # index into dated_pts: scopes with dated < cutoff expire
-    for c in cutoffs:
-        while expiry < len(dated_pts) and dated_pts[expiry]["dated"][:10] < c:
-            p = dated_pts[expiry]
-            gaussian_scatter(field, p["x"], p["y"], -1.0)
-            expiry += 1
-        land = land_cells(field, theta)
-        water = set(((gx, gy) for gy in range(GH - 1) for gx in range(GW - 1))
-                    ) - land
-        comps = components(land)
-        n_scopes_exposed = len(pts) - expiry
+    for c, field, expired in fields_by_cutoff(pts, cutoffs):
+        land = tide_land(field, low_land)
+        water = low_land - land          # only terrain is flooded; open sea
+        comps = components(land)         # beyond the terrain stays undrawn
         submerged = {}
-        exposed_m = 0
-        for m, cell in hub_cell.items():
-            if cell in land or m not in missions:
-                exposed_m += 1
+        for m in pos:
+            if not mission_submerged(m_dates.get(m), c):
                 continue
-            info = missions[m]
-            if info["last_work"]:
+            info = missions.get(m, {})
+            if info.get("last_work"):
                 tip = f"last dated work {info['last_work'][:10]}"
-            elif info["n_admin_commits"]:
+            elif info.get("n_admin_commits"):
                 tip = ("no non-administrative commits in git history "
                        f"(administrative only, last {info['last_admin'][:10]})")
             else:
-                tip = "no dated work"
+                tip = f"last dated scope {max(m_dates[m])[:10]}"
             submerged[m] = tip
         weeks.append({
             "cutoff": c,
             "water": water_runs(water),
-            "shore": shoreline_segments(field, theta),
+            "shore": shoreline_segments(field, TAU, cells=low_land),
             "islands": len(comps),
-            "exposed_missions": exposed_m,
-            "exposed_scopes": n_scopes_exposed,
+            "exposed_missions": len(pos) - len(submerged),
+            "exposed_scopes": len(pts) - expired,
             "submerged": submerged,
         })
     meta = {
-        "theta": theta, "theta_jaccard": theta_j,
+        "theta": theta, "theta_jaccard": theta_j, "tau": TAU,
         "cutoffs": cutoffs, "step": STEP,
-        "n_missions": len(hub_cell), "n_scopes": len(pts),
+        "n_missions": len(pos), "n_scopes": len(pts),
         "n_undated": n_undated,
         "build_seconds": round(time.time() - t0, 1),
     }
@@ -364,8 +400,8 @@ padding:10px 14px;max-width:380px;color:#cfd8ea;font:15px/1.4 sans-serif">
 <div style="margin-top:6px;font-size:14px;color:#9fb0c8">__LEGEND__
 Undated scopes (__N_UNDATED__) always count and are never submerged.
 Scope dots here come from the dating table's scopes, so their positions
-differ slightly from the baseline's dots. Submerged hubs stay at 30%
-opacity, not hidden.</div>
+differ slightly from the baseline's dots. A mission with no scope dated on
+or after the cutoff is drawn at 30% of its opacity, not hidden.</div>
 </div>
 """
 
@@ -376,18 +412,50 @@ const TIDE = __TIDE_JSON__;
 const slider = document.getElementById('tide-slider');
 const readout = document.getElementById('tide-readout');
 slider.max = TIDE.weeks.length - 1;
-slider.value = TIDE.weeks.length - 1;
+slider.value = 0;  // open at the lowest tide: the baseline's land
 const STEP = TIDE.step;
 const svg = document.getElementById('efe-field');
 const NS = 'http://www.w3.org/2000/svg';
 const gWater = document.getElementById('tide-water');
 const gShore = document.getElementById('tide-shore');
+// A mission is drawn as several elements carrying data-m: its core disc,
+// the doc ring and its hit target, the code-ring group, and its scope dots.
+// A submerged mission dims all of them to 0.3 of their own opacity.
 const hubs = {};
-svg.querySelectorAll('circle[data-m]').forEach(c => {
-  hubs[c.getAttribute('data-m')] = {el: c, title: c.querySelector('title')};
+svg.querySelectorAll('[data-m]').forEach(el => {
+  const m = el.getAttribute('data-m');
+  const op = parseFloat(el.getAttribute('opacity') || '1');
+  (hubs[m] = hubs[m] || []).push({el, op, titles: [...el.querySelectorAll('title')]
+    .map(t => [t, t.textContent])});
 });
-const originalTitle = {};
-for (const m in hubs) originalTitle[m] = hubs[m].title ? hubs[m].title.textContent : '';
+// Capability-zone rings are drawn by the baseline's own script at load (and
+// redrawn on live refresh), keyed by data-capability-mission-id; they are
+// re-dimmed whenever the SVG's children change. Event-driven, no loop.
+let current = null;
+let observer = null;
+function applyDim(){
+  if (!current) return;
+  if (observer) observer.disconnect();  // our own title edits are mutations
+  const w = current;
+  let dimmed = 0;
+  for (const m in hubs) {
+    const sub = w.submerged['M-' + m] || w.submerged[m];
+    if (sub) dimmed++;
+    for (const h of hubs[m]) {
+      h.el.setAttribute('opacity', sub ? 0.3 * h.op : h.op);
+      for (const [t, orig] of h.titles)
+        t.textContent = orig + (sub ? ' · submerged at ' + w.cutoff + ': ' + sub : '');
+    }
+  }
+  svg.querySelectorAll('[data-capability-mission-id]').forEach(g => {
+    const m = g.getAttribute('data-capability-mission-id');
+    const sub = w.submerged[m] || w.submerged['M-' + m];
+    g.setAttribute('opacity', sub ? 0.3 : 1);
+  });
+  svg.setAttribute('data-tide-dimmed', dimmed);
+  observer.observe(svg, {childList: true, subtree: true});
+}
+observer = new MutationObserver(applyDim);
 const cache = {};
 function render(i){
   const w = TIDE.weeks[i];
@@ -414,14 +482,8 @@ function render(i){
   }
   gWater.replaceChildren(cache[i].water.cloneNode(true));
   gShore.replaceChildren(cache[i].shore.cloneNode(true));
-  for (const m in hubs) {
-    const sub = w.submerged['M-' + m] || w.submerged[m];
-    hubs[m].el.setAttribute('opacity', sub ? 0.3 : 1);
-    if (hubs[m].title) {
-      hubs[m].title.textContent = originalTitle[m] +
-        (sub ? ' · submerged at ' + w.cutoff + ': ' + sub : '');
-    }
-  }
+  current = w;
+  applyDim();
   readout.textContent = 'cutoff ' + w.cutoff + ' · ' + w.islands + ' islands · ' +
     'exposed missions ' + w.exposed_missions + '/' + TIDE.nMissions + ' · ' +
     'exposed scopes ' + w.exposed_scopes + '/' + TIDE.nScopes + ' · ' +
