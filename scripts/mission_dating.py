@@ -9,6 +9,8 @@ claude-17's archipelago brief §3/§8/§9:
     than ADMIN_THRESHOLD mission docs is ADMINISTRATIVE (e.g. the
     mission-accept-cNNN disposition sweeps): it feeds last_admin /
     n_admin_commits only, never last_work.
+  * A doc with only administrative commits is "git-admin-only" (dated by
+    last_admin), not "undated".
   * Scope dates come from git blame of the scope's :anchor/passage in the
     mission doc, with admin commits ignored (--ignore-rev). A passage that
     cannot be located falls back to the mission's last_work
@@ -227,6 +229,24 @@ def fetch_scopes(binders=BINDERS):
 
 # -------------------------------------------------------------------- main
 
+_COPY_DIRS = ("labs", "runs", "draft-missions", "authority")
+
+
+def canonical_doc(paths):
+    """Pick the mission's own doc among same-named files.
+
+    Run directories copy mission docs (futon3c/holes/labs/wm-contract/runs/
+    .../authority/holes/missions/M-u88-*.md has 14 copies), so the glob's
+    last hit can be a frozen copy. Prefer a path with no copy directory in
+    it, then one under holes/missions/, then the shortest path."""
+    def rank(p):
+        parts = p.parts
+        return (any(d in parts for d in _COPY_DIRS),
+                "missions" not in parts,
+                len(parts), str(p))
+    return min(paths, key=rank)
+
+
 def build_table(doc_paths, scopes, repo_of=None):
     """doc_paths: {mid: Path}; scopes: fetch_scopes() rows. Returns the
     output dict (missions/scopes/admin_commits)."""
@@ -243,7 +263,16 @@ def build_table(doc_paths, scopes, repo_of=None):
     mission_rows = {}
     for mid, path in doc_paths.items():
         g = missions_git[mid]
-        dated = bool(g["work_dates"] or g["admin_dates"])
+        # A doc whose every commit is administrative (bulk import, repo sync,
+        # disposition sweep) is still datable: it gets "git-admin-only", so
+        # the tide can use last_admin with that flag rather than calling it
+        # undated (never submerged) or old.
+        if g["work_dates"]:
+            source = "git"
+        elif g["admin_dates"]:
+            source = "git-admin-only"
+        else:
+            source = "undated"
         row = {
             "doc": str(path),
             "born": g["born"],
@@ -251,7 +280,7 @@ def build_table(doc_paths, scopes, repo_of=None):
             "last_admin": max(g["admin_dates"]) if g["admin_dates"] else None,
             "n_work_commits": g["n_work"],
             "n_admin_commits": g["n_admin"],
-            "date_source": "git" if dated else "undated",
+            "date_source": source,
         }
         out_missions[mid] = row
         mission_rows[mid] = row
@@ -275,10 +304,10 @@ def build_table(doc_paths, scopes, repo_of=None):
         except OSError:
             text = ""
         m = mission_rows[mid]
-        mission_dated = m["date_source"] == "git" and m["last_work"]
+        fallback = m["last_work"] or m["last_admin"]
         for s in srows:
             dated, source = date_scope(text, s["passage"], line_dates,
-                                       m["last_work"], mission_dated)
+                                       fallback, bool(fallback))
             out_scopes[s["scope/id"]] = {
                 "mission": mid, "binder": s["binder"],
                 "dated": dated, "date_source": source,
@@ -298,8 +327,10 @@ def main():
     positioned = json.loads(POS_EMBED.read_text())
     ids = sorted(positioned.keys())
     code_root = config.code_root()
-    found = {p.stem: p for p in code_root.glob("futon*/holes/**/M-*.md")}
-    doc_paths = {mid: found[mid] for mid in ids if mid in found}
+    candidates = defaultdict(list)
+    for p in code_root.glob("futon*/holes/**/M-*.md"):
+        candidates[p.stem].append(p)
+    doc_paths = {mid: canonical_doc(candidates[mid]) for mid in ids if mid in candidates}
     missing = sorted(set(ids) - set(doc_paths))
     if missing:
         print(f"warning: {len(missing)} positioned missions have no doc: "

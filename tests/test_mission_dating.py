@@ -110,3 +110,28 @@ def test_undated_mission_is_null_not_epoch(tmp_path):
     s = table["scopes"]["M-c/section/x"]
     assert s["date_source"] == "undated"
     assert s["dated"] is None
+
+
+def test_admin_only_mission_is_dated_not_undated(repo):
+    # a bulk import creates 6 docs and nothing touches them again
+    for i in range(6):
+        _write(repo, f"holes/missions/M-imp{i}.md", f"imported {i}\n")
+    _commit(repo, "2026-02-18T10:00:00+00:00", "import missions")
+    docs = {f"M-imp{i}": repo / f"holes/missions/M-imp{i}.md" for i in range(6)}
+    table = md.build_table(docs, [{"scope/id": "M-imp0/section/missing",
+                                   "mission": "M-imp0", "binder": "loose-section",
+                                   "passage": "not in the doc"}])
+    m = table["missions"]["M-imp0"]
+    assert m["date_source"] == "git-admin-only"
+    assert m["last_work"] is None
+    assert m["last_admin"] == "2026-02-18T10:00:00+00:00"
+    s = table["scopes"]["M-imp0/section/missing"]
+    assert (s["date_source"], s["dated"]) == ("mission-fallback", "2026-02-18T10:00:00+00:00")
+
+
+def test_canonical_doc_skips_run_copies(tmp_path):
+    real = tmp_path / "futon2/holes/missions/M-u.md"
+    copies = [tmp_path / "futon3c/holes/labs/wm-contract/runs/R1/authority/holes/missions/M-u.md",
+              tmp_path / "futon2/holes/labs/wm-contract/runs/P/draft-missions/M-u.md"]
+    assert md.canonical_doc(copies + [real]) == real
+    assert md.canonical_doc([real] + copies) == real
