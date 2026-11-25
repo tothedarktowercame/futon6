@@ -131,7 +131,7 @@ drawn as a diagonal chain that could run off the bottom of the map.</p>
 <p>Pick a date, and every place with no dated work since then goes under water. The water is
 a separate field from the terrain: terrain stays scope density, and the tide reads the git
 date of each scope's text. Water is not failure, and not irrelevance; it only says nothing
-was written here since the cutoff. A mission whose own scopes are all older dims to 30%,
+was written here since the cutoff. A mission whose own scopes are all older fades to 12%,
 but stays on the map.</p>
 <div class="row four">
 {fig("tide-low", f"<b>Lowest tide.</b> All work counted: the land matches the baseline terrain.")}
@@ -139,9 +139,10 @@ but stays on the map.</p>
 {fig("tide-sep", f"<b>Since 1 September.</b> {e_sep} missions, {isl('tide-sep')} islands.")}
 {fig("tide-nov", f"<b>Since 1 November.</b> {e_nov} missions, {isl('tide-nov')} islands.")}
 </div>
-<p class="note">Open question: the shoreline keeps a place dry when about one recent scope
-lies within 80 units, so dry land is larger than the share of live missions, and some dimmed
-hubs stand on dry land. A stricter level is waiting on a decision.</p>
+<p class="note">The water level is one fixed constant, set so that the share of the map
+left dry tracks the share of missions with work since the cutoff (about a fifth in
+September, a tenth in November). An earlier, gentler level left over half the map dry in
+September and showed too much.</p>
 
 <h2>B. Roads that remember their pattern</h2>
 <p>Here a road is drawn for each pattern two missions both scope, so two missions sharing

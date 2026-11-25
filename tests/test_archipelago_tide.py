@@ -133,3 +133,8 @@ def test_mission_without_scopes_uses_its_doc_date():
     md = at.mission_dates([], missions)
     assert at.mission_submerged(md.get("M-x"), "2026-06-01")
     assert not at.mission_submerged(md.get("M-y"), "2026-06-01")
+
+
+def test_shared_dim_block_has_the_constant_filled_in():
+    assert "__DIM__" not in at.HUB_DIM_JS
+    assert f"sub ? {at.SUBMERGED_DIM} * h.op" in at.HUB_DIM_JS

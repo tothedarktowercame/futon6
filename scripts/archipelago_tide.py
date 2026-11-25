@@ -57,18 +57,25 @@ ORDER = {"eightfold-phase": 0, "loose-section": 1, "plain-argument": 1,
 FRONTIER = {"capability-scope", "pattern", "psr", "pur", "verify-gate"}
 
 WATER_FILL = "#020409"  # darker than the lowest terrain band, so islands read as land
-WATER_OPACITY = 0.82
+WATER_OPACITY = 0.94  # was 0.82; Joe 11-25: the tide did not hide enough
 SHORE_STROKE = "#7fa7c9"
 SHORE_WIDTH = 1.2
 
 # Tide level: a cell of the low-tide land stays land at cutoff c while the
-# dated-or-undated scope density there is at least TAU, about one scope
-# within 80 units (a single scope peaks near 0.9 at its nearest vertex).
-# Absolute, one constant for all cutoffs. It is NOT theta: theta decides
+# dated-or-undated scope density there is at least TAU. Absolute, one
+# constant for all cutoffs. TAU = 8 (2026-11-25, Joe: "the ability of tide to
+# hide things is not sufficiently strong"): it makes the dry share of the
+# low-tide land track the share of missions with work since the cutoff
+# (06-01 67% dry / 63% missions; 08-31 21% / 23%; 10-26 8% / 10%). The first
+# value, 0.5 (about one scope within 80 units), left 57% / 28% dry at 08-31 /
+# 10-26 with 23% / 10% of missions live. It is NOT theta: theta decides
 # where the map has land at all (matching the baseline terrain); TAU decides
 # whether that land has recent work. Using theta for both made small
 # missions water at the lowest tide, i.e. size read as age.
-TAU = 0.5
+TAU = 8.0
+# Submerged missions and their zone rings are drawn at this fraction of their
+# own opacity (was 0.3).
+SUBMERGED_DIM = 0.12
 
 LEGEND = ("Water = no dated work on or after the cutoff nearby. "
           "Not failure, not irrelevance. Terrain height is scope density, "
@@ -415,7 +422,7 @@ padding:10px 14px;max-width:380px;color:#cfd8ea;font:15px/1.4 sans-serif">
 Undated scopes (__N_UNDATED__) always count and are never submerged.
 Scope dots here come from the dating table's scopes, so their positions
 differ slightly from the baseline's dots. A mission with no scope dated on
-or after the cutoff is drawn at 30% of its opacity, not hidden.</div>
+or after the cutoff is drawn at 12% of its opacity, not hidden.</div>
 </div>
 """
 
@@ -446,7 +453,7 @@ function applyDim(){
     const sub = w.submerged['M-' + m] || w.submerged[m];
     if (sub) dimmed++;
     for (const h of hubs[m]) {
-      h.el.setAttribute('opacity', sub ? 0.3 * h.op : h.op);
+      h.el.setAttribute('opacity', sub ? __DIM__ * h.op : h.op);
       for (const [t, orig] of h.titles)
         t.textContent = orig + (sub ? ' · submerged at ' + w.cutoff + ': ' + sub : '');
     }
@@ -454,13 +461,13 @@ function applyDim(){
   svg.querySelectorAll('[data-capability-mission-id]').forEach(g => {
     const m = g.getAttribute('data-capability-mission-id');
     const sub = w.submerged[m] || w.submerged['M-' + m];
-    g.setAttribute('opacity', sub ? 0.3 : 1);
+    g.setAttribute('opacity', sub ? __DIM__ : 1);
   });
   svg.setAttribute('data-tide-dimmed', dimmed);
   observer.observe(svg, {childList: true, subtree: true});
 }
 observer = new MutationObserver(applyDim);
-"""
+""".replace("__DIM__", str(SUBMERGED_DIM))
 
 SCRIPT = """
 <script>
