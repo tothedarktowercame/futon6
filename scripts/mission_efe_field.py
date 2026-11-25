@@ -850,18 +850,40 @@ LIVE_OVERLAY_SCRIPT = """
     zoneLayer.setAttribute("data-hide-disagreement", String(!disagreementVisible));
   }
 
+  // Distinct missions can land on one synthetic shelf slot (the server hashes a
+  // mission id into 60 slots, so collisions happen); drawn on one point their agents
+  // and labels pile into one chain. Each extra mission on a spot moves 85 units right.
+  function missionSpotOffsets(data) {
+    const bySpot = new Map();
+    const add = (mid, p) => {
+      if (!mid || !validPlacement(p)) return;
+      const spot = `${p.x},${p.y}`;
+      const ms = bySpot.get(spot) || [];
+      if (!ms.includes(mid)) ms.push(mid);
+      bySpot.set(spot, ms);
+    };
+    for (const it of ((data.frontier && data.frontier.items) || [])) add(it["mission-id"], it);
+    for (const a of ((data.agents && data.agents.items) || [])) add(a["mission-id"], fanPlace(a["mission-id"], a.placement));
+    const off = new Map();
+    for (const [spot, ms] of bySpot) ms.sort().forEach((m, j) => off.set(`${spot}|${m}`, 85 * j));
+    return (mid, p) => off.get(`${p.x},${p.y}|${mid}`) || 0;
+  }
+
   function drawFrontierBand(data) {
     const g = el("g", {"data-layer": "frontier-band"});
     g.appendChild(el("rect", {x: 0, y: FRONTIER_Y, width: 3600, height: FRONTIER_H, fill: "#09111f", opacity: 0.88}));
     g.appendChild(el("line", {x1: 0, y1: FRONTIER_Y, x2: 3600, y2: FRONTIER_Y, stroke: "#f8e7a0", "stroke-width": 1.3, "stroke-dasharray": "9 7", opacity: 0.8}));
     g.appendChild(el("text", {x: 24, y: FRONTIER_Y + 28, class: "live-frontier-label"}, "frontier shelf — off-map live placements"));
-    for (const item of ((data.frontier && data.frontier.items) || [])) {
+    const spotOffset = missionSpotOffsets(data);
+    for (let item of ((data.frontier && data.frontier.items) || [])) {
       if (!validPlacement(item)) continue;
       const missionId = item["mission-id"] || "unknown";
+      const dx = spotOffset(missionId, item);
+      if (dx) item = Object.assign({}, item, {x: Number(item.x) + dx});
       const itemG = el("g", {"data-live-kind": "frontier", "data-mission-id": missionId});
       title(itemG, `${missionId}${isExcursion(missionId) ? " — excursion" : ""}\\n${placementTitle(item)}`);
       itemG.appendChild(el("circle", {cx: item.x, cy: item.y, r: 7, fill: "none", stroke: "#f8e7a0", "stroke-width": 1.8, "stroke-dasharray": "4 3"}));
-      itemG.appendChild(el("text", {x: Number(item.x) + 12, y: Number(item.y) + 4, class: "live-frontier-item"}, `${missionId}${isExcursion(missionId) ? " · excursion" : ""}`));
+      itemG.appendChild(el("text", {x: Number(item.x) + 12, y: Number(item.y) + 4 + (dx ? 22 * dx / 85 : 0), class: "live-frontier-item"}, `${missionId}${isExcursion(missionId) ? " · excursion" : ""}`));
       g.appendChild(itemG);
     }
     layer.appendChild(g);
@@ -903,6 +925,8 @@ LIVE_OVERLAY_SCRIPT = """
     // no-silent-absence rule). Remove this filter once :7070 runs >= 5b14a6f6.
     let withheldStale = 0;
     const staleIds = [];
+    const spotOffset = missionSpotOffsets(data);
+    const live = [];
     for (const agent0 of ((data.agents && data.agents.items) || [])) {
       const agent = Object.assign({}, agent0, {placement: fanPlace(agent0["mission-id"], agent0.placement)});
       if (!agent["mission-id"] || !validPlacement(agent.placement)) continue;
@@ -912,13 +936,29 @@ LIVE_OVERLAY_SCRIPT = """
         staleIds.push(`${agent["agent-id"]}(${agent.status})`);
         continue;
       }
+      const dx = spotOffset(agent["mission-id"], agent.placement);
+      if (dx) agent.placement = Object.assign({}, agent.placement, {x: Number(agent.placement.x) + dx});
       const spot = `${agent.placement.x},${agent.placement.y}`;
-      const k = crowd.get(spot) || 0;
-      crowd.set(spot, k + 1);
-      const p = k === 0 ? agent.placement : Object.assign({}, agent.placement, {
-        x: Number(agent.placement.x) + 14 * k,
-        y: Number(agent.placement.y) + 30 * k
+      crowd.set(spot, (crowd.get(spot) || 0) + 1);
+      live.push(agent);
+    }
+    // Co-located agents sit on a ring round their spot (radius grows with the
+    // count), not on a diagonal line: a line of n saucers ran 30n units downhill
+    // and off the canvas from the shelf (7 agents on one slot, 2026-11-25).
+    const seen = new Map();
+    for (const agent of live) {
+      const spot = `${agent.placement.x},${agent.placement.y}`;
+      const n = crowd.get(spot);
+      const k = seen.get(spot) || 0;
+      seen.set(spot, k + 1);
+      // Radius leaves room for the labels, which point outward from the ring.
+      const R = 20 + 6 * n;
+      const a = -Math.PI / 2 + 2 * Math.PI * k / n;
+      const p = n === 1 ? agent.placement : Object.assign({}, agent.placement, {
+        x: Number(agent.placement.x) + R * Math.cos(a),
+        y: Math.min(3590, Number(agent.placement.y) + R * Math.sin(a))
       });
+      const left = n > 1 && Math.cos(a) < -1e-6;
       const active = agentActive(agent);
       const g = el("g", {"data-live-kind": "agent", "data-agent-id": agent["agent-id"], "data-mission-id": agent["mission-id"]});
       title(g, `${agent["agent-id"]}\\nmission=${agent["mission-id"]}${isExcursion(agent["mission-id"]) ? " (excursion)" : ""}\\nclock-source=${agent["clock-source"] || "unknown"}\\nstatus=${agent.status || "unknown"}\\n${placementTitle(p)}`);
@@ -928,8 +968,10 @@ LIVE_OVERLAY_SCRIPT = """
         glyph: "🛸",
         className: active ? "live-agent-invoking" : "live-agent-idle"
       });
-      g.appendChild(el("text", {x: Number(p.x) + 11, y: Number(p.y) - 9, class: "live-agent-label"}, agent["agent-id"] || "agent"));
-      if (isShelf(p) || isExcursion(agent["mission-id"])) {
+      g.appendChild(el("text", {x: Number(p.x) + (left ? -11 : 11), y: Number(p.y) - (n > 1 ? -4 : 9), class: "live-agent-label",
+        "text-anchor": left ? "end" : "start"}, agent["agent-id"] || "agent"));
+      // In a crowd the shelf's own mission label already says "excursion".
+      if (n === 1 && (isShelf(p) || isExcursion(agent["mission-id"]))) {
         g.appendChild(el("text", {x: Number(p.x) + 11, y: Number(p.y) + 8, class: "live-frontier-item"}, "excursion"));
       }
       layer.appendChild(g);
