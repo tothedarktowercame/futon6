@@ -90,6 +90,17 @@ def fetch_pattern_scopes():
     return out
 
 
+def pattern_key(ident, ref):
+    """One key per library pattern. Scopes name a pattern bare
+    ("evidence-over-assertion") or namespaced ("agent/evidence-over-assertion");
+    on 2026-11-25 212 patterns appeared under both, splitting their roads.
+    The flexiarg path is the identity: futon3/library/agent/x.flexiarg ->
+    "agent/x". Without a ref, the ident stands."""
+    if ref and ref.endswith(".flexiarg") and "/library/" in ref:
+        return ref.split("/library/", 1)[1][: -len(".flexiarg")]
+    return ident
+
+
 def _dated_key(entry):
     """Sort key picking the earliest-dated scope; undated sorts last."""
     d = entry.get("dated")
@@ -104,13 +115,16 @@ def build_roads(scopes, positioned, dating):
     # pattern -> mission -> [linked scope entries for that end]
     by_pattern = defaultdict(lambda: defaultdict(list))
     refs = {}
+    idents = defaultdict(set)
     for s in scopes:
-        refs.setdefault(s["ident"], s["ref"])
+        key = pattern_key(s["ident"], s["ref"])
+        refs.setdefault(key, s["ref"])
+        idents[key].add(s["ident"])
         if s["state"] != "linked":
             excluded[s["state"] or "missing"] += 1
             continue
         d = dating.get(s["scope/id"], {})
-        by_pattern[s["ident"]][s["mission"]].append({
+        by_pattern[key][s["mission"]].append({
             "scope": s["scope/id"],
             "dated": d.get("dated"),
             "date_source": d.get("date_source", "undated"),
@@ -127,6 +141,7 @@ def build_roads(scopes, positioned, dating):
         off_map = sorted(m for m in ends if m not in positioned)
         patterns[ident] = {
             "ref": refs.get(ident),
+            "idents": sorted(idents[ident]),
             "missions": on_map,
             "n_missions": len(on_map),
             "off_map_missions": off_map,

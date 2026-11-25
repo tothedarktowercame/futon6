@@ -80,3 +80,18 @@ def test_pair_diffs():
     d = pr.pair_diffs(roads, text)
     assert d["text_only_pairs"] == [["M-a", "M-c"]]
     assert d["scope_only_pairs"] == []
+
+
+def test_bare_and_namespaced_idents_are_one_pattern():
+    ref = "futon3/library/agent/evidence-over-assertion.flexiarg"
+    scopes = [
+        {"scope/id": "M-a/pattern/x", "mission": "M-a", "ident": "agent/evidence-over-assertion",
+         "ref": ref, "state": "linked"},
+        {"scope/id": "M-b/pattern/x", "mission": "M-b", "ident": "evidence-over-assertion",
+         "ref": ref, "state": "linked"},
+    ]
+    table = pr.build_roads(scopes, {"M-a", "M-b"}, {})
+    assert list(table["patterns"]) == ["agent/evidence-over-assertion"]
+    assert table["patterns"]["agent/evidence-over-assertion"]["idents"] == [
+        "agent/evidence-over-assertion", "evidence-over-assertion"]
+    assert [(r["a"], r["b"]) for r in table["roads"]] == [("M-a", "M-b")]
