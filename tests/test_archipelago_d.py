@@ -86,3 +86,8 @@ def test_page_rule_guard_selectors_resolve_in_baseline():
     undeclared = {s for s in css_sels
                   if not any(s == d or (s[0] in "#." and s == d) for d in declared)}
     assert not undeclared, undeclared
+
+
+def test_page_zoom_thresholds_come_from_python():
+    # The page's level() must use ZOOM_FAR / ZOOM_MID, not its own copy.
+    assert "const FAR = __ZOOM_FAR__, MID = __ZOOM_MID__;" in ad.SCRIPT

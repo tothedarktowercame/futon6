@@ -187,9 +187,12 @@ def island_labels():
     cutoffs = tide.weekly_cutoffs(dated_days[0] if dated_days else
                                   date.today().isoformat(),
                                   date.today().isoformat())
-    m_dates = defaultdict(list)
+    # Same dating rule as A and C (scope-less missions take their doc date);
+    # label ranking counts scope points only.
+    m_dates = tide.mission_dates(pts, dating["missions"])
+    scope_n = defaultdict(int)
     for p in pts:
-        m_dates[p["mission"]].append(p["dated"])
+        scope_n[p["mission"]] += 1
 
     def submerged(m, c):
         return tide.mission_submerged(m_dates.get(m), c)
@@ -197,7 +200,7 @@ def island_labels():
     hub_cells = {m: (min(tide.GW - 2, max(0, int(round(x / tide.STEP)))),
                      min(tide.GH - 2, max(0, int(round(y / tide.STEP)))))
                  for m, (x, y) in pos.items()}
-    counts = {m: len(v) for m, v in m_dates.items()}
+    counts = dict(scope_n)
     labels = {}
     for c, field, _ in tide.fields_by_cutoff(pts, cutoffs):
         land = tide.tide_land(field, low_land)
@@ -258,7 +261,7 @@ const cSlider = document.getElementById('c-slider');
 const styleSel = document.getElementById('d-style');
 const lightBox = document.getElementById('d-light');
 const zoomReadout = document.getElementById('d-zoom-readout');
-const FAR = 2000, MID = 800;
+const FAR = __ZOOM_FAR__, MID = __ZOOM_MID__;  // from ZOOM_FAR / ZOOM_MID
 const gIsl = document.createElementNS(NS, 'g');
 gIsl.id = 'd-island-labels';
 const gHub = document.createElementNS(NS, 'g');
@@ -373,7 +376,8 @@ def compose_page(c_data, d_data, contrast_failures):
     controls = (CONTROLS_HTML
                 .replace("__SELECTORS__", ", ".join(SELECTORS_USED))
                 .replace("__CONTRAST__", contrast))
-    script = SCRIPT.replace(
+    script = SCRIPT.replace("__ZOOM_FAR__", str(ZOOM_FAR)).replace(
+        "__ZOOM_MID__", str(ZOOM_MID)).replace(
         "__D_JSON__",
         json.dumps(d_data, separators=(",", ":")).replace("</", "<\\/"))
     return doc + style + controls + script
