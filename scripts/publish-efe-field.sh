@@ -87,6 +87,20 @@ OUTDIR="$(dirname "$OUT")"
   done
 )
 
+# The Futon City visual essay (futon-city.html): pictures of the pages just
+# published, in the configurations its deep links open. Non-fatal.
+echo "Rebuilding the Futon City visual essay ..." >&2
+(
+  cd "$F6"
+  SHOTS="$WORK/futon-city-shots"
+  if "${EFE_NODE:-node}" scripts/futon_city_shots.js "file://$OUTDIR" "$SHOTS" >/dev/null \
+     && "$PY" scripts/futon_city_essay.py "$SHOTS" "$OUTDIR"; then
+    :
+  else
+    echo "WARN: futon-city essay not rebuilt; the previous page stays" >&2
+  fi
+)
+
 echo "Updating the shared WIP navigation ..." >&2
 "$ROOT"/p4ng/publish-wip-nav.sh
 
