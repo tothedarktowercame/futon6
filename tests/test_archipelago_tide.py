@@ -123,3 +123,13 @@ def test_hub_submersion_is_by_its_own_dates_not_its_size():
     assert at.mission_submerged(["2026-09-20T00:00:00+00:00"], "2026-09-21")
     assert not at.mission_submerged(["2026-01-01T00:00:00+00:00", None], "2026-11-23")
     assert not at.mission_submerged([], "2026-11-23")
+
+
+def test_mission_without_scopes_uses_its_doc_date():
+    # A mission with no scopes is dated by its mission doc, not left
+    # permanently above water; one with no date at all stays unknown.
+    missions = {"M-x": {"last_work": "2026-03-01T00:00:00+00:00", "last_admin": None},
+                "M-y": {"last_work": None, "last_admin": None}}
+    md = at.mission_dates([], missions)
+    assert at.mission_submerged(md.get("M-x"), "2026-06-01")
+    assert not at.mission_submerged(md.get("M-y"), "2026-06-01")

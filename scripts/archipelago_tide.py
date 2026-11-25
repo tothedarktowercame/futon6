@@ -254,6 +254,22 @@ def mission_submerged(scope_dates, cutoff):
     return max(d[:10] for d in scope_dates) < cutoff
 
 
+def mission_dates(pts, missions):
+    """Per mission, the dates that decide whether its hub is above water: its
+    scopes' dates; for a mission with no scopes, its mission-doc date
+    (last_work, else last_admin) when it has one. A mission with neither stays
+    [] (unknown: never submerged)."""
+    out = defaultdict(list)
+    for p in pts:
+        out[p["mission"]].append(p["dated"])
+    for m, info in missions.items():
+        if m not in out:
+            d = info.get("last_work") or info.get("last_admin")
+            if d:
+                out[m].append(d)
+    return out
+
+
 def weekly_cutoffs(first_day, last_day):
     """Mondays from the week of first_day to the week of last_day."""
     d0 = date.fromisoformat(first_day[:10])
@@ -346,9 +362,7 @@ def build(theta_report=None):
     first_day = dated_days[0] if dated_days else date.today().isoformat()
     cutoffs = weekly_cutoffs(first_day, date.today().isoformat())
 
-    m_dates = defaultdict(list)
-    for p in pts:
-        m_dates[p["mission"]].append(p["dated"])
+    m_dates = mission_dates(pts, missions)
 
     weeks = []
     for c, field, expired in fields_by_cutoff(pts, cutoffs):
@@ -405,20 +419,9 @@ or after the cutoff is drawn at 30% of its opacity, not hidden.</div>
 </div>
 """
 
-SCRIPT = """
-<script>
-(function(){
-const TIDE = __TIDE_JSON__;
-const slider = document.getElementById('tide-slider');
-const readout = document.getElementById('tide-readout');
-slider.max = TIDE.weeks.length - 1;
-slider.value = 0;  // open at the lowest tide: the baseline's land
-const STEP = TIDE.step;
-const svg = document.getElementById('efe-field');
-const NS = 'http://www.w3.org/2000/svg';
-const gWater = document.getElementById('tide-water');
-const gShore = document.getElementById('tide-shore');
-// A mission is drawn as several elements carrying data-m: its core disc,
+# Shared with archipelago_c.py: dims every element of a submerged mission and
+# the capability-zone rings. Call setTideDim(week) with {cutoff, submerged}.
+HUB_DIM_JS = """// A mission is drawn as several elements carrying data-m: its core disc,
 // the doc ring and its hit target, the code-ring group, and its scope dots.
 // A submerged mission dims all of them to 0.3 of their own opacity.
 const hubs = {};
@@ -432,6 +435,7 @@ svg.querySelectorAll('[data-m]').forEach(el => {
 // redrawn on live refresh), keyed by data-capability-mission-id; they are
 // re-dimmed whenever the SVG's children change. Event-driven, no loop.
 let current = null;
+function setTideDim(w){ current = w; applyDim(); }
 let observer = null;
 function applyDim(){
   if (!current) return;
@@ -456,6 +460,22 @@ function applyDim(){
   observer.observe(svg, {childList: true, subtree: true});
 }
 observer = new MutationObserver(applyDim);
+"""
+
+SCRIPT = """
+<script>
+(function(){
+const TIDE = __TIDE_JSON__;
+const slider = document.getElementById('tide-slider');
+const readout = document.getElementById('tide-readout');
+slider.max = TIDE.weeks.length - 1;
+slider.value = 0;  // open at the lowest tide: the baseline's land
+const STEP = TIDE.step;
+const svg = document.getElementById('efe-field');
+const NS = 'http://www.w3.org/2000/svg';
+const gWater = document.getElementById('tide-water');
+const gShore = document.getElementById('tide-shore');
+__HUB_DIM_JS__
 const cache = {};
 function render(i){
   const w = TIDE.weeks[i];
@@ -482,8 +502,7 @@ function render(i){
   }
   gWater.replaceChildren(cache[i].water.cloneNode(true));
   gShore.replaceChildren(cache[i].shore.cloneNode(true));
-  current = w;
-  applyDim();
+  setTideDim(w);
   readout.textContent = 'cutoff ' + w.cutoff + ' · ' + w.islands + ' islands · ' +
     'exposed missions ' + w.exposed_missions + '/' + TIDE.nMissions + ' · ' +
     'exposed scopes ' + w.exposed_scopes + '/' + TIDE.nScopes + ' · ' +
@@ -521,7 +540,7 @@ def compose_page(meta, weeks):
     controls = (CONTROLS_HTML
                 .replace("__LEGEND__", LEGEND)
                 .replace("__N_UNDATED__", str(meta["n_undated"])))
-    script = SCRIPT.replace(
+    script = SCRIPT.replace("__HUB_DIM_JS__", HUB_DIM_JS).replace(
         "__TIDE_JSON__",
         json.dumps(tide, separators=(",", ":")).replace("</", "<\\/"))
     doc += controls + script

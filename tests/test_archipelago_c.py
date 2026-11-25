@@ -86,3 +86,12 @@ def test_page_rule_guard_interior_respects_focus():
     # draws its own strand set), and tethers stay off in focus mode.
     assert "showInterior && focus === null" in ac.SCRIPT
     assert "gFerry.style.display = focus !== null ? 'none' : ''" in ac.SCRIPT
+
+
+def test_page_dims_whole_missions_via_the_shared_block():
+    # C first copied A's pre-fix dimming (circle[data-m]: one scope dot per
+    # mission). Both pages must use the shared block from archipelago_tide.
+    assert "__HUB_DIM_JS__" in ac.SCRIPT
+    assert "circle[data-m]" not in ac.SCRIPT
+    import archipelago_tide as at
+    assert "querySelectorAll('[data-m]')" in at.HUB_DIM_JS

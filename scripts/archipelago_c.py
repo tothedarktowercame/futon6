@@ -186,9 +186,7 @@ def build():
     first_day = dated_days[0] if dated_days else date.today().isoformat()
     cutoffs = tide.weekly_cutoffs(first_day, date.today().isoformat())
 
-    m_dates = defaultdict(list)
-    for p in pts:
-        m_dates[p["mission"]].append(p["dated"])
+    m_dates = tide.mission_dates(pts, dating["missions"])
 
     def submerged(m, c):
         return tide.mission_submerged(m_dates.get(m), c)
@@ -347,12 +345,7 @@ D.patterns.forEach((p, i) => {
 });
 focusSel.insertBefore(Object.assign(document.createElement('option'),
   {value: '', textContent: '(none)'}), focusSel.firstChild);
-const hubs = {};
-svg.querySelectorAll('circle[data-m]').forEach(c => {
-  hubs[c.getAttribute('data-m')] = {el: c, title: c.querySelector('title')};
-});
-const origTitle = {};
-for (const m in hubs) origTitle[m] = hubs[m].title ? hubs[m].title.textContent : '';
+__HUB_DIM_JS__
 function line(x1, y1, x2, y2, attrs) {
   const l = document.createElementNS(NS, 'line');
   l.setAttribute('x1', x1); l.setAttribute('y1', y1);
@@ -441,13 +434,7 @@ function render(){
   gFocus.replaceChildren(ff2);
   gFerry.style.display = focus !== null ? 'none' : '';
   gTether.style.display = focus !== null ? 'none' : '';
-  for (const m in hubs) {
-    const sub = w.submerged['M-' + m] || w.submerged[m];
-    hubs[m].el.setAttribute('opacity', sub ? 0.3 : 1);
-    if (hubs[m].title)
-      hubs[m].title.textContent = origTitle[m] +
-        (sub ? ' · submerged at ' + w.cutoff + ': ' + sub : '');
-  }
+  setTideDim(w);
   readout.textContent = 'cutoff ' + w.cutoff + ' · ' + w.islands + ' islands · ' +
     w.islets + ' islets · ' + w.exposed_missions + '/' + D.nMissions +
     ' missions exposed · interior ' + w.n_interior +
@@ -506,7 +493,7 @@ def compose_page(data):
               + '<g id="c-ferries"></g><g id="c-tethers"></g>'
               + '<g id="c-interior-g"></g><g id="c-focus-g"></g>')
     doc = doc[:m.start()] + layers + doc[m.end():]
-    script = SCRIPT.replace(
+    script = SCRIPT.replace("__HUB_DIM_JS__", tide.HUB_DIM_JS).replace(
         "__C_JSON__",
         json.dumps(data, separators=(",", ":")).replace("</", "<\\/"))
     return doc + CONTROLS_HTML.replace("__LEGEND__", LEGEND) + script
